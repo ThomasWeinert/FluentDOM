@@ -302,6 +302,65 @@ class FluentDOM implements Iterator, Countable {
     }
     return $result;
   }
+  
+  /**
+  * put all nodes matching expression in a new list
+  *
+  * @param string $expr XPath expression
+  * @access public
+  * @return object FluentDOM
+  */
+  public function filter($expr) {
+    $result = new FluentDOM($this);
+    foreach ($this->_array as $node) {
+      $check = $this->xpath()->evaluate($expr, $node);
+      if ($check instanceof DOMNodeList && $check->length > 0) {
+        $result->push($node);
+      } elseif ($check) {
+        $result->push($node);
+      }
+    }
+    return $result;
+  }
+  
+  /**
+  * chek if one of the nodes in the list matchers the expression
+  *
+  * @param string $expr XPath expression
+  * @access public
+  * @return boolean
+  */
+  public function is($expr) {
+    foreach ($this->_array as $node) {
+      $check = $this->xpath()->evaluate($expr, $node);
+      if ($check instanceof DOMNodeList && $check->length > 0) {
+        return TRUE;
+      } elseif ($check) {
+        return FALSE;
+      } 
+    }
+    return FALSE;
+  }
+  
+  /**
+  * return a new list containing all elements from the current
+  * list that do not match the expression
+  *
+  * @param string $expr XPath expression
+  * @access public
+  * @return FluentDOM
+  */
+  public function not($expr) {
+    $result = new FluentDOM($this);
+    foreach ($this->_array as $node) {$check = $this->xpath()->evaluate($expr, $node);
+      if ($check instanceof DOMNodeList && $check->length == 0) {
+        $result->push($node);
+      } elseif (!$check) {
+        $result->push($node);
+      }
+    }
+    return $result;
+  } 
     
   /**
   * validate string as qualified tag name

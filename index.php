@@ -1,9 +1,12 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+header('Content-type: text/plain');
 
 require_once(dirname(__FILE__).'/FluentDOM.php');
 $doc = new DOMDocument();
+$doc->preserveWhiteSpace = FALSE;
+$doc->formatOutput = TRUE;
 $doc->load('test.xml');
 
 $query = new FluentDOM($doc);
@@ -19,7 +22,7 @@ $query->find('//foo')
       ->addClass('world earth')
       ->toggleClass('world continent');
              
-echo htmlspecialchars($doc->saveXML()), '<br>';
+echo $doc->saveXML(), "\n";
 
 $query->find('/test/*')
       ->xml('<bla>blub</bla>')
@@ -27,9 +30,9 @@ $query->find('/test/*')
       ->addClass('blob')
       ->prepend('HUHU');
 
-echo htmlspecialchars($doc->saveXML()), '<br>';
+echo $doc->saveXML(), "\n";
 
-$query->find('//foo')->appendTo('//bar//*');
+$query->find('//foo')->appendTo('//bar');
 
-echo htmlspecialchars($doc->saveXML()), '<br>';
+echo $doc->saveXML(), "\n";
 ?>

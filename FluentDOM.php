@@ -1,26 +1,26 @@
 <?php
 /**
-* FluentDOMNodelist implements a jQuery like replacement for DOMNodeList
+* FluentDOM implements a jQuery like replacement for DOMNodeList
 * 
-* @version $Id: FluentDOMNodeList.php,v 0.0 00.00.0000 00:00:00 weinert Exp $
+* @version $Id: FluentDOM.php,v 0.0 00.00.0000 00:00:00 weinert Exp $
 */
 
 
 /**
-* FluentDOMNodelist implements a jQuery like replacement for DOMNodeList
+* FluentDOM implements a jQuery like replacement for DOMNodeList
 */
-class FluentDOMNodeList implements Iterator, Countable {
+class FluentDOM implements Iterator, Countable {
 
   /**
   * document object
-  * @var object FluentDOMDocument
+  * @var object DOMDocument
   * @access private
   */
   private $document = NULL;
   
   /**
   * parent node list (last selection in chain)
-  * @var object FluentDOMNodeList
+  * @var object FluentDOM
   * @access private
   */
   private $parent = NULL;
@@ -40,21 +40,32 @@ class FluentDOMNodeList implements Iterator, Countable {
   private $array = array();
   
   /**
-  * initialize the FluentDOMNodeList instance and set private properties
+  * initialize the FluentDOM instance and set private properties
   *
-  * @param object FluentDOMDocument $document document object
-  * @param object FluentDOMNodeList | NULL $parent parent node list (last selection in chain)
+  * @param object FluentDOM | object DOMElement | object DOMDocument $source
+  * source to create FluentDOM from
   * @access public
   */
-  public function __construct($document, $parent = NULL) {
-    if ($document instanceof FluentDOMDocument) {
-      $this->document = $document;
-      if (isset($parent) && $parent instanceof FluentDOMNodeList) {
-        $this->parent = $parent;
-      }
+  public function __construct($source) {
+    if ($source instanceof FluentDOM) {
+      $this->document = $source->document;
+      $this->parent = $source;
+    } elseif ($source instanceof DOMDocument) {
+      $this->document = $source;
+    } elseif ($source instanceof DOMELement) {
+      $this->document = $source->document;
+      $this->add($source);
     } else {
       throw new Exception('Invalid document object');
     }
+  }
+  
+  private function xpath() {
+    static $xpath;
+    if (empty($xpath) || $xpath->document != $this->document) {
+      $xpath = new DOMXPath($this->document);
+    }
+    return $xpath;
   }
   
   /**
@@ -179,12 +190,12 @@ class FluentDOMNodeList implements Iterator, Countable {
   *
   * @param $expr
   * @access public
-  * @return object FluentDOMNodeList
+  * @return object FluentDOM
   */
   public function add($expr) {
     if (is_object($expr) && $expr instanceof DOMElement) {
       $this->array[] = $expr;
-    } elseif (is_object($expr) && $expr instanceof FluentDOMNodeList) {
+    } elseif (is_object($expr) && $expr instanceof FluentDOM) {
       foreach ($expr as $node) {
         $this->array[] = $node;
       }
@@ -196,14 +207,14 @@ class FluentDOMNodeList implements Iterator, Countable {
   * Traversing: add parent elements to current list - return merged list.
   *
   * @access public
-  * @return object FluentDOMNodeList
+  * @return object FluentDOM
   */
   public function andSelf() {
-    $result = new FluentDOMNodeList($this->document, $this);
+    $result = new FluentDOM($this->document, $this);
     foreach ($this->array as $node) {
       $result->add($node);
     }
-    if (is_object($this->parent) && $this->parent instanceof FluentDOMNodeList) {
+    if (is_object($this->parent) && $this->parent instanceof FluentDOM) {
       foreach ($this->parent as $node) {
         $result->add($node);
       }
@@ -215,13 +226,13 @@ class FluentDOMNodeList implements Iterator, Countable {
   * Traversing: return parent list or document
   *
   * @access public
-  * @return object FluentDOMNodeList |  object FluentDOMDocument
+  * @return object FluentDOM |  object DOMDocument
   */
   public function end() {
     if (!empty($this->parent)) {
       return $this->parent;
     } else {
-      return $this->document;
+      return $this;
     }
   }
   
@@ -230,10 +241,10 @@ class FluentDOMNodeList implements Iterator, Countable {
   *
   * @param integer $position
   * @access public
-  * @return object FluentDOMNodeList
+  * @return object FluentDOM
   */
   public function eq($position) {
-    $result = new FluentDOMNodeList($this->document, $this);
+    $result = new FluentDOM($this);
     if (isset($this->array[$position])) {
       $result->add($this->array[$position]);
     }
@@ -245,10 +256,26 @@ class FluentDOMNodeList implements Iterator, Countable {
   *
   * @param string $expr XPath expression
   * @access public
-  * @return object FluentDOMNodeList
+  * @return object FluentDOM
   */
-  public function find($expr) {
-    return $this->document->find($expr, $this);
+  public function find($expr, $context = NULL) {
+    $result = new FluentDOM($this);
+    if (empty($context)) {
+      foreach ($this->xpath()->query($expr) as $node) {
+        $result->add($node);
+      }
+    } elseif ($context instanceof FluentDOM) {
+      foreach ($context as $contextNode) {
+        foreach ($this->xpath()->query($expr, $contextNode) as $node) {
+          $result->add($node);
+        }
+      }
+    } elseif ($context instanceof DOMElement) {
+      foreach ($this->xpath()->query($expr, $context) as $node) {
+        $result->add($node);
+      }
+    }
+    return $result;
   }
     
   /**
@@ -269,7 +296,7 @@ class FluentDOMNodeList implements Iterator, Countable {
   * @param string | array $expr attribute name or attribute list
   * @param callback | string $value function callback or value
   * @access public
-  * @return string | object FluentDOMNodeList attribute value or $this
+  * @return string | object FluentDOM attribute value or $this
   */
   public function attr($expr, $value = NULL) {
     if (is_array($expr) && count($expr)) {
@@ -309,7 +336,7 @@ class FluentDOMNodeList implements Iterator, Countable {
   *
   * @param string $name
   * @access public
-  * @return object FluentDOMNodeList
+  * @return object FluentDOM
   */
   public function removeAttr($name) {
     if (!empty($name)) {
@@ -327,7 +354,7 @@ class FluentDOMNodeList implements Iterator, Countable {
   *
   * @param string $class
   * @access public
-  * @return object FluentDOMNodeList
+  * @return object FluentDOM
   */
   public function addClass($class) {
     return $this->toggleClass($class, TRUE);
@@ -338,7 +365,7 @@ class FluentDOMNodeList implements Iterator, Countable {
   *
   * @param string $class
   * @access public
-  * @return object FluentDOMNodeList
+  * @return object FluentDOM
   */
   public function hasClass($class) {
     foreach ($this->array as $node) {
@@ -357,7 +384,7 @@ class FluentDOMNodeList implements Iterator, Countable {
   *
   * @param $class
   * @access public
-  * @return object FluentDOMNodeList
+  * @return object FluentDOM
   */
   public function removeClass($class) {
     return $this->toggleClass($class, FALSE);
@@ -369,7 +396,7 @@ class FluentDOMNodeList implements Iterator, Countable {
   * @param string $class
   * @param NULL | boolean $switch toggle if NULL, add if TRUE, remove if FALSE
   * @access public
-  * @return object FluentDOMNodeList
+  * @return object FluentDOM
   */
   public function toggleClass($class, $switch = NULL) {
     foreach ($this->array as $node) {
@@ -409,7 +436,7 @@ class FluentDOMNodeList implements Iterator, Countable {
   *
   * @param string $xml optional, default value NULL
   * @access public
-  * @return string | object FluentDOMNodeList
+  * @return string | object FluentDOM
   */
   public function xml($xml = NULL) {
     if (isset($xml)) {
@@ -439,7 +466,7 @@ class FluentDOMNodeList implements Iterator, Countable {
   *
   * @param string $text optional, default value NULL
   * @access public
-  * @return string | object FluentDOMNodeList
+  * @return string | object FluentDOM
   */
   public function text($text = NULL) {
     if (isset($text)) {
@@ -459,9 +486,9 @@ class FluentDOMNodeList implements Iterator, Countable {
   /**
   * append clones of elements defined by $expr to all elements in list
   *
-  * @param string | object DOMNode | object FluentDOMNodeList $expr DOMNode or DOMNodeList or xml fragment string
+  * @param string | object DOMNode | object FluentDOM $expr DOMNode or DOMNodeList or xml fragment string
   * @access public
-  * @return string | object FluentDOMNodeList
+  * @return string | object FluentDOM
   */
   public function append($expr) {
     return $this->insertChild($expr, FALSE);
@@ -481,10 +508,10 @@ class FluentDOMNodeList implements Iterator, Countable {
   /**
   * insert clones of elements defined by $expr before or after the children of all elements in the list
   *
-  * @param string | object DOMNode | object FluentDOMNodeList $expr DOMNode or DOMNodeList or xml fragment string
+  * @param string | object DOMNode | object FluentDOM $expr DOMNode or DOMNodeList or xml fragment string
   * @param boolean $first insert at first position (or last)
   * @access private
-  * @return object FluentDOMNodeList
+  * @return object FluentDOM
   */
   private function insertChild($expr, $first) {
     if (!empty($expr)) {
@@ -495,7 +522,7 @@ class FluentDOMNodeList implements Iterator, Countable {
             ($first && $node->hasChildNodes()) ? $node->childNodes->item(0) : NULL
           );
         }
-      } elseif ($expr instanceof FluentDOMNodeList) {
+      } elseif ($expr instanceof FluentDOM) {
         foreach ($this->array as $node) {
           foreach ($expr as $exprNode) {
             $node->insertBefore(
@@ -522,9 +549,9 @@ class FluentDOMNodeList implements Iterator, Countable {
   /**
   * append clones of elements in the list to child nodes of all elements defined by $expr
   *
-  * @param string | object DOMElement | object FluentDOMNodeList $expr XPath expression, element or list of elements
+  * @param string | object DOMElement | object FluentDOM $expr XPath expression, element or list of elements
   * @access public
-  * @return object FluentDOMNodeList list of all new elements
+  * @return object FluentDOM list of all new elements
   */
   public function appendTo($expr) {
     return $this->insertChildTo($expr, FALSE);
@@ -533,9 +560,9 @@ class FluentDOMNodeList implements Iterator, Countable {
   /**
   * prepend clones of elements in the list to child nodes of all elements defined by $expr
   *
-  * @param string | object DOMElement | object FluentDOMNodeList $expr XPath expression, element or list of elements
+  * @param string | object DOMElement | object FluentDOM $expr XPath expression, element or list of elements
   * @access public
-  * @return object FluentDOMNodeList list of all new elements
+  * @return object FluentDOM list of all new elements
   */
   public function prependTo($expr) {
     return $this->insertChildTo($expr, TRUE);
@@ -544,13 +571,13 @@ class FluentDOMNodeList implements Iterator, Countable {
   /**
   * insert clones of elements in the list to child nodes of all elements defined by $expr
   *
-  * @param string | object DOMElement | object FluentDOMNodeList $expr XPath expression, element or list of elements
+  * @param string | object DOMElement | object FluentDOM $expr XPath expression, element or list of elements
   * @param boolean $first insert at first position (or last)
   * @access public
-  * @return object FluentDOMNodeList list of all new elements
+  * @return object FluentDOM list of all new elements
   */
   public function insertChildTo($expr, $first) {
-    $result = new FluentDOMNodeList($this->document, $this);
+    $result = new FluentDOM($this->document, $this);
     if (!empty($expr)) {
       if ($expr instanceof DOMElement) {
         foreach ($this->array as $node) {
@@ -562,7 +589,7 @@ class FluentDOMNodeList implements Iterator, Countable {
           );
         }
         $node->parentNode->removeChild($node);
-      } elseif ($expr instanceof FluentDOMNodeList) {
+      } elseif ($expr instanceof FluentDOM) {
         foreach ($expr as $exprNode) {
           foreach ($this->array as $node) {
             $result->add(
@@ -577,7 +604,7 @@ class FluentDOMNodeList implements Iterator, Countable {
           $node->parentNode->removeChild($node);
         }
       } elseif (is_string($expr)) {
-        $targets = $this->document->find($expr);
+        $targets = $this->find($expr, $this->document);
         foreach ($targets as $exprNode) {
           foreach ($this->array as $node) {
             $result->add(

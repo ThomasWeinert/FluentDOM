@@ -56,10 +56,10 @@ class FluentDOM implements Iterator, Countable {
   public function __construct($source) {
     if ($source instanceof FluentDOM) {
       $this->_document = $source->document;
-      $this->_useRootContext = TRUE;
       $this->_parent = $source;
     } elseif ($source instanceof DOMDocument) {
       $this->_document = $source;
+      $this->_useDocumentContext = TRUE;
     } elseif ($source instanceof DOMELement) {
       $this->_document = $source->document;
       $this->push($source);
@@ -75,7 +75,7 @@ class FluentDOM implements Iterator, Countable {
     }
     return $xpath;
   }
-  
+    
   /**
   * implement dynamic property length using magic methods  
   *
@@ -212,6 +212,7 @@ class FluentDOM implements Iterator, Countable {
     if ($elements instanceof DOMElement) {
       $this->_array[] = $elements;
     } elseif ($elements instanceof DOMNodeList ||
+              $elements instanceof DOMDocumentFragment ||
               $elements instanceof FluentDOM) {
       foreach ($elements as $node) {
         if ($node instanceof DOMElement) {
@@ -233,8 +234,12 @@ class FluentDOM implements Iterator, Countable {
     $result->push($this->_array);
     if (is_object($expr)) {
       $result->push($expr);
+    } elseif (isset($this->parent)) {
+      $result->push($this->parent->find($expr));
+    } else {
+      $result->push($this->find($expr));
     }
-    return $this;
+    return $result;
   }
   
   /**
@@ -288,7 +293,7 @@ class FluentDOM implements Iterator, Countable {
   */
   public function find($expr) {
     $result = new FluentDOM($this);
-    if (empty($this->_useDocumentContext)) {
+    if ($this->_useDocumentContext) {
       $result->push($this->xpath()->query($expr));
     } else {
       foreach ($this->_array as $contextNode) {

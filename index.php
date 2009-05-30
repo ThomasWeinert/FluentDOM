@@ -10,7 +10,6 @@ $doc->formatOutput = TRUE;
 $doc->load('test.xml');
 
 $query = new FluentDOM($doc);
-var_dump($query);
 
 $query->find('//foo')
       ->find('../.')
@@ -27,8 +26,7 @@ echo $doc->saveXML(), "\n";
 $query->find('/test/*')
       ->xml('<bla>blub</bla>')
       ->find('bla')
-      ->addClass('blob')
-      ->prepend('HUHU');
+      ->addClass('blob');
 
 echo $doc->saveXML(), "\n";
 

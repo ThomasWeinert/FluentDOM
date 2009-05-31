@@ -61,8 +61,12 @@ class FluentDOM implements Iterator, Countable {
       $this->_document = $source;
       $this->_useDocumentContext = TRUE;
     } elseif ($source instanceof DOMELement) {
-      $this->_document = $source->document;
+      $this->_document = $source->ownerDocument;
       $this->push($source);
+    } elseif (is_string($source)) {
+      $this->_document = new DOMDocument();
+      $this->_document->loadXML($source);
+      $this->_useDocumentContext = TRUE;
     } else {
       throw new Exception('Invalid document object');
     }
@@ -213,10 +217,15 @@ class FluentDOM implements Iterator, Countable {
       $this->_array[] = $elements;
     } elseif ($elements instanceof DOMNodeList ||
               $elements instanceof DOMDocumentFragment ||
-              $elements instanceof FluentDOM) {
+              $elements instanceof Iterator ||
+              is_array($elements)) {
       foreach ($elements as $node) {
         if ($node instanceof DOMElement) {
-          $this->_array[] = $node;
+          if ($node->ownerDocument == $this->_document) {
+            $this->_array[] = $node;
+          } else {
+            throw new Exception('DOMElement is not a part of this DOMDocument');
+          }
         }
       }
     }
@@ -234,8 +243,8 @@ class FluentDOM implements Iterator, Countable {
     $result->push($this->_array);
     if (is_object($expr)) {
       $result->push($expr);
-    } elseif (isset($this->parent)) {
-      $result->push($this->parent->find($expr));
+    } elseif (isset($this->_parent)) {
+      $result->push($this->_parent->find($expr));
     } else {
       $result->push($this->find($expr));
     }
@@ -251,7 +260,7 @@ class FluentDOM implements Iterator, Countable {
   public function andSelf() {
     $result = new FluentDOM($this);
     $result->push($this->_array);
-    $result->push($this->parent);
+    $result->push($this->_parent);
     return $result;
   }
   
@@ -706,5 +715,49 @@ class FluentDOM implements Iterator, Countable {
     }
     return $result;
   }
+  
+  public function each($function) {
+    if (is_array($function) ||
+        is_string($function) ||
+        $function instanceof Closure) {
+      foreach ($this->_array as $index => $node) {
+        call_user_func($function, $node, $index);
+      }
+    } else {
+      throw new Exception('Invalid callback function');
+    }
+    return $this;
+  }
+  
+  /**
+  * call mapping function for each element in list
+  *
+  * @param $function
+  * @access public
+  * @return void
+  */
+  public function map($function) {
+    $array = $this->_array;
+    $this->_array = array();
+    foreach ($array as $index => $node) {
+      if (is_array($function) ||
+          is_string($function) ||
+          $function instanceof Closure) {
+        $check = call_user_func($function, $node, $index);
+      } else {
+        throw new Exception('Invalid callback function');
+      }
+      if ($check === NULL) {
+        continue;
+      } elseif ($check instanceof DOMElement ||
+                $check instanceof DOMNodeList ||
+                $check instanceof Iterator) {
+        $this->push($check);
+      } else {
+        $this->push($node);
+      }
+    }
+    return $this;
+  } 
 }
 ?>

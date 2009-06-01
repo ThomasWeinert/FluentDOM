@@ -1,7 +1,7 @@
 <?php
 require_once 'PHPUnit/Framework.php';
 
-require_once '/data_lokal/workspaceLocal/FluentDom/FluentDom.php';
+require_once 'FluentDom.php';
 
 /**
  * Test class for FluentDom.
@@ -25,7 +25,7 @@ class FluentDomTest extends PHPUnit_Framework_TestCase
       $this->doc = new DOMDocument();
       $this->doc->preserveWhiteSpace = FALSE;
       $this->doc->formatOutput = TRUE;
-      $this->doc->load('/data_lokal/workspaceLocal/FluentDom/tests/sources/test.xml');
+      $this->doc->load('tests/sources/test.xml');
 
     }
 
@@ -124,11 +124,10 @@ class FluentDomTest extends PHPUnit_Framework_TestCase
      * @access public
      */
     public function testAppendXML() {
-      $org = $this->getNewFluentDoc();
       $out = $this->getNewFluentDoc()->append('<test>inside</test>');
 
       $this->assertTrue($out instanceof FluentDOM);
-//      $this->assertEquals($out->length, $org->length+1);
+
     }
 
 

@@ -87,6 +87,15 @@ class FluentDomTest extends PHPUnit_Framework_TestCase
       $this->assertEquals($out->item(0)->nodeName, 'foo');
     }
 
+    public function testEq() {
+      $out = $this->getNewFluentDoc()
+        ->find('//bar')
+        ->eq(3);
+
+      $this->assertTrue($out instanceof FluentDOM);
+
+    }
+
     /**
      * Testcase for add
      *

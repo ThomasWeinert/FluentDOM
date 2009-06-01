@@ -873,7 +873,7 @@ class FluentDOM implements Iterator, Countable {
   /**
   * list with the next sibling (unique) of each element in current list
   *
-  * Like jQuerys next() method but renambed because of a conflict with Iterator
+  * Like jQuerys next() method but renamed because of a conflict with Iterator
   *
   * @param string $expr optional, default value NULL
   * @access public
@@ -898,7 +898,7 @@ class FluentDOM implements Iterator, Countable {
   /**
   * list with all siblings (unique) of all elements in current list
   *
-  * Like jQuerys nextAll() method but renamed for consitency with nextSiblings()
+  * Like jQuerys nextAll() method but renamed for consistency with nextSiblings()
   *
   * @param string $expr optional, default value NULL
   * @access public
@@ -915,6 +915,31 @@ class FluentDOM implements Iterator, Countable {
           }
         }
         $next = $next->nextSibling;
+      }
+    }
+    return $result;
+  }
+  
+  /**
+  * list with the previous sibling (unique) of each element in current list
+  *
+  * Like jQuerys next() method but renamed for consistency with nextSiblings
+  *
+  * @param string $expr optional, default value NULL
+  * @access public
+  * @return FluentDOM
+  */
+  function prevSiblings($expr = NULL) {
+    $result = new FluentDOM($this);
+    foreach ($this->_array as $node) {
+      $next = $node->previousSibling;
+      while ($next instanceof DOMNode && !($next instanceof DOMElement)) {
+        $next = $next->previousSibling;
+      }
+      if (!empty($next)) {
+        if (empty($expr) || $this->test($expr, $next)) {
+          $result->push($next, TRUE);
+        }
       }
     }
     return $result;

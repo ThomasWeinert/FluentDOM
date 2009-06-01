@@ -850,6 +850,27 @@ class FluentDOM implements Iterator, Countable {
   }
   
   /**
+  * return all parents of all current elemtns in list
+  *
+  * @param string $expr optional, default value NULL
+  * @access public
+  * @return FluentDOM
+  */
+  function parents($expr = NULL) {
+    $result = new FluentDOM($this);
+    foreach ($this->_array as $node) {
+      $parents = $this->match('ancestor::*', $node);
+      for($i = $parents->length - 1; $i >= 0; --$i) {
+        $parentNode = $parents->item($i);
+        if (empty($expr) || $this->test($expr, $parentNode)) {
+          $result->push($parentNode, TRUE);
+        }
+      }
+    }
+    return $result;
+  }
+  
+  /**
   * list with the next sibling (unique) of each element in current list
   *
   * Like jQuerys next() method but renambed because of a conflict with Iterator

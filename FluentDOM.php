@@ -225,9 +225,15 @@ class FluentDOM implements Iterator, Countable {
   * @access private
   * @return void
   */
-  private function push($elements) {
+  private function push($elements, $unique = FALSE) {
     if ($elements instanceof DOMElement) {
-      $this->_array[] = $elements;
+      if ($elements->ownerDocument == $this->_document) {
+        if (!$unique || !in_array($elements, $this->_array)) {
+          $this->_array[] = $elements;
+        }
+      } else {
+        throw new Exception('DOMElement is not a part of this DOMDocument');
+      }
     } elseif ($elements instanceof DOMNodeList ||
               $elements instanceof DOMDocumentFragment ||
               $elements instanceof Iterator ||
@@ -235,7 +241,9 @@ class FluentDOM implements Iterator, Countable {
       foreach ($elements as $node) {
         if ($node instanceof DOMElement) {
           if ($node->ownerDocument == $this->_document) {
-            $this->_array[] = $node;
+            if (!$unique || !in_array($node, $this->_array)) {
+              $this->_array[] = $node;
+            }
           } else {
             throw new Exception('DOMElement is not a part of this DOMDocument');
           }
@@ -365,7 +373,7 @@ class FluentDOM implements Iterator, Countable {
       if ($check instanceof DOMNodeList && $check->length > 0) {
         return TRUE;
       } elseif ($check) {
-        return FALSE;
+        return TRUE;
       } 
     }
     return FALSE;
@@ -781,6 +789,20 @@ class FluentDOM implements Iterator, Countable {
       }
     }
     return $result;
-  } 
+  }
+  
+  /**
+  * return a list of the unique parents of the current elements in the list
+  *
+  * @access public
+  * @return FluentDOM
+  */
+  function parent() {
+    $result = new FluentDOM($this);
+    foreach ($this->_array as $node) {
+      $result->push($node->parentNode, TRUE);
+    }
+    return $result;
+  }
 }
 ?>

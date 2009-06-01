@@ -72,6 +72,17 @@ class FluentDOM implements Iterator, Countable {
     }
   }
   
+  /**
+  * static class method to create a new FluentDOM instance
+  *
+  * @param mixed $source
+  * @access public
+  * @return FluentDOM
+  */
+  public static function _($source) {
+    return new FluentDOM($source);
+  }
+  
   private function xpath() {
     static $xpath;
     if (empty($xpath) || $xpath->document != $this->_document) {
@@ -730,34 +741,37 @@ class FluentDOM implements Iterator, Countable {
   }
   
   /**
-  * call mapping function for each element in list
+  * maps the elements into an array using a mapping function
   *
   * @param $function
   * @access public
-  * @return void
+  * @return array
   */
   public function map($function) {
-    $array = $this->_array;
-    $this->_array = array();
-    foreach ($array as $index => $node) {
+    $result = array();
+    foreach ($this->_array as $index => $node) {
       if (is_array($function) ||
           is_string($function) ||
           $function instanceof Closure) {
-        $check = call_user_func($function, $node, $index);
+        $mapped = call_user_func($function, $node, $index);
       } else {
         throw new Exception('Invalid callback function');
       }
-      if ($check === NULL) {
+      if ($mapped === NULL) {
         continue;
-      } elseif ($check instanceof DOMElement ||
-                $check instanceof DOMNodeList ||
-                $check instanceof Iterator) {
-        $this->push($check);
+      } elseif ($mapped instanceof DOMNodeList ||
+                $mapped instanceof Iterator ||
+                is_array($mapped)) {
+        foreach ($mapped as $element) {
+          if ($element !== NULL) {
+            $result[] = $element;
+          }
+        }
       } else {
-        $this->push($node);
+        $result[] = $mapped;
       }
     }
-    return $this;
+    return $result;
   } 
 }
 ?>

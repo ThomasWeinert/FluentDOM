@@ -16,7 +16,7 @@ $xml = <<<XML
 XML;
 
 require_once('../FluentDOM.php');
-$dom = FluentDOM::_($xml);
+$dom = FluentDOM($xml);
 echo $dom
   ->find('//p')
   ->append(
@@ -26,7 +26,7 @@ echo $dom
         ->find('//input')
         ->map(
           function($node) {
-            return FluentDOM::_($node)->attr('value');
+            return FluentDOM($node)->attr('value');
           }
         )
     )

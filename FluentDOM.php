@@ -7,6 +7,19 @@
 
 
 /**
+* function to create a new FluentDOM instance
+*
+* This is a shortcut for "new FluentDOM($source)"
+*
+* @param mixed $source
+* @access public
+* @return FluentDOM
+*/
+function FluentDOM($source) {
+  return new FluentDOM($source);
+}
+
+/**
 * FluentDOM implements a jQuery like replacement for DOMNodeList
 */
 class FluentDOM implements Iterator, Countable {
@@ -70,17 +83,6 @@ class FluentDOM implements Iterator, Countable {
     } else {
       throw new Exception('Invalid document object');
     }
-  }
-  
-  /**
-  * static class method to create a new FluentDOM instance
-  *
-  * @param mixed $source
-  * @access public
-  * @return FluentDOM
-  */
-  public static function _($source) {
-    return new FluentDOM($source);
   }
   
   private function xpath() {
@@ -332,8 +334,15 @@ class FluentDOM implements Iterator, Countable {
   */
   public function filter($expr) {
     $result = new FluentDOM($this);
-    foreach ($this->_array as $node) {
-      $check = $this->xpath()->evaluate($expr, $node);
+    foreach ($this->_array as $index => $node) {
+      if (is_string($expr)) {
+        $check = $this->xpath()->evaluate($expr, $node);
+      } elseif ($expr instanceof Closure ||
+                is_array($expr)) {
+        $check = call_user_func($expr, $node, $index);
+      } else {
+        $check = TRUE;
+      }
       if ($check instanceof DOMNodeList && $check->length > 0) {
         $result->push($node);
       } elseif ($check) {

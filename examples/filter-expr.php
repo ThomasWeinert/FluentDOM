@@ -16,7 +16,7 @@ $xml = <<<XML
 XML;
 
 require_once('../FluentDOM.php');
-echo FluentDOM::_($xml)
+echo FluentDOM($xml)
   ->find('//div')
   ->attr('border', 1)
   ->filter('@class = "middle"')

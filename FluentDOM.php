@@ -92,6 +92,43 @@ class FluentDOM implements Iterator, Countable {
     }
     return $xpath;
   }
+  
+  /**
+  * match xpath expression agains context and return matched elements
+  *
+  * @param string$expr
+  * @param DOMElement $context optional, default value NULL
+  * @access private
+  * @return DOMNodeList
+  */
+  private function match($expr, $context = NULL) {
+    if (isset($context)) {
+      return $this->xpath()->query($expr, $context);
+    } else {
+      return $this->xpath()->query($expr); 
+    }
+  }
+  
+  /**
+  * test xpath expression against context and return true/false
+  *
+  * @param string$expr
+  * @param DOMElement $context optional, default value NULL
+  * @access private
+  * @return boolean
+  */
+  private function test($expr, $context = NULL) {
+    if (isset($context)) {
+      $check = $this->xpath()->evaluate($expr, $context);
+    } else {
+      $check = $this->xpath()->evaluate($expr); 
+    }
+    if ($check instanceof DOMNodeList) {
+      return $check->length > 0;
+    } else {
+      return (bool)$check;
+    }
+  }
     
   /**
   * implement dynamic property length using magic methods  
@@ -228,7 +265,7 @@ class FluentDOM implements Iterator, Countable {
   private function push($elements, $unique = FALSE) {
     if ($elements instanceof DOMElement) {
       if ($elements->ownerDocument == $this->_document) {
-        if (!$unique || !in_array($elements, $this->_array)) {
+        if (!$unique || !$this->inList($elements, $this->_array)) {
           $this->_array[] = $elements;
         }
       } else {
@@ -241,7 +278,7 @@ class FluentDOM implements Iterator, Countable {
       foreach ($elements as $node) {
         if ($node instanceof DOMElement) {
           if ($node->ownerDocument == $this->_document) {
-            if (!$unique || !in_array($node, $this->_array)) {
+            if (!$unique || !$this->inList($node, $this->_array)) {
               $this->_array[] = $node;
             }
           } else {
@@ -250,6 +287,22 @@ class FluentDOM implements Iterator, Countable {
         }
       }
     }
+  }
+  
+  /**
+  * check if object is already in internal list
+  *
+  * @param object DOMElement $node
+  * @access private
+  * @return boolean
+  */
+  private function inList($node) {
+    foreach ($this->_array as $compareNode) {
+      if ($compareNode === $node) {
+        return TRUE;
+      }
+    }
+    return FALSE;
   }
   
   /**
@@ -324,10 +377,10 @@ class FluentDOM implements Iterator, Countable {
   public function find($expr) {
     $result = new FluentDOM($this);
     if ($this->_useDocumentContext) {
-      $result->push($this->xpath()->query($expr));
+      $result->push($this->match($expr));
     } else {
       foreach ($this->_array as $contextNode) {
-        $result->push($this->xpath()->query($expr, $contextNode));
+        $result->push($this->match($expr, $contextNode));
       }
     }
     return $result;
@@ -344,16 +397,14 @@ class FluentDOM implements Iterator, Countable {
     $result = new FluentDOM($this);
     foreach ($this->_array as $index => $node) {
       if (is_string($expr)) {
-        $check = $this->xpath()->evaluate($expr, $node);
+        $check = $this->test($expr, $node);
       } elseif ($expr instanceof Closure ||
                 is_array($expr)) {
         $check = call_user_func($expr, $node, $index);
       } else {
         $check = TRUE;
       }
-      if ($check instanceof DOMNodeList && $check->length > 0) {
-        $result->push($node);
-      } elseif ($check) {
+      if ($check) {
         $result->push($node);
       }
     }
@@ -369,12 +420,7 @@ class FluentDOM implements Iterator, Countable {
   */
   public function is($expr) {
     foreach ($this->_array as $node) {
-      $check = $this->xpath()->evaluate($expr, $node);
-      if ($check instanceof DOMNodeList && $check->length > 0) {
-        return TRUE;
-      } elseif ($check) {
-        return TRUE;
-      } 
+      return $this->test($expr, $node); 
     }
     return FALSE;
   }
@@ -389,10 +435,8 @@ class FluentDOM implements Iterator, Countable {
   */
   public function not($expr) {
     $result = new FluentDOM($this);
-    foreach ($this->_array as $node) {$check = $this->xpath()->evaluate($expr, $node);
-      if ($check instanceof DOMNodeList && $check->length == 0) {
-        $result->push($node);
-      } elseif (!$check) {
+    foreach ($this->_array as $node) {
+      if ($this->test($expr, $node)) {
         $result->push($node);
       }
     }
@@ -725,7 +769,7 @@ class FluentDOM implements Iterator, Countable {
           $node->parentNode->removeChild($node);
         }
       } elseif (is_string($expr)) {
-        $targets = $this->xpath()->query($expr);
+        $targets = $this->match($expr);
         foreach ($targets as $exprNode) {
           foreach ($this->_array as $node) {
             $result->push(
@@ -801,6 +845,56 @@ class FluentDOM implements Iterator, Countable {
     $result = new FluentDOM($this);
     foreach ($this->_array as $node) {
       $result->push($node->parentNode, TRUE);
+    }
+    return $result;
+  }
+  
+  /**
+  * list with the next sibling (unique) of each element in current list
+  *
+  * Like jQuerys next() method but renambed because of a conflict with Iterator
+  *
+  * @param string $expr optional, default value NULL
+  * @access public
+  * @return FluentDOM
+  */
+  function nextSiblings($expr = NULL) {
+    $result = new FluentDOM($this);
+    foreach ($this->_array as $node) {
+      $next = $node->nextSibling;
+      while ($next instanceof DOMNode && !($next instanceof DOMElement)) {
+        $next = $next->nextSibling;
+      }
+      if (!empty($next)) {
+        if (empty($expr) || $this->test($expr, $next)) {
+          $result->push($next, TRUE);
+        }
+      }
+    }
+    return $result;
+  }
+  
+  /**
+  * list with all siblings (unique) of all elements in current list
+  *
+  * Like jQuerys nextAll() method but renamed for consitency with nextSiblings()
+  *
+  * @param string $expr optional, default value NULL
+  * @access public
+  * @return FluentDOM
+  */
+  function nextAllSiblings($expr = NULL) {
+  $result = new FluentDOM($this);
+    foreach ($this->_array as $node) {
+      $next = $node->nextSibling;
+      while ($next instanceof DOMNode) {
+        if ($next instanceof DOMElement) {
+          if (empty($expr) || $this->test($expr, $next)) {
+            $result->push($next, TRUE);
+          }
+        }
+        $next = $next->nextSibling;
+      }
     }
     return $result;
   }

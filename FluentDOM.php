@@ -60,6 +60,13 @@ class FluentDOM implements Iterator, Countable {
   private $_array = array();
   
   /**
+  * internal xpath instance
+  * @var object DOMXPath
+  * @access private
+  */
+  private $_xpath = NULL;
+  
+  /**
   * initialize the FluentDOM instance and set private properties
   *
   * @param object FluentDOM | object DOMElement | object DOMDocument $source
@@ -69,6 +76,7 @@ class FluentDOM implements Iterator, Countable {
   public function __construct($source) {
     if ($source instanceof FluentDOM) {
       $this->_document = $source->document;
+      $this->_xpath = $source->_xpath;
       $this->_parent = $source;
     } elseif ($source instanceof DOMDocument) {
       $this->_document = $source;
@@ -85,12 +93,24 @@ class FluentDOM implements Iterator, Countable {
     }
   }
   
+  /**
+  * create a new xpath object an register all namespaces from the current document
+  *
+  * @access private
+  * @return object DOMXPath
+  */
   private function xpath() {
-    static $xpath;
-    if (empty($xpath) || $xpath->document != $this->_document) {
-      $xpath = new DOMXPath($this->_document);
+    if (empty($this->_xpath) || $this->_xpath->document != $this->_document) {
+      $this->_xpath = new DOMXPath($this->_document);
+      foreach ($this->_xpath->query('namespace::*') as $namespace) {
+        if ($namespace->localName == 'xmlns') {
+          $this->_xpath->registerNamespace('_', $namespace->namespaceURI);
+        } else {
+          $this->_xpath->registerNamespace($namespace->localName, $namespace->namespaceURI);
+        }
+      }
     }
-    return $xpath;
+    return $this->_xpath;
   }
   
   /**

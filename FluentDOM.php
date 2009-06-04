@@ -94,7 +94,7 @@ class FluentDOM implements Iterator, Countable {
   }
   
   /**
-  * create a new xpath object an register all namespaces from the current document
+  * create a new xpath object an register default namespaces from the current document
   *
   * @access private
   * @return object DOMXPath
@@ -950,7 +950,7 @@ class FluentDOM implements Iterator, Countable {
   *
   * @param string $expr optional, default value NULL
   * @access public
-  * @return FluentDOM
+  * @return object FluentDOM
   */
   function prevSiblings($expr = NULL) {
     $result = new FluentDOM($this);
@@ -962,6 +962,29 @@ class FluentDOM implements Iterator, Countable {
       if (!empty($next)) {
         if (empty($expr) || $this->test($expr, $next)) {
           $result->push($next, TRUE);
+        }
+      }
+    }
+    return $result;
+  }
+  
+  /**
+  * Get a set of elements containing all of the unique immediate children of each of the matched set of elements.
+  *
+  * @param string $expr optional, default value NULL
+  * @access public
+  * @return object FluentDOM
+  */
+  function children($expr = NULL) {
+    $result = new FluentDOM($this);
+    foreach ($this->_array as $node) {
+      if (empty($expr)) {
+        $result->push($node->childNodes, TRUE);
+      } else {
+        foreach ($node->childNodes as $childNode) {
+          if ($this->test($expr, $childNode)) {
+            $result->push($next, TRUE);
+          }
         }
       }
     }

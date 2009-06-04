@@ -102,11 +102,9 @@ class FluentDOM implements Iterator, Countable {
   private function xpath() {
     if (empty($this->_xpath) || $this->_xpath->document != $this->_document) {
       $this->_xpath = new DOMXPath($this->_document);
-      foreach ($this->_xpath->query('namespace::*') as $namespace) {
+      foreach ($this->_xpath->query('namespace::*[name() = ""]') as $namespace) {
         if ($namespace->localName == 'xmlns') {
           $this->_xpath->registerNamespace('_', $namespace->namespaceURI);
-        } else {
-          $this->_xpath->registerNamespace($namespace->localName, $namespace->namespaceURI);
         }
       }
     }
@@ -163,7 +161,7 @@ class FluentDOM implements Iterator, Countable {
       return count($this->_array);
     case 'document' :
       return $this->_document;
-    case 'document' :
+    case 'xpath' :
       return $this->xpath();
     default :
       return NULL;

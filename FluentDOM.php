@@ -1,13 +1,13 @@
 <?php
 /**
 * FluentDOM implements a jQuery like replacement for DOMNodeList
-* 
-* @version $Id: FluentDOM.php,v 0.0 00.00.0000 00:00:00 weinert Exp $
+*
+* @version $Id$
 */
 
 
 /**
-* function to create a new FluentDOM instance
+* Function to create a new FluentDOM instance
 *
 * This is a shortcut for "new FluentDOM($source)"
 *
@@ -30,42 +30,42 @@ class FluentDOM implements Iterator, Countable {
   * @access private
   */
   private $_document = NULL;
-  
+
   /**
   * use document context for expression
-  * @var 
+  * @var
   * @access private
   */
   private $_useDocumentContext = FALSE;
-  
+
   /**
   * parent node list (last selection in chain)
   * @var object FluentDOM
   * @access private
   */
   private $_parent = NULL;
-  
+
   /**
   * current iterator position
   * @var integer
   * @access private
-  */  
+  */
   private $_position = 0;
-  
+
   /**
   * element nodes
-  * @var 
+  * @var
   * @access private
   */
   private $_array = array();
-  
+
   /**
   * internal xpath instance
   * @var object DOMXPath
   * @access private
   */
   private $_xpath = NULL;
-  
+
   /**
   * initialize the FluentDOM instance and set private properties
   *
@@ -81,7 +81,7 @@ class FluentDOM implements Iterator, Countable {
     } elseif ($source instanceof DOMDocument) {
       $this->_document = $source;
       $this->_useDocumentContext = TRUE;
-    } elseif ($source instanceof DOMELement) {
+    } elseif ($source instanceof DOMElement) {
       $this->_document = $source->ownerDocument;
       $this->push($source);
     } elseif (is_string($source)) {
@@ -89,10 +89,10 @@ class FluentDOM implements Iterator, Countable {
       $this->_document->loadXML($source);
       $this->_useDocumentContext = TRUE;
     } else {
-      throw new Exception('Invalid document object');
+      throw new Exception('Invalid source object');
     }
   }
-  
+
   /**
   * create a new xpath object an register default namespaces from the current document
   *
@@ -114,7 +114,7 @@ class FluentDOM implements Iterator, Countable {
     }
     return $this->_xpath;
   }
-  
+
   /**
   * match xpath expression agains context and return matched elements
   *
@@ -127,10 +127,10 @@ class FluentDOM implements Iterator, Countable {
     if (isset($context)) {
       return $this->xpath()->query($expr, $context);
     } else {
-      return $this->xpath()->query($expr); 
+      return $this->xpath()->query($expr);
     }
   }
-  
+
   /**
   * test xpath expression against context and return true/false
   *
@@ -143,7 +143,7 @@ class FluentDOM implements Iterator, Countable {
     if (isset($context)) {
       $check = $this->xpath()->evaluate($expr, $context);
     } else {
-      $check = $this->xpath()->evaluate($expr); 
+      $check = $this->xpath()->evaluate($expr);
     }
     if ($check instanceof DOMNodeList) {
       return $check->length > 0;
@@ -151,17 +151,17 @@ class FluentDOM implements Iterator, Countable {
       return (bool)$check;
     }
   }
-    
+
   /**
-  * implement dynamic properties using magic methods  
+  * implement dynamic properties using magic methods
   *
-  * @param string $name 
+  * @param string $name
   * @access public
   * @return mixed
   */
   public function __get($name) {
     switch ($name) {
-    case 'length' : 
+    case 'length' :
       return count($this->_array);
     case 'document' :
       return $this->_document;
@@ -171,7 +171,7 @@ class FluentDOM implements Iterator, Countable {
       return NULL;
     }
   }
-  
+
   /**
   * block changes of dynmaic readonly property length
   *
@@ -185,7 +185,7 @@ class FluentDOM implements Iterator, Countable {
       $this->$name = $value;
     }
   }
-  
+
   /**
   * support isst for dynic properties length and document
   *
@@ -203,7 +203,7 @@ class FluentDOM implements Iterator, Countable {
     }
     return FALSE;
   }
-  
+
   /**
   * the item() method is used to access elements in the node list
   *
@@ -217,7 +217,7 @@ class FluentDOM implements Iterator, Countable {
     }
     return NULL;
   }
-  
+
   /**
   * reset iterator pointer (Iterator)
   *
@@ -232,7 +232,7 @@ class FluentDOM implements Iterator, Countable {
   * get current element (Iterator)
   *
   * @access public
-  * @return DOMNode 
+  * @return DOMNode
   */
   public function current() {
     return $this->_array[$this->_position];
@@ -267,7 +267,7 @@ class FluentDOM implements Iterator, Countable {
   public function valid() {
     return isset($this->_array[$this->_position]);
   }
-  
+
   /**
   * get element count (Countable)
   *
@@ -277,7 +277,7 @@ class FluentDOM implements Iterator, Countable {
   public function count() {
     return count($this->_array);
   }
-  
+
   /**
   * push new elements an the list
   *
@@ -311,7 +311,7 @@ class FluentDOM implements Iterator, Countable {
       }
     }
   }
-  
+
   /**
   * check if object is already in internal list
   *
@@ -327,58 +327,51 @@ class FluentDOM implements Iterator, Countable {
     }
     return FALSE;
   }
-  
+
   /**
-  * Traversing: add elements to list
+  * validate string as qualified tag name
   *
-  * @param $expr
-  * @access public
-  * @return object FluentDOM
+  * @todo implement isQName
+  * @param string $name
+  * @access private
+  * @return boolean
   */
-  public function add($expr) {
-    $result = new FluentDOM($this);
-    $result->push($this->_array);
-    if (is_object($expr)) {
-      $result->push($expr);
-    } elseif (isset($this->_parent)) {
-      $result->push($this->_parent->find($expr));
+  private function isQName($name) {
+    return TRUE;
+  }
+
+  /*
+  * Object Accessors
+  */
+
+  /**
+  * Execute a function within the context of every matched element.
+  *
+  * @param callback | object Closure $function
+  * @access public
+  * @return
+  */
+  public function each($function) {
+    if (is_array($function) ||
+        is_string($function) ||
+        $function instanceof Closure) {
+      foreach ($this->_array as $index => $node) {
+        call_user_func($function, $node, $index);
+      }
     } else {
-      $result->push($this->find($expr));
+      throw new Exception('Invalid callback function');
     }
-    return $result;
+    return $this;
   }
-  
-  /**
-  * Traversing: push parent elements to current list - return merged list.
-  *
-  * @access public
-  * @return object FluentDOM
+
+  /*
+  * Traversing - Filtering
   */
-  public function andSelf() {
-    $result = new FluentDOM($this);
-    $result->push($this->_array);
-    $result->push($this->_parent);
-    return $result;
-  }
-  
+
   /**
-  * Traversing: return parent list or document
+  * Reduce the set of matched elements to a single element.
   *
-  * @access public
-  * @return object FluentDOM |  object DOMDocument
-  */
-  public function end() {
-    if (!empty($this->_parent)) {
-      return $this->_parent;
-    } else {
-      return $this;
-    }
-  }
-  
-  /**
-  * Traversing: return a new list with one element defined by position
-  *
-  * @param integer $position
+  * @param integer $position Element index (start with 0)
   * @access public
   * @return object FluentDOM
   */
@@ -389,30 +382,11 @@ class FluentDOM implements Iterator, Countable {
     }
     return $result;
   }
-  
+
   /**
-  * Traversing: return new list with selected elements
+  * Removes all elements from the set of matched elements that do not match the specified expression(s).
   *
-  * @param string $expr XPath expression
-  * @access public
-  * @return object FluentDOM
-  */
-  public function find($expr) {
-    $result = new FluentDOM($this);
-    if ($this->_useDocumentContext) {
-      $result->push($this->match($expr));
-    } else {
-      foreach ($this->_array as $contextNode) {
-        $result->push($this->match($expr, $contextNode));
-      }
-    }
-    return $result;
-  }
-  
-  /**
-  * put all nodes matching expression in a new list
-  *
-  * @param string $expr XPath expression
+  * @param string $expr | callback | object Closure XPath expression or callback function
   * @access public
   * @return object FluentDOM
   */
@@ -433,9 +407,10 @@ class FluentDOM implements Iterator, Countable {
     }
     return $result;
   }
-  
+
   /**
-  * chek if one of the nodes in the list matchers the expression
+  * Checks the current selection against an expression and returns true,
+  * if at least one element of the selection fits the given expression.
   *
   * @param string $expr XPath expression
   * @access public
@@ -443,18 +418,52 @@ class FluentDOM implements Iterator, Countable {
   */
   public function is($expr) {
     foreach ($this->_array as $node) {
-      return $this->test($expr, $node); 
+      return $this->test($expr, $node);
     }
     return FALSE;
   }
-  
+
   /**
-  * return a new list containing all elements from the current
-  * list that do not match the expression
+  * Translate a set of elements in the FluentDOM object into
+  * another set of values in an array (which may, or may not contain elements).
+  *
+  * @param callback | object Closure $function
+  * @access public
+  * @return array
+  */
+  public function map($function) {
+    $result = array();
+    foreach ($this->_array as $index => $node) {
+      if (is_array($function) ||
+          is_string($function) ||
+          $function instanceof Closure) {
+        $mapped = call_user_func($function, $node, $index);
+      } else {
+        throw new Exception('Invalid callback function');
+      }
+      if ($mapped === NULL) {
+        continue;
+      } elseif ($mapped instanceof DOMNodeList ||
+                $mapped instanceof Iterator ||
+                is_array($mapped)) {
+        foreach ($mapped as $element) {
+          if ($element !== NULL) {
+            $result[] = $element;
+          }
+        }
+      } else {
+        $result[] = $mapped;
+      }
+    }
+    return $result;
+  }
+
+  /**
+  * Removes elements matching the specified expression from the set of matched elements.
   *
   * @param string $expr XPath expression
   * @access public
-  * @return FluentDOM
+  * @return object FluentDOM
   */
   public function not($expr) {
     $result = new FluentDOM($this);
@@ -464,165 +473,294 @@ class FluentDOM implements Iterator, Countable {
       }
     }
     return $result;
-  } 
-    
-  /**
-  * validate string as qualified tag name
-  *
-  * @todo implement isQName
-  * @param string $name
-  * @access private
-  * @return boolean
-  */
-  private function isQName($name) {
-    return TRUE;
   }
-  
+
   /**
-  * attribute manipulation and reading
+  * Selects a subset of the matched elements.
   *
-  * @param string | array $expr attribute name or attribute list
-  * @param callback | string $value function callback or value
+  * @param integer $start
+  * @param integer $end
   * @access public
-  * @return string | object FluentDOM attribute value or $this
+  * @return object FluentDOM
   */
-  public function attr($expr, $value = NULL) {
-    if (is_array($expr) && count($expr)) {
-      //expr is an array of attributes and values - set on each element
-      foreach ($expr as $key => $value) {
-        if ($this->isQName($key)) {
-          foreach ($this->_array as $node) {
-            $node->setAttribute($key, $value);
-          }
-        }
-      }
-    } elseif (empty($value)) {
-      //empty value - read attribute from first element in list
-      if ($this->isQName($expr) && isset($this->_array[0])) {
-        return $this->_array[0]->getAttribute($expr);
-      }
-    } elseif (is_array($value)) {
-      //value is an array (function callback) - execute ist and set result on each element
-      if ($this->isQName($expr)) {
-        foreach ($this->_array as $node) {
-          $node->setAttribute($expr, call_user_func($value, $node));
-        }
-      }
+  function slice($start, $end = NULL) {
+    $result = new FluentDOM($this);
+    if ($end === NULL) {
+      $result->push(array_slice($this->_array, $start));
+    } elseif ($end < 0) {
+      $result->push(array_slice($this->_array, $start, $end));
+    } elseif ($end > $start) {
+      $result->push(array_slice($this->_array, $start, $end - $start));
     } else {
-      // set attribute value of each element
-      if ($this->isQName($expr)) {
-        foreach ($this->_array as $node) {
-          $node->setAttribute($expr, $value);
-        }
-      }
+      $result->push(array_slice($this->_array, $end, $start - $end));
     }
-    return $this;
+    return $result;
   }
-  
+
+  /*
+  * Traversing - Finding
+  */
+
   /**
-  * remove attribute from all elements in list
+  * Adds more elements, matched by the given expression, to the set of matched elements.
   *
-  * @param string $name
+  * @param string $expr XPath expression
   * @access public
   * @return object FluentDOM
   */
-  public function removeAttr($name) {
-    if (!empty($name)) {
-      foreach ($this->_array as $node) {
-        if ($node->hasAttribute($name)) {
-          $node->removeAttribute($name);
-        }
-      }
+  public function add($expr) {
+    $result = new FluentDOM($this);
+    $result->push($this->_array);
+    if (is_object($expr)) {
+      $result->push($expr);
+    } elseif (isset($this->_parent)) {
+      $result->push($this->_parent->find($expr));
+    } else {
+      $result->push($this->find($expr));
     }
-    return $this;
+    return $result;
   }
-  
+
   /**
-  * add css class to all elements in list
+  * Get a set of elements containing all of the unique immediate children of each of the matched set of elements.
   *
-  * @param string $class
+  * @param string $expr XPath expression
   * @access public
   * @return object FluentDOM
   */
-  public function addClass($class) {
-    return $this->toggleClass($class, TRUE);
-  }
-  
-  /**
-  * check if one element in node list has the specified css class
-  *
-  * @param string $class
-  * @access public
-  * @return object FluentDOM
-  */
-  public function hasClass($class) {
+  function children($expr = NULL) {
+    $result = new FluentDOM($this);
     foreach ($this->_array as $node) {
-      if ($node->hasAttribute('class')) {
-        $classes = preg_split('\s+', trim($node->getAttribute('class')));
-        if (in_array($class, $classes)) {
-          return TRUE;
-        }
-      }
-    }
-    return FALSE;
-  }
-  
-  /**
-  * remove css class to all elements in list
-  *
-  * @param $class
-  * @access public
-  * @return object FluentDOM
-  */
-  public function removeClass($class) {
-    return $this->toggleClass($class, FALSE);
-  }
-  
-  /**
-  * remove css class to all elements in list
-  *
-  * @param string $class
-  * @param NULL | boolean $switch toggle if NULL, add if TRUE, remove if FALSE
-  * @access public
-  * @return object FluentDOM
-  */
-  public function toggleClass($class, $switch = NULL) {
-    foreach ($this->_array as $node) {
-      if ($node->hasAttribute('class')) {
-        $currentClasses = array_flip(preg_split('(\s+)', trim($node->getAttribute('class'))));
+      if (empty($expr)) {
+        $result->push($node->childNodes, TRUE);
       } else {
-        $currentClasses = array();
-      }
-      $toggledClasses = array_unique(preg_split('(\s+)', trim($class)));
-      $modified = FALSE;
-      foreach($toggledClasses as $toggledClass) {
-        if (isset($currentClasses[$toggledClass])) {
-          if ($switch === FALSE || is_null($switch)) {
-            unset($currentClasses[$toggledClass]);
-            $modified = TRUE;
+        foreach ($node->childNodes as $childNode) {
+          if ($this->test($expr, $childNode)) {
+            $result->push($next, TRUE);
           }
-        } else {
-          if ($switch === TRUE || is_null($switch)) {
-            $currentClasses[$toggledClass] = TRUE;
-            $modified = TRUE;
-          }
-        }
-      }
-      if ($modified) {
-        if (empty($currentClasses)) {
-          $node->removeAttribute('class');
-        } else {
-          $node->setAttribute('class', implode(' ', array_keys($currentClasses)));
         }
       }
     }
-    return $this;
+    return $result;
   }
-  
+
   /**
-  * get xml content of first element or set xml content of all elements in list
+  * Searches for descendent elements that match the specified expression.
   *
-  * @param string $xml optional, default value NULL
+  * @param string $expr XPath expression
+  * @access public
+  * @return object FluentDOM
+  */
+  public function find($expr) {
+    $result = new FluentDOM($this);
+    if ($this->_useDocumentContext) {
+      $result->push($this->match($expr));
+    } else {
+      foreach ($this->_array as $contextNode) {
+        $result->push($this->match($expr, $contextNode));
+      }
+    }
+    return $result;
+  }
+
+  /**
+  * Get a set of elements containing the unique next siblings of each of the given set of elements.
+  *
+  * Like jQuerys next() method but renamed because of a conflict with Iterator
+  *
+  * @param string $expr XPath expression
+  * @access public
+  * @return FluentDOM
+  */
+  function nextSiblings($expr = NULL) {
+    $result = new FluentDOM($this);
+    foreach ($this->_array as $node) {
+      $next = $node->nextSibling;
+      while ($next instanceof DOMNode && !($next instanceof DOMElement)) {
+        $next = $next->nextSibling;
+      }
+      if (!empty($next)) {
+        if (empty($expr) || $this->test($expr, $next)) {
+          $result->push($next, TRUE);
+        }
+      }
+    }
+    return $result;
+  }
+
+  /**
+  * Find all sibling elements after the current element.
+  *
+  * Like jQuerys nextAll() method but renamed for consistency with nextSiblings()
+  *
+  * @param string $expr XPath expression
+  * @access public
+  * @return FluentDOM
+  */
+  function nextAllSiblings($expr = NULL) {
+    $result = new FluentDOM($this);
+    foreach ($this->_array as $node) {
+      $next = $node->nextSibling;
+      while ($next instanceof DOMNode) {
+        if ($next instanceof DOMElement) {
+          if (empty($expr) || $this->test($expr, $next)) {
+            $result->push($next, TRUE);
+          }
+        }
+        $next = $next->nextSibling;
+      }
+    }
+    return $result;
+  }
+
+  /**
+  * Get a set of elements containing the unique parents of the matched set of elements.
+  *
+  * @access public
+  * @return FluentDOM
+  */
+  function parent() {
+    $result = new FluentDOM($this);
+    foreach ($this->_array as $node) {
+      $result->push($node->parentNode, TRUE);
+    }
+    return $result;
+  }
+
+  /**
+  * Get a set of elements containing the unique ancestors of the matched set of elements.
+  *
+  * @param string $expr XPath expression
+  * @access public
+  * @return FluentDOM
+  */
+  function parents($expr = NULL) {
+    $result = new FluentDOM($this);
+    foreach ($this->_array as $node) {
+      $parents = $this->match('ancestor::*', $node);
+      for ($i = $parents->length - 1; $i >= 0; --$i) {
+        $parentNode = $parents->item($i);
+        if (empty($expr) || $this->test($expr, $parentNode)) {
+          $result->push($parentNode, TRUE);
+        }
+      }
+    }
+    return $result;
+  }
+
+  /**
+  * Get a set of elements containing the unique previous siblings of each of the matched set of elements.
+  *
+  * Like jQuerys prev() method but renamed for consistency with nextSiblings()
+  *
+  * @param string $expr XPath expression
+  * @access public
+  * @return object FluentDOM
+  */
+  function prevSiblings($expr = NULL) {
+    $result = new FluentDOM($this);
+    foreach ($this->_array as $node) {
+      $next = $node->previousSibling;
+      while ($next instanceof DOMNode && !($next instanceof DOMElement)) {
+        $next = $next->previousSibling;
+      }
+      if (!empty($next)) {
+        if (empty($expr) || $this->test($expr, $next)) {
+          $result->push($next, TRUE);
+        }
+      }
+    }
+    return $result;
+  }
+
+  /**
+  * Find all sibling elements in front of the current element.
+  *
+  * Like jQuerys prevAll() method but renamed for consistency with nextSiblings()
+  *
+  * @param string $expr XPath expression
+  * @access public
+  * @return object FluentDOM
+  */
+  function prevAllSiblings($expr = NULL) {
+    $result = new FluentDOM($this);
+    foreach ($this->_array as $node) {
+      $next = $node->previousSibling;
+      while ($next instanceof DOMNode) {
+        if ($next instanceof DOMElement) {
+          if (empty($expr) || $this->test($expr, $next)) {
+            $result->push($next, TRUE);
+          }
+        }
+        $next = $next->previousSibling;
+      }
+    }
+    return $result;
+  }
+
+  /**
+  * Get a set of elements containing all of the unique siblings of each of the matched set of elements.
+  *
+  * @param string $expr XPath expression
+  * @access public
+  * @return object FluentDOM
+  */
+  function siblings($expr = NULL) {
+    $result = new FluentDOM($this);
+    foreach ($this->_array as $node) {
+      $siblings = $node->parentNode->childNodes;
+      foreach ($node->parentNode->childNodes as $childNode) {
+        if ($childNode instanceof DOMElement &&
+            $childNode !== $node) {
+          if (empty($expr) || $this->test($expr, $childNode)) {
+            $result->push($childNode, TRUE);
+          }
+        }
+      }
+    }
+    return $result;
+  }
+
+  /*
+  * Traversing - Chaining
+  */
+
+  /**
+  * Add the previous selection to the current selection.
+  *
+  * @access public
+  * @return object FluentDOM
+  */
+  public function andSelf() {
+    $result = new FluentDOM($this);
+    $result->push($this->_array);
+    $result->push($this->_parent);
+    return $result;
+  }
+
+  /**
+  * Revert the most recent traversing operation,
+  * changing the set of matched elements to its previous state.
+  *
+  * @access public
+  * @return object FluentDOM
+  */
+  public function end() {
+    if (!empty($this->_parent)) {
+      return $this->_parent;
+    } else {
+      return $this;
+    }
+  }
+
+  /*
+  * Manipulation - Changing Contents
+  */
+
+  /**
+  * Get or set the xml contents of the first matched element.
+  *
+  * @param string $xml XML fragment
   * @access public
   * @return string | object FluentDOM
   */
@@ -648,11 +786,12 @@ class FluentDOM implements Iterator, Countable {
       return $result;
     }
   }
-  
+
   /**
-  * get text content of first element or set text content of all elements in list
+  * Get the combined text contents of all matched elements or
+  * set the text contents of all matched elements.
   *
-  * @param string $text optional, default value NULL
+  * @param string $text
   * @access public
   * @return string | object FluentDOM
   */
@@ -670,58 +809,86 @@ class FluentDOM implements Iterator, Countable {
       return $result;
     }
   }
-  
+
+  /*
+  * Manipulation - Inserting Inside
+  */
+
   /**
-  * append clones of elements defined by $expr to all elements in list
+  * Append content to the inside of every matched element.
   *
-  * @param string | object DOMNode | object FluentDOM $expr DOMNode or DOMNodeList or xml fragment string
+  * @param string | object DOMNode | object FluentDOM $content DOMNode or DOMNodeList or xml fragment string
   * @access public
   * @return string | object FluentDOM
   */
-  public function append($expr) {
-    return $this->insertChild($expr, FALSE);
+  public function append($content) {
+    return $this->insertChild($content, FALSE);
   }
-  
+
   /**
-  * preppend clones of elements defined by $expr to all elements in list
+  * Append all of the matched elements to another, specified, set of elements.
+  * Returns all of the inserted elements.
   *
-  * @param $expr
+  * @param string | object DOMElement | object FluentDOM $expr XPath expression, element or list of elements
   * @access public
-  * @return
+  * @return object FluentDOM
   */
-  public function prepend($expr) {
-    return $this->insertChild($expr, TRUE);
+  public function appendTo($expr) {
+    return $this->insertChildTo($expr, FALSE);
   }
-  
+
   /**
-  * insert clones of elements defined by $expr before or after the children of all elements in the list
+  * Prepend content to the inside of every matched element.
   *
-  * @param string | object DOMNode | object FluentDOM $expr DOMNode or DOMNodeList or xml fragment string
+  * @param string | object DOMNode | object FluentDOM $content DOMNode or DOMNodeList or xml fragment string
+  * @access public
+  * @return string | object FluentDOM
+  */
+  public function prepend($content) {
+    return $this->insertChild($content, TRUE);
+  }
+
+  /**
+  * Prepend all of the matched elements to another, specified, set of elements.
+  * Returns all of the inserted elements.
+  *
+  * @param string | object DOMElement | object FluentDOM $expr XPath expression, element or list of elements
+  * @access public
+  * @return object FluentDOM list of all new elements
+  */
+  public function prependTo($expr) {
+    return $this->insertChildTo($expr, TRUE);
+  }
+
+  /**
+  * Insert content to the inside of every matched element.
+  *
+  * @param string | object DOMNode | object FluentDOM $content DOMNode or DOMNodeList or xml fragment string
   * @param boolean $first insert at first position (or last)
   * @access private
   * @return object FluentDOM
   */
-  private function insertChild($expr, $first) {
-    if (!empty($expr)) {
-      if ($expr instanceof DOMNode) {
+  private function insertChild($content, $first) {
+    if (!empty($content)) {
+      if ($content instanceof DOMNode) {
         foreach ($this->_array as $node) {
           $node->insertBefore(
-            $expr->cloneNode(TRUE),
+            $content->cloneNode(TRUE),
             ($first && $node->hasChildNodes()) ? $node->childNodes->item(0) : NULL
           );
         }
-      } elseif ($expr instanceof FluentDOM) {
+      } elseif ($content instanceof FluentDOM) {
         foreach ($this->_array as $node) {
-          foreach ($expr as $exprNode) {
+          foreach ($content as $contentNode) {
             $node->insertBefore(
-              $exprNode->cloneNode(TRUE),
+              $contentNode->cloneNode(TRUE),
               ($first && $node->hasChildNodes()) ? $node->childNodes->item(0) : NULL
             );
           }
         }
       } else {
         $fragment = $this->_document->createDocumentFragment();
-        if ($fragment->appendXML($expr)) {
+        if ($fragment->appendXML($content)) {
           foreach ($this->_array as $node) {
             $node->insertBefore(
               $fragment->cloneNode(TRUE),
@@ -733,36 +900,15 @@ class FluentDOM implements Iterator, Countable {
     }
     return $this;
   }
-  
+
   /**
-  * append clones of elements in the list to child nodes of all elements defined by $expr
-  *
-  * @param string | object DOMElement | object FluentDOM $expr XPath expression, element or list of elements
-  * @access public
-  * @return object FluentDOM list of all new elements
-  */
-  public function appendTo($expr) {
-    return $this->insertChildTo($expr, FALSE);
-  }
-  
-  /**
-  * prepend clones of elements in the list to child nodes of all elements defined by $expr
-  *
-  * @param string | object DOMElement | object FluentDOM $expr XPath expression, element or list of elements
-  * @access public
-  * @return object FluentDOM list of all new elements
-  */
-  public function prependTo($expr) {
-    return $this->insertChildTo($expr, TRUE);
-  }
-  
-  /**
-  * insert clones of elements in the list to child nodes of all elements defined by $expr
+  * Insert all of the matched elements to another, specified, set of elements.
+  * Returns all of the inserted elements.
   *
   * @param string | object DOMElement | object FluentDOM $expr XPath expression, element or list of elements
   * @param boolean $first insert at first position (or last)
   * @access public
-  * @return object FluentDOM list of all new elements
+  * @return object FluentDOM
   */
   public function insertChildTo($expr, $first) {
     $result = new FluentDOM($this->_document, $this);
@@ -810,185 +956,178 @@ class FluentDOM implements Iterator, Countable {
     }
     return $result;
   }
-  
-  public function each($function) {
-    if (is_array($function) ||
-        is_string($function) ||
-        $function instanceof Closure) {
-      foreach ($this->_array as $index => $node) {
-        call_user_func($function, $node, $index);
+
+  /*
+  * Manipulation - Inserting Inside
+  */
+
+  /*
+  * Manipulation - Inserting Around
+  */
+
+  /*
+  * Manipulation - Replacing
+  */
+
+  /*
+  * Manipulation - Removing
+  */
+
+  /*
+  * Manipulation - Copying
+  */
+
+  /*
+  * Attributes - General
+  */
+
+  /**
+  * Access a property on the first matched element or set the attribute(s) of all matched elements
+  *
+  * @param string | array $expr attribute name or attribute list
+  * @param callback | string $value function callback or value
+  * @access public
+  * @return string | object FluentDOM attribute value or $this
+  */
+  public function attr($expr, $value = NULL) {
+    if (is_array($expr) && count($expr)) {
+      //expr is an array of attributes and values - set on each element
+      foreach ($expr as $key => $value) {
+        if ($this->isQName($key)) {
+          foreach ($this->_array as $node) {
+            $node->setAttribute($key, $value);
+          }
+        }
+      }
+    } elseif (empty($value)) {
+      //empty value - read attribute from first element in list
+      if ($this->isQName($expr) && isset($this->_array[0])) {
+        return $this->_array[0]->getAttribute($expr);
+      } else {
+        return NULL;
+      }
+    } elseif (is_array($value)) {
+      //value is an array (function callback) - execute ist and set result on each element
+      if ($this->isQName($expr)) {
+        foreach ($this->_array as $node) {
+          $node->setAttribute($expr, call_user_func($value, $node));
+        }
       }
     } else {
-      throw new Exception('Invalid callback function');
+      // set attribute value of each element
+      if ($this->isQName($expr)) {
+        foreach ($this->_array as $node) {
+          $node->setAttribute($expr, $value);
+        }
+      }
     }
     return $this;
   }
-  
+
   /**
-  * maps the elements into an array using a mapping function
+  * Remove an attribute from each of the matched elements.
   *
-  * @param $function
-  * @access public
-  * @return array
-  */
-  public function map($function) {
-    $result = array();
-    foreach ($this->_array as $index => $node) {
-      if (is_array($function) ||
-          is_string($function) ||
-          $function instanceof Closure) {
-        $mapped = call_user_func($function, $node, $index);
-      } else {
-        throw new Exception('Invalid callback function');
-      }
-      if ($mapped === NULL) {
-        continue;
-      } elseif ($mapped instanceof DOMNodeList ||
-                $mapped instanceof Iterator ||
-                is_array($mapped)) {
-        foreach ($mapped as $element) {
-          if ($element !== NULL) {
-            $result[] = $element;
-          }
-        }
-      } else {
-        $result[] = $mapped;
-      }
-    }
-    return $result;
-  }
-  
-  /**
-  * return a list of the unique parents of the current elements in the list
-  *
-  * @access public
-  * @return FluentDOM
-  */
-  function parent() {
-    $result = new FluentDOM($this);
-    foreach ($this->_array as $node) {
-      $result->push($node->parentNode, TRUE);
-    }
-    return $result;
-  }
-  
-  /**
-  * return all parents of all current elemtns in list
-  *
-  * @param string $expr optional, default value NULL
-  * @access public
-  * @return FluentDOM
-  */
-  function parents($expr = NULL) {
-    $result = new FluentDOM($this);
-    foreach ($this->_array as $node) {
-      $parents = $this->match('ancestor::*', $node);
-      for($i = $parents->length - 1; $i >= 0; --$i) {
-        $parentNode = $parents->item($i);
-        if (empty($expr) || $this->test($expr, $parentNode)) {
-          $result->push($parentNode, TRUE);
-        }
-      }
-    }
-    return $result;
-  }
-  
-  /**
-  * list with the next sibling (unique) of each element in current list
-  *
-  * Like jQuerys next() method but renamed because of a conflict with Iterator
-  *
-  * @param string $expr optional, default value NULL
-  * @access public
-  * @return FluentDOM
-  */
-  function nextSiblings($expr = NULL) {
-    $result = new FluentDOM($this);
-    foreach ($this->_array as $node) {
-      $next = $node->nextSibling;
-      while ($next instanceof DOMNode && !($next instanceof DOMElement)) {
-        $next = $next->nextSibling;
-      }
-      if (!empty($next)) {
-        if (empty($expr) || $this->test($expr, $next)) {
-          $result->push($next, TRUE);
-        }
-      }
-    }
-    return $result;
-  }
-  
-  /**
-  * list with all siblings (unique) of all elements in current list
-  *
-  * Like jQuerys nextAll() method but renamed for consistency with nextSiblings()
-  *
-  * @param string $expr optional, default value NULL
-  * @access public
-  * @return FluentDOM
-  */
-  function nextAllSiblings($expr = NULL) {
-  $result = new FluentDOM($this);
-    foreach ($this->_array as $node) {
-      $next = $node->nextSibling;
-      while ($next instanceof DOMNode) {
-        if ($next instanceof DOMElement) {
-          if (empty($expr) || $this->test($expr, $next)) {
-            $result->push($next, TRUE);
-          }
-        }
-        $next = $next->nextSibling;
-      }
-    }
-    return $result;
-  }
-  
-  /**
-  * list with the previous sibling (unique) of each element in current list
-  *
-  * Like jQuerys next() method but renamed for consistency with nextSiblings
-  *
-  * @param string $expr optional, default value NULL
+  * @param string $name
   * @access public
   * @return object FluentDOM
   */
-  function prevSiblings($expr = NULL) {
-    $result = new FluentDOM($this);
-    foreach ($this->_array as $node) {
-      $next = $node->previousSibling;
-      while ($next instanceof DOMNode && !($next instanceof DOMElement)) {
-        $next = $next->previousSibling;
-      }
-      if (!empty($next)) {
-        if (empty($expr) || $this->test($expr, $next)) {
-          $result->push($next, TRUE);
+  public function removeAttr($name) {
+    if (!empty($name)) {
+      foreach ($this->_array as $node) {
+        if ($node->hasAttribute($name)) {
+          $node->removeAttribute($name);
         }
       }
     }
-    return $result;
+    return $this;
   }
-  
+
+  /*
+  * Attributes - Classes
+  */
+
   /**
-  * Get a set of elements containing all of the unique immediate children of each of the matched set of elements.
+  * Adds the specified class(es) to each of the set of matched elements.
   *
-  * @param string $expr optional, default value NULL
+  * @param string $class
   * @access public
   * @return object FluentDOM
   */
-  function children($expr = NULL) {
-    $result = new FluentDOM($this);
+  public function addClass($class) {
+    return $this->toggleClass($class, TRUE);
+  }
+
+  /**
+  * Returns true if the specified class is present on at least one of the set of matched elements.
+  *
+  * @param string $class
+  * @access public
+  * @return boolean
+  */
+  public function hasClass($class) {
     foreach ($this->_array as $node) {
-      if (empty($expr)) {
-        $result->push($node->childNodes, TRUE);
-      } else {
-        foreach ($node->childNodes as $childNode) {
-          if ($this->test($expr, $childNode)) {
-            $result->push($next, TRUE);
-          }
+      if ($node->hasAttribute('class')) {
+        $classes = preg_split('\s+', trim($node->getAttribute('class')));
+        if (in_array($class, $classes)) {
+          return TRUE;
         }
       }
     }
-    return $result;
+    return FALSE;
+  }
+
+  /**
+  * Removes all or the specified class(es) from the set of matched elements.
+  *
+  * @param $class
+  * @access public
+  * @return object FluentDOM
+  */
+  public function removeClass($class) {
+    return $this->toggleClass($class, FALSE);
+  }
+
+  /**
+  * Adds the specified class if the switch is TRUE,
+  * removes the specified class if the switch is FALSE,
+  * toggles the specified class if the switch is NULL.
+  *
+  * @param string $class
+  * @param NULL | boolean $switch toggle if NULL, add if TRUE, remove if FALSE
+  * @access public
+  * @return object FluentDOM
+  */
+  public function toggleClass($class, $switch = NULL) {
+    foreach ($this->_array as $node) {
+      if ($node->hasAttribute('class')) {
+        $currentClasses = array_flip(preg_split('(\s+)', trim($node->getAttribute('class'))));
+      } else {
+        $currentClasses = array();
+      }
+      $toggledClasses = array_unique(preg_split('(\s+)', trim($class)));
+      $modified = FALSE;
+      foreach($toggledClasses as $toggledClass) {
+        if (isset($currentClasses[$toggledClass])) {
+          if ($switch === FALSE || is_null($switch)) {
+            unset($currentClasses[$toggledClass]);
+            $modified = TRUE;
+          }
+        } else {
+          if ($switch === TRUE || is_null($switch)) {
+            $currentClasses[$toggledClass] = TRUE;
+            $modified = TRUE;
+          }
+        }
+      }
+      if ($modified) {
+        if (empty($currentClasses)) {
+          $node->removeAttribute('class');
+        } else {
+          $node->setAttribute('class', implode(' ', array_keys($currentClasses)));
+        }
+      }
+    }
+    return $this;
   }
 }
 ?>

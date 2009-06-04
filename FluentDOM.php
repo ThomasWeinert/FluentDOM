@@ -964,7 +964,88 @@ class FluentDOM implements Iterator, Countable {
   /*
   * Manipulation - Inserting Around
   */
+  
+  /**
+  * Wrap $content around a set of elements
+  *
+  * @param array $elements
+  * @param string | array | object DOMElement | object FluentDOM $content
+  * @access private
+  * @return object FluentDOM
+  */
+  private function _wrap($elements, $content) {
+    if ($content instanceof DOMElement) {
+      $simple = FALSE;
+      foreach ($elements as $node) {
+        $wrapper = $content->cloneNode(TRUE);
+        $targets = $this->match('.//*[count(*) = 0]', $wrapper);
+        if ($simple || $targets->length == 0) {
+          $target = $wrapper;
+          $simple = TRUE;
+        } else {
+          $target = $targets->item(0);
+        }
+        $node->parentNode->insertBefore($wrapper, $node);
+        $target->appendChild($node);
+      }
+    } else {
+      if (is_string($content)) {
+        $fragment = $this->_document->createDocumentFragment();
+        if ($fragment->appendXML($content)) {
+          return $this->_wrap($elements, $fragment->childNodes);
+        } else {
+          throw new Exception('Invalid document fragment');
+        }
+      }
+      if ($content instanceof DOMNodeList ||
+          $content instanceof Iterator ||
+          is_array($content)) {
+        foreach ($content as $element) {
+          if ($element instanceof DOMElement) {
+            return $this->_wrap($elements, $element);  
+          } 
+        }
+      }
+      throw new Exception('No element found'); 
+    }
+    return $this;
+  }
+  
 
+  /**
+  * Wrap each matched element with the specified content.
+  *
+  * If $content contains several elements the first one is used 
+  *
+  * @param string | array | object DOMElement | object FluentDOM $content
+  * @access public
+  * @return object FluentDOM
+  */
+  public function wrap($content) {
+    return $this->_wrap($this->_array, $content);
+  }
+  
+  /**
+  * Wrap the inner child contents of each matched element
+  * (including text nodes) with an XML structure.
+  *
+  * @param string | array | object DOMElement | object FluentDOM $content
+  * @access public
+  * @return FluentDOM
+  */
+  public function wrapInner($content) {
+    $elements = array();
+    foreach ($this->_array as $node) {
+      foreach ($node->childNodes as $childNode) {
+        if ($childNode instanceof DOMElement ||
+            $childNode instanceof DOMText) {
+          $elements[] = $childNode;   
+        }
+      }
+    }
+    return $this->_wrap($elements, $content);
+  }
+  
   /*
   * Manipulation - Replacing
   */

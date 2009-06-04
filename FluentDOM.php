@@ -5,7 +5,6 @@
 * @version $Id$
 */
 
-
 /**
 * Function to create a new FluentDOM instance
 *
@@ -86,6 +85,7 @@ class FluentDOM implements Iterator, Countable {
       $this->push($source);
     } elseif (is_string($source)) {
       $this->_document = new DOMDocument();
+      $this->_document->preserveWhitespace = FALSE;
       $this->_document->loadXML($source);
       $this->_useDocumentContext = TRUE;
     } else {
@@ -974,11 +974,14 @@ class FluentDOM implements Iterator, Countable {
   * @return object FluentDOM
   */
   private function _wrap($elements, $content) {
+    $wrapperTemplate = $this->_getWrapper($content);
     if ($content instanceof DOMElement) {
       $simple = FALSE;
       foreach ($elements as $node) {
-        $wrapper = $content->cloneNode(TRUE);
-        $targets = $this->match('.//*[count(*) = 0]', $wrapper);
+        $wrapper = $wrapperTemplate->cloneNode(TRUE);
+        if (!$simple) {
+          $targets = $this->match('.//*[count(*) = 0]', $wrapper);
+        }
         if ($simple || $targets->length == 0) {
           $target = $wrapper;
           $simple = TRUE;
@@ -989,26 +992,45 @@ class FluentDOM implements Iterator, Countable {
         $target->appendChild($node);
       }
     } else {
-      if (is_string($content)) {
-        $fragment = $this->_document->createDocumentFragment();
-        if ($fragment->appendXML($content)) {
-          return $this->_wrap($elements, $fragment->childNodes);
-        } else {
-          throw new Exception('Invalid document fragment');
-        }
-      }
-      if ($content instanceof DOMNodeList ||
-          $content instanceof Iterator ||
-          is_array($content)) {
-        foreach ($content as $element) {
-          if ($element instanceof DOMElement) {
-            return $this->_wrap($elements, $element);  
-          } 
-        }
-      }
-      throw new Exception('No element found'); 
+       
     }
     return $this;
+  }
+  
+  /**
+  * Convert wrapper content to DOMElement
+  *
+  * @param string | array | object DOMElement | object FluentDOM $content
+  * @access private
+  * @return object DOMElement
+  */
+  private function _getWrapper($content) {
+    if ($content instanceof DOMElement) {
+      return $content;
+    }
+    if (is_string($content)) {
+      $fragment = $this->_document->createDocumentFragment();
+      if ($fragment->appendXML($content)) {
+        foreach ($fragment->childNodes as $element) {
+          if ($element instanceof DOMElement) {
+            $element->parentNode->removeChild($element);
+            return $element;
+          } 
+        }
+      } else {
+        throw new Exception('Invalid document fragment');
+      }
+    }
+    if ($content instanceof DOMNodeList ||
+        $content instanceof Iterator ||
+        is_array($content)) {
+      foreach ($content as $element) {
+        if ($element instanceof DOMElement) {
+          return $element;  
+        } 
+      }
+    }
+    throw new Exception('No element found'); 
   }
   
 
@@ -1023,6 +1045,57 @@ class FluentDOM implements Iterator, Countable {
   */
   public function wrap($content) {
     return $this->_wrap($this->_array, $content);
+  }
+  
+  /**
+  * Wrap al matched elements with the specified content
+  *
+  * If the matched elemetns are not siblings, wrap each group of siblings.
+  *
+  * @param string | array | object DOMElement | object FluentDOM $content
+  * @access public
+  * @return object FluentDOM
+  */
+  public function wrapAll($content) {
+    $current = NULL;
+    $counter = 0;
+    $groups = array();
+    //group elements by previous node - ignore whitespace text nodes
+    foreach ($this->_array as $node) {
+      $previous = $node->previousSibling;
+      while ($previous instanceof DOMText && trim($previous->textContent) == '') {
+        $previous = $previous->previousSibling;
+      }
+      if ($previous !== $current) {
+        $counter++;
+      }
+      $groups[$counter][] = $node;
+      $current = $node;
+    }
+    if (count($groups) > 0) {
+      $wrapperTemplate = $this->_getWrapper($content);
+      $simple = FALSE;
+      foreach ($groups as $group) {
+        if (isset($group[0])) {
+          $node = $group[0];
+          $wrapper = $wrapperTemplate->cloneNode(TRUE);
+          if (!$simple) {
+            $targets = $this->match('.//*[count(*) = 0]', $wrapper);
+          }
+          if ($simple || $targets->length == 0) {
+            $target = $wrapper;
+            $simple = TRUE;
+          } else {
+            $target = $targets->item(0);
+          }
+          $node->parentNode->insertBefore($wrapper, $node);
+          foreach ($group as $node) {
+            $target->appendChild($node);
+          }
+        }
+      }
+    }
+    return $this;
   }
   
   /**

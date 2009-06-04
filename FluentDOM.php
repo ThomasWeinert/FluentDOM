@@ -102,9 +102,13 @@ class FluentDOM implements Iterator, Countable {
   private function xpath() {
     if (empty($this->_xpath) || $this->_xpath->document != $this->_document) {
       $this->_xpath = new DOMXPath($this->_document);
-      foreach ($this->_xpath->query('namespace::*[name() = ""]') as $namespace) {
-        if ($namespace->localName == 'xmlns') {
-          $this->_xpath->registerNamespace('_', $namespace->namespaceURI);
+      if ($this->_document->documentElement) {
+        $uri = $this->_document->documentElement->lookupnamespaceURI('_');
+        if (!isset($uri)) {
+          $uri = $this->_document->documentElement->lookupnamespaceURI(NULL);
+          if (isset($uri)) {
+            $this->_xpath->registerNamespace('_', $uri);
+          }
         }
       }
     }

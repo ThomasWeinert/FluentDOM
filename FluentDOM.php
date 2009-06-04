@@ -151,7 +151,7 @@ class FluentDOM implements Iterator, Countable {
   }
     
   /**
-  * implement dynamic property length using magic methods  
+  * implement dynamic properties using magic methods  
   *
   * @param string $name 
   * @access public
@@ -161,10 +161,10 @@ class FluentDOM implements Iterator, Countable {
     switch ($name) {
     case 'length' : 
       return count($this->_array);
-      break;
     case 'document' :
       return $this->_document;
-      break;
+    case 'document' :
+      return $this->xpath();
     default :
       return NULL;
     }
@@ -179,7 +179,7 @@ class FluentDOM implements Iterator, Countable {
   * @return void
   */
   public function __set($name, $value) {
-    if ($name != 'length' && $name != 'document') {
+    if ($name != 'length' && $name != 'document' && $name != 'xpath') {
       $this->$name = $value;
     }
   }
@@ -194,6 +194,7 @@ class FluentDOM implements Iterator, Countable {
   public function __isset($name) {
     switch ($name) {
     case 'length' :
+    case 'xpath' :
       return TRUE;
     case 'document' :
       return isset($this->_document);

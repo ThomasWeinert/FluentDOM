@@ -143,6 +143,31 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     }
     return FALSE;
   }
+  
+  /**
+  * declaring an empty() method will crash the parser so we use some magic
+  *
+  * @param string $name
+  * @param array $arguments
+  * @access public
+  * @return mixed
+  */
+  public function __call($name, $arguments) {
+    switch (strtolower($name)) {
+    case 'empty' :
+      return $this->_emptyNodes();
+    }
+  }
+  
+  /**
+  * Return the XML output of the internal dom document
+  *
+  * @access public
+  * @return string
+  */
+  public function __toString() {
+    return $this->_document->saveXML();
+  }
 
   /**
   * the item() method is used to access elements in the node list
@@ -1240,6 +1265,21 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   /*
   * Manipulation - Removing
   */
+  
+  /**
+  * this is the empty() method - but because empty
+  * is a reserved word we can no declare it directly
+  * @see __call
+  *
+  * @access public
+  * @return object FluentDOM
+  */
+  private function _emptyNodes() {
+    foreach ($this->_array as $node) {
+      $node->nodeValue = '';
+    }
+    return $this;
+  }
 
   /*
   * Manipulation - Copying

@@ -14,5 +14,5 @@ XML;
 require_once('../FluentDOM.php');
 echo FluentDOM($xml)
   ->find('//p[@class = "first"]')
-  ->empty();
+  ->remove();
 ?>

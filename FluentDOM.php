@@ -1280,6 +1280,24 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     }
     return $this;
   }
+  
+  /**
+  * Removes all matched elements from the DOM.
+  *
+  * @param string $expr XPath expression
+  * @access public
+  * @return object FluentDOM removed elements
+  */
+  public function remove($expr = NULL) {
+    $result = new FluentDOM($this);
+    foreach ($this->_array as $node) {
+      if (empty($expr) || $this->test($expr, $node)) {
+        $node->parentNode->removeChild($node);
+        $result->push($node);
+      }
+    }
+    return $result;
+  }
 
   /*
   * Manipulation - Copying

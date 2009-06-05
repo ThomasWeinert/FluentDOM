@@ -40,7 +40,5 @@ echo FluentDOM($xml)
         )
       ); 
     }
-  )
-  ->document
-  ->saveXML();
+  );
 ?>

@@ -21,5 +21,5 @@ $dom
   ->find('//div')
   ->text('$isFormParent = '.($isFormParent ? 'TRUE' : 'FALSE'));
 
-echo $dom->document->saveXML();
+echo $dom;
 ?>

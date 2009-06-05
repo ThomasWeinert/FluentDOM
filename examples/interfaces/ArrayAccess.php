@@ -12,9 +12,8 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../FluentDOM.php');
+require_once('../../FluentDOM.php');
 
-echo FluentDOM($xml)
-  ->find('//p')
-  ->wrap('<div class="outer"><div class="inner"></div></div>');
+$dom = FluentDOM($xml)->find('//p');
+echo $dom[0]->textContent, ' ', $dom[2]->textContent;
 ?>

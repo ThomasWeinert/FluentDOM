@@ -20,7 +20,5 @@ require_once('../FluentDOM.php');
 echo FluentDOM($xml)
   ->find('//div')
   ->not('@class = "green" or @id = "blueone"')
-  ->addClass('blue')
-  ->document
-  ->saveXML();
+  ->addClass('blue');
 ?>

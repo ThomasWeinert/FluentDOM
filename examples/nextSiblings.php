@@ -17,7 +17,5 @@ require_once('../FluentDOM.php');
 echo FluentDOM($xml)
   ->find('//button[@disabled]')
   ->nextSiblings()
-  ->text('This button is disabled.')
-  ->document
-  ->saveXML();
+  ->text('This button is disabled.');
 ?>

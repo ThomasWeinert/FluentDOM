@@ -19,7 +19,5 @@ require_once('../FluentDOM.php');
 echo FluentDOM($xml)
   ->find('//div')
   ->eq(2)
-  ->addClass('emphased')
-  ->document
-  ->saveXML();
+  ->addClass('emphased');
 ?>

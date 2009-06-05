@@ -20,7 +20,5 @@ echo FluentDOM($xml)
   ->find('//div')
   ->attr('border', 1)
   ->filter('@class = "middle"')
-  ->attr('style', 'text-align: center;')
-  ->document
-  ->saveXML();
+  ->attr('style', 'text-align: center;');
 ?>

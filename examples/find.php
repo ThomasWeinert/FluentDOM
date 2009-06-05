@@ -15,7 +15,5 @@ require_once('../FluentDOM.php');
 echo FluentDOM($xml)
   ->find('//p')
   ->find('span')
-  ->addClass('red')
-  ->document
-  ->saveXML();
+  ->addClass('red');
 ?>

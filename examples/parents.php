@@ -31,7 +31,5 @@ $parents = implode(
 );
 echo $dom
   ->find('//b')
-  ->append('<strong>'.htmlspecialchars($parents).'</strong>')
-  ->document
-  ->saveXML();
+  ->append('<strong>'.htmlspecialchars($parents).'</strong>');
 ?>

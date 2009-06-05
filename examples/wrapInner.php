@@ -16,7 +16,5 @@ require_once('../FluentDOM.php');
 
 echo FluentDOM($xml)
   ->find('//p')
-  ->wrapInner('<b></b>')
-  ->document
-  ->saveXML();
+  ->wrapInner('<b></b>');
 ?>

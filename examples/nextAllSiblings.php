@@ -17,7 +17,5 @@ require_once('../FluentDOM.php');
 echo FluentDOM($xml)
   ->find('//div[position() = 1]')
   ->nextAllSiblings()
-  ->addClass('after')
-  ->document
-  ->saveXML();
+  ->addClass('after');
 ?>

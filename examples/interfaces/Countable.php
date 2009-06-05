@@ -12,9 +12,7 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../FluentDOM.php');
+require_once('../../FluentDOM.php');
 
-echo FluentDOM($xml)
-  ->find('//p')
-  ->wrap('<div class="outer"><div class="inner"></div></div>');
+echo count(FluentDOM($xml)->find('//p')), ' <p> tags';
 ?>

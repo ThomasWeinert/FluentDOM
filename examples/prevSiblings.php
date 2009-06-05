@@ -18,7 +18,5 @@ require_once('../FluentDOM.php');
 echo FluentDOM($xml)
   ->find('//div[@id = "start"]')
   ->prevSiblings()
-  ->addClass('before')
-  ->document
-  ->saveXML();
+  ->addClass('before');
 ?>

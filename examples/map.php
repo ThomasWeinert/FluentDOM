@@ -30,7 +30,5 @@ echo $dom
           }
         )
     )
-  )
-  ->document
-  ->saveXML();
+  );
 ?>

@@ -17,7 +17,5 @@ require_once('../FluentDOM.php');
 echo FluentDOM($xml)
   ->find('//div[@id = "container"]/p')
   ->children()
-  ->toggleClass('child')
-  ->document
-  ->saveXML();
+  ->toggleClass('child');
 ?>

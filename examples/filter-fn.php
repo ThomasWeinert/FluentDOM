@@ -27,7 +27,5 @@ echo FluentDOM($xml)
         return FALSE;
       }
     )
-  ->attr('style', 'text-align: center;')
-  ->document
-  ->saveXML();
+  ->attr('style', 'text-align: center;');
 ?>

@@ -21,7 +21,7 @@ function FluentDOM($source) {
 /**
 * FluentDOM implements a jQuery like replacement for DOMNodeList
 */
-class FluentDOM implements Iterator, Countable {
+class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, ArrayAccess {
 
   /**
   * document object
@@ -85,70 +85,10 @@ class FluentDOM implements Iterator, Countable {
       $this->push($source);
     } elseif (is_string($source)) {
       $this->_document = new DOMDocument();
-      $this->_document->preserveWhitespace = FALSE;
       $this->_document->loadXML($source);
       $this->_useDocumentContext = TRUE;
     } else {
       throw new Exception('Invalid source object');
-    }
-  }
-
-  /**
-  * create a new xpath object an register default namespaces from the current document
-  *
-  * @access private
-  * @return object DOMXPath
-  */
-  private function xpath() {
-    if (empty($this->_xpath) || $this->_xpath->document != $this->_document) {
-      $this->_xpath = new DOMXPath($this->_document);
-      if ($this->_document->documentElement) {
-        $uri = $this->_document->documentElement->lookupnamespaceURI('_');
-        if (!isset($uri)) {
-          $uri = $this->_document->documentElement->lookupnamespaceURI(NULL);
-          if (isset($uri)) {
-            $this->_xpath->registerNamespace('_', $uri);
-          }
-        }
-      }
-    }
-    return $this->_xpath;
-  }
-
-  /**
-  * match xpath expression agains context and return matched elements
-  *
-  * @param string$expr
-  * @param DOMElement $context optional, default value NULL
-  * @access private
-  * @return DOMNodeList
-  */
-  private function match($expr, $context = NULL) {
-    if (isset($context)) {
-      return $this->xpath()->query($expr, $context);
-    } else {
-      return $this->xpath()->query($expr);
-    }
-  }
-
-  /**
-  * test xpath expression against context and return true/false
-  *
-  * @param string$expr
-  * @param DOMElement $context optional, default value NULL
-  * @access private
-  * @return boolean
-  */
-  private function test($expr, $context = NULL) {
-    if (isset($context)) {
-      $check = $this->xpath()->evaluate($expr, $context);
-    } else {
-      $check = $this->xpath()->evaluate($expr);
-    }
-    if ($check instanceof DOMNodeList) {
-      return $check->length > 0;
-    } else {
-      return (bool)$check;
     }
   }
 
@@ -217,19 +157,13 @@ class FluentDOM implements Iterator, Countable {
     }
     return NULL;
   }
-
-  /**
-  * reset iterator pointer (Iterator)
-  *
-  * @access public
-  * @return void
+  
+  /*
+  * Interface - Iterator, SeekableIterator
   */
-  public function rewind() {
-    $this->_position = 0;
-  }
 
   /**
-  * get current element (Iterator)
+  * Get current iterator element
   *
   * @access public
   * @return DOMNode
@@ -239,7 +173,7 @@ class FluentDOM implements Iterator, Countable {
   }
 
   /**
-  * get current key (Iterator)
+  * Get current iterator pointer
   *
   * @access public
   * @return integer
@@ -249,7 +183,7 @@ class FluentDOM implements Iterator, Countable {
   }
 
   /**
-  * move key to next element (Iterator)
+  * Move iterator pointer to next element
   *
   * @access public
   * @return
@@ -259,7 +193,32 @@ class FluentDOM implements Iterator, Countable {
   }
 
   /**
-  * check if current position contains a valid element (Iterator)
+  * Reset iterator pointer
+  *
+  * @access public
+  * @return void
+  */
+  public function rewind() {
+    $this->_position = 0;
+  }
+
+  /**
+  * Move iterator pointer to specified element
+  *
+  * @param integer $position
+  * @access public
+  * @return void
+  */
+  public function seek($position) {
+    if (isset($this->_array[$position])) {
+      $this->_position = $position;
+    } else {
+      throw new Exception('Unknown Index');
+    }
+  }
+
+  /**
+  * Check if current iterator pointer contains a valid element
   *
   * @access public
   * @return boolean
@@ -267,6 +226,32 @@ class FluentDOM implements Iterator, Countable {
   public function valid() {
     return isset($this->_array[$this->_position]);
   }
+  
+  /**
+  * Get children of the current iterator element
+  *
+  * @access public
+  * @return object FluentDOM
+  */
+  public function getChildren() {
+    $result = new FluentDOM($this);
+    $result->push($this->match('*', $this->_array[$this->_position]));
+    return $result;
+  }
+  
+  /**
+  * Check if the current iterator element has children
+  *
+  * @access public
+  * @return object FluentDOM
+  */
+  public function hasChildren() {
+    return $this->test('count(*)', $this->_array[$this->_position]);
+  }
+  
+  /*
+  * Interface - Countable
+  */
 
   /**
   * get element count (Countable)
@@ -276,6 +261,118 @@ class FluentDOM implements Iterator, Countable {
   */
   public function count() {
     return count($this->_array);
+  }
+  
+  /*
+  * Interface - ArrayAccess
+  */
+  
+  /**
+  * If somebody tries to modify the internal array throw an exception.
+  *
+  * @param integer $offset
+  * @param mixed $value
+  * @access public
+  * @return void
+  */
+  public function offsetSet($offset, $value) {
+    throw new Exception('List is read only');
+  }
+  
+  /**
+  * Check if index exists in internal array
+  *
+  * @param integer $offset
+  * @access public
+  * @return boolean
+  */
+  public function offsetExists($offset) {
+    return isset($this->_array[$offset]);
+  }
+  
+  /**
+  * If somebody tries to remove an element from the internal array throw an exception.
+  *
+  * @param integer $offset
+  * @access public
+  * @return void
+  */
+  public function offsetUnset($offset) {
+    throw new Exception('List is read only');
+  }
+  
+  /**
+  * Get element from internal array
+  *
+  * @param $offset
+  * @access public
+  * @return void
+  */
+  public function offsetGet($offset) {
+    return isset($this->_array[$offset]) ? $this->_array[$offset] : null;
+  }
+  
+  /*
+  * Core functions for node handling
+  */
+
+  /**
+  * create a new xpath object an register default namespaces from the current document
+  *
+  * @access private
+  * @return object DOMXPath
+  */
+  private function xpath() {
+    if (empty($this->_xpath) || $this->_xpath->document != $this->_document) {
+      $this->_xpath = new DOMXPath($this->_document);
+      if ($this->_document->documentElement) {
+        $uri = $this->_document->documentElement->lookupnamespaceURI('_');
+        if (!isset($uri)) {
+          $uri = $this->_document->documentElement->lookupnamespaceURI(NULL);
+          if (isset($uri)) {
+            $this->_xpath->registerNamespace('_', $uri);
+          }
+        }
+      }
+    }
+    return $this->_xpath;
+  }
+
+  /**
+  * match xpath expression agains context and return matched elements
+  *
+  * @param string$expr
+  * @param DOMElement $context optional, default value NULL
+  * @access private
+  * @return DOMNodeList
+  */
+  private function match($expr, $context = NULL) {
+    if (isset($context)) {
+      return $this->xpath()->query($expr, $context);
+    } else {
+      return $this->xpath()->query($expr);
+    }
+  }
+
+  /**
+  * test xpath expression against context and return true/false
+  *
+  * @param string$expr
+  * @param DOMElement $context optional, default value NULL
+  * @access private
+  * @return boolean
+  */
+  private function test($expr, $context = NULL) {
+    if (isset($context)) {
+      $check = $this->xpath()->evaluate($expr, $context);
+    } else {
+      $check = $this->xpath()->evaluate($expr);
+    }
+    if ($check instanceof DOMNodeList) {
+      return $check->length > 0;
+    } else {
+      return (bool)$check;
+    }
   }
 
   /**
@@ -349,7 +446,7 @@ class FluentDOM implements Iterator, Countable {
   *
   * @param callback | object Closure $function
   * @access public
-  * @return
+  * @return object FluentDOM
   */
   public function each($function) {
     if (is_array($function) ||
@@ -361,6 +458,25 @@ class FluentDOM implements Iterator, Countable {
     } else {
       throw new Exception('Invalid callback function');
     }
+    return $this;
+  }
+  
+  /**
+  * Formats the current document, resets internal node array and other properties.
+  *
+  * The document is saved and reloaded, all variables with DOMNodes of this document will get invalid.
+  *
+  * @access public
+  * @return object FluentDOM
+  */
+  public function formatOutput() {
+    $this->_array = array();
+    $this->_position = 0;
+    $this->_useDocumentContext = TRUE;
+    $this->_parent = NULL;
+    $this->_document->preserveWhiteSpace = FALSE;
+    $this->_document->formatOutput = TRUE;
+    $this->_document->loadXML($this->_document->saveXML());
     return $this;
   }
 

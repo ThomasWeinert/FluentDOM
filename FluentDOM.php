@@ -975,7 +975,7 @@ class FluentDOM implements Iterator, Countable {
   */
   private function _wrap($elements, $content) {
     $wrapperTemplate = $this->_getWrapper($content);
-    if ($content instanceof DOMElement) {
+    if ($wrapperTemplate instanceof DOMElement) {
       $simple = FALSE;
       foreach ($elements as $node) {
         $wrapper = $wrapperTemplate->cloneNode(TRUE);
@@ -1007,23 +1007,21 @@ class FluentDOM implements Iterator, Countable {
   private function _getWrapper($content) {
     if ($content instanceof DOMElement) {
       return $content;
-    }
-    if (is_string($content)) {
+    } elseif (is_string($content)) {
       $fragment = $this->_document->createDocumentFragment();
       if ($fragment->appendXML($content)) {
         foreach ($fragment->childNodes as $element) {
           if ($element instanceof DOMElement) {
             $element->parentNode->removeChild($element);
             return $element;
-          } 
+          }
         }
       } else {
         throw new Exception('Invalid document fragment');
       }
-    }
-    if ($content instanceof DOMNodeList ||
-        $content instanceof Iterator ||
-        is_array($content)) {
+    } elseif ($content instanceof DOMNodeList ||
+              $content instanceof Iterator ||
+              is_array($content)) {
       foreach ($content as $element) {
         if ($element instanceof DOMElement) {
           return $element;  

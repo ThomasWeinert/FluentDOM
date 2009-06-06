@@ -506,7 +506,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @access private
   * @return array
   */
-  private function _getContentNodes($content, $includeTextNodes, $limit = 0) {
+  private function _getContentNodes($content, $includeTextNodes = TRUE, $limit = 0) {
     if ($content instanceof DOMElement) {
       return array($content);
     } elseif ($includeTextNodes && $this->_isNode($content)) {
@@ -1462,6 +1462,32 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   /*
   * Manipulation - Replacing
   */
+  
+  /**
+  * Replaces all matched elements with the specified HTML or DOM elements.
+  * This returns the JQuery element that was just replaced,
+  * which has been removed from the DOM.
+  *
+  * @param $content
+  * @access public
+  * @return
+  */
+  public function replaceWith($content) {
+    $contentNodes = $this->_getContentNodes($content);
+    foreach ($this->_array as $node) {
+      if (isset($node->parentNode)) {
+        foreach ($contentNodes as $contentNode) {
+          $node->parentNode->insertBefore(
+            $contentNode->cloneNode(TRUE),
+            $node
+          );
+        }
+      }
+    }
+    $this->_removeNodes($this->_array);
+    return $this;
+  }
+  
 
   /*
   * Manipulation - Removing

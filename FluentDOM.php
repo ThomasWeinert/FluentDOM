@@ -264,7 +264,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   */
   public function getChildren() {
     $result = $this->_spawn();
-    $result->_push($this->_match('*', $this->_array[$this->_position]));
+    $result->_push($this->_match('node()', $this->_array[$this->_position]));
     return $result;
   }
   
@@ -275,7 +275,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return object FluentDOM
   */
   public function hasChildren() {
-    return $this->_test('count(*)', $this->_array[$this->_position]);
+    return $this->_test('node()', $this->_array[$this->_position]);
   }
   
   /*
@@ -490,7 +490,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
       if ($node instanceof DOMElement) {
         return TRUE;
       } elseif ($node instanceof DOMText && 
-                trim($node->textContent) != '') {
+                !$node->isWhitespaceInElementContent()) {
         return TRUE;
       }
     }
@@ -1399,7 +1399,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     //group elements by previous node - ignore whitespace text nodes
     foreach ($this->_array as $node) {
       $previous = $node->previousSibling;
-      while ($previous instanceof DOMText && trim($previous->textContent) == '') {
+      while ($previous instanceof DOMText && !$previous->isWhitespaceInElementContent()) {
         $previous = $previous->previousSibling;
       }
       if ($previous !== $current) {

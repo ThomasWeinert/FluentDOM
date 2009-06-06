@@ -156,6 +156,8 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     switch (strtolower($name)) {
     case 'empty' :
       return $this->_emptyNodes();
+    case 'clone' :
+      return $this->_cloneNodes();
     }
   }
   
@@ -259,7 +261,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return object FluentDOM
   */
   public function getChildren() {
-    $result = new FluentDOM($this);
+    $result = $this->_spawn();
     $result->push($this->match('*', $this->_array[$this->_position]));
     return $result;
   }
@@ -338,8 +340,20 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   }
   
   /*
-  * Core functions for node handling
+  * Core functions
   */
+  
+  /**
+  * Create a new instance of the same class with the $this as the parent.
+  *
+  * This is used for the chaining and needs to be overloaded in child classes.
+  *
+  * @access private
+  * @return
+  */
+  private function _spawn() {
+    return new FluentDOM($this);
+  }
 
   /**
   * create a new xpath object an register default namespaces from the current document
@@ -517,7 +531,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return object FluentDOM
   */
   public function eq($position) {
-    $result = new FluentDOM($this);
+    $result = $this->_spawn();
     if (isset($this->_array[$position])) {
       $result->push($this->_array[$position]);
     }
@@ -532,7 +546,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return object FluentDOM
   */
   public function filter($expr) {
-    $result = new FluentDOM($this);
+    $result = $this->_spawn();
     foreach ($this->_array as $index => $node) {
       if (is_string($expr)) {
         $check = $this->test($expr, $node);
@@ -607,7 +621,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return object FluentDOM
   */
   public function not($expr) {
-    $result = new FluentDOM($this);
+    $result = $this->_spawn();
     foreach ($this->_array as $node) {
       if ($this->test($expr, $node)) {
         $result->push($node);
@@ -625,7 +639,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return object FluentDOM
   */
   function slice($start, $end = NULL) {
-    $result = new FluentDOM($this);
+    $result = $this->_spawn();
     if ($end === NULL) {
       $result->push(array_slice($this->_array, $start));
     } elseif ($end < 0) {
@@ -650,7 +664,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return object FluentDOM
   */
   public function add($expr) {
-    $result = new FluentDOM($this);
+    $result = $this->_spawn();
     $result->push($this->_array);
     if (is_object($expr)) {
       $result->push($expr);
@@ -670,7 +684,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return object FluentDOM
   */
   function children($expr = NULL) {
-    $result = new FluentDOM($this);
+    $result = $this->_spawn();
     foreach ($this->_array as $node) {
       if (empty($expr)) {
         $result->push($node->childNodes, TRUE);
@@ -693,7 +707,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return object FluentDOM
   */
   public function find($expr) {
-    $result = new FluentDOM($this);
+    $result = $this->_spawn();
     if ($this->_useDocumentContext) {
       $result->push($this->match($expr));
     } else {
@@ -714,7 +728,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return FluentDOM
   */
   function nextSiblings($expr = NULL) {
-    $result = new FluentDOM($this);
+    $result = $this->_spawn();
     foreach ($this->_array as $node) {
       $next = $node->nextSibling;
       while ($next instanceof DOMNode && !($next instanceof DOMElement)) {
@@ -739,7 +753,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return FluentDOM
   */
   function nextAllSiblings($expr = NULL) {
-    $result = new FluentDOM($this);
+    $result = $this->_spawn();
     foreach ($this->_array as $node) {
       $next = $node->nextSibling;
       while ($next instanceof DOMNode) {
@@ -761,9 +775,11 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return FluentDOM
   */
   function parent() {
-    $result = new FluentDOM($this);
+    $result = $this->_spawn();
     foreach ($this->_array as $node) {
-      $result->push($node->parentNode, TRUE);
+      if (isset($node->parentNode)) {
+        $result->push($node->parentNode, TRUE);
+      }
     }
     return $result;
   }
@@ -776,7 +792,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return FluentDOM
   */
   function parents($expr = NULL) {
-    $result = new FluentDOM($this);
+    $result = $this->_spawn();
     foreach ($this->_array as $node) {
       $parents = $this->match('ancestor::*', $node);
       for ($i = $parents->length - 1; $i >= 0; --$i) {
@@ -799,7 +815,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return object FluentDOM
   */
   function prevSiblings($expr = NULL) {
-    $result = new FluentDOM($this);
+    $result = $this->_spawn();
     foreach ($this->_array as $node) {
       $next = $node->previousSibling;
       while ($next instanceof DOMNode && !($next instanceof DOMElement)) {
@@ -824,7 +840,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return object FluentDOM
   */
   function prevAllSiblings($expr = NULL) {
-    $result = new FluentDOM($this);
+    $result = $this->_spawn();
     foreach ($this->_array as $node) {
       $next = $node->previousSibling;
       while ($next instanceof DOMNode) {
@@ -847,14 +863,16 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return object FluentDOM
   */
   function siblings($expr = NULL) {
-    $result = new FluentDOM($this);
+    $result = $this->_spawn();
     foreach ($this->_array as $node) {
-      $siblings = $node->parentNode->childNodes;
-      foreach ($node->parentNode->childNodes as $childNode) {
-        if ($childNode instanceof DOMElement &&
-            $childNode !== $node) {
-          if (empty($expr) || $this->test($expr, $childNode)) {
-            $result->push($childNode, TRUE);
+      if (isset($node->parentNode)) {
+        $siblings = $node->parentNode->childNodes;
+        foreach ($node->parentNode->childNodes as $childNode) {
+          if ($childNode instanceof DOMElement &&
+              $childNode !== $node) {
+            if (empty($expr) || $this->test($expr, $childNode)) {
+              $result->push($childNode, TRUE);
+            }
           }
         }
       }
@@ -873,7 +891,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return object FluentDOM
   */
   public function andSelf() {
-    $result = new FluentDOM($this);
+    $result = $this->_spawn();
     $result->push($this->_array);
     $result->push($this->_parent);
     return $result;
@@ -1063,7 +1081,9 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
             )
           );
         }
-        $node->parentNode->removeChild($node);
+        if (isset($node->parentNode)) {
+          $node->parentNode->removeChild($node);
+        }
       } elseif ($expr instanceof FluentDOM) {
         foreach ($expr as $exprNode) {
           foreach ($this->_array as $node) {
@@ -1076,7 +1096,9 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
           }
         }
         foreach ($this->_array as $node) {
-          $node->parentNode->removeChild($node);
+          if (isset($node->parentNode)) {
+            $node->parentNode->removeChild($node);
+          }
         }
       } elseif (is_string($expr)) {
         $targets = $this->match($expr);
@@ -1091,7 +1113,9 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
           }
         }
         foreach ($this->_array as $node) {
-          $node->parentNode->removeChild($node);
+          if (isset($node->parentNode)) {
+            $node->parentNode->removeChild($node);
+          }
         }
       }
     }
@@ -1116,6 +1140,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   */
   private function _wrap($elements, $content) {
     $wrapperTemplate = $this->_getWrapper($content);
+    $result = array();
     if ($wrapperTemplate instanceof DOMElement) {
       $simple = FALSE;
       foreach ($elements as $node) {
@@ -1129,13 +1154,14 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
         } else {
           $target = $targets->item(0);
         }
-        $node->parentNode->insertBefore($wrapper, $node);
+        if (isset($node->parentNode)) {
+          $node->parentNode->insertBefore($wrapper, $node);
+        }
         $target->appendChild($node);
+        $result[] = $node;
       }
-    } else {
-       
     }
-    return $this;
+    return $result;
   }
   
   /**
@@ -1183,7 +1209,9 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return object FluentDOM
   */
   public function wrap($content) {
-    return $this->_wrap($this->_array, $content);
+    $result = $this->_spawn();
+    $result->push($this->_wrap($this->_array, $content));
+    return $result;
   }
   
   /**
@@ -1196,6 +1224,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return object FluentDOM
   */
   public function wrapAll($content) {
+    $result = $this->_spawn();
     $current = NULL;
     $counter = 0;
     $groups = array();
@@ -1227,14 +1256,17 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
           } else {
             $target = $targets->item(0);
           }
-          $node->parentNode->insertBefore($wrapper, $node);
+          if (isset($node->parentNode)) {
+            $node->parentNode->insertBefore($wrapper, $node);
+          }
           foreach ($group as $node) {
             $target->appendChild($node);
           }
+          $result->push($node);
         }
       }
     }
-    return $this;
+    return $result;
   }
   
   /**
@@ -1246,6 +1278,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return FluentDOM
   */
   public function wrapInner($content) {
+    $result = $this->_spawn();
     $elements = array();
     foreach ($this->_array as $node) {
       foreach ($node->childNodes as $childNode) {
@@ -1255,7 +1288,8 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
         }
       }
     }
-    return $this->_wrap($elements, $content);
+    $result->push($this->_wrap($elements, $content));
+    return $result;
   }
   
   /*
@@ -1289,10 +1323,12 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return object FluentDOM removed elements
   */
   public function remove($expr = NULL) {
-    $result = new FluentDOM($this);
+    $result = $this->_spawn();
     foreach ($this->_array as $node) {
       if (empty($expr) || $this->test($expr, $node)) {
-        $node->parentNode->removeChild($node);
+        if (isset($node->parentNode)) {
+          $node->parentNode->removeChild($node);
+        }
         $result->push($node);
       }
     }
@@ -1303,6 +1339,20 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * Manipulation - Copying
   */
 
+  /**
+  * Clone matched DOM Elements and select the clones.
+  *
+  * @access public
+  * @return object FluentDOM
+  */
+  private function _cloneNodes() {
+    $result = $this->_spawn();
+    foreach ($this->_array as $node) {
+      $result->push($node->cloneNode(TRUE));
+    }
+    return $result;
+  }
+  
   /*
   * Attributes - General
   */

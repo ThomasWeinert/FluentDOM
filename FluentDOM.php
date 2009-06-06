@@ -80,11 +80,13 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     } elseif ($source instanceof DOMDocument) {
       $this->_document = $source;
       $this->_useDocumentContext = TRUE;
-    } elseif ($source instanceof DOMElement) {
+    } elseif ($this->_isNode($source)) {
       $this->_document = $source->ownerDocument;
       $this->_push($source);
     } elseif (is_string($source)) {
       $this->_document = new DOMDocument();
+      $this->_document->preserveWhiteSpace = FALSE;
+      $this->_document->formatOutput = TRUE;
       $this->_document->loadXML($source);
       $this->_useDocumentContext = TRUE;
     } else {
@@ -422,26 +424,26 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return void
   */
   private function _push($elements, $unique = FALSE) {
-    if ($elements instanceof DOMElement) {
+    if ($this->_isNode($elements)) {
       if ($elements->ownerDocument == $this->_document) {
         if (!$unique || !$this->_inList($elements, $this->_array)) {
           $this->_array[] = $elements;
         }
       } else {
-        throw new Exception('DOMElement is not a part of this DOMDocument');
+        throw new Exception('Node is not a part of this document');
       }
     } elseif ($elements instanceof DOMNodeList ||
               $elements instanceof DOMDocumentFragment ||
               $elements instanceof Iterator ||
               is_array($elements)) {
       foreach ($elements as $node) {
-        if ($node instanceof DOMElement) {
+        if ($this->_isNode($node)) {
           if ($node->ownerDocument == $this->_document) {
             if (!$unique || !$this->_inList($node, $this->_array)) {
               $this->_array[] = $node;
             }
           } else {
-            throw new Exception('DOMElement is not a part of this DOMDocument');
+            throw new Exception('Node is not a part of this document');
           }
         }
       }
@@ -474,6 +476,94 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   */
   private function _isQName($name) {
     return TRUE;
+  }
+  
+  /**
+  * Check if the DOMNode is DOMElement or DOMText with content
+  *
+  * @param DOMNode $node
+  * @access private
+  * @return boolean
+  */
+  private function _isNode($node) {
+    if (is_object($node)) {
+      if ($node instanceof DOMElement) {
+        return TRUE;
+      } elseif ($node instanceof DOMText && 
+                trim($node->textContent) != '') {
+        return TRUE;
+      }
+    }
+    return FALSE;
+  }
+  
+  /**
+  * Convert a given content into and array of nodes
+  *
+  * @param string | object DOMElement | object DOMText | object Iterator $content
+  * @param boolean $includeTextNodes
+  * @param integer $limit
+  * @access private
+  * @return array
+  */
+  private function _getContentNodes($content, $includeTextNodes, $limit = 0) {
+    if ($content instanceof DOMElement) {
+      return array($content);
+    } elseif ($includeTextNodes && $this->_isNode($content)) {
+      return array($content);
+    } elseif (is_string($content)) {
+      $fragment = $this->_document->createDocumentFragment();
+      if ($fragment->appendXML($content)) {
+        $result = array();
+        foreach ($fragment->childNodes as $element) {
+          if ($element instanceof DOMElement ||
+              ($includeTextNodes && $this->_isNode($element))) {
+            $element->parentNode->removeChild($element);
+            $result[] = $element;
+            if ($limit > 0 && count($result) > $limit) {
+              break;
+            }
+          }
+        }
+        return $result;
+      } else {
+        throw new Exception('Invalid document fragment');
+      }
+    } elseif ($content instanceof DOMNodeList ||
+              $content instanceof Iterator ||
+              is_array($content)) {
+      $result = array();
+      foreach ($content as $element) {
+        if ($element instanceof DOMElement ||
+            ($includeTextNodes && $this->_isNode($element))) {
+          $result[] = $element;
+          if ($limit > 0 && count($result) > $limit) {
+            break;
+          }  
+        } 
+      }
+      return $result;
+    }
+    throw new Exception('No element found'); 
+  }
+  
+  /**
+  * Convert content to DOMElement
+  *
+  * @param string | array | object DOMElement | object FluentDOM $content
+  * @access private
+  * @return object DOMElement
+  */
+  private function _getContentElement($content) {
+    if ($content instanceof DOMElement) {
+      return $content;
+    } elseif (is_string($content) ||
+              is_array($content) ||
+              $content instanceof DOMNodeList ||
+              $content instanceof Iterator) {
+      $contentNodes = $this->_getContentNodes($content, FALSE, 1);
+      return $contentNodes[0];
+    }
   }
 
   /*
@@ -731,7 +821,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     $result = $this->_spawn();
     foreach ($this->_array as $node) {
       $next = $node->nextSibling;
-      while ($next instanceof DOMNode && !($next instanceof DOMElement)) {
+      while ($next instanceof DOMNode && !$this->_isNode($next)) {
         $next = $next->nextSibling;
       }
       if (!empty($next)) {
@@ -757,7 +847,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     foreach ($this->_array as $node) {
       $next = $node->nextSibling;
       while ($next instanceof DOMNode) {
-        if ($next instanceof DOMElement) {
+        if ($this->_isNode($next)) {
           if (empty($expr) || $this->_test($expr, $next)) {
             $result->_push($next, TRUE);
           }
@@ -817,13 +907,13 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   function prevSiblings($expr = NULL) {
     $result = $this->_spawn();
     foreach ($this->_array as $node) {
-      $next = $node->previousSibling;
-      while ($next instanceof DOMNode && !($next instanceof DOMElement)) {
-        $next = $next->previousSibling;
+      $previous = $node->previousSibling;
+      while ($previous instanceof DOMNode && !$this->isNode($previous)) {
+        $previous = $previous->previousSibling;
       }
-      if (!empty($next)) {
-        if (empty($expr) || $this->_test($expr, $next)) {
-          $result->_push($next, TRUE);
+      if (!empty($previous)) {
+        if (empty($expr) || $this->_test($expr, $previous)) {
+          $result->_push($previous, TRUE);
         }
       }
     }
@@ -842,14 +932,14 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   function prevAllSiblings($expr = NULL) {
     $result = $this->_spawn();
     foreach ($this->_array as $node) {
-      $next = $node->previousSibling;
-      while ($next instanceof DOMNode) {
-        if ($next instanceof DOMElement) {
-          if (empty($expr) || $this->_test($expr, $next)) {
-            $result->_push($next, TRUE);
+      $previous = $node->previousSibling;
+      while ($previous instanceof DOMNode) {
+        if ($this->_isNode($previous)) {
+          if (empty($expr) || $this->_test($expr, $previous)) {
+            $result->_push($previous, TRUE);
           }
         }
-        $next = $next->previousSibling;
+        $previous = $previous->previousSibling;
       }
     }
     return $result;
@@ -868,7 +958,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
       if (isset($node->parentNode)) {
         $siblings = $node->parentNode->childNodes;
         foreach ($node->parentNode->childNodes as $childNode) {
-          if ($childNode instanceof DOMElement &&
+          if ($this->_isNode($childNode) &&
               $childNode !== $node) {
             if (empty($expr) || $this->_test($expr, $childNode)) {
               $result->_push($childNode, TRUE);
@@ -1086,13 +1176,16 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
         }
       } elseif ($expr instanceof FluentDOM) {
         foreach ($expr as $exprNode) {
-          foreach ($this->_array as $node) {
-            $result->_push(
-              $exprNode->insertBefore(
-                $node->cloneNode(TRUE),
-                ($first && $exprNode->hasChildNodes()) ? $exprNode->childNodes->item(0) : NULL
-              )
-            );
+          if ($exprNode instanceof DOMElement) {
+            foreach ($this->_array as $node) {
+              $result->_push(
+                $exprNode->insertBefore(
+                  $node->cloneNode(TRUE),
+                  ($first && $exprNode->hasChildNodes())
+                    ? $exprNode->childNodes->item(0) : NULL
+                )
+              );
+            }
           }
         }
         foreach ($this->_array as $node) {
@@ -1103,13 +1196,15 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
       } elseif (is_string($expr)) {
         $targets = $this->_match($expr);
         foreach ($targets as $exprNode) {
-          foreach ($this->_array as $node) {
-            $result->_push(
-              $exprNode->insertBefore(
-                $node->cloneNode(TRUE),
-                ($first && $exprNode->hasChildNodes()) ? $exprNode->childNodes->item(0) : NULL
-              )
-            );
+          if ($exprNode instanceof DOMElement) {
+            foreach ($this->_array as $node) {
+              $result->_push(
+                $exprNode->insertBefore(
+                  $node->cloneNode(TRUE),
+                  ($first && $exprNode->hasChildNodes()) ? $exprNode->childNodes->item(0) : NULL
+                )
+              );
+            }
           }
         }
         foreach ($this->_array as $node) {
@@ -1123,9 +1218,48 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   }
 
   /*
-  * Manipulation - Inserting Inside
+  * Manipulation - Inserting Outside
   */
 
+  public function after($content) {
+    $result = $this->_spawn();
+    if ($contentNodes = $this->_getContentNodes($content, TRUE)) {
+      foreach ($this->_array as $node) {
+        $beforeNode = $node->nextSibling;
+        if (isset($node->parentNode)) {
+          foreach ($contentNodes as $contentNode) {
+            $result->_push(
+              $node->parentNode->insertBefore(
+                $contentNode->cloneNode(TRUE),
+                $beforeNode
+              )
+            );
+          }
+        }
+      }
+    }
+    return $result;
+  }
+  
+  public function before($content) {
+    $result = $this->_spawn();
+    if ($contentNodes = $this->_getContentNodes($content, TRUE)) {
+      foreach ($this->_array as $node) {
+        if (isset($node->parentNode)) {
+          foreach ($contentNodes as $contentNode) {
+            $result->_push(
+              $node->parentNode->insertBefore(
+                $contentNode->cloneNode(TRUE),
+                $node
+              )
+            );
+          }
+        }
+      }
+    }
+    return $result;
+  }
+  
   /*
   * Manipulation - Inserting Around
   */
@@ -1139,7 +1273,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return object FluentDOM
   */
   private function _wrap($elements, $content) {
-    $wrapperTemplate = $this->_getWrapper($content);
+    $wrapperTemplate = $this->_getContentElement($content);
     $result = array();
     if ($wrapperTemplate instanceof DOMElement) {
       $simple = FALSE;
@@ -1162,42 +1296,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
       }
     }
     return $result;
-  }
-  
-  /**
-  * Convert wrapper content to DOMElement
-  *
-  * @param string | array | object DOMElement | object FluentDOM $content
-  * @access private
-  * @return object DOMElement
-  */
-  private function _getWrapper($content) {
-    if ($content instanceof DOMElement) {
-      return $content;
-    } elseif (is_string($content)) {
-      $fragment = $this->_document->createDocumentFragment();
-      if ($fragment->appendXML($content)) {
-        foreach ($fragment->childNodes as $element) {
-          if ($element instanceof DOMElement) {
-            $element->parentNode->removeChild($element);
-            return $element;
-          }
-        }
-      } else {
-        throw new Exception('Invalid document fragment');
-      }
-    } elseif ($content instanceof DOMNodeList ||
-              $content instanceof Iterator ||
-              is_array($content)) {
-      foreach ($content as $element) {
-        if ($element instanceof DOMElement) {
-          return $element;  
-        } 
-      }
-    }
-    throw new Exception('No element found'); 
-  }
-  
+  }  
 
   /**
   * Wrap each matched element with the specified content.
@@ -1241,7 +1340,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
       $current = $node;
     }
     if (count($groups) > 0) {
-      $wrapperTemplate = $this->_getWrapper($content);
+      $wrapperTemplate = $this->_getContentElement($content);
       $simple = FALSE;
       foreach ($groups as $group) {
         if (isset($group[0])) {
@@ -1282,8 +1381,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     $elements = array();
     foreach ($this->_array as $node) {
       foreach ($node->childNodes as $childNode) {
-        if ($childNode instanceof DOMElement ||
-            $childNode instanceof DOMText) {
+        if ($this->_isNode($childNode)) {
           $elements[] = $childNode;   
         }
       }
@@ -1310,7 +1408,11 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   */
   private function _emptyNodes() {
     foreach ($this->_array as $node) {
-      $node->nodeValue = '';
+      if ($node instanceof DOMElement) {
+        $node->nodeValue = '';
+      } elseif ($node instanceof DOMText) {
+        $node->textContent = '';
+      }
     }
     return $this;
   }
@@ -1371,7 +1473,9 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
       foreach ($expr as $key => $value) {
         if ($this->_isQName($key)) {
           foreach ($this->_array as $node) {
-            $node->setAttribute($key, $value);
+            if ($node instanceof DOMElement) {
+              $node->setAttribute($key, $value);
+            }
           }
         }
       }
@@ -1386,14 +1490,18 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
       //value is an array (function callback) - execute ist and set result on each element
       if ($this->_isQName($expr)) {
         foreach ($this->_array as $node) {
-          $node->setAttribute($expr, call_user_func($value, $node));
+          if ($node instanceof DOMElement) {
+            $node->setAttribute($expr, call_user_func($value, $node));
+          }
         }
       }
     } else {
       // set attribute value of each element
       if ($this->_isQName($expr)) {
         foreach ($this->_array as $node) {
-          $node->setAttribute($expr, $value);
+          if ($node instanceof DOMElement) {
+            $node->setAttribute($expr, $value);
+          }
         }
       }
     }
@@ -1410,7 +1518,8 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   public function removeAttr($name) {
     if (!empty($name)) {
       foreach ($this->_array as $node) {
-        if ($node->hasAttribute($name)) {
+        if ($node instanceof DOMElement &&
+            $node->hasAttribute($name)) {
           $node->removeAttribute($name);
         }
       }
@@ -1442,7 +1551,8 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   */
   public function hasClass($class) {
     foreach ($this->_array as $node) {
-      if ($node->hasAttribute('class')) {
+      if ($node instanceof DOMElement &&
+          $node->hasAttribute('class')) {
         $classes = preg_split('\s+', trim($node->getAttribute('class')));
         if (in_array($class, $classes)) {
           return TRUE;
@@ -1475,31 +1585,36 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   */
   public function toggleClass($class, $switch = NULL) {
     foreach ($this->_array as $node) {
-      if ($node->hasAttribute('class')) {
-        $currentClasses = array_flip(preg_split('(\s+)', trim($node->getAttribute('class'))));
-      } else {
-        $currentClasses = array();
-      }
-      $toggledClasses = array_unique(preg_split('(\s+)', trim($class)));
-      $modified = FALSE;
-      foreach($toggledClasses as $toggledClass) {
-        if (isset($currentClasses[$toggledClass])) {
-          if ($switch === FALSE || is_null($switch)) {
-            unset($currentClasses[$toggledClass]);
-            $modified = TRUE;
-          }
+      if ($node instanceof DOMElement) {
+        if ($node->hasAttribute('class')) {
+          $currentClasses = array_flip(
+            preg_split('(\s+)',
+            trim($node->getAttribute('class')))
+          );
         } else {
-          if ($switch === TRUE || is_null($switch)) {
-            $currentClasses[$toggledClass] = TRUE;
-            $modified = TRUE;
+          $currentClasses = array();
+        }
+        $toggledClasses = array_unique(preg_split('(\s+)', trim($class)));
+        $modified = FALSE;
+        foreach($toggledClasses as $toggledClass) {
+          if (isset($currentClasses[$toggledClass])) {
+            if ($switch === FALSE || is_null($switch)) {
+              unset($currentClasses[$toggledClass]);
+              $modified = TRUE;
+            }
+          } else {
+            if ($switch === TRUE || is_null($switch)) {
+              $currentClasses[$toggledClass] = TRUE;
+              $modified = TRUE;
+            }
           }
         }
-      }
-      if ($modified) {
-        if (empty($currentClasses)) {
-          $node->removeAttribute('class');
-        } else {
-          $node->setAttribute('class', implode(' ', array_keys($currentClasses)));
+        if ($modified) {
+          if (empty($currentClasses)) {
+            $node->removeAttribute('class');
+          } else {
+            $node->setAttribute('class', implode(' ', array_keys($currentClasses)));
+          }
         }
       }
     }

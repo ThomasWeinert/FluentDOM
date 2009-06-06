@@ -547,6 +547,39 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     throw new Exception('No element found'); 
   }
   
+  private function _getTargetNodes($selector) {
+    if ($this->_isNode($selector)) {
+      return array($selector);
+    } elseif (is_string($selector)) {
+      return $this->_match($selector);
+    } elseif (is_array($selector) ||
+              $selector instanceof Iterator ||
+              $selector instanceof DOMNodeList) {
+      return $selector;
+    } else {
+      throw new Exception('Invalid selector');
+    }
+  }
+  
+  /**
+  * Remove nodes from document tree
+  *
+  * @param $selector
+  * @access private
+  * @return array removed nodes
+  */
+  private function _removeNodes($selector) {
+    $targetNodes = $this->_getTargetNodes($selector);
+    $result = array();
+    foreach ($targetNodes as $node) {
+      if ($node instanceof DOMNode &&
+          isset($node->parentNode)) {
+        $result[] = $node->parentNode->removeChild($node);
+      }
+    }
+    return $result;
+  }
+  
   /**
   * Convert content to DOMElement
   *
@@ -767,7 +800,8 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   }
 
   /**
-  * Get a set of elements containing all of the unique immediate children of each of the matched set of elements.
+  * Get a set of elements containing all of the unique immediate
+  * children of each of the matched set of elements.
   *
   * @param string $expr XPath expression
   * @access public
@@ -1154,64 +1188,28 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * Insert all of the matched elements to another, specified, set of elements.
   * Returns all of the inserted elements.
   *
-  * @param string | object DOMElement | object FluentDOM $expr XPath expression, element or list of elements
+  * @param string | object DOMElement | object FluentDOM $selector XPath expression, element or list of elements
   * @param boolean $first insert at first position (or last)
   * @access public
   * @return object FluentDOM
   */
-  private function _insertChildTo($expr, $first) {
-    $result = new FluentDOM($this->_document, $this);
-    if (!empty($expr)) {
-      if ($expr instanceof DOMElement) {
-        foreach ($this->_array as $node) {
-          $result->_push(
-            $expr->insertBefore(
-              $node->cloneNode(TRUE),
-              ($first && $expr->hasChildNodes()) ? $expr->childNodes->item(0) : NULL
-            )
-          );
-        }
-        if (isset($node->parentNode)) {
-          $node->parentNode->removeChild($node);
-        }
-      } elseif ($expr instanceof FluentDOM) {
-        foreach ($expr as $exprNode) {
-          if ($exprNode instanceof DOMElement) {
-            foreach ($this->_array as $node) {
-              $result->_push(
-                $exprNode->insertBefore(
-                  $node->cloneNode(TRUE),
-                  ($first && $exprNode->hasChildNodes())
-                    ? $exprNode->childNodes->item(0) : NULL
-                )
-              );
-            }
+  private function _insertChildTo($selector, $first) {
+    $result = $this->_spawn();
+    $targets = $this->_getTargetNodes($selector);
+    if (!empty($targets)) {
+      foreach ($targets as $targetNode) {
+        if ($targetNode instanceof DOMElement) {
+          foreach ($this->_array as $node) {
+            $result->_push(
+              $targetNode->insertBefore(
+                $node->cloneNode(TRUE),
+                ($first && $exprNode->hasChildNodes())
+                  ? $exprNode->childNodes->item(0) : NULL
+              )
+            );
           }
         }
-        foreach ($this->_array as $node) {
-          if (isset($node->parentNode)) {
-            $node->parentNode->removeChild($node);
-          }
-        }
-      } elseif (is_string($expr)) {
-        $targets = $this->_match($expr);
-        foreach ($targets as $exprNode) {
-          if ($exprNode instanceof DOMElement) {
-            foreach ($this->_array as $node) {
-              $result->_push(
-                $exprNode->insertBefore(
-                  $node->cloneNode(TRUE),
-                  ($first && $exprNode->hasChildNodes()) ? $exprNode->childNodes->item(0) : NULL
-                )
-              );
-            }
-          }
-        }
-        foreach ($this->_array as $node) {
-          if (isset($node->parentNode)) {
-            $node->parentNode->removeChild($node);
-          }
-        }
+        $this->_removeNodes($this->_array);
       }
     }
     return $result;
@@ -1221,6 +1219,13 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * Manipulation - Inserting Outside
   */
 
+  /**
+  * Insert content after each of the matched elements.
+  *
+  * @param $content
+  * @access public
+  * @return
+  */
   public function after($content) {
     $result = $this->_spawn();
     if ($contentNodes = $this->_getContentNodes($content, TRUE)) {
@@ -1241,6 +1246,13 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     return $result;
   }
   
+  /**
+  * Insert content before each of the matched elements.
+  *
+  * @param $content
+  * @access public
+  * @return object FluentDOM 
+  */
   public function before($content) {
     $result = $this->_spawn();
     if ($contentNodes = $this->_getContentNodes($content, TRUE)) {
@@ -1255,6 +1267,63 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
             );
           }
         }
+      }
+    }
+    return $result;
+  }
+  
+  /**
+  * Insert all of the matched elements after another, specified, set of elements.
+  *
+  * @param $selector
+  * @access public
+  * @return object FluentDOM
+  */
+  public function insertAfter($selector) {
+    $result = $this->_spawn();
+    $targets = $this->_getTargetNodes($selector);
+    if (!empty($targets)) {
+      foreach ($targets as $targetNode) {
+        if ($this->_isNode($targetNode) && isset($targetNode->parentNode)) {
+          $beforeNode = $targetNode->nextSibling;
+          foreach ($this->_array as $node) {
+            $result->_push(
+              $targetNode->parentNode->insertBefore(
+                $node->cloneNode(TRUE),
+                $beforeNode
+              )
+            );
+          }
+        }
+        $this->_removeNodes($this->_array);
+      }
+    }
+    return $result;
+  }
+  
+  /**
+  * Insert all of the matched elements before another, specified, set of elements.
+  *
+  * @param $selector
+  * @access public
+  * @return object FluentDOM
+  */
+  public function insertBefore($selector) {
+    $result = $this->_spawn();
+    $targets = $this->_getTargetNodes($selector);
+    if (!empty($targets)) {
+      foreach ($targets as $targetNode) {
+        if ($this->_isNode($targetNode) && isset($targetNode->parentNode)) {
+          foreach ($this->_array as $node) {
+            $result->_push(
+              $targetNode->parentNode->insertBefore(
+                $node->cloneNode(TRUE),
+                $targetNode
+              )
+            );
+          }
+        }
+        $this->_removeNodes($this->_array);
       }
     }
     return $result;
@@ -1426,13 +1495,8 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   */
   public function remove($expr = NULL) {
     $result = $this->_spawn();
-    foreach ($this->_array as $node) {
-      if (empty($expr) || $this->_test($expr, $node)) {
-        if (isset($node->parentNode)) {
-          $node->parentNode->removeChild($node);
-        }
-        $result->_push($node);
-      }
+    if (is_string($expr)) {
+      $result->_push($this->_removeNodes($expr));
     }
     return $result;
   }

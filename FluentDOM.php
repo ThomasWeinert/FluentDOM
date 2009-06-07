@@ -425,7 +425,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   */
   private function _push($elements, $unique = FALSE) {
     if ($this->_isNode($elements)) {
-      if ($elements->ownerDocument == $this->_document) {
+      if ($elements->ownerDocument === $this->_document) {
         if (!$unique || !$this->_inList($elements, $this->_array)) {
           $this->_array[] = $elements;
         }
@@ -438,7 +438,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
               is_array($elements)) {
       foreach ($elements as $node) {
         if ($this->_isNode($node)) {
-          if ($node->ownerDocument == $this->_document) {
+          if ($node->ownerDocument === $this->_document) {
             if (!$unique || !$this->_inList($node, $this->_array)) {
               $this->_array[] = $node;
             }
@@ -507,14 +507,14 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return array
   */
   private function _getContentNodes($content, $includeTextNodes = TRUE, $limit = 0) {
+    $result = array();
     if ($content instanceof DOMElement) {
-      return array($content);
+      $result = array($content);
     } elseif ($includeTextNodes && $this->_isNode($content)) {
-      return array($content);
+      $result = array($content);
     } elseif (is_string($content)) {
       $fragment = $this->_document->createDocumentFragment();
       if ($fragment->appendXML($content)) {
-        $result = array();
         foreach ($fragment->childNodes as $element) {
           if ($element instanceof DOMElement ||
               ($includeTextNodes && $this->_isNode($element))) {
@@ -532,7 +532,6 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     } elseif ($content instanceof DOMNodeList ||
               $content instanceof Iterator ||
               is_array($content)) {
-      $result = array();
       foreach ($content as $element) {
         if ($element instanceof DOMElement ||
             ($includeTextNodes && $this->_isNode($element))) {
@@ -542,9 +541,18 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
           }  
         } 
       }
-      return $result;
     }
-    throw new Exception('No element found'); 
+    if (empty($result)) {
+      throw new Exception('No element found'); 
+    } else {
+      //if a node is not in the current document import it
+      foreach ($result as $index => $node) {
+        if ($node->ownerDocument !== $this->_document) {
+          $result[$index] = $this->_document->importNode($node, TRUE);
+        }
+      }
+    }
+    return $result;
   }
   
   private function _getTargetNodes($selector) {
@@ -1488,6 +1496,33 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     return $this;
   }
   
+  /**
+  * Replaces the elements matched by the specified selector with the matched elements.
+  *
+  * @param $selector
+  * @access public
+  * @return object FluentDOM
+  */
+  public function replaceAll($selector) {
+    $result = $this->_spawn();
+    $targetNodes = $this->_getTargetNodes($selector);
+    foreach ($targetNodes as $targetNode) {
+      if (isset($targetNode->parentNode)) {
+        foreach ($this->_array as $node) {
+          $result->_push(
+            $targetNode->parentNode->insertBefore(
+              $node->cloneNode(TRUE),
+              $targetNode
+            )
+          );
+        }
+      }
+    }
+    $this->_removeNodes($targetNodes);
+    $this->_removeNodes($this->_array);
+    return $result;
+  }
+  
 
   /*
   * Manipulation - Removing
@@ -1498,7 +1533,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * is a reserved word we can no declare it directly
   * @see __call
   *
-  * @access public
+  * @access private
   * @return object FluentDOM
   */
   private function _emptyNodes() {
@@ -1528,13 +1563,31 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   }
 
   /*
+  * Manipulation - Creation
+  */
+  
+  /**
+  * create nodes list from content, if $content contains node(s)
+  * from another document the are imported. 
+  *
+  * @param $content
+  * @access public
+  * @return object FluentDOM
+  */
+  public function node($content) {
+    $result = $this->_spawn();
+    $result->_push($this->_getContentNodes($content));
+    return $result;
+  }
+
+  /*
   * Manipulation - Copying
   */
 
   /**
   * Clone matched DOM Elements and select the clones.
   *
-  * @access public
+  * @access private
   * @return object FluentDOM
   */
   private function _cloneNodes() {

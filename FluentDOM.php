@@ -90,7 +90,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
       $this->_document->loadXML($source);
       $this->_useDocumentContext = TRUE;
     } else {
-      throw new Exception('Invalid source object');
+      throw new InvalidArgumentException('Invalid source object.');
     }
   }
 
@@ -115,7 +115,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   }
 
   /**
-  * block changes of dynmaic readonly property length
+  * block changes of dynamic readonly property length
   *
   * @param $name
   * @param $value
@@ -123,8 +123,15 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return void
   */
   public function __set($name, $value) {
-    if ($name != 'length' && $name != 'document' && $name != 'xpath') {
+    switch ($name) {
+    case 'length' :
+    case 'document' :
+    case 'xpath' :
+      throw new BadMethodCallException('Can not set readonly value.');
+      break;
+    default :
       $this->$name = $value;
+      break;
     }
   }
 
@@ -305,7 +312,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return void
   */
   public function offsetSet($offset, $value) {
-    throw new Exception('List is read only');
+    throw new BadMethodCallException('List is read only');
   }
   
   /**
@@ -327,7 +334,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return void
   */
   public function offsetUnset($offset) {
-    throw new Exception('List is read only');
+    throw new BadMethodCallException('List is read only');
   }
   
   /**
@@ -430,7 +437,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
           $this->_array[] = $elements;
         }
       } else {
-        throw new Exception('Node is not a part of this document');
+        throw new OutOfBoundsException('Node is not a part of this document');
       }
     } elseif ($elements instanceof DOMNodeList ||
               $elements instanceof DOMDocumentFragment ||
@@ -443,7 +450,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
               $this->_array[] = $node;
             }
           } else {
-            throw new Exception('Node is not a part of this document');
+            throw new OutOfBoundsException('Node is not a part of this document');
           }
         }
       }
@@ -527,7 +534,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
         }
         return $result;
       } else {
-        throw new Exception('Invalid document fragment');
+        throw new UnexpectedValueException('Invalid document fragment');
       }
     } elseif ($content instanceof DOMNodeList ||
               $content instanceof Iterator ||
@@ -543,7 +550,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
       }
     }
     if (empty($result)) {
-      throw new Exception('No element found'); 
+      throw new UnexpectedValueException('No element found'); 
     } else {
       //if a node is not in the current document import it
       foreach ($result as $index => $node) {
@@ -565,7 +572,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
               $selector instanceof DOMNodeList) {
       return $selector;
     } else {
-      throw new Exception('Invalid selector');
+      throw new InvalidArgumentException('Invalid selector');
     }
   }
   
@@ -626,7 +633,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
         call_user_func($function, $node, $index);
       }
     } else {
-      throw new Exception('Invalid callback function');
+      throw new InvalidArgumentException('Invalid callback function');
     }
     return $this;
   }
@@ -725,7 +732,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
           $function instanceof Closure) {
         $mapped = call_user_func($function, $node, $index);
       } else {
-        throw new Exception('Invalid callback function');
+        throw new InvalidArgumentException('Invalid callback function');
       }
       if ($mapped === NULL) {
         continue;
@@ -747,14 +754,22 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   /**
   * Removes elements matching the specified expression from the set of matched elements.
   *
-  * @param string $expr XPath expression
+  * @param string $expr | callback | object Closure XPath expression or callback function
   * @access public
   * @return object FluentDOM
   */
   public function not($expr) {
     $result = $this->_spawn();
     foreach ($this->_array as $node) {
-      if ($this->_test($expr, $node)) {
+      if (is_string($expr)) {
+        $check = $this->_test($expr, $node);
+      } elseif ($expr instanceof Closure ||
+                is_array($expr)) {
+        $check = call_user_func($expr, $node, $index);
+      } else {
+        $check = TRUE;
+      }
+      if (!$check) {
         $result->_push($node);
       }
     }
@@ -1523,7 +1538,6 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     return $result;
   }
   
-
   /*
   * Manipulation - Removing
   */

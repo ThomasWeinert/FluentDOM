@@ -218,26 +218,42 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   
   function testAndSelf() {
-    $this->markTestIncomplete('This test has not been implemented yet.');
+    $doc = FluentDOM(self::XML)->find('/items')->find('.//item');
+    $this->assertEquals(3, $doc->length);
+    $andSelfDoc = $doc->andSelf();
+    $this->assertEquals(4, $andSelfDoc->length);
+    $this->assertTrue($andSelfDoc !== $doc);
   }
   
   function testEnd() {
-    $this->markTestIncomplete('This test has not been implemented yet.');
+    $doc = FluentDOM(self::XML)->find('/items')->find('.//item');
+    $this->assertEquals(3, $doc->length);
+    $endDoc = $doc->end();
+    $this->assertEquals(1, $endDoc->length);
+    $this->assertTrue($endDoc !== $doc);
+    $endDocRoot = $doc->end();
+    $this->assertTrue($endDoc === $endDocRoot);
+  }
+  
+  function testXMLRead() {
+    $expect = '<item index="0">text1</item>'.
+      '<item index="1">text2</item>'.
+      '<item index="2">text3</item>';
+    $xml = FluentDOM(self::XML)->find('//group')->xml();
+    $this->assertEquals($expect, $xml);
   }
   
   function testXMLWrite() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
   
-  function testXMLRead() {
-    $this->markTestIncomplete('This test has not been implemented yet.');
+  function testTextRead() {
+    $expect = 'text1text2text3';
+    $text = FluentDOM(self::XML)->find('//group')->text();
+    $this->assertEquals($expect, $text);
   }
   
   function testTextWrite() {
-    $this->markTestIncomplete('This test has not been implemented yet.');
-  }
-  
-  function testTextRead() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
 

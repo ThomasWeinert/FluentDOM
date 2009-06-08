@@ -254,7 +254,13 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   }
   
   function testTextWrite() {
-    $this->markTestIncomplete('This test has not been implemented yet.');
+    $doc = FluentDOM(self::XML)->find('//item');
+    $this->assertEquals('text1', $doc[0]->textContent);
+    $this->assertEquals('text2', $doc[1]->textContent);
+    $textDoc = $doc->text('changed');
+    $this->assertEquals('changed', $doc[0]->textContent);
+    $this->assertEquals('changed', $doc[1]->textContent);
+    $this->assertTrue($doc === $textDoc);
   }
 
   /*

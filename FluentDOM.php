@@ -1710,7 +1710,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     foreach ($this->_array as $node) {
       if ($node instanceof DOMElement &&
           $node->hasAttribute('class')) {
-        $classes = preg_split('\s+', trim($node->getAttribute('class')));
+        $classes = preg_split('(\s+)', trim($node->getAttribute('class')));
         if (in_array($class, $classes)) {
           return TRUE;
         }

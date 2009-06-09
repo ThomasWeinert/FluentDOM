@@ -372,7 +372,10 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   
   function testAddClass() {
-    $this->markTestIncomplete('This test has not been implemented yet.');
+    $doc = FluentDOM(self::XML)->find('//html/div');
+    $this->assertTrue($doc->hasClass('added') === FALSE);
+    $doc->addClass('added');
+    $this->assertTrue($doc->hasClass('added') === TRUE);
   }
   
   function testHasClass() {
@@ -382,11 +385,21 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   }
   
   function testRemoveClass() {
-    $this->markTestIncomplete('This test has not been implemented yet.');
+    $doc = FluentDOM(self::XML)->find('//html/div');
+    $this->assertEquals('test1 test2', $doc[0]->getAttribute('class'));
+    $this->assertEquals('test2', $doc[1]->getAttribute('class'));
+    $doc->removeClass('test2');
+    $this->assertEquals('test1', $doc[0]->getAttribute('class'));
+    $this->assertTrue($doc[1]->hasAttribute('class') === FALSE);
   }
   
   function testToggleClass() {
-    $this->markTestIncomplete('This test has not been implemented yet.');
+    $doc = FluentDOM(self::XML)->find('//html/div');
+    $this->assertEquals('test1 test2', $doc[0]->getAttribute('class'));
+    $this->assertEquals('test2', $doc[1]->getAttribute('class'));
+    $doc->toggleClass('test1');
+    $this->assertEquals('test2', $doc[0]->getAttribute('class'));
+    $this->assertEquals('test2 test1', $doc[1]->getAttribute('class'));
   }
 }
 ?>

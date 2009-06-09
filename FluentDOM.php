@@ -32,7 +32,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
 
   /**
   * use document context for expression
-  * @var
+  * @var boolean
   * @access private
   */
   private $_useDocumentContext = FALSE;
@@ -53,7 +53,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
 
   /**
   * element nodes
-  * @var
+  * @var array
   * @access private
   */
   private $_array = array();

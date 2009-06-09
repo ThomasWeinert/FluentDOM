@@ -14,6 +14,10 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
         <item index="1">text2</item>
         <item index="2">text3</item>
       </group>
+      <html>
+        <div class="test1 test2">class testing</div>
+        <div class="test2">class testing</div>
+      </html>
     </items>
   ';
   
@@ -372,7 +376,9 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   }
   
   function testHasClass() {
-    $this->markTestIncomplete('This test has not been implemented yet.');
+    $doc = FluentDOM(self::XML)->find('//html/div');
+    $this->assertTrue($doc->hasClass('test1') === TRUE);
+    $this->assertTrue($doc->hasClass('unknown') === FALSE);
   }
   
   function testRemoveClass() {

@@ -21,7 +21,6 @@ $samples = <<<XML
 XML;
 
 require_once('../FluentDOM.php');
-$doc = FluentDOM($xml);
 echo FluentDOM($xml)
   ->node(
     FluentDOM($samples)

@@ -1,6 +1,6 @@
 <?php
 require_once 'PHPUnit/Framework.php';
-require_once '../FluentDom.php';
+require_once '../FluentDOM.php';
 
 /**
  * Test class for FluentDOM.

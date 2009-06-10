@@ -408,18 +408,16 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testMapInvalidCallback() {
     $this->assertFileExists('data/map.src.xml');
-    $dom = FluentDOM(file_get_contents('data/map.src.xml'));
-    $dom->find('//p')
-      ->append(
-        implode(
-          ', ',
-          $dom
-            ->find('//input')
-            ->map('invalidCallbackFunctionName')
-        )
-      );
-    $this->assertTrue($dom instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile('data/map.tgt.xml', $dom);
+    $doc = FluentDOM(file_get_contents('data/map.src.xml'));
+    try {
+      $doc->find('//p')
+        ->map('invalidCallbackFunctionName');
+    } catch (BadFunctionCallException $expected) {
+      return;
+    } catch (Exception $expected) {
+      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
+    }
+    $this->fail('An expected exception has not been raised.');
   }
 
   /**

@@ -1018,7 +1018,12 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   * @group Manipulation
   */
   function testEmpty() {
-    $this->markTestIncomplete('This test has not been implemented yet.');
+    $this->assertFileExists('data/empty.src.xml');
+    $doc = FluentDOM(file_get_contents('data/empty.src.xml'))
+      ->find('//p[@class = "first"]')
+      ->empty();
+    $this->assertTrue($doc instanceof FluentDOM);
+    $this->assertXmlStringEqualsXMLFile('data/empty.tgt.xml', $doc);
   }
 
   /**

@@ -6,7 +6,7 @@ require_once '../FluentDOM.php';
  * Test class for FluentDOM.
  */
 class FluentDOMTest extends PHPUnit_Framework_TestCase {
-  
+
   const XML = '
     <items>
       <group>
@@ -20,29 +20,29 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
       </html>
     </items>
   ';
-  
+
   /**
   * Constructor
   */
-  
+
   function testConstructorWithString() {
     $doc = new FluentDOM(self::XML);
     $this->assertTrue($doc instanceof FluentDOM);
   }
-  
+
   function testConstructorWithFluentDOM() {
     $doc = new FluentDOM(self::XML);
     $doc = new FluentDOM($doc);
     $this->assertTrue($doc instanceof FluentDOM);
   }
-  
+
   function testConstructorWithDOMDocument() {
     $dom = new DOMDocument();
     $dom->loadXML(self::XML);
     $doc = new FluentDOM($dom);
     $this->assertTrue($doc instanceof FluentDOM);
   }
-  
+
   function testConstructorWithDomNode() {
     $dom = new DOMDocument();
     $dom->loadXML(self::XML);
@@ -50,7 +50,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue($doc instanceof FluentDOM);
     $this->assertEquals($dom->documentElement, $doc[0]);
   }
-  
+
   function testConstructorWithInvalidSource() {
     try {
       new FluentDOM(NULL);
@@ -65,9 +65,10 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   /*
   * Properties
   */
-  
+
   function testPropertyDocument() {
     $doc = FluentDOM(self::XML);
+    $this->assertTrue(isset($doc->document));
     $this->assertTrue($doc->document instanceof DOMDocument);
     try {
       $doc->document = NULL;
@@ -78,9 +79,10 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     }
     $this->fail('An expected exception has not been raised.');
   }
-  
+
   function testPropertyXPath() {
     $doc = FluentDOM(self::XML);
+    $this->assertTrue(isset($doc->xpath));
     $this->assertTrue($doc->xpath instanceof DOMXPath);
     try {
       $doc->xpath = NULL;
@@ -91,9 +93,10 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     }
     $this->fail('An expected exception has not been raised.');
   }
-  
+
   function testPropertyLength() {
     $doc = FluentDOM(self::XML);
+    $this->assertTrue(isset($doc->length));
     $this->assertEquals(0, $doc->length);
     $doc = $doc->find('/items');
     $this->assertEquals(1, $doc->length);
@@ -115,11 +118,11 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $doc = FluentDOM(self::XML);
     $this->assertEquals($doc->document->saveXML(), (string)$doc);
   }
-  
+
   /*
   * DOMNodeList emulation
   */
-  
+
   function testItem() {
     $doc = FluentDOM(self::XML);
     $doc = $doc->find('/items');
@@ -130,7 +133,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   /*
   * Traversing - Filtering
   */
-  
+
   function testEq() {
     $doc = FluentDOM(self::XML)->find('//*');
     $this->assertTrue($doc->length > 1);
@@ -138,7 +141,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals(1, $eqDoc->length);
     $this->assertTrue($eqDoc !== $doc);
   }
-  
+
   function testFilter() {
     $doc = FluentDOM(self::XML)->find('//*');
     $this->assertTrue($doc->length > 1);
@@ -146,18 +149,18 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals(1, $filterDoc->length);
     $this->assertTrue($filterDoc !== $doc);
   }
-  
+
   function testIs() {
     $doc = FluentDOM(self::XML)->find('//*');
     $this->assertTrue($doc->length > 1);
     $this->assertTrue($doc->is('name() = "items"'));
     $this->assertFalse($doc->is('name() = "no-items"'));
   }
-  
+
   function testMap() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
-  
+
   function testNot() {
     $doc = FluentDOM(self::XML)->find('//*');
     $this->assertTrue($doc->length > 1);
@@ -165,7 +168,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals(1, $notDoc->length);
     $this->assertTrue($notDoc !== $doc);
   }
-  
+
   function testSlice() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
@@ -173,15 +176,15 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   /*
   * Traversing - Finding
   */
-  
+
   function testAdd() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
-  
+
   function testChildren() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
-  
+
   function testFind() {
     $doc = FluentDOM(self::XML)->find('/*');
     $this->assertEquals(1, $doc->length);
@@ -189,30 +192,30 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals(3, $findDoc->length);
     $this->assertTrue($findDoc !== $doc);
   }
-  
+
   function testNextSiblings() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
-  
+
   function testNextAllSiblings() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
-  
+
   function testParent() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
   function testParents() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
-  
+
   function testPrevSiblings() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
-  
+
   function testPrevAllSiblings() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
-  
+
   function testSiblings() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
@@ -220,7 +223,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   /*
   * Traversing - Chaining
   */
-  
+
   function testAndSelf() {
     $doc = FluentDOM(self::XML)->find('/items')->find('.//item');
     $this->assertEquals(3, $doc->length);
@@ -228,7 +231,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals(4, $andSelfDoc->length);
     $this->assertTrue($andSelfDoc !== $doc);
   }
-  
+
   function testEnd() {
     $doc = FluentDOM(self::XML)->find('/items')->find('.//item');
     $this->assertEquals(3, $doc->length);
@@ -238,7 +241,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $endDocRoot = $doc->end();
     $this->assertTrue($endDoc === $endDocRoot);
   }
-  
+
   function testXMLRead() {
     $expect = '<item index="0">text1</item>'.
       '<item index="1">text2</item>'.
@@ -246,17 +249,17 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $xml = FluentDOM(self::XML)->find('//group')->xml();
     $this->assertEquals($expect, $xml);
   }
-  
+
   function testXMLWrite() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
-  
+
   function testTextRead() {
     $expect = 'text1text2text3';
     $text = FluentDOM(self::XML)->find('//group')->text();
     $this->assertEquals($expect, $text);
   }
-  
+
   function testTextWrite() {
     $doc = FluentDOM(self::XML)->find('//item');
     $this->assertEquals('text1', $doc[0]->textContent);
@@ -270,19 +273,19 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   /*
   * Manipulation - Inserting Inside
   */
-  
+
   function testAppend() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
-  
+
   function testAppendTo() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
-  
+
   function testPrepend() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
-  
+
   function testPrependTo() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
@@ -290,59 +293,59 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   /*
   * Manipulation - Inserting Outside
   */
-  
+
   function testAfter() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
-  
+
   function testBefore() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
-  
+
   function testInsertAfter() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
-  
+
   function testInsertBefore() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
-  
+
   /*
   * Manipulation - Inserting Around
   */
-  
+
   function testWrap() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
-  
+
   function testWrapAll() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
-  
+
   function testWrapInner() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
-  
+
   /*
   * Manipulation - Replacing
   */
-  
+
   function testReplaceWith() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
-  
+
   function testReplaceAll() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
-  
+
   /*
   * Manipulation - Removing
   */
-  
+
   function testEmpty() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
-  
+
   function testRemove() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
@@ -350,19 +353,19 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   /*
   * Attributes
   */
-  
+
   function testNode() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
-  
+
   function testAttrRead() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
-  
+
   function testAttrWrite() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
-  
+
   function testRemoveAttr() {
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
@@ -370,20 +373,20 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   /*
   * Attributes - Classes
   */
-  
+
   function testAddClass() {
     $doc = FluentDOM(self::XML)->find('//html/div');
     $this->assertTrue($doc->hasClass('added') === FALSE);
     $doc->addClass('added');
     $this->assertTrue($doc->hasClass('added') === TRUE);
   }
-  
+
   function testHasClass() {
     $doc = FluentDOM(self::XML)->find('//html/div');
     $this->assertTrue($doc->hasClass('test1') === TRUE);
     $this->assertTrue($doc->hasClass('unknown') === FALSE);
   }
-  
+
   function testRemoveClass() {
     $doc = FluentDOM(self::XML)->find('//html/div');
     $this->assertEquals('test1 test2', $doc[0]->getAttribute('class'));
@@ -392,7 +395,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals('test1', $doc[0]->getAttribute('class'));
     $this->assertTrue($doc[1]->hasAttribute('class') === FALSE);
   }
-  
+
   function testToggleClass() {
     $doc = FluentDOM(self::XML)->find('//html/div');
     $this->assertEquals('test1 test2', $doc[0]->getAttribute('class'));

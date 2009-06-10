@@ -85,8 +85,6 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
       $this->_push($source);
     } elseif (is_string($source)) {
       $this->_document = new DOMDocument();
-      $this->_document->preserveWhiteSpace = FALSE;
-      $this->_document->formatOutput = TRUE;
       $this->_document->loadXML($source);
       $this->_useDocumentContext = TRUE;
     } else {
@@ -1086,7 +1084,9 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
       $result = '';
       if (isset($this->_array[0])) {
         foreach ($this->_array[0]->childNodes as $childNode) {
-          $result .= $this->_document->saveXML($childNode);
+          if ($this->_isNode($childNode)) {
+            $result .= $this->_document->saveXML($childNode);
+          }
         }
       }
       return $result;
@@ -1422,7 +1422,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     //group elements by previous node - ignore whitespace text nodes
     foreach ($this->_array as $node) {
       $previous = $node->previousSibling;
-      while ($previous instanceof DOMText && !$previous->isWhitespaceInElementContent()) {
+      while ($previous instanceof DOMText && $previous->isWhitespaceInElementContent()) {
         $previous = $previous->previousSibling;
       }
       if ($previous !== $current) {

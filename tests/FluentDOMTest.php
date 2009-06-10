@@ -167,7 +167,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $doc = FluentDOM(self::XML);
     $this->assertEquals($doc->document->saveXML(), (string)$doc);
   }
-  
+
   /**
   *
   * @group MagicFunctions
@@ -181,7 +181,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
       $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
     }
     $this->fail('An expected exception has not been raised.');
-  
+
   }
 
   /*
@@ -308,7 +308,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     }
     $this->fail('An expected exception has not been raised.');
   }
-  
+
   /**
   *
   * @group Interfaces
@@ -396,6 +396,26 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
             ->map(
               create_function('$node, $item', 'return FluentDOM($node)->attr("value");')
             )
+        )
+      );
+    $this->assertTrue($dom instanceof FluentDOM);
+    $this->assertXmlStringEqualsXMLFile('data/map.tgt.xml', $dom);
+  }
+
+  /**
+  *
+  * @group TraversingFilter
+  */
+  function testMapInvalidCallback() {
+    $this->assertFileExists('data/map.src.xml');
+    $dom = FluentDOM(file_get_contents('data/map.src.xml'));
+    $dom->find('//p')
+      ->append(
+        implode(
+          ', ',
+          $dom
+            ->find('//input')
+            ->map('invalidCallbackFunctionName')
         )
       );
     $this->assertTrue($dom instanceof FluentDOM);

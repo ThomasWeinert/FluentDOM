@@ -662,6 +662,20 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   *
   * @group TraversingFind
   */
+  function testPrevSiblings() {
+    $this->assertFileExists('data/prevSiblings.src.xml');
+    $dom = FluentDOM(file_get_contents('data/prevSiblings.src.xml'))
+      ->find('//div[@id = "start"]')
+      ->prevSiblings()
+      ->addClass('before');
+    $this->assertTrue($dom instanceof FluentDOM);
+    $this->assertXmlStringEqualsXMLFile('data/prevSiblings.tgt.xml', $dom);
+  }
+
+  /**
+  *
+  * @group TraversingFind
+  */
   function testPrevSiblingsExpression() {
     $this->assertFileExists('data/prevSiblingsExpression.src.xml');
     $dom = FluentDOM(file_get_contents('data/prevSiblingsExpression.src.xml'))
@@ -677,7 +691,27 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   * @group TraversingFind
   */
   function testPrevAllSiblings() {
-    $this->markTestIncomplete('This test has not been implemented yet.');
+    $this->assertFileExists('data/prevAllSiblings.src.xml');
+    $dom = FluentDOM(file_get_contents('data/prevAllSiblings.src.xml'))
+      ->find('//div[@id = "start"]')
+      ->prevSiblings()
+      ->addClass('before');
+    $this->assertTrue($dom instanceof FluentDOM);
+    $this->assertXmlStringEqualsXMLFile('data/prevAllSiblings.tgt.xml', $dom);
+  }
+
+  /**
+  *
+  * @group TraversingFind
+  */
+  function testPrevAllSiblingsExpression() {
+    $this->assertFileExists('data/prevAllSiblingsExpression.src.xml');
+    $dom = FluentDOM(file_get_contents('data/prevAllSiblingsExpression.src.xml'))
+      ->find('//div[@class= "here"]')
+      ->prevAllSiblings('.//span')
+      ->addClass('nextTest');
+    $this->assertTrue($dom instanceof FluentDOM);
+    $this->assertXmlStringEqualsXMLFile('data/prevAllSiblingsExpression.tgt.xml', $dom);
   }
 
   /**

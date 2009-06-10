@@ -304,7 +304,12 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   }
 
   function testBefore() {
-    $this->markTestIncomplete('This test has not been implemented yet.');
+    $doc = FluentDOM(file_get_contents('data/before.src.xml'))
+      ->find('//p')
+      ->before(' World')
+      ->before('<b>Hello</b>');
+    $this->assertTrue($doc instanceof FluentDOM);
+    $this->assertXmlStringEqualsXMLFile('data/before.tgt.xml', $doc);
   }
 
   function testInsertAfter() {

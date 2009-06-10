@@ -20,5 +20,11 @@ require_once('../FluentDOM.php');
 
 echo FluentDOM($xml)
   ->find('//p')
-  ->wrapAll('<div class="wrapper"/>');
+  ->wrapAll('<div class="wrapper" />');
+
+echo "\n\n";
+
+echo FluentDOM($xml)
+  ->find('//p')
+  ->wrapAll('<div class="wrapper"><div>INNER</div></div>');
 ?>

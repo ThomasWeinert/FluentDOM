@@ -772,13 +772,26 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   *
   * @group Manipulation
   */
-  function testWrapAll() {
-    $this->assertFileExists('data/wrapAll.src.xml');
-    $doc = FluentDOM(file_get_contents('data/wrapAll.src.xml'))
+  function testWrapAllSingle() {
+    $this->assertFileExists('data/wrapAllSingle.src.xml');
+    $doc = FluentDOM(file_get_contents('data/wrapAllSingle.src.xml'))
       ->find('//p')
       ->wrapAll('<div class="wrapper"/>');
     $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile('data/wrapAll.tgt.xml', $doc);
+    $this->assertXmlStringEqualsXMLFile('data/wrapAllSingle.tgt.xml', $doc);
+  }
+
+  /**
+  *
+  * @group Manipulation
+  */
+  function testWrapAllComplex() {
+    $this->assertFileExists('data/wrapAllComplex.src.xml');
+    $doc = FluentDOM(file_get_contents('data/wrapAllComplex.src.xml'))
+      ->find('//p')
+      ->wrapAll('<div class="wrapper"><div>INNER</div></div>');
+    $this->assertTrue($doc instanceof FluentDOM);
+    $this->assertXmlStringEqualsXMLFile('data/wrapAllComplex.tgt.xml', $doc);
   }
 
   /**

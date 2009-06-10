@@ -1570,10 +1570,9 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   */
   private function _emptyNodes() {
     foreach ($this->_array as $node) {
-      if ($node instanceof DOMElement) {
+      if ($node instanceof DOMElement ||
+          $node instanceof DOMText) {
         $node->nodeValue = '';
-      } elseif ($node instanceof DOMText) {
-        $node->textContent = '';
       }
     }
     return $this;

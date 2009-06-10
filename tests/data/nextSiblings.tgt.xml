@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<html>
+<head/>
+<body>
+  <div>
+    <button disabled="disabled">First</button> <b>This button is disabled.</b> <span/></div>
+  <div><button>Second</button> - <span/></div>
+  <div><button disabled="disabled">Third</button>This button is disabled.<span/></div>
+</body>
+</html>

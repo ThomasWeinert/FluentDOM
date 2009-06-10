@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html>
+<head></head>
+<body>
+  <div>
+    <button disabled="disabled">First</button> <b>-</b> <span></span></div>
+  <div><button>Second</button> - <span></span></div>
+  <div><button disabled="disabled">Third</button> - <span></span></div>
+</body>
+</html>

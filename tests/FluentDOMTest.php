@@ -333,7 +333,11 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
 
   function testWrap() {
-    $this->markTestIncomplete('This test has not been implemented yet.');
+    $doc = FluentDOM(file_get_contents('data/wrap.src.xml'))
+      ->find('//p')
+      ->wrap('<div class="outer"><div class="inner"></div></div>');
+    $this->assertTrue($doc instanceof FluentDOM);
+    $this->assertXmlStringEqualsXMLFile('data/wrap.tgt.xml', $doc);
   }
 
   function testWrapAll() {

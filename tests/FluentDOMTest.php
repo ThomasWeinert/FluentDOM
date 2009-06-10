@@ -381,7 +381,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testTextRead() {
     $expect = 'text1text2text3';
-    $text = FluentDOM(self::XML)->find('//group')->text();
+    $text = FluentDOM(self::XML)->formatOutput()->find('//group')->text();
     $this->assertEquals($expect, $text);
   }
 
@@ -445,6 +445,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testAfter() {
     $doc = FluentDOM(file_get_contents('data/after.src.xml'))
+      ->formatOutput()
       ->find('//p')
       ->after('<b>Hello</b>')
       ->after(' World');
@@ -458,6 +459,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testBefore() {
     $doc = FluentDOM(file_get_contents('data/before.src.xml'))
+      ->formatOutput()
       ->find('//p')
       ->before(' World')
       ->before('<b>Hello</b>');

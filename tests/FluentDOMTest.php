@@ -125,6 +125,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   /**
   *
   * @group properties
+  * @covers FluentDOM::find
   */
   function testPropertyLength() {
     $doc = FluentDOM(self::XML);
@@ -161,6 +162,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
 
   /**
   *
+  * @covers FluentDOM::find
   */
   function testItem() {
     $doc = FluentDOM(self::XML);
@@ -176,6 +178,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   /**
   *
   * @group traversingFilter
+  * @covers FluentDOM::find
   */
   function testEq() {
     $doc = FluentDOM(self::XML)->find('//*');
@@ -188,6 +191,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   /**
   *
   * @group traversingFilter
+  * @covers FluentDOM::find
   */
   function testFilter() {
     $doc = FluentDOM(self::XML)->find('//*');
@@ -200,6 +204,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   /**
   *
   * @group traversingFilter
+  * @covers FluentDOM::find
   */
   function testIs() {
     $doc = FluentDOM(self::XML)->find('//*');
@@ -219,6 +224,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   /**
   *
   * @group traversingFilter
+  * @covers FluentDOM::find
   */
   function testNot() {
     $doc = FluentDOM(self::XML)->find('//*');
@@ -331,6 +337,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   /**
   *
   * @group traversingChain
+  * @covers FluentDOM::find
   */
   function testAndSelf() {
     $doc = FluentDOM(self::XML)->find('/items')->find('.//item');
@@ -343,6 +350,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   /**
   *
   * @group traversingChain
+  * @covers FluentDOM::find
   */
   function testEnd() {
     $doc = FluentDOM(self::XML)->find('/items')->find('.//item');
@@ -357,6 +365,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   /**
   *
   * @group traversingChain
+  * @covers FluentDOM::find
   */
   function testXMLRead() {
     $expect = '<item index="0">text1</item>'.
@@ -377,6 +386,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   /**
   *
   * @group traversingChain
+  * @covers FluentDOM::find
   */
   function testTextRead() {
     $expect = 'text1text2text3';
@@ -387,6 +397,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   /**
   *
   * @group traversingChain
+  * @covers FluentDOM::find
   */
   function testTextWrite() {
     $doc = FluentDOM(self::XML)->find('//item');
@@ -441,6 +452,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   /**
   *
   * @group manipulation
+  * @covers FluentDOM::find
   */
   function testAfter() {
     $doc = FluentDOM(file_get_contents('data/after.src.xml'))
@@ -454,6 +466,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   /**
   *
   * @group manipulation
+  * @covers FluentDOM::find
   */
   function testBefore() {
     $doc = FluentDOM(file_get_contents('data/before.src.xml'))
@@ -467,6 +480,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   /**
   *
   * @group manipulation
+  * @covers FluentDOM::find
   */
   function testInsertAfter() {
     $doc = FluentDOM(file_get_contents('data/insertAfter.src.xml'))
@@ -479,6 +493,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   /**
   *
   * @group manipulation
+  * @covers FluentDOM::find
   */
   function testInsertBefore() {
     $doc = FluentDOM(file_get_contents('data/insertBefore.src.xml'))
@@ -495,6 +510,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   /**
   *
   * @group manipulation
+  * @covers FluentDOM::find
   */
   function testWrap() {
     $doc = FluentDOM(file_get_contents('data/wrap.src.xml'))
@@ -507,6 +523,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   /**
   *
   * @group manipulation
+  * @covers FluentDOM::find
   */
   function testWrapAll() {
     $doc = FluentDOM(file_get_contents('data/wrapAll.src.xml'))
@@ -519,6 +536,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   /**
   *
   * @group manipulation
+  * @covers FluentDOM::find
   */
   function testWrapInner() {
     $doc = FluentDOM(file_get_contents('data/wrapInner.src.xml'))

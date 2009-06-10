@@ -773,7 +773,12 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   * @group TraversingChain
   */
   function testXMLWrite() {
-    $this->markTestIncomplete('This test has not been implemented yet.');
+    $this->assertFileExists('data/xmlWrite.src.xml');
+    $dom = FluentDOM(file_get_contents('data/xmlWrite.src.xml'))
+      ->find('//p[position() = last()]')
+      ->xml('<b>New</b>World');
+    $this->assertTrue($dom instanceof FluentDOM);
+    $this->assertXmlStringEqualsXMLFile('data/xmlWrite.tgt.xml', $dom);
   }
 
   /**

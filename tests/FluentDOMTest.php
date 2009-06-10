@@ -752,10 +752,10 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $endDoc = $doc->end();
     $this->assertEquals(1, $endDoc->length);
     $this->assertTrue($endDoc !== $doc);
-    $endDocRoot = $endDoc->end();
-    $this->assertTrue($endDoc !== $endDocRoot);
-    $endDocRoot2 = $endDocRoot->end();
-    $this->assertTrue($endDocRoot === $endDocRoot2);
+    $endDocRoot = $doc->end();
+    $this->assertTrue($endDoc === $endDocRoot);
+    $endDocRoot = $doc->end();
+    $this->assertTrue($endDoc === $endDocRoot);
   }
 
   /**
@@ -1079,13 +1079,12 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   * @group Attributes
   */
   function testAttrWrite() {
-    $this->markTestIncomplete('This test has not been implemented yet.');
-    /*$doc = FluentDOM(self::XML)
+    $doc = FluentDOM(self::XML)
       ->find('//group/item')
-      ->attr('index', '15');
-    //$this->assertEquals('15', $doc);
+      ->attr('index', '15')
+      ->attr('index');
+    $this->assertEquals('15', $doc);
 
-    var_dump($doc);*/
   }
 
   /**
@@ -1093,7 +1092,12 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   * @group Attributes
   */
   function testRemoveAttr() {
-    $this->markTestIncomplete('This test has not been implemented yet.');
+    $this->assertFileExists('data/removeAttr.src.xml');
+    $doc = FluentDOM(file_get_contents('data/removeAttr.src.xml'))
+      ->find('//p')
+      ->removeAttr('index');
+    $this->assertTrue($doc instanceof FluentDOM);
+    $this->assertXmlStringEqualsXMLFile('data/removeAttr.tgt.xml', $doc);
   }
 
   /*

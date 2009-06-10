@@ -342,6 +342,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
 
   function testWrapAll() {
     $doc = FluentDOM(file_get_contents('data/wrapAll.src.xml'))
+      ->find('//p')
       ->wrapAll('<div class="wrapper"/>');
     $this->assertTrue($doc instanceof FluentDOM);
     $this->assertXmlStringEqualsXMLFile('data/wrapAll.tgt.xml', $doc);
@@ -349,6 +350,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
 
   function testWrapInner() {
     $doc = FluentDOM(file_get_contents('data/wrapInner.src.xml'))
+      ->find('//p')
       ->wrapInner('<b></b>');
     $this->assertTrue($doc instanceof FluentDOM);
     $this->assertXmlStringEqualsXMLFile('data/wrapInner.tgt.xml', $doc);

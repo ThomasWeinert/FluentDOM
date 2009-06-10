@@ -167,6 +167,22 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $doc = FluentDOM(self::XML);
     $this->assertEquals($doc->document->saveXML(), (string)$doc);
   }
+  
+  /**
+  *
+  * @group MagicFunctions
+  */
+  function testMagicCallUnknown() {
+    try {
+      FluentDOM(self::XML)->invalidDynamicMethodName();
+    } catch (BadMethodCallException $expected) {
+      return;
+    } catch (Exception $expected) {
+      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
+    }
+    $this->fail('An expected exception has not been raised.');
+  
+  }
 
   /*
   * Interfaces

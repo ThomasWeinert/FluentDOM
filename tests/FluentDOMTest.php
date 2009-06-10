@@ -217,6 +217,26 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals(3, $counter);
   }
 
+  /**
+  *
+  * @group Interfaces
+  */
+  function testInterfaceSeekableIterator() {
+    $items = FluentDOM(self::XML)->find('//item');
+    $this->assertTrue($items instanceof SeekableIterator);
+    $this->assertEquals(0, $items->key());
+    $items->seek(2);
+    $this->assertEquals(2, $items->key());
+    try {
+      $items->seek(200);
+    } catch (InvalidArgumentException $expected) {
+      return;
+    } catch (Exception $expected) {
+      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
+    }
+    $this->fail('An expected exception has not been raised.');
+  }
+  
   /*
   * DOMNodeList emulation
   */

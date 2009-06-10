@@ -1646,10 +1646,10 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @access public
   * @return string | object FluentDOM attribute value or $this
   */
-  public function attr($expr, $value = NULL) {
-    if (is_array($expr) && count($expr)) {
+  public function attr($attribute, $value = NULL) {
+    if (is_array($attribute) && count($attribute) > 0) {
       //expr is an array of attributes and values - set on each element
-      foreach ($expr as $key => $value) {
+      foreach ($attribute as $key => $value) {
         if ($this->_isQName($key)) {
           foreach ($this->_array as $node) {
             if ($node instanceof DOMElement) {
@@ -1660,26 +1660,31 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
       }
     } elseif (empty($value)) {
       //empty value - read attribute from first element in list
-      if ($this->_isQName($expr) && isset($this->_array[0])) {
-        return $this->_array[0]->getAttribute($expr);
-      } else {
-        return NULL;
+      if ($this->_isQName($attribute) && count($this->_array) > 0) {
+        $node = $this->_array[0];
+        if ($node instanceof DOMElement) {
+          return $node->getAttribute($attribute);
+        }
       }
-    } elseif (is_array($value)) {
+      return NULL;
+    } elseif (is_array($value) || $value instanceof Closure) {
       //value is an array (function callback) - execute ist and set result on each element
-      if ($this->_isQName($expr)) {
-        foreach ($this->_array as $node) {
+      if ($this->_isQName($attribute)) {
+        foreach ($this->_array as $index => $node) {
           if ($node instanceof DOMElement) {
-            $node->setAttribute($expr, call_user_func($value, $node));
+            $node->setAttribute(
+              $attribute,
+              call_user_func($value, $node, $index)
+            );
           }
         }
       }
     } else {
       // set attribute value of each element
-      if ($this->_isQName($expr)) {
+      if ($this->_isQName($attribute)) {
         foreach ($this->_array as $node) {
           if ($node instanceof DOMElement) {
-            $node->setAttribute($expr, $value);
+            $node->setAttribute($attribute, (string)$value);
           }
         }
       }

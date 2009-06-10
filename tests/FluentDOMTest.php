@@ -1068,7 +1068,10 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   * @group Attributes
   */
   function testAttrRead() {
-    $this->markTestIncomplete('This test has not been implemented yet.');
+    $doc = FluentDOM(self::XML)
+      ->find('//group/item')
+      ->attr('index');
+    $this->assertEquals('0', $doc);
   }
 
   /**
@@ -1077,6 +1080,12 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testAttrWrite() {
     $this->markTestIncomplete('This test has not been implemented yet.');
+    /*$doc = FluentDOM(self::XML)
+      ->find('//group/item')
+      ->attr('index', '15');
+    //$this->assertEquals('15', $doc);
+
+    var_dump($doc);*/
   }
 
   /**

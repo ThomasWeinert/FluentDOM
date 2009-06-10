@@ -420,6 +420,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   * @group Manipulation
   */
   function testAppend() {
+    $this->assertFileExists('data/append.src.xml');
     $doc = FluentDOM(file_get_contents('data/append.src.xml'))
       ->find('//p')
       ->append('<strong>Hello</strong>');
@@ -432,6 +433,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   * @group Manipulation
   */
   function testAppendTo() {
+    $this->assertFileExists('data/appendTo.src.xml');
     $doc = FluentDOM(file_get_contents('data/appendTo.src.xml'))
       ->find('//span')
       ->appendTo('//div[@id = "foo"]');
@@ -444,6 +446,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   * @group Manipulation
   */
   function testPrepend() {
+    $this->assertFileExists('data/prepend.src.xml');
     $doc = FluentDOM(file_get_contents('data/prepend.src.xml'))
       ->find('//p')
       ->prepend('<strong>Hello</strong>');
@@ -456,6 +459,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   * @group Manipulation
   */
   function testPrependTo() {
+    $this->assertFileExists('data/prependTo.src.xml');
     $doc = FluentDOM(file_get_contents('data/prependTo.src.xml'))
       ->find('//span')
       ->prependTo('//div[@id = "foo"]');
@@ -472,6 +476,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   * @group Manipulation
   */
   function testAfter() {
+    $this->assertFileExists('data/after.src.xml');
     $doc = FluentDOM(file_get_contents('data/after.src.xml'))
       ->formatOutput()
       ->find('//p')
@@ -486,6 +491,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   * @group Manipulation
   */
   function testBefore() {
+    $this->assertFileExists('data/before.src.xml');
     $doc = FluentDOM(file_get_contents('data/before.src.xml'))
       ->formatOutput()
       ->find('//p')
@@ -500,6 +506,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   * @group Manipulation
   */
   function testInsertAfter() {
+    $this->assertFileExists('data/insertAfter.src.xml');
     $doc = FluentDOM(file_get_contents('data/insertAfter.src.xml'))
       ->find('//p')
       ->insertAfter('//div[@id = "foo"]');
@@ -512,6 +519,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   * @group Manipulation
   */
   function testInsertBefore() {
+    $this->assertFileExists('data/insertBefore.src.xml');
     $doc = FluentDOM(file_get_contents('data/insertBefore.src.xml'))
       ->find('//p')
       ->insertBefore('//div[@id = "foo"]');
@@ -528,6 +536,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   * @group Manipulation
   */
   function testWrap() {
+    $this->assertFileExists('data/wrap.src.xml');
     $doc = FluentDOM(file_get_contents('data/wrap.src.xml'))
       ->find('//p')
       ->wrap('<div class="outer"><div class="inner"></div></div>');
@@ -540,6 +549,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   * @group Manipulation
   */
   function testWrapAll() {
+    $this->assertFileExists('data/wrapAll.src.xml');
     $doc = FluentDOM(file_get_contents('data/wrapAll.src.xml'))
       ->find('//p')
       ->wrapAll('<div class="wrapper"/>');
@@ -552,6 +562,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   * @group Manipulation
   */
   function testWrapInner() {
+    $this->assertFileExists('data/wrapInner.src.xml');
     $doc = FluentDOM(file_get_contents('data/wrapInner.src.xml'))
       ->find('//p')
       ->wrapInner('<b></b>');
@@ -568,6 +579,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   * @group Manipulation
   */
   function testReplaceWith() {
+    $this->assertFileExists('data/replaceWith.src.xml');
     $doc = FluentDOM(file_get_contents('data/replaceWith.src.xml'))
       ->find('//p')
       ->replaceWith('<b>Paragraph. </b>');
@@ -580,7 +592,12 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   * @group Manipulation
   */
   function testReplaceAll() {
-    $this->markTestIncomplete('This test has not been implemented yet.');
+    $this->assertFileExists('data/replaceAll.src.xml');
+    $doc = FluentDOM(file_get_contents('data/replaceAll.src.xml'))
+      ->node('<b id="sample">Paragraph. </b>')
+      ->replaceAll('//p');
+    $this->assertTrue($doc instanceof FluentDOM);
+    $this->assertXmlStringEqualsXMLFile('data/replaceAll.tgt.xml', $doc);
   }
 
   /*

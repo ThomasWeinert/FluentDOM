@@ -176,6 +176,62 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   *
   * @group Interfaces
   */
+  function testInterfaceArrayAccessIsset() {
+    $items = FluentDOM(self::XML)->find('//item');
+    $this->assertTrue($items instanceof ArrayAccess);
+    $this->assertEquals(TRUE, isset($items[1]));
+    $this->assertEquals(FALSE, isset($items[200]));
+  }
+  
+  /**
+  *
+  * @group Interfaces
+  */
+  function testInterfaceArrayAccessGet() {
+    $items = FluentDOM(self::XML)->find('//item');
+    $this->assertTrue($items instanceof ArrayAccess);
+    $this->assertEquals('item', $items[1]->nodeName);
+    $this->assertEquals(1, $items[1]->getAttribute('index'));
+  }
+  
+  /**
+  *
+  * @group Interfaces
+  */
+  function testInterfaceArrayAccessSet() {
+    $items = FluentDOM(self::XML)->find('//item');
+    $this->assertTrue($items instanceof ArrayAccess);
+    try {
+      $items[1] = NULL;
+    } catch (BadMethodCallException $expected) {
+      return;
+    } catch (Exception $expected) {
+      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
+    }
+    $this->fail('An expected exception has not been raised.');
+  }
+  
+  /**
+  *
+  * @group Interfaces
+  */
+  function testInterfaceArrayAccessUnset() {
+    $items = FluentDOM(self::XML)->find('//item');
+    $this->assertTrue($items instanceof ArrayAccess);
+    try {
+      unset($items[1]);
+    } catch (BadMethodCallException $expected) {
+      return;
+    } catch (Exception $expected) {
+      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
+    }
+    $this->fail('An expected exception has not been raised.');
+  }
+
+  /**
+  *
+  * @group Interfaces
+  */
   function testInterfaceCountable() {
     $doc = FluentDOM(self::XML);
     $this->assertTrue($doc instanceof Countable);

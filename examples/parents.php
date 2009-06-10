@@ -24,10 +24,8 @@ $parents = implode(
     ->find('//b')
     ->parents()
     ->map(
-      function ($node) {
-        return $node->tagName; 
-      }
-    )
+        create_function('$node', 'return $node->tagName;')
+      )
 );
 echo $dom
   ->find('//b')

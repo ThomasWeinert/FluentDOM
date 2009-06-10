@@ -247,7 +247,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     if (isset($this->_array[$position])) {
       $this->_position = $position;
     } else {
-      throw new Exception('Unknown Index');
+      throw new InvalidArgumentException('Unknown position');
     }
   }
 

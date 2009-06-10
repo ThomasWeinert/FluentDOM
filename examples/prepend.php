@@ -13,5 +13,5 @@ XML;
 require_once('../FluentDOM.php');
 echo FluentDOM($xml)
   ->find('//p')
-  ->append('<strong>Hello</strong>');
+  ->prepend('<strong>Hello</strong>');
 ?>

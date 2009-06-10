@@ -167,7 +167,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $doc = FluentDOM(self::XML);
     $this->assertEquals($doc->document->saveXML(), (string)$doc);
   }
-  
+
   /*
   * Interfaces
   */
@@ -175,7 +175,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   /**
   *
   * @group Interfaces
-  */  
+  */
   function testInterfaceCountable() {
     $doc = FluentDOM(self::XML);
     $this->assertTrue($doc instanceof Countable);
@@ -183,11 +183,12 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $items = $doc->find('//item');
     $this->assertEquals(3, count($items));
   }
-  
+
+
   /**
   *
   * @group Interfaces
-  */  
+  */
   function testInterfaceIteratorMethods() {
     $items = FluentDOM(self::XML)->find('//item');
     $this->assertTrue($items instanceof Iterator);
@@ -199,11 +200,11 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals(0, $items->current()->getAttribute('index'));
     $this->assertEquals(0, $items->key());
   }
-  
+
   /**
   *
   * @group Interfaces
-  */  
+  */
   function testInterfaceIteratorLoop() {
     $items = FluentDOM(self::XML)->find('//item');
     $this->assertTrue($items instanceof Iterator);
@@ -215,7 +216,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     }
     $this->assertEquals(3, $counter);
   }
-  
+
   /*
   * DOMNodeList emulation
   */
@@ -307,8 +308,56 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   *
   * @group TraversingFilter
   */
-  function testSlice() {
-    $this->markTestIncomplete('This test has not been implemented yet.');
+  function testSliceByRangeStartLtEnd() {
+    $this->assertFileExists('data/sliceByRangeStartLtEnd.src.xml');
+    $doc = FluentDOM(file_get_contents('data/sliceByRangeStartLtEnd.src.xml'))
+      ->find('//p')
+      ->slice(0,3)
+      ->replaceAll('//div');
+    $this->assertTrue($doc instanceof FluentDOM);
+    $this->assertXmlStringEqualsXMLFile('data/sliceByRangeStartLtEnd.tgt.xml', $doc);
+  }
+
+  /**
+  *
+  * @group TraversingFilter
+  */
+  function testSliceByRangeStartGtEnd() {
+    $this->assertFileExists('data/sliceByRangeStartGtEnd.src.xml');
+    $doc = FluentDOM(file_get_contents('data/sliceByRangeStartGtEnd.src.xml'))
+      ->find('//p')
+      ->slice(5,2)
+      ->replaceAll('//div');
+    $this->assertTrue($doc instanceof FluentDOM);
+    $this->assertXmlStringEqualsXMLFile('data/sliceByRangeStartGtEnd.tgt.xml', $doc);
+  }
+
+  /**
+  *
+  * @group TraversingFilter
+  */
+  function testSliceByNegRange() {
+    $this->assertFileExists('data/sliceByNegRange.src.xml');
+    $doc = FluentDOM(file_get_contents('data/sliceByNegRange.src.xml'))
+      ->find('//p')
+      ->slice(1,-2)
+      ->replaceAll('//div');
+    $this->assertTrue($doc instanceof FluentDOM);
+    $this->assertXmlStringEqualsXMLFile('data/sliceByNegRange.tgt.xml', $doc);
+  }
+
+  /**
+  *
+  * @group TraversingFilter
+  */
+  function testSliceToEnd() {
+    $this->assertFileExists('data/sliceToEnd.src.xml');
+    $doc = FluentDOM(file_get_contents('data/sliceToEnd.src.xml'))
+      ->find('//p')
+      ->slice(3)
+      ->replaceAll('//div');
+    $this->assertTrue($doc instanceof FluentDOM);
+    $this->assertXmlStringEqualsXMLFile('data/sliceToEnd.tgt.xml', $doc);
   }
 
   /*

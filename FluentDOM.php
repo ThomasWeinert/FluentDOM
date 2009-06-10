@@ -150,7 +150,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     }
     return FALSE;
   }
-  
+
   /**
   * declaring an empty() method will crash the parser so we use some magic
   *
@@ -167,7 +167,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
       return $this->_cloneNodes();
     }
   }
-  
+
   /**
   * Return the XML output of the internal dom document
   *
@@ -191,7 +191,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     }
     return NULL;
   }
-  
+
   /*
   * Interface - Iterator, SeekableIterator
   */
@@ -260,7 +260,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   public function valid() {
     return isset($this->_array[$this->_position]);
   }
-  
+
   /**
   * Get children of the current iterator element
   *
@@ -272,7 +272,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     $result->_push($this->_match('node()', $this->_array[$this->_position]));
     return $result;
   }
-  
+
   /**
   * Check if the current iterator element has children
   *
@@ -282,7 +282,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   public function hasChildren() {
     return $this->_test('node()', $this->_array[$this->_position]);
   }
-  
+
   /*
   * Interface - Countable
   */
@@ -296,11 +296,11 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   public function count() {
     return count($this->_array);
   }
-  
+
   /*
   * Interface - ArrayAccess
   */
-  
+
   /**
   * If somebody tries to modify the internal array throw an exception.
   *
@@ -312,7 +312,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   public function offsetSet($offset, $value) {
     throw new BadMethodCallException('List is read only');
   }
-  
+
   /**
   * Check if index exists in internal array
   *
@@ -323,7 +323,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   public function offsetExists($offset) {
     return isset($this->_array[$offset]);
   }
-  
+
   /**
   * If somebody tries to remove an element from the internal array throw an exception.
   *
@@ -334,7 +334,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   public function offsetUnset($offset) {
     throw new BadMethodCallException('List is read only');
   }
-  
+
   /**
   * Get element from internal array
   *
@@ -345,11 +345,11 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   public function offsetGet($offset) {
     return isset($this->_array[$offset]) ? $this->_array[$offset] : null;
   }
-  
+
   /*
   * Core functions
   */
-  
+
   /**
   * Create a new instance of the same class with the $this as the parent.
   *
@@ -482,7 +482,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   private function _isQName($name) {
     return TRUE;
   }
-  
+
   /**
   * Check if the DOMNode is DOMElement or DOMText with content
   *
@@ -494,14 +494,14 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     if (is_object($node)) {
       if ($node instanceof DOMElement) {
         return TRUE;
-      } elseif ($node instanceof DOMText && 
+      } elseif ($node instanceof DOMText &&
                 !$node->isWhitespaceInElementContent()) {
         return TRUE;
       }
     }
     return FALSE;
   }
-  
+
   /**
   * Convert a given content into and array of nodes
   *
@@ -543,12 +543,12 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
           $result[] = $element;
           if ($limit > 0 && count($result) > $limit) {
             break;
-          }  
-        } 
+          }
+        }
       }
     }
     if (empty($result)) {
-      throw new UnexpectedValueException('No element found'); 
+      throw new UnexpectedValueException('No element found');
     } else {
       //if a node is not in the current document import it
       foreach ($result as $index => $node) {
@@ -559,7 +559,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     }
     return $result;
   }
-  
+
   private function _getTargetNodes($selector) {
     if ($this->_isNode($selector)) {
       return array($selector);
@@ -573,7 +573,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
       throw new InvalidArgumentException('Invalid selector');
     }
   }
-  
+
   /**
   * Remove nodes from document tree
   *
@@ -592,7 +592,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     }
     return $result;
   }
-  
+
   /**
   * Convert content to DOMElement
   *
@@ -635,7 +635,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     }
     return $this;
   }
-  
+
   /**
   * Formats the current document, resets internal node array and other properties.
   *
@@ -836,7 +836,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
       } else {
         foreach ($node->childNodes as $childNode) {
           if ($this->_test($expr, $childNode)) {
-            $result->_push($next, TRUE);
+            $result->_push($childNode, TRUE);
           }
         }
       }
@@ -1268,13 +1268,13 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     }
     return $result;
   }
-  
+
   /**
   * Insert content before each of the matched elements.
   *
   * @param $content
   * @access public
-  * @return object FluentDOM 
+  * @return object FluentDOM
   */
   public function before($content) {
     $result = $this->_spawn();
@@ -1294,7 +1294,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     }
     return $result;
   }
-  
+
   /**
   * Insert all of the matched elements after another, specified, set of elements.
   *
@@ -1323,7 +1323,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     }
     return $result;
   }
-  
+
   /**
   * Insert all of the matched elements before another, specified, set of elements.
   *
@@ -1351,11 +1351,11 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     }
     return $result;
   }
-  
+
   /*
   * Manipulation - Inserting Around
   */
-  
+
   /**
   * Wrap $content around a set of elements
   *
@@ -1388,12 +1388,12 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
       }
     }
     return $result;
-  }  
+  }
 
   /**
   * Wrap each matched element with the specified content.
   *
-  * If $content contains several elements the first one is used 
+  * If $content contains several elements the first one is used
   *
   * @param string | array | object DOMElement | object FluentDOM $content
   * @access public
@@ -1404,7 +1404,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     $result->_push($this->_wrap($this->_array, $content));
     return $result;
   }
-  
+
   /**
   * Wrap al matched elements with the specified content
   *
@@ -1459,7 +1459,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     }
     return $result;
   }
-  
+
   /**
   * Wrap the inner child contents of each matched element
   * (including text nodes) with an XML structure.
@@ -1474,18 +1474,18 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     foreach ($this->_array as $node) {
       foreach ($node->childNodes as $childNode) {
         if ($this->_isNode($childNode)) {
-          $elements[] = $childNode;   
+          $elements[] = $childNode;
         }
       }
     }
     $result->_push($this->_wrap($elements, $content));
     return $result;
   }
-  
+
   /*
   * Manipulation - Replacing
   */
-  
+
   /**
   * Replaces all matched elements with the specified HTML or DOM elements.
   * This returns the JQuery element that was just replaced,
@@ -1510,7 +1510,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     $this->_removeNodes($this->_array);
     return $this;
   }
-  
+
   /**
   * Replaces the elements matched by the specified selector with the matched elements.
   *
@@ -1537,11 +1537,11 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     $this->_removeNodes($this->_array);
     return $result;
   }
-  
+
   /*
   * Manipulation - Removing
   */
-  
+
   /**
   * this is the empty() method - but because empty
   * is a reserved word we can no declare it directly
@@ -1560,7 +1560,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     }
     return $this;
   }
-  
+
   /**
   * Removes all matched elements from the DOM.
   *
@@ -1575,7 +1575,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
         if (empty($expr) || $this->test($expr, $node)) {
           $result->_push($node->parentNode->removeChild($node));
         }
-      }  
+      }
     }
     return $result;
   }
@@ -1583,10 +1583,10 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   /*
   * Manipulation - Creation
   */
-  
+
   /**
   * create nodes list from content, if $content contains node(s)
-  * from another document the are imported. 
+  * from another document the are imported.
   *
   * @param $content
   * @access public
@@ -1615,7 +1615,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     }
     return $result;
   }
-  
+
   /*
   * Attributes - General
   */

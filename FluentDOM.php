@@ -138,7 +138,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   *
   * @param $name
   * @access public
-  * @return
+  * @return boolean
   */
   public function __isset($name) {
     switch ($name) {

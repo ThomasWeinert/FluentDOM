@@ -555,7 +555,11 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   * @group Manipulation
   */
   function testReplaceWith() {
-    $this->markTestIncomplete('This test has not been implemented yet.');
+    $doc = FluentDOM(file_get_contents('data/replaceWith.src.xml'))
+      ->find('//p')
+      ->replaceWith('<b>Paragraph. </b>');
+    $this->assertTrue($doc instanceof FluentDOM);
+    $this->assertXmlStringEqualsXMLFile('data/replaceWith.tgt.xml', $doc);
   }
 
   /**

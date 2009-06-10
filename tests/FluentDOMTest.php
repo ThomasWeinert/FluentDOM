@@ -1134,6 +1134,17 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   *
   * @group Attributes
   */
+  function testAttrWriteCallback() {
+    $doc = FluentDOM(self::XML)
+      ->find('//group/item')
+      ->attr('callback', array($this, 'callBackForAttr'));
+    $this->assertEquals($doc[0]->nodeName, $doc->attr('callback'));
+  }
+
+  /**
+  *
+  * @group Attributes
+  */
   function testRemoveAttr() {
     $this->assertFileExists('data/removeAttr.src.xml');
     $doc = FluentDOM(file_get_contents('data/removeAttr.src.xml'))
@@ -1192,6 +1203,14 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $doc->toggleClass('test1');
     $this->assertEquals('test2', $doc[0]->getAttribute('class'));
     $this->assertEquals('test2 test1', $doc[1]->getAttribute('class'));
+  }
+
+
+  /**
+  * helper
+  */
+  function callBackForAttr($node, $index) {
+    return $node->nodeName;
   }
 }
 ?>

@@ -24,11 +24,18 @@ echo $dom
       ', ',
       $dom
         ->find('//input')
-        ->map(
-          function($node) {
-            return FluentDOM($node)->attr('value');
-          }
-        )
+        ->map('getNodeAttribValue')
     )
   );
+
+/**
+*
+*
+* @param $node
+* @param $index
+* @return string | array
+*/
+function getNodeAttribValue($node, $index) {
+  return FluentDOM($node)->attr('value');
+}
 ?>

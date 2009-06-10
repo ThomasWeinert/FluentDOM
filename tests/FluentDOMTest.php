@@ -141,7 +141,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     }
     $this->fail('An expected exception has not been raised.');
   }
-  
+
   /**
   *
   * @group Properties
@@ -226,7 +226,21 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   * @group TraversingFilter
   */
   function testMap() {
-    $this->markTestIncomplete('This test has not been implemented yet.');
+    $this->assertFileExists('data/map.src.xml');
+    $dom = FluentDOM(file_get_contents('data/map.src.xml'));
+    $dom->find('//p')
+      ->append(
+        implode(
+          ', ',
+          $dom
+            ->find('//input')
+            ->map(
+              create_function('$node, $item', 'return FluentDOM($node)->attr("value");')
+            )
+        )
+      );
+    $this->assertTrue($dom instanceof FluentDOM);
+    $this->assertXmlStringEqualsXMLFile('data/map.tgt.xml', $dom);
   }
 
   /**

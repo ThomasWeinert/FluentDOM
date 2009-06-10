@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<html>
+<head/>
+<body>
+  <p><b>Values: </b>John, password, http://ejohn.org/</p>
+  <form>
+    <input type="text" name="name" value="John"/>
+    <input type="text" name="password" value="password"/>
+    <input type="text" name="url" value="http://ejohn.org/"/>
+  </form>
+</body>
+</html>

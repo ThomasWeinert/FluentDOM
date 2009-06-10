@@ -502,6 +502,29 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     }
     return FALSE;
   }
+  
+  /**
+  * check if parameter is a valid callback function
+  *
+  * @param $callback
+  * @access private
+  * @return boolean
+  */
+  private function _isCallback($callback) {
+    if ($callback instanceof Closure) {
+      return TRUE;
+    } elseif (is_string($callback) &&
+              function_exists($callback)) {
+      return is_callable($callback);
+    } elseif (is_array($callback) &&
+              count($callback) == 2 &&
+              (is_object($callback[0]) || is_string($callback[0])) &&
+              is_string($callback[1])) {
+      return is_callable($callback);
+    } else {
+      throw BadFunctionCallException('Invalid callback argument');
+    }
+  } 
 
   /**
   * Convert a given content into and array of nodes
@@ -625,9 +648,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return object FluentDOM
   */
   public function each($function) {
-    if (is_array($function) ||
-        is_string($function) ||
-        $function instanceof Closure) {
+    if ($this->_isCallback($function)) {
       foreach ($this->_array as $index => $node) {
         call_user_func($function, $node, $index);
       }
@@ -687,8 +708,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     foreach ($this->_array as $index => $node) {
       if (is_string($expr)) {
         $check = $this->_test($expr, $node);
-      } elseif ($expr instanceof Closure ||
-                is_array($expr)) {
+      } elseif ($this->_isCallback($function)) {
         $check = call_user_func($expr, $node, $index);
       } else {
         $check = TRUE;
@@ -726,9 +746,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   public function map($function) {
     $result = array();
     foreach ($this->_array as $index => $node) {
-      if (is_array($function) ||
-          is_string($function) ||
-          $function instanceof Closure) {
+      if ($this->_isCallback($function)) {
         $mapped = call_user_func($function, $node, $index);
       } else {
         throw new InvalidArgumentException('Invalid callback function');
@@ -762,8 +780,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     foreach ($this->_array as $node) {
       if (is_string($expr)) {
         $check = $this->_test($expr, $node);
-      } elseif ($expr instanceof Closure ||
-                is_array($expr)) {
+      } elseif ($this->_isCallback($function)) {
         $check = call_user_func($expr, $node, $index);
       } else {
         $check = TRUE;

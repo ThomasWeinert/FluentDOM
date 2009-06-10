@@ -308,6 +308,24 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     }
     $this->fail('An expected exception has not been raised.');
   }
+  
+  /**
+  *
+  * @group Interfaces
+  */
+  function testInterfaceRecursiveIterator() {
+    $iterator = new RecursiveIteratorIterator(
+      FluentDOM(self::XML)->find('/*'),
+      RecursiveIteratorIterator::SELF_FIRST
+    );
+    $counter = 0;
+    foreach ($iterator as $key => $value) {
+      if ($value->nodeName == 'item') {
+        ++$counter;
+      }
+    }
+    $this->assertEquals(3, $counter);
+  }
 
   /*
   * DOMNodeList emulation

@@ -166,6 +166,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     case 'clone' :
       return $this->_cloneNodes();
     }
+    throw new BadMethodCallException('Unknown method '.get_class($this).'::'.$name);
   }
 
   /**

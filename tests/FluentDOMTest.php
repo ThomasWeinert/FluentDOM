@@ -544,13 +544,11 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   * @group TraversingFind
   */
   function testNextAllSiblings() {
-    $this->markTestIncomplete('This test has not been implemented yet.');
-
     $this->assertFileExists('data/nextAllSiblings.src.xml');
     $dom = FluentDOM(file_get_contents('data/nextAllSiblings.src.xml'))
-      ->find('//button[@disabled]')
-      ->nextSiblings()
-      ->text('This button is disabled.');
+      ->find('//div[position() = 1]')
+      ->nextAllSiblings()
+      ->addClass('after');
     $this->assertTrue($dom instanceof FluentDOM);
     $this->assertXmlStringEqualsXMLFile('data/nextAllSiblings.tgt.xml', $dom);
   }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html>
+<head></head>
+<body>
+  <div>first</div>
+  <div>sibling<div>child</div></div>
+  <div>sibling</div>
+  <div>sibling</div>
+</body>
+</html>

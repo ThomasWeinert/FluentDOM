@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<html>
+<head/>
+<body>
+  <div>first</div>
+  <div class="after">sibling<div>child</div></div>
+  <div class="after">sibling</div>
+  <div class="after">sibling</div>
+</body>
+</html>

@@ -1040,6 +1040,26 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   }
 
   /*
+  * Manipulation - Copying
+  */
+
+  /**
+  *
+  * @group Manipulation
+  */
+  function testClone() {
+    $doc = FluentDOM(self::XML)->find('//item');
+    $clonedNodes = $doc->clone();
+    $this->assertTrue($doc instanceof FluentDOM);
+    $this->assertTrue($clonedNodes instanceof FluentDOM);
+    $this->assertTrue($doc[0] !== $clonedNodes[0]);
+    $this->assertEquals($doc[0]->nodeName, $clonedNodes[0]->nodeName);
+    $this->assertEquals($doc[1]->getAttribute('index'), $clonedNodes[1]->getAttribute('index'));
+    $this->assertEquals(count($doc), count($clonedNodes));
+  }
+
+
+  /*
   * Attributes
   */
 
@@ -1078,6 +1098,16 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   *
   * @group Attributes
   */
+  function testAttrReadNoMatch() {
+    $doc = FluentDOM(self::XML)
+      ->attr('item');
+    $this->assertTrue(empty($doc));
+  }
+
+  /**
+  *
+  * @group Attributes
+  */
   function testAttrWrite() {
     $doc = FluentDOM(self::XML)
       ->find('//group/item')
@@ -1085,6 +1115,19 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
       ->attr('index');
     $this->assertEquals('15', $doc);
 
+  }
+
+  /**
+  *
+  * @group Attributes
+  */
+  function testAttrWriteArray() {
+    $doc = FluentDOM(self::XML)
+      ->find('//group/item')
+      ->attr(array('index' => '15', 'length' => '34', 'label' => 'box'));
+    $this->assertEquals('15', $doc->attr('index'));
+    $this->assertEquals('34', $doc->attr('length'));
+    $this->assertEquals('box', $doc->attr('label'));
   }
 
   /**

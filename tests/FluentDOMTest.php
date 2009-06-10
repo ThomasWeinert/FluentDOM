@@ -167,7 +167,43 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $doc = FluentDOM(self::XML);
     $this->assertEquals($doc->document->saveXML(), (string)$doc);
   }
-
+  
+  /*
+  * Interfaces
+  */
+  
+  /**
+  *
+  * @group Interfaces
+  */  
+  function testInterfaceIteratorMethods() {
+    $items = FluentDOM(self::XML)->find('//item');
+    $this->assertTrue($items instanceof Iterator);
+    $this->assertEquals(0, $items->current()->getAttribute('index'));
+    $items->next();
+    $this->assertEquals(1, $items->current()->getAttribute('index'));
+    $this->assertEquals(1, $items->key());
+    $items->rewind();
+    $this->assertEquals(0, $items->current()->getAttribute('index'));
+    $this->assertEquals(0, $items->key());
+  }
+  
+  /**
+  *
+  * @group Interfaces
+  */  
+  function testInterfaceIteratorLoop() {
+    $items = FluentDOM(self::XML)->find('//item');
+    $this->assertTrue($items instanceof Iterator);
+    $counter = 0;
+    foreach ($items as $item) {
+      $this->assertEquals('item', $item->nodeName);
+      $this->assertEquals($counter, $item->getAttribute('index'));
+      ++$counter;
+    }
+    $this->assertEquals(3, $counter);
+  }
+  
   /*
   * DOMNodeList emulation
   */

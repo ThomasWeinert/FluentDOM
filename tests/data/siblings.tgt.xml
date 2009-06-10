@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<html>
+<head/>
+<body>
+  <ul>
+    <li class="before">One</li>
+    <li class="before">Two</li>
+    <li class="hilite">Three</li>
+    <li class="before">Four</li>
+  </ul>
+  <ul>
+    <li>Five</li>
+    <li>Six</li>
+    <li>Seven</li>
+  </ul>
+  <ul>
+    <li class="before">Eight</li>
+    <li class="hilite before">Nine</li>
+    <li class="before">Ten</li>
+    <li class="hilite before">Eleven</li>
+  </ul>
+  <p>Unique siblings: <b/></p>
+</body>
+
+</html>

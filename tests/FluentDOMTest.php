@@ -490,7 +490,27 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   * @group TraversingFind
   */
   function testChildren() {
-    $this->markTestIncomplete('This test has not been implemented yet.');
+    $this->assertFileExists('data/children.src.xml');
+    $dom = FluentDOM(file_get_contents('data/children.src.xml'))
+      ->find('//div[@id = "container"]/p')
+      ->children()
+      ->toggleClass('child');
+    $this->assertTrue($dom instanceof FluentDOM);
+    $this->assertXmlStringEqualsXMLFile('data/children.tgt.xml', $dom);
+  }
+
+  /**
+  *
+  * @group TraversingFind
+  */
+  function testChildrenExpression() {
+    $this->assertFileExists('data/childrenExpression.src.xml');
+    $dom = FluentDOM(file_get_contents('data/childrenExpression.src.xml'))
+      ->find('//div[@id = "container"]/p')
+      ->children('name() = "em"')
+      ->toggleClass('child');
+    $this->assertTrue($dom instanceof FluentDOM);
+    $this->assertXmlStringEqualsXMLFile('data/childrenExpression.tgt.xml', $dom);
   }
 
   /**

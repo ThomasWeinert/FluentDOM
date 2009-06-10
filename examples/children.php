@@ -6,7 +6,7 @@ $xml = <<<XML
 <head></head>
 <body>
   <div id="container">
-    <p>This <span>is the <em>way</em> we</span> 
+    <p>This <span>is the <em>way</em> we</span>
     write <em>the</em> demo,</p>
   </div>
 </body>
@@ -17,5 +17,12 @@ require_once('../FluentDOM.php');
 echo FluentDOM($xml)
   ->find('//div[@id = "container"]/p')
   ->children()
+  ->toggleClass('child');
+
+echo "\n\n";
+
+echo FluentDOM($xml)
+  ->find('//div[@id = "container"]/p')
+  ->children('name() = "em"')
   ->toggleClass('child');
 ?>

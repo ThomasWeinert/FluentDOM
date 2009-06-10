@@ -409,12 +409,8 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @access private
   * @return boolean
   */
-  private function _test($expr, $context = NULL) {
-    if (isset($context)) {
-      $check = $this->_xpath()->evaluate($expr, $context);
-    } else {
-      $check = $this->_xpath()->evaluate($expr);
-    }
+  private function _test($expr, $context) {
+    $check = $this->_xpath()->evaluate($expr, $context);
     if ($check instanceof DOMNodeList) {
       return $check->length > 0;
     } else {
@@ -506,7 +502,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     }
     return FALSE;
   }
-  
+
   /**
   * check if parameter is a valid callback function
   *
@@ -528,7 +524,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     } else {
       throw new BadFunctionCallException('Invalid callback argument');
     }
-  } 
+  }
 
   /**
   * Convert a given content into and array of nodes

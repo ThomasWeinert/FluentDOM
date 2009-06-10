@@ -1226,8 +1226,8 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
             $result->_push(
               $targetNode->insertBefore(
                 $node->cloneNode(TRUE),
-                ($first && $exprNode->hasChildNodes())
-                  ? $exprNode->childNodes->item(0) : NULL
+                ($first && $targetNode->hasChildNodes())
+                  ? $targetNode->childNodes->item(0) : NULL
               )
             );
           }

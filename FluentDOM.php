@@ -963,7 +963,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     $result = $this->_spawn();
     foreach ($this->_array as $node) {
       $previous = $node->previousSibling;
-      while ($previous instanceof DOMNode && !$this->isNode($previous)) {
+      while ($previous instanceof DOMNode && !$this->_isNode($previous)) {
         $previous = $previous->previousSibling;
       }
       if (!empty($previous)) {

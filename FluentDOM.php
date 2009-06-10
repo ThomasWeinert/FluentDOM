@@ -522,7 +522,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
               is_string($callback[1])) {
       return is_callable($callback);
     } else {
-      throw BadFunctionCallException('Invalid callback argument');
+      throw new BadFunctionCallException('Invalid callback argument');
     }
   } 
 

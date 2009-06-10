@@ -1068,7 +1068,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return object FluentDOM
   */
   public function end() {
-    if (!empty($this->_parent)) {
+    if ($this->_parent instanceof FluentDOM) {
       return $this->_parent;
     } else {
       return $this;

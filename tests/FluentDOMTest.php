@@ -171,6 +171,18 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   /*
   * Interfaces
   */
+
+  /**
+  *
+  * @group Interfaces
+  */  
+  function testInterfaceCountable() {
+    $doc = FluentDOM(self::XML);
+    $this->assertTrue($doc instanceof Countable);
+    $this->assertEquals(0, count($doc));
+    $items = $doc->find('//item');
+    $this->assertEquals(3, count($items));
+  }
   
   /**
   *

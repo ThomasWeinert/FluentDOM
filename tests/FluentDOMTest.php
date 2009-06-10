@@ -541,6 +541,44 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   *
   * @group TraversingFind
   */
+  function testInvalidAddForgeinNodes() {
+    $dom = FluentDOM(self::XML);
+    $items = FluentDOM(self::XML)->find('//item');
+    try {
+      $dom
+        ->find('/items')
+        ->add($items);
+    } catch (OutOfBoundsException $expected) {
+      return;
+    } catch (Exception $expected) {
+      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
+    }
+    $this->fail('An expected exception has not been raised.');
+  }
+
+  /**
+  *
+  * @group TraversingFind
+  */
+  function testInvalidAddForgeinNode() {
+    $dom = FluentDOM(self::XML);
+    $items = FluentDOM(self::XML)->find('//item');
+    try {
+      $dom
+        ->find('/items')
+        ->add($items[0]);
+    } catch (OutOfBoundsException $expected) {
+      return;
+    } catch (Exception $expected) {
+      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
+    }
+    $this->fail('An expected exception has not been raised.');
+  }
+
+  /**
+  *
+  * @group TraversingFind
+  */
   function testChildren() {
     $this->assertFileExists('data/children.src.xml');
     $dom = FluentDOM(file_get_contents('data/children.src.xml'))

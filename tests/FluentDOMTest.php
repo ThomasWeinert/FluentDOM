@@ -443,7 +443,11 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   * @group Manipulation
   */
   function testPrependTo() {
-    $this->markTestIncomplete('This test has not been implemented yet.');
+    $doc = FluentDOM(file_get_contents('data/prependTo.src.xml'))
+      ->find('//span')
+      ->prependTo('//div[@id = "foo"]');
+    $this->assertTrue($doc instanceof FluentDOM);
+    $this->assertXmlStringEqualsXMLFile('data/prependTo.tgt.xml', $doc);
   }
 
   /*

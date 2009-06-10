@@ -141,6 +141,19 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     }
     $this->fail('An expected exception has not been raised.');
   }
+  
+  /**
+  *
+  * @group Properties
+  */
+  function testDynamicProperty() {
+    $doc = FluentDOM(self::XML);
+    $this->assertEquals(FALSE, isset($doc->dynamicProperty));
+    $this->assertEquals(NULL, $doc->dynamicProperty);
+    $doc->dynamicProperty = 'test';
+    $this->assertEquals(TRUE, isset($doc->dynamicProperty));
+    $this->assertEquals('test', $doc->dynamicProperty);
+  }
 
   /*
   * __toString() method

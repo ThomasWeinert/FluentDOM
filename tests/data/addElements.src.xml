@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<html>
+<head></head>
+<body>
+  <p>I would like to say: <b>HELLO</b></p>
+  <b>HELLO</b>
+
+  <div>Another list of childNodes</div>
+</body>
+</html>

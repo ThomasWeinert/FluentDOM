@@ -182,7 +182,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals(TRUE, isset($items[1]));
     $this->assertEquals(FALSE, isset($items[200]));
   }
-  
+
   /**
   *
   * @group Interfaces
@@ -193,7 +193,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals('item', $items[1]->nodeName);
     $this->assertEquals(1, $items[1]->getAttribute('index'));
   }
-  
+
   /**
   *
   * @group Interfaces
@@ -210,7 +210,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     }
     $this->fail('An expected exception has not been raised.');
   }
-  
+
   /**
   *
   * @group Interfaces
@@ -292,7 +292,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     }
     $this->fail('An expected exception has not been raised.');
   }
-  
+
   /*
   * DOMNodeList emulation
   */
@@ -444,8 +444,45 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   *
   * @group TraversingFind
   */
-  function testAdd() {
-    $this->markTestIncomplete('This test has not been implemented yet.');
+  function testAddElements() {
+    $this->assertFileExists('data/addElements.src.xml');
+    $dom = FluentDOM(file_get_contents('data/addElements.src.xml'));
+    $dom
+      ->add(
+        $dom->find('//div')
+      )
+      ->toggleClass('inB');
+    $this->assertTrue($dom instanceof FluentDOM);
+    $this->assertXmlStringEqualsXMLFile('data/addElements.tgt.xml', $dom);
+  }
+
+  /**
+  *
+  * @group TraversingFind
+  */
+  function testAddFromExpression() {
+    $this->assertFileExists('data/addFromExpression.src.xml');
+    $dom = FluentDOM(file_get_contents('data/addFromExpression.src.xml'));
+    $dom
+      ->add('//div')
+      ->toggleClass('inB');
+    $this->assertTrue($dom instanceof FluentDOM);
+    $this->assertXmlStringEqualsXMLFile('data/addFromExpression.tgt.xml', $dom);
+  }
+
+  /**
+  *
+  * @group TraversingFind
+  */
+  function testAddInContext() {
+    $this->assertFileExists('data/addInContext.src.xml');
+    $dom = FluentDOM(file_get_contents('data/addInContext.src.xml'));
+    $dom
+      ->find('//p')
+      ->add('//p/b')
+      ->toggleClass('inB');
+    $this->assertTrue($dom instanceof FluentDOM);
+    $this->assertXmlStringEqualsXMLFile('data/addInContext.tgt.xml', $dom);
   }
 
   /**

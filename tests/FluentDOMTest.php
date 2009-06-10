@@ -754,6 +754,8 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue($endDoc !== $doc);
     $endDocRoot = $doc->end();
     $this->assertTrue($endDoc === $endDocRoot);
+    $endDocRoot = $doc->end();
+    $this->assertTrue($endDoc === $endDocRoot);
   }
 
   /**

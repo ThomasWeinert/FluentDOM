@@ -220,7 +220,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * Move iterator pointer to next element
   *
   * @access public
-  * @return
+  * @return void
   */
   public function next() {
     ++$this->_position;
@@ -1570,8 +1570,12 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   */
   public function remove($expr = NULL) {
     $result = $this->_spawn();
-    if (is_string($expr)) {
-      $result->_push($this->_removeNodes($expr));
+    foreach ($this->_array as $node) {
+      if (isset($node->parentNode)) {
+        if (empty($expr) || $this->test($expr, $node)) {
+          $result->_push($node->parentNode->removeChild($node));
+        }
+      }  
     }
     return $result;
   }

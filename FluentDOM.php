@@ -481,7 +481,11 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return boolean
   */
   private function _isQName($name) {
-    return TRUE;
+    if (preg_match('((\w[\w\d]*:)?(\w[\w\d-]*))', $name)) {
+      return TRUE;
+    } else {
+      return FALSE;
+    }
   }
 
   /**

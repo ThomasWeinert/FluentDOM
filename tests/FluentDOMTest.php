@@ -469,6 +469,18 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   *
   * @group TraversingFilter
   */
+  function testNotWithFunction() {
+    $doc = FluentDOM(self::XML)->find('//*');
+    $this->assertTrue($doc->length > 1);
+    $notDoc = $doc->not(array($this, 'callbackTestNotWithFunction'));
+    $this->assertEquals(1, $notDoc->length);
+    $this->assertTrue($notDoc !== $doc);
+  }
+
+  /**
+  *
+  * @group TraversingFilter
+  */
   function testSliceByRangeStartLtEnd() {
     $this->assertFileExists('data/sliceByRangeStartLtEnd.src.xml');
     $doc = FluentDOM(file_get_contents('data/sliceByRangeStartLtEnd.src.xml'))
@@ -1223,7 +1235,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   function testAttrWriteCallback() {
     $doc = FluentDOM(self::XML)
       ->find('//group/item')
-      ->attr('callback', array($this, 'callBackForAttr'));
+      ->attr('callback', array($this, 'callbackForAttr'));
     $this->assertEquals($doc[0]->nodeName, $doc->attr('callback'));
   }
 
@@ -1292,11 +1304,24 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   }
 
 
-  /**
+  /*
   * helper
   */
-  function callBackForAttr($node, $index) {
+
+  /**
+   *
+   * @uses testAttrWriteCallback
+   */
+  function callbackForAttr($node, $index) {
     return $node->nodeName;
+  }
+
+  /**
+   *
+   * @uses testNotWithFunction()
+   */
+  function callbackTestNotWithFunction($node, $index) {
+    return $node->nodeName != "items";
   }
 }
 ?>

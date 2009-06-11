@@ -706,12 +706,11 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   public function filter($expr) {
     $result = $this->_spawn();
     foreach ($this->_array as $index => $node) {
+      $check = TRUE;
       if (is_string($expr)) {
-        $check = $this->_test($expr, $node);
-      } elseif ($this->_isCallback($function)) {
+        $check = $this->_test($expr, $node, $index);
+      } elseif ($this->_isCallback($expr)) {
         $check = call_user_func($expr, $node, $index);
-      } else {
-        $check = TRUE;
       }
       if ($check) {
         $result->_push($node);

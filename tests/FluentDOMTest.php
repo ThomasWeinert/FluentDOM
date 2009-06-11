@@ -373,6 +373,18 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   *
   * @group TraversingFilter
   */
+  function testFilterWithFunction() {
+    $doc = FluentDOM(self::XML)->find('//*');
+    $this->assertTrue($doc->length > 1);
+    $filterDoc = $doc->filter(array($this, 'callbackTestFilterWithFunction'));
+    $this->assertEquals(1, $filterDoc->length);
+    $this->assertTrue($filterDoc !== $doc);
+  }
+
+  /**
+  *
+  * @group TraversingFilter
+  */
   function testIs() {
     $doc = FluentDOM(self::XML)->find('//*');
     $this->assertTrue($doc->length > 1);
@@ -1374,6 +1386,14 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
    */
   function callbackTestNotWithFunction($node, $index) {
     return $node->nodeName != "items";
+  }
+
+  /**
+   *
+   * @uses testFilterWithFunction()
+   */
+  function callbackTestFilterWithFunction($node, $index) {
+    return $node->nodeName == "items";
   }
 }
 ?>

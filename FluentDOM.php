@@ -570,6 +570,8 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
           }
         }
       }
+    } else {
+      throw new InvalidArgumentException('Invalid content parameter');
     }
     if (empty($result)) {
       throw new UnexpectedValueException('No element found');
@@ -627,10 +629,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   private function _getContentElement($content) {
     if ($content instanceof DOMElement) {
       return $content;
-    } elseif (is_string($content) ||
-              is_array($content) ||
-              $content instanceof DOMNodeList ||
-              $content instanceof Iterator) {
+    } else {
       $contentNodes = $this->_getContentNodes($content, FALSE, 1);
       return $contentNodes[0];
     }

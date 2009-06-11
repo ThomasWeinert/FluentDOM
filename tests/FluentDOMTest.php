@@ -1123,6 +1123,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue($doc instanceof FluentDOM);
     $this->assertXmlStringEqualsXMLFile('data/WrapWithDOMElement.tgt.xml', $doc);
   }
+  
   /**
   *
   * @group Manipulation
@@ -1134,6 +1135,23 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue($doc instanceof FluentDOM);
     $doc->find('//p')->wrap($divs);
     $this->assertXmlStringEqualsXMLFile('data/wrapWithDOMNodeList.tgt.xml', $doc);
+  }
+  
+  /**
+  *
+  * @group Manipulation
+  */
+  function testWrapWithInvalidArgument() {
+    try {
+      FluentDOM(self::XML)
+        ->find('//item')
+        ->wrap(NULL);
+    } catch (InvalidArgumentException $expected) {
+      return;
+    } catch (Exception $expected) {
+      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
+    }
+    $this->fail('An expected exception has not been raised.');
   }
   
   /**

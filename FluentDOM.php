@@ -748,8 +748,6 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     foreach ($this->_array as $index => $node) {
       if ($this->_isCallback($function)) {
         $mapped = call_user_func($function, $node, $index);
-      } else {
-        throw new InvalidArgumentException('Invalid callback function');
       }
       if ($mapped === NULL) {
         continue;
@@ -780,7 +778,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     foreach ($this->_array as $node) {
       if (is_string($expr)) {
         $check = $this->_test($expr, $node);
-      } elseif ($this->_isCallback($function)) {
+      } elseif ($this->_isCallback($expr)) {
         $check = call_user_func($expr, $node, $index);
       } else {
         $check = TRUE;

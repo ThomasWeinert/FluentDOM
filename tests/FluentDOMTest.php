@@ -357,7 +357,6 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
            $fluentNode->prepend("EACH > ");
           ')
       );
-    var_dump((string)$dom);
     $this->assertTrue($dom instanceof FluentDOM);
     $this->assertXmlStringEqualsXMLFile('data/each.tgt.xml', $dom);
   }

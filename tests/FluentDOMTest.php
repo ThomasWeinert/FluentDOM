@@ -365,10 +365,9 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   *
   * @group CoreFunctions
   */
-  function testEachWihtInvalidFunction() {
-    $this->assertFileExists('data/each.src.xml');
+  function testEachWithInvalidFunction() {
     try {
-      $dom = FluentDOM(file_get_contents('data/each.src.xml'))
+      $dom = FluentDOM(self::XML)
         ->find('//body//*')
         ->each('invalidCallbackFunctionName');
     } catch (BadFunctionCallException $expected) {
@@ -407,6 +406,64 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $nodes = $doc->node($doc->document->createElement('div'));
     $this->assertTrue($doc instanceof FluentDOM);
     $this->assertEquals(1, count($nodes));
+  }
+  
+  /**
+  *
+  * @group CoreFunctions
+  */
+  function testNodeWithDOMText() {
+    $doc = FluentDOM(self::XML);
+    $nodes = $doc->node($doc->document->createTextNode('div'));
+    $this->assertTrue($doc instanceof FluentDOM);
+    $this->assertEquals(1, count($nodes));
+  }
+  
+  /**
+  *
+  * @group CoreFunctions
+  */
+  function testNodeWithInvalidContent() {
+    try {
+      $dom = FluentDOM(self::XML)
+        ->node(NULL);
+    } catch (InvalidArgumentException $expected) {
+      return;
+    } catch (Exception $expected) {
+      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
+    }
+  }
+  
+  /**
+  *
+  * @group CoreFunctions
+  */
+  function testNodeWithEmptyContent() {
+    try {
+      $dom = FluentDOM(self::XML)
+        ->node('');
+    } catch (UnexpectedValueException $expected) {
+      return;
+    } catch (Exception $expected) {
+      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
+    }
+  }
+  
+  /**
+  *
+  * @group CoreFunctions
+  */
+  function testNodeWithEmptyList() {
+    try {
+      $dom = FluentDOM(self::XML);
+      $dom->node(
+          $dom->find('UnknownTagName')
+        );
+    } catch (UnexpectedValueException $expected) {
+      return;
+    } catch (Exception $expected) {
+      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
+    }
   }
 
   /*

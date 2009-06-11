@@ -2,11 +2,11 @@ FluentDOM
 
 FluentDOM provides an easy to use fluent interface for DOMDocument.
 
-The idea was born in a workshop of Tobias Schlitt (www.schlitt.info) about the PHP XML 
+The idea was born in a workshop of Tobias Schlitt (schlitt.info) about the PHP XML 
 extensions at the IPC Spring in Berlin. He used this idea to show XPath samples in the
 session.
 
-Many thanks to the jQuery (www.jquery.com) people for their work, who did an exceptional 
+Many thanks to the jQuery (jquery.com) people for their work, who did an exceptional 
 job describing their interfaces and providing examples. This saved us a lot of work.
 
 We implemented most of the jQuery methods into FluentDOM, but here are

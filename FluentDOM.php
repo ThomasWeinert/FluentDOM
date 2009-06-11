@@ -12,7 +12,7 @@
 *
 * @param mixed $source
 * @access public
-* @return FluentDOM
+* @return object FluentDOM
 */
 function FluentDOM($source) {
   return new FluentDOM($source);
@@ -359,7 +359,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @access private
   * @return
   */
-  private function _spawn() {
+  protected function _spawn() {
     return new FluentDOM($this);
   }
 

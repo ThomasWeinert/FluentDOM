@@ -5,6 +5,7 @@ require_once 'FluentDOMTest.php';
 if (version_compare(PHP_VERSION, '5.3', '>=')) {
   include_once 'FluentDOMTest_PHP5_3.php';
 }
+require_once 'FluentDOMStyleTest.php';
  
 class FluentDOM_AllTests {
 
@@ -15,6 +16,7 @@ class FluentDOM_AllTests {
     if (version_compare(PHP_VERSION, '5.3', '>=')) {
       $suite->addTestSuite('FluentDOMTest_PHP5_3');
     }
+    $suite->addTestSuite('FluentDOMStyleTest');
  
     return $suite;
   }

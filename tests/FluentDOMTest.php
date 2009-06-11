@@ -686,6 +686,18 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   *
   * @group TraversingFind
   */
+  function testFindWithNamespaces() {
+    $this->assertFileExists('data/findWithNamespaces.src.xml');
+    $doc = FluentDOM(file_get_contents('data/findWithNamespaces.src.xml'))->find('//_:entry');
+    $this->assertEquals(25, $doc->length);
+    $value = FluentDOM(file_get_contents('data/findWithNamespaces.src.xml'))->find('//openSearch:totalResults')->text();
+    $this->assertEquals(38, $value);
+  }
+
+  /**
+  *
+  * @group TraversingFind
+  */
   function testNextSiblings() {
     $this->assertFileExists('data/nextSiblings.src.xml');
     $dom = FluentDOM(file_get_contents('data/nextSiblings.src.xml'))

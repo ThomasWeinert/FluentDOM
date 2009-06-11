@@ -54,9 +54,9 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   /**
   * element nodes
   * @var array
-  * @access private
+  * @access protected
   */
-  private $_array = array();
+  protected $_array = array();
 
   /**
   * internal xpath instance
@@ -507,10 +507,10 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * check if parameter is a valid callback function
   *
   * @param $callback
-  * @access private
+  * @access protected
   * @return boolean
   */
-  private function _isCallback($callback) {
+  protected function _isCallback($callback) {
     if ($callback instanceof Closure) {
       return TRUE;
     } elseif (is_string($callback) &&
@@ -1650,7 +1650,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
           }
         }
       }
-    } elseif (empty($value)) {
+    } elseif (is_null($value)) {
       //empty value - read attribute from first element in list
       if ($this->_isQName($attribute) &&
           count($this->_array) > 0) {

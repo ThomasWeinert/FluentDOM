@@ -378,6 +378,37 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     }
   }
 
+  /**
+  *
+  * @group CoreFunctions
+  */
+  function testNode() {
+    $this->assertFileExists('data/node.src.xml');
+    $doc = FluentDOM(file_get_contents('data/node.src.xml'))
+      ->node(
+        FluentDOM('<samples>
+                    <b id="first">Paragraph. </b>
+                  </samples>')
+          ->find('//b[@id = "first"]')
+          ->removeAttr('id')
+          ->addClass('imported')
+      )
+      ->replaceAll('//p');
+    $this->assertTrue($doc instanceof FluentDOM);
+    $this->assertXmlStringEqualsXMLFile('data/node.tgt.xml', $doc);
+  }
+  
+  /**
+  *
+  * @group CoreFunctions
+  */
+  function testNodeWithDOMElement() {
+    $doc = FluentDOM(self::XML);
+    $nodes = $doc->node($doc->document->createElement('div'));
+    $this->assertTrue($doc instanceof FluentDOM);
+    $this->assertEquals(1, count($nodes));
+  }
+
   /*
   * Traversing - Filtering
   */
@@ -1292,26 +1323,6 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   /*
   * Attributes
   */
-
-  /**
-  *
-  * @group Attributes
-  */
-  function testNode() {
-    $this->assertFileExists('data/node.src.xml');
-    $doc = FluentDOM(file_get_contents('data/node.src.xml'))
-      ->node(
-        FluentDOM('<samples>
-                    <b id="first">Paragraph. </b>
-                  </samples>')
-          ->find('//b[@id = "first"]')
-          ->removeAttr('id')
-          ->addClass('imported')
-      )
-      ->replaceAll('//p');
-    $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile('data/node.tgt.xml', $doc);
-  }
 
   /**
   *

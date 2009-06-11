@@ -394,12 +394,45 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
           $dom
             ->find('//input')
             ->map(
-              create_function('$node, $item', 'return FluentDOM($node)->attr("value");')
+              create_function('$node, $index', 'return FluentDOM($node)->attr("value");')
             )
         )
       );
     $this->assertTrue($dom instanceof FluentDOM);
     $this->assertXmlStringEqualsXMLFile('data/map.tgt.xml', $dom);
+  }
+
+  /**
+  *
+  * @group TraversingFilter
+  */
+  function testMapMixedResult() {
+    $this->assertFileExists('data/mapMixedResult.src.xml');
+    $dom = FluentDOM(file_get_contents('data/mapMixedResult.src.xml'));
+    $dom->find('//p')
+      ->append(
+        implode(
+          ', ',
+          $dom
+            ->find('//input')
+            ->map(
+              create_function(
+                '$node, $index',
+                '
+                  switch($index) {
+                  case 0:
+                    return NULL;
+                  case 1:
+                    return 3;
+                  default:
+                    return array(1,2);
+                  }
+                ')
+            )
+        )
+      );
+    $this->assertTrue($dom instanceof FluentDOM);
+    $this->assertXmlStringEqualsXMLFile('data/mapMixedResult.tgt.xml', $dom);
   }
 
   /**

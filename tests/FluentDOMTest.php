@@ -377,7 +377,17 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $doc = FluentDOM(self::XML)->find('//*');
     $this->assertTrue($doc->length > 1);
     $this->assertTrue($doc->is('name() = "items"'));
-    $this->assertFalse($doc->is('name() = "no-items"'));
+    $this->assertFalse($doc->is('name() = "invalidItemName"'));
+  }
+
+  /**
+  *
+  * @group TraversingFilter
+  */
+  function testIsOnEmptyList() {
+    $doc = FluentDOM(self::XML);
+    $this->assertTrue($doc->length == 0);
+    $this->assertFalse($doc->is('name() = "items"'));
   }
 
   /**

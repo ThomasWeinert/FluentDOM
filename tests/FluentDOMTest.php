@@ -1329,10 +1329,16 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   * @group Attributes
   */
   function testAttrReadInvalid() {
-    $value = FluentDOM(self::XML)
-      ->find('//group/item')
-      ->attr('---');
-    $this->assertEquals(NULL, $value);
+    try {
+      FluentDOM(self::XML)
+        ->find('//item')
+        ->attr('');
+    } catch (UnexpectedValueException $expected) {
+      return;
+    } catch (Exception $expected) {
+      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
+    }
+    $this->fail('An expected exception has not been raised.');
   }
 
   /**

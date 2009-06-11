@@ -1326,6 +1326,40 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue($doc instanceof FluentDOM);
     $this->assertXmlStringEqualsXMLFile('data/replaceAll.tgt.xml', $doc);
   }
+  
+  /**
+  *
+  * @group Manipulation
+  */
+  function testReplaceAllWithNode() {
+    $this->assertFileExists('data/replaceAllWithNode.src.xml');
+    $doc = FluentDOM(file_get_contents('data/replaceAllWithNode.src.xml'));
+    $doc->node('<b id="sample">Paragraph. </b>')
+      ->replaceAll(
+        $doc->find('//p')->item(1)
+      );
+    $this->assertTrue($doc instanceof FluentDOM);
+    $this->assertXmlStringEqualsXMLFile('data/replaceAllWithNode.tgt.xml', $doc);
+  }
+  
+  /**
+  *
+  * @group Manipulation
+  */
+  function testReplaceAllWithInvalidArgument() {
+    try {
+      $doc = FluentDOM(self::XML);
+      $doc->node('<b id="sample">Paragraph. </b>')
+        ->replaceAll(
+          NULL
+        );
+    } catch (InvalidArgumentException $expected) {
+      return;
+    } catch (Exception $expected) {
+      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
+    }
+    $this->fail('An expected exception has not been raised.');
+  }
 
   /*
   * Manipulation - Removing

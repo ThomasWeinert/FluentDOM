@@ -775,10 +775,10 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   */
   public function not($expr) {
     $result = $this->_spawn();
-    foreach ($this->_array as $node) {
+    foreach ($this->_array as $index => $node) {
       $check = FALSE;
       if (is_string($expr)) {
-        $check = $this->_test($expr, $node);
+        $check = $this->_test($expr, $node, $index);
       } elseif ($this->_isCallback($expr)) {
         $check = call_user_func($expr, $node, $index);
       }

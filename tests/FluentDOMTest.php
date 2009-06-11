@@ -1347,7 +1347,18 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testAttrReadNoMatch() {
     $doc = FluentDOM(self::XML)
-      ->attr('item');
+      ->attr('index');
+    $this->assertTrue(empty($doc));
+  }
+
+  /**
+  *
+  * @group Attributes
+  */
+  function testAttrReadOnDOMText() {
+    $doc = FluentDOM(self::XML)
+      ->find('//item/text()')
+      ->attr('index');
     $this->assertTrue(empty($doc));
   }
 

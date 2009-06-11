@@ -549,7 +549,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
               ($includeTextNodes && $this->_isNode($element))) {
             $element->parentNode->removeChild($element);
             $result[] = $element;
-            if ($limit > 0 && count($result) > $limit) {
+            if ($limit > 0 && count($result) >= $limit) {
               break;
             }
           }
@@ -565,7 +565,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
         if ($element instanceof DOMElement ||
             ($includeTextNodes && $this->_isNode($element))) {
           $result[] = $element;
-          if ($limit > 0 && count($result) > $limit) {
+          if ($limit > 0 && count($result) >= $limit) {
             break;
           }
         }

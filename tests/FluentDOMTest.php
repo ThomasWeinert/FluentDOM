@@ -866,6 +866,21 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   *
   * @group Manipulation
   */
+  function testAppendDOMNodeList() {
+    $this->assertFileExists('data/appendDOMNodeList.src.xml');
+    $dom = FluentDOM(file_get_contents('data/appendDOMNodeList.src.xml'))->find('//item');
+    $this->assertTrue($dom instanceof FluentDOM);
+    $doc = $dom
+      ->find('//html/div')
+      ->append($dom);
+    $this->assertTrue($doc instanceof FluentDOM);
+    $this->assertXmlStringEqualsXMLFile('data/appendDOMNodeList.tgt.xml', $doc);
+  }
+
+  /**
+  *
+  * @group Manipulation
+  */
   function testAppendTo() {
     $this->assertFileExists('data/appendTo.src.xml');
     $doc = FluentDOM(file_get_contents('data/appendTo.src.xml'))

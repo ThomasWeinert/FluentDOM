@@ -652,8 +652,6 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
       foreach ($this->_array as $index => $node) {
         call_user_func($function, $node, $index);
       }
-    } else {
-      throw new InvalidArgumentException('Invalid callback function');
     }
     return $this;
   }
@@ -1655,14 +1653,16 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
       }
     } elseif (empty($value)) {
       //empty value - read attribute from first element in list
-      if ($this->_isQName($attribute) && count($this->_array) > 0) {
+      if ($this->_isQName($attribute) &&
+          count($this->_array) > 0) {
         $node = $this->_array[0];
         if ($node instanceof DOMElement) {
           return $node->getAttribute($attribute);
         }
       }
       return NULL;
-    } elseif (is_array($value) || $value instanceof Closure) {
+    } elseif (is_array($value) ||
+              $value instanceof Closure) {
       //value is an array (function callback) - execute ist and set result on each element
       if ($this->_isQName($attribute)) {
         foreach ($this->_array as $index => $node) {

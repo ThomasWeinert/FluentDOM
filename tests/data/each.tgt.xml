@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<html>
+<head/>
+<body>
+  <div>EACH &gt; div,
+    <span>EACH &gt; span, </span>
+    <b>EACH &gt; b </b>
+  </div>
+  <p>EACH &gt; p,
+    <span>EACH &gt; span,
+      <em>EACH &gt; em </em>
+    </span>
+  </p>
+  <div>EACH &gt; div,
+    <strong>EACH &gt; strong,
+      <span>EACH &gt; span, </span>
+      <em>EACH &gt; em,
+        <b>EACH &gt; b, </b>
+      </em>
+    </strong>
+    <b>EACH &gt; b </b>
+  </div>
+</body>
+</html>

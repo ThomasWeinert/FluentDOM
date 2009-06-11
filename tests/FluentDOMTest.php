@@ -328,17 +328,55 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   }
 
   /*
-  * DOMNodeList emulation
+  * Core functions
   */
 
   /**
   *
+  * @group CoreFunctions
   */
   function testItem() {
     $doc = FluentDOM(self::XML);
     $doc = $doc->find('/items');
     $this->assertEquals($doc->document->documentElement, $doc->item(0));
     $this->assertEquals(NULL, $doc->item(-10));
+  }
+  
+  /**
+  *
+  * @group CoreFunctions
+  */
+  function testEach() {
+    $this->assertFileExists('data/each.src.xml');
+    $dom = FluentDOM(file_get_contents('data/each.src.xml'))
+      ->find('//body//*')
+      ->each(
+        create_function(
+          '$node, $item',
+          '$fluentNode = FluentDOM($node);
+           $fluentNode->prepend("EACH > ");
+          ')
+      );
+    var_dump((string)$dom);
+    $this->assertTrue($dom instanceof FluentDOM);
+    $this->assertXmlStringEqualsXMLFile('data/each.tgt.xml', $dom);
+  }
+  
+  /**
+  *
+  * @group CoreFunctions
+  */
+  function testEachWihtInvalidFunction() {
+    $this->assertFileExists('data/each.src.xml');
+    try {
+      $dom = FluentDOM(file_get_contents('data/each.src.xml'))
+        ->find('//body//*')
+        ->each('invalidCallbackFunctionName');
+    } catch (BadFunctionCallException $expected) {
+      return;
+    } catch (Exception $expected) {
+      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
+    }
   }
 
   /*

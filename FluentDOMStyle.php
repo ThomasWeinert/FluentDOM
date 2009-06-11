@@ -43,12 +43,97 @@ class FluentDOMStyle extends FluentDOM {
   /**
   * get or set CSS values in style attributes
   *
-  * @param string | array $name
-  * @param string | Closure $value
+  * @param string | array $property
+  * @param NULL | string | Closure $value
   * @access public
   * @return string | object FluentDOMStyle
   */
-  public function css($name, $value) {
+  public function css($property, $value = NULL) {
+    if (is_array($property)) {
+      //set list of properties to all elements
+      foreach ($this->_array as $node) {
+        if ($node instanceof DOMElement) {
+          $options = $this->_decodeStyleAttribute($node->getAttribute('style'));
+          foreach ($property as $name => $value) {
+            if ($this->_isCSSProperty($name)) {
+              if (isset($options[$name]) && empty($value)) {
+                unset($options[$name]);
+              } elseif (!empty($value)) {
+                $options[$name] = $value;
+              }
+            } else {
+              throw new InvalidArgumentException('Invalid css property name: '.$property);
+            }
+          }
+          $styleString = $this->_encodeStyleAttribute($options);
+          if (empty($styleString) && $node->hasAttribute('style')) {
+            $node->removeAttribute('style');
+          } elseif (!empty($styleString)) {
+            $node->setAttribute('style', $styleString);
+          }
+        }
+      }
+    } elseif (is_null($value)) {
+      //get value from first DOMElement
+      $firstNode = NULL;
+      foreach ($this->_array as $node) {
+        if ($node instanceof DOMElement) {
+          $firstNode = $node;
+          break;
+        }
+      }
+      if (empty($firstNode)) {
+        return NULL;
+      } else {
+        $options = $this->_decodeStyleAttribute($firstNode->getAttribute('style'));
+        if (isset($options[$property])) {
+          return $options[$property];
+        }
+      }
+      return NULL;
+    } else {
+      //set value to all nodes
+      if ($this->_isCSSProperty($property)) {
+        foreach ($this->_array as $node) {
+          if ($node instanceof DOMElement) {
+            $options = $this->_decodeStyleAttribute($node->getAttribute('style'));
+            if (is_string($value)) {
+              $options[$property] = $value;
+            } elseif ($this->_isCallback($value)) {
+              $options[$property] = call_user_func(
+                $value,
+                $node,
+                $property,
+                empty($options[$property]) ? '' : $options[$property]
+              );
+            }
+            $styleString = $this->_encodeStyleAttribute($options);
+            if (empty($styleString) && $node->hasAttribute('style')) {
+              $node->removeAttribute('style');
+            } elseif (!empty($styleString)) {
+              $node->setAttribute('style', $styleString);
+            }
+          } 
+        }
+      } else {
+        throw new InvalidArgumentException('Invalid css property name: '.$property);
+      }
+    }
+  }
   
+  private function _isCSSProperty($propertyName) {
+    $pattern = '(^-?(?:[a-z]+-)*(?:[a-z]+)$)D';
+    if (preg_match($pattern, $propertyName)) {
+      return TRUE;
+    }
+    return FALSE;
+  }
+  
+  private function _decodeStyleAttribute($styleString) {
+    return array();
+  }
+  
+  private function _encodeStyleAttribute($properties) {
+    return '';
   }
 }

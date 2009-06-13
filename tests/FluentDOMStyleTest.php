@@ -109,7 +109,6 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
   function testCSSRemoveProperty() {
     $doc = FluentDOMStyle(self::HTML)->find('//div');
     $doc->css('text-align', '');
-    var_dump($doc[0]->getAttribute('style'));
     $this->assertFalse($doc[0]->hasAttribute('style'));
   }
   

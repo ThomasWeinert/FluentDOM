@@ -54,6 +54,12 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue($items instanceof FluentDOMStyle);
     $this->assertEquals(NULL, $items->css('text-align'));
   }
+  
+  function testCSSReadOnTextNodes() {
+    $items = FluentDOMStyle(self::HTML)->find('//div')->children()->andSelf();
+    $this->assertTrue(count($items) > 3);
+    $this->assertEquals('left', $items->css('text-align'));
+  }
 
   function testCSSWriteWithString() {
     $items = FluentDOMStyle(self::HTML)->find('//div');

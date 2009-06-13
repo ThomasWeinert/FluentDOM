@@ -4,6 +4,8 @@
 * the style attribute of html tags
 *
 * @version $Id: FluentDOM.php 155 2009-06-11 13:08:01Z subjective $
+* @license http://www.opensource.org/licenses/mit-license.php The MIT License
+* @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
 */
 
 /**
@@ -22,7 +24,7 @@ require_once(dirname(__FILE__).'/FluentDOM.php');
 */
 function FluentDOMStyle($content) {
   return new FluentDOMStyle($content);
-} 
+}
 
 /**
 * FluentDOMStyle extends the FluentDOM class with a function to edit
@@ -39,7 +41,7 @@ class FluentDOMStyle extends FluentDOM {
   protected function _spawn() {
     return new FluentDOMStyle($this);
   }
-  
+
   /**
   * get or set CSS values in style attributes
   *
@@ -113,14 +115,14 @@ class FluentDOMStyle extends FluentDOM {
             } elseif (!empty($styleString)) {
               $node->setAttribute('style', $styleString);
             }
-          } 
+          }
         }
       } else {
         throw new InvalidArgumentException('Invalid css property name: '.$property);
       }
     }
   }
-  
+
   private function _isCSSProperty($propertyName) {
     $pattern = '(^-?(?:[a-z]+-)*(?:[a-z]+)$)D';
     if (preg_match($pattern, $propertyName)) {
@@ -128,11 +130,11 @@ class FluentDOMStyle extends FluentDOM {
     }
     return FALSE;
   }
-  
+
   private function _decodeStyleAttribute($styleString) {
     return array();
   }
-  
+
   private function _encodeStyleAttribute($properties) {
     return '';
   }

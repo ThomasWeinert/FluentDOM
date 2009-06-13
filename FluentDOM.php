@@ -3,6 +3,8 @@
 * FluentDOM implements a jQuery like replacement for DOMNodeList
 *
 * @version $Id$
+* @license http://www.opensource.org/licenses/mit-license.php The MIT License
+* @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
 */
 
 /**

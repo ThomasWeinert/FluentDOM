@@ -17,6 +17,8 @@ require_once 'FluentDOMStyleTest.php';
 class FluentDOM_AllTests {
 
   public static function suite() {
+    PHPUnit_Util_Filter::addFileToFilter('AllTests.php');
+    
     $suite = new PHPUnit_Framework_TestSuite('FluentDOM Package');
 
     $suite->addTestSuite('FluentDOMTest');

@@ -33,6 +33,11 @@ function FluentDOMStyle($content) {
 class FluentDOMStyle extends FluentDOM {
 
   /**
+  * Pattern to decode the stlye property string
+  */
+  const STYLE_PATTERN = '((?:^|;)\s*(?P<name>[-\w]+)\s*:\s*(?P<value>[^;]+))';
+
+  /**
   * redefine the _spawn() method to get an new instance of FluentDOMStyle
   *
   * @access protected
@@ -123,6 +128,13 @@ class FluentDOMStyle extends FluentDOM {
     }
   }
 
+  /**
+  * check if string is an valid css property name
+  *
+  * @param string $propertyName
+  * @access private
+  * @return boolean
+  */
   private function _isCSSProperty($propertyName) {
     $pattern = '(^-?(?:[a-z]+-)*(?:[a-z]+)$)D';
     if (preg_match($pattern, $propertyName)) {
@@ -131,11 +143,64 @@ class FluentDOMStyle extends FluentDOM {
     return FALSE;
   }
 
+  /**
+  * decode style attribute to css properties array
+  *
+  * @param string $styleString
+  * @access private
+  * @return array
+  */
   private function _decodeStyleAttribute($styleString) {
-    return array();
+    $result = array();
+    if (!empty($styleString)) {
+      $matches = array();
+      if (preg_match_all(self::STYLE_PATTERN, $styleString, $matches, PREG_SET_ORDER)) {
+        foreach ($matches as $match) {
+          if (isset($match['name']) &&
+              $this->_isCSSProperty($match['name']) &&
+              !empty($match['value'])) {
+            $result[$match['name']] = $match['value'];
+          } 
+        }
+      }
+    }
+    return $result;
   }
 
+  /**
+  * encode css options array for the style string
+  *
+  * @param array $properties
+  * @access private
+  * @return string
+  */
   private function _encodeStyleAttribute($properties) {
-    return '';
+    $result = '';
+    if (is_array($properties) && count($properties) > 0) {
+      uksort($properties, array($this, '_compareCSSProperties'));
+      foreach ($properties as $name => $value) {
+        $result .= ' '.$name.': '.$value.';';
+      }
+    }
+    return substr($result, 1);
+  }
+  
+  /**
+  * compare to css property names
+  *
+  * @param string $item1
+  * @param string $item2
+  * @access private
+  * @return integer
+  */
+  private function _compareCSSProperties($item1, $item2) {
+    $levels1 = substr_count($item1, '-');
+    $levels2 = substr_count($item2, '-');
+    if ($levels1 == $levels2) {
+      return strnatcasecmp($item1, $item2);
+    } else {
+      return $levels1 > $levels2 ? 1 : -1;
+    }
+    return 0;
   }
 }

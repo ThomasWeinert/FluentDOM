@@ -104,7 +104,11 @@ class FluentDOMStyle extends FluentDOM {
         foreach ($this->_array as $node) {
           if ($node instanceof DOMElement) {
             $options = $this->_decodeStyleAttribute($node->getAttribute('style'));
-            if (is_string($value)) {
+            if (empty($value)) {
+              if (isset($options[$property])) {
+                unset($options[$property]);
+              }
+            } elseif (is_string($value)) {
               $options[$property] = $value;
             } elseif ($this->_isCallback($value)) {
               $options[$property] = call_user_func(

@@ -3,7 +3,7 @@
 * FluentDOMStyle extends the FluentDOM class with a function to edit
 * the style attribute of html tags
 *
-* @version $Id: FluentDOM.php 155 2009-06-11 13:08:01Z subjective $
+* @version $Id$
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
 * @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
 */
@@ -188,19 +188,56 @@ class FluentDOMStyle extends FluentDOM {
   /**
   * compare to css property names
   *
-  * @param string $item1
-  * @param string $item2
+  * by name, browser-prefix, level
+  *
+  * @param string $propertyNameOne
+  * @param string $propertyNameTwo
   * @access private
   * @return integer
   */
-  private function _compareCSSProperties($item1, $item2) {
-    $levels1 = substr_count($item1, '-');
-    $levels2 = substr_count($item2, '-');
-    if ($levels1 == $levels2) {
-      return strnatcasecmp($item1, $item2);
-    } else {
-      return $levels1 > $levels2 ? 1 : -1;
+  private function _compareCSSProperties($propertyNameOne, $propertyNameTwo) {
+    $propertyOne = $this->_getCSSPropertyElements($propertyNameOne);
+    $propertyTwo = $this->_getCSSPropertyElements($propertyNameTwo);
+    $propertyOneLevels = count($propertyOne);
+    $propertyTwoLevels = count($propertyTwo);
+    $maxLevels = ($propertyOneLevels > $propertyTwoLevels)
+      ? $propertyOneLevels : $propertyTwoLevels;
+    for ($i = 0; $i < $maxLevels; ++$i) {
+      if (isset($propertyOne[$i]) &&
+          isset($propertyTwo[$i])) {
+        $compare = strnatcasecmp(
+          $propertyOne[$i],
+          $propertyTwo[$i]
+        );
+        if ($compare != 0) {
+          return $compare;
+        }
+      } else {
+        break;
+      }
     }
-    return 0;
+    if ($propertyOneLevels > $propertyTwoLevels) {
+      return 1;
+    } else {
+      return -1;
+    }
+  }
+  
+  /**
+  * decodes the css property name into an compareable array
+  *
+  * @access private
+  * @return 
+  */
+  private function _getCSSPropertyElements($propertyName) {
+    if (substr($propertyName, 0, 1) == '-') {
+      $pos = strpos($propertyName, '-', 1);
+      $items = explode('-', substr($propertyName, $pos + 1));
+      $items[] = substr($propertyName, 1, $pos);
+      return $items;
+    } else {
+      $items = explode('-', $propertyName);
+      return $items;
+    }
   }
 }

@@ -19,6 +19,7 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
       <body>
         <div style="text-align: left;">First</div>
         <div style="text-align: right;">Second</div>
+        <div>Third</div>
       </body>
     </html>
   ';
@@ -103,6 +104,44 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
       $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
     }
     $this->fail('An expected exception has not been raised.');
+  }
+  
+  function testCSSSortPropertiesName() {
+    $doc = FluentDOMStyle(self::HTML)->find('//div');
+    $doc->css(
+      array(
+       'padding' => '0em',
+       'margin' => '1em'
+      )
+    );
+    $expect = 'margin: 1em; padding: 0em;'; 
+    $this->assertEquals($expect, $doc[2]->getAttribute('style'));
+  }
+  
+  function testCSSSortPropertiesLevels() {
+    $doc = FluentDOMStyle(self::HTML)->find('//div');
+    $doc->css(
+      array(
+       'border' => '1px solid red',
+       'border-top-color' => 'black',
+       'border-top' => '2px solid blue'
+      )
+    );
+    $expect = 'border: 1px solid red; border-top: 2px solid blue; border-top-color: black;'; 
+    $this->assertEquals($expect, $doc[2]->getAttribute('style'));
+  }
+  
+  function testCSSSortPropertiesPrefix() {
+    $doc = FluentDOMStyle(self::HTML)->find('//div');
+    $doc->css(
+      array(
+       '-moz-opacity' => 30,
+       '-o-opacity' => 30,
+       'opacity' => 30
+      )
+    );
+    $expect = 'opacity: 30; -moz-opacity: 30; -o-opacity: 30;'; 
+    $this->assertEquals($expect, $doc[2]->getAttribute('style'));
   }
 
   /*

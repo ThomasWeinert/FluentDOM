@@ -1,3 +1,9 @@
+/**
+*
+* @version $Id $
+* @license http://www.opensource.org/licenses/mit-license.php The MIT License
+* @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
+*/
 <?php
 header('Content-type: text/plain');
 

@@ -1,3 +1,9 @@
+/**
+*
+* @version $Id $
+* @license http://www.opensource.org/licenses/mit-license.php The MIT License
+* @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
+*/
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
@@ -26,7 +32,7 @@
     <?php
       require_once('../../FluentDOM.php');
       $dom = new FluentDOM(file_get_contents('atom-sample.xml'));
-      
+
       $categories = array_unique($dom->find('//_:category')->map('callbackCategoryTerm'));
       if (count($categories) > 0) {
         echo '<ul class="categories">'."\n";
@@ -39,7 +45,7 @@
         }
         echo '</ul>'."\n";
       }
-      
+
       if (empty($_GET['label'])) {
         $expr = '//_:entry';
       } else {
@@ -74,7 +80,7 @@
           );
           break;
         default :
-        
+
           break;
         }
         echo '</div>'."\n";

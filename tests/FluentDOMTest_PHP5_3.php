@@ -1,4 +1,11 @@
 <?php
+/**
+*Collection of test for the FluentDOM class supporting PHP5.3
+*
+* @version $Id $
+* @license http://www.opensource.org/licenses/mit-license.php The MIT License
+* @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
+*/
 require_once 'PHPUnit/Framework.php';
 require_once '../FluentDOM.php';
 
@@ -6,7 +13,7 @@ require_once '../FluentDOM.php';
  * Test class for FluentDOM.
  */
 class FluentDOMTest_PHP5_3 extends PHPUnit_Framework_TestCase {
-  
+
   /**
   *
   * @group TraversingFilter

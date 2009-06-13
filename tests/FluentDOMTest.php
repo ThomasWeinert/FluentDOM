@@ -1,4 +1,11 @@
 <?php
+/**
+* Collection of test for the FluentDOM class supporting PHP 5.2
+*
+* @version $Id $
+* @license http://www.opensource.org/licenses/mit-license.php The MIT License
+* @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
+*/
 require_once 'PHPUnit/Framework.php';
 require_once '../FluentDOM.php';
 
@@ -341,7 +348,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals($doc->document->documentElement, $doc->item(0));
     $this->assertEquals(NULL, $doc->item(-10));
   }
-  
+
   /**
   *
   * @group CoreFunctions
@@ -360,7 +367,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue($dom instanceof FluentDOM);
     $this->assertXmlStringEqualsXMLFile('data/each.tgt.xml', $dom);
   }
-  
+
   /**
   *
   * @group CoreFunctions
@@ -396,7 +403,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue($doc instanceof FluentDOM);
     $this->assertXmlStringEqualsXMLFile('data/node.tgt.xml', $doc);
   }
-  
+
   /**
   *
   * @group CoreFunctions
@@ -407,7 +414,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue($doc instanceof FluentDOM);
     $this->assertEquals(1, count($nodes));
   }
-  
+
   /**
   *
   * @group CoreFunctions
@@ -418,7 +425,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue($doc instanceof FluentDOM);
     $this->assertEquals(1, count($nodes));
   }
-  
+
   /**
   *
   * @group CoreFunctions
@@ -433,7 +440,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
       $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
     }
   }
-  
+
   /**
   *
   * @group CoreFunctions
@@ -448,7 +455,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
       $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
     }
   }
-  
+
   /**
   *
   * @group CoreFunctions
@@ -1196,7 +1203,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue($doc instanceof FluentDOM);
     $this->assertXmlStringEqualsXMLFile('data/wrap.tgt.xml', $doc);
   }
-  
+
   /**
   *
   * @group Manipulation
@@ -1211,7 +1218,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue($doc instanceof FluentDOM);
     $this->assertXmlStringEqualsXMLFile('data/WrapWithDOMElement.tgt.xml', $doc);
   }
-  
+
   /**
   *
   * @group Manipulation
@@ -1224,7 +1231,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $doc->find('//p')->wrap($divs);
     $this->assertXmlStringEqualsXMLFile('data/wrapWithDOMNodeList.tgt.xml', $doc);
   }
-  
+
   /**
   *
   * @group Manipulation
@@ -1241,7 +1248,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     }
     $this->fail('An expected exception has not been raised.');
   }
-  
+
   /**
   *
   * @group Manipulation
@@ -1326,7 +1333,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue($doc instanceof FluentDOM);
     $this->assertXmlStringEqualsXMLFile('data/replaceAll.tgt.xml', $doc);
   }
-  
+
   /**
   *
   * @group Manipulation
@@ -1341,7 +1348,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue($doc instanceof FluentDOM);
     $this->assertXmlStringEqualsXMLFile('data/replaceAllWithNode.tgt.xml', $doc);
   }
-  
+
   /**
   *
   * @group Manipulation
@@ -1425,7 +1432,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
       ->attr('index');
     $this->assertEquals('0', $doc);
   }
-  
+
   /**
   *
   * @group Attributes

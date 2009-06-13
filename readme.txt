@@ -35,7 +35,7 @@ output the xml of the associated DOMDocument.
 
 FluentDOM needs a document. The FluentDOM function (and the FluentDOM class
 constructor) need a XML, a DOMNode or a DOMDocument to work with. The magic of jQuery's 
-'${}' is provided by 'node()'.
+'$()' is provided by 'node()'.
 
 XPath do not only match element nodes (nodes with a tag name and maybe children),
 but text nodes, too. Which implecitly enhances FluentDOM to support them.

@@ -796,7 +796,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @access public
   * @return object FluentDOM
   */
-  function slice($start, $end = NULL) {
+  public function slice($start, $end = NULL) {
     $result = $this->_spawn();
     if ($end === NULL) {
       $result->_push(array_slice($this->_array, $start));
@@ -842,7 +842,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @access public
   * @return object FluentDOM
   */
-  function children($expr = NULL) {
+  public function children($expr = NULL) {
     $result = $this->_spawn();
     foreach ($this->_array as $node) {
       if (empty($expr)) {
@@ -886,7 +886,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @access public
   * @return FluentDOM
   */
-  function nextSiblings($expr = NULL) {
+  public function nextSiblings($expr = NULL) {
     $result = $this->_spawn();
     foreach ($this->_array as $node) {
       $next = $node->nextSibling;
@@ -911,7 +911,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @access public
   * @return FluentDOM
   */
-  function nextAllSiblings($expr = NULL) {
+  public function nextAllSiblings($expr = NULL) {
     $result = $this->_spawn();
     foreach ($this->_array as $node) {
       $next = $node->nextSibling;
@@ -933,7 +933,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @access public
   * @return FluentDOM
   */
-  function parent() {
+  public function parent() {
     $result = $this->_spawn();
     foreach ($this->_array as $node) {
       if (isset($node->parentNode)) {
@@ -950,7 +950,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @access public
   * @return FluentDOM
   */
-  function parents($expr = NULL) {
+  public function parents($expr = NULL) {
     $result = $this->_spawn();
     foreach ($this->_array as $node) {
       $parents = $this->_match('ancestor::*', $node);
@@ -973,7 +973,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @access public
   * @return object FluentDOM
   */
-  function prevSiblings($expr = NULL) {
+  public function prevSiblings($expr = NULL) {
     $result = $this->_spawn();
     foreach ($this->_array as $node) {
       $previous = $node->previousSibling;
@@ -998,7 +998,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @access public
   * @return object FluentDOM
   */
-  function prevAllSiblings($expr = NULL) {
+  public function prevAllSiblings($expr = NULL) {
     $result = $this->_spawn();
     foreach ($this->_array as $node) {
       $previous = $node->previousSibling;
@@ -1021,7 +1021,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @access public
   * @return object FluentDOM
   */
-  function siblings($expr = NULL) {
+  public function siblings($expr = NULL) {
     $result = $this->_spawn();
     foreach ($this->_array as $node) {
       if (isset($node->parentNode)) {

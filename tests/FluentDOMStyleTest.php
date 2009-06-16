@@ -2,7 +2,7 @@
 /**
 * Collection of test for the FluentDOMStyle class supporting PHP 5.2
 *
-* @version $Id $
+* @version $Id$
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
 * @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
 */

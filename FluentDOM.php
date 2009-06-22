@@ -22,6 +22,13 @@ function FluentDOM($source) {
 
 /**
 * FluentDOM implements a jQuery like replacement for DOMNodeList
+*
+* @property-read int $length the amount of elements found by selector
+* @property-read DOMDocument $document An instance of the current DOMDocument
+* @property-read DOMXPath $xpath An Instance of the current DOMXPath object
+*
+* @method bool empty() clears the current node list identified by a selector
+* @method DOMDocument clone() clones the items of the current node list identified by a selector
 */
 class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, ArrayAccess {
 

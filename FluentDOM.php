@@ -215,7 +215,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * Get current iterator element
   *
   * @access public
-  * @return DOMNode
+  * @return object DOMNode
   */
   public function current() {
     return $this->_array[$this->_position];
@@ -306,7 +306,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * get element count (Countable)
   *
   * @access public
-  * @return
+  * @return integer
   */
   public function count() {
     return count($this->_array);
@@ -371,7 +371,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * This is used for the chaining and needs to be overloaded in child classes.
   *
   * @access private
-  * @return
+  * @return  object FluentDOM
   */
   protected function _spawn() {
     return new FluentDOM($this);
@@ -1272,7 +1272,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   *
   * @param $content
   * @access public
-  * @return
+  * @return  object FluentDOM
   */
   public function after($content) {
     $result = $this->_spawn();
@@ -1518,7 +1518,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   *
   * @param $content
   * @access public
-  * @return
+  * @return object FluentDOM
   */
   public function replaceWith($content) {
     $contentNodes = $this->_getContentNodes($content);

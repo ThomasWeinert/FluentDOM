@@ -5,6 +5,8 @@
 * @version $Id$
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
 * @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
+*
+* @package FluentDOM
 */
 
 /**
@@ -29,6 +31,8 @@ function FluentDOM($source) {
 *
 * @method bool empty() clears the current node list identified by a selector
 * @method DOMDocument clone() clones the items of the current node list identified by a selector
+*
+* @package FluentDOM
 */
 class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, ArrayAccess {
 

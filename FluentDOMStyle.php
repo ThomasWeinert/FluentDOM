@@ -6,6 +6,8 @@
 * @version $Id$
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
 * @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
+*
+* @package FluentDOM
 */
 
 /**
@@ -29,6 +31,8 @@ function FluentDOMStyle($content) {
 /**
 * FluentDOMStyle extends the FluentDOM class with a function to edit
 * the style attribute of html tags
+*
+* @package FluentDOM
 */
 class FluentDOMStyle extends FluentDOM {
 
@@ -164,7 +168,7 @@ class FluentDOMStyle extends FluentDOM {
               $this->_isCSSProperty($match['name']) &&
               !empty($match['value'])) {
             $result[$match['name']] = $match['value'];
-          } 
+          }
         }
       }
     }
@@ -188,7 +192,7 @@ class FluentDOMStyle extends FluentDOM {
     }
     return substr($result, 1);
   }
-  
+
   /**
   * compare to css property names
   *
@@ -226,12 +230,12 @@ class FluentDOMStyle extends FluentDOM {
       return -1;
     }
   }
-  
+
   /**
   * decodes the css property name into an compareable array
   *
   * @access private
-  * @return 
+  * @return
   */
   private function _getCSSPropertyElements($propertyName) {
     if (substr($propertyName, 0, 1) == '-') {

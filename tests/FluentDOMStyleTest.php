@@ -5,13 +5,19 @@
 * @version $Id$
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
 * @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
+*
+* @package FluentDOM
+* @subpackage unitTests
 */
 require_once 'PHPUnit/Framework.php';
 require_once '../FluentDOMStyle.php';
 
 /**
- * Test class for FluentDOMStyle.
- */
+* Test class for FluentDOMStyle.
+*
+* @package FluentDOM
+* @subpackage unitTests
+*/
 class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
 
   const HTML = '
@@ -54,7 +60,7 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue($items instanceof FluentDOMStyle);
     $this->assertEquals(NULL, $items->css('text-align'));
   }
-  
+
   function testCSSReadOnTextNodes() {
     $items = FluentDOMStyle(self::HTML)->find('//div')->children()->andSelf();
     $this->assertTrue(count($items) > 3);
@@ -111,13 +117,13 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
     }
     $this->fail('An expected exception has not been raised.');
   }
-  
+
   function testCSSRemoveProperty() {
     $doc = FluentDOMStyle(self::HTML)->find('//div');
     $doc->css('text-align', '');
     $this->assertFalse($doc[0]->hasAttribute('style'));
   }
-  
+
   function testCSSRemoveProperties() {
     $doc = FluentDOMStyle(self::HTML)->find('//div');
     $doc->css(
@@ -128,7 +134,7 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
     );
     $this->assertFalse($doc[0]->hasAttribute('style'));
   }
-  
+
   function testCSSSortPropertiesName() {
     $doc = FluentDOMStyle(self::HTML)->find('//div');
     $doc->css(
@@ -137,10 +143,10 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
        'margin' => '1em'
       )
     );
-    $expect = 'margin: 1em; padding: 0em;'; 
+    $expect = 'margin: 1em; padding: 0em;';
     $this->assertEquals($expect, $doc[2]->getAttribute('style'));
   }
-  
+
   function testCSSSortPropertiesLevels() {
     $doc = FluentDOMStyle(self::HTML)->find('//div');
     $doc->css(
@@ -150,10 +156,10 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
        'border-top' => '2px solid blue'
       )
     );
-    $expect = 'border: 1px solid red; border-top: 2px solid blue; border-top-color: black;'; 
+    $expect = 'border: 1px solid red; border-top: 2px solid blue; border-top-color: black;';
     $this->assertEquals($expect, $doc[2]->getAttribute('style'));
   }
-  
+
   function testCSSSortPropertiesPrefix() {
     $doc = FluentDOMStyle(self::HTML)->find('//div');
     $doc->css(
@@ -163,7 +169,7 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
        'opacity' => 30
       )
     );
-    $expect = 'opacity: 30; -moz-opacity: 30; -o-opacity: 30;'; 
+    $expect = 'opacity: 30; -moz-opacity: 30; -o-opacity: 30;';
     $this->assertEquals($expect, $doc[2]->getAttribute('style'));
   }
 

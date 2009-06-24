@@ -5,13 +5,19 @@
 * @version $Id$
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
 * @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
+*
+* @package FluentDOM
+* @subpackage unitTests
 */
 require_once 'PHPUnit/Framework.php';
 require_once '../FluentDOM.php';
 
 /**
- * Test class for FluentDOM.
- */
+* Test class for FluentDOM.
+*
+* @package FluentDOM
+* @subpackage unitTests
+*/
 class FluentDOMTest extends PHPUnit_Framework_TestCase {
 
   const XML = '
@@ -262,7 +268,6 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $items = $doc->find('//item');
     $this->assertEquals(3, count($items));
   }
-
 
   /**
   *

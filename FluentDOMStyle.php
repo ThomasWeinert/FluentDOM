@@ -235,7 +235,7 @@ class FluentDOMStyle extends FluentDOM {
   * decodes the css property name into an compareable array
   *
   * @access private
-  * @return
+  * @return array
   */
   private function _getCSSPropertyElements($propertyName) {
     if (substr($propertyName, 0, 1) == '-') {

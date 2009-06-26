@@ -9,6 +9,10 @@
 * @package FluentDOM
 * @subpackage unitTests
 */
+
+/**
+* Load necessary files
+*/
 require_once 'PHPUnit/Framework.php';
 
 require_once 'FluentDOMTest.php';
@@ -17,8 +21,18 @@ if (version_compare(PHP_VERSION, '5.3', '>=')) {
 }
 require_once 'FluentDOMStyleTest.php';
 
+/**
+*
+* @package FluentDOM
+* @subpackage unitTests
+*/
 class FluentDOM_AllTests {
 
+  /**
+  *
+  * @see PHPUnit_Util_Filter::addFileToFilter()
+  * @see PHPUnit_Framework_TestSuite::addTestSuite()
+  */
   public static function suite() {
     PHPUnit_Util_Filter::addFileToFilter('AllTests.php');
 

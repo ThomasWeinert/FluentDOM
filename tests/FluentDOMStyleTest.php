@@ -6,7 +6,7 @@
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
 * @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
 *
-* @package FluentDOM
+* @package FluentDOMStyle
 * @subpackage unitTests
 */
 require_once 'PHPUnit/Framework.php';

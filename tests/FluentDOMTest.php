@@ -88,9 +88,18 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   *
   * @group Constructors
   */
+  function testConstructorWithoutSource() {
+    $doc = new FluentDOM();
+    $this->assertTrue($doc instanceof FluentDOM);
+  }
+
+  /**
+  *
+  * @group Constructors
+  */
   function testConstructorWithInvalidSource() {
     try {
-      new FluentDOM(NULL);
+      new FluentDOM(123);
     } catch (InvalidArgumentException $expected) {
       return;
     } catch (Exception $expected) {
@@ -99,6 +108,46 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $this->fail('An expected exception has not been raised.');
   }
 
+  /**
+  *
+  * @group Loading
+  */
+  function testLoadWithXMLString() {
+    $this->assertFileExists('data/loadXML.src.xml');
+    $dom = FluentDOM(file_get_contents('data/loadXML.src.xml'));
+    $this->assertTrue($dom instanceof FluentDOM);
+  }
+  
+  /**
+  *
+  * @group Loading
+  */
+  function testLoadWithHTMLString() {
+    $this->assertFileExists('data/loadHTML.src.html');
+    $dom = FluentDOM(file_get_contents('data/loadHTML.src.html'), 'html');
+    $this->assertTrue($dom instanceof FluentDOM);
+  }
+  
+  /**
+  *
+  * @group Loading
+  */
+  function testLoadWithXMLFile() {
+    $this->assertFileExists('data/loadXML.src.xml');
+    $dom = FluentDOM('data/loadXML.src.xml');
+    $this->assertTrue($dom instanceof FluentDOM);
+  }
+  
+  /**
+  *
+  * @group Loading
+  */
+  function testLoadWithHTMLFile() {
+    $this->assertFileExists('data/loadHTML.src.html');
+    $dom = FluentDOM('data/loadHTML.src.html', 'html');
+    $this->assertTrue($dom instanceof FluentDOM);
+  }
+  
   /*
   * Properties
   */
@@ -364,7 +413,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testEach() {
     $this->assertFileExists('data/each.src.xml');
-    $dom = FluentDOM(file_get_contents('data/each.src.xml'))
+    $dom = FluentDOM('data/each.src.xml')
       ->find('//body//*')
       ->each(
         create_function(
@@ -399,7 +448,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testNode() {
     $this->assertFileExists('data/node.src.xml');
-    $doc = FluentDOM(file_get_contents('data/node.src.xml'))
+    $doc = FluentDOM('data/node.src.xml')
       ->node(
         FluentDOM('<samples>
                     <b id="first">Paragraph. </b>
@@ -549,7 +598,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testMap() {
     $this->assertFileExists('data/map.src.xml');
-    $dom = FluentDOM(file_get_contents('data/map.src.xml'));
+    $dom = FluentDOM('data/map.src.xml');
     $dom->find('//p')
       ->append(
         implode(
@@ -571,7 +620,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testMapMixedResult() {
     $this->assertFileExists('data/mapMixedResult.src.xml');
-    $dom = FluentDOM(file_get_contents('data/mapMixedResult.src.xml'));
+    $dom = FluentDOM('data/mapMixedResult.src.xml');
     $dom->find('//p')
       ->append(
         implode(
@@ -604,7 +653,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testMapInvalidCallback() {
     $this->assertFileExists('data/map.src.xml');
-    $doc = FluentDOM(file_get_contents('data/map.src.xml'));
+    $doc = FluentDOM('data/map.src.xml');
     try {
       $doc->find('//p')
         ->map('invalidCallbackFunctionName');
@@ -646,7 +695,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testSliceByRangeStartLtEnd() {
     $this->assertFileExists('data/sliceByRangeStartLtEnd.src.xml');
-    $doc = FluentDOM(file_get_contents('data/sliceByRangeStartLtEnd.src.xml'))
+    $doc = FluentDOM('data/sliceByRangeStartLtEnd.src.xml')
       ->find('//p')
       ->slice(0,3)
       ->replaceAll('//div');
@@ -660,7 +709,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testSliceByRangeStartGtEnd() {
     $this->assertFileExists('data/sliceByRangeStartGtEnd.src.xml');
-    $doc = FluentDOM(file_get_contents('data/sliceByRangeStartGtEnd.src.xml'))
+    $doc = FluentDOM('data/sliceByRangeStartGtEnd.src.xml')
       ->find('//p')
       ->slice(5,2)
       ->replaceAll('//div');
@@ -674,7 +723,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testSliceByNegRange() {
     $this->assertFileExists('data/sliceByNegRange.src.xml');
-    $doc = FluentDOM(file_get_contents('data/sliceByNegRange.src.xml'))
+    $doc = FluentDOM('data/sliceByNegRange.src.xml')
       ->find('//p')
       ->slice(1,-2)
       ->replaceAll('//div');
@@ -688,7 +737,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testSliceToEnd() {
     $this->assertFileExists('data/sliceToEnd.src.xml');
-    $doc = FluentDOM(file_get_contents('data/sliceToEnd.src.xml'))
+    $doc = FluentDOM('data/sliceToEnd.src.xml')
       ->find('//p')
       ->slice(3)
       ->replaceAll('//div');
@@ -706,7 +755,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testAddElements() {
     $this->assertFileExists('data/addElements.src.xml');
-    $dom = FluentDOM(file_get_contents('data/addElements.src.xml'));
+    $dom = FluentDOM('data/addElements.src.xml');
     $dom
       ->add(
         $dom->find('//div')
@@ -722,7 +771,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testAddFromExpression() {
     $this->assertFileExists('data/addFromExpression.src.xml');
-    $dom = FluentDOM(file_get_contents('data/addFromExpression.src.xml'));
+    $dom = FluentDOM('data/addFromExpression.src.xml');
     $dom
       ->add('//div')
       ->toggleClass('inB');
@@ -736,7 +785,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testAddInContext() {
     $this->assertFileExists('data/addInContext.src.xml');
-    $dom = FluentDOM(file_get_contents('data/addInContext.src.xml'));
+    $dom = FluentDOM('data/addInContext.src.xml');
     $dom
       ->find('//p')
       ->add('//p/b')
@@ -789,7 +838,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testChildren() {
     $this->assertFileExists('data/children.src.xml');
-    $dom = FluentDOM(file_get_contents('data/children.src.xml'))
+    $dom = FluentDOM('data/children.src.xml')
       ->find('//div[@id = "container"]/p')
       ->children()
       ->toggleClass('child');
@@ -803,7 +852,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testChildrenExpression() {
     $this->assertFileExists('data/childrenExpression.src.xml');
-    $dom = FluentDOM(file_get_contents('data/childrenExpression.src.xml'))
+    $dom = FluentDOM('data/childrenExpression.src.xml')
       ->find('//div[@id = "container"]/p')
       ->children('name() = "em"')
       ->toggleClass('child');
@@ -829,9 +878,9 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testFindWithNamespaces() {
     $this->assertFileExists('data/findWithNamespaces.src.xml');
-    $doc = FluentDOM(file_get_contents('data/findWithNamespaces.src.xml'))->find('//_:entry');
+    $doc = FluentDOM('data/findWithNamespaces.src.xml')->find('//_:entry');
     $this->assertEquals(25, $doc->length);
-    $value = FluentDOM(file_get_contents('data/findWithNamespaces.src.xml'))->find('//openSearch:totalResults')->text();
+    $value = FluentDOM('data/findWithNamespaces.src.xml')->find('//openSearch:totalResults')->text();
     $this->assertEquals(38, $value);
   }
 
@@ -841,7 +890,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testNextSiblings() {
     $this->assertFileExists('data/nextSiblings.src.xml');
-    $dom = FluentDOM(file_get_contents('data/nextSiblings.src.xml'))
+    $dom = FluentDOM('data/nextSiblings.src.xml')
       ->find('//button[@disabled]')
       ->nextSiblings()
       ->text('This button is disabled.');
@@ -855,7 +904,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testNextAllSiblings() {
     $this->assertFileExists('data/nextAllSiblings.src.xml');
-    $dom = FluentDOM(file_get_contents('data/nextAllSiblings.src.xml'))
+    $dom = FluentDOM('data/nextAllSiblings.src.xml')
       ->find('//div[position() = 1]')
       ->nextAllSiblings()
       ->addClass('after');
@@ -869,7 +918,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testParent() {
     $this->assertFileExists('data/parent.src.xml');
-    $dom = FluentDOM(file_get_contents('data/parent.src.xml'))
+    $dom = FluentDOM('data/parent.src.xml')
       ->find('//body//*')
       ->each(
         create_function(
@@ -892,7 +941,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testParents() {
     $this->assertFileExists('data/parent.src.xml');
-    $dom = FluentDOM(file_get_contents('data/parents.src.xml'));
+    $dom = FluentDOM('data/parents.src.xml');
     $this->assertTrue($dom instanceof FluentDOM);
     $parents = $dom
       ->find('//b')
@@ -920,7 +969,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testPrevSiblings() {
     $this->assertFileExists('data/prevSiblings.src.xml');
-    $dom = FluentDOM(file_get_contents('data/prevSiblings.src.xml'))
+    $dom = FluentDOM('data/prevSiblings.src.xml')
       ->find('//div[@id = "start"]')
       ->prevSiblings()
       ->addClass('before');
@@ -934,7 +983,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testPrevSiblingsExpression() {
     $this->assertFileExists('data/prevSiblingsExpression.src.xml');
-    $dom = FluentDOM(file_get_contents('data/prevSiblingsExpression.src.xml'))
+    $dom = FluentDOM('data/prevSiblingsExpression.src.xml')
       ->find('//div[@class = "here"]')
       ->prevSiblings()
       ->addClass('nextTest');
@@ -948,7 +997,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testPrevAllSiblings() {
     $this->assertFileExists('data/prevAllSiblings.src.xml');
-    $dom = FluentDOM(file_get_contents('data/prevAllSiblings.src.xml'))
+    $dom = FluentDOM('data/prevAllSiblings.src.xml')
       ->find('//div[@id = "start"]')
       ->prevSiblings()
       ->addClass('before');
@@ -962,7 +1011,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testPrevAllSiblingsExpression() {
     $this->assertFileExists('data/prevAllSiblingsExpression.src.xml');
-    $dom = FluentDOM(file_get_contents('data/prevAllSiblingsExpression.src.xml'))
+    $dom = FluentDOM('data/prevAllSiblingsExpression.src.xml')
       ->find('//div[@class= "here"]')
       ->prevAllSiblings('.//span')
       ->addClass('nextTest');
@@ -976,7 +1025,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testSiblings() {
     $this->assertFileExists('data/siblings.src.xml');
-    $dom = FluentDOM(file_get_contents('data/siblings.src.xml'))
+    $dom = FluentDOM('data/siblings.src.xml')
       ->find('//li[@class = "hilite"]')
       ->siblings()
       ->addClass('before');
@@ -1034,7 +1083,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testXMLWrite() {
     $this->assertFileExists('data/xmlWrite.src.xml');
-    $dom = FluentDOM(file_get_contents('data/xmlWrite.src.xml'))
+    $dom = FluentDOM('data/xmlWrite.src.xml')
       ->find('//p[position() = last()]')
       ->xml('<b>New</b>World');
     $this->assertTrue($dom instanceof FluentDOM);
@@ -1075,11 +1124,22 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testAppend() {
     $this->assertFileExists('data/append.src.xml');
-    $doc = FluentDOM(file_get_contents('data/append.src.xml'))
+    $doc = FluentDOM('data/append.src.xml')
       ->find('//p')
       ->append('<strong>Hello</strong>');
     $this->assertTrue($doc instanceof FluentDOM);
     $this->assertXmlStringEqualsXMLFile('data/append.tgt.xml', $doc);
+  }
+  
+  /**
+  *
+  * @group Manipulation
+  */
+  function testAppendDocumentElement() {
+    $doc = FluentDOM()
+      ->append('<strong>Hello</strong>');
+    $this->assertTrue($doc instanceof FluentDOM);
+    $this->assertEquals('strong', $doc->find('/strong')->item(0)->nodeName);
   }
 
   /**
@@ -1088,11 +1148,12 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testAppendDOMNodeList() {
     $this->assertFileExists('data/appendDOMNodeList.src.xml');
-    $dom = FluentDOM(file_get_contents('data/appendDOMNodeList.src.xml'))->find('//item');
+    $dom = FluentDOM('data/appendDOMNodeList.src.xml');
+    $items = $dom->find('//item');
     $this->assertTrue($dom instanceof FluentDOM);
     $doc = $dom
       ->find('//html/div')
-      ->append($dom);
+      ->append($items);
     $this->assertTrue($doc instanceof FluentDOM);
     $this->assertXmlStringEqualsXMLFile('data/appendDOMNodeList.tgt.xml', $doc);
   }
@@ -1103,7 +1164,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testAppendTo() {
     $this->assertFileExists('data/appendTo.src.xml');
-    $doc = FluentDOM(file_get_contents('data/appendTo.src.xml'))
+    $doc = FluentDOM('data/appendTo.src.xml')
       ->find('//span')
       ->appendTo('//div[@id = "foo"]');
     $this->assertTrue($doc instanceof FluentDOM);
@@ -1116,7 +1177,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testPrepend() {
     $this->assertFileExists('data/prepend.src.xml');
-    $doc = FluentDOM(file_get_contents('data/prepend.src.xml'))
+    $doc = FluentDOM('data/prepend.src.xml')
       ->find('//p')
       ->prepend('<strong>Hello</strong>');
     $this->assertTrue($doc instanceof FluentDOM);
@@ -1129,7 +1190,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testPrependTo() {
     $this->assertFileExists('data/prependTo.src.xml');
-    $doc = FluentDOM(file_get_contents('data/prependTo.src.xml'))
+    $doc = FluentDOM('data/prependTo.src.xml')
       ->find('//span')
       ->prependTo('//div[@id = "foo"]');
     $this->assertTrue($doc instanceof FluentDOM);
@@ -1146,7 +1207,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testAfter() {
     $this->assertFileExists('data/after.src.xml');
-    $doc = FluentDOM(file_get_contents('data/after.src.xml'))
+    $doc = FluentDOM('data/after.src.xml')
       ->formatOutput()
       ->find('//p')
       ->after('<b>Hello</b>')
@@ -1161,7 +1222,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testBefore() {
     $this->assertFileExists('data/before.src.xml');
-    $doc = FluentDOM(file_get_contents('data/before.src.xml'))
+    $doc = FluentDOM('data/before.src.xml')
       ->formatOutput()
       ->find('//p')
       ->before(' World')
@@ -1176,7 +1237,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testInsertAfter() {
     $this->assertFileExists('data/insertAfter.src.xml');
-    $doc = FluentDOM(file_get_contents('data/insertAfter.src.xml'))
+    $doc = FluentDOM('data/insertAfter.src.xml')
       ->find('//p')
       ->insertAfter('//div[@id = "foo"]');
     $this->assertTrue($doc instanceof FluentDOM);
@@ -1189,7 +1250,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testInsertBefore() {
     $this->assertFileExists('data/insertBefore.src.xml');
-    $doc = FluentDOM(file_get_contents('data/insertBefore.src.xml'))
+    $doc = FluentDOM('data/insertBefore.src.xml')
       ->find('//p')
       ->insertBefore('//div[@id = "foo"]');
     $this->assertTrue($doc instanceof FluentDOM);
@@ -1206,7 +1267,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testWrap() {
     $this->assertFileExists('data/wrap.src.xml');
-    $doc = FluentDOM(file_get_contents('data/wrap.src.xml'))
+    $doc = FluentDOM('data/wrap.src.xml')
       ->find('//p')
       ->wrap('<div class="outer"><div class="inner"></div></div>');
     $this->assertTrue($doc instanceof FluentDOM);
@@ -1219,7 +1280,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testWrapWithDOMElement() {
     $this->assertFileExists('data/wrapWithDOMElement.src.xml');
-    $doc = FluentDOM(file_get_contents('data/wrapWithDOMElement.src.xml'));
+    $doc = FluentDOM('data/wrapWithDOMElement.src.xml');
     $dom = $doc->document;
     $div = $dom->createElement('div');
     $div->setAttribute('class', 'wrapper');
@@ -1234,7 +1295,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testWrapWithDOMNodeList() {
     $this->assertFileExists('data/wrapWithDOMNodeList.src.xml');
-    $doc = FluentDOM(file_get_contents('data/wrapWithDOMNodeList.src.xml'));
+    $doc = FluentDOM('data/wrapWithDOMNodeList.src.xml');
     $divs = $doc->xpath->query('//div[@class = "wrapper"]');
     $this->assertTrue($doc instanceof FluentDOM);
     $doc->find('//p')->wrap($divs);
@@ -1264,7 +1325,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testWrapWithArray() {
     $this->assertFileExists('data/wrapWithArray.src.xml');
-    $doc = FluentDOM(file_get_contents('data/wrapWithArray.src.xml'));
+    $doc = FluentDOM('data/wrapWithArray.src.xml');
     $dom = $doc->document;
     $divs[0] = $dom->createElement('div');
     $divs[0]->setAttribute('class', 'wrapper');
@@ -1280,7 +1341,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testWrapAllSingle() {
     $this->assertFileExists('data/wrapAllSingle.src.xml');
-    $doc = FluentDOM(file_get_contents('data/wrapAllSingle.src.xml'))
+    $doc = FluentDOM('data/wrapAllSingle.src.xml')
       ->find('//p')
       ->wrapAll('<div class="wrapper"/>');
     $this->assertTrue($doc instanceof FluentDOM);
@@ -1293,7 +1354,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testWrapAllComplex() {
     $this->assertFileExists('data/wrapAllComplex.src.xml');
-    $doc = FluentDOM(file_get_contents('data/wrapAllComplex.src.xml'))
+    $doc = FluentDOM('data/wrapAllComplex.src.xml')
       ->find('//p')
       ->wrapAll('<div class="wrapper"><div>INNER</div></div>');
     $this->assertTrue($doc instanceof FluentDOM);
@@ -1306,7 +1367,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testWrapInner() {
     $this->assertFileExists('data/wrapInner.src.xml');
-    $doc = FluentDOM(file_get_contents('data/wrapInner.src.xml'))
+    $doc = FluentDOM('data/wrapInner.src.xml')
       ->find('//p')
       ->wrapInner('<b></b>');
     $this->assertTrue($doc instanceof FluentDOM);
@@ -1323,7 +1384,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testReplaceWith() {
     $this->assertFileExists('data/replaceWith.src.xml');
-    $doc = FluentDOM(file_get_contents('data/replaceWith.src.xml'))
+    $doc = FluentDOM('data/replaceWith.src.xml')
       ->find('//p')
       ->replaceWith('<b>Paragraph. </b>');
     $this->assertTrue($doc instanceof FluentDOM);
@@ -1336,7 +1397,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testReplaceAll() {
     $this->assertFileExists('data/replaceAll.src.xml');
-    $doc = FluentDOM(file_get_contents('data/replaceAll.src.xml'))
+    $doc = FluentDOM('data/replaceAll.src.xml')
       ->node('<b id="sample">Paragraph. </b>')
       ->replaceAll('//p');
     $this->assertTrue($doc instanceof FluentDOM);
@@ -1349,7 +1410,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testReplaceAllWithNode() {
     $this->assertFileExists('data/replaceAllWithNode.src.xml');
-    $doc = FluentDOM(file_get_contents('data/replaceAllWithNode.src.xml'));
+    $doc = FluentDOM('data/replaceAllWithNode.src.xml');
     $doc->node('<b id="sample">Paragraph. </b>')
       ->replaceAll(
         $doc->find('//p')->item(1)
@@ -1387,7 +1448,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testEmpty() {
     $this->assertFileExists('data/empty.src.xml');
-    $doc = FluentDOM(file_get_contents('data/empty.src.xml'))
+    $doc = FluentDOM('data/empty.src.xml')
       ->find('//p[@class = "first"]')
       ->empty();
     $this->assertTrue($doc instanceof FluentDOM);
@@ -1400,7 +1461,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testRemove() {
     $this->assertFileExists('data/remove.src.xml');
-    $doc = FluentDOM(file_get_contents('data/remove.src.xml'))
+    $doc = FluentDOM('data/remove.src.xml')
       ->find('//p[@class = "first"]')
       ->remove();
     $this->assertTrue($doc instanceof FluentDOM);
@@ -1523,7 +1584,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   */
   function testRemoveAttr() {
     $this->assertFileExists('data/removeAttr.src.xml');
-    $doc = FluentDOM(file_get_contents('data/removeAttr.src.xml'))
+    $doc = FluentDOM('data/removeAttr.src.xml')
       ->find('//p')
       ->removeAttr('index');
     $this->assertTrue($doc instanceof FluentDOM);

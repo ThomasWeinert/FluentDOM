@@ -15,11 +15,12 @@
 * This is a shortcut for "new FluentDOM($source)"
 *
 * @param mixed $source
+* @param string $contentType optional, default value 'xml'
 * @access public
 * @return object FluentDOM
 */
-function FluentDOM($source) {
-  return new FluentDOM($source);
+function FluentDOM($source = NULL, $contentType = 'xml') {
+  return new FluentDOM($source, $contentType);
 }
 
 /**
@@ -83,9 +84,10 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   *
   * @param object FluentDOM | object DOMElement | object DOMDocument $source
   * source to create FluentDOM from
+  * @param string $contentType optional, default value 'xml'
   * @access public
   */
-  public function __construct($source) {
+  public function __construct($source = NULL, $contentType = 'xml') {
     if ($source instanceof FluentDOM) {
       $this->_document = $source->document;
       $this->_xpath = $source->_xpath;
@@ -96,12 +98,50 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     } elseif ($this->_isNode($source)) {
       $this->_document = $source->ownerDocument;
       $this->_push($source);
-    } elseif (is_string($source)) {
+    } elseif (is_string($source) || is_null($source)) {
       $this->_document = new DOMDocument();
-      $this->_document->loadXML($source);
       $this->_useDocumentContext = TRUE;
+      $this->load($source, $contentType);
     } else {
       throw new InvalidArgumentException('Invalid source object.');
+    }
+  }
+  
+  /**
+  * Load a $source string. This can be content (contains <) or an URL.
+  *
+  * @param $source
+  * @param string $contentType optional, default value 'xml'
+  * @access public
+  * @return
+  */
+  public function load($source, $contentType = 'xml') {
+    if (!empty($source)) {
+      if (FALSE !== strpos($source, '<')) {
+        $isContent = TRUE;
+      } else {
+        $isContent = FALSE;
+      }
+      switch (strtolower($contentType)) {
+      case 'html' :
+      case 'text/html' :
+        $errorSetting = libxml_use_internal_errors(TRUE); 
+        libxml_clear_errors();
+        if ($isContent) {
+          $this->_document->loadHTML($source);
+        } else {
+          $this->_document->loadHTMLFile($source);
+        }
+        libxml_clear_errors();
+        libxml_use_internal_errors($errorSetting);
+        break;
+      default :
+        if ($isContent) {
+          $this->_document->loadXML($source);
+        } else {
+          $this->_document->load($source);
+        }
+      }
     }
   }
 
@@ -873,12 +913,14 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * Searches for descendent elements that match the specified expression.
   *
   * @param string $expr XPath expression
+  * @param boolean $useDocumentContext ignore current node list
   * @access public
   * @return object FluentDOM
   */
-  public function find($expr) {
+  public function find($expr, $useDocumentContext = FALSE) {
     $result = $this->_spawn();
-    if ($this->_useDocumentContext) {
+    if ($useDocumentContext ||
+        $this->_useDocumentContext) {
       $result->_push($this->_match($expr));
     } else {
       foreach ($this->_array as $contextNode) {
@@ -1200,36 +1242,30 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return object FluentDOM
   */
   private function _insertChild($content, $first) {
-    if (!empty($content)) {
-      if ($content instanceof DOMNode) {
-        foreach ($this->_array as $node) {
-          $node->insertBefore(
-            $content->cloneNode(TRUE),
-            ($first && $node->hasChildNodes()) ? $node->childNodes->item(0) : NULL
-          );
-        }
-      } elseif ($content instanceof FluentDOM) {
-        foreach ($this->_array as $node) {
-          foreach ($content as $contentNode) {
+    $result = $this->_spawn();
+    if (empty($this->_array) &&
+        $this->_useDocumentContext &&
+        !isset($this->_document->documentElement)) {
+      $contentNode = $this->_getContentElement($content);
+      $result->_push(
+        $this->_document->appendChild(
+          $contentNode
+        )
+      );
+    } else {
+      $contentNodes = $this->_getContentNodes($content, TRUE);
+      foreach ($this->_array as $node) {
+        foreach ($contentNodes as $contentNode) {
+          $result->_push(
             $node->insertBefore(
               $contentNode->cloneNode(TRUE),
               ($first && $node->hasChildNodes()) ? $node->childNodes->item(0) : NULL
-            );
-          }
-        }
-      } else {
-        $fragment = $this->_document->createDocumentFragment();
-        if ($fragment->appendXML($content)) {
-          foreach ($this->_array as $node) {
-            $node->insertBefore(
-              $fragment->cloneNode(TRUE),
-              ($first && $node->hasChildNodes()) ? $node->childNodes->item(0) : NULL
-            );
-          }
+            )
+          );
         }
       }
     }
-    return $this;
+    return $result;
   }
 
   /**

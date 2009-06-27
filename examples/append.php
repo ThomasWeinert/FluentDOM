@@ -19,8 +19,8 @@ $xml = <<<XML
       <item index="2">text3</item>
     </group>
     <html>
-      <div class="test1 test2">class testing</div>
-      <div class="test2">class testing</div>
+      <div class="test1 test2"><b>class testing</b></div>
+      <div class="test2"><b>class testing</b></div>
     </html>
   </items>
 </body>
@@ -30,13 +30,16 @@ XML;
 require_once('../FluentDOM.php');
 echo FluentDOM($xml)
   ->find('//p')
-  ->append('<strong>Hello</strong>');
+  ->append('<strong>Hello</strong>')
+  ->formatOutput();
 
 echo "\n\n";
 
-$dom = FluentDOM($xml)->find('//group/item');
+$dom = FluentDOM($xml);
+$items = $dom->find('//group/item');
 echo $dom
   ->find('//html/div')
-  ->append($dom);
+  ->append($items)
+  ->formatOutput();
 
 ?>

@@ -21,11 +21,12 @@ require_once(dirname(__FILE__).'/FluentDOM.php');
 * This is a shortcut for "new FluentDOMStyle($source)"
 *
 * @param mixed $source
+* @param string $contentType optional, default value 'xml'
 * @access public
 * @return object FluentDOMStyle
 */
-function FluentDOMStyle($content) {
-  return new FluentDOMStyle($content);
+function FluentDOMStyle($content = NULL, $contentType = 'xml') {
+  return new FluentDOMStyle($content, $contentType);
 }
 
 /**

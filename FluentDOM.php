@@ -52,6 +52,13 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   private $_useDocumentContext = FALSE;
 
   /**
+  * content type for output (xml, text/xml, html, text/html)
+  * @var boolean
+  * @access private
+  */
+  private $_contentType = FALSE;
+
+  /**
   * parent node list (last selection in chain)
   * @var object FluentDOM
   * @access private
@@ -88,6 +95,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @access public
   */
   public function __construct($source = NULL, $contentType = 'xml') {
+    $this->_contentType = $contentType;
     if ($source instanceof FluentDOM) {
       $this->_document = $source->document;
       $this->_xpath = $source->_xpath;
@@ -116,6 +124,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return
   */
   public function load($source, $contentType = 'xml') {
+    $this->_contentType = $contentType;
     if (!empty($source)) {
       if (FALSE !== strpos($source, '<')) {
         $isContent = TRUE;
@@ -230,7 +239,13 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return string
   */
   public function __toString() {
-    return $this->_document->saveXML();
+    switch ($this->_contentType) {
+    case 'html' :
+    case 'text/html' :
+      return $this->_document->saveHTML();
+    default :
+      return $this->_document->saveXML();
+    }
   }
 
   /**

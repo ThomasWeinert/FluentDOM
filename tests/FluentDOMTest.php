@@ -238,6 +238,16 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   *
   * @group MagicFunctions
   */
+  function testMagicToStringHTML() {
+    $doc = FluentDOM('<html><body><br></body></html>', 'html');
+    $this->assertEquals('br', $doc->find('//br')->item(0)->nodeName);
+    $this->assertEquals($doc->document->saveHTML(), (string)$doc);
+  }
+
+  /**
+  *
+  * @group MagicFunctions
+  */
   function testMagicCallUnknown() {
     try {
       FluentDOM(self::XML)->invalidDynamicMethodName();

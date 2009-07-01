@@ -114,14 +114,18 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
       throw new InvalidArgumentException('Invalid source object.');
     }
   }
-  
+
   /**
   * Load a $source string. This can be content (contains <) or an URL.
   *
   * @param $source
   * @param string $contentType optional, default value 'xml'
   * @access public
-  * @return
+  *
+  * @see DOMDocument::loadHTML()
+  * @see DOMDocument::loadHTMLFile()
+  * @see DOMDocument::loadXML()
+  * @see DOMDocument::load()
   */
   public function load($source, $contentType = 'xml') {
     $this->_contentType = $contentType;
@@ -134,7 +138,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
       switch (strtolower($contentType)) {
       case 'html' :
       case 'text/html' :
-        $errorSetting = libxml_use_internal_errors(TRUE); 
+        $errorSetting = libxml_use_internal_errors(TRUE);
         libxml_clear_errors();
         if ($isContent) {
           $this->_document->loadHTML($source);

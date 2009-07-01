@@ -9,6 +9,10 @@
 * @package FluentDOM
 * @subpackage unitTests
 */
+
+/**
+* load necessary files
+*/
 require_once 'PHPUnit/Framework.php';
 require_once '../FluentDOM.php';
 

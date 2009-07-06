@@ -544,7 +544,6 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   /**
   * validate string as qualified tag name
   *
-  * @todo implement isQName
   * @param string $name
   * @access private
   * @return boolean

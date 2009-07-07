@@ -16,6 +16,8 @@
 require_once 'PHPUnit/Framework.php';
 require_once '../FluentDOMStyle.php';
 
+PHPUnit_Util_Filter::addFileToFilter(__FILE__);
+
 /**
 * Test class for FluentDOMStyle.
 *

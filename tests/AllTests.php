@@ -14,12 +14,13 @@
 * Load necessary files
 */
 require_once 'PHPUnit/Framework.php';
-
 require_once 'FluentDOMTest.php';
 if (version_compare(PHP_VERSION, '5.3', '>=')) {
   include_once 'FluentDOMTest_PHP5_3.php';
 }
 require_once 'FluentDOMStyleTest.php';
+
+PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
 /**
 *
@@ -34,8 +35,6 @@ class FluentDOM_AllTests {
   * @see PHPUnit_Framework_TestSuite::addTestSuite()
   */
   public static function suite() {
-    PHPUnit_Util_Filter::addFileToFilter('AllTests.php');
-
     $suite = new PHPUnit_Framework_TestSuite('FluentDOM Package');
 
     $suite->addTestSuite('FluentDOMTest');

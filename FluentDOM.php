@@ -192,7 +192,6 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     case 'document' :
     case 'xpath' :
       throw new BadMethodCallException('Can not set readonly value.');
-      break;
     default :
       $this->$name = $value;
       break;

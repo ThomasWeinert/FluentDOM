@@ -14,11 +14,12 @@
 * Load necessary files
 */
 require_once 'PHPUnit/Framework.php';
-require_once 'FluentDOMTest.php';
+$dir = dirname(__FILE__);
+require_once $dir.'/FluentDOMTest.php';
 if (version_compare(PHP_VERSION, '5.3', '>=')) {
-  include_once 'FluentDOMTest_PHP5_3.php';
+  include_once $dir.'/FluentDOMTest_PHP5_3.php';
 }
-require_once 'FluentDOMStyleTest.php';
+require_once $dir.'/FluentDOMStyleTest.php';
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 

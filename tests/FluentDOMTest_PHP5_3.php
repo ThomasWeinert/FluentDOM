@@ -14,7 +14,7 @@
 * load necessary files
 */
 require_once 'PHPUnit/Framework.php';
-require_once '../FluentDOM.php';
+require_once dirname(__FILE__).'/../FluentDOM.php';
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
@@ -27,12 +27,28 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 class FluentDOMTest_PHP5_3 extends PHPUnit_Framework_TestCase {
 
   /**
+  * directory of this file
+  * @var string
+  */
+  private $_directory = '';
+
+  /**
+  * initialize test suite
+  *
+  * @access public
+  * @return
+  */
+  function setUp() {
+    $this->_directory = dirname(__FILE__);
+  }
+  
+  /**
   *
   * @group TraversingFilter
   */
   function testMap() {
-    $this->assertFileExists('data/map.src.xml');
-    $dom = FluentDOM(file_get_contents('data/map.src.xml'));
+    $this->assertFileExists($this->_directory.'/data/map.src.xml');
+    $dom = FluentDOM(file_get_contents($this->_directory.'/data/map.src.xml'));
     $dom->find('//p')
       ->append(
         implode(
@@ -47,7 +63,7 @@ class FluentDOMTest_PHP5_3 extends PHPUnit_Framework_TestCase {
         )
       );
     $this->assertTrue($dom instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile('data/map.tgt.xml', $dom);
+    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/map.tgt.xml', $dom);
   }
 }
 ?>

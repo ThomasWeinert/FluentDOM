@@ -27,7 +27,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 class FluentDOMTest extends PHPUnit_Framework_TestCase {
 
   const XML = '
-    <items>
+    <items version="1.0">
       <group>
         <item index="0">text1</item>
         <item index="1">text2</item>
@@ -39,7 +39,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
       </html>
     </items>
   ';
-  
+
   /**
   * directory of this file
   * @var string
@@ -55,7 +55,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   function setUp() {
     $this->_directory = dirname(__FILE__);
   }
-  
+
   /**
   * Constructor
   */
@@ -135,7 +135,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $dom = FluentDOM(file_get_contents($this->_directory.'/data/loadXML.src.xml'));
     $this->assertTrue($dom instanceof FluentDOM);
   }
-  
+
   /**
   *
   * @group Loading
@@ -145,7 +145,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $dom = FluentDOM(file_get_contents($this->_directory.'/data/loadHTML.src.html'), 'html');
     $this->assertTrue($dom instanceof FluentDOM);
   }
-  
+
   /**
   *
   * @group Loading
@@ -155,7 +155,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $dom = FluentDOM($this->_directory.'/data/loadXML.src.xml');
     $this->assertTrue($dom instanceof FluentDOM);
   }
-  
+
   /**
   *
   * @group Loading
@@ -165,7 +165,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $dom = FluentDOM($this->_directory.'/data/loadHTML.src.html', 'html');
     $this->assertTrue($dom instanceof FluentDOM);
   }
-  
+
   /*
   * Properties
   */
@@ -904,6 +904,18 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   *
   * @group TraversingFind
   */
+  function testFindFromRootNode() {
+    $doc = FluentDOM(self::XML)->find('/*');
+    $this->assertEquals(1, $doc->length);
+    $findDoc = FluentDOM(self::XML)->find('/items');
+    $this->assertEquals(1, $findDoc->length);
+    $this->assertTrue($findDoc == $doc);
+  }
+
+  /**
+  *
+  * @group TraversingFind
+  */
   function testFindWithNamespaces() {
     $this->assertFileExists($this->_directory.'/data/findWithNamespaces.src.xml');
     $doc = FluentDOM($this->_directory.'/data/findWithNamespaces.src.xml')->find('//_:entry');
@@ -1158,7 +1170,7 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue($doc instanceof FluentDOM);
     $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/append.tgt.xml', $doc);
   }
-  
+
   /**
   *
   * @group Manipulation
@@ -1529,6 +1541,24 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
       ->find('//group/item')
       ->attr('index');
     $this->assertEquals('0', $doc);
+  }
+  /**
+  *
+  * @group Attributes
+  */
+  function testAttrReadFromRoot() {
+    $doc = FluentDOM(self::XML)
+      ->find('/*')
+      ->attr('version');
+    $this->assertEquals('1.0', $doc);
+    $doc = FluentDOM(self::XML)
+      ->find('/items')
+      ->attr('version');
+    $this->assertEquals('1.0', $doc);
+    $doc = FluentDOM(self::XML)
+      ->find('//items')
+      ->attr('version');
+    $this->assertEquals('1.0', $doc);
   }
 
   /**

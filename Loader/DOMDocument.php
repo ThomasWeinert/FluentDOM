@@ -7,8 +7,13 @@
 * @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
 *
 * @package FluentDOM
-* @package Loaders
+* @subpackage Loaders
 */
+
+/**
+* include interface
+*/
+require_once dirname(__FILE__).'../FluentDOMLoader.php';
 
 /**
 * Load FluentDOM from DOMDocument

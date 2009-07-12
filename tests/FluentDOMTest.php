@@ -592,7 +592,7 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFilter
   */
   function testNot() {
-    $fd = FluentDOM(self::XML)->find('//*');
+    $fd = $this->getFixtureFromString(self::XML)->find('//*');
     $this->assertTrue($fd->length > 1);
     $notDoc = $fd->not('name() != "items"');
     $this->assertEquals(1, $notDoc->length);
@@ -604,7 +604,7 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFilter
   */
   function testNotWithFunction() {
-    $fd = FluentDOM(self::XML)->find('//*');
+    $fd = $this->getFixtureFromString(self::XML)->find('//*');
     $this->assertTrue($fd->length > 1);
     $notDoc = $fd->not(array($this, 'callbackTestNotWithFunction'));
     $this->assertEquals(1, $notDoc->length);

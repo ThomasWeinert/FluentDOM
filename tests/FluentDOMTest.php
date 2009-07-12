@@ -78,7 +78,7 @@ class FluentDOMTest extends FluentDomTestCase {
       $fd->load('test load string')
     );
   }
-  
+
   function testSetLoadersInvalid() {
     try {
       $fd = new FluentDOM();
@@ -1319,12 +1319,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Manipulation
   */
   function testReplaceWith() {
-    $this->assertFileExists($this->_directory.'/data/replaceWith.src.xml');
-    $doc = FluentDOM($this->_directory.'/data/replaceWith.src.xml')
-      ->find('//p')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//p')
       ->replaceWith('<b>Paragraph. </b>');
-    $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/replaceWith.tgt.xml', $doc);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -1332,12 +1331,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Manipulation
   */
   function testReplaceAll() {
-    $this->assertFileExists($this->_directory.'/data/replaceAll.src.xml');
-    $doc = FluentDOM($this->_directory.'/data/replaceAll.src.xml')
-      ->node('<b id="sample">Paragraph. </b>')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->node('<b id="sample">Paragraph. </b>')
       ->replaceAll('//p');
-    $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/replaceAll.tgt.xml', $doc);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -1345,14 +1343,13 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Manipulation
   */
   function testReplaceAllWithNode() {
-    $this->assertFileExists($this->_directory.'/data/replaceAllWithNode.src.xml');
-    $doc = FluentDOM($this->_directory.'/data/replaceAllWithNode.src.xml');
-    $doc->node('<b id="sample">Paragraph. </b>')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->node('<b id="sample">Paragraph. </b>')
       ->replaceAll(
-        $doc->find('//p')->item(1)
+        $fd->find('//p')->item(1)
       );
-    $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/replaceAllWithNode.tgt.xml', $doc);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -1383,12 +1380,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Manipulation
   */
   function testEmpty() {
-    $this->assertFileExists($this->_directory.'/data/empty.src.xml');
-    $doc = FluentDOM($this->_directory.'/data/empty.src.xml')
-      ->find('//p[@class = "first"]')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//p[@class = "first"]')
       ->empty();
-    $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/empty.tgt.xml', $doc);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -1396,12 +1392,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Manipulation
   */
   function testRemove() {
-    $this->assertFileExists($this->_directory.'/data/remove.src.xml');
-    $doc = FluentDOM($this->_directory.'/data/remove.src.xml')
-      ->find('//p[@class = "first"]')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//p[@class = "first"]')
       ->remove();
-    $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/remove.tgt.xml', $doc);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /*
@@ -1413,14 +1408,14 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Manipulation
   */
   function testClone() {
-    $doc = FluentDOM(self::XML)->find('//item');
-    $clonedNodes = $doc->clone();
-    $this->assertTrue($doc instanceof FluentDOM);
+    $fd = FluentDOM(self::XML)->find('//item');
+    $clonedNodes = $fd->clone();
+    $this->assertTrue($fd instanceof FluentDOM);
     $this->assertTrue($clonedNodes instanceof FluentDOM);
-    $this->assertTrue($doc[0] !== $clonedNodes[0]);
-    $this->assertEquals($doc[0]->nodeName, $clonedNodes[0]->nodeName);
-    $this->assertEquals($doc[1]->getAttribute('index'), $clonedNodes[1]->getAttribute('index'));
-    $this->assertEquals(count($doc), count($clonedNodes));
+    $this->assertTrue($fd[0] !== $clonedNodes[0]);
+    $this->assertEquals($fd[0]->nodeName, $clonedNodes[0]->nodeName);
+    $this->assertEquals($fd[1]->getAttribute('index'), $clonedNodes[1]->getAttribute('index'));
+    $this->assertEquals(count($fd), count($clonedNodes));
   }
 
 

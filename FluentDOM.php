@@ -21,7 +21,11 @@
 */
 function FluentDOM($source = NULL, $contentType = 'xml') {
   $result = new FluentDOM();
-  return $result->load($source, $contentType);
+  if (isset($source)) {
+    return $result->load($source, $contentType);
+  } else {
+    return $result;
+  }
 }
 
 /**
@@ -50,7 +54,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @var boolean
   * @access private
   */
-  private $_useDocumentContext = FALSE;
+  private $_useDocumentContext = TRUE;
 
   /**
   * content type for output (xml, text/xml, html, text/html)
@@ -93,6 +97,16 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @access private
   */
   private $_loaders = NULL;
+  
+  /**
+  * Constructor
+  *
+  * @access public
+  * @return FluentDOM
+  */
+  public function __construct() {
+    $this->_document = new DOMDocument();
+  }
 
   /**
   * Load a $source string. This can be content (contains <) or an URL.
@@ -109,16 +123,14 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   public function load($source, $contentType = 'xml') {
     $this->_contentType = $contentType;
     if ($source instanceof FluentDOM) {
+      $this->_useDocumentContext = FALSE;
       $this->_document = $source->document;
       $this->_xpath = $source->_xpath;
       $this->_contentType = $source->_contentType;
       $this->_parent = $source;
       return $this;
-    } elseif (empty($source)) {
-      $this->_document = new DOMDocument(); 
-      $this->_useDocumentContext = TRUE;
-      return $this;
     } elseif ($this->_isNode($source)) {
+      $this->_useDocumentContext = FALSE;
       $this->_document = $source->ownerDocument;
       $this->_push($source);      
     } else {

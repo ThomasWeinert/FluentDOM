@@ -25,9 +25,13 @@ require_once(dirname(__FILE__).'/FluentDOM.php');
 * @access public
 * @return object FluentDOMStyle
 */
-function FluentDOMStyle($content = NULL, $contentType = 'xml') {
+function FluentDOMStyle($source = NULL, $contentType = 'xml') {
   $result = new FluentDOMStyle();
-  return $result->load($content, $contentType);
+  if (isset($source)) {
+    return $result->load($source, $contentType);
+  } else {
+    return $result;
+  }
 }
 
 /**

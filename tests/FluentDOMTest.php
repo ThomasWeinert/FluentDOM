@@ -299,19 +299,16 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Interfaces
   */
   function testInterfaceSeekableIterator() {
-    $items = FluentDOM(self::XML)->find('//item');
-    $this->assertTrue($items instanceof SeekableIterator);
-    $this->assertEquals(0, $items->key());
-    $items->seek(2);
-    $this->assertEquals(2, $items->key());
+    $fd = $this->getFixtureFromString(self::XML)->find('//item');
+    $this->assertTrue($fd instanceof SeekableIterator);
+    $this->assertEquals(0, $fd->key());
+    $fd->seek(2);
+    $this->assertEquals(2, $fd->key());
     try {
-      $items->seek(200);
+      $fd->seek(200);
+      $this->fail('An expected exception has not been raised.');
     } catch (InvalidArgumentException $expected) {
-      return;
-    } catch (Exception $expected) {
-      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
     }
-    $this->fail('An expected exception has not been raised.');
   }
 
   /**

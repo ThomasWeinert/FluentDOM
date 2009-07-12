@@ -338,10 +338,9 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group CoreFunctions
   */
   function testItem() {
-    $doc = FluentDOM(self::XML);
-    $doc = $doc->find('/items');
-    $this->assertEquals($doc->document->documentElement, $doc->item(0));
-    $this->assertEquals(NULL, $doc->item(-10));
+    $fd = $this->getFixtureFromString(self::XML)->find('/items');
+    $this->assertEquals($fd->document->documentElement, $fd->item(0));
+    $this->assertEquals(NULL, $fd->item(-10));
   }
 
   /**

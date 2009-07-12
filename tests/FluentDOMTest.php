@@ -354,8 +354,9 @@ class FluentDOMTest extends FluentDomTestCase {
       ->each(
         create_function(
           '$node, $item',
-          '$fluentNode = FluentDOM($node);
-           $fluentNode->prepend("EACH > ");
+          '$fd = new FluentDOM();
+           $fd->load($node);
+           $fd->prepend("EACH > ");
           ')
       );
     $this->assertTrue($dom instanceof FluentDOM);
@@ -368,7 +369,7 @@ class FluentDOMTest extends FluentDomTestCase {
   */
   function testEachWithInvalidFunction() {
     try {
-      $fd = $this->getFixtureFromString(self::XML)
+      $this->getFixtureFromString(self::XML)
         ->find('//body//*')
         ->each('invalidCallbackFunctionName');
       $this->fail('An expected exception has not been raised.');
@@ -452,8 +453,8 @@ class FluentDOMTest extends FluentDomTestCase {
     try {
       $fd = $this->getFixtureFromString(self::XML);
       $fd->node(
-          $fd->find('UnknownTagName')
-        );
+        $fd->find('UnknownTagName')
+      );
       $this->fail('An expected exception has not been raised.');
     } catch (UnexpectedValueException $expected) {
     }
@@ -533,7 +534,11 @@ class FluentDOMTest extends FluentDomTestCase {
           $fd
             ->find('//input')
             ->map(
-              create_function('$node, $index', 'return FluentDOM($node)->attr("value");')
+              create_function(
+                '$node, $index',
+                '$fd = new FluentDOM();
+                 return $fd->load($node)->attr("value");'
+              )
             )
         )
       );
@@ -838,10 +843,11 @@ class FluentDOMTest extends FluentDomTestCase {
       ->each(
         create_function(
           '$node, $item',
-          '$fluentNode = FluentDOM($node);
-           $fluentNode->prepend(
-             $fluentNode->document->createTextNode(
-               $fluentNode->parent()->item(0)->tagName." > "
+          '$fd = new FluentDOM();
+           $fd->load($node);
+           $fd->prepend(
+             $fd->document->createTextNode(
+               $fd->parent()->item(0)->tagName." > "
              )
             );
           ')
@@ -1043,10 +1049,9 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Manipulation
   */
   function testAppendDocumentElement() {
-    $doc = FluentDOM()
-      ->append('<strong>Hello</strong>');
-    $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertEquals('strong', $doc->find('/strong')->item(0)->nodeName);
+    $fd = new FluentDOM();
+    $fd->append('<strong>Hello</strong>');
+    $this->assertEquals('strong', $fd->find('/strong')->item(0)->nodeName);
   }
 
   /**
@@ -1378,28 +1383,20 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Attributes
   */
   function testAttrRead() {
-    $doc = FluentDOM(self::XML)
+    $fd = $this->getFixtureFromString(self::XML)
       ->find('//group/item')
       ->attr('index');
-    $this->assertEquals('0', $doc);
+    $this->assertEquals('0', $fd);
   }
   /**
   *
   * @group Attributes
   */
   function testAttrReadFromRoot() {
-    $doc = FluentDOM(self::XML)
-      ->find('/*')
-      ->attr('version');
-    $this->assertEquals('1.0', $doc);
-    $doc = FluentDOM(self::XML)
-      ->find('/items')
-      ->attr('version');
-    $this->assertEquals('1.0', $doc);
-    $doc = FluentDOM(self::XML)
-      ->find('//items')
-      ->attr('version');
-    $this->assertEquals('1.0', $doc);
+    $fd = $this->getFixtureFromString(self::XML);
+    $this->assertEquals('1.0', $fd->find('/*')->attr('version'));
+    $this->assertEquals('1.0', $fd->find('/items')->attr('version'));
+    $this->assertEquals('1.0', $fd->find('//items')->attr('version'));
   }
 
   /**
@@ -1408,15 +1405,12 @@ class FluentDOMTest extends FluentDomTestCase {
   */
   function testAttrReadInvalid() {
     try {
-      FluentDOM(self::XML)
+      $this->getFixtureFromString(self::XML)
         ->find('//item')
         ->attr('');
+      $this->fail('An expected exception has not been raised.');
     } catch (UnexpectedValueException $expected) {
-      return;
-    } catch (Exception $expected) {
-      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
-    }
-    $this->fail('An expected exception has not been raised.');
+    }    
   }
 
   /**
@@ -1424,9 +1418,8 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Attributes
   */
   function testAttrReadNoMatch() {
-    $doc = FluentDOM(self::XML)
-      ->attr('index');
-    $this->assertTrue(empty($doc));
+    $fd = $this->getFixtureFromString(self::XML)->attr('index');
+    $this->assertTrue(empty($fd));
   }
 
   /**
@@ -1434,10 +1427,10 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Attributes
   */
   function testAttrReadOnDOMText() {
-    $doc = FluentDOM(self::XML)
+    $fd = $this->getFixtureFromString(self::XML)
       ->find('//item/text()')
       ->attr('index');
-    $this->assertTrue(empty($doc));
+    $this->assertTrue(empty($fd));
   }
 
   /**
@@ -1445,11 +1438,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Attributes
   */
   function testAttrWrite() {
-    $doc = FluentDOM(self::XML)
+    $fd = $this->getFixtureFromString(self::XML)
       ->find('//group/item')
       ->attr('index', '15')
       ->attr('index');
-    $this->assertEquals('15', $doc);
+    $this->assertEquals('15', $fd);
 
   }
 
@@ -1458,12 +1451,12 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Attributes
   */
   function testAttrWriteArray() {
-    $doc = FluentDOM(self::XML)
+    $fd = $this->getFixtureFromString(self::XML)
       ->find('//group/item')
       ->attr(array('index' => '15', 'length' => '34', 'label' => 'box'));
-    $this->assertEquals('15', $doc->attr('index'));
-    $this->assertEquals('34', $doc->attr('length'));
-    $this->assertEquals('box', $doc->attr('label'));
+    $this->assertEquals('15', $fd->attr('index'));
+    $this->assertEquals('34', $fd->attr('length'));
+    $this->assertEquals('box', $fd->attr('label'));
   }
 
   /**
@@ -1471,10 +1464,10 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Attributes
   */
   function testAttrWriteCallback() {
-    $doc = FluentDOM(self::XML)
+    $fd = $this->getFixtureFromString(self::XML)
       ->find('//group/item')
       ->attr('callback', array($this, 'callbackForAttr'));
-    $this->assertEquals($doc[0]->nodeName, $doc->attr('callback'));
+    $this->assertEquals($fd[0]->nodeName, $fd->attr('callback'));
   }
 
   /**
@@ -1498,7 +1491,7 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Attributes
   */
   function testAddClass() {
-    $fd = FluentDOM(self::XML)->find('//html/div');
+    $fd = $this->getFixtureFromString(self::XML)->find('//html/div');
     $this->assertTrue($fd->hasClass('added') === FALSE);
     $fd->addClass('added');
     $this->assertTrue($fd->hasClass('added') === TRUE);
@@ -1509,7 +1502,7 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Attributes
   */
   function testHasClass() {
-    $fd = FluentDOM(self::XML)->find('//html/div');
+    $fd = $this->getFixtureFromString(self::XML)->find('//html/div');
     $this->assertTrue($fd->hasClass('test1') === TRUE);
     $this->assertTrue($fd->hasClass('unknown') === FALSE);
   }
@@ -1519,7 +1512,7 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Attributes
   */
   function testRemoveClass() {
-    $fd = FluentDOM(self::XML)->find('//html/div');
+    $fd = $this->getFixtureFromString(self::XML)->find('//html/div');
     $this->assertEquals('test1 test2', $fd[0]->getAttribute('class'));
     $this->assertEquals('test2', $fd[1]->getAttribute('class'));
     $fd->removeClass('test2');
@@ -1532,7 +1525,7 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Attributes
   */
   function testToggleClass() {
-    $fd = FluentDOM(self::XML)->find('//html/div');
+    $fd = $this->getFixtureFromString(self::XML)->find('//html/div');
     $this->assertEquals('test1 test2', $fd[0]->getAttribute('class'));
     $this->assertEquals('test2', $fd[1]->getAttribute('class'));
     $fd->toggleClass('test1');

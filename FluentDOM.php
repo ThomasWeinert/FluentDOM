@@ -172,7 +172,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
         throw new InvalidArgumentException('Array contains invalid loader object');
       }
     }
-    $this->loaders = $loaders;
+    $this->_loaders = $loaders;
     return $this;
   }
 

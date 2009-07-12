@@ -205,10 +205,10 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Interfaces
   */
   function testInterfaceArrayAccessIsset() {
-    $items = FluentDOM(self::XML)->find('//item');
-    $this->assertTrue($items instanceof ArrayAccess);
-    $this->assertEquals(TRUE, isset($items[1]));
-    $this->assertEquals(FALSE, isset($items[200]));
+    $fd = $this->getFixtureFromString(self::XML)->find('//item');
+    $this->assertTrue($fd instanceof ArrayAccess);
+    $this->assertEquals(TRUE, isset($fd[1]));
+    $this->assertEquals(FALSE, isset($fd[200]));
   }
 
   /**
@@ -216,10 +216,10 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Interfaces
   */
   function testInterfaceArrayAccessGet() {
-    $items = FluentDOM(self::XML)->find('//item');
-    $this->assertTrue($items instanceof ArrayAccess);
-    $this->assertEquals('item', $items[1]->nodeName);
-    $this->assertEquals(1, $items[1]->getAttribute('index'));
+    $fd = $this->getFixtureFromString(self::XML)->find('//item');
+    $this->assertTrue($fd instanceof ArrayAccess);
+    $this->assertEquals('item', $fd[1]->nodeName);
+    $this->assertEquals(1, $fd[1]->getAttribute('index'));
   }
 
   /**
@@ -227,16 +227,13 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Interfaces
   */
   function testInterfaceArrayAccessSet() {
-    $items = FluentDOM(self::XML)->find('//item');
-    $this->assertTrue($items instanceof ArrayAccess);
+    $fd = $this->getFixtureFromString(self::XML)->find('//item');
+    $this->assertTrue($fd instanceof ArrayAccess);
     try {
-      $items[1] = NULL;
+      $fd[1] = NULL;
+      $this->fail('An expected exception has not been raised.');
     } catch (BadMethodCallException $expected) {
-      return;
-    } catch (Exception $expected) {
-      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
     }
-    $this->fail('An expected exception has not been raised.');
   }
 
   /**
@@ -244,16 +241,13 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Interfaces
   */
   function testInterfaceArrayAccessUnset() {
-    $items = FluentDOM(self::XML)->find('//item');
-    $this->assertTrue($items instanceof ArrayAccess);
+    $fd = $this->getFixtureFromString(self::XML)->find('//item');
+    $this->assertTrue($fd instanceof ArrayAccess);
     try {
-      unset($items[1]);
+      unset($fd[1]);
+      $this->fail('An expected exception has not been raised.');
     } catch (BadMethodCallException $expected) {
-      return;
-    } catch (Exception $expected) {
-      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
     }
-    $this->fail('An expected exception has not been raised.');
   }
 
   /**

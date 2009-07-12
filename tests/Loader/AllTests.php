@@ -16,7 +16,7 @@
 require_once 'PHPUnit/Framework.php';
 $dir = dirname(__FILE__);
 require_once $dir.'/StringXMLTest.php';
-//require_once $dir.'/FileXMLTest.php';
+require_once $dir.'/FileXMLTest.php';
 require_once $dir.'/StringHTMLTest.php';
 require_once $dir.'/FileHTMLTest.php';
 
@@ -39,6 +39,7 @@ class FluentDOMLoader_AllTests {
     $suite->addTestSuite('FluentDOMLoaderStringXMLTest');
     $suite->addTestSuite('FluentDOMLoaderStringHTMLTest');
     $suite->addTestSuite('FluentDOMLoaderFileHTMLTest');
+    $suite->addTestSuite('FluentDOMLoaderFileXMLTest');
 
     return $suite;
   }

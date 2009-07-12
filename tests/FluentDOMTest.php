@@ -951,11 +951,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingChain
   */
   function testAndSelf() {
-    $fd = FluentDOM(self::XML)->find('/items')->find('.//item');
+    $fd = $this->getFixtureFromString(self::XML)->find('/items')->find('.//item');
     $this->assertEquals(3, $fd->length);
-    $andSelfDoc = $fd->andSelf();
-    $this->assertEquals(4, $andSelfDoc->length);
-    $this->assertTrue($andSelfDoc !== $fd);
+    $andSelfFd = $fd->andSelf();
+    $this->assertEquals(4, $andSelfFd->length);
+    $this->assertTrue($andSelfFd !== $fd);
   }
 
   /**
@@ -963,15 +963,15 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingChain
   */
   function testEnd() {
-    $fd = FluentDOM(self::XML)->find('/items')->find('.//item');
+    $fd = $this->getFixtureFromString(self::XML)->find('/items')->find('.//item');
     $this->assertEquals(3, $fd->length);
-    $endDoc = $fd->end();
-    $this->assertEquals(1, $endDoc->length);
-    $this->assertTrue($endDoc !== $fd);
-    $endDocRoot = $endDoc->end();
-    $this->assertTrue($endDoc !== $endDocRoot);
-    $endDocRoot2 = $endDocRoot->end();
-    $this->assertTrue($endDocRoot === $endDocRoot2);
+    $endFd = $fd->end();
+    $this->assertEquals(1, $endFd->length);
+    $this->assertTrue($endFd !== $fd);
+    $endFdRoot = $endFd->end();
+    $this->assertTrue($endFd !== $endFdRoot);
+    $endFdRoot2 = $endFdRoot->end();
+    $this->assertTrue($endFdRoot === $endFdRoot2);
   }
 
   /**
@@ -982,7 +982,7 @@ class FluentDOMTest extends FluentDomTestCase {
     $expect = '<item index="0">text1</item>'.
       '<item index="1">text2</item>'.
       '<item index="2">text3</item>';
-    $fd = FluentDOM(self::XML)->find('//group')->xml();
+    $fd = $this->getFixtureFromString(self::XML)->find('//group')->xml();
     $this->assertEquals($expect, $fd);
   }
 
@@ -1004,7 +1004,7 @@ class FluentDOMTest extends FluentDomTestCase {
   */
   function testTextRead() {
     $expect = 'text1text2text3';
-    $text = FluentDOM(self::XML)->formatOutput()->find('//group')->text();
+    $text = $this->getFixtureFromString(self::XML)->formatOutput()->find('//group')->text();
     $this->assertEquals($expect, $text);
   }
 
@@ -1013,13 +1013,13 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingChain
   */
   function testTextWrite() {
-    $fd = FluentDOM(self::XML)->find('//item');
+    $fd = $this->getFixtureFromString(self::XML)->find('//item');
     $this->assertEquals('text1', $fd[0]->textContent);
     $this->assertEquals('text2', $fd[1]->textContent);
-    $textDoc = $fd->text('changed');
+    $textFd = $fd->text('changed');
     $this->assertEquals('changed', $fd[0]->textContent);
     $this->assertEquals('changed', $fd[1]->textContent);
-    $this->assertTrue($fd === $textDoc);
+    $this->assertTrue($fd === $textFd);
   }
 
   /*
@@ -1204,15 +1204,12 @@ class FluentDOMTest extends FluentDomTestCase {
   */
   function testWrapWithInvalidArgument() {
     try {
-      FluentDOM(self::XML)
+      $this->getFixtureFromString(self::XML)
         ->find('//item')
         ->wrap(NULL);
+      $this->fail('An expected exception has not been raised.');
     } catch (InvalidArgumentException $expected) {
-      return;
-    } catch (Exception $expected) {
-      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
-    }
-    $this->fail('An expected exception has not been raised.');
+    }    
   }
 
   /**
@@ -1314,17 +1311,14 @@ class FluentDOMTest extends FluentDomTestCase {
   */
   function testReplaceAllWithInvalidArgument() {
     try {
-      $doc = FluentDOM(self::XML);
-      $doc->node('<b id="sample">Paragraph. </b>')
+      $this->getFixtureFromString(self::XML)
+        ->node('<b id="sample">Paragraph. </b>')
         ->replaceAll(
           NULL
         );
+      $this->fail('An expected exception has not been raised.');
     } catch (InvalidArgumentException $expected) {
-      return;
-    } catch (Exception $expected) {
-      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
     }
-    $this->fail('An expected exception has not been raised.');
   }
 
   /*

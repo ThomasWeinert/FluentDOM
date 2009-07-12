@@ -711,12 +711,13 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFind
   */
   function testInvalidAddForgeinNodes() {
-    $fd = FluentDOM(self::XML);
-    $items = FluentDOM(self::XML)->find('//item');
+    $fd = $this->getFixtureFromString(self::XML);
+    $itemsFd = $this->getFixtureFromString(self::XML)->find('//item');
     try {
       $fd
         ->find('/items')
-        ->add($items);
+        ->add($itemsFd);
+      $this->fail('An expected exception has not been raised.');
         $this->fail('An expected exception has not been raised.');
     } catch (OutOfBoundsException $expected) {
     }
@@ -727,12 +728,13 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFind
   */
   function testInvalidAddForgeinNode() {
-    $fd = FluentDOM(self::XML);
-    $items = FluentDOM(self::XML)->find('//item');
+    $fd = $this->getFixtureFromString(self::XML);
+    $itemsFd = $this->getFixtureFromString(self::XML)->find('//item');
     try {
       $fd
         ->find('/items')
-        ->add($items[0]);
+        ->add($itemsFd[0]);
+      $this->fail('An expected exception has not been raised.');
         $this->fail('An expected exception has not been raised.');
     } catch (OutOfBoundsException $expected) {
     }
@@ -769,11 +771,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFind
   */
   function testFind() {
-    $fd = FluentDOM(self::XML)->find('/*');
+    $fd = $this->getFixtureFromString(self::XML)->find('/*');
     $this->assertEquals(1, $fd->length);
-    $findDoc = $fd->find('group/item');
-    $this->assertEquals(3, $findDoc->length);
-    $this->assertTrue($findDoc !== $fd);
+    $findFd = $fd->find('group/item');
+    $this->assertEquals(3, $findFd->length);
+    $this->assertTrue($findFd !== $fd);
   }
 
   /**
@@ -781,11 +783,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFind
   */
   function testFindFromRootNode() {
-    $fd = FluentDOM(self::XML)->find('/*');
+    $fd = $this->getFixtureFromString(self::XML)->find('/*');
     $this->assertEquals(1, $fd->length);
-    $findDoc = FluentDOM(self::XML)->find('/items');
-    $this->assertEquals(1, $findDoc->length);
-    $this->assertTrue($findDoc == $fd);
+    $findFd = $this->getFixtureFromString(self::XML)->find('/items');
+    $this->assertEquals(1, $findFd->length);
+    $this->assertTrue($findFd !== $fd);
   }
 
   /**

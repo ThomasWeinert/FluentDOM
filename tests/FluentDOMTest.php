@@ -46,7 +46,7 @@ class FluentDOMTest extends FluentDomTestCase {
   /**
   * @group Load
   */
-  function testLoadWithInvalidSource() {
+  public function testLoadWithInvalidSource() {
     $fd = new FluentDOM();
     try {
       $fd->load(1);
@@ -58,7 +58,7 @@ class FluentDOMTest extends FluentDomTestCase {
   /**
   * @group Load
   */
-  function testLoaderMechanism() {
+  public function testLoaderMechanism() {
     $firstLoaderMock = $this->getMock('FluentDOMLoader');
     $firstLoaderMock->expects($this->once())
                     ->method('load')
@@ -79,7 +79,7 @@ class FluentDOMTest extends FluentDomTestCase {
     );
   }
 
-  function testSetLoadersInvalid() {
+  public function testSetLoadersInvalid() {
     try {
       $fd = new FluentDOM();
       $fd->setLoaders(array(new stdClass));
@@ -93,10 +93,9 @@ class FluentDOMTest extends FluentDomTestCase {
   */
 
   /**
-  *
   * @group Properties
   */
-  function testPropertyDocument() {
+  public function testPropertyDocument() {
     $fd = $this->getFixtureFromString(self::XML);
     $this->assertTrue(isset($fd->document));
     $this->assertTrue($fd->document instanceof DOMDocument);
@@ -108,10 +107,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Properties
   */
-  function testPropertyXPath() {
+  public function testPropertyXPath() {
     $fd = $this->getFixtureFromString(self::XML);
     $this->assertTrue(isset($fd->xpath));
     $this->assertTrue($fd->xpath instanceof DOMXPath);
@@ -123,10 +121,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Properties
   */
-  function testPropertyLength() {
+  public function testPropertyLength() {
     $fd = $this->getFixtureFromString(self::XML);
     $this->assertTrue(isset($fd->length));
     $this->assertEquals(0, $fd->length);
@@ -140,10 +137,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Properties
   */
-  function testDynamicProperty() {
+  public function testDynamicProperty() {
     $fd = $this->getFixtureFromString(self::XML);
     $this->assertEquals(FALSE, isset($fd->dynamicProperty));
     $this->assertEquals(NULL, $fd->dynamicProperty);
@@ -157,19 +153,17 @@ class FluentDOMTest extends FluentDomTestCase {
   */
 
   /**
-  *
   * @group MagicFunctions
   */
-  function testMagicToString() {
+  public function testMagicToString() {
     $fd = $this->getFixtureFromString(self::XML);
     $this->assertEquals($fd->document->saveXML(), (string)$fd);
   }
 
   /**
-  *
   * @group MagicFunctions
   */
-  function testMagicToStringHTML() {
+  public function testMagicToStringHTML() {
     $dom = new DOMDocument();
     $dom->loadHTML('<html><body><br></body></html>');
     $loader = $this->getMock('FluentDOMLoader');
@@ -184,10 +178,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group MagicFunctions
   */
-  function testMagicCallUnknown() {
+  public function testMagicCallUnknown() {
     try {
       $fd = new FluentDOM();
       $fd->invalidDynamicMethodName();
@@ -201,10 +194,9 @@ class FluentDOMTest extends FluentDomTestCase {
   */
 
   /**
-  *
   * @group Interfaces
   */
-  function testInterfaceArrayAccessIsset() {
+  public function testInterfaceArrayAccessIsset() {
     $fd = $this->getFixtureFromString(self::XML)->find('//item');
     $this->assertTrue($fd instanceof ArrayAccess);
     $this->assertEquals(TRUE, isset($fd[1]));
@@ -212,10 +204,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Interfaces
   */
-  function testInterfaceArrayAccessGet() {
+  public function testInterfaceArrayAccessGet() {
     $fd = $this->getFixtureFromString(self::XML)->find('//item');
     $this->assertTrue($fd instanceof ArrayAccess);
     $this->assertEquals('item', $fd[1]->nodeName);
@@ -223,10 +214,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Interfaces
   */
-  function testInterfaceArrayAccessSet() {
+  public function testInterfaceArrayAccessSet() {
     $fd = $this->getFixtureFromString(self::XML)->find('//item');
     $this->assertTrue($fd instanceof ArrayAccess);
     try {
@@ -237,10 +227,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Interfaces
   */
-  function testInterfaceArrayAccessUnset() {
+  public function testInterfaceArrayAccessUnset() {
     $fd = $this->getFixtureFromString(self::XML)->find('//item');
     $this->assertTrue($fd instanceof ArrayAccess);
     try {
@@ -251,10 +240,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Interfaces
   */
-  function testInterfaceCountable() {
+  public function testInterfaceCountable() {
     $fd = $this->getFixtureFromString(self::XML);
     $this->assertTrue($fd instanceof Countable);
     $this->assertEquals(0, count($fd));
@@ -263,10 +251,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Interfaces
   */
-  function testInterfaceIteratorMethods() {
+  public function testInterfaceIteratorMethods() {
     $fd = $this->getFixtureFromString(self::XML)->find('//item');
     $this->assertTrue($fd instanceof Iterator);
     $this->assertEquals(0, $fd->current()->getAttribute('index'));
@@ -279,10 +266,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Interfaces
   */
-  function testInterfaceIteratorLoop() {
+  public function testInterfaceIteratorLoop() {
     $fd = $this->getFixtureFromString(self::XML)->find('//item');
     $this->assertTrue($fd instanceof Iterator);
     $counter = 0;
@@ -295,10 +281,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Interfaces
   */
-  function testInterfaceSeekableIterator() {
+  public function testInterfaceSeekableIterator() {
     $fd = $this->getFixtureFromString(self::XML)->find('//item');
     $this->assertTrue($fd instanceof SeekableIterator);
     $this->assertEquals(0, $fd->key());
@@ -312,10 +297,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Interfaces
   */
-  function testInterfaceRecursiveIterator() {
+  public function testInterfaceRecursiveIterator() {
     $iterator = new RecursiveIteratorIterator(
       $this->getFixtureFromString(self::XML)->find('/*'),
       RecursiveIteratorIterator::SELF_FIRST
@@ -334,20 +318,18 @@ class FluentDOMTest extends FluentDomTestCase {
   */
 
   /**
-  *
   * @group CoreFunctions
   */
-  function testItem() {
+  public function testItem() {
     $fd = $this->getFixtureFromString(self::XML)->find('/items');
     $this->assertEquals($fd->document->documentElement, $fd->item(0));
     $this->assertEquals(NULL, $fd->item(-10));
   }
 
   /**
-  *
   * @group CoreFunctions
   */
-  function testEach() {
+  public function testEach() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//body//*')
       ->each(
@@ -363,10 +345,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group CoreFunctions
   */
-  function testEachWithInvalidFunction() {
+  public function testEachWithInvalidFunction() {
     try {
       $this->getFixtureFromString(self::XML)
         ->find('//body//*')
@@ -377,10 +358,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group CoreFunctions
   */
-  function testNode() {
+  public function testNode() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fdItems = $this->getFixtureFromString(
       '<samples><b id="first">Paragraph. </b></samples>'
@@ -397,10 +377,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group CoreFunctions
   */
-  function testNodeWithDOMElement() {
+  public function testNodeWithDOMElement() {
     $fd = $this->getFixtureFromString(self::XML);
     $nodes = $fd->node($fd->document->createElement('div'));
     $this->assertTrue($fd instanceof FluentDOM);
@@ -408,10 +387,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group CoreFunctions
   */
-  function testNodeWithDOMText() {
+  public function testNodeWithDOMText() {
     $fd = $this->getFixtureFromString(self::XML);
     $nodes = $fd->node($fd->document->createTextNode('div'));
     $this->assertTrue($fd instanceof FluentDOM);
@@ -419,10 +397,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group CoreFunctions
   */
-  function testNodeWithInvalidContent() {
+  public function testNodeWithInvalidContent() {
     try {
       $fd = $this->getFixtureFromString(self::XML)
         ->node(NULL);
@@ -432,10 +409,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group CoreFunctions
   */
-  function testNodeWithEmptyContent() {
+  public function testNodeWithEmptyContent() {
     try {
       $fd = $this->getFixtureFromString(self::XML)
         ->node('');
@@ -445,10 +421,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group CoreFunctions
   */
-  function testNodeWithEmptyList() {
+  public function testNodeWithEmptyList() {
     try {
       $fd = $this->getFixtureFromString(self::XML);
       $fd->node(
@@ -464,10 +439,9 @@ class FluentDOMTest extends FluentDomTestCase {
   */
 
   /**
-  *
   * @group TraversingFilter
   */
-  function testEq() {
+  public function testEq() {
     $fd = $this->getFixtureFromString(self::XML)->find('//*');
     $this->assertTrue($fd->length > 1);
     $eqFd = $fd->eq(0);
@@ -476,10 +450,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingFilter
   */
-  function testFilter() {
+  public function testFilter() {
     $fd = $this->getFixtureFromString(self::XML)->find('//*');
     $this->assertTrue($fd->length > 1);
     $filterFd = $fd->filter('name() = "items"');
@@ -488,10 +461,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingFilter
   */
-  function testFilterWithFunction() {
+  public function testFilterWithFunction() {
     $fd = $this->getFixtureFromString(self::XML)->find('//*');
     $this->assertTrue($fd->length > 1);
     $filterFd = $fd->filter(array($this, 'callbackTestFilterWithFunction'));
@@ -500,10 +472,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingFilter
   */
-  function testIs() {
+  public function testIs() {
     $fd = $this->getFixtureFromString(self::XML)->find('//*');
     $this->assertTrue($fd->length > 1);
     $this->assertTrue($fd->is('name() = "items"'));
@@ -511,20 +482,18 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingFilter
   */
-  function testIsOnEmptyList() {
+  public function testIsOnEmptyList() {
     $fd = $this->getFixtureFromString(self::XML);
     $this->assertTrue($fd->length == 0);
     $this->assertFalse($fd->is('name() = "items"'));
   }
 
   /**
-  *
   * @group TraversingFilter
   */
-  function testMap() {
+  public function testMap() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//p')
       ->append(
@@ -546,10 +515,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingFilter
   */
-  function testMapMixedResult() {
+  public function testMapMixedResult() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//p')
       ->append(
@@ -578,10 +546,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingFilter
   */
-  function testMapInvalidCallback() {
+  public function testMapInvalidCallback() {
     $fd = $this->getFixtureFromFile('testMap');
     try {
       $fd->find('//p')
@@ -592,10 +559,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingFilter
   */
-  function testNot() {
+  public function testNot() {
     $fd = $this->getFixtureFromString(self::XML)->find('//*');
     $this->assertTrue($fd->length > 1);
     $notDoc = $fd->not('name() != "items"');
@@ -604,10 +570,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingFilter
   */
-  function testNotWithFunction() {
+  public function testNotWithFunction() {
     $fd = $this->getFixtureFromString(self::XML)->find('//*');
     $this->assertTrue($fd->length > 1);
     $notDoc = $fd->not(array($this, 'callbackTestNotWithFunction'));
@@ -616,10 +581,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingFilter
   */
-  function testSliceByRangeStartLtEnd() {
+  public function testSliceByRangeStartLtEnd() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//p')
       ->slice(0,3)
@@ -629,10 +593,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingFilter
   */
-  function testSliceByRangeStartGtEnd() {
+  public function testSliceByRangeStartGtEnd() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//p')
       ->slice(5,2)
@@ -642,10 +605,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingFilter
   */
-  function testSliceByNegRange() {
+  public function testSliceByNegRange() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//p')
       ->slice(1,-2)
@@ -655,10 +617,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingFilter
   */
-  function testSliceToEnd() {
+  public function testSliceToEnd() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//p')
       ->slice(3)
@@ -672,10 +633,9 @@ class FluentDOMTest extends FluentDomTestCase {
   */
 
   /**
-  *
   * @group TraversingFind
   */
-  function testAddElements() {
+  public function testAddElements() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->add(
         $fd->find('//div')
@@ -686,10 +646,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingFind
   */
-  function testAddFromExpression() {
+  public function testAddFromExpression() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->add('//div')
       ->toggleClass('inB');
@@ -698,10 +657,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingFind
   */
-  function testAddInContext() {
+  public function testAddInContext() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//p')
       ->add('//p/b')
@@ -711,10 +669,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingFind
   */
-  function testInvalidAddForgeinNodes() {
+  public function testInvalidAddForgeinNodes() {
     $fd = $this->getFixtureFromString(self::XML);
     $itemsFd = $this->getFixtureFromString(self::XML)->find('//item');
     try {
@@ -728,10 +685,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingFind
   */
-  function testInvalidAddForgeinNode() {
+  public function testInvalidAddForgeinNode() {
     $fd = $this->getFixtureFromString(self::XML);
     $itemsFd = $this->getFixtureFromString(self::XML)->find('//item');
     try {
@@ -745,10 +701,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingFind
   */
-  function testChildren() {
+  public function testChildren() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//div[@id = "container"]/p')
       ->children()
@@ -758,10 +713,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingFind
   */
-  function testChildrenExpression() {
+  public function testChildrenExpression() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//div[@id = "container"]/p')
       ->children('name() = "em"')
@@ -771,10 +725,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingFind
   */
-  function testFind() {
+  public function testFind() {
     $fd = $this->getFixtureFromString(self::XML)->find('/*');
     $this->assertEquals(1, $fd->length);
     $findFd = $fd->find('group/item');
@@ -783,10 +736,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingFind
   */
-  function testFindFromRootNode() {
+  public function testFindFromRootNode() {
     $fd = $this->getFixtureFromString(self::XML)->find('/*');
     $this->assertEquals(1, $fd->length);
     $findFd = $this->getFixtureFromString(self::XML)->find('/items');
@@ -795,10 +747,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingFind
   */
-  function testFindWithNamespaces() {
+  public function testFindWithNamespaces() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $doc = $fd ->find('//_:entry');
     $this->assertEquals(25, $doc->length);
@@ -807,10 +758,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingFind
   */
-  function testNextSiblings() {
+  public function testNextSiblings() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//button[@disabled]')
       ->nextSiblings()
@@ -820,10 +770,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingFind
   */
-  function testNextAllSiblings() {
+  public function testNextAllSiblings() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//div[position() = 1]')
       ->nextAllSiblings()
@@ -833,10 +782,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingFind
   */
-  function testParent() {
+  public function testParent() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//body//*')
       ->each(
@@ -856,10 +804,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingFind
   */
-  function testParents() {
+  public function testParents() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $this->assertTrue($fd instanceof FluentDOM);
     $parents = $fd
@@ -883,10 +830,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingFind
   */
-  function testPrevSiblings() {
+  public function testPrevSiblings() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//div[@id = "start"]')
       ->prevSiblings()
@@ -896,10 +842,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingFind
   */
-  function testPrevSiblingsExpression() {
+  public function testPrevSiblingsExpression() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//div[@class = "here"]')
       ->prevSiblings()
@@ -909,10 +854,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingFind
   */
-  function testPrevAllSiblings() {
+  public function testPrevAllSiblings() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//div[@id = "start"]')
       ->prevSiblings()
@@ -922,10 +866,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingFind
   */
-  function testPrevAllSiblingsExpression() {
+  public function testPrevAllSiblingsExpression() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//div[@class= "here"]')
       ->prevAllSiblings('.//span')
@@ -935,10 +878,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingFind
   */
-  function testSiblings() {
+  public function testSiblings() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//li[@class = "hilite"]')
       ->siblings()
@@ -952,10 +894,9 @@ class FluentDOMTest extends FluentDomTestCase {
   */
 
   /**
-  *
   * @group TraversingChain
   */
-  function testAndSelf() {
+  public function testAndSelf() {
     $fd = $this->getFixtureFromString(self::XML)->find('/items')->find('.//item');
     $this->assertEquals(3, $fd->length);
     $andSelfFd = $fd->andSelf();
@@ -964,10 +905,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingChain
   */
-  function testEnd() {
+  public function testEnd() {
     $fd = $this->getFixtureFromString(self::XML)->find('/items')->find('.//item');
     $this->assertEquals(3, $fd->length);
     $endFd = $fd->end();
@@ -980,10 +920,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingChain
   */
-  function testXMLRead() {
+  public function testXMLRead() {
     $expect = '<item index="0">text1</item>'.
       '<item index="1">text2</item>'.
       '<item index="2">text3</item>';
@@ -992,10 +931,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingChain
   */
-  function testXMLWrite() {
+  public function testXMLWrite() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//p[position() = last()]')
       ->xml('<b>New</b>World');
@@ -1004,20 +942,18 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group TraversingChain
   */
-  function testTextRead() {
+  public function testTextRead() {
     $expect = 'text1text2text3';
     $text = $this->getFixtureFromString(self::XML)->formatOutput()->find('//group')->text();
     $this->assertEquals($expect, $text);
   }
 
   /**
-  *
   * @group TraversingChain
   */
-  function testTextWrite() {
+  public function testTextWrite() {
     $fd = $this->getFixtureFromString(self::XML)->find('//item');
     $this->assertEquals('text1', $fd[0]->textContent);
     $this->assertEquals('text2', $fd[1]->textContent);
@@ -1032,10 +968,9 @@ class FluentDOMTest extends FluentDomTestCase {
   */
 
   /**
-  *
   * @group Manipulation
   */
-  function testAppend() {
+  public function testAppend() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd->find('//p')
        ->append('<strong>Hello</strong>');
@@ -1044,20 +979,18 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Manipulation
   */
-  function testAppendDocumentElement() {
+  public function testAppendDocumentElement() {
     $fd = new FluentDOM();
     $fd->append('<strong>Hello</strong>');
     $this->assertEquals('strong', $fd->find('/strong')->item(0)->nodeName);
   }
 
   /**
-  *
   * @group Manipulation
   */
-  function testAppendDOMNodeList() {
+  public function testAppendDOMNodeList() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $items = $fd->find('//item');
     $this->assertTrue($fd instanceof FluentDOM);
@@ -1069,10 +1002,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Manipulation
   */
-  function testAppendTo() {
+  public function testAppendTo() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//span')
       ->appendTo('//div[@id = "foo"]');
@@ -1081,10 +1013,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Manipulation
   */
-  function testPrepend() {
+  public function testPrepend() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//p')
       ->prepend('<strong>Hello</strong>');
@@ -1093,10 +1024,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Manipulation
   */
-  function testPrependTo() {
+  public function testPrependTo() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//span')
       ->prependTo('//div[@id = "foo"]');
@@ -1109,10 +1039,9 @@ class FluentDOMTest extends FluentDomTestCase {
   */
 
   /**
-  *
   * @group Manipulation
   */
-  function testAfter() {
+  public function testAfter() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->formatOutput()
       ->find('//p')
@@ -1123,10 +1052,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Manipulation
   */
-  function testBefore() {
+  public function testBefore() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->formatOutput()
       ->find('//p')
@@ -1137,10 +1065,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Manipulation
   */
-  function testInsertAfter() {
+  public function testInsertAfter() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//p')
       ->insertAfter('//div[@id = "foo"]');
@@ -1149,10 +1076,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Manipulation
   */
-  function testInsertBefore() {
+  public function testInsertBefore() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//p')
       ->insertBefore('//div[@id = "foo"]');
@@ -1165,10 +1091,9 @@ class FluentDOMTest extends FluentDomTestCase {
   */
 
   /**
-  *
   * @group Manipulation
   */
-  function testWrap() {
+  public function testWrap() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//p')
       ->wrap('<div class="outer"><div class="inner"></div></div>');
@@ -1177,10 +1102,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Manipulation
   */
-  function testWrapWithDOMElement() {
+  public function testWrapWithDOMElement() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $dom = $fd->document;
     $div = $dom->createElement('div');
@@ -1191,10 +1115,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Manipulation
   */
-  function testWrapWithDOMNodeList() {
+  public function testWrapWithDOMNodeList() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $divs = $fd->xpath->query('//div[@class = "wrapper"]');
     $this->assertTrue($fd instanceof FluentDOM);
@@ -1203,10 +1126,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Manipulation
   */
-  function testWrapWithInvalidArgument() {
+  public function testWrapWithInvalidArgument() {
     try {
       $this->getFixtureFromString(self::XML)
         ->find('//item')
@@ -1217,10 +1139,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Manipulation
   */
-  function testWrapWithArray() {
+  public function testWrapWithArray() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $dom = $fd->document;
     $divs[0] = $dom->createElement('div');
@@ -1232,10 +1153,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Manipulation
   */
-  function testWrapAllSingle() {
+  public function testWrapAllSingle() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//p')
       ->wrapAll('<div class="wrapper"/>');
@@ -1244,10 +1164,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Manipulation
   */
-  function testWrapAllComplex() {
+  public function testWrapAllComplex() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//p')
       ->wrapAll('<div class="wrapper"><div>INNER</div></div>');
@@ -1256,10 +1175,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Manipulation
   */
-  function testWrapInner() {
+  public function testWrapInner() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//p')
       ->wrapInner('<b></b>');
@@ -1272,10 +1190,9 @@ class FluentDOMTest extends FluentDomTestCase {
   */
 
   /**
-  *
   * @group Manipulation
   */
-  function testReplaceWith() {
+  public function testReplaceWith() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//p')
       ->replaceWith('<b>Paragraph. </b>');
@@ -1284,10 +1201,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Manipulation
   */
-  function testReplaceAll() {
+  public function testReplaceAll() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->node('<b id="sample">Paragraph. </b>')
       ->replaceAll('//p');
@@ -1296,10 +1212,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Manipulation
   */
-  function testReplaceAllWithNode() {
+  public function testReplaceAllWithNode() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->node('<b id="sample">Paragraph. </b>')
       ->replaceAll(
@@ -1310,10 +1225,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Manipulation
   */
-  function testReplaceAllWithInvalidArgument() {
+  public function testReplaceAllWithInvalidArgument() {
     try {
       $this->getFixtureFromString(self::XML)
         ->node('<b id="sample">Paragraph. </b>')
@@ -1330,10 +1244,9 @@ class FluentDOMTest extends FluentDomTestCase {
   */
 
   /**
-  *
   * @group Manipulation
   */
-  function testEmpty() {
+  public function testEmpty() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//p[@class = "first"]')
       ->empty();
@@ -1342,10 +1255,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Manipulation
   */
-  function testRemove() {
+  public function testRemove() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//p[@class = "first"]')
       ->remove();
@@ -1358,10 +1270,9 @@ class FluentDOMTest extends FluentDomTestCase {
   */
 
   /**
-  *
   * @group Manipulation
   */
-  function testClone() {
+  public function testClone() {
     $fd = $this->getFixtureFromString(self::XML)->find('//item');
     $clonedNodes = $fd->clone();
     $this->assertTrue($fd instanceof FluentDOM);
@@ -1378,20 +1289,18 @@ class FluentDOMTest extends FluentDomTestCase {
   */
 
   /**
-  *
   * @group Attributes
   */
-  function testAttrRead() {
+  public function testAttrRead() {
     $fd = $this->getFixtureFromString(self::XML)
       ->find('//group/item')
       ->attr('index');
     $this->assertEquals('0', $fd);
   }
   /**
-  *
   * @group Attributes
   */
-  function testAttrReadFromRoot() {
+  public function testAttrReadFromRoot() {
     $fd = $this->getFixtureFromString(self::XML);
     $this->assertEquals('1.0', $fd->find('/*')->attr('version'));
     $this->assertEquals('1.0', $fd->find('/items')->attr('version'));
@@ -1399,10 +1308,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Attributes
   */
-  function testAttrReadInvalid() {
+  public function testAttrReadInvalid() {
     try {
       $this->getFixtureFromString(self::XML)
         ->find('//item')
@@ -1413,19 +1321,17 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Attributes
   */
-  function testAttrReadNoMatch() {
+  public function testAttrReadNoMatch() {
     $fd = $this->getFixtureFromString(self::XML)->attr('index');
     $this->assertTrue(empty($fd));
   }
 
   /**
-  *
   * @group Attributes
   */
-  function testAttrReadOnDOMText() {
+  public function testAttrReadOnDOMText() {
     $fd = $this->getFixtureFromString(self::XML)
       ->find('//item/text()')
       ->attr('index');
@@ -1433,10 +1339,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Attributes
   */
-  function testAttrWrite() {
+  public function testAttrWrite() {
     $fd = $this->getFixtureFromString(self::XML)
       ->find('//group/item')
       ->attr('index', '15')
@@ -1446,10 +1351,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Attributes
   */
-  function testAttrWriteArray() {
+  public function testAttrWriteArray() {
     $fd = $this->getFixtureFromString(self::XML)
       ->find('//group/item')
       ->attr(array('index' => '15', 'length' => '34', 'label' => 'box'));
@@ -1459,10 +1363,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Attributes
   */
-  function testAttrWriteCallback() {
+  public function testAttrWriteCallback() {
     $fd = $this->getFixtureFromString(self::XML)
       ->find('//group/item')
       ->attr('callback', array($this, 'callbackForAttr'));
@@ -1470,10 +1373,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Attributes
   */
-  function testRemoveAttr() {
+  public function testRemoveAttr() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//p')
       ->removeAttr('index');
@@ -1486,10 +1388,9 @@ class FluentDOMTest extends FluentDomTestCase {
   */
 
   /**
-  *
   * @group Attributes
   */
-  function testAddClass() {
+  public function testAddClass() {
     $fd = $this->getFixtureFromString(self::XML)->find('//html/div');
     $this->assertTrue($fd->hasClass('added') === FALSE);
     $fd->addClass('added');
@@ -1497,20 +1398,18 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Attributes
   */
-  function testHasClass() {
+  public function testHasClass() {
     $fd = $this->getFixtureFromString(self::XML)->find('//html/div');
     $this->assertTrue($fd->hasClass('test1') === TRUE);
     $this->assertTrue($fd->hasClass('unknown') === FALSE);
   }
 
   /**
-  *
   * @group Attributes
   */
-  function testRemoveClass() {
+  public function testRemoveClass() {
     $fd = $this->getFixtureFromString(self::XML)->find('//html/div');
     $this->assertEquals('test1 test2', $fd[0]->getAttribute('class'));
     $this->assertEquals('test2', $fd[1]->getAttribute('class'));
@@ -1520,10 +1419,9 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-  *
   * @group Attributes
   */
-  function testToggleClass() {
+  public function testToggleClass() {
     $fd = $this->getFixtureFromString(self::XML)->find('//html/div');
     $this->assertEquals('test1 test2', $fd[0]->getAttribute('class'));
     $this->assertEquals('test2', $fd[1]->getAttribute('class'));
@@ -1538,26 +1436,23 @@ class FluentDOMTest extends FluentDomTestCase {
   */
 
   /**
-   *
-   * @uses testAttrWriteCallback
-   */
-  function callbackForAttr($node, $index) {
+  * @uses testAttrWriteCallback
+  */
+  public function callbackForAttr($node, $index) {
     return $node->nodeName;
   }
 
   /**
-   *
-   * @uses testNotWithFunction()
-   */
-  function callbackTestNotWithFunction($node, $index) {
+  * @uses testNotWithFunction()
+  */
+  public function callbackTestNotWithFunction($node, $index) {
     return $node->nodeName != "items";
   }
 
   /**
-   *
-   * @uses testFilterWithFunction()
-   */
-  function callbackTestFilterWithFunction($node, $index) {
+  * @uses testFilterWithFunction()
+  */
+  public function callbackTestFilterWithFunction($node, $index) {
     return $node->nodeName == "items";
   }
 }

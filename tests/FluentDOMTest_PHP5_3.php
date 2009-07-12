@@ -26,10 +26,9 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 class FluentDOMTest_PHP5_3 extends FluentDomTestCase {
   
   /**
-  *
   * @group TraversingFilter
   */
-  function testMap() {
+  public function testMap() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd->find('//p')
       ->append(

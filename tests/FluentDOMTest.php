@@ -401,9 +401,9 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group CoreFunctions
   */
   function testNodeWithDOMElement() {
-    $doc = FluentDOM(self::XML);
-    $nodes = $doc->node($doc->document->createElement('div'));
-    $this->assertTrue($doc instanceof FluentDOM);
+    $fd = $this->getFixtureFromString(self::XML);
+    $nodes = $fd->node($fd->document->createElement('div'));
+    $this->assertTrue($fd instanceof FluentDOM);
     $this->assertEquals(1, count($nodes));
   }
 
@@ -412,9 +412,9 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group CoreFunctions
   */
   function testNodeWithDOMText() {
-    $doc = FluentDOM(self::XML);
-    $nodes = $doc->node($doc->document->createTextNode('div'));
-    $this->assertTrue($doc instanceof FluentDOM);
+    $fd = $this->getFixtureFromString(self::XML);
+    $nodes = $fd->node($fd->document->createTextNode('div'));
+    $this->assertTrue($fd instanceof FluentDOM);
     $this->assertEquals(1, count($nodes));
   }
 
@@ -424,12 +424,10 @@ class FluentDOMTest extends FluentDomTestCase {
   */
   function testNodeWithInvalidContent() {
     try {
-      $dom = FluentDOM(self::XML)
+      $fd = $this->getFixtureFromString(self::XML)
         ->node(NULL);
+      $this->fail('An expected exception has not been raised.');
     } catch (InvalidArgumentException $expected) {
-      return;
-    } catch (Exception $expected) {
-      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
     }
   }
 
@@ -439,12 +437,10 @@ class FluentDOMTest extends FluentDomTestCase {
   */
   function testNodeWithEmptyContent() {
     try {
-      $dom = FluentDOM(self::XML)
+      $fd = $this->getFixtureFromString(self::XML)
         ->node('');
+      $this->fail('An expected exception has not been raised.');
     } catch (UnexpectedValueException $expected) {
-      return;
-    } catch (Exception $expected) {
-      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
     }
   }
 
@@ -454,14 +450,12 @@ class FluentDOMTest extends FluentDomTestCase {
   */
   function testNodeWithEmptyList() {
     try {
-      $dom = FluentDOM(self::XML);
-      $dom->node(
-          $dom->find('UnknownTagName')
+      $fd = $this->getFixtureFromString(self::XML);
+      $fd->node(
+          $fd->find('UnknownTagName')
         );
+      $this->fail('An expected exception has not been raised.');
     } catch (UnexpectedValueException $expected) {
-      return;
-    } catch (Exception $expected) {
-      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
     }
   }
 

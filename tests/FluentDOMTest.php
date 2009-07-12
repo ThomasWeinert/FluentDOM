@@ -255,11 +255,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Interfaces
   */
   function testInterfaceCountable() {
-    $doc = FluentDOM(self::XML);
-    $this->assertTrue($doc instanceof Countable);
-    $this->assertEquals(0, count($doc));
-    $items = $doc->find('//item');
-    $this->assertEquals(3, count($items));
+    $fd = $this->getFixtureFromString(self::XML);
+    $this->assertTrue($fd instanceof Countable);
+    $this->assertEquals(0, count($fd));
+    $fd = $fd->find('//item');
+    $this->assertEquals(3, count($fd));
   }
 
   /**

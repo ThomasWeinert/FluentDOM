@@ -27,6 +27,14 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 class FluentDOMTestCase extends PHPUnit_Framework_TestCase {
 
   /**
+  * directory of this file
+  * @var string
+  *
+  * @todo set to private after refactoring to new base class
+  */
+  protected $_directory = '';
+
+  /**
   * initialize test suite
   *
   * @access public

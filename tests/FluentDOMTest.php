@@ -39,12 +39,6 @@ class FluentDOMTest extends FluentDomTestCase {
     </items>
   ';
 
-  /**
-  * directory of this file
-  * @var string
-  */
-  private $_directory = '';
-
   /*
   * Load
   */

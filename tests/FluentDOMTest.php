@@ -317,7 +317,7 @@ class FluentDOMTest extends FluentDomTestCase {
   */
   function testInterfaceRecursiveIterator() {
     $iterator = new RecursiveIteratorIterator(
-      FluentDOM(self::XML)->find('/*'),
+      $this->getFixtureFromString(self::XML)->find('/*'),
       RecursiveIteratorIterator::SELF_FIRST
     );
     $counter = 0;

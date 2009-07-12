@@ -1532,12 +1532,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Attributes
   */
   function testRemoveAttr() {
-    $this->assertFileExists($this->_directory.'/data/removeAttr.src.xml');
-    $doc = FluentDOM($this->_directory.'/data/removeAttr.src.xml')
-      ->find('//p')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//p')
       ->removeAttr('index');
-    $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/removeAttr.tgt.xml', $doc);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /*
@@ -1549,10 +1548,10 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Attributes
   */
   function testAddClass() {
-    $doc = FluentDOM(self::XML)->find('//html/div');
-    $this->assertTrue($doc->hasClass('added') === FALSE);
-    $doc->addClass('added');
-    $this->assertTrue($doc->hasClass('added') === TRUE);
+    $fd = FluentDOM(self::XML)->find('//html/div');
+    $this->assertTrue($fd->hasClass('added') === FALSE);
+    $fd->addClass('added');
+    $this->assertTrue($fd->hasClass('added') === TRUE);
   }
 
   /**
@@ -1560,9 +1559,9 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Attributes
   */
   function testHasClass() {
-    $doc = FluentDOM(self::XML)->find('//html/div');
-    $this->assertTrue($doc->hasClass('test1') === TRUE);
-    $this->assertTrue($doc->hasClass('unknown') === FALSE);
+    $fd = FluentDOM(self::XML)->find('//html/div');
+    $this->assertTrue($fd->hasClass('test1') === TRUE);
+    $this->assertTrue($fd->hasClass('unknown') === FALSE);
   }
 
   /**
@@ -1570,12 +1569,12 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Attributes
   */
   function testRemoveClass() {
-    $doc = FluentDOM(self::XML)->find('//html/div');
-    $this->assertEquals('test1 test2', $doc[0]->getAttribute('class'));
-    $this->assertEquals('test2', $doc[1]->getAttribute('class'));
-    $doc->removeClass('test2');
-    $this->assertEquals('test1', $doc[0]->getAttribute('class'));
-    $this->assertTrue($doc[1]->hasAttribute('class') === FALSE);
+    $fd = FluentDOM(self::XML)->find('//html/div');
+    $this->assertEquals('test1 test2', $fd[0]->getAttribute('class'));
+    $this->assertEquals('test2', $fd[1]->getAttribute('class'));
+    $fd->removeClass('test2');
+    $this->assertEquals('test1', $fd[0]->getAttribute('class'));
+    $this->assertTrue($fd[1]->hasAttribute('class') === FALSE);
   }
 
   /**
@@ -1583,12 +1582,12 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Attributes
   */
   function testToggleClass() {
-    $doc = FluentDOM(self::XML)->find('//html/div');
-    $this->assertEquals('test1 test2', $doc[0]->getAttribute('class'));
-    $this->assertEquals('test2', $doc[1]->getAttribute('class'));
-    $doc->toggleClass('test1');
-    $this->assertEquals('test2', $doc[0]->getAttribute('class'));
-    $this->assertEquals('test2 test1', $doc[1]->getAttribute('class'));
+    $fd = FluentDOM(self::XML)->find('//html/div');
+    $this->assertEquals('test1 test2', $fd[0]->getAttribute('class'));
+    $this->assertEquals('test2', $fd[1]->getAttribute('class'));
+    $fd->toggleClass('test1');
+    $this->assertEquals('test2', $fd[0]->getAttribute('class'));
+    $this->assertEquals('test2 test1', $fd[1]->getAttribute('class'));
   }
 
 

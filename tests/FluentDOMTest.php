@@ -1087,7 +1087,7 @@ class FluentDOMTest extends FluentDomTestCase {
   function testAppend() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd->find('//p')
-      ->append('<strong>Hello</strong>');
+       ->append('<strong>Hello</strong>');
     $this->assertTrue($fd instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
@@ -1108,15 +1108,14 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Manipulation
   */
   function testAppendDOMNodeList() {
-    $this->assertFileExists($this->_directory.'/data/appendDOMNodeList.src.xml');
-    $dom = FluentDOM($this->_directory.'/data/appendDOMNodeList.src.xml');
-    $items = $dom->find('//item');
-    $this->assertTrue($dom instanceof FluentDOM);
-    $doc = $dom
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $items = $fd->find('//item');
+    $this->assertTrue($fd instanceof FluentDOM);
+    $doc = $fd
       ->find('//html/div')
       ->append($items);
     $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/appendDOMNodeList.tgt.xml', $doc);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -1124,12 +1123,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Manipulation
   */
   function testAppendTo() {
-    $this->assertFileExists($this->_directory.'/data/appendTo.src.xml');
-    $doc = FluentDOM($this->_directory.'/data/appendTo.src.xml')
-      ->find('//span')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//span')
       ->appendTo('//div[@id = "foo"]');
-    $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/appendTo.tgt.xml', $doc);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -1137,12 +1135,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Manipulation
   */
   function testPrepend() {
-    $this->assertFileExists($this->_directory.'/data/prepend.src.xml');
-    $doc = FluentDOM($this->_directory.'/data/prepend.src.xml')
-      ->find('//p')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//p')
       ->prepend('<strong>Hello</strong>');
-    $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/prepend.tgt.xml', $doc);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -1150,12 +1147,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Manipulation
   */
   function testPrependTo() {
-    $this->assertFileExists($this->_directory.'/data/prependTo.src.xml');
-    $doc = FluentDOM($this->_directory.'/data/prependTo.src.xml')
-      ->find('//span')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//span')
       ->prependTo('//div[@id = "foo"]');
-    $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/prependTo.tgt.xml', $doc);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /*
@@ -1167,14 +1163,13 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Manipulation
   */
   function testAfter() {
-    $this->assertFileExists($this->_directory.'/data/after.src.xml');
-    $doc = FluentDOM($this->_directory.'/data/after.src.xml')
-      ->formatOutput()
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->formatOutput()
       ->find('//p')
       ->after('<b>Hello</b>')
       ->after(' World');
-    $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/after.tgt.xml', $doc);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -1182,14 +1177,13 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Manipulation
   */
   function testBefore() {
-    $this->assertFileExists($this->_directory.'/data/before.src.xml');
-    $doc = FluentDOM($this->_directory.'/data/before.src.xml')
-      ->formatOutput()
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->formatOutput()
       ->find('//p')
       ->before(' World')
       ->before('<b>Hello</b>');
-    $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/before.tgt.xml', $doc);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -1197,12 +1191,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Manipulation
   */
   function testInsertAfter() {
-    $this->assertFileExists($this->_directory.'/data/insertAfter.src.xml');
-    $doc = FluentDOM($this->_directory.'/data/insertAfter.src.xml')
-      ->find('//p')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//p')
       ->insertAfter('//div[@id = "foo"]');
-    $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/insertAfter.tgt.xml', $doc);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -1210,12 +1203,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Manipulation
   */
   function testInsertBefore() {
-    $this->assertFileExists($this->_directory.'/data/insertBefore.src.xml');
-    $doc = FluentDOM($this->_directory.'/data/insertBefore.src.xml')
-      ->find('//p')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//p')
       ->insertBefore('//div[@id = "foo"]');
-    $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/insertBefore.tgt.xml', $doc);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /*
@@ -1227,12 +1219,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Manipulation
   */
   function testWrap() {
-    $this->assertFileExists($this->_directory.'/data/wrap.src.xml');
-    $doc = FluentDOM($this->_directory.'/data/wrap.src.xml')
-      ->find('//p')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//p')
       ->wrap('<div class="outer"><div class="inner"></div></div>');
-    $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/wrap.tgt.xml', $doc);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -1240,14 +1231,13 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Manipulation
   */
   function testWrapWithDOMElement() {
-    $this->assertFileExists($this->_directory.'/data/wrapWithDOMElement.src.xml');
-    $doc = FluentDOM($this->_directory.'/data/wrapWithDOMElement.src.xml');
-    $dom = $doc->document;
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $dom = $fd->document;
     $div = $dom->createElement('div');
     $div->setAttribute('class', 'wrapper');
-    $doc->find('//p')->wrap($div);
-    $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/wrapWithDOMElement.tgt.xml', $doc);
+    $fd->find('//p')->wrap($div);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -1255,12 +1245,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Manipulation
   */
   function testWrapWithDOMNodeList() {
-    $this->assertFileExists($this->_directory.'/data/wrapWithDOMNodeList.src.xml');
-    $doc = FluentDOM($this->_directory.'/data/wrapWithDOMNodeList.src.xml');
-    $divs = $doc->xpath->query('//div[@class = "wrapper"]');
-    $this->assertTrue($doc instanceof FluentDOM);
-    $doc->find('//p')->wrap($divs);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/wrapWithDOMNodeList.tgt.xml', $doc);
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $divs = $fd->xpath->query('//div[@class = "wrapper"]');
+    $this->assertTrue($fd instanceof FluentDOM);
+    $fd->find('//p')->wrap($divs);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -1285,15 +1274,14 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Manipulation
   */
   function testWrapWithArray() {
-    $this->assertFileExists($this->_directory.'/data/wrapWithArray.src.xml');
-    $doc = FluentDOM($this->_directory.'/data/wrapWithArray.src.xml');
-    $dom = $doc->document;
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $dom = $fd->document;
     $divs[0] = $dom->createElement('div');
     $divs[0]->setAttribute('class', 'wrapper');
     $divs[1] = $dom->createElement('div');
-    $doc->find('//p')->wrap($divs);
-    $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/wrapWithArray.tgt.xml', $doc);
+    $fd->find('//p')->wrap($divs);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -1301,12 +1289,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Manipulation
   */
   function testWrapAllSingle() {
-    $this->assertFileExists($this->_directory.'/data/wrapAllSingle.src.xml');
-    $doc = FluentDOM($this->_directory.'/data/wrapAllSingle.src.xml')
-      ->find('//p')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//p')
       ->wrapAll('<div class="wrapper"/>');
-    $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/wrapAllSingle.tgt.xml', $doc);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -1314,12 +1301,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Manipulation
   */
   function testWrapAllComplex() {
-    $this->assertFileExists($this->_directory.'/data/wrapAllComplex.src.xml');
-    $doc = FluentDOM($this->_directory.'/data/wrapAllComplex.src.xml')
-      ->find('//p')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//p')
       ->wrapAll('<div class="wrapper"><div>INNER</div></div>');
-    $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/wrapAllComplex.tgt.xml', $doc);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -1327,12 +1313,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Manipulation
   */
   function testWrapInner() {
-    $this->assertFileExists($this->_directory.'/data/wrapInner.src.xml');
-    $doc = FluentDOM($this->_directory.'/data/wrapInner.src.xml')
-      ->find('//p')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//p')
       ->wrapInner('<b></b>');
-    $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/wrapInner.tgt.xml', $doc);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /*

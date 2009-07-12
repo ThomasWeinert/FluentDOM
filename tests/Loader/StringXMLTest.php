@@ -6,7 +6,7 @@
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
 * @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
 *
-* @package FluentDOM
+* @package FluentDOMLoader
 * @subpackage unitTests
 */
 
@@ -32,11 +32,11 @@ class FluentDOMLoaderStringXMLTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue($dom instanceof DOMDocument);
     $this->assertEquals('sample', $dom->documentElement->nodeName);
   }
-  
+
   public function testLoadInvalid() {
     $loader = new FluentDOMLoaderStringXML();
     $result = $loader->load('foobar', 'xml');
-    $this->assertFalse($result);    
+    $this->assertFalse($result);
   }
 }
 

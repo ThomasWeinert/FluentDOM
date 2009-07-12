@@ -13,8 +13,7 @@
 /**
 * load necessary files
 */
-require_once 'PHPUnit/Framework.php';
-require_once dirname(__FILE__).'/../FluentDOM.php';
+require_once dirname(__FILE__).'/FluentDomTestCase.php';
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
@@ -24,46 +23,29 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 * @package FluentDOM
 * @subpackage unitTests
 */
-class FluentDOMTest_PHP5_3 extends PHPUnit_Framework_TestCase {
-
-  /**
-  * directory of this file
-  * @var string
-  */
-  private $_directory = '';
-
-  /**
-  * initialize test suite
-  *
-  * @access public
-  * @return
-  */
-  function setUp() {
-    $this->_directory = dirname(__FILE__);
-  }
+class FluentDOMTest_PHP5_3 extends FluentDomTestCase {
   
   /**
   *
   * @group TraversingFilter
   */
   function testMap() {
-    $this->assertFileExists($this->_directory.'/data/map.src.xml');
-    $dom = FluentDOM(file_get_contents($this->_directory.'/data/map.src.xml'));
-    $dom->find('//p')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd->find('//p')
       ->append(
         implode(
           ', ',
-          $dom
+          $fd
             ->find('//input')
             ->map(
               function ($node, $index) {
-                return FluentDOM($node)->attr("value");
+                $nodeFd = new FluentDOM();
+                return $nodeFd->load($node)->attr("value");
               }
             )
         )
       );
-    $this->assertTrue($dom instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/map.tgt.xml', $dom);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 }
 ?>

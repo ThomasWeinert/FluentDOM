@@ -14,6 +14,7 @@
 * Load necessary files
 */
 require_once 'PHPUnit/Framework.php';
+require_once dirname(__FILE__).'/Loader/AllTests.php';
 $dir = dirname(__FILE__);
 require_once $dir.'/FluentDOMTest.php';
 if (version_compare(PHP_VERSION, '5.3', '>=')) {
@@ -38,6 +39,7 @@ class FluentDOM_AllTests {
   public static function suite() {
     $suite = new PHPUnit_Framework_TestSuite('FluentDOM Package');
 
+    $suite->addTestSuite('FluentDOMLoader_AllTests');
     $suite->addTestSuite('FluentDOMTest');
     if (version_compare(PHP_VERSION, '5.3', '>=')) {
       $suite->addTestSuite('FluentDOMTest_PHP5_3');

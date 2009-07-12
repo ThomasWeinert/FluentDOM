@@ -69,10 +69,15 @@ class FluentDOMTestCase extends PHPUnit_Framework_TestCase {
     if (!file_exists($fileName)) {
       throw new Exception('File Not Found: '. $fileName);
     }
-
+    $dom = new DOMDocument();
+    $dom->load($fileName);
+    $loader = $this->getMock('FluentDOMLoader');
+    $loader->expects($this->once())
+           ->method('load')
+           ->with($this->equalTo($fileName))
+           ->will($this->returnValue($dom));
     $fd = new FluentDOM();
-
-    // @todo add MOCK loader
+    $fd->setLoaders(array($loader));
     return $fd->load($fileName);
   }
 

@@ -56,114 +56,28 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
     $this->_directory = dirname(__FILE__);
   }
 
-  /**
-  * Constructor
+  /*
+  * Load
   */
-
+  
   /**
-  *
-  * @group Constructors
+  * @group Load
   */
-  function testConstructorWithString() {
-    $doc = new FluentDOM(self::XML);
-    $this->assertTrue($doc instanceof FluentDOM);
-  }
-
-  /**
-  *
-  * @group Constructors
-  */
-  function testConstructorWithFluentDOM() {
-    $doc = new FluentDOM(self::XML);
-    $doc = new FluentDOM($doc);
-    $this->assertTrue($doc instanceof FluentDOM);
-  }
-
-  /**
-  *
-  * @group Constructors
-  */
-  function testConstructorWithDOMDocument() {
-    $dom = new DOMDocument();
-    $dom->loadXML(self::XML);
-    $doc = new FluentDOM($dom);
-    $this->assertTrue($doc instanceof FluentDOM);
-  }
-
-  /**
-  *
-  * @group Constructors
-  */
-  function testConstructorWithDomNode() {
-    $dom = new DOMDocument();
-    $dom->loadXML(self::XML);
-    $doc = new FluentDOM($dom->documentElement);
-    $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertEquals($dom->documentElement, $doc[0]);
-  }
-
-  /**
-  *
-  * @group Constructors
-  */
-  function testConstructorWithoutSource() {
+  function testLoad() {
     $doc = new FluentDOM();
-    $this->assertTrue($doc instanceof FluentDOM);
+    $doc->load(self::XML);
   }
-
+  
   /**
-  *
-  * @group Constructors
+  * @group Load
   */
-  function testConstructorWithInvalidSource() {
+  function testLoadWithInvalidSource() {
+    $doc = new FluentDOM();
     try {
-      new FluentDOM(123);
+      $doc->load(1);
+      $this->fail('An expected exception has not been raised.');
     } catch (InvalidArgumentException $expected) {
-      return;
-    } catch (Exception $expected) {
-      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
     }
-    $this->fail('An expected exception has not been raised.');
-  }
-
-  /**
-  *
-  * @group Loading
-  */
-  function testLoadWithXMLString() {
-    $this->assertFileExists($this->_directory.'/data/loadXML.src.xml');
-    $dom = FluentDOM(file_get_contents($this->_directory.'/data/loadXML.src.xml'));
-    $this->assertTrue($dom instanceof FluentDOM);
-  }
-
-  /**
-  *
-  * @group Loading
-  */
-  function testLoadWithHTMLString() {
-    $this->assertFileExists($this->_directory.'/data/loadHTML.src.html');
-    $dom = FluentDOM(file_get_contents($this->_directory.'/data/loadHTML.src.html'), 'html');
-    $this->assertTrue($dom instanceof FluentDOM);
-  }
-
-  /**
-  *
-  * @group Loading
-  */
-  function testLoadWithXMLFile() {
-    $this->assertFileExists($this->_directory.'/data/loadXML.src.xml');
-    $dom = FluentDOM($this->_directory.'/data/loadXML.src.xml');
-    $this->assertTrue($dom instanceof FluentDOM);
-  }
-
-  /**
-  *
-  * @group Loading
-  */
-  function testLoadWithHTMLFile() {
-    $this->assertFileExists($this->_directory.'/data/loadHTML.src.html');
-    $dom = FluentDOM($this->_directory.'/data/loadHTML.src.html', 'html');
-    $this->assertTrue($dom instanceof FluentDOM);
   }
 
   /*

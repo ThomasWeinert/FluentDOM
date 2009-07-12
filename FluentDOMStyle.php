@@ -26,7 +26,8 @@ require_once(dirname(__FILE__).'/FluentDOM.php');
 * @return object FluentDOMStyle
 */
 function FluentDOMStyle($content = NULL, $contentType = 'xml') {
-  return new FluentDOMStyle($content, $contentType);
+  $result = new FluentDOMStyle();
+  return $result->load($content, $contentType);
 }
 
 /**
@@ -41,16 +42,6 @@ class FluentDOMStyle extends FluentDOM {
   * Pattern to decode the stlye property string
   */
   const STYLE_PATTERN = '((?:^|;)\s*(?P<name>[-\w]+)\s*:\s*(?P<value>[^;]+))';
-
-  /**
-  * redefine the _spawn() method to get an new instance of FluentDOMStyle
-  *
-  * @access protected
-  * @return object FluentDOMStyle
-  */
-  protected function _spawn() {
-    return new FluentDOMStyle($this);
-  }
 
   /**
   * get or set CSS values in style attributes

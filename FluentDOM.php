@@ -20,7 +20,8 @@
 * @return object FluentDOM
 */
 function FluentDOM($source = NULL, $contentType = 'xml') {
-  return new FluentDOM($source, $contentType);
+  $result = new FluentDOM();
+  return $result->load($source, $contentType);
 }
 
 /**
@@ -85,35 +86,13 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @access private
   */
   private $_xpath = NULL;
-
+  
   /**
-  * initialize the FluentDOM instance and set private properties
-  *
-  * @param object FluentDOM | object DOMElement | object DOMDocument $source
-  * source to create FluentDOM from
-  * @param string $contentType optional, default value 'xml'
-  * @access public
+  * document loader objects
+  * @var array
+  * @access private
   */
-  public function __construct($source = NULL, $contentType = 'xml') {
-    $this->_contentType = $contentType;
-    if ($source instanceof FluentDOM) {
-      $this->_document = $source->document;
-      $this->_xpath = $source->_xpath;
-      $this->_parent = $source;
-    } elseif ($source instanceof DOMDocument) {
-      $this->_document = $source;
-      $this->_useDocumentContext = TRUE;
-    } elseif ($this->_isNode($source)) {
-      $this->_document = $source->ownerDocument;
-      $this->_push($source);
-    } elseif (is_string($source) || is_null($source)) {
-      $this->_document = new DOMDocument();
-      $this->_useDocumentContext = TRUE;
-      $this->load($source, $contentType);
-    } else {
-      throw new InvalidArgumentException('Invalid source object.');
-    }
-  }
+  private $_loaders = NULL;
 
   /**
   * Load a $source string. This can be content (contains <) or an URL.
@@ -129,33 +108,72 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   */
   public function load($source, $contentType = 'xml') {
     $this->_contentType = $contentType;
-    if (!empty($source)) {
-      if (FALSE !== strpos($source, '<')) {
-        $isContent = TRUE;
-      } else {
-        $isContent = FALSE;
+    if ($source instanceof FluentDOM) {
+      $this->_document = $source->document;
+      $this->_xpath = $source->_xpath;
+      $this->_contentType = $source->_contentType;
+      $this->_parent = $source;
+      return $this;
+    } elseif (empty($source)) {
+      $this->_document = new DOMDocument(); 
+      $this->_useDocumentContext = TRUE;
+      return $this;
+    } elseif ($this->_isNode($source)) {
+      $this->_document = $source->ownerDocument;
+      $this->_push($source);      
+    } else {
+      $this->_useDocumentContext = TRUE;
+      $this->_initLoaders();
+      foreach ($this->_loaders as $loader) {
+        if ($this->_document = $loader->load($source, $contentType)) {
+          return $this;
+        }
       }
-      switch (strtolower($contentType)) {
-      case 'html' :
-      case 'text/html' :
-        $errorSetting = libxml_use_internal_errors(TRUE);
-        libxml_clear_errors();
-        if ($isContent) {
-          $this->_document->loadHTML($source);
-        } else {
-          $this->_document->loadHTMLFile($source);
-        }
-        libxml_clear_errors();
-        libxml_use_internal_errors($errorSetting);
-        break;
-      default :
-        if ($isContent) {
-          $this->_document->loadXML($source);
-        } else {
-          $this->_document->load($source);
-        }
+      throw new InvalidArgumentException('Invalid source object.');
+    }
+    return $this;
+  }
+  
+  /**
+  * Initialize loaders if they are not already initialized
+  *
+  * @access protected
+  * @return void
+  */
+  protected function _initLoaders() {
+    if (!is_array($this->_loaders)) {
+      $path = dirname(__FILE__);
+      include_once($path.'/FluentDOMLoader.php');
+      include_once($path.'/Loader/DOMDocument.php');
+      include_once($path.'/Loader/StringXML.php');
+      include_once($path.'/Loader/FileXML.php');
+      include_once($path.'/Loader/StringHTML.php');
+      include_once($path.'/Loader/FileHTML.php');
+      $this->_loaders = array(
+        new FluentDOMLoaderDOMDocument(),
+        new FluentDOMLoaderStringXML(),
+        new FluentDOMLoaderFileXML(),
+        new FluentDOMLoaderStringHTML(),
+        new FluentDOMLoaderFileHTML(),
+      );
+    }
+  }
+  
+  /**
+  * Define own loading handlers
+  *
+  * @param $loaders
+  * @access public
+  * @return object FluentDOM
+  */
+  public function setLoaders($loaders) {
+    foreach ($loaders as $loader) {
+      if (!($loader instanceof FluentDOMLoader)) {
+        throw new InvalidArgumentException('Array conmtains invalid loader object');
       }
     }
+    $this->loaders = $loaders;
+    return $this;
   }
 
   /**
@@ -432,7 +450,9 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return  object FluentDOM
   */
   protected function _spawn() {
-    return new FluentDOM($this);
+    $className = get_class($this);
+    $result = new $className();
+    return $result->load($this);
   }
 
   /**

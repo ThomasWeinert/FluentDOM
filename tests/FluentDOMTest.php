@@ -56,27 +56,36 @@ class FluentDOMTest extends FluentDomTestCase {
   }
 
   /**
-   * @group Load
-   */
+  * @group Load
+  */
   function testLoaderMechanism() {
-      $firstLoaderMock = $this->getMock('FluentDOMLoader');
-      $firstLoaderMock->expects($this->once())
-                      ->method('load')
-                      ->with($this->equalTo('test load string'), $this->equalTo('xml'))
-                      ->will($this->returnValue(FALSE));
-      $secondLoaderMock = $this->getMock('FluentDOMLoader');
-      $secondLoaderMock->expects($this->once())
-                       ->method('load')
-                       ->with($this->equalTo('test load string'), $this->equalTo('xml'))
-                       ->will($this->returnValue(new DOMDocument()));
+    $firstLoaderMock = $this->getMock('FluentDOMLoader');
+    $firstLoaderMock->expects($this->once())
+                    ->method('load')
+                    ->with($this->equalTo('test load string'), $this->equalTo('xml'))
+                    ->will($this->returnValue(FALSE));
+    $secondLoaderMock = $this->getMock('FluentDOMLoader');
+    $secondLoaderMock->expects($this->once())
+                     ->method('load')
+                     ->with($this->equalTo('test load string'), $this->equalTo('xml'))
+                     ->will($this->returnValue(new DOMDocument()));
 
+    $fd = new FluentDOM();
+    $fd->setLoaders(array($firstLoaderMock, $secondLoaderMock));
+
+    $this->assertSame(
+      $fd,
+      $fd->load('test load string')
+    );
+  }
+  
+  function testSetLoadersInvalid() {
+    try {
       $fd = new FluentDOM();
-      $fd->setLoaders(array($firstLoaderMock, $secondLoaderMock));
-
-      $this->assertSame(
-          $fd,
-          $fd->load('test load string')
-      );
+      $fd->setLoaders(array(new stdClass));
+      $this->fail('An expected exception has not been raised.');
+    } catch (InvalidArgumentException $expected) {
+    }
   }
 
   /*

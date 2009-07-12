@@ -38,6 +38,25 @@ class FluentDOMTest extends FluentDomTestCase {
       </html>
     </items>
   ';
+  
+  /**
+  * @group Functions
+  */
+  public function testFunctionFluentDOM() {
+    $fd = FluentDOM();
+    $this->assertTrue($fd instanceof FluentDOM);
+  }
+  
+  /**
+  * @group Functions
+  */
+  public function testFunctionFluentDOMStyleWithContent() {
+    $dom = new DOMDocument();
+    $node = $dom->appendChild($dom->createElement('html'));
+    $fd = FluentDOM($node);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertEquals('html', $fd->document->documentElement->nodeName);
+  }
 
   /*
   * Load

@@ -36,6 +36,31 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
     </html>
   ';
   
+  /**
+  * @group Functions
+  */
+  public function testFunctionFluentDOMStyle() {
+    $fd = FluentDOMStyle();
+    $this->assertTrue($fd instanceof FluentDOMStyle);
+  }
+  
+  /**
+  * @group Functions
+  */
+  public function testFunctionFluentDOMStyleWithContent() {
+    $dom = new DOMDocument();
+    $node = $dom->appendChild($dom->createElement('html'));
+    $fd = FluentDOMStyle($node);
+    $this->assertTrue($fd instanceof FluentDOMStyle);
+    $this->assertEquals('html', $fd->document->documentElement->nodeName);
+  }
+  
+  /**
+  * Get FluentDOMStyle instance with loaded html document using a mock loader
+  *
+  * @access protected
+  * @return FluentDOMStyle
+  */
   protected function getFixture() {
     $dom = new DOMDocument();
     $dom->loadXML(self::HTML);
@@ -49,11 +74,17 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
     return $fd->load('');
   }
 
+  /**
+  * @group CSS
+  */
   public function testConstructor() {
     $fd = $this->getFixture();
     $this->assertTrue($fd instanceof FluentDOMStyle);
   }
 
+  /**
+  * @group CSS
+  */
   public function testChaining() {
     $fd = $this->getFixture();
     $this->assertTrue($fd instanceof FluentDOMStyle);
@@ -62,30 +93,45 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue($fd !== $findFd);
   }
 
+  /**
+  * @group CSS
+  */
   public function testCSSRead() {
     $fd =$this->getFixture()->find('//div');
     $this->assertTrue($fd instanceof FluentDOMStyle);
     $this->assertEquals('left', $fd->css('text-align'));
   }
 
+  /**
+  * @group CSS
+  */
   public function testCSSReadWithInvalidProperty() {
     $fd =$this->getFixture()->find('//div');
     $this->assertTrue($fd instanceof FluentDOMStyle);
     $this->assertEquals(NULL, $fd->css('---'));
   }
 
+  /**
+  * @group CSS
+  */
   public function testCSSReadOnEmpty() {
     $fd = $this->getFixture();
     $this->assertTrue($fd instanceof FluentDOMStyle);
     $this->assertEquals(NULL, $fd->css('text-align'));
   }
 
+  /**
+  * @group CSS
+  */
   public function testCSSReadOnTextNodes() {
     $fd = $this->getFixture()->find('//div')->children()->andSelf();
     $this->assertTrue(count($fd) > 3);
     $this->assertEquals('left', $fd->css('text-align'));
   }
 
+  /**
+  * @group CSS
+  */
   public function testCSSWriteWithString() {
     $fd = $this->getFixture()->find('//div');
     $this->assertTrue($fd instanceof FluentDOMStyle);
@@ -94,6 +140,9 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals('text-align: center;', $fd->eq(1)->attr('style'));
   }
 
+  /**
+  * @group CSS
+  */
   public function testCSSWriteWithArray() {
     $fd = $this->getFixture()->find('//div');
     $this->assertTrue($fd instanceof FluentDOMStyle);
@@ -107,6 +156,9 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals('color: black; text-align: center;', $fd->eq(1)->attr('style'));
   }
 
+  /**
+  * @group CSS
+  */
   public function testCSSWriteWithFunction() {
     $fd = $this->getFixture()->find('//div');
     $this->assertTrue($fd instanceof FluentDOMStyle);
@@ -115,6 +167,9 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals('text-align: left;', $fd->eq(1)->attr('style'));
   }
 
+  /**
+  * @group CSS
+  */
   public function testCSSWriteWithInvalidProperty() {
     try {
       $this->getFixture()->find('//div')->css('---', '');
@@ -123,6 +178,9 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
     }
   }
 
+  /**
+  * @group CSS
+  */
   public function testCSSWriteWithInvalidPropertyInArray() {
     try {
       $this->getFixture()->find('//div')->css(array('---' => ''));
@@ -131,12 +189,18 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
     }
   }
 
+  /**
+  * @group CSS
+  */
   public function testCSSRemoveProperty() {
     $fd = $this->getFixture()->find('//div');
     $fd->css('text-align', '');
     $this->assertFalse($fd[0]->hasAttribute('style'));
   }
 
+  /**
+  * @group CSS
+  */
   public function testCSSRemoveProperties() {
     $fd = $this->getFixture()->find('//div');
     $fd->css(
@@ -148,6 +212,9 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
     $this->assertFalse($fd[0]->hasAttribute('style'));
   }
 
+  /**
+  * @group CSS
+  */
   public function testCSSSortPropertiesName() {
     $fd = $this->getFixture()->find('//div');
     $fd->css(
@@ -160,6 +227,9 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals($expect, $fd[2]->getAttribute('style'));
   }
 
+  /**
+  * @group CSS
+  */
   public function testCSSSortPropertiesLevels() {
     $fd = $this->getFixture()->find('//div');
     $fd->css(
@@ -173,6 +243,9 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals($expect, $fd[2]->getAttribute('style'));
   }
 
+  /**
+  * @group CSS
+  */
   public function testCSSSortPropertiesPrefix() {
     $fd = $this->getFixture()->find('//div');
     $fd->css(

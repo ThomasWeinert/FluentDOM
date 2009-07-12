@@ -97,17 +97,14 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Properties
   */
   function testPropertyDocument() {
-    $doc = FluentDOM(self::XML);
-    $this->assertTrue(isset($doc->document));
-    $this->assertTrue($doc->document instanceof DOMDocument);
+    $fd = $this->getFixtureFromString(self::XML);
+    $this->assertTrue(isset($fd->document));
+    $this->assertTrue($fd->document instanceof DOMDocument);
     try {
-      $doc->document = NULL;
+      $fd->document = NULL;
+      $this->fail('An expected exception has not been raised.');
     } catch (BadMethodCallException $expected) {
-      return;
-    } catch (Exception $expected) {
-      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
     }
-    $this->fail('An expected exception has not been raised.');
   }
 
   /**

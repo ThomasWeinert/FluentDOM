@@ -80,6 +80,24 @@ class FluentDOMTestCase extends PHPUnit_Framework_TestCase {
     $fd->setLoaders(array($loader));
     return $fd->load($fileName);
   }
+  
+  /**
+  * @param string $string
+  * @access protected
+  * @return FluentDOM
+  */
+  protected function getFixtureFromString($string) {
+    $dom = new DOMDocument();
+    $dom->loadXML($string);
+    $loader = $this->getMock('FluentDOMLoader');
+    $loader->expects($this->once())
+           ->method('load')
+           ->with($this->equalTo(''))
+           ->will($this->returnValue($dom));
+    $fd = new FluentDOM();
+    $fd->setLoaders(array($loader));
+    return $fd->load('');
+  }
 
   /**
   *

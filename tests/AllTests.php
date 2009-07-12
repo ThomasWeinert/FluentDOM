@@ -42,7 +42,6 @@ class FluentDOM_AllTests {
     if (version_compare(PHP_VERSION, '5.3', '>=')) {
       $suite->addTestSuite('FluentDOMTest_PHP5_3');
     }
-    // Just a test
     $suite->addTestSuite('FluentDOMStyleTest');
 
     return $suite;

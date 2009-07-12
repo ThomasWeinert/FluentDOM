@@ -112,17 +112,14 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Properties
   */
   function testPropertyXPath() {
-    $doc = FluentDOM(self::XML);
-    $this->assertTrue(isset($doc->xpath));
-    $this->assertTrue($doc->xpath instanceof DOMXPath);
+    $fd = $this->getFixtureFromString(self::XML);
+    $this->assertTrue(isset($fd->xpath));
+    $this->assertTrue($fd->xpath instanceof DOMXPath);
     try {
-      $doc->xpath = NULL;
+      $fd->xpath = NULL;
+      $this->fail('An expected exception has not been raised.');
     } catch (BadMethodCallException $expected) {
-      return;
-    } catch (Exception $expected) {
-      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
     }
-    $this->fail('An expected exception has not been raised.');
   }
 
   /**
@@ -130,19 +127,16 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Properties
   */
   function testPropertyLength() {
-    $doc = FluentDOM(self::XML);
-    $this->assertTrue(isset($doc->length));
-    $this->assertEquals(0, $doc->length);
-    $doc = $doc->find('/items');
-    $this->assertEquals(1, $doc->length);
+    $fd = $this->getFixtureFromString(self::XML);
+    $this->assertTrue(isset($fd->length));
+    $this->assertEquals(0, $fd->length);
+    $fd = $fd->find('/items');
+    $this->assertEquals(1, $fd->length);
     try {
-      $doc->length = 50;
+      $fd->length = 50;
+      $this->fail('An expected exception has not been raised.');
     } catch (BadMethodCallException $expected) {
-      return;
-    } catch (Exception $expected) {
-      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
     }
-    $this->fail('An expected exception has not been raised.');
   }
 
   /**
@@ -150,12 +144,12 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Properties
   */
   function testDynamicProperty() {
-    $doc = FluentDOM(self::XML);
-    $this->assertEquals(FALSE, isset($doc->dynamicProperty));
-    $this->assertEquals(NULL, $doc->dynamicProperty);
-    $doc->dynamicProperty = 'test';
-    $this->assertEquals(TRUE, isset($doc->dynamicProperty));
-    $this->assertEquals('test', $doc->dynamicProperty);
+    $fd = $this->getFixtureFromString(self::XML);
+    $this->assertEquals(FALSE, isset($fd->dynamicProperty));
+    $this->assertEquals(NULL, $fd->dynamicProperty);
+    $fd->dynamicProperty = 'test';
+    $this->assertEquals(TRUE, isset($fd->dynamicProperty));
+    $this->assertEquals('test', $fd->dynamicProperty);
   }
 
   /*

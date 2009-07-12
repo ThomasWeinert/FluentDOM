@@ -13,7 +13,7 @@
 /**
 * load necessary files
 */
-require_once 'FluentDomTestCase.php';
+require_once dirname(__FILE__).'/FluentDomTestCase.php';
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
@@ -47,9 +47,9 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Load
   */
   function testLoadWithInvalidSource() {
-    $doc = new FluentDOM();
+    $fd = new FluentDOM();
     try {
-      $doc->load(1);
+      $fd->load(1);
       $this->fail('An expected exception has not been raised.');
     } catch (InvalidArgumentException $expected) {
     }
@@ -382,10 +382,11 @@ class FluentDOMTest extends FluentDomTestCase {
   */
   function testNode() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fdItems = $this->getFixtureFromString(
+      '<samples><b id="first">Paragraph. </b></samples>'
+    );
     $fd->node(
-        FluentDOM('<samples>
-                    <b id="first">Paragraph. </b>
-                  </samples>')
+        $fdItems
           ->find('//b[@id = "first"]')
           ->removeAttr('id')
           ->addClass('imported')

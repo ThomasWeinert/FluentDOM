@@ -468,11 +468,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFilter
   */
   function testEq() {
-    $doc = FluentDOM(self::XML)->find('//*');
-    $this->assertTrue($doc->length > 1);
-    $eqDoc = $doc->eq(0);
-    $this->assertEquals(1, $eqDoc->length);
-    $this->assertTrue($eqDoc !== $doc);
+    $fd = $this->getFixtureFromString(self::XML)->find('//*');
+    $this->assertTrue($fd->length > 1);
+    $eqFd = $fd->eq(0);
+    $this->assertEquals(1, $eqFd->length);
+    $this->assertTrue($eqFd !== $fd);
   }
 
   /**
@@ -480,11 +480,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFilter
   */
   function testFilter() {
-    $doc = FluentDOM(self::XML)->find('//*');
-    $this->assertTrue($doc->length > 1);
-    $filterDoc = $doc->filter('name() = "items"');
-    $this->assertEquals(1, $filterDoc->length);
-    $this->assertTrue($filterDoc !== $doc);
+    $fd = $this->getFixtureFromString(self::XML)->find('//*');
+    $this->assertTrue($fd->length > 1);
+    $filterFd = $fd->filter('name() = "items"');
+    $this->assertEquals(1, $filterFd->length);
+    $this->assertTrue($filterFd !== $fd);
   }
 
   /**
@@ -492,11 +492,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFilter
   */
   function testFilterWithFunction() {
-    $doc = FluentDOM(self::XML)->find('//*');
-    $this->assertTrue($doc->length > 1);
-    $filterDoc = $doc->filter(array($this, 'callbackTestFilterWithFunction'));
-    $this->assertEquals(1, $filterDoc->length);
-    $this->assertTrue($filterDoc !== $doc);
+    $fd = $this->getFixtureFromString(self::XML)->find('//*');
+    $this->assertTrue($fd->length > 1);
+    $filterFd = $fd->filter(array($this, 'callbackTestFilterWithFunction'));
+    $this->assertEquals(1, $filterFd->length);
+    $this->assertTrue($filterFd !== $fd);
   }
 
   /**
@@ -504,10 +504,10 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFilter
   */
   function testIs() {
-    $doc = FluentDOM(self::XML)->find('//*');
-    $this->assertTrue($doc->length > 1);
-    $this->assertTrue($doc->is('name() = "items"'));
-    $this->assertFalse($doc->is('name() = "invalidItemName"'));
+    $fd = $this->getFixtureFromString(self::XML)->find('//*');
+    $this->assertTrue($fd->length > 1);
+    $this->assertTrue($fd->is('name() = "items"'));
+    $this->assertFalse($fd->is('name() = "invalidItemName"'));
   }
 
   /**
@@ -515,9 +515,9 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFilter
   */
   function testIsOnEmptyList() {
-    $doc = FluentDOM(self::XML);
-    $this->assertTrue($doc->length == 0);
-    $this->assertFalse($doc->is('name() = "items"'));
+    $fd = $this->getFixtureFromString(self::XML);
+    $this->assertTrue($fd->length == 0);
+    $this->assertFalse($fd->is('name() = "items"'));
   }
 
   /**

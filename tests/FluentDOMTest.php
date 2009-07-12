@@ -348,9 +348,8 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group CoreFunctions
   */
   function testEach() {
-    $this->assertFileExists($this->_directory.'/data/each.src.xml');
-    $dom = FluentDOM($this->_directory.'/data/each.src.xml')
-      ->find('//body//*')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//body//*')
       ->each(
         create_function(
           '$node, $item',
@@ -359,8 +358,8 @@ class FluentDOMTest extends FluentDomTestCase {
            $fd->prepend("EACH > ");
           ')
       );
-    $this->assertTrue($dom instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/each.tgt.xml', $dom);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -382,9 +381,8 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group CoreFunctions
   */
   function testNode() {
-    $this->assertFileExists($this->_directory.'/data/node.src.xml');
-    $doc = FluentDOM($this->_directory.'/data/node.src.xml')
-      ->node(
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd->node(
         FluentDOM('<samples>
                     <b id="first">Paragraph. </b>
                   </samples>')
@@ -393,8 +391,8 @@ class FluentDOMTest extends FluentDomTestCase {
           ->addClass('imported')
       )
       ->replaceAll('//p');
-    $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/node.tgt.xml', $doc);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -1214,7 +1212,7 @@ class FluentDOMTest extends FluentDomTestCase {
         ->wrap(NULL);
       $this->fail('An expected exception has not been raised.');
     } catch (InvalidArgumentException $expected) {
-    }    
+    }
   }
 
   /**
@@ -1410,7 +1408,7 @@ class FluentDOMTest extends FluentDomTestCase {
         ->attr('');
       $this->fail('An expected exception has not been raised.');
     } catch (UnexpectedValueException $expected) {
-    }    
+    }
   }
 
   /**

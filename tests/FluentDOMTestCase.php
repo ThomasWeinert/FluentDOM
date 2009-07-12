@@ -29,10 +29,8 @@ class FluentDOMTestCase extends PHPUnit_Framework_TestCase {
   /**
   * directory of this file
   * @var string
-  *
-  * @todo set to private after refactoring to new base class
   */
-  protected $_directory = '';
+  private $_directory = '';
 
   /**
   * initialize test suite
@@ -80,7 +78,7 @@ class FluentDOMTestCase extends PHPUnit_Framework_TestCase {
     $fd->setLoaders(array($loader));
     return $fd->load($fileName);
   }
-  
+
   /**
   * @param string $string
   * @access protected

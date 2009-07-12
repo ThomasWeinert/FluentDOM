@@ -35,7 +35,7 @@ class FluentDOMLoaderStringHTMLTest extends PHPUnit_Framework_TestCase {
 
   public function testLoadInvalid() {
     $loader = new FluentDOMLoaderStringHTML();
-    $result = $loader->load('<html><body></body></html>', 'html');
+    $result = $loader->load('html', 'html');
     $this->assertFalse($result);
   }
 }

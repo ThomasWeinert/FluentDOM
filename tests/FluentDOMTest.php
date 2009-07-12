@@ -672,15 +672,13 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFind
   */
   function testAddElements() {
-    $this->assertFileExists($this->_directory.'/data/addElements.src.xml');
-    $dom = FluentDOM($this->_directory.'/data/addElements.src.xml');
-    $dom
-      ->add(
-        $dom->find('//div')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->add(
+        $fd->find('//div')
       )
       ->toggleClass('inB');
-    $this->assertTrue($dom instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/addElements.tgt.xml', $dom);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -688,13 +686,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFind
   */
   function testAddFromExpression() {
-    $this->assertFileExists($this->_directory.'/data/addFromExpression.src.xml');
-    $dom = FluentDOM($this->_directory.'/data/addFromExpression.src.xml');
-    $dom
-      ->add('//div')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->add('//div')
       ->toggleClass('inB');
-    $this->assertTrue($dom instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/addFromExpression.tgt.xml', $dom);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -702,14 +698,12 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFind
   */
   function testAddInContext() {
-    $this->assertFileExists($this->_directory.'/data/addInContext.src.xml');
-    $dom = FluentDOM($this->_directory.'/data/addInContext.src.xml');
-    $dom
-      ->find('//p')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//p')
       ->add('//p/b')
       ->toggleClass('inB');
-    $this->assertTrue($dom instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/addInContext.tgt.xml', $dom);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -717,18 +711,15 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFind
   */
   function testInvalidAddForgeinNodes() {
-    $dom = FluentDOM(self::XML);
+    $fd = FluentDOM(self::XML);
     $items = FluentDOM(self::XML)->find('//item');
     try {
-      $dom
+      $fd
         ->find('/items')
         ->add($items);
+        $this->fail('An expected exception has not been raised.');
     } catch (OutOfBoundsException $expected) {
-      return;
-    } catch (Exception $expected) {
-      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
     }
-    $this->fail('An expected exception has not been raised.');
   }
 
   /**
@@ -736,18 +727,15 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFind
   */
   function testInvalidAddForgeinNode() {
-    $dom = FluentDOM(self::XML);
+    $fd = FluentDOM(self::XML);
     $items = FluentDOM(self::XML)->find('//item');
     try {
-      $dom
+      $fd
         ->find('/items')
         ->add($items[0]);
+        $this->fail('An expected exception has not been raised.');
     } catch (OutOfBoundsException $expected) {
-      return;
-    } catch (Exception $expected) {
-      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
     }
-    $this->fail('An expected exception has not been raised.');
   }
 
   /**
@@ -755,13 +743,12 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFind
   */
   function testChildren() {
-    $this->assertFileExists($this->_directory.'/data/children.src.xml');
-    $dom = FluentDOM($this->_directory.'/data/children.src.xml')
-      ->find('//div[@id = "container"]/p')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//div[@id = "container"]/p')
       ->children()
       ->toggleClass('child');
-    $this->assertTrue($dom instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/children.tgt.xml', $dom);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -769,13 +756,12 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFind
   */
   function testChildrenExpression() {
-    $this->assertFileExists($this->_directory.'/data/childrenExpression.src.xml');
-    $dom = FluentDOM($this->_directory.'/data/childrenExpression.src.xml')
-      ->find('//div[@id = "container"]/p')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//div[@id = "container"]/p')
       ->children('name() = "em"')
       ->toggleClass('child');
-    $this->assertTrue($dom instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/childrenExpression.tgt.xml', $dom);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -783,11 +769,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFind
   */
   function testFind() {
-    $doc = FluentDOM(self::XML)->find('/*');
-    $this->assertEquals(1, $doc->length);
-    $findDoc = $doc->find('group/item');
+    $fd = FluentDOM(self::XML)->find('/*');
+    $this->assertEquals(1, $fd->length);
+    $findDoc = $fd->find('group/item');
     $this->assertEquals(3, $findDoc->length);
-    $this->assertTrue($findDoc !== $doc);
+    $this->assertTrue($findDoc !== $fd);
   }
 
   /**
@@ -795,11 +781,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFind
   */
   function testFindFromRootNode() {
-    $doc = FluentDOM(self::XML)->find('/*');
-    $this->assertEquals(1, $doc->length);
+    $fd = FluentDOM(self::XML)->find('/*');
+    $this->assertEquals(1, $fd->length);
     $findDoc = FluentDOM(self::XML)->find('/items');
     $this->assertEquals(1, $findDoc->length);
-    $this->assertTrue($findDoc == $doc);
+    $this->assertTrue($findDoc == $fd);
   }
 
   /**
@@ -807,10 +793,10 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFind
   */
   function testFindWithNamespaces() {
-    $this->assertFileExists($this->_directory.'/data/findWithNamespaces.src.xml');
-    $doc = FluentDOM($this->_directory.'/data/findWithNamespaces.src.xml')->find('//_:entry');
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $doc = $fd ->find('//_:entry');
     $this->assertEquals(25, $doc->length);
-    $value = FluentDOM($this->_directory.'/data/findWithNamespaces.src.xml')->find('//openSearch:totalResults')->text();
+    $value = $fd ->find('//openSearch:totalResults')->text();
     $this->assertEquals(38, $value);
   }
 
@@ -819,13 +805,12 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFind
   */
   function testNextSiblings() {
-    $this->assertFileExists($this->_directory.'/data/nextSiblings.src.xml');
-    $dom = FluentDOM($this->_directory.'/data/nextSiblings.src.xml')
-      ->find('//button[@disabled]')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//button[@disabled]')
       ->nextSiblings()
       ->text('This button is disabled.');
-    $this->assertTrue($dom instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/nextSiblings.tgt.xml', $dom);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -833,13 +818,12 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFind
   */
   function testNextAllSiblings() {
-    $this->assertFileExists($this->_directory.'/data/nextAllSiblings.src.xml');
-    $dom = FluentDOM($this->_directory.'/data/nextAllSiblings.src.xml')
-      ->find('//div[position() = 1]')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//div[position() = 1]')
       ->nextAllSiblings()
       ->addClass('after');
-    $this->assertTrue($dom instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/nextAllSiblings.tgt.xml', $dom);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -847,9 +831,8 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFind
   */
   function testParent() {
-    $this->assertFileExists($this->_directory.'/data/parent.src.xml');
-    $dom = FluentDOM($this->_directory.'/data/parent.src.xml')
-      ->find('//body//*')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//body//*')
       ->each(
         create_function(
           '$node, $item',
@@ -861,8 +844,8 @@ class FluentDOMTest extends FluentDomTestCase {
             );
           ')
       );
-    $this->assertTrue($dom instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/parent.tgt.xml', $dom);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -870,10 +853,9 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFind
   */
   function testParents() {
-    $this->assertFileExists($this->_directory.'/data/parent.src.xml');
-    $dom = FluentDOM($this->_directory.'/data/parents.src.xml');
-    $this->assertTrue($dom instanceof FluentDOM);
-    $parents = $dom
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $parents = $fd
       ->find('//b')
       ->parents()
       ->map(
@@ -886,11 +868,11 @@ class FluentDOMTest extends FluentDomTestCase {
     $this->assertContains('body', $parents);
     $this->assertContains('html', $parents);
     $parents = implode(', ', $parents);
-    $doc = $dom
+    $doc = $fd
       ->find('//b')
       ->append('<strong>'.htmlspecialchars($parents).'</strong>');
     $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/parents.tgt.xml', $doc);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $doc);
   }
 
   /**
@@ -898,13 +880,12 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFind
   */
   function testPrevSiblings() {
-    $this->assertFileExists($this->_directory.'/data/prevSiblings.src.xml');
-    $dom = FluentDOM($this->_directory.'/data/prevSiblings.src.xml')
-      ->find('//div[@id = "start"]')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//div[@id = "start"]')
       ->prevSiblings()
       ->addClass('before');
-    $this->assertTrue($dom instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/prevSiblings.tgt.xml', $dom);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -912,13 +893,12 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFind
   */
   function testPrevSiblingsExpression() {
-    $this->assertFileExists($this->_directory.'/data/prevSiblingsExpression.src.xml');
-    $dom = FluentDOM($this->_directory.'/data/prevSiblingsExpression.src.xml')
-      ->find('//div[@class = "here"]')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//div[@class = "here"]')
       ->prevSiblings()
       ->addClass('nextTest');
-    $this->assertTrue($dom instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/prevSiblingsExpression.tgt.xml', $dom);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -926,13 +906,12 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFind
   */
   function testPrevAllSiblings() {
-    $this->assertFileExists($this->_directory.'/data/prevAllSiblings.src.xml');
-    $dom = FluentDOM($this->_directory.'/data/prevAllSiblings.src.xml')
-      ->find('//div[@id = "start"]')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//div[@id = "start"]')
       ->prevSiblings()
       ->addClass('before');
-    $this->assertTrue($dom instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/prevAllSiblings.tgt.xml', $dom);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -940,13 +919,12 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFind
   */
   function testPrevAllSiblingsExpression() {
-    $this->assertFileExists($this->_directory.'/data/prevAllSiblingsExpression.src.xml');
-    $dom = FluentDOM($this->_directory.'/data/prevAllSiblingsExpression.src.xml')
-      ->find('//div[@class= "here"]')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//div[@class= "here"]')
       ->prevAllSiblings('.//span')
       ->addClass('nextTest');
-    $this->assertTrue($dom instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/prevAllSiblingsExpression.tgt.xml', $dom);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -954,13 +932,12 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFind
   */
   function testSiblings() {
-    $this->assertFileExists($this->_directory.'/data/siblings.src.xml');
-    $dom = FluentDOM($this->_directory.'/data/siblings.src.xml')
-      ->find('//li[@class = "hilite"]')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//li[@class = "hilite"]')
       ->siblings()
       ->addClass('before');
-    $this->assertTrue($dom instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/siblings.tgt.xml', $dom);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /*

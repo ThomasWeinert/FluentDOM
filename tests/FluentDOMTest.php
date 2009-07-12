@@ -161,8 +161,8 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group MagicFunctions
   */
   function testMagicToString() {
-    $doc = FluentDOM(self::XML);
-    $this->assertEquals($doc->document->saveXML(), (string)$doc);
+    $fd = $this->getFixtureFromString(self::XML);
+    $this->assertEquals($fd->document->saveXML(), (string)$fd);
   }
 
   /**
@@ -170,9 +170,17 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group MagicFunctions
   */
   function testMagicToStringHTML() {
-    $doc = FluentDOM('<html><body><br></body></html>', 'html');
-    $this->assertEquals('br', $doc->find('//br')->item(0)->nodeName);
-    $this->assertEquals($doc->document->saveHTML(), (string)$doc);
+    $dom = new DOMDocument();
+    $dom->loadHTML('<html><body><br></body></html>');
+    $loader = $this->getMock('FluentDOMLoader');
+    $loader->expects($this->once())
+           ->method('load')
+           ->with($this->equalTo(''), $this->equalTo('html'))
+           ->will($this->returnValue($dom));
+    $fd = new FluentDOM();
+    $fd->setLoaders(array($loader));
+    $fd = $fd->load('', 'html');
+    $this->assertEquals($dom->saveHTML(), (string)$fd);
   }
 
   /**

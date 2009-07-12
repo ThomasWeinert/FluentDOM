@@ -105,12 +105,10 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
   function testCSSWriteWithInvalidProperty() {
     try {
       FluentDOMStyle(self::HTML)->find('//div')->css('---', '');
+      $this->fail('An expected exception has not been raised.');
     } catch (InvalidArgumentException $expected) {
       return;
-    } catch (Exception $expected) {
-      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
     }
-    $this->fail('An expected exception has not been raised.');
   }
 
   function testCSSWriteWithInvalidPropertyInArray() {

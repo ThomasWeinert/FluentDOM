@@ -531,21 +531,20 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFilter
   */
   function testMap() {
-    $this->assertFileExists($this->_directory.'/data/map.src.xml');
-    $dom = FluentDOM($this->_directory.'/data/map.src.xml');
-    $dom->find('//p')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//p')
       ->append(
         implode(
           ', ',
-          $dom
+          $fd
             ->find('//input')
             ->map(
               create_function('$node, $index', 'return FluentDOM($node)->attr("value");')
             )
         )
       );
-    $this->assertTrue($dom instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/map.tgt.xml', $dom);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -553,13 +552,12 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFilter
   */
   function testMapMixedResult() {
-    $this->assertFileExists($this->_directory.'/data/mapMixedResult.src.xml');
-    $dom = FluentDOM($this->_directory.'/data/mapMixedResult.src.xml');
-    $dom->find('//p')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//p')
       ->append(
         implode(
           ', ',
-          $dom
+          $fd
             ->find('//input')
             ->map(
               create_function(
@@ -577,8 +575,8 @@ class FluentDOMTest extends FluentDomTestCase {
             )
         )
       );
-    $this->assertTrue($dom instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/mapMixedResult.tgt.xml', $dom);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -586,17 +584,13 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFilter
   */
   function testMapInvalidCallback() {
-    $this->assertFileExists($this->_directory.'/data/map.src.xml');
-    $doc = FluentDOM($this->_directory.'/data/map.src.xml');
+    $fd = $this->getFixtureFromFile('testMap');
     try {
-      $doc->find('//p')
+      $fd->find('//p')
         ->map('invalidCallbackFunctionName');
+        $this->fail('An expected exception has not been raised.');
     } catch (BadFunctionCallException $expected) {
-      return;
-    } catch (Exception $expected) {
-      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
     }
-    $this->fail('An expected exception has not been raised.');
   }
 
   /**
@@ -604,11 +598,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFilter
   */
   function testNot() {
-    $doc = FluentDOM(self::XML)->find('//*');
-    $this->assertTrue($doc->length > 1);
-    $notDoc = $doc->not('name() != "items"');
+    $fd = FluentDOM(self::XML)->find('//*');
+    $this->assertTrue($fd->length > 1);
+    $notDoc = $fd->not('name() != "items"');
     $this->assertEquals(1, $notDoc->length);
-    $this->assertTrue($notDoc !== $doc);
+    $this->assertTrue($notDoc !== $fd);
   }
 
   /**
@@ -616,11 +610,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFilter
   */
   function testNotWithFunction() {
-    $doc = FluentDOM(self::XML)->find('//*');
-    $this->assertTrue($doc->length > 1);
-    $notDoc = $doc->not(array($this, 'callbackTestNotWithFunction'));
+    $fd = FluentDOM(self::XML)->find('//*');
+    $this->assertTrue($fd->length > 1);
+    $notDoc = $fd->not(array($this, 'callbackTestNotWithFunction'));
     $this->assertEquals(1, $notDoc->length);
-    $this->assertTrue($notDoc !== $doc);
+    $this->assertTrue($notDoc !== $fd);
   }
 
   /**
@@ -628,13 +622,12 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFilter
   */
   function testSliceByRangeStartLtEnd() {
-    $this->assertFileExists($this->_directory.'/data/sliceByRangeStartLtEnd.src.xml');
-    $doc = FluentDOM($this->_directory.'/data/sliceByRangeStartLtEnd.src.xml')
-      ->find('//p')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//p')
       ->slice(0,3)
       ->replaceAll('//div');
-    $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/sliceByRangeStartLtEnd.tgt.xml', $doc);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -642,13 +635,12 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFilter
   */
   function testSliceByRangeStartGtEnd() {
-    $this->assertFileExists($this->_directory.'/data/sliceByRangeStartGtEnd.src.xml');
-    $doc = FluentDOM($this->_directory.'/data/sliceByRangeStartGtEnd.src.xml')
-      ->find('//p')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//p')
       ->slice(5,2)
       ->replaceAll('//div');
-    $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/sliceByRangeStartGtEnd.tgt.xml', $doc);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -656,13 +648,12 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFilter
   */
   function testSliceByNegRange() {
-    $this->assertFileExists($this->_directory.'/data/sliceByNegRange.src.xml');
-    $doc = FluentDOM($this->_directory.'/data/sliceByNegRange.src.xml')
-      ->find('//p')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//p')
       ->slice(1,-2)
       ->replaceAll('//div');
-    $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/sliceByNegRange.tgt.xml', $doc);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -670,13 +661,12 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingFilter
   */
   function testSliceToEnd() {
-    $this->assertFileExists($this->_directory.'/data/sliceToEnd.src.xml');
-    $doc = FluentDOM($this->_directory.'/data/sliceToEnd.src.xml')
-      ->find('//p')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//p')
       ->slice(3)
       ->replaceAll('//div');
-    $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/sliceToEnd.tgt.xml', $doc);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /*

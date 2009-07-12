@@ -4,18 +4,23 @@
  * @package FluentDOM
  * @subpackage unitTests
  */
-class FluentDOMTest_PHP5_3_Suite {
-    public static function suite() {
-        $suite = new PHPUnit_Framework_TestSuite('FluentDOM PHP 5.3 Package');
+class FluentDOMTest_PHP5_3_Suite extends PHPUnit_Framework_TestSuite {
 
+    public function __construct() {
+        $this->setName('FluentDOM PHP 5.3 Package');
+    }
+
+    protected function setUp() {
         if (version_compare(PHP_VERSION, '5.3', '>=')) {
           include_once dirname(__FILE__).'/FluentDOMTest_PHP5_3.php';
-          $suite->addTestSuite('FluentDOMTest_PHP5_3');
+          $this->addTestSuite('FluentDOMTest_PHP5_3');
         } else {
-          $suite->markTestSuiteSkipped("PHP 5.3 required.");
+          $this->markTestSuiteSkipped("PHP 5.3 required.");
         }
+    }
 
-        return $suite;
+    public static function suite() {
+        return new FluentDOMTest_PHP5_3_Suite();
     }
 }
 

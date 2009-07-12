@@ -267,15 +267,15 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Interfaces
   */
   function testInterfaceIteratorMethods() {
-    $items = FluentDOM(self::XML)->find('//item');
-    $this->assertTrue($items instanceof Iterator);
-    $this->assertEquals(0, $items->current()->getAttribute('index'));
-    $items->next();
-    $this->assertEquals(1, $items->current()->getAttribute('index'));
-    $this->assertEquals(1, $items->key());
-    $items->rewind();
-    $this->assertEquals(0, $items->current()->getAttribute('index'));
-    $this->assertEquals(0, $items->key());
+    $fd = $this->getFixtureFromString(self::XML)->find('//item');
+    $this->assertTrue($fd instanceof Iterator);
+    $this->assertEquals(0, $fd->current()->getAttribute('index'));
+    $fd->next();
+    $this->assertEquals(1, $fd->current()->getAttribute('index'));
+    $this->assertEquals(1, $fd->key());
+    $fd->rewind();
+    $this->assertEquals(0, $fd->current()->getAttribute('index'));
+    $this->assertEquals(0, $fd->key());
   }
 
   /**
@@ -283,10 +283,10 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Interfaces
   */
   function testInterfaceIteratorLoop() {
-    $items = FluentDOM(self::XML)->find('//item');
-    $this->assertTrue($items instanceof Iterator);
+    $fd = $this->getFixtureFromString(self::XML)->find('//item');
+    $this->assertTrue($fd instanceof Iterator);
     $counter = 0;
-    foreach ($items as $item) {
+    foreach ($fd as $item) {
       $this->assertEquals('item', $item->nodeName);
       $this->assertEquals($counter, $item->getAttribute('index'));
       ++$counter;

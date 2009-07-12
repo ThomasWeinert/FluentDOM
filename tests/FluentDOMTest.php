@@ -949,11 +949,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingChain
   */
   function testAndSelf() {
-    $doc = FluentDOM(self::XML)->find('/items')->find('.//item');
-    $this->assertEquals(3, $doc->length);
-    $andSelfDoc = $doc->andSelf();
+    $fd = FluentDOM(self::XML)->find('/items')->find('.//item');
+    $this->assertEquals(3, $fd->length);
+    $andSelfDoc = $fd->andSelf();
     $this->assertEquals(4, $andSelfDoc->length);
-    $this->assertTrue($andSelfDoc !== $doc);
+    $this->assertTrue($andSelfDoc !== $fd);
   }
 
   /**
@@ -961,11 +961,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingChain
   */
   function testEnd() {
-    $doc = FluentDOM(self::XML)->find('/items')->find('.//item');
-    $this->assertEquals(3, $doc->length);
-    $endDoc = $doc->end();
+    $fd = FluentDOM(self::XML)->find('/items')->find('.//item');
+    $this->assertEquals(3, $fd->length);
+    $endDoc = $fd->end();
     $this->assertEquals(1, $endDoc->length);
-    $this->assertTrue($endDoc !== $doc);
+    $this->assertTrue($endDoc !== $fd);
     $endDocRoot = $endDoc->end();
     $this->assertTrue($endDoc !== $endDocRoot);
     $endDocRoot2 = $endDocRoot->end();
@@ -980,8 +980,8 @@ class FluentDOMTest extends FluentDomTestCase {
     $expect = '<item index="0">text1</item>'.
       '<item index="1">text2</item>'.
       '<item index="2">text3</item>';
-    $xml = FluentDOM(self::XML)->find('//group')->xml();
-    $this->assertEquals($expect, $xml);
+    $fd = FluentDOM(self::XML)->find('//group')->xml();
+    $this->assertEquals($expect, $fd);
   }
 
   /**
@@ -989,12 +989,11 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingChain
   */
   function testXMLWrite() {
-    $this->assertFileExists($this->_directory.'/data/xmlWrite.src.xml');
-    $dom = FluentDOM($this->_directory.'/data/xmlWrite.src.xml')
-      ->find('//p[position() = last()]')
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd ->find('//p[position() = last()]')
       ->xml('<b>New</b>World');
-    $this->assertTrue($dom instanceof FluentDOM);
-    $this->assertXmlStringEqualsXMLFile($this->_directory.'/data/xmlWrite.tgt.xml', $dom);
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -1012,13 +1011,13 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingChain
   */
   function testTextWrite() {
-    $doc = FluentDOM(self::XML)->find('//item');
-    $this->assertEquals('text1', $doc[0]->textContent);
-    $this->assertEquals('text2', $doc[1]->textContent);
-    $textDoc = $doc->text('changed');
-    $this->assertEquals('changed', $doc[0]->textContent);
-    $this->assertEquals('changed', $doc[1]->textContent);
-    $this->assertTrue($doc === $textDoc);
+    $fd = FluentDOM(self::XML)->find('//item');
+    $this->assertEquals('text1', $fd[0]->textContent);
+    $this->assertEquals('text2', $fd[1]->textContent);
+    $textDoc = $fd->text('changed');
+    $this->assertEquals('changed', $fd[0]->textContent);
+    $this->assertEquals('changed', $fd[1]->textContent);
+    $this->assertTrue($fd === $textDoc);
   }
 
   /*

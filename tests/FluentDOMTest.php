@@ -368,13 +368,11 @@ class FluentDOMTest extends FluentDomTestCase {
   */
   function testEachWithInvalidFunction() {
     try {
-      $dom = FluentDOM(self::XML)
+      $fd = $this->getFixtureFromString(self::XML)
         ->find('//body//*')
         ->each('invalidCallbackFunctionName');
+      $this->fail('An expected exception has not been raised.');
     } catch (BadFunctionCallException $expected) {
-      return;
-    } catch (Exception $expected) {
-      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
     }
   }
 

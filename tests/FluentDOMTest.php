@@ -63,14 +63,6 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
   /**
   * @group Load
   */
-  function testLoad() {
-    $doc = new FluentDOM();
-    $doc->load(self::XML);
-  }
-  
-  /**
-  * @group Load
-  */
   function testLoadWithInvalidSource() {
     $doc = new FluentDOM();
     try {
@@ -78,6 +70,30 @@ class FluentDOMTest extends PHPUnit_Framework_TestCase {
       $this->fail('An expected exception has not been raised.');
     } catch (InvalidArgumentException $expected) {
     }
+  }
+
+  /**
+   * @group Load
+   */
+  function testLoaderMechanism() {
+      $firstLoaderMock = $this->getMock('FluentDOMLoader');
+      $firstLoaderMock->expects($this->once())
+                      ->method('load')
+                      ->with($this->equalTo('test load string'), $this->equalTo('xml'))
+                      ->will($this->returnValue(FALSE));
+      $secondLoaderMock = $this->getMock('FluentDOMLoader');
+      $secondLoaderMock->expects($this->once())
+                       ->method('load')
+                       ->with($this->equalTo('test load string'), $this->equalTo('xml'))
+                       ->will($this->returnValue(new DOMDocument()));
+
+      $fd = new FluentDOM();
+      $fd->setLoaders(array($firstLoaderMock, $secondLoaderMock));
+
+      $this->assertSame(
+          $fd,
+          $fd->load('test load string')
+      );
   }
 
   /*

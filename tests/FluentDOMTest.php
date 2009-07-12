@@ -189,14 +189,11 @@ class FluentDOMTest extends FluentDomTestCase {
   */
   function testMagicCallUnknown() {
     try {
-      FluentDOM(self::XML)->invalidDynamicMethodName();
+      $fd = new FluentDOM();
+      $fd->invalidDynamicMethodName();
+      $this->fail('An expected exception has not been raised.');
     } catch (BadMethodCallException $expected) {
-      return;
-    } catch (Exception $expected) {
-      $this->fail('An unexpected exception has been raised: '.$expected->getMessage());
     }
-    $this->fail('An expected exception has not been raised.');
-
   }
 
   /*

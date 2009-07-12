@@ -1358,7 +1358,7 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group Manipulation
   */
   function testClone() {
-    $fd = FluentDOM(self::XML)->find('//item');
+    $fd = $this->getFixtureFromString(self::XML)->find('//item');
     $clonedNodes = $fd->clone();
     $this->assertTrue($fd instanceof FluentDOM);
     $this->assertTrue($clonedNodes instanceof FluentDOM);

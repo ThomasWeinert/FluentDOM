@@ -19,11 +19,16 @@ require_once dirname(__FILE__).'/../FluentDOMLoader.php';
 * Load FluentDOM from XML file
 */
 class FluentDOMLoaderFileHTML implements FluentDOMLoader {
-  
+
   public function load($source, $contentType) {
     if (is_string($source) &&
         FALSE === strpos($source, '<') &&
         in_array($contentType, array('html', 'text/html'))) {
+
+      if (!file_exists($source)) {
+        throw new InvalidArgumentException('File not found: '. $source);
+      }
+
       $dom = new DOMDocument();
       $errorSetting = libxml_use_internal_errors(TRUE);
       libxml_clear_errors();

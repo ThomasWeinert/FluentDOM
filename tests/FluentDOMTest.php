@@ -690,7 +690,7 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group TraversingFind
   */
-  public function testInvalidAddForgeinNodes() {
+  public function testAddInvalidForeignNodes() {
     $fd = $this->getFixtureFromString(self::XML);
     $itemsFd = $this->getFixtureFromString(self::XML)->find('//item');
     try {
@@ -706,7 +706,7 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group TraversingFind
   */
-  public function testInvalidAddForgeinNode() {
+  public function testAddInvalidForeignNode() {
     $fd = $this->getFixtureFromString(self::XML);
     $itemsFd = $this->getFixtureFromString(self::XML)->find('//item');
     try {

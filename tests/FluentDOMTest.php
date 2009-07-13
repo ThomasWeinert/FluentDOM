@@ -953,11 +953,11 @@ class FluentDOMTest extends FluentDOMTestCase {
   * @group TraversingChain
   */
   public function testXmlWrite() {
-    $fd = $this->getFixtureFromFile('testXmlWrite');
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//p[position() = last()]')
       ->xml('<b>New</b>World');
     $this->assertTrue($fd instanceof FluentDOM);
-    $this->assertFluentDOMEqualsXMLFile('testXmlWrite', $fd);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**

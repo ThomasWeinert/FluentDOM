@@ -17,9 +17,20 @@ require_once dirname(__FILE__).'/../FluentDOMLoader.php';
 
 /**
 * Load FluentDOM from XML string
+*
+* @package FluentDOM
+* @subpackage Loaders
 */
 class FluentDOMLoaderStringXML implements FluentDOMLoader {
   
+  /**
+  * Load DOMDocument from xml string
+  *
+  * @param string $source xml string
+  * @param string $contentType
+  * @access public
+  * @return object DOMDocument | FALSE
+  */
   public function load($source, $contentType) {
     if (is_string($source) &&
         FALSE !== strpos($source, '<') &&

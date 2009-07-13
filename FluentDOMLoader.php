@@ -7,11 +7,14 @@
 * @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
 *
 * @package FluentDOM
-* @package Loaders
+* @subpackage Loaders
 */
 
 /**
 * Interface for FluentDOM loaders
+*
+* @package FluentDOM
+* @subpackage Loaders
 */
 interface FluentDOMLoader {
   public function load($source, $contentType);

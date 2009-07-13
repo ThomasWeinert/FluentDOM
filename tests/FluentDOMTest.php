@@ -38,7 +38,7 @@ class FluentDOMTest extends FluentDomTestCase {
       </html>
     </items>
   ';
-  
+
   /**
   * @group Functions
   */
@@ -46,7 +46,7 @@ class FluentDOMTest extends FluentDomTestCase {
     $fd = FluentDOM();
     $this->assertTrue($fd instanceof FluentDOM);
   }
-  
+
   /**
   * @group Functions
   */
@@ -957,7 +957,7 @@ class FluentDOMTest extends FluentDomTestCase {
     $fd ->find('//p[position() = last()]')
       ->xml('<b>New</b>World');
     $this->assertTrue($fd instanceof FluentDOM);
-    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
+    $this->assertFluentDOMEqualsXMLFile('testXmlWrite', $fd);
   }
 
   /**

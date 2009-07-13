@@ -1,6 +1,6 @@
 <?php
 /**
-* Load FluentDOM from XML file
+* Load FluentDOM from HTML file
 *
 * @version $Id$
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
@@ -16,7 +16,7 @@
 require_once dirname(__FILE__).'/../FluentDOMLoader.php';
 
 /**
-* Load FluentDOM from XML file
+* Load FluentDOM from HTML file
 *
 * @package FluentDOM
 * @subpackage Loaders

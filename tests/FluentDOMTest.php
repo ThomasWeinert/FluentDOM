@@ -398,7 +398,7 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group CoreFunctions
   */
-  public function testNodeWithDomElement() {
+  public function testNodeWithDomelement() {
     $fd = $this->getFixtureFromString(self::XML);
     $nodes = $fd->node($fd->document->createElement('div'));
     $this->assertTrue($fd instanceof FluentDOM);
@@ -408,7 +408,7 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group CoreFunctions
   */
-  public function testNodeWithDomText() {
+  public function testNodeWithDomtext() {
     $fd = $this->getFixtureFromString(self::XML);
     $nodes = $fd->node($fd->document->createTextNode('div'));
     $this->assertTrue($fd instanceof FluentDOM);
@@ -1000,7 +1000,7 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group Manipulation
   */
-  public function testAppendDocumentElement() {
+  public function testAppendDomelement() {
     $fd = new FluentDOM();
     $fd->append('<strong>Hello</strong>');
     $this->assertEquals('strong', $fd->find('/strong')->item(0)->nodeName);
@@ -1009,7 +1009,7 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group Manipulation
   */
-  public function testAppendDomNodeList() {
+  public function testAppendDomnodelist() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $items = $fd->find('//item');
     $this->assertTrue($fd instanceof FluentDOM);
@@ -1123,7 +1123,7 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group Manipulation
   */
-  public function testWrapWithDomElement() {
+  public function testWrapWithDomelement() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $dom = $fd->document;
     $div = $dom->createElement('div');
@@ -1136,7 +1136,7 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group Manipulation
   */
-  public function testWrapWithDomNodeList() {
+  public function testWrapWithDomnodelist() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $divs = $fd->xpath->query('//div[@class = "wrapper"]');
     $this->assertTrue($fd instanceof FluentDOM);
@@ -1350,7 +1350,7 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group Attributes
   */
-  public function testAttrReadOnDomText() {
+  public function testAttrReadOnDomtext() {
     $fd = $this->getFixtureFromString(self::XML)
       ->find('//item/text()')
       ->attr('index');
@@ -1372,7 +1372,7 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group Attributes
   */
-  public function testAttrWriteArray() {
+  public function testAttrWriteWithArray() {
     $fd = $this->getFixtureFromString(self::XML)
       ->find('//group/item')
       ->attr(array('index' => '15', 'length' => '34', 'label' => 'box'));
@@ -1384,7 +1384,7 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group Attributes
   */
-  public function testAttrWriteCallback() {
+  public function testAttrWriteWithCallback() {
     $fd = $this->getFixtureFromString(self::XML)
       ->find('//group/item')
       ->attr('callback', array($this, 'callbackForAttr'));

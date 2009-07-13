@@ -13,7 +13,7 @@
 /**
 * load necessary files
 */
-require_once dirname(__FILE__).'/FluentDomTestCase.php';
+require_once dirname(__FILE__).'/FluentDOMTestCase.php';
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
@@ -953,7 +953,7 @@ class FluentDOMTest extends FluentDomTestCase {
   * @group TraversingChain
   */
   public function testXMLWrite() {
-    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd = $this->getFixtureFromFile('testXmlWrite');
     $fd ->find('//p[position() = last()]')
       ->xml('<b>New</b>World');
     $this->assertTrue($fd instanceof FluentDOM);

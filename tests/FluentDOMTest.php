@@ -1009,7 +1009,7 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group Manipulation
   */
-  public function testAppendDOMNodeList() {
+  public function testAppendDomNodeList() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $items = $fd->find('//item');
     $this->assertTrue($fd instanceof FluentDOM);
@@ -1350,7 +1350,7 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group Attributes
   */
-  public function testAttrReadOnDOMText() {
+  public function testAttrReadOnDomText() {
     $fd = $this->getFixtureFromString(self::XML)
       ->find('//item/text()')
       ->attr('index');

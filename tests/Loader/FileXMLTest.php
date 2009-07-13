@@ -36,7 +36,7 @@ class FluentDOMLoaderFileXMLTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals('html', $fd->documentElement->nodeName);
   }
 
-  public function testLoadwithXMLFileInvalid() {
+  public function testLoadWithXmlFileInvalid() {
     $loader = new FluentDOMLoaderFileXML();
     $result = $loader->load('<invalidFileName />','xml');
     $this->assertFalse($result);

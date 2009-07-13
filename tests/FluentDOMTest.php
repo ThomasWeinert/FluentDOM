@@ -23,7 +23,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 * @package FluentDOM
 * @subpackage unitTests
 */
-class FluentDOMTest extends FluentDomTestCase {
+class FluentDOMTest extends FluentDOMTestCase {
 
   const XML = '
     <items version="1.0">
@@ -42,7 +42,7 @@ class FluentDOMTest extends FluentDomTestCase {
   /**
   * @group Functions
   */
-  public function testFunctionFluentDOM() {
+  public function testFunction() {
     $fd = FluentDOM();
     $this->assertTrue($fd instanceof FluentDOM);
   }
@@ -50,7 +50,7 @@ class FluentDOMTest extends FluentDomTestCase {
   /**
   * @group Functions
   */
-  public function testFunctionFluentDOMStyleWithContent() {
+  public function testFunctionWithContent() {
     $dom = new DOMDocument();
     $node = $dom->appendChild($dom->createElement('html'));
     $fd = FluentDOM($node);
@@ -128,7 +128,7 @@ class FluentDOMTest extends FluentDomTestCase {
   /**
   * @group Properties
   */
-  public function testPropertyXPath() {
+  public function testPropertyXpath() {
     $fd = $this->getFixtureFromString(self::XML);
     $this->assertTrue(isset($fd->xpath));
     $this->assertTrue($fd->xpath instanceof DOMXPath);
@@ -182,7 +182,7 @@ class FluentDOMTest extends FluentDomTestCase {
   /**
   * @group MagicFunctions
   */
-  public function testMagicToStringHTML() {
+  public function testMagicToStringHtml() {
     $dom = new DOMDocument();
     $dom->loadHTML('<html><body><br></body></html>');
     $loader = $this->getMock('FluentDOMLoader');
@@ -398,7 +398,7 @@ class FluentDOMTest extends FluentDomTestCase {
   /**
   * @group CoreFunctions
   */
-  public function testNodeWithDOMElement() {
+  public function testNodeWithDomElement() {
     $fd = $this->getFixtureFromString(self::XML);
     $nodes = $fd->node($fd->document->createElement('div'));
     $this->assertTrue($fd instanceof FluentDOM);
@@ -408,7 +408,7 @@ class FluentDOMTest extends FluentDomTestCase {
   /**
   * @group CoreFunctions
   */
-  public function testNodeWithDOMText() {
+  public function testNodeWithDomText() {
     $fd = $this->getFixtureFromString(self::XML);
     $nodes = $fd->node($fd->document->createTextNode('div'));
     $this->assertTrue($fd instanceof FluentDOM);
@@ -941,7 +941,7 @@ class FluentDOMTest extends FluentDomTestCase {
   /**
   * @group TraversingChain
   */
-  public function testXMLRead() {
+  public function testXmlRead() {
     $expect = '<item index="0">text1</item>'.
       '<item index="1">text2</item>'.
       '<item index="2">text3</item>';
@@ -952,7 +952,7 @@ class FluentDOMTest extends FluentDomTestCase {
   /**
   * @group TraversingChain
   */
-  public function testXMLWrite() {
+  public function testXmlWrite() {
     $fd = $this->getFixtureFromFile('testXmlWrite');
     $fd ->find('//p[position() = last()]')
       ->xml('<b>New</b>World');
@@ -1123,7 +1123,7 @@ class FluentDOMTest extends FluentDomTestCase {
   /**
   * @group Manipulation
   */
-  public function testWrapWithDOMElement() {
+  public function testWrapWithDomElement() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $dom = $fd->document;
     $div = $dom->createElement('div');
@@ -1136,7 +1136,7 @@ class FluentDOMTest extends FluentDomTestCase {
   /**
   * @group Manipulation
   */
-  public function testWrapWithDOMNodeList() {
+  public function testWrapWithDomNodeList() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $divs = $fd->xpath->query('//div[@class = "wrapper"]');
     $this->assertTrue($fd instanceof FluentDOM);

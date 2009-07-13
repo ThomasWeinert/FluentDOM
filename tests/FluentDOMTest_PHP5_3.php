@@ -13,7 +13,7 @@
 /**
 * load necessary files
 */
-require_once dirname(__FILE__).'/FluentDomTestCase.php';
+require_once dirname(__FILE__).'/FluentDOMTestCase.php';
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
@@ -23,7 +23,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 * @package FluentDOM
 * @subpackage unitTests
 */
-class FluentDOMTest_PHP5_3 extends FluentDomTestCase {
+class FluentDOMTest_PHP5_3 extends FluentDOMTestCase {
   
   /**
   * @group TraversingFilter

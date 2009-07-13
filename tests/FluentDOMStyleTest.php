@@ -39,7 +39,7 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
   /**
   * @group Functions
   */
-  public function testFunctionFluentDOMStyle() {
+  public function testFunction() {
     $fd = FluentDOMStyle();
     $this->assertTrue($fd instanceof FluentDOMStyle);
   }
@@ -47,7 +47,7 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
   /**
   * @group Functions
   */
-  public function testFunctionFluentDOMStyleWithContent() {
+  public function testFunctionWithContent() {
     $dom = new DOMDocument();
     $node = $dom->appendChild($dom->createElement('html'));
     $fd = FluentDOMStyle($node);
@@ -77,14 +77,6 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
   /**
   * @group CSS
   */
-  public function testConstructor() {
-    $fd = $this->getFixture();
-    $this->assertTrue($fd instanceof FluentDOMStyle);
-  }
-
-  /**
-  * @group CSS
-  */
   public function testChaining() {
     $fd = $this->getFixture();
     $this->assertTrue($fd instanceof FluentDOMStyle);
@@ -96,7 +88,7 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
   /**
   * @group CSS
   */
-  public function testCSSRead() {
+  public function testCssRead() {
     $fd =$this->getFixture()->find('//div');
     $this->assertTrue($fd instanceof FluentDOMStyle);
     $this->assertEquals('left', $fd->css('text-align'));
@@ -105,7 +97,7 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
   /**
   * @group CSS
   */
-  public function testCSSReadWithInvalidProperty() {
+  public function testCssReadWithInvalidProperty() {
     $fd =$this->getFixture()->find('//div');
     $this->assertTrue($fd instanceof FluentDOMStyle);
     $this->assertEquals(NULL, $fd->css('---'));
@@ -114,7 +106,7 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
   /**
   * @group CSS
   */
-  public function testCSSReadOnEmpty() {
+  public function testCssReadOnEmpty() {
     $fd = $this->getFixture();
     $this->assertTrue($fd instanceof FluentDOMStyle);
     $this->assertEquals(NULL, $fd->css('text-align'));
@@ -123,7 +115,7 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
   /**
   * @group CSS
   */
-  public function testCSSReadOnTextNodes() {
+  public function testCssReadOnTextNodes() {
     $fd = $this->getFixture()->find('//div')->children()->andSelf();
     $this->assertTrue(count($fd) > 3);
     $this->assertEquals('left', $fd->css('text-align'));
@@ -132,7 +124,7 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
   /**
   * @group CSS
   */
-  public function testCSSWriteWithString() {
+  public function testCssWriteWithString() {
     $fd = $this->getFixture()->find('//div');
     $this->assertTrue($fd instanceof FluentDOMStyle);
     $fd->css('text-align', 'center');
@@ -143,7 +135,7 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
   /**
   * @group CSS
   */
-  public function testCSSWriteWithArray() {
+  public function testCssWriteWithArray() {
     $fd = $this->getFixture()->find('//div');
     $this->assertTrue($fd instanceof FluentDOMStyle);
     $fd->css(
@@ -159,10 +151,10 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
   /**
   * @group CSS
   */
-  public function testCSSWriteWithFunction() {
+  public function testCssWriteWithFunction() {
     $fd = $this->getFixture()->find('//div');
     $this->assertTrue($fd instanceof FluentDOMStyle);
-    $fd->css('text-align', array($this, 'callbackTestCSSWriteWithFunction'));
+    $fd->css('text-align', array($this, 'callbackTestCssWriteWithFunction'));
     $this->assertEquals('text-align: right;', $fd->eq(0)->attr('style'));
     $this->assertEquals('text-align: left;', $fd->eq(1)->attr('style'));
   }
@@ -170,7 +162,7 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
   /**
   * @group CSS
   */
-  public function testCSSWriteWithInvalidProperty() {
+  public function testCssWriteWithInvalidProperty() {
     try {
       $this->getFixture()->find('//div')->css('---', '');
       $this->fail('An expected exception has not been raised.');
@@ -181,7 +173,7 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
   /**
   * @group CSS
   */
-  public function testCSSWriteWithInvalidPropertyInArray() {
+  public function testCssWriteWithInvalidPropertyInArray() {
     try {
       $this->getFixture()->find('//div')->css(array('---' => ''));
       $this->fail('An expected exception has not been raised.');
@@ -192,7 +184,7 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
   /**
   * @group CSS
   */
-  public function testCSSRemoveProperty() {
+  public function testCssRemoveProperty() {
     $fd = $this->getFixture()->find('//div');
     $fd->css('text-align', '');
     $this->assertFalse($fd[0]->hasAttribute('style'));
@@ -201,7 +193,7 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
   /**
   * @group CSS
   */
-  public function testCSSRemoveProperties() {
+  public function testCssRemoveProperties() {
     $fd = $this->getFixture()->find('//div');
     $fd->css(
       array(
@@ -215,7 +207,7 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
   /**
   * @group CSS
   */
-  public function testCSSSortPropertiesName() {
+  public function testCssSortPropertiesName() {
     $fd = $this->getFixture()->find('//div');
     $fd->css(
       array(
@@ -230,7 +222,7 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
   /**
   * @group CSS
   */
-  public function testCSSSortPropertiesLevels() {
+  public function testCssSortPropertiesLevels() {
     $fd = $this->getFixture()->find('//div');
     $fd->css(
       array(
@@ -246,7 +238,7 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
   /**
   * @group CSS
   */
-  public function testCSSSortPropertiesPrefix() {
+  public function testCssSortPropertiesPrefix() {
     $fd = $this->getFixture()->find('//div');
     $fd->css(
       array(
@@ -262,7 +254,7 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
   /*
   * helper
   */
-  public function callbackTestCSSWriteWithFunction($node, $property, $value) {
+  public function callbackTestCssWriteWithFunction($node, $property, $value) {
     switch ($value) {
     case 'left' :
       return 'right';

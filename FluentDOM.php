@@ -580,7 +580,10 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @return boolean
   */
   private function _isQName($name) {
-    if (preg_match('(^([a-z]\w*:)?([a-z][\w-]*)$)Di', $name)) {
+    $nameStartChar = '[A-Za-z_|]';
+    $nameChar = '(?:'.$nameStartChar.'|[-.\d])';
+    $pattern = '(^('.$nameStartChar.$nameChar.'*:)?('.$nameStartChar.$nameChar.'+)$)Diu';
+    if (preg_match($pattern, $name)) {
       return TRUE;
     } else {
       throw new UnexpectedValueException('Invalid QName');

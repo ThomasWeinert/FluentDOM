@@ -1366,7 +1366,48 @@ class FluentDOMTest extends FluentDOMTestCase {
       ->attr('index', '15')
       ->attr('index');
     $this->assertEquals('15', $fd);
-
+  }
+  
+  /**
+  * @group Attributes
+  * @dataProvider getInvalidAttributeNames
+  */
+  public function testAttrWriteWithInvalidNames($attrName) {
+    try {
+      $this->getFixtureFromString(self::XML)
+        ->find('//item')
+        ->attr($attrName, '');
+      $this->fail('An expected exception has not been raised.');
+    } catch (UnexpectedValueException $expected) {
+    }
+  }
+  
+  public static function getInvalidAttributeNames() {
+    return array(
+      array('1foo'), 
+      array('1bar:foo'),
+      array('bar:1foo'), 
+      array('bar:foo<>')
+    );
+  }
+  
+  /**
+  * @group Attributes
+  * @dataProvider getValidAttributeNames
+  */
+  public function testAttrWriteWithValidNames($attrName) {
+    $fd = $this->getFixtureFromString(self::XML)
+      ->find('//item')
+      ->attr($attrName, 'foo');
+    $this->assertTrue($fd->item(0)->hasAttribute($attrName));
+    $this->assertEquals('foo', $fd->item(0)->getAttribute($attrName));
+  }
+  
+  public static function getValidAttributeNames() {
+    return array(
+      array('foo'), 
+      array('bar:foo')
+    );
   }
 
   /**

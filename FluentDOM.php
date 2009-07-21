@@ -9,6 +9,8 @@
 * @package FluentDOM
 */
 
+require_once(dirname(__FILE__).'/FluentDOMIterator.php');
+
 /**
 * Function to create a new FluentDOM instance
 *
@@ -40,7 +42,7 @@ function FluentDOM($source = NULL, $contentType = 'xml') {
 *
 * @package FluentDOM
 */
-class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, ArrayAccess {
+class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
 
   /**
   * document object
@@ -69,14 +71,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   * @access private
   */
   private $_parent = NULL;
-
-  /**
-  * current iterator position
-  * @var integer
-  * @access private
-  */
-  private $_position = 0;
-
+  
   /**
   * element nodes
   * @var array
@@ -229,7 +224,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   }
 
   /**
-  * support isst for dynic properties length and document
+  * support isset for dynamic properties length and document
   *
   * @param $name
   * @access public
@@ -247,7 +242,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
   }
 
   /**
-  * declaring an empty() method will crash the parser so we use some magic
+  * declaring an empty() or clone() method will crash the parser so we use some magic
   *
   * @param string $name
   * @param array $arguments
@@ -294,97 +289,14 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     }
     return NULL;
   }
-
+  
   /*
-  * Interface - Iterator, SeekableIterator
+  * Interface - IteratorAggregate
   */
-
-  /**
-  * Get current iterator element
-  *
-  * @access public
-  * @return object DOMNode
-  */
-  public function current() {
-    return $this->_array[$this->_position];
-  }
-
-  /**
-  * Get current iterator pointer
-  *
-  * @access public
-  * @return integer
-  */
-  public function key() {
-    return $this->_position;
-  }
-
-  /**
-  * Move iterator pointer to next element
-  *
-  * @access public
-  * @return void
-  */
-  public function next() {
-    ++$this->_position;
-  }
-
-  /**
-  * Reset iterator pointer
-  *
-  * @access public
-  * @return void
-  */
-  public function rewind() {
-    $this->_position = 0;
-  }
-
-  /**
-  * Move iterator pointer to specified element
-  *
-  * @param integer $position
-  * @access public
-  * @return void
-  */
-  public function seek($position) {
-    if (isset($this->_array[$position])) {
-      $this->_position = $position;
-    } else {
-      throw new InvalidArgumentException('Unknown position');
-    }
-  }
-
-  /**
-  * Check if current iterator pointer contains a valid element
-  *
-  * @access public
-  * @return boolean
-  */
-  public function valid() {
-    return isset($this->_array[$this->_position]);
-  }
-
-  /**
-  * Get children of the current iterator element
-  *
-  * @access public
-  * @return object FluentDOM
-  */
-  public function getChildren() {
-    $result = $this->_spawn();
-    $result->_push($this->_match('node()', $this->_array[$this->_position]));
-    return $result;
-  }
-
-  /**
-  * Check if the current iterator element has children
-  *
-  * @access public
-  * @return object FluentDOM
-  */
-  public function hasChildren() {
-    return $this->_test('node()', $this->_array[$this->_position]);
-  }
+  
+  public function getIterator() {
+    return new FluentDOMIterator($this);
+  }  
 
   /*
   * Interface - Countable
@@ -541,6 +453,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
     } elseif ($elements instanceof DOMNodeList ||
               $elements instanceof DOMDocumentFragment ||
               $elements instanceof Iterator ||
+              $elements instanceof IteratorAggregate ||
               is_array($elements)) {
       foreach ($elements as $node) {
         if ($this->_isNode($node)) {
@@ -666,6 +579,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
       }
     } elseif ($content instanceof DOMNodeList ||
               $content instanceof Iterator ||
+              $content instanceof IteratorAggregate ||
               is_array($content)) {
       foreach ($content as $element) {
         if ($element instanceof DOMElement ||
@@ -699,6 +613,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
       return $this->_match($selector);
     } elseif (is_array($selector) ||
               $selector instanceof Iterator ||
+              $selector instanceof IteratorAggregate ||
               $selector instanceof DOMNodeList) {
       return $selector;
     } else {
@@ -855,6 +770,7 @@ class FluentDOM implements RecursiveIterator, SeekableIterator, Countable, Array
         continue;
       } elseif ($mapped instanceof DOMNodeList ||
                 $mapped instanceof Iterator ||
+                $mapped instanceof IteratorAggregate ||
                 is_array($mapped)) {
         foreach ($mapped as $element) {
           if ($element !== NULL) {

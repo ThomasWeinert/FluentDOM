@@ -6,8 +6,8 @@
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
 * @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
 *
-* @package FluentDOMStyle
-* @subpackage unitTests
+* @package FluentDOM
+* @subpackage Tests
 */
 
 /**
@@ -22,7 +22,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 * Test class for FluentDOMStyle.
 *
 * @package FluentDOM
-* @subpackage unitTests
+* @subpackage Tests
 */
 class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
 

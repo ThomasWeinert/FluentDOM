@@ -272,24 +272,8 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group Interfaces
   */
-  public function testInterfaceIteratorMethods() {
-    $fd = $this->getFixtureFromString(self::XML)->find('//item');
-    $this->assertTrue($fd instanceof Iterator);
-    $this->assertEquals(0, $fd->current()->getAttribute('index'));
-    $fd->next();
-    $this->assertEquals(1, $fd->current()->getAttribute('index'));
-    $this->assertEquals(1, $fd->key());
-    $fd->rewind();
-    $this->assertEquals(0, $fd->current()->getAttribute('index'));
-    $this->assertEquals(0, $fd->key());
-  }
-
-  /**
-  * @group Interfaces
-  */
   public function testInterfaceIteratorLoop() {
     $fd = $this->getFixtureFromString(self::XML)->find('//item');
-    $this->assertTrue($fd instanceof Iterator);
     $counter = 0;
     foreach ($fd as $item) {
       $this->assertEquals('item', $item->nodeName);
@@ -297,22 +281,6 @@ class FluentDOMTest extends FluentDOMTestCase {
       ++$counter;
     }
     $this->assertEquals(3, $counter);
-  }
-
-  /**
-  * @group Interfaces
-  */
-  public function testInterfaceSeekableIterator() {
-    $fd = $this->getFixtureFromString(self::XML)->find('//item');
-    $this->assertTrue($fd instanceof SeekableIterator);
-    $this->assertEquals(0, $fd->key());
-    $fd->seek(2);
-    $this->assertEquals(2, $fd->key());
-    try {
-      $fd->seek(200);
-      $this->fail('An expected exception has not been raised.');
-    } catch (InvalidArgumentException $expected) {
-    }
   }
 
   /**

@@ -20,14 +20,6 @@ And as a nice topping it supports namespaces, too.
 We implemented several php interfaces: Countable, Iterator, SeekableIterator and 
 RecursiveItrerator. Even ArrayAccess is supported.
 
-The jQuery method "next" has a conflict with the Iterator interface used in PHP. 
-We attached the postfix 'Siblings' to each of these methods to get around the conflict:
-E.g. 
-  'next' => 'nextSiblings'
-  'prev' => 'prevSiblings'
-  
-We think you got it.
-
 Since FluentDOM works on XML documents, there is no method 'html()', but 'xml()'.
 
 We support the string conversion using the magic __toString() method. It will
@@ -47,5 +39,4 @@ Once again many thanks to the jQuery team.
 
 Plans/ToDo:
 
-1) FluentDOMStyle to support modifications of the style attribute
-2) CSS to XPath expression translator
+1) CSS to XPath expression translator

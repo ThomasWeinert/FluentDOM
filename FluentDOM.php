@@ -907,7 +907,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * @access public
   * @return FluentDOM
   */
-  public function nextSiblings($expr = NULL) {
+  public function next($expr = NULL) {
     $result = $this->_spawn();
     foreach ($this->_array as $node) {
       $next = $node->nextSibling;
@@ -932,7 +932,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * @access public
   * @return FluentDOM
   */
-  public function nextAllSiblings($expr = NULL) {
+  public function nextAll($expr = NULL) {
     $result = $this->_spawn();
     foreach ($this->_array as $node) {
       $next = $node->nextSibling;
@@ -994,7 +994,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * @access public
   * @return object FluentDOM
   */
-  public function prevSiblings($expr = NULL) {
+  public function prev($expr = NULL) {
     $result = $this->_spawn();
     foreach ($this->_array as $node) {
       $previous = $node->previousSibling;
@@ -1019,7 +1019,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * @access public
   * @return object FluentDOM
   */
-  public function prevAllSiblings($expr = NULL) {
+  public function prevAll($expr = NULL) {
     $result = $this->_spawn();
     foreach ($this->_array as $node) {
       $previous = $node->previousSibling;

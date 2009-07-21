@@ -27,13 +27,13 @@ XML;
 require_once('../FluentDOM.php');
 echo FluentDOM($xml)
   ->find('//div[@id = "start"]')
-  ->prevSiblings()
+  ->prev()
   ->addClass('before');
 
 echo "\n\n";
 
 echo FluentDOM($xml)
   ->find('//div[@class= "here"]')
-  ->prevSiblings('.//span')
+  ->prev('.//span')
   ->addClass('nextTest');
 ?>

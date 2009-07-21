@@ -48,6 +48,6 @@ echo "\n\n";
  */
 echo FluentDOM($xml)
   ->find('//p[position() = 1]')
-  ->nextSiblings()
+  ->next()
   ->text('nice');
 ?>

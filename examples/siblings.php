@@ -38,11 +38,4 @@ echo FluentDOM($xml)
   ->find('//li[@class = "hilite"]')
   ->siblings()
   ->addClass('before');
-
-/*echo "\n\n";
-
-echo FluentDOM($xml)
-  ->find('//div[@class= "here"]')
-  ->prevSiblings('.//span')
-  ->addClass('nextTest');*/
 ?>

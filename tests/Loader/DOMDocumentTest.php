@@ -6,7 +6,7 @@
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
 * @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
 *
-* @package FluentDOMLoader
+* @package FluentDOM
 * @subpackage unitTests
 */
 
@@ -21,20 +21,20 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 /**
 * Test class for FluentDOMLoaderDOMDocument.
 *
-* @package FluentDOMLoader
+* @package FluentDOM
 * @subpackage unitTests
 */
 class FluentDOMLoaderDOMDocumentTest extends PHPUnit_Framework_TestCase {
 
   public function testLoad() {
     $loader = new FluentDOMLoaderDOMDocument();
-    $fd = $loader->load(new DOMDocument(), NULL);
+    $fd = $loader->load(new DOMDocument(), 'xml');
     $this->assertTrue($fd instanceof DOMDocument);
   }
 
   public function testLoadInvalid() {
     $loader = new FluentDOMLoaderDOMDocument();
-    $result = $loader->load(NULL, 'html');
+    $result = $loader->load(NULL, 'xml');
     $this->assertFalse($result);
   }
 }

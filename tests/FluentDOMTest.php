@@ -57,7 +57,7 @@ class FluentDOMTest extends FluentDOMTestCase {
     $this->assertTrue($fd instanceof FluentDOM);
     $this->assertEquals('html', $fd->document->documentElement->nodeName);
   }
-
+  
   /*
   * Load
   */
@@ -95,6 +95,27 @@ class FluentDOMTest extends FluentDOMTestCase {
     $this->assertSame(
       $fd,
       $fd->load('test load string')
+    );
+  }
+
+  /**
+  * @group Load
+  */
+  public function testLoaderMechanismIncludingSelection() {
+    $dom = new DOMDocument();
+    $domNode = $dom->appendChild($dom->createElement('root'));
+    $loaderMock = $this->getMock('FluentDOMLoader');
+    $loaderMock->expects($this->once())
+               ->method('load')
+               ->with($this->equalTo($domNode), $this->equalTo('xml'))
+               ->will($this->returnValue(array($dom, array($domNode))));
+
+    $fd = new FluentDOM();
+    $fd->setLoaders(array($loaderMock));
+
+    $this->assertSame(
+      $fd,
+      $fd->load($domNode)
     );
   }
 

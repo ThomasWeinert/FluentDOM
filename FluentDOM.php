@@ -116,6 +116,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * @see DOMDocument::load()
   */
   public function load($source, $contentType = 'xml') {
+    $this->_array = array();
     $this->_contentType = $contentType;
     if ($source instanceof FluentDOM) {
       $this->_useDocumentContext = FALSE;
@@ -123,16 +124,24 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
       $this->_xpath = $source->_xpath;
       $this->_contentType = $source->_contentType;
       $this->_parent = $source;
-      return $this;
-    } elseif ($this->_isNode($source)) {
-      $this->_useDocumentContext = FALSE;
-      $this->_document = $source->ownerDocument;
-      $this->_push($source);      
+      return $this;   
     } else {
-      $this->_useDocumentContext = TRUE;
+      $this->_parent = NULL;
       $this->_initLoaders();
       foreach ($this->_loaders as $loader) {
-        if ($this->_document = $loader->load($source, $contentType)) {
+        if ($loaded = $loader->load($source, $contentType)) {
+          if ($loaded instanceof DOMDocument) {
+            $this->_useDocumentContext = TRUE;
+            $this->_document = $loaded;
+          } elseif (is_array($loaded) &&
+                    isset($loaded[0]) &&
+                    isset($loaded[1]) &&
+                    $loaded[0] instanceof DOMDocument &&
+                    is_array($loaded[1])) {
+            $this->_document = $loaded[0];
+            $this->_push($loaded[1]);
+            $this->_useDocumentContext = FALSE;
+          }
           return $this;
         }
       }
@@ -151,12 +160,14 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
     if (!is_array($this->_loaders)) {
       $path = dirname(__FILE__);
       include_once($path.'/FluentDOMLoader.php');
+      include_once($path.'/Loader/DOMNode.php');
       include_once($path.'/Loader/DOMDocument.php');
       include_once($path.'/Loader/StringXML.php');
       include_once($path.'/Loader/FileXML.php');
       include_once($path.'/Loader/StringHTML.php');
       include_once($path.'/Loader/FileHTML.php');
       $this->_loaders = array(
+        new FluentDOMLoaderDOMNode(),
         new FluentDOMLoaderDOMDocument(),
         new FluentDOMLoaderStringXML(),
         new FluentDOMLoaderFileXML(),

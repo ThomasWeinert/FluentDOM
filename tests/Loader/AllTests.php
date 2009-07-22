@@ -6,8 +6,8 @@
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
 * @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
 *
-* @package FluentDOMLoader
-* @subpackage unitTests
+* @package FluentDOM
+* @subpackage Tests
 */
 
 /**
@@ -20,12 +20,13 @@ require_once $dir.'/FileXMLTest.php';
 require_once $dir.'/StringHTMLTest.php';
 require_once $dir.'/FileHTMLTest.php';
 require_once $dir.'/DOMDocumentTest.php';
+require_once $dir.'/DOMNodeTest.php';
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
 /**
-* @package FluentDOMLoader
-* @subpackage unitTests
+* @package FluentDOM
+* @subpackage Tests
 */
 class FluentDOMLoader_AllTests {
 
@@ -42,6 +43,7 @@ class FluentDOMLoader_AllTests {
     $suite->addTestSuite('FluentDOMLoaderFileHTMLTest');
     $suite->addTestSuite('FluentDOMLoaderFileXMLTest');
     $suite->addTestSuite('FluentDOMLoaderDOMDocumentTest');
+    $suite->addTestSuite('FluentDOMLoaderDOMNodeTest');
 
     return $suite;
   }

@@ -17,6 +17,15 @@
 * @subpackage Loaders
 */
 interface FluentDOMLoader {
+
+  /**
+  * load FluentDOM document data from a source
+  *
+  * @param mixed $source
+  * @param string $contentType 
+  * @access public
+  * @return mixed object DOMDocument | array(DOMDocument, array(DOMNode, ...))  
+  */
   public function load($source, $contentType);
 }
 

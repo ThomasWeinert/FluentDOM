@@ -1,6 +1,6 @@
 <?php
 /**
-* Load FluentDOM from DOMDocument
+* Load FluentDOM from DOMNode
 *
 * @version $Id$
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
@@ -24,12 +24,12 @@ require_once dirname(__FILE__).'/../FluentDOMLoader.php';
 class FluentDOMLoaderDOMNode implements FluentDOMLoader {
   
   /**
-  * attach existing DOMDocument 
+  * attach existing DOMNode->ownerdocument and select the DOMNode
   *
-  * @param object DOMDocument $source
+  * @param object DOMNode $source
   * @param string $contentType
   * @access public
-  * @return object DOMDocument | FALSE
+  * @return array | FALSE
   */
   public function load($source, $contentType) {
     if ($source instanceof DOMNode) {

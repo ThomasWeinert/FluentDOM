@@ -2,14 +2,23 @@ $Id$
 
 --------------------------------------------------------------------------------
  FluentDOM
- Version 2.0 
+ 
+ Version: 2.0
+ Copyright: 2009 Bastian Feder, Thomas Weinert
+ Licence: The MIT License
+          http://www.opensource.org/licenses/mit-license.php
 --------------------------------------------------------------------------------
 
-FluentDOM provides an easy to use fluent interface for DOMDocument.
+FluentDOM provides an easy to use fluent interface for DOMDocument. We tried to
+keep the jQuery API but adapted it to PHP and der server environment.
 
-The idea was born in a workshop of Tobias Schlitt (schlitt.info) about the PHP
-XML extensions at the IPC Spring in Berlin. He used this idea to show XPath
-samples in the session. Since then he contributed several ideas and hints.
+The idea was born in a workshop of Tobias Schlitt (http://schlitt.info) about
+the PHP XML extensions at the IPC Spring in Berlin. He used this idea to show
+XPath samples in the session. Since then he contributed several ideas and hints.
+The loader concept was his idea, too.
+
+FluentDOM is a test driven project. We write tests before and during the
+development. You will find the PHPUnit test in the "tests" subdirectory.
 
 --------------------------------------------------------------------------------
 

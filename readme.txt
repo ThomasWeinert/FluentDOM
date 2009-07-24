@@ -95,14 +95,14 @@ You can select, traverse and manipulate them.
 
 3) FluentDOM(), FluentDOMStyle()
 
-Functions that create a object of the same class. You can provide $source and
-$contentType paramters to initialize the content. Makes the chaining nicer. 
+Functions creating an object of the same class. You can provide $source and
+$contentType parameters to initialize the content. Makes the chaining nicer. 
 
 $fd = FluentDOM($source)->find($selector);
 
 4) FluentDOM::xml()
 
-A method to read an write the inner XML of the selected nodes.
+A method to read and write the inner XML of the selected nodes.
 
 5) FluentDOM::node()
 
@@ -121,7 +121,7 @@ methods.
 
 2) FluentDOMStyle
 
-Extends FluentDOM with support wor manipulation of the style attribute.
+Extends FluentDOM with support for manipulation of the style attribute.
 
 3) FluentDOMIterator
 

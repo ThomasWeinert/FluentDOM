@@ -22,7 +22,6 @@ Table Of Contents:
 * Classes
 * Syntax Sugar
 * Loaders
-* Feedback
 * Changelog
 * Plans/ToDo
 

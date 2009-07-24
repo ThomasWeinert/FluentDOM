@@ -34,7 +34,7 @@ class FluentDOMLoaderFileHTML implements FluentDOMLoader {
   public function load($source, $contentType) {
     if (is_string($source) &&
         FALSE === strpos($source, '<') &&
-        in_array($contentType, array('html', 'text/html'))) {
+        $contentType == 'text/html') {
 
       if (!file_exists($source)) {
         throw new InvalidArgumentException('File not found: '. $source);

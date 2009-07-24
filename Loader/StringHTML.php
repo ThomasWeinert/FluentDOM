@@ -34,7 +34,7 @@ class FluentDOMLoaderStringHTML implements FluentDOMLoader {
   public function load($source, $contentType) {
     if (is_string($source) &&
         FALSE !== strpos($source, '<') &&
-        in_array($contentType, array('html', 'text/html'))) {
+        $contentType == 'text/html') {
       $dom = new DOMDocument();
       $errorSetting = libxml_use_internal_errors(TRUE);
       libxml_clear_errors();

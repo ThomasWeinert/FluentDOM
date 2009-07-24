@@ -28,13 +28,13 @@ class FluentDOMLoaderDOMDocumentTest extends PHPUnit_Framework_TestCase {
 
   public function testLoad() {
     $loader = new FluentDOMLoaderDOMDocument();
-    $fd = $loader->load(new DOMDocument(), 'xml');
+    $fd = $loader->load(new DOMDocument(), 'text/xml');
     $this->assertTrue($fd instanceof DOMDocument);
   }
 
   public function testLoadInvalid() {
     $loader = new FluentDOMLoaderDOMDocument();
-    $result = $loader->load(NULL, 'xml');
+    $result = $loader->load(NULL, 'text/xml');
     $this->assertFalse($result);
   }
 }

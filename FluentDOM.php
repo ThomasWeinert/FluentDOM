@@ -17,11 +17,11 @@ require_once(dirname(__FILE__).'/FluentDOMIterator.php');
 * This is a shortcut for "new FluentDOM($source)"
 *
 * @param mixed $source
-* @param string $contentType optional, default value 'xml'
+* @param string $contentType optional, default value 'text/xml'
 * @access public
 * @return object FluentDOM
 */
-function FluentDOM($source = NULL, $contentType = 'xml') {
+function FluentDOM($source = NULL, $contentType = 'text/xml') {
   $result = new FluentDOM();
   if (isset($source)) {
     return $result->load($source, $contentType);
@@ -60,10 +60,10 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
 
   /**
   * content type for output (xml, text/xml, html, text/html)
-  * @var boolean
+  * @var string
   * @access private
   */
-  private $_contentType = FALSE;
+  private $_contentType = 'text/xml';
 
   /**
   * parent node list (last selection in chain)
@@ -107,7 +107,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * Load a $source string. This can be content (contains <) or an URL.
   *
   * @param $source
-  * @param string $contentType optional, default value 'xml'
+  * @param string $contentType optional, default value 'text/xml'
   * @access public
   *
   * @see DOMDocument::loadHTML()
@@ -115,9 +115,9 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * @see DOMDocument::loadXML()
   * @see DOMDocument::load()
   */
-  public function load($source, $contentType = 'xml') {
+  public function load($source, $contentType = 'text/xml') {
     $this->_array = array();
-    $this->_contentType = $contentType;
+    $this->_setContentType($contentType);
     if ($source instanceof FluentDOM) {
       $this->_useDocumentContext = FALSE;
       $this->_document = $source->document;
@@ -129,7 +129,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
       $this->_parent = NULL;
       $this->_initLoaders();
       foreach ($this->_loaders as $loader) {
-        if ($loaded = $loader->load($source, $contentType)) {
+        if ($loaded = $loader->load($source, $this->_contentType)) {
           if ($loaded instanceof DOMDocument) {
             $this->_useDocumentContext = TRUE;
             $this->_document = $loaded;
@@ -149,7 +149,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
     }
     return $this;
   }
-  
+    
   /**
   * Initialize loaders if they are not already initialized
   *
@@ -193,6 +193,34 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
     $this->_loaders = $loaders;
     return $this;
   }
+  
+  /**
+  * setter for contentType property
+  *
+  * @param string $value
+  * @access private
+  * @return void
+  */
+  private function _setContentType($value) {
+    switch (strtolower($value)) {
+    case 'xml' :
+    case 'text/xml' :
+      $newContentType = 'text/xml';
+      break;
+    case 'html' :
+    case 'text/html' :
+      $newContentType = 'text/html';
+      break;
+    default :
+      throw new UnexpectedValueException('Invalid content type value');
+    }
+    if ($this->_contentType != $newContentType) {
+      $this->_contentType = $newContentType;
+      if (isset($this->_parent)) {
+        $this->_parent->contentType = $newContentType;
+      }
+    }
+  }
 
   /**
   * implement dynamic properties using magic methods
@@ -203,10 +231,12 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   */
   public function __get($name) {
     switch ($name) {
-    case 'length' :
-      return count($this->_array);
+    case 'contentType' :
+      return $this->_contentType;
     case 'document' :
       return $this->_document;
+    case 'length' :
+      return count($this->_array);
     case 'xpath' :
       return $this->_xpath();
     default :
@@ -224,8 +254,11 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   */
   public function __set($name, $value) {
     switch ($name) {
-    case 'length' :
+    case 'contentType' :
+      $this->_setContentType($value);
+      break;
     case 'document' :
+    case 'length' :
     case 'xpath' :
       throw new BadMethodCallException('Can not set readonly value.');
     default :
@@ -695,7 +728,10 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * @access public
   * @return object FluentDOM
   */
-  public function formatOutput() {
+  public function formatOutput($contentType = NULL) {
+    if (isset($contentType)) {
+      $this->_setContentType($contentType);
+    }
     $this->_array = array();
     $this->_position = 0;
     $this->_useDocumentContext = TRUE;

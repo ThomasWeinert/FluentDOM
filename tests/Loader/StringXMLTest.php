@@ -28,14 +28,14 @@ class FluentDOMLoaderStringXMLTest extends PHPUnit_Framework_TestCase {
 
   public function testLoad() {
     $loader = new FluentDOMLoaderStringXML();
-    $dom = $loader->load('<sample/>', 'xml');
+    $dom = $loader->load('<sample/>', 'text/xml');
     $this->assertTrue($dom instanceof DOMDocument);
     $this->assertEquals('sample', $dom->documentElement->nodeName);
   }
 
   public function testLoadInvalid() {
     $loader = new FluentDOMLoaderStringXML();
-    $result = $loader->load('foobar', 'xml');
+    $result = $loader->load('foobar', 'text/xml');
     $this->assertFalse($result);
   }
 }

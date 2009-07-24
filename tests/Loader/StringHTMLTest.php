@@ -28,14 +28,14 @@ class FluentDOMLoaderStringHTMLTest extends PHPUnit_Framework_TestCase {
 
   public function testLoad() {
     $loader = new FluentDOMLoaderStringHTML();
-    $fd = $loader->load('<html><body></body></html>', 'html');
+    $fd = $loader->load('<html><body></body></html>', 'text/html');
     $this->assertTrue($fd instanceof DOMDocument);
     $this->assertEquals('html', $fd->documentElement->nodeName);
   }
 
   public function testLoadInvalid() {
     $loader = new FluentDOMLoaderStringHTML();
-    $result = $loader->load('html', 'html');
+    $result = $loader->load('html', 'text/html');
     $this->assertFalse($result);
   }
 }

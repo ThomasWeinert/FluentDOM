@@ -30,7 +30,7 @@ class FluentDOMLoaderFileHTMLTest extends PHPUnit_Framework_TestCase {
     $loader = new FluentDOMLoaderFileHTML();
     $fd = $loader->load(
       dirname(__FILE__).'/data/fileHTML_src.html',
-      'html'
+      'text/html'
     );
     $this->assertTrue($fd instanceof DOMDocument);
     $this->assertEquals('html', $fd->documentElement->nodeName);
@@ -38,14 +38,14 @@ class FluentDOMLoaderFileHTMLTest extends PHPUnit_Framework_TestCase {
 
   public function testLoadWithHtmlStringInvalid() {
     $loader = new FluentDOMLoaderFileHTML();
-    $result = $loader->load('<invalidFileName></invalidFileName>','html');
+    $result = $loader->load('<invalidFileName></invalidFileName>', 'text/html');
     $this->assertFalse($result);
   }
 
   public function testLoadInvalid() {
     try {
       $loader = new FluentDOMLoaderFileHTML();
-      $result = $loader->load('invalidFileName','html');
+      $result = $loader->load('invalidFileName', 'text/html');
       $this->fail('An expected exception has not been raised.');
     } catch (InvalidArgumentException $e) {
     }

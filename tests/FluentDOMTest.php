@@ -81,12 +81,12 @@ class FluentDOMTest extends FluentDOMTestCase {
     $firstLoaderMock = $this->getMock('FluentDOMLoader');
     $firstLoaderMock->expects($this->once())
                     ->method('load')
-                    ->with($this->equalTo('test load string'), $this->equalTo('xml'))
+                    ->with($this->equalTo('test load string'), $this->equalTo('text/xml'))
                     ->will($this->returnValue(FALSE));
     $secondLoaderMock = $this->getMock('FluentDOMLoader');
     $secondLoaderMock->expects($this->once())
                      ->method('load')
-                     ->with($this->equalTo('test load string'), $this->equalTo('xml'))
+                     ->with($this->equalTo('test load string'), $this->equalTo('text/xml'))
                      ->will($this->returnValue(new DOMDocument()));
 
     $fd = new FluentDOM();
@@ -107,7 +107,7 @@ class FluentDOMTest extends FluentDOMTestCase {
     $loaderMock = $this->getMock('FluentDOMLoader');
     $loaderMock->expects($this->once())
                ->method('load')
-               ->with($this->equalTo($domNode), $this->equalTo('xml'))
+               ->with($this->equalTo($domNode), $this->equalTo('text/xml'))
                ->will($this->returnValue(array($dom, array($domNode))));
 
     $fd = new FluentDOM();
@@ -175,6 +175,41 @@ class FluentDOMTest extends FluentDOMTestCase {
     } catch (BadMethodCallException $expected) {
     }
   }
+  
+  /**
+  * @group  Properties
+  * @dataProvider getContentTypeSamples
+  */
+  public function testPropertyContenttype($contentType, $expected) {
+    $fd = new FluentDOM();
+    $fd->contentType = $contentType;
+    $this->assertSame($expected, $fd->contentType);
+  }
+  
+  public function getContentTypeSamples() {
+    return array(
+      array('text/xml', 'text/xml'),
+      array('text/html', 'text/html'),
+      array('xml', 'text/xml'),
+      array('html', 'text/html'),
+      array('TEXT/XML', 'text/xml'),
+      array('TEXT/HTML', 'text/html'),
+      array('XML', 'text/xml'),
+      array('HTML', 'text/html')
+    );
+  }
+  
+  /**
+  * @group  Properties
+  */
+  public function testSetInvalidPropertyContenttype() {
+    try {
+      $fd = new FluentDOM();
+      $fd->contentType = 'INVALID_TYPE';
+      $this->fail('An expected exception has not been raised.');
+    } catch (UnexpectedValueException $expected) {
+    }
+  }
 
   /**
   * @group Properties
@@ -209,11 +244,11 @@ class FluentDOMTest extends FluentDOMTestCase {
     $loader = $this->getMock('FluentDOMLoader');
     $loader->expects($this->once())
            ->method('load')
-           ->with($this->equalTo(''), $this->equalTo('html'))
+           ->with($this->equalTo(''), $this->equalTo('text/html'))
            ->will($this->returnValue($dom));
     $fd = new FluentDOM();
     $fd->setLoaders(array($loader));
-    $fd = $fd->load('', 'html');
+    $fd = $fd->load('', 'text/html');
     $this->assertEquals($dom->saveHTML(), (string)$fd);
   }
 
@@ -440,6 +475,37 @@ class FluentDOMTest extends FluentDOMTestCase {
       $this->fail('An expected exception has not been raised.');
     } catch (UnexpectedValueException $expected) {
     }
+  }
+  
+  /**
+  * @group CoreFunctions
+  */
+  public function testFormatOutput() {
+    $fd = new FluentDOM();
+    $fd->append('<html><body><br/></body></html>')
+       ->formatOutput();
+    $expected =
+       "<?xml version=\"1.0\"?>\n".
+       "<html>\n".
+       "  <body>\n".
+       "    <br/>\n".
+       "  </body>\n".
+       "</html>\n";
+    $this->assertSame('text/xml', $this->readAttribute($fd, '_contentType'));
+    $this->assertSame($expected, (string)$fd);
+  }
+
+  
+  /**
+  * @group CoreFunctions
+  */
+  public function testFormatOutputWithContentTypeHtml() {
+    $fd = new FluentDOM();
+    $fd->append('<html><body><br/></body></html>')
+       ->formatOutput('text/html');
+    $expected = "<html><body><br></body></html>\n";
+    $this->assertSame('text/html', $this->readAttribute($fd, '_contentType'));
+    $this->assertSame($expected, (string)$fd);
   }
 
   /*

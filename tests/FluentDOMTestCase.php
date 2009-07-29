@@ -24,7 +24,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 * @package FluentDOM
 * @subpackage unitTests
 */
-class FluentDOMTestCase extends PHPUnit_Framework_TestCase {
+abstract class FluentDOMTestCase extends PHPUnit_Framework_TestCase {
 
   /**
   * directory of this file

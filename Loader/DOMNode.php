@@ -32,7 +32,7 @@ class FluentDOMLoaderDOMNode implements FluentDOMLoader {
   * @return array | FALSE
   */
   public function load($source, $contentType) {
-    if ($source instanceof DOMNode) {
+    if ($source instanceof DOMNode && !empty($source->ownerDocument)) {
       return array($source->ownerDocument, array($source));
     }
     return FALSE;

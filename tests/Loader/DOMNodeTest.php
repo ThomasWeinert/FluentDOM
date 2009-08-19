@@ -41,6 +41,13 @@ class FluentDOMLoaderDOMNodeTest extends PHPUnit_Framework_TestCase {
     $result = $loader->load(NULL, 'text/xml');
     $this->assertFalse($result);
   }
+
+  public function testLoadInvalidWithDOMDocument() {
+    $dom = new DOMDocument();
+    $loader = new FluentDOMLoaderDOMNode();
+    $result = $loader->load($dom, 'text/xml');
+    $this->assertFalse($result);
+  }
 }
 
 ?>

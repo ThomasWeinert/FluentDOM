@@ -33,7 +33,7 @@
   <body>
     <?php
       require_once('../../FluentDOM.php');
-      $dom = new FluentDOM(file_get_contents('atom-sample.xml'));
+      $dom = FluentDOM('./atom-sample.xml');
 
       $categories = array_unique($dom->find('//_:category')->map('callbackCategoryTerm'));
       if (count($categories) > 0) {

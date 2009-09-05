@@ -1339,6 +1339,17 @@ class FluentDOMTest extends FluentDOMTestCase {
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
+  /**
+  * @group Manipulation
+  */
+  public function testRemoveWithExpression() {
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd->find('//p')
+       ->remove('@class = "first"');
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
+  }
+
   /*
   * Manipulation - Copying
   */
@@ -1492,8 +1503,30 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testRemoveAttr() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->find('//p')
-      ->removeAttr('index');
+    $fd->find('//p')
+       ->removeAttr('index');
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
+  }
+  
+  /**
+  * @group Attributes
+  */
+  public function testRemoveAttrWithListParameter() {
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd->find('//p')
+       ->removeAttr(array('index', 'style'));
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
+  }
+  
+  /**
+  * @group Attributes
+  */
+  public function testRemoveAttrWithAsteriskParameter() {
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd->find('//p')
+       ->removeAttr('*');
     $this->assertTrue($fd instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }

@@ -417,7 +417,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * @access private
   * @return  object FluentDOM
   */
-  protected function _spawn() {
+  private function _spawn() {
     $className = get_class($this);
     $result = new $className();
     return $result->load($this);
@@ -1647,7 +1647,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
     $result = $this->_spawn();
     foreach ($this->_array as $node) {
       if (isset($node->parentNode)) {
-        if (empty($expr) || $this->test($expr, $node)) {
+        if (empty($expr) || $this->_test($expr, $node)) {
           $result->_push($node->parentNode->removeChild($node));
         }
       }
@@ -1760,10 +1760,26 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   */
   public function removeAttr($name) {
     if (!empty($name)) {
+      if (is_string($name) && $name !== '*') {
+        $attributes = array($name);
+      } elseif (is_array($name)) {
+        $attributes = $name;
+      } elseif ($name !== '*') {
+        throw new InvalidArgumentException();
+      }
       foreach ($this->_array as $node) {
-        if ($node instanceof DOMElement &&
-            $node->hasAttribute($name)) {
-          $node->removeAttribute($name);
+        if ($node instanceof DOMElement) {
+          if ($name === '*') {
+            for ($i = $node->attributes->length - 1; $i >= 0; $i--) {
+              $node->removeAttribute($node->attributes->item($i)->name);
+            }
+          } else {
+            foreach ($attributes as $attribute) {
+              if ($node->hasAttribute($attribute)) {
+                $node->removeAttribute($attribute);
+              }
+            }
+          }
         }
       }
     }

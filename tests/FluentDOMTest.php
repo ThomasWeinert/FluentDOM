@@ -1508,6 +1508,18 @@ class FluentDOMTest extends FluentDOMTestCase {
     $this->assertTrue($fd instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
+
+  /**
+  * @group Attributes
+  */
+  public function testRemoveAttrWithInvalidParameter() { 
+    $fd = new FluentDOM();
+    try {
+      $fd->removeAttr(1);
+      $this->fail('An expected exception has not been raised.');
+    } catch (InvalidArgumentException $expected) {
+    }
+  }
   
   /**
   * @group Attributes

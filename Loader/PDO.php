@@ -23,9 +23,9 @@ require_once dirname(__FILE__).'/../FluentDOMLoader.php';
 */
 class FluentDOMLoaderPDO implements FluentDOMLoader {
   
-  protected $tagNameRoot = 'records';
-  protected $tagNameRecord = 'record';
-  protected $tagNameColumn = 'column';
+  protected $_tagNameRoot = 'records';
+  protected $_tagNameRecord = 'record';
+  protected $_tagNameColumn = 'column';
   
   /**
   * Load DOMDocument from xml string
@@ -42,15 +42,15 @@ class FluentDOMLoaderPDO implements FluentDOMLoader {
       $dom = new DOMDocument();
       $dom->formatOutput = TRUE;
       $dom->appendChild(
-        $rootNode = $dom->createElement($this->tagNameRoot)
+        $rootNode = $dom->createElement($this->_tagNameRoot)
       );
       foreach ($source as $row) {
         $rootNode->appendChild(
-          $recordNode = $dom->createElement($this->tagNameRecord)
+          $recordNode = $dom->createElement($this->_tagNameRecord)
         );
         foreach ($row as $name => $value) {
           $recordNode->appendChild(
-            $valueNode = $dom->createElement('column', $value)
+            $valueNode = $dom->createElement($this->_tagNameColumn, $value)
           );
           $valueNode->setAttribute('name', $name);
         }

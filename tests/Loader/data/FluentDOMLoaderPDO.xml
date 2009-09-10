@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<records>
+  <record>
+    <column name="sample_integer">1</column>
+    <column name="sample_varchar">FOO</column>
+    <column name="sample_text">BAR</column>
+  </record>
+</records>

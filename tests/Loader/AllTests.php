@@ -21,7 +21,8 @@ require_once $dir.'/StringHTMLTest.php';
 require_once $dir.'/FileHTMLTest.php';
 require_once $dir.'/DOMDocumentTest.php';
 require_once $dir.'/DOMNodeTest.php';
-require_once $dir.'/SimpleXMLElement.php';
+require_once $dir.'/SimpleXMLElementTest.php';
+require_once $dir.'/PDOTest.php';
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
@@ -46,6 +47,7 @@ class FluentDOMLoader_AllTests {
     $suite->addTestSuite('FluentDOMLoaderDOMDocumentTest');
     $suite->addTestSuite('FluentDOMLoaderDOMNodeTest');
     $suite->addTestSuite('FluentDOMLoaderSimpleXMLElementTest');
+    $suite->addTestSuite('FluentDOMLoaderPDOTest');
 
     return $suite;
   }

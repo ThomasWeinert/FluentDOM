@@ -39,9 +39,16 @@ class FluentDOMLoaderPDOTest extends PHPUnit_Framework_TestCase {
   }
 
   public function testLoadInvalid() {
-    $loader = new FluentDOMLoaderDOMNode();
+    $loader = new FluentDOMLoaderPDO();
     $result = $loader->load(NULL, 'text/xml');
     $this->assertFalse($result);
+  }
+  
+  public function testSetTagNames() {
+    $loader = new FluentDOMLoaderPDO();
+    $loader->setTagNames('samples', 'sample');
+    $this->assertSame('samples', $this->readAttribute($loader, '_tagNameRoot'));
+    $this->assertSame('sample', $this->readAttribute($loader, '_tagNameRecord'));
   }
 }
 

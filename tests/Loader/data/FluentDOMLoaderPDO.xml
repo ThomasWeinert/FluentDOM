@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 <records>
-  <record>
-    <column name="sample_integer">1</column>
-    <column name="sample_varchar">FOO</column>
-    <column name="sample_text">BAR</column>
+  <record sample_integer="1">
+    <sample_varchar>FOO</sample_varchar>
+    <sample_text>BAR</sample_text>
   </record>
 </records>

@@ -24,7 +24,7 @@ class FluentDOMIterator implements RecursiveIterator, SeekableIterator {
   *
   * @param $owner
   * @access public
-  * @return
+  * @return object FluentDOM
   */
   public function __construct($owner) {
     $this->_owner = $owner;

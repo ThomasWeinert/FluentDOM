@@ -7,18 +7,17 @@
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
 * @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
 *
-* @package FluentDOMStyle
+* @package FluentDOM
 */
 
 /**
-* include the parant class (FluentDOM)
+* include the parent class (FluentDOM)
 */
 require_once(dirname(__FILE__).'/FluentDOM.php');
 
 /**
-* Function to create a new FluentDOMStyle instance
-*
-* This is a shortcut for "new FluentDOMStyle($source)"
+* Function to create a new FluentDOMStyleinstance and loads data into it if
+* a valid $source is provided.
 *
 * @param mixed $source
 * @param string $contentType optional, default value 'text/xml'
@@ -50,10 +49,10 @@ class FluentDOMStyle extends FluentDOM {
   /**
   * get or set CSS values in style attributes
   *
-  * @param string | array $property
-  * @param NULL | string | Closure $value
+  * @param string|array $property
+  * @param NULL|string|object Closure $value
   * @access public
-  * @return string | object FluentDOMStyle
+  * @return string|object FluentDOMStyle
   */
   public function css($property, $value = NULL) {
     if (is_array($property)) {

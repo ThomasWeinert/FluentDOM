@@ -9,17 +9,19 @@
 * @package FluentDOM
 */
 
+/**
+* include the iterator class
+*/
 require_once(dirname(__FILE__).'/FluentDOMIterator.php');
 
 /**
-* Function to create a new FluentDOM instance
-*
-* This is a shortcut for "new FluentDOM($source)"
+* Function to create a new FluentDOM instance and loads data into it if
+* a valid $source is provided.
 *
 * @param mixed $source
 * @param string $contentType optional, default value 'text/xml'
 * @access public
-* @return object FluentDOM
+* @return FluentDOM
 */
 function FluentDOM($source = NULL, $contentType = 'text/xml') {
   $result = new FluentDOM();
@@ -33,12 +35,13 @@ function FluentDOM($source = NULL, $contentType = 'text/xml') {
 /**
 * FluentDOM implements a jQuery like replacement for DOMNodeList
 *
+* @property-read string $contentType output type - text/xml or text/html
 * @property-read int $length the amount of elements found by selector
-* @property-read DOMDocument $document An instance of the current DOMDocument
-* @property-read DOMXPath $xpath An Instance of the current DOMXPath object
+* @property-read DOMDocument $document internal DOM document object
+* @property-read DOMXPath $xpath internal XPath object
 *
-* @method bool empty() clears the current node list identified by a selector
-* @method DOMDocument clone() clones the items of the current node list identified by a selector
+* @method bool empty() Clears the current node list identified by a selector
+* @method DOMDocument clone() Clones the items of the current node list identified by a selector
 *
 * @package FluentDOM
 */
@@ -46,7 +49,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
 
   /**
   * document object
-  * @var object DOMDocument
+  * @var DOMDocument
   * @access private
   */
   private $_document = NULL;
@@ -67,7 +70,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
 
   /**
   * parent node list (last selection in chain)
-  * @var object FluentDOM
+  * @var FluentDOM
   * @access private
   */
   private $_parent = NULL;
@@ -81,7 +84,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
 
   /**
   * internal xpath instance
-  * @var object DOMXPath
+  * @var DOMXPath
   * @access private
   */
   private $_xpath = NULL;
@@ -106,14 +109,9 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Load a $source string. This can be content (contains <) or an URL.
   *
-  * @param $source
+  * @param mixed $source
   * @param string $contentType optional, default value 'text/xml'
   * @access public
-  *
-  * @see DOMDocument::loadHTML()
-  * @see DOMDocument::loadHTMLFile()
-  * @see DOMDocument::loadXML()
-  * @see DOMDocument::load()
   */
   public function load($source, $contentType = 'text/xml') {
     $this->_array = array();
@@ -151,7 +149,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   }
     
   /**
-  * Initialize loaders if they are not already initialized
+  * Initialize default loaders if they are not already initialized
   *
   * @access protected
   * @return void
@@ -182,7 +180,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   *
   * @param $loaders
   * @access public
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   public function setLoaders($loaders) {
     foreach ($loaders as $loader) {
@@ -195,7 +193,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   }
   
   /**
-  * setter for contentType property
+  * setter for FluentDOM::_contentType property
   *
   * @param string $value
   * @access private
@@ -204,6 +202,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   private function _setContentType($value) {
     switch (strtolower($value)) {
     case 'xml' :
+    case 'application/xml' :
     case 'text/xml' :
       $newContentType = 'text/xml';
       break;
@@ -325,7 +324,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   *
   * @param $position
   * @access public
-  * @return object DOMNode
+  * @return DOMNode
   */
   public function item($position) {
     if (isset($this->_array[$position])) {
@@ -415,7 +414,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * This is used for the chaining and needs to be overloaded in child classes.
   *
   * @access private
-  * @return  object FluentDOM
+  * @return  FluentDOM
   */
   private function _spawn() {
     $className = get_class($this);
@@ -424,10 +423,10 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   }
 
   /**
-  * create a new xpath object an register default namespaces from the current document
+  * Create a new xpath object and register default namespaces from the current document.
   *
   * @access private
-  * @return object DOMXPath
+  * @return DOMXPath
   */
   private function _xpath() {
     if (empty($this->_xpath) || $this->_xpath->document != $this->_document) {
@@ -481,7 +480,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * push new elements an the list
   *
-  * @param object DOMElement | object DOMNodeList | object FluentDOM $elements
+  * @param DOMElement|DOMNodeList|FluentDOM $elements
   * @access private
   * @return void
   */
@@ -516,7 +515,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * check if object is already in internal list
   *
-  * @param object DOMElement $node
+  * @param DOMElement $node
   * @access private
   * @return boolean
   */
@@ -569,7 +568,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * check if parameter is a valid callback function
   *
-  * @param $callback
+  * @param callback $callback
   * @access protected
   * @return boolean
   */
@@ -592,7 +591,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Convert a given content into and array of nodes
   *
-  * @param string | object DOMElement | object DOMText | object Iterator $content
+  * @param string|DOMElement|DOMText|Iterator $content
   * @param boolean $includeTextNodes
   * @param integer $limit
   * @access private
@@ -687,9 +686,9 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Convert content to DOMElement
   *
-  * @param string | array | object DOMElement | object FluentDOM $content
+  * @param string|array|DOMElement|FluentDOM $content
   * @access private
-  * @return object DOMElement
+  * @return DOMElement
   */
   private function _getContentElement($content) {
     if ($content instanceof DOMElement) {
@@ -707,9 +706,9 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Execute a function within the context of every matched element.
   *
-  * @param callback | object Closure $function
+  * @param callback $function
   * @access public
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   public function each($function) {
     if ($this->_isCallback($function)) {
@@ -726,7 +725,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * The document is saved and reloaded, all variables with DOMNodes of this document will get invalid.
   *
   * @access public
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   public function formatOutput($contentType = NULL) {
     if (isset($contentType)) {
@@ -751,7 +750,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   *
   * @param integer $position Element index (start with 0)
   * @access public
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   public function eq($position) {
     $result = $this->_spawn();
@@ -764,9 +763,9 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Removes all elements from the set of matched elements that do not match the specified expression(s).
   *
-  * @param string $expr | callback | object Closure XPath expression or callback function
+  * @param string $expr|callback XPath expression or callback function
   * @access public
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   public function filter($expr) {
     $result = $this->_spawn();
@@ -803,7 +802,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * Translate a set of elements in the FluentDOM object into
   * another set of values in an array (which may, or may not contain elements).
   *
-  * @param callback | object Closure $function
+  * @param callback $function
   * @access public
   * @return array
   */
@@ -834,9 +833,9 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Removes elements matching the specified expression from the set of matched elements.
   *
-  * @param string $expr | callback | object Closure XPath expression or callback function
+  * @param string|callback $expr XPath expression or callback function
   * @access public
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   public function not($expr) {
     $result = $this->_spawn();
@@ -860,7 +859,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * @param integer $start
   * @param integer $end
   * @access public
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   public function slice($start, $end = NULL) {
     $result = $this->_spawn();
@@ -883,9 +882,10 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Adds more elements, matched by the given expression, to the set of matched elements.
   *
+  * @example add.php Usage Examples: FluentDOM::add()
   * @param string $expr XPath expression
   * @access public
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   public function add($expr) {
     $result = $this->_spawn();
@@ -904,9 +904,10 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * Get a set of elements containing all of the unique immediate
   * children of each of the matched set of elements.
   *
+  * @example children.php Usage Examples: FluentDOM::children()
   * @param string $expr XPath expression
   * @access public
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   public function children($expr = NULL) {
     $result = $this->_spawn();
@@ -930,7 +931,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * @param string $expr XPath expression
   * @param boolean $useDocumentContext ignore current node list
   * @access public
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   public function find($expr, $useDocumentContext = FALSE) {
     $result = $this->_spawn();
@@ -1039,7 +1040,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   *
   * @param string $expr XPath expression
   * @access public
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   public function prev($expr = NULL) {
     $result = $this->_spawn();
@@ -1064,7 +1065,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   *
   * @param string $expr XPath expression
   * @access public
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   public function prevAll($expr = NULL) {
     $result = $this->_spawn();
@@ -1087,7 +1088,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   *
   * @param string $expr XPath expression
   * @access public
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   public function siblings($expr = NULL) {
     $result = $this->_spawn();
@@ -1115,7 +1116,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * Add the previous selection to the current selection.
   *
   * @access public
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   public function andSelf() {
     $result = $this->_spawn();
@@ -1129,7 +1130,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * changing the set of matched elements to its previous state.
   *
   * @access public
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   public function end() {
     if ($this->_parent instanceof FluentDOM) {
@@ -1148,7 +1149,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   *
   * @param string $xml XML fragment
   * @access public
-  * @return string | object FluentDOM
+  * @return string|FluentDOM
   */
   public function xml($xml = NULL) {
     if (isset($xml)) {
@@ -1181,7 +1182,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   *
   * @param string $text
   * @access public
-  * @return string | object FluentDOM
+  * @return string|FluentDOM
   */
   public function text($text = NULL) {
     if (isset($text)) {
@@ -1205,9 +1206,9 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Append content to the inside of every matched element.
   *
-  * @param string | object DOMNode | object FluentDOM $content DOMNode or DOMNodeList or xml fragment string
+  * @param string|DOMNode|FluentDOM $content DOMNode or DOMNodeList or xml fragment string
   * @access public
-  * @return string | object FluentDOM
+  * @return FluentDOM
   */
   public function append($content) {
     return $this->_insertChild($content, FALSE);
@@ -1217,9 +1218,9 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * Append all of the matched elements to another, specified, set of elements.
   * Returns all of the inserted elements.
   *
-  * @param string | object DOMElement | object FluentDOM $expr XPath expression, element or list of elements
+  * @param string|DOMElement|FluentDOM $expr XPath expression, element or list of elements
   * @access public
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   public function appendTo($expr) {
     return $this->_insertChildTo($expr, FALSE);
@@ -1228,9 +1229,10 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Prepend content to the inside of every matched element.
   *
-  * @param string | object DOMNode | object FluentDOM $content DOMNode or DOMNodeList or xml fragment string
+  * @example prepend.php Usage Example: FluentDOM::prepend()
+  * @param string|DOMNode|FluentDOM $content DOMNode or DOMNodeList or xml fragment string
   * @access public
-  * @return string | object FluentDOM
+  * @return FluentDOM
   */
   public function prepend($content) {
     return $this->_insertChild($content, TRUE);
@@ -1240,9 +1242,10 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * Prepend all of the matched elements to another, specified, set of elements.
   * Returns all of the inserted elements.
   *
-  * @param string | object DOMElement | object FluentDOM $expr XPath expression, element or list of elements
+  * @example prependTo.php Usage Example: FluentDOM::prependTo()
+  * @param string|DOMElement|FluentDOM $expr XPath expression, element or list of elements
   * @access public
-  * @return object FluentDOM list of all new elements
+  * @return FluentDOM list of all new elements
   */
   public function prependTo($expr) {
     return $this->_insertChildTo($expr, TRUE);
@@ -1251,10 +1254,10 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Insert content to the inside of every matched element.
   *
-  * @param string | object DOMNode | object FluentDOM $content DOMNode or DOMNodeList or xml fragment string
+  * @param string|DOMNode|FluentDOM $content DOMNode or DOMNodeList or xml fragment string
   * @param boolean $first insert at first position (or last)
   * @access private
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   private function _insertChild($content, $first) {
     $result = $this->_spawn();
@@ -1287,10 +1290,10 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * Insert all of the matched elements to another, specified, set of elements.
   * Returns all of the inserted elements.
   *
-  * @param string | object DOMElement | object FluentDOM $selector XPath expression, element or list of elements
+  * @param string|DOMElement|FluentDOM $selector XPath expression, element or list of elements
   * @param boolean $first insert at first position (or last)
   * @access public
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   private function _insertChildTo($selector, $first) {
     $result = $this->_spawn();
@@ -1321,9 +1324,10 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Insert content after each of the matched elements.
   *
+  * @example after.php Usage Example: FluentDOM::after()
   * @param $content
   * @access public
-  * @return  object FluentDOM
+  * @return FluentDOM
   */
   public function after($content) {
     $result = $this->_spawn();
@@ -1348,9 +1352,9 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Insert content before each of the matched elements.
   *
-  * @param $content
+  * @param string|array|FluentDOM $content
   * @access public
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   public function before($content) {
     $result = $this->_spawn();
@@ -1374,9 +1378,9 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Insert all of the matched elements after another, specified, set of elements.
   *
-  * @param $selector
+  * @param string|callback $selector
   * @access public
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   public function insertAfter($selector) {
     $result = $this->_spawn();
@@ -1403,9 +1407,9 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Insert all of the matched elements before another, specified, set of elements.
   *
-  * @param $selector
+  * @param string|callback $selector
   * @access public
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   public function insertBefore($selector) {
     $result = $this->_spawn();
@@ -1436,9 +1440,9 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * Wrap $content around a set of elements
   *
   * @param array $elements
-  * @param string | array | object DOMElement | object FluentDOM $content
+  * @param string|array|DOMElement|FluentDOM $content
   * @access private
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   private function _wrap($elements, $content) {
     $wrapperTemplate = $this->_getContentElement($content);
@@ -1471,9 +1475,9 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   *
   * If $content contains several elements the first one is used
   *
-  * @param string | array | object DOMElement | object FluentDOM $content
+  * @param string|array|DOMElement|FluentDOM $content
   * @access public
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   public function wrap($content) {
     $result = $this->_spawn();
@@ -1486,9 +1490,9 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   *
   * If the matched elemetns are not siblings, wrap each group of siblings.
   *
-  * @param string | array | object DOMElement | object FluentDOM $content
+  * @param string|array|DOMElement|FluentDOM $content
   * @access public
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   public function wrapAll($content) {
     $result = $this->_spawn();
@@ -1540,7 +1544,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * Wrap the inner child contents of each matched element
   * (including text nodes) with an XML structure.
   *
-  * @param string | array | object DOMElement | object FluentDOM $content
+  * @param string|array|DOMElement|FluentDOM $content
   * @access public
   * @return FluentDOM
   */
@@ -1569,7 +1573,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   *
   * @param $content
   * @access public
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   public function replaceWith($content) {
     $contentNodes = $this->_getContentNodes($content);
@@ -1592,7 +1596,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   *
   * @param $selector
   * @access public
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   public function replaceAll($selector) {
     $result = $this->_spawn();
@@ -1624,7 +1628,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * @see __call
   *
   * @access private
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   private function _emptyNodes() {
     foreach ($this->_array as $node) {
@@ -1641,7 +1645,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   *
   * @param string $expr XPath expression
   * @access public
-  * @return object FluentDOM removed elements
+  * @return FluentDOM removed elements
   */
   public function remove($expr = NULL) {
     $result = $this->_spawn();
@@ -1665,7 +1669,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   *
   * @param $content
   * @access public
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   public function node($content) {
     $result = $this->_spawn();
@@ -1681,7 +1685,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * Clone matched DOM Elements and select the clones.
   *
   * @access private
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   private function _cloneNodes() {
     $result = $this->_spawn();
@@ -1698,10 +1702,11 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Access a property on the first matched element or set the attribute(s) of all matched elements
   *
-  * @param string | array $expr attribute name or attribute list
-  * @param callback | string $value function callback or value
+  * @example attr.php Usage Example: FluentDOM:attr() Read an attribute value.
+  * @param string|array $attribute attribute name or attribute list
+  * @param callback|string $value function callback or value
   * @access public
-  * @return string | object FluentDOM attribute value or $this
+  * @return string|FluentDOM attribute value or $this
   */
   public function attr($attribute, $value = NULL) {
     if (is_array($attribute) && count($attribute) > 0) {
@@ -1756,7 +1761,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   *
   * @param string $name
   * @access public
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   public function removeAttr($name) {
     if (!empty($name)) {
@@ -1795,7 +1800,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   *
   * @param string $class
   * @access public
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   public function addClass($class) {
     return $this->toggleClass($class, TRUE);
@@ -1824,9 +1829,9 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Removes all or the specified class(es) from the set of matched elements.
   *
-  * @param $class
+  * @param string|array $class
   * @access public
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   public function removeClass($class) {
     return $this->toggleClass($class, FALSE);
@@ -1838,9 +1843,9 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * toggles the specified class if the switch is NULL.
   *
   * @param string $class
-  * @param NULL | boolean $switch toggle if NULL, add if TRUE, remove if FALSE
+  * @param NULL|boolean $switch toggle if NULL, add if TRUE, remove if FALSE
   * @access public
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   public function toggleClass($class, $switch = NULL) {
     foreach ($this->_array as $node) {

@@ -178,6 +178,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Define own loading handlers
   *
+  * @example iniloader/iniToXML.php Usage Example: Own loader object
   * @param $loaders
   * @access public
   * @return FluentDOM
@@ -717,7 +718,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
 
   /**
   * Execute a function within the context of every matched element.
-  *
+  * 
   * @param callback $function
   * @access public
   * @return FluentDOM
@@ -760,6 +761,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Reduce the set of matched elements to a single element.
   *
+  * @example eq.php Usage Example: FluentDOM::eq()
   * @param integer $position Element index (start with 0)
   * @access public
   * @return FluentDOM
@@ -775,6 +777,8 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Removes all elements from the set of matched elements that do not match the specified expression(s).
   *
+  * @example filter-expr.php Usage Example: FluentDOM::filter() with XPath expression
+  * @example filter-fn.php Usage Example: FluentDOM::filter() with Closure
   * @param string $expr|callback XPath expression or callback function
   * @access public
   * @return FluentDOM
@@ -799,6 +803,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * Checks the current selection against an expression and returns true,
   * if at least one element of the selection fits the given expression.
   *
+  * @example is.php Usage Example: FluentDOM::is()
   * @param string $expr XPath expression
   * @access public
   * @return boolean
@@ -814,6 +819,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * Translate a set of elements in the FluentDOM object into
   * another set of values in an array (which may, or may not contain elements).
   *
+  * @example map.php Usage Example: FluentDOM::map()
   * @param callback $function
   * @access public
   * @return array
@@ -845,6 +851,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Removes elements matching the specified expression from the set of matched elements.
   *
+  * @example not.php Usage Example: FluentDOM::not()
   * @param string|callback $expr XPath expression or callback function
   * @access public
   * @return FluentDOM
@@ -868,6 +875,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Selects a subset of the matched elements.
   *
+  * @example slice.php Usage Example: FluentDOM::slice()
   * @param integer $start
   * @param integer $end
   * @access public
@@ -940,6 +948,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Searches for descendent elements that match the specified expression.
   *
+  * @example find.php Usage Example: FluentDOM::find()
   * @param string $expr XPath expression
   * @param boolean $useDocumentContext ignore current node list
   * @access public
@@ -961,8 +970,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Get a set of elements containing the unique next siblings of each of the given set of elements.
   *
-  * Like jQuerys next() method but renamed because of a conflict with Iterator
-  *
+  * @example next.php Usage Example: FluentDOM::next()
   * @param string $expr XPath expression
   * @access public
   * @return FluentDOM
@@ -986,8 +994,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Find all sibling elements after the current element.
   *
-  * Like jQuerys nextAll() method but renamed for consistency with nextSiblings()
-  *
+  * @example nextAll.php Usage Example: FluentDOM::nextAll()
   * @param string $expr XPath expression
   * @access public
   * @return FluentDOM
@@ -1011,6 +1018,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Get a set of elements containing the unique parents of the matched set of elements.
   *
+  * @example parent.php Usage Example: FluentDOM::parent()
   * @access public
   * @return FluentDOM
   */
@@ -1027,6 +1035,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Get a set of elements containing the unique ancestors of the matched set of elements.
   *
+  * @example parents.php Usage Example: FluentDOM::parents()
   * @param string $expr XPath expression
   * @access public
   * @return FluentDOM
@@ -1048,8 +1057,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Get a set of elements containing the unique previous siblings of each of the matched set of elements.
   *
-  * Like jQuerys prev() method but renamed for consistency with nextSiblings()
-  *
+  * @example prev.php Usage Example: FluentDOM::prev()
   * @param string $expr XPath expression
   * @access public
   * @return FluentDOM
@@ -1073,8 +1081,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Find all sibling elements in front of the current element.
   *
-  * Like jQuerys prevAll() method but renamed for consistency with nextSiblings()
-  *
+  * @example prevAll.php Usage Example: FluentDOM::prevAll()
   * @param string $expr XPath expression
   * @access public
   * @return FluentDOM
@@ -1098,6 +1105,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Get a set of elements containing all of the unique siblings of each of the matched set of elements.
   *
+  * @example siblings.php Usage Example: FluentDOM::siblings()
   * @param string $expr XPath expression
   * @access public
   * @return FluentDOM
@@ -1159,6 +1167,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Get or set the xml contents of the first matched element.
   *
+  * @example xml.php Usage Example: FluentDOM::xml()
   * @param string $xml XML fragment
   * @access public
   * @return string|FluentDOM
@@ -1192,6 +1201,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * Get the combined text contents of all matched elements or
   * set the text contents of all matched elements.
   *
+  * @example text.php Usage Example: FluentDOM::text()
   * @param string $text
   * @access public
   * @return string|FluentDOM
@@ -1218,6 +1228,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Append content to the inside of every matched element.
   *
+  * @example append.php Usage Example: FluentDOM::append()
   * @param string|DOMNode|FluentDOM $content DOMNode or DOMNodeList or xml fragment string
   * @access public
   * @return FluentDOM
@@ -1230,6 +1241,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * Append all of the matched elements to another, specified, set of elements.
   * Returns all of the inserted elements.
   *
+  * @example appendTo.php Usage Example: FluentDOM::appendTo()
   * @param string|DOMElement|FluentDOM $expr XPath expression, element or list of elements
   * @access public
   * @return FluentDOM
@@ -1364,6 +1376,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Insert content before each of the matched elements.
   *
+  * @example before.php Usage Example: FluentDOM::before()
   * @param string|array|FluentDOM $content
   * @access public
   * @return FluentDOM
@@ -1390,6 +1403,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Insert all of the matched elements after another, specified, set of elements.
   *
+  * @example insertAfter.php Usage Example: FluentDOM::insertAfter()
   * @param string|callback $selector
   * @access public
   * @return FluentDOM
@@ -1419,6 +1433,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Insert all of the matched elements before another, specified, set of elements.
   *
+  * @example insertBefore.php Usage Example: FluentDOM::insertBefore()
   * @param string|callback $selector
   * @access public
   * @return FluentDOM
@@ -1487,6 +1502,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   *
   * If $content contains several elements the first one is used
   *
+  * @example wrap.php Usage Example: FluentDOM::wrap()
   * @param string|array|DOMElement|FluentDOM $content
   * @access public
   * @return FluentDOM
@@ -1502,6 +1518,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   *
   * If the matched elemetns are not siblings, wrap each group of siblings.
   *
+  * @example wrapAll.php Usage Example: FluentDOM::wrapAll()
   * @param string|array|DOMElement|FluentDOM $content
   * @access public
   * @return FluentDOM
@@ -1556,6 +1573,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * Wrap the inner child contents of each matched element
   * (including text nodes) with an XML structure.
   *
+  * @example wrapInner.php Usage Example: FluentDOM::wrapInner()
   * @param string|array|DOMElement|FluentDOM $content
   * @access public
   * @return FluentDOM
@@ -1583,6 +1601,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * This returns the JQuery element that was just replaced,
   * which has been removed from the DOM.
   *
+  * @example replaceWith.php Usage Example: FluentDOM::replaceWith()
   * @param $content
   * @access public
   * @return FluentDOM
@@ -1606,6 +1625,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Replaces the elements matched by the specified selector with the matched elements.
   *
+  * @example replaceAll.php Usage Example: FluentDOM::replaceAll()
   * @param $selector
   * @access public
   * @return FluentDOM
@@ -1655,6 +1675,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Removes all matched elements from the DOM.
   *
+  * @example remove.php Usage Example: FluentDOM::remove()
   * @param string $expr XPath expression
   * @access public
   * @return FluentDOM removed elements
@@ -1679,6 +1700,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * create nodes list from content, if $content contains node(s)
   * from another document the are imported.
   *
+  * @example node.php Usage Example: FluentDOM::node()
   * @param $content
   * @access public
   * @return FluentDOM
@@ -1771,6 +1793,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Remove an attribute from each of the matched elements.
   *
+  * @example removeAttr.php Usage Example: FluentDOM::removeAttr()
   * @param string $name
   * @access public
   * @return FluentDOM
@@ -1854,6 +1877,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * removes the specified class if the switch is FALSE,
   * toggles the specified class if the switch is NULL.
   *
+  * @example toggleClass.php Usage Example: FluentDOM::toggleClass()
   * @param string $class
   * @param NULL|boolean $switch toggle if NULL, add if TRUE, remove if FALSE
   * @access public

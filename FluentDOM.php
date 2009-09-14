@@ -337,6 +337,13 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * Interface - IteratorAggregate
   */
   
+  /**
+  * Get iterator for this object
+  * 
+  * @example interfaces/Iterator.php Usage Example: Iterator Interface
+  * @example interfaces/RecursiveIterator.php Usage Example: Recursive Iterator Interface
+  * @return FluentDOMIterator
+  */
   public function getIterator() {
     return new FluentDOMIterator($this);
   }  
@@ -346,8 +353,9 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   */
 
   /**
-  * get element count (Countable)
+  * Get element count (Countable interface)
   *
+  * @example interfaces/Countable.php Usage Example: Countable Interface
   * @access public
   * @return integer
   */
@@ -361,7 +369,8 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
 
   /**
   * If somebody tries to modify the internal array throw an exception.
-  *
+  * 
+  * @example interfaces/ArrayAccess.php Usage Example: ArrayAccess Interface
   * @param integer $offset
   * @param mixed $value
   * @access public
@@ -374,6 +383,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Check if index exists in internal array
   *
+  * @example interfaces/ArrayAccess.php Usage Example: ArrayAccess Interface
   * @param integer $offset
   * @access public
   * @return boolean
@@ -385,6 +395,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * If somebody tries to remove an element from the internal array throw an exception.
   *
+  * @example interfaces/ArrayAccess.php Usage Example: ArrayAccess Interface
   * @param integer $offset
   * @access public
   * @return void
@@ -396,6 +407,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Get element from internal array
   *
+  * @example interfaces/ArrayAccess.php Usage Example: ArrayAccess Interface
   * @param $offset
   * @access public
   * @return void

@@ -1,0 +1,17 @@
+<refentry id="{@id}">
+  <refnamediv>
+    <refname>User Guide for FluentDOM</refname>
+    <refpurpose></refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+    <author>Bastian Feder</author>
+    <author>Thomas Weinert</author>
+  </refsynopsisdiv>
+  {@toc}
+  <refsect1 id="{@id intro}">
+    <title>FluentDOM</title>
+    <para>
+      FluentDOM ist a jQuery like fluent xml interface for PHP. 
+    </para>
+  </refsect1>
+</refentry>

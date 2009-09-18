@@ -11,7 +11,49 @@
   <refsect1 id="{@id intro}">
     <title>FluentDOM</title>
     <para>
-      FluentDOM ist a jQuery like fluent xml interface for PHP. 
+      FluentDOM ist a jQuery like fluent XML interface for the DOMDocument in PHP. 
+    </para>
+    <para>
+      The idea was born in a workshop of Tobias Schlitt, about the PHP XML 
+      extensions at the IPC Spring , in Berlin. He used this idea to show
+      XPath samples in the session.
+    </para>
+    <para>   
+      Many thanks to the jQuery people for their work, who did an exceptional
+      job describing their interfaces and providing examples. This saved us a lot of work.
+    </para>
+    <para>
+      We implemented most of the jQuery methods into FluentDOM, but here are
+      differences. Most important: we use XPath for expressions, not CSS selectors.
+      Since XPath is supported by the ext/xml extension, no extra parsing need
+      to be done. This should be faster processing the selectors and btw it was
+      easier for us to implement. And as a nice topping it supports namespaces, too.
+    </para>
+    <para>
+      We implemented several php interfaces: Countable, IteratorAggregate,
+      SeekableIterator and RecursiveItrerator. Even ArrayAccess is supported.
+    </para>
+    <para>
+      Since FluentDOM works on XML documents, there is no method 'html()', but 'xml()'.
+    </para>
+    <para>
+      We support the string conversion using the magic __toString() method. It
+      will output the xml or html of the associated DOMDocument.
+    </para>
+    <para>
+      FluentDOM needs a document. If you do not provide a valid source an empty one
+      will be created.
+    </para>
+    <para>
+      XPath do not only match element nodes (nodes with a tag name and maybe children),
+      but text nodes, too. Which implecitly enhances FluentDOM to support them.
+    </para>
+    <para>
+      To be able to write phpUnit Tests and develop FluentDOM a lot of examples
+      where written. Most of them are copied and adapted from or are deeply
+      inspired by the jQuery documentation. They are located in the 'examples'
+      folder and linked in the documentation.
+      Once again many thanks to the jQuery team.
     </para>
   </refsect1>
 </refentry>

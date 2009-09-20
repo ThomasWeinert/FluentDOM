@@ -29,8 +29,8 @@ class FluentDOMLoaderPDOTest extends PHPUnit_Framework_TestCase {
   public function testLoad() {
     $loader = new FluentDOMLoaderPDO();
     $database = new PDO('sqlite:'.dirname(__FILE__).'/data/FluentDOMLoaderPDO.sqlite');
-    $statment = $database->query('SELECT * FROM sample');
-    $result = $loader->load($statment, 'text/xml');
+    $statement = $database->query('SELECT * FROM sample');
+    $result = $loader->load($statement, 'text/xml');
     $this->assertTrue($result instanceof DOMDocument);
     $this->assertXmlStringEqualsXmlFile(
       dirname(__FILE__).'/data/FluentDOMLoaderPDO.xml',

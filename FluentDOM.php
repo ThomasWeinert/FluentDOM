@@ -200,7 +200,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   }
 
   /**
-  * setter for FluentDOM::_contentType property
+  * Setter for FluentDOM::_contentType property
   *
   * @param string $value
   * @access private
@@ -253,8 +253,8 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * block changes of dynamic readonly property length
   *
-  * @param $name
-  * @param $value
+  * @param string $name
+  * @param mixed $value
   * @access public
   * @return void
   */
@@ -276,7 +276,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * support isset for dynamic properties length and document
   *
-  * @param $name
+  * @param string $name
   * @access public
   * @return boolean
   */
@@ -327,7 +327,8 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   }
 
   /**
-  * the item() method is used to access elements in the node list
+  * The item() method is used to access elements in the node list,
+  * like in a DOMNodelist.
   *
   * @param integer $position
   * @access public
@@ -463,9 +464,9 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   }
 
   /**
-  * Match xpath expression agains context and return matched elements.
+  * Match XPath expression agains context and return matched elements.
   *
-  * @param string$expr
+  * @param string $expr
   * @param DOMElement $context optional, default value NULL
   * @access private
   * @return DOMNodeList
@@ -549,8 +550,9 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   }
 
   /**
-  * validate string as qualified tag name
+  * Validate string as qualified tag name
   *
+  * @todo Improve QName check to allow full rfc compatible names.
   * @param string $name
   * @access private
   * @return boolean
@@ -672,7 +674,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Get the target nodes from a given $selector.
   *
-  * A string will be used as a XPath expression.
+  * A string will be used as XPath expression.
   *
   * @param string|array|DOMNode|DOMNodeList|FluentDOM $selector
   * @return unknown_type
@@ -790,7 +792,8 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   }
 
   /**
-  * Removes all elements from the set of matched elements that do not match the specified expression(s).
+  * Removes all elements from the set of matched elements that do not match
+  * the specified expression(s).
   *
   * @example filter-expr.php Usage Example: FluentDOM::filter() with XPath expression
   * @example filter-fn.php Usage Example: FluentDOM::filter() with Closure
@@ -986,7 +989,8 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   }
 
   /**
-  * Get a set of elements containing the unique next siblings of each of the given set of elements.
+  * Get a set of elements containing the unique next siblings of each of the
+  * given set of elements.
   *
   * @example next.php Usage Example: FluentDOM::next()
   * @param string $expr XPath expression
@@ -1121,7 +1125,8 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   }
 
   /**
-  * Get a set of elements containing all of the unique siblings of each of the matched set of elements.
+  * Get a set of elements containing all of the unique siblings of each of the
+  * matched set of elements.
   *
   * @example siblings.php Usage Example: FluentDOM::siblings()
   * @param string $expr XPath expression

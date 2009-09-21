@@ -14,19 +14,20 @@
       FluentDOM ist a jQuery like fluent XML interface for the DOMDocument in PHP. 
     </para>
     <para>
-      The idea was born in a workshop of Tobias Schlitt, about the PHP XML 
-      extensions at the IPC Spring , in Berlin. He used this idea to show
+      The idea was born in a workshop of {@link http://schlitt.info Tobias Schlitt}, 
+      about the PHP XML extensions at the IPC Spring, in Berlin. He used this idea to show
       XPath samples in the session.
     </para>
     <para>   
-      Many thanks to the jQuery people for their work, who did an exceptional
-      job describing their interfaces and providing examples. This saved us a lot of work.
+      Many thanks to the {@link http://jquery.com jQuery} people for their work, 
+      who did an exceptional job describing their interfaces and providing examples.
+      This saved us a lot of work.
     </para>
     <para>
-      We implemented most of the jQuery methods into FluentDOM, but here are
+      We implemented most of the jQuery methods into FluentDOM, but there are
       differences. Most important: we use XPath for expressions, not CSS selectors.
       Since XPath is supported by the ext/xml extension, no extra parsing need
-      to be done. This should be faster processing the selectors and btw it was
+      to be done. This should be faster processing the selectors and btw. it was
       easier for us to implement. And as a nice topping it supports namespaces, too.
     </para>
     <para>
@@ -41,12 +42,12 @@
       will output the xml or html of the associated DOMDocument.
     </para>
     <para>
-      FluentDOM needs a document. If you do not provide a valid source an empty one
+      FluentDOM needs a document. If you do not provide a valid source, an empty one
       will be created.
     </para>
     <para>
       XPath do not only match element nodes (nodes with a tag name and maybe children),
-      but text nodes, too. Which implecitly enhances FluentDOM to support them.
+      but text nodes, too. Which implicitly enhances FluentDOM to support them.
     </para>
     <para>
       To be able to write phpUnit Tests and develop FluentDOM a lot of examples

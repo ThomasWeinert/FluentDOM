@@ -22,7 +22,7 @@ require_once dirname(__FILE__).'/../FluentDOMLoader.php';
 * @subpackage Loaders
 */
 class FluentDOMLoaderDOMNode implements FluentDOMLoader {
-  
+
   /**
   * attach existing DOMNode->ownerdocument and select the DOMNode
   *

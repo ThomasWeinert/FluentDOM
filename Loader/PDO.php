@@ -2,7 +2,7 @@
 /**
 * Load FluentDOM from pdo result
 *
-* @version $Id: StringXML.php 305 2009-07-24 18:03:59Z subjective $
+* @version $Id$
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
 * @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
 *
@@ -25,10 +25,10 @@ class FluentDOMLoaderPDO implements FluentDOMLoader {
 
   const ELEMENT_VALUE = 1;
   const ATTRIBUTE_VALUE = 2;
-  
+
   protected $_tagNameRoot = 'records';
   protected $_tagNameRecord = 'record';
-  
+
   /**
   * set root and record tag name for xml elements.
   *
@@ -39,7 +39,7 @@ class FluentDOMLoaderPDO implements FluentDOMLoader {
     $this->_tagNameRoot = $root;
     $this->_tagNameRecord = $record;
   }
-  
+
   /**
   * Load DOMDocument from xml string
   *
@@ -60,7 +60,7 @@ class FluentDOMLoaderPDO implements FluentDOMLoader {
           'name' => $this->_normalizeColumnName($columnData['name']),
           'type' => $this->_getNodeType($columnData)
         );
-      }      
+      }
       $dom = new DOMDocument();
       $dom->formatOutput = TRUE;
       $dom->appendChild(
@@ -93,7 +93,7 @@ class FluentDOMLoaderPDO implements FluentDOMLoader {
     }
     return FALSE;
   }
-  
+
   /**
   * normalize column for tag name use
   *
@@ -102,7 +102,7 @@ class FluentDOMLoaderPDO implements FluentDOMLoader {
   protected function _normalizeColumnName($name) {
     return preg_replace('([:|+~\s]+)', '-', $name);
   }
-  
+
   /**
   * get node type (attribute or element)
   *
@@ -113,7 +113,7 @@ class FluentDOMLoaderPDO implements FluentDOMLoader {
       return self::ELEMENT_VALUE;
     } else {
       return self::ATTRIBUTE_VALUE;
-    } 
+    }
   }
 }
 

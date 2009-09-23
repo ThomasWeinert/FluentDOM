@@ -22,9 +22,9 @@ require_once dirname(__FILE__).'/../FluentDOMLoader.php';
 * @subpackage Loaders
 */
 class FluentDOMLoaderDOMDocument implements FluentDOMLoader {
-  
+
   /**
-  * attach existing DOMDocument 
+  * attach existing DOMDocument
   *
   * @param object DOMDocument $source
   * @param string $contentType
@@ -32,7 +32,7 @@ class FluentDOMLoaderDOMDocument implements FluentDOMLoader {
   * @return object DOMDocument | FALSE
   */
   public function load($source, $contentType) {
-    if ($source instanceof DOMDocument) { 
+    if ($source instanceof DOMDocument) {
       return $source;
     }
     return FALSE;

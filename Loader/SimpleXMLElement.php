@@ -22,9 +22,9 @@ require_once dirname(__FILE__).'/../FluentDOMLoader.php';
 * @subpackage Loaders
 */
 class FluentDOMLoaderSimpleXMLElement implements FluentDOMLoader {
-  
+
   /**
-  * select DOMNode represantation of an existing SimpleXMLElement 
+  * select DOMNode represantation of an existing SimpleXMLElement
   *
   * @param object SimpleXMLElement $source
   * @param string $contentType

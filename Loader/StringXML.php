@@ -22,7 +22,7 @@ require_once dirname(__FILE__).'/../FluentDOMLoader.php';
 * @subpackage Loaders
 */
 class FluentDOMLoaderStringXML implements FluentDOMLoader {
-  
+
   /**
   * Load DOMDocument from xml string
   *

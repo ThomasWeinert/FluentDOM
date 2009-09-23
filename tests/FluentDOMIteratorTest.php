@@ -36,13 +36,13 @@ class FluentDOMIteratorTest extends PHPUnit_Framework_TestCase {
     $fdi = new FluentDOMIterator($fd);
     $this->assertTrue($fdi->current());
   }
-  
+
   public function testIteratorKey() {
     $fd = $this->getMock('FluentDOM');
     $fdi = new FluentDOMIterator($fd);
     $this->assertEquals(0, $fdi->key());
   }
-  
+
   public function testIteratorNext() {
     $fd = $this->getMock('FluentDOM');
     $fdi = new FluentDOMIterator($fd);
@@ -50,7 +50,7 @@ class FluentDOMIteratorTest extends PHPUnit_Framework_TestCase {
     $fdi->next();
     $this->assertEquals(1, $this->readAttribute($fdi, '_position'));
   }
-  
+
   public function testIteratorRewind() {
     $fd = $this->getMock('FluentDOM');
     $fdi = new FluentDOMIterator($fd);
@@ -59,7 +59,7 @@ class FluentDOMIteratorTest extends PHPUnit_Framework_TestCase {
     $fdi->rewind();
     $this->assertEquals(0, $this->readAttribute($fdi, '_position'));
   }
-  
+
   public function testIteratorSeek() {
     $fd = $this->getMock('FluentDOM');
     $fd->expects($this->once())
@@ -69,7 +69,7 @@ class FluentDOMIteratorTest extends PHPUnit_Framework_TestCase {
     $fdi->seek(1);
     $this->assertEquals(1, $this->readAttribute($fdi, '_position'));
   }
-  
+
   public function testIteratorSeekToInvalidPosition() {
     try {
       $fd = $this->getMock('FluentDOM');
@@ -82,7 +82,7 @@ class FluentDOMIteratorTest extends PHPUnit_Framework_TestCase {
     } catch (InvalidArgumentException $expected) {
     }
   }
-  
+
   public function testIteratorValid() {
     $fd = $this->getMock('FluentDOM');
     $fd->expects($this->once())
@@ -91,7 +91,7 @@ class FluentDOMIteratorTest extends PHPUnit_Framework_TestCase {
     $fdi = new FluentDOMIterator($fd);
     $this->assertTrue($fdi->valid());
   }
-  
+
   public function testGetChildren() {
     $fd = $this->getMock('FluentDOM');
     $fd->expects($this->once())
@@ -108,7 +108,7 @@ class FluentDOMIteratorTest extends PHPUnit_Framework_TestCase {
     $fdi = new FluentDOMIterator($fd);
     $this->assertTrue($fdi->getChildren() instanceof FluentDOMIterator);
   }
-  
+
   public function testHasChildren() {
     $fd = $this->getMock('FluentDOM');
     $fd->expects($this->once())

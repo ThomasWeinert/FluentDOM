@@ -24,7 +24,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 * @subpackage unitTests
 */
 class FluentDOMTest_PHP5_3 extends FluentDOMTestCase {
-  
+
   /**
   * @group TraversingFilter
   */

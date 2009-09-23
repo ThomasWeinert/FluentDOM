@@ -57,7 +57,7 @@ class FluentDOMTest extends FluentDOMTestCase {
     $this->assertTrue($fd instanceof FluentDOM);
     $this->assertEquals('html', $fd->document->documentElement->nodeName);
   }
-  
+
   /*
   * Load
   */
@@ -175,7 +175,7 @@ class FluentDOMTest extends FluentDOMTestCase {
     } catch (BadMethodCallException $expected) {
     }
   }
-  
+
   /**
   * @group  Properties
   * @dataProvider getContentTypeSamples
@@ -185,7 +185,7 @@ class FluentDOMTest extends FluentDOMTestCase {
     $fd->contentType = $contentType;
     $this->assertSame($expected, $fd->contentType);
   }
-  
+
   public function getContentTypeSamples() {
     return array(
       array('text/xml', 'text/xml'),
@@ -198,7 +198,7 @@ class FluentDOMTest extends FluentDOMTestCase {
       array('HTML', 'text/html')
     );
   }
-  
+
   /**
   * @group  Properties
   */
@@ -476,7 +476,7 @@ class FluentDOMTest extends FluentDOMTestCase {
     } catch (UnexpectedValueException $expected) {
     }
   }
-  
+
   /**
   * @group CoreFunctions
   */
@@ -495,7 +495,7 @@ class FluentDOMTest extends FluentDOMTestCase {
     $this->assertSame($expected, (string)$fd);
   }
 
-  
+
   /**
   * @group CoreFunctions
   */
@@ -1433,7 +1433,7 @@ class FluentDOMTest extends FluentDOMTestCase {
       ->attr('index');
     $this->assertEquals('15', $fd);
   }
-  
+
   /**
   * @group Attributes
   * @dataProvider getInvalidAttributeNames
@@ -1447,16 +1447,16 @@ class FluentDOMTest extends FluentDOMTestCase {
     } catch (UnexpectedValueException $expected) {
     }
   }
-  
+
   public static function getInvalidAttributeNames() {
     return array(
-      array('1foo'), 
+      array('1foo'),
       array('1bar:foo'),
-      array('bar:1foo'), 
+      array('bar:1foo'),
       array('bar:foo<>')
     );
   }
-  
+
   /**
   * @group Attributes
   * @dataProvider getValidAttributeNames
@@ -1468,10 +1468,10 @@ class FluentDOMTest extends FluentDOMTestCase {
     $this->assertTrue($fd->item(0)->hasAttribute($attrName));
     $this->assertEquals('foo', $fd->item(0)->getAttribute($attrName));
   }
-  
+
   public static function getValidAttributeNames() {
     return array(
-      array('foo'), 
+      array('foo'),
       array('bar:foo')
     );
   }
@@ -1512,7 +1512,7 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group Attributes
   */
-  public function testRemoveAttrWithInvalidParameter() { 
+  public function testRemoveAttrWithInvalidParameter() {
     $fd = new FluentDOM();
     try {
       $fd->removeAttr(1);
@@ -1520,7 +1520,7 @@ class FluentDOMTest extends FluentDOMTestCase {
     } catch (InvalidArgumentException $expected) {
     }
   }
-  
+
   /**
   * @group Attributes
   */
@@ -1531,7 +1531,7 @@ class FluentDOMTest extends FluentDOMTestCase {
     $this->assertTrue($fd instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
-  
+
   /**
   * @group Attributes
   */

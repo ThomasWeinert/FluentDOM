@@ -35,7 +35,7 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
       </body>
     </html>
   ';
-  
+
   /**
   * @group Functions
   */
@@ -43,7 +43,7 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
     $fd = FluentDOMStyle();
     $this->assertTrue($fd instanceof FluentDOMStyle);
   }
-  
+
   /**
   * @group Functions
   */
@@ -54,7 +54,7 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue($fd instanceof FluentDOMStyle);
     $this->assertEquals('html', $fd->document->documentElement->nodeName);
   }
-  
+
   /**
   * Get FluentDOMStyle instance with loaded html document using a mock loader
   *

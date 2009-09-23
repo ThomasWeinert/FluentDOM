@@ -18,7 +18,7 @@ class FluentDOMIterator implements RecursiveIterator, SeekableIterator {
 
   private $_position  = 0;
   private $_owner = NULL;
-  
+
   /**
   * remember the owner object (the FluentDOM object this iterator interates)
   *

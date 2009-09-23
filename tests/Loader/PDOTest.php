@@ -43,7 +43,7 @@ class FluentDOMLoaderPDOTest extends PHPUnit_Framework_TestCase {
     $result = $loader->load(NULL, 'text/xml');
     $this->assertFalse($result);
   }
-  
+
   public function testSetTagNames() {
     $loader = new FluentDOMLoaderPDO();
     $loader->setTagNames('samples', 'sample');

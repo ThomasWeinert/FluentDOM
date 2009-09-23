@@ -7,11 +7,11 @@ class FluentDOMIniLoader implements FluentDOMLoader {
   public function load($source, $contentType) {
     if (is_string($source) &&
         in_array($contentType, array('ini', 'text/ini'))) {
-        
+
       if (!file_exists($source)) {
         throw new InvalidArgumentException('File not found: '. $source);
       }
-      
+
       if ($iniFile = parse_ini_file($source)) {
         $dom = new DOMDocument();
         $root = $dom->appendChild($dom->createElement('ini'));
@@ -21,7 +21,7 @@ class FluentDOMIniLoader implements FluentDOMLoader {
     }
     return FALSE;
   }
-  
+
   protected function _arrayToNodes(&$dom, &$node, $data) {
     if (is_array($data)) {
       foreach ($data as $key => $val) {
@@ -51,7 +51,7 @@ class FluentDOMIniLoader implements FluentDOMLoader {
       $node->appendChild($textNode);
     }
   }
-  
+
 }
 
 ?>

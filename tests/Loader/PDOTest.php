@@ -2,7 +2,7 @@
 /**
 * DOMDocument loader test for FluentDOMLoaderPDO
 *
-* @version $Id: DOMNodeTest.php 313 2009-08-19 12:01:49Z subjective $
+* @version $Id$
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
 * @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
 *

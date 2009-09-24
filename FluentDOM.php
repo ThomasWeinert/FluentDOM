@@ -1151,6 +1151,29 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
     return $result;
   }
 
+  /**
+  * Find the closest
+  *
+  * @example closest.php Usage Example: FluentDOM::closest()
+  * @param string $expr XPath expression
+  * @return FluentDOM
+  */
+  public function closest($expr) {
+    $result = $this->_spawn();
+    foreach ($this->_array as $node) {
+      while (isset($node)) {
+        if ($this->_test($expr, $node)) {
+          break;
+        }
+        $node = $node->parentNode;
+      }
+      if (isset($node)) {
+        $result->_push($node, TRUE);
+      }
+    }
+    return $result;
+  }
+
   /*
   * Traversing - Chaining
   */

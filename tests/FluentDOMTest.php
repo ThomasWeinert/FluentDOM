@@ -13,7 +13,7 @@
 /**
 * load necessary files
 */
-require_once dirname(__FILE__).'/FluentDOMTestCase.php';
+require_once (dirname(__FILE__).'/FluentDOMTestCase.php');
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
@@ -27,7 +27,7 @@ class FluentDOMTest extends FluentDOMTestCase {
 
   const XML = '
     <items version="1.0">
-      <group>
+      <group id="1st">
         <item index="0">text1</item>
         <item index="1">text2</item>
         <item index="2">text3</item>
@@ -660,7 +660,7 @@ class FluentDOMTest extends FluentDOMTestCase {
   public function testSliceByRangeStartLtEnd() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//p')
-      ->slice(0,3)
+      ->slice(0, 3)
       ->replaceAll('//div');
     $this->assertTrue($fd instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
@@ -672,7 +672,7 @@ class FluentDOMTest extends FluentDOMTestCase {
   public function testSliceByRangeStartGtEnd() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//p')
-      ->slice(5,2)
+      ->slice(5, 2)
       ->replaceAll('//div');
     $this->assertTrue($fd instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
@@ -684,7 +684,7 @@ class FluentDOMTest extends FluentDOMTestCase {
   public function testSliceByNegRange() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//p')
-      ->slice(1,-2)
+      ->slice(1, -2)
       ->replaceAll('//div');
     $this->assertTrue($fd instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
@@ -961,6 +961,17 @@ class FluentDOMTest extends FluentDOMTestCase {
       ->addClass('before');
     $this->assertTrue($fd instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
+  }
+
+  /**
+  * @group TraversingFind
+  */
+  public function testClosest() {
+    $fd = $this->getFixtureFromString(self::XML)
+      ->find('//item')
+      ->closest('name() = "group"')
+      ->attr("id");
+    $this->assertEquals('1st', $fd);
   }
 
   /*

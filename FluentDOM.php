@@ -1927,7 +1927,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
         }
         $toggledClasses = array_unique(preg_split('(\s+)', trim($class)));
         $modified = FALSE;
-        foreach($toggledClasses as $toggledClass) {
+        foreach ($toggledClasses as $toggledClass) {
           if (isset($currentClasses[$toggledClass])) {
             if ($switch === FALSE || is_null($switch)) {
               unset($currentClasses[$toggledClass]);

@@ -1,5 +1,10 @@
 <?php
 /**
+* FluentDOM::closest() Usage example
+*
+* Be aware that you check the current context node.
+* The expression 'li' whould search for a node containing a <li> child node.
+* The example uses the self:: axis to avoid this.
 *
 * @version $Id$
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
@@ -23,12 +28,11 @@ $xml = <<<XML
 </html>
 XML;
 
-
 require_once('../FluentDOM.php');
 $dom = FluentDOM($xml);
 echo $dom
   ->find('//u')
-  ->closest('li')
+  ->closest('self::li')
   ->addClass('foundIt');
 
 ?>

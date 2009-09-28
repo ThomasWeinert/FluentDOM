@@ -1152,7 +1152,8 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   }
 
   /**
-  * Find the closest
+  * Get a set of elements containing the closest parent element that matches the specified
+  * selector, the starting element included.
   *
   * @example closest.php Usage Example: FluentDOM::closest()
   * @param string $expr XPath expression
@@ -1163,12 +1164,10 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
     foreach ($this->_array as $node) {
       while (isset($node)) {
         if ($this->_test($expr, $node)) {
+          $result->_push($node, TRUE);
           break;
         }
         $node = $node->parentNode;
-      }
-      if (isset($node)) {
-        $result->_push($node, TRUE);
       }
     }
     return $result;
@@ -1942,8 +1941,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
       if ($node instanceof DOMElement) {
         if ($node->hasAttribute('class')) {
           $currentClasses = array_flip(
-            preg_split('(\s+)',
-            trim($node->getAttribute('class')))
+            preg_split('(\s+)', trim($node->getAttribute('class')))
           );
         } else {
           $currentClasses = array();

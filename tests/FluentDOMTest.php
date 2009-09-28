@@ -967,11 +967,22 @@ class FluentDOMTest extends FluentDOMTestCase {
   * @group TraversingFind
   */
   public function testClosest() {
-    $fd = $this->getFixtureFromString(self::XML)
+    $attribute = $this->getFixtureFromString(self::XML)
       ->find('//item')
       ->closest('name() = "group"')
       ->attr("id");
-    $this->assertEquals('1st', $fd);
+    $this->assertEquals('1st', $attribute);
+  }
+
+  /**
+  * @group TraversingFind
+  */
+  public function testClosestIsCurrentNode() {
+    $attribute = $this->getFixtureFromString(self::XML)
+      ->find('//item')
+      ->closest('self::item[@index = "1"]')
+      ->attr("index");
+    $this->assertEquals('1', $attribute);
   }
 
   /*

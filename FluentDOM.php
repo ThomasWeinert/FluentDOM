@@ -1137,7 +1137,6 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
     $result = $this->_spawn();
     foreach ($this->_array as $node) {
       if (isset($node->parentNode)) {
-        $siblings = $node->parentNode->childNodes;
         foreach ($node->parentNode->childNodes as $childNode) {
           if ($this->_isNode($childNode) &&
               $childNode !== $node) {

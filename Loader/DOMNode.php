@@ -26,10 +26,10 @@ class FluentDOMLoaderDOMNode implements FluentDOMLoader {
   /**
   * attach existing DOMNode->ownerdocument and select the DOMNode
   *
-  * @param object DOMNode $source
+  * @param DOMNode $source
   * @param string $contentType
   * @access public
-  * @return array | FALSE
+  * @return array(DOMDocument,DOMNode)|FALSE
   */
   public function load($source, $contentType) {
     if ($source instanceof DOMNode && !empty($source->ownerDocument)) {

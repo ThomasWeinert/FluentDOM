@@ -11,20 +11,29 @@
 
 /**
 * FluentDOMIterator is the Iterator class for FluentDOM objects
-*
+* 
 * @package FluentDOM
 */
 class FluentDOMIterator implements RecursiveIterator, SeekableIterator {
 
+  /**
+  * internal position pointer variable 
+  * @var integer
+  */
   private $_position  = 0;
+  
+  /**
+  * owner (object) of the iterator 
+  * @var FluentDOM
+  */
   private $_owner = NULL;
 
   /**
-  * remember the owner object (the FluentDOM object this iterator interates)
+  * Remember the owner object (the FluentDOM object this iterator interates)
   *
   * @param $owner
   * @access public
-  * @return object FluentDOM
+  * @return FluentDOM
   */
   public function __construct($owner) {
     $this->_owner = $owner;
@@ -118,5 +127,4 @@ class FluentDOMIterator implements RecursiveIterator, SeekableIterator {
   public function hasChildren() {
     return (count($this->_owner->eq($this->_position)->find('node()')) > 0);
   }
-
 }

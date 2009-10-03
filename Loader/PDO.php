@@ -23,10 +23,26 @@ require_once dirname(__FILE__).'/../FluentDOMLoader.php';
 */
 class FluentDOMLoaderPDO implements FluentDOMLoader {
 
+  /**
+  * Element type value
+  * @var integer
+  */
   const ELEMENT_VALUE = 1;
+  /**
+  * Element type attribute
+  * @var integer
+  */
   const ATTRIBUTE_VALUE = 2;
 
+  /**
+  * root element name
+  * @var string
+  */
   protected $_tagNameRoot = 'records';
+  /**
+  * record element name 
+  * @var unknown_type
+  */
   protected $_tagNameRecord = 'record';
 
   /**
@@ -46,7 +62,7 @@ class FluentDOMLoaderPDO implements FluentDOMLoader {
   * @param string $source xml string
   * @param string $contentType
   * @access public
-  * @return object DOMDocument | FALSE
+  * @return DOMDocument|FALSE
   */
   public function load($source, $contentType) {
     if (is_object($source) &&
@@ -97,6 +113,7 @@ class FluentDOMLoaderPDO implements FluentDOMLoader {
   /**
   * normalize column for tag name use
   *
+  * @access protected
   * @param string $name
   */
   protected function _normalizeColumnName($name) {
@@ -106,6 +123,7 @@ class FluentDOMLoaderPDO implements FluentDOMLoader {
   /**
   * get node type (attribute or element)
   *
+  * @access protected
   * @param array $columnData
   */
   protected function _getNodeType($columnData) {

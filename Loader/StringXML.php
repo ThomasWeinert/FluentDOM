@@ -29,7 +29,7 @@ class FluentDOMLoaderStringXML implements FluentDOMLoader {
   * @param string $source xml string
   * @param string $contentType
   * @access public
-  * @return object DOMDocument | FALSE
+  * @return DOMDocument|FALSE
   */
   public function load($source, $contentType) {
     if (is_string($source) &&

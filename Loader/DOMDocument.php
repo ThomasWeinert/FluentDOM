@@ -24,12 +24,12 @@ require_once dirname(__FILE__).'/../FluentDOMLoader.php';
 class FluentDOMLoaderDOMDocument implements FluentDOMLoader {
 
   /**
-  * attach existing DOMDocument
+  * Attach existing DOMDocument to a FluentDOM
   *
-  * @param object DOMDocument $source
+  * @param DOMDocument $source
   * @param string $contentType
   * @access public
-  * @return object DOMDocument | FALSE
+  * @return DOMDocument|FALSE
   */
   public function load($source, $contentType) {
     if ($source instanceof DOMDocument) {

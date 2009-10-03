@@ -1,6 +1,6 @@
 <?php
 /**
-* Load FluentDOM from XML file
+* Load FluentDOM from local XML file
 *
 * @version $Id$
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
@@ -24,12 +24,12 @@ require_once dirname(__FILE__).'/../FluentDOMLoader.php';
 class FluentDOMLoaderFileXML implements FluentDOMLoader {
 
   /**
-  * load DOMDocument from xml file
+  * load DOMDocument from local XML file
   *
   * @param string $source filename
   * @param string $contentType
   * @access public
-  * @return object DOMDocument | FALSE
+  * @return DOMDocument|FALSE
   */
   public function load($source, $contentType) {
     if (is_string($source) &&

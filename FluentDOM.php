@@ -562,11 +562,12 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
       throw new UnexpectedValueException('Invalid QName: QName is empty.');
     } elseif (FALSE !== strpos($name, ':')) {
       list($namespace, $localName) = explode(':', $name, 2);
-      if ($this->_isNCName($namespace)) {
-        return $this->_isNCName($localName, strlen($namespace));
-      }
+      $this->_isNCName($namespace);
+      $this->_isNCName($localName, strlen($namespace));
+      return TRUE;
     }
-    return $this->_isNCName($name);
+    $this->_isNCName($name);
+    return TRUE;
   }
 
   /**

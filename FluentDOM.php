@@ -550,7 +550,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   }
 
   /**
-  * Validate string as qualified tag name
+  * Validate string as qualified node name
   *
   * @todo Improve QName check to allow full rfc compatible names.
   * @param string $name
@@ -558,14 +558,48 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * @return boolean
   */
   private function _isQName($name) {
-    $nameStartChar = '[A-Za-z_|]';
-    $nameChar = '(?:'.$nameStartChar.'|[-.\d])';
-    $pattern = '(^('.$nameStartChar.$nameChar.'*:)?('.$nameStartChar.$nameChar.'+)$)Diu';
-    if (preg_match($pattern, $name)) {
-      return TRUE;
-    } else {
-      throw new UnexpectedValueException('Invalid QName');
+    if (empty($name)) {
+      throw new UnexpectedValueException('Invalid QName: QName is empty.');
+    } elseif (FALSE !== strpos($name, ':')) {
+      list($namespace, $localName) = explode(':', $name, 2);
+      if ($this->_isNCName($namespace)) {
+        return $this->_isNCName($localName, strlen($namespace));
+      }
     }
+    return $this->_isNCName($name);
+  }
+
+  /**
+  * Validate string as qualified node name part (namespace or local name)
+  *
+  * @param string $name
+  * @param integer $offset idex offset for excpetion messages
+  * @access private
+  * @return boolean
+  */
+  private function _isNCName($name, $offset = 0) {
+    $nameStartChar =
+       'A-Z_a-z'.
+       '\\x{C0}-\\x{D6}\\x{D8}-\\x{F6}\\x{F8}-\\x{2FF}\\x{370}-\\x{37D}'.
+       '\\x{37F}-\\x{1FFF}\\x{200C}-\\x{200D}\\x{2070}-\\x{218F}'.
+       '\\x{2C00}-\\x{2FEF}\\x{3001}-\\x{D7FF}\\x{F900}-\\x{FDCF}'.
+       '\\x{FDF0}-\\x{FFFD}\\x{10000}-\\x{EFFFF}';
+    $nameChar =
+       $nameStartChar.
+       '\\.\\d\\x{B7}\\x{300}-\\x{36F}\\x{203F}-\\x{2040}';
+    if (preg_match('([^'.$nameChar.'])u', $name, $match, PREG_OFFSET_CAPTURE)) {
+      //invalid bytes and whitespaces
+      $position = (int)$match[0][1];
+      throw new UnexpectedValueException(
+        'Invalid QName "'.$name.'": Invalid character at index '.($offset + $position).'.'
+      );
+    } elseif (preg_match('(^[^'.$nameStartChar.'-])u', $name)) {
+      //first char is a little more limited
+      throw new UnexpectedValueException(
+        'Invalid QName "'.$name.'": Invalid character at .index '.$offset.'.'
+      );
+    }
+    return TRUE;
   }
 
   /**

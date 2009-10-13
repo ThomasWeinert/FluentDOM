@@ -552,7 +552,6 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Validate string as qualified node name
   *
-  * @todo Improve QName check to allow full rfc compatible names.
   * @param string $name
   * @access private
   * @return boolean
@@ -574,7 +573,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * Validate string as qualified node name part (namespace or local name)
   *
   * @param string $name
-  * @param integer $offset idex offset for excpetion messages
+  * @param integer $offset index offset for excpetion messages
   * @access private
   * @return boolean
   */
@@ -588,7 +587,11 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
     $nameChar =
        $nameStartChar.
        '\\.\\d\\x{B7}\\x{300}-\\x{36F}\\x{203F}-\\x{2040}';
-    if (preg_match('([^'.$nameChar.'])u', $name, $match, PREG_OFFSET_CAPTURE)) {
+    if (empty($name)) {
+      throw new UnexpectedValueException(
+        'Invalid QName "'.$name.'": Missing QName part.'
+      );
+    } elseif (preg_match('([^'.$nameChar.'])u', $name, $match, PREG_OFFSET_CAPTURE)) {
       //invalid bytes and whitespaces
       $position = (int)$match[0][1];
       throw new UnexpectedValueException(
@@ -787,7 +790,8 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Formats the current document, resets internal node array and other properties.
   *
-  * The document is saved and reloaded, all variables with DOMNodes of this document will get invalid.
+  * The document is saved and reloaded, all variables with DOMNodes
+  * of this document will get invalid.
   *
   * @access public
   * @return FluentDOM

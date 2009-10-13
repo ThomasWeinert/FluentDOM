@@ -1475,7 +1475,9 @@ class FluentDOMTest extends FluentDOMTestCase {
       array('1foo'),
       array('1bar:foo'),
       array('bar:1foo'),
-      array('bar:foo<>')
+      array('bar:foo<>'),
+      array('bar:'),
+      array(':foo')
     );
   }
 

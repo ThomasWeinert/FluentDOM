@@ -14,14 +14,11 @@
 * Load necessary files
 */
 require_once 'PHPUnit/Framework.php';
-require_once dirname(__FILE__).'/Loader/AllTests.php';
-$dir = dirname(__FILE__);
-require_once $dir.'/FluentDOMTest.php';
+require_once dirname(__FILE__).'/FluentDOM/AllTests.php';
+require_once dirname(__FILE__).'/FluentDOMTest.php';
 if (version_compare(PHP_VERSION, '5.3', '>=')) {
-  include_once $dir.'/FluentDOMTest_PHP5_3.php';
+  include_once dirname(__FILE__).'/FluentDOMTest_PHP5_3.php';
 }
-require_once $dir.'/FluentDOMIteratorTest.php';
-require_once $dir.'/FluentDOMStyleTest.php';
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
@@ -39,15 +36,11 @@ class FluentDOM_AllTests {
   */
   public static function suite() {
     $suite = new PHPUnit_Framework_TestSuite('FluentDOM Package');
-
-    $suite->addTestSuite('FluentDOMLoader_AllTests');
     $suite->addTestSuite('FluentDOMTest');
     if (version_compare(PHP_VERSION, '5.3', '>=')) {
       $suite->addTestSuite('FluentDOMTest_PHP5_3');
     }
-    $suite->addTestSuite('FluentDOMIteratorTest');
-    $suite->addTestSuite('FluentDOMStyleTest');
-
+    $suite->addTestSuite('FluentDOMClasses_AllTests');
     return $suite;
   }
 }

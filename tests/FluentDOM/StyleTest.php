@@ -14,7 +14,7 @@
 * load necessary files
 */
 require_once 'PHPUnit/Framework.php';
-require_once dirname(__FILE__).'/../FluentDOMStyle.php';
+require_once dirname(__FILE__).'/../../FluentDOM/Style.php';
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 

@@ -1,6 +1,6 @@
 <?php
 /**
-* DOMDocument loader test for FluentDOM
+* HTML string loader test for FluentDOM
 *
 * @version $Id$
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
@@ -14,27 +14,28 @@
 * load necessary files
 */
 require_once 'PHPUnit/Framework.php';
-require_once dirname(__FILE__).'/../../Loader/DOMDocument.php';
+require_once dirname(__FILE__).'/../../../FluentDOM/Loader/StringHTML.php';
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
 /**
-* Test class for FluentDOMLoaderDOMDocument.
+* Test class for FluentDOMLoaderStringHTML.
 *
 * @package FluentDOM
 * @subpackage unitTests
 */
-class FluentDOMLoaderDOMDocumentTest extends PHPUnit_Framework_TestCase {
+class FluentDOMLoaderStringHTMLTest extends PHPUnit_Framework_TestCase {
 
   public function testLoad() {
-    $loader = new FluentDOMLoaderDOMDocument();
-    $fd = $loader->load(new DOMDocument(), 'text/xml');
+    $loader = new FluentDOMLoaderStringHTML();
+    $fd = $loader->load('<html><body></body></html>', 'text/html');
     $this->assertTrue($fd instanceof DOMDocument);
+    $this->assertEquals('html', $fd->documentElement->nodeName);
   }
 
   public function testLoadInvalid() {
-    $loader = new FluentDOMLoaderDOMDocument();
-    $result = $loader->load(NULL, 'text/xml');
+    $loader = new FluentDOMLoaderStringHTML();
+    $result = $loader->load('html', 'text/html');
     $this->assertFalse($result);
   }
 }

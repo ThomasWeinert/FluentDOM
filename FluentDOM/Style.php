@@ -13,7 +13,7 @@
 /**
 * include the parent class (FluentDOM)
 */
-require_once(dirname(__FILE__).'/FluentDOM.php');
+require_once(dirname(__FILE__).'/../FluentDOM.php');
 
 /**
 * Function to create a new FluentDOMStyleinstance and loads data into it if

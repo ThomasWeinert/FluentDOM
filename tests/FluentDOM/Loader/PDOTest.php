@@ -14,7 +14,7 @@
 * load necessary files
 */
 require_once 'PHPUnit/Framework.php';
-require_once dirname(__FILE__).'/../../Loader/PDO.php';
+require_once dirname(__FILE__).'/../../../FluentDOM/Loader/PDO.php';
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 

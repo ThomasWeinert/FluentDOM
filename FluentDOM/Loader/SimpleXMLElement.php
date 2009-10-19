@@ -13,7 +13,7 @@
 /**
 * include interface
 */
-require_once dirname(__FILE__).'/../FluentDOMLoader.php';
+require_once dirname(__FILE__).'/../Loader.php';
 
 /**
 * Load FluentDOM from SimpleXMLElement

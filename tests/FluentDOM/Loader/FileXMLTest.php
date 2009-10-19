@@ -1,6 +1,6 @@
 <?php
 /**
-* HTML file loader test for FluentDOM
+* XML file loader test for FluentDOM
 *
 * @version $Id$
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
@@ -14,41 +14,42 @@
 * load necessary files
 */
 require_once 'PHPUnit/Framework.php';
-require_once dirname(__FILE__).'/../../Loader/FileHTML.php';
+require_once dirname(__FILE__).'/../../../FluentDOM/Loader/FileXML.php';
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
 /**
-* Test class for FluentDOMLoaderFileHTMLTest.
+* Test class for FluentDOMLoaderFileXMLTest.
 *
 * @package FluentDOM
 * @subpackage unitTests
 */
-class FluentDOMLoaderFileHTMLTest extends PHPUnit_Framework_TestCase {
+class FluentDOMLoaderFileXMLTest extends PHPUnit_Framework_TestCase {
 
   public function testLoad() {
-    $loader = new FluentDOMLoaderFileHTML();
+    $loader = new FluentDOMLoaderFileXML();
     $fd = $loader->load(
-      dirname(__FILE__).'/data/fileHTML_src.html',
-      'text/html'
+      dirname(__FILE__).'/data/fileXML.src.xml',
+      'text/xml'
     );
     $this->assertTrue($fd instanceof DOMDocument);
     $this->assertEquals('html', $fd->documentElement->nodeName);
   }
 
-  public function testLoadWithHtmlStringInvalid() {
-    $loader = new FluentDOMLoaderFileHTML();
-    $result = $loader->load('<invalidFileName></invalidFileName>', 'text/html');
+  public function testLoadWithXmlFileInvalid() {
+    $loader = new FluentDOMLoaderFileXML();
+    $result = $loader->load('<invalidFileName />', 'text/xml');
     $this->assertFalse($result);
   }
 
   public function testLoadInvalid() {
     try {
-      $loader = new FluentDOMLoaderFileHTML();
-      $result = $loader->load('invalidFileName', 'text/html');
+      $loader = new FluentDOMLoaderFileXML();
+      $result = $loader->load('invalidFileName', 'text/xml');
       $this->fail('An expected exception has not been raised.');
     } catch (InvalidArgumentException $e) {
     }
   }
 }
+
 ?>

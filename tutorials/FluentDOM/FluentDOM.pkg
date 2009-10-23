@@ -11,15 +11,15 @@
   <refsect1 id="{@id intro}">
     <title>FluentDOM</title>
     <para>
-      FluentDOM ist a jQuery like fluent XML interface for the DOMDocument in PHP. 
+      FluentDOM ist a jQuery like fluent XML interface for the DOMDocument in PHP.
     </para>
     <para>
-      The idea was born in a workshop of {@link http://schlitt.info Tobias Schlitt}, 
+      The idea was born in a workshop of {@link http://schlitt.info Tobias Schlitt},
       about the PHP XML extensions at the IPC Spring, in Berlin. He used this idea to show
       XPath samples in the session.
     </para>
-    <para>   
-      Many thanks to the {@link http://jquery.com jQuery} people for their work, 
+    <para>
+      Many thanks to the {@link http://jquery.com jQuery} people for their work,
       who did an exceptional job describing their interfaces and providing examples.
       This saved us a lot of work.
     </para>
@@ -56,5 +56,84 @@
       folder and linked in the documentation.
       Once again many thanks to the jQuery team.
     </para>
+  </refsect1>
+  <refsect1 id="{@id tutorial-menu}">
+    <title>Tutorial: Create A HTML Menu</title>
+    <refsect2 id="{@id tutorial-menu-step1}">
+      <title>Step 1: The Root Element</title>
+      <para>
+        After the FluentDOM class is included an instance of it is created.
+        The default content type of a FluentDOM object is XML.
+        For this tutorial it is changed to HTML.
+      </para>
+      <para>
+        {@example menu/step1.php}
+      </para>
+      <para>
+        The method append() appends elements to the current selection and returns a FluentDOM
+        with the appended elements. For later use this is assigned to a variable.
+      </para>
+      <para>
+        The example uses a string parameter to define the tag. This has to be some text
+        or a valid xml tree with a single root node.
+      </para>
+      <para>
+        The parameter can be an DOMNode, too. It is up to you which way you prefer.
+      </para>
+      <para>
+        {@example menu/step1b.php}
+      </para>
+    </refsect2>
+    <refsect2 id="{@id tutorial-menu-step2}">
+      <title>Step 2: Add Menu Items</title>
+      <para>
+        A menu without items is useless. Using the chaining a listitem is appended and a hyperlink
+        into it. The link target is set using <literal>attr()</literal> and with <literal>text()</literal>
+        a link caption is provided. These two methods do not change the selected elements.
+      </para>
+      <para>
+        {@example menu/step2.php}
+      </para>
+    </refsect2>
+    <refsect2 id="{@id tutorial-menu-step3}">
+      <title>Step 3: Improve Menu Items</title>
+      <para>
+        Of course menu items can get classes. The method <literal>addClass()</literal> will
+        add a class to all selected elements.
+      </para>
+      <para>
+        Javascript links do not need to have a href attribute, <literal>attr()</literal> can set other
+        parameters like <important>"id"</important> or <important>"onclick"</important>, too.
+      </para>
+      <para>
+        {@example menu/step3.php}
+      </para>
+    </refsect2>
+    <refsect2 id="{@id tutorial-menu-step4}">
+      <title>Step 4: Mark Menu Items</title>
+      <para>
+        Often the first and/or the last element in a list need special threatment. To add classes
+        to them <literal>find()</literal> is used to select them and <literal>addClass()</literal>
+        to mark them.
+      </para>
+      <para>
+        FluentDOM uses XPath for selectors. In XPath <important>"//"</important> selects elements at
+        an level (from root) and <important>"[1]"</important> means that it has to be the first
+        element in it's parent node.
+      </para>
+      <para>
+        {@example menu/step4.php}
+      </para>
+    </refsect2>
+    <refsect2 id="{@id tutorial-menu-step5}">
+      <title>Step 5: Add A Submenu</title>
+      <para>
+        In the last step a submenu is added. The submenu is appended to the &lt;li&gt; tag.
+        The method <literal>end()</literal> is used to jump to the previous selection.
+      </para>
+      <para>
+        {@example menu/step5.php}
+      </para>
+    </refsect2>
   </refsect1>
 </refentry>

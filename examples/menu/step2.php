@@ -17,7 +17,7 @@ $menu
   ->append('<a/>')
   // set the href attribute of the <a>
   ->attr('href', '/sample.php')
-  // set the text conten of the <a>
+  // set the text content of the <a>
   ->text('Sample');
 
 // add the second menu item

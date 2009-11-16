@@ -57,6 +57,47 @@
       Once again many thanks to the jQuery team.
     </para>
   </refsect1>
+  <refsect1 id="{@id basic-usage}">
+    <title>Basic Usage</title>
+    <para>This section shows some of the basic operation.</para>
+    <refsect2 id="{@id basic-usage-class}">
+      <title>FluentDOM Function</title>
+      <para>
+        The FluentDOM function is a little wrapper. It creates a new FluentDOM object and loads
+        the source if it was provided. Possible sources are local xml or html files, xml or
+        html strings, DOMDocument DOMNode objects or a FluentDOM object. The following two samples
+        do the same.
+      </para>
+      <para>
+        <title>Function Sample</title>
+        {@example basic-usage/function.php}
+      </para>
+      <para>
+        <title>Object Sample</title>
+        {@example basic-usage/object.php}
+      </para>
+    </refsect2>
+    <refsect2 id="{@id basic-usage-load}">
+      <title>Load</title>
+      <para>
+        You can use different ways to load a source into a FluentDOM object. The simplest way
+        ist the FluentDOM function. But somtimes you need more. The default loaders
+        do not support urls for example. But here are oter ways:
+      </para>
+      <para>
+        <title>Prepare a DOMDocument</title>
+        <para>
+          {@example basic-usage/load-domdocument.php}
+        </para>
+      </para>
+      <para>
+        <title>Use the document attribute</title>
+        <para>
+          {@example basic-usage/load-document.php}
+        </para>
+      </para>
+    </refsect2>
+  </refsect1>
   <refsect1 id="{@id tutorial-menu}">
     <title>Tutorial: Create A HTML Menu</title>
     <refsect2 id="{@id tutorial-menu-step1}">

@@ -68,14 +68,14 @@
         HTML strings, DOMDocument DOMNode objects or a FluentDOM object. The following two samples
         do the same.
       </para>
-      <para>
+      <refsect3>
         <title>Function Sample</title>
         {@example basic-usage/function.php}
-      </para>
-      <para>
+      </refsect3>
+      <refsect3>
         <title>Object Sample</title>
         {@example basic-usage/object.php}
-      </para>
+      </refsect3>
     </refsect2>
     <refsect2 id="{@id basic-usage-load}">
       <title>Loading Data</title>
@@ -84,18 +84,31 @@
         is the FluentDOM function. But sometimes you need more. The default loaders
         do not support URLs for example. But here are other ways:
       </para>
-      <para>
-        <title>Prepare a DOMDocument</title>
+      <refsect3>
+        <title>Prepare A DOMDocument</title>
         <para>
-          {@example basic-usage/load-domdocument.php}
+          The first way is to create a DOMDocument with custom logic and load this into the
+          FluentDOM object.
         </para>
-      </para>
-      <para>
-        <title>Use the document attribute</title>
+        {@example basic-usage/load-domdocument.php}
+      </refsect3>
+      <refsect3>
+        <title>Use The "document" Attribute</title>
         <para>
-          {@example basic-usage/load-document.php}
+          The FluentDOM has an read only attribute <literal>document</literal>. You can not
+          assign a value to this attribute directly. But you have access to all its methods and
+          attributes. This example uses <literal>DOMDocument::load()</literal> to load the XML file.
         </para>
-      </para>
+        {@example basic-usage/load-document.php}
+      </refsect3>
+      <refsect3>
+        <title>Custom Loader</title>
+        <para>
+          FluentDOM allows to use custom loaders. This are simple classes implementing the
+          FluentDOMLoader interface. The interface has a single function <literal>load()</literal>.  
+        </para>
+        {@example basic-usage/load-custom.php}
+      </refsect3>
     </refsect2>
   </refsect1>
   <refsect1 id="{@id tutorial-menu}">
@@ -107,9 +120,7 @@
         The default content type of a FluentDOM object is XML.
         For this tutorial it is changed to HTML.
       </para>
-      <para>
-        {@example menu/step1.php}
-      </para>
+      {@example menu/step1.php}
       <para>
         The method append() appends elements to the current selection and returns a FluentDOM
         with the appended elements. For later use this is assigned to a variable.
@@ -121,9 +132,7 @@
       <para>
         The parameter can be an DOMNode, too. It is up to you which way you prefer.
       </para>
-      <para>
-        {@example menu/step1b.php}
-      </para>
+      {@example menu/step1b.php}
     </refsect2>
     <refsect2 id="{@id tutorial-menu-step2}">
       <title>Step 2: Add Menu Items</title>
@@ -132,9 +141,7 @@
         into it. The link target is set using <literal>attr()</literal> and with <literal>text()</literal>
         a link caption is provided. These two methods do not change the selected elements.
       </para>
-      <para>
-        {@example menu/step2.php}
-      </para>
+      {@example menu/step2.php}
     </refsect2>
     <refsect2 id="{@id tutorial-menu-step3}">
       <title>Step 3: Improve Menu Items</title>
@@ -146,9 +153,7 @@
         Javascript links do not need to have a href attribute, <literal>attr()</literal> can set other
         parameters like <important>"id"</important> or <important>"onclick"</important>, too.
       </para>
-      <para>
-        {@example menu/step3.php}
-      </para>
+      {@example menu/step3.php}
     </refsect2>
     <refsect2 id="{@id tutorial-menu-step4}">
       <title>Step 4: Mark Menu Items</title>
@@ -162,9 +167,7 @@
         an level (from root) and <important>"[1]"</important> means that it has to be the first
         element in it's parent node.
       </para>
-      <para>
-        {@example menu/step4.php}
-      </para>
+      {@example menu/step4.php}
     </refsect2>
     <refsect2 id="{@id tutorial-menu-step5}">
       <title>Step 5: Add A Submenu</title>
@@ -172,9 +175,7 @@
         In the last step a submenu is added. The submenu is appended to the &lt;li&gt; tag.
         The method <literal>end()</literal> is used to jump to the previous selection.
       </para>
-      <para>
-        {@example menu/step5.php}
-      </para>
+      {@example menu/step5.php}
     </refsect2>
   </refsect1>
 </refentry>

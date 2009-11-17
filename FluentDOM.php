@@ -14,6 +14,10 @@
 * Include the external iterator class.
 */
 require_once(dirname(__FILE__).'/FluentDOM/Iterator.php');
+/**
+* Include the loader interface.
+*/
+require_once(dirname(__FILE__).'/FluentDOM/Loader.php');
 
 /**
 * Function to create a new FluentDOM instance and loads data into it if
@@ -163,7 +167,6 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   protected function _initLoaders() {
     if (!is_array($this->_loaders)) {
       $path = dirname(__FILE__).'/FluentDOM';
-      include_once($path.'/Loader.php');
       include_once($path.'/Loader/DOMNode.php');
       include_once($path.'/Loader/DOMDocument.php');
       include_once($path.'/Loader/StringXML.php');

@@ -4,8 +4,10 @@ require('../../FluentDOM.php');
 
 $xmlFile = 'hello.xml';
 
+// create object 
 $fd = new FluentDOM();
-$fd->documnet->load($xmlFile);
+// use document attribute
+$fd->document->load($xmlFile);
 
 echo $fd
   ->find('/message')

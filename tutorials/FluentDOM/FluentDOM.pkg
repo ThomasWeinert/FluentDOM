@@ -64,8 +64,8 @@
       <title>FluentDOM Function</title>
       <para>
         The FluentDOM function is a little wrapper. It creates a new FluentDOM object and loads
-        the source if it was provided. Possible sources are local xml or html files, xml or
-        html strings, DOMDocument DOMNode objects or a FluentDOM object. The following two samples
+        the source if it was provided. Possible sources are local XML or HTML files, XML or
+        HTML strings, DOMDocument DOMNode objects or a FluentDOM object. The following two samples
         do the same.
       </para>
       <para>
@@ -78,11 +78,11 @@
       </para>
     </refsect2>
     <refsect2 id="{@id basic-usage-load}">
-      <title>Load</title>
+      <title>Loading Data</title>
       <para>
         You can use different ways to load a source into a FluentDOM object. The simplest way
-        ist the FluentDOM function. But somtimes you need more. The default loaders
-        do not support urls for example. But here are oter ways:
+        is the FluentDOM function. But sometimes you need more. The default loaders
+        do not support URLs for example. But here are other ways:
       </para>
       <para>
         <title>Prepare a DOMDocument</title>

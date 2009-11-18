@@ -110,6 +110,21 @@
         {@example basic-usage/load-custom.php}
       </refsect3>
     </refsect2>
+    <refsect2 id="{@id basic-usage-find}">
+      <title>Find Elements</title>
+      <para>
+        The method <literal>find()</literal> is used to select some elements from the document.
+        The selector parameter can be an XPath query or a callback function. XPath is a little
+        different from CSS but more powerful. More important it is implemented in the PHP extension
+        and faster any PHP based CSS selector implementation could be.
+      </para>
+      {@example basic-usage/find-xpath.php}
+      <para>
+        If the FluentDOM object already contains a selection, the selector will be used with each
+        selected element. If you this is the first action on the object, the document context is
+        used. You can force the document context with the second parameter.
+      </para> 
+    </refsect2>
   </refsect1>
   <refsect1 id="{@id tutorial-menu}">
     <title>Tutorial: Create A HTML Menu</title>

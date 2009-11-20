@@ -10,7 +10,7 @@ $Id$
 --------------------------------------------------------------------------------
 
 FluentDOM provides an easy to use fluent interface for DOMDocument. We tried to
-keep the jQuery API but adapted it to PHP and der server environment.
+keep the jQuery API but adapted it to PHP and the server environment.
 
 The idea was born in a workshop of Tobias Schlitt (http://schlitt.info) about
 the PHP XML extensions at the IPC Spring in Berlin. He used this idea to show

@@ -113,6 +113,9 @@
     <refsect2 id="{@id basic-usage-find}">
       <title>Find Elements</title>
       <para>
+        <caution>The selector language used in FluentDOM is XPath, not CSS.</caution>
+      </para> 
+      <para>
         The method <literal>find()</literal> is used to select some elements from the document.
         The selector parameter can be an XPath query or a callback function. XPath is a little
         different from CSS but more powerful. More important it is implemented in the PHP extension
@@ -123,7 +126,7 @@
         If the FluentDOM object already contains a selection, the selector will be used with each
         selected element. If you this is the first action on the object, the document context is
         used. You can force the document context with the second parameter.
-      </para> 
+      </para>
     </refsect2>
   </refsect1>
   <refsect1 id="{@id tutorial-menu}">
@@ -192,5 +195,73 @@
       </para>
       {@example menu/step5.php}
     </refsect2>
+  </refsect1>
+  <refsect1 id="{@id xpath}">
+    <title>XPath 101</title>
+    <para>
+      This is a little introduction into XPath. For further information see the links at the
+      end of this section.
+    </para>
+    <refsect2 id="{@id xpath-syntax}">
+      <title>Syntax elements</title>
+      <itemizedlist>
+        <listitem><literal>/</literal> - Level separator</listitem>
+        <listitem><literal>//</literal> - Multi-level separator</listitem>
+        <listitem><literal>*</literal> - Element wildcard</listitem>
+        <listitem><literal>@</literal> - Attribute prefix</listitem>
+        <listitem><literal>@*</literal> - Attribute wildcard</listitem>
+        <listitem><literal>[ ]</literal> - Conditions</listitem>
+        <listitem><literal>.</literal> - Current element</listitem>
+        <listitem><literal>..</literal> - Parent element</listitem>
+      </itemizedlist>
+      <refsect3>
+        <title>Simple XPath Selector Samples</title>
+        <para>
+          -match the document element with the name "element-name".
+        </para>
+        <example>/element-name</example>
+        <para>
+          Match all direct childs of the document element with the name "child".
+        </para>
+        <example>/*/child</example>
+        <para>
+          Match all elements with name "a" and attribute "href" anywhere in the document.
+        </para>
+        <example>//a[@href]</example>
+        <para>
+          Match all elements with name "strong" that are child (direct or not) of the current
+          element.
+        </para>
+        <example>.//strong</example>
+        <para>
+          Match the first direct child of the current element.
+        </para>
+        <example>*[1]</example>
+        <para>
+          Match all elements with the name "div" in the current element with the attribute "id" set
+          to "sampleOne".
+        </para>
+        <example>div[@id = "sampleOne"]</example>
+      </refsect3>
+    </refsect2>
+    <refsect2 id="{@id xpath-functions}">
+      <title>Functions</title>
+      <itemizedlist>
+        <listitem><literal>name()</literal> - Element name</listitem>
+        <listitem><literal>local-name()</literal> - Element name wihtout namespace prefix</listitem>
+        <listitem>
+           <literal>position()</literal> - Position in parent element (starts with 1)</listitem>
+        <listitem><literal>last()</literal> - Position of last element</listitem>
+        <listitem><literal>count(...)</literal> - Element count</listitem>
+        <listitem><literal>normalize-space()</literal> - Normalize withespaces</listitem>
+        <listitem><literal>concat()</literal> - Concatinate strings</listitem>
+        <listitem>
+          <literal>contains()</literal> - Check if a string contains anther string
+        </listitem>
+      </itemizedlist>
+      <para>
+        This is only a selection of functions uses in the following samples. XPath knows some more.
+      </para>
+    </refsect2> 
   </refsect1>
 </refentry>

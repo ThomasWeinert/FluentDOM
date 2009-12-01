@@ -17,6 +17,7 @@ require_once 'PHPUnit/Framework.php';
 require_once dirname(__FILE__).'/Loader/AllTests.php';
 require_once dirname(__FILE__).'/IteratorTest.php';
 require_once dirname(__FILE__).'/StyleTest.php';
+require_once dirname(__FILE__).'/Selector/AllTests.php';
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
@@ -37,6 +38,7 @@ class FluentDOMClasses_AllTests {
     $suite->addTestSuite('FluentDOMIteratorTest');
     $suite->addTestSuite('FluentDOMStyleTest');
     $suite->addTestSuite('FluentDOMLoader_AllTests');
+    $suite->addTestSuite('FluentDOMSelector_AllTests');
     return $suite;
   }
 }

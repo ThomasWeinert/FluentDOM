@@ -7,17 +7,24 @@
 * @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
 *
 * @package FluentDOM
-* @subpackage Selector
+* @subpackage Selector-CSS
 */
 
 /**
 * FluentDOMSelectorCssStatusStringSingle checks for tokens in a single quoted string.
 *
 * @package FluentDOM
-* @subpackage Selector
+* @subpackage Selector-CSS
 */
 class FluentDOMSelectorCssStatusStringSingle implements FluentDOMSelectorStatus {
 
+  /**
+  * Try to get token in buffer at offset position.
+  * 
+  * @param string $buffer
+  * @param integer $offset
+  * @return FluentDOMSelectorCssToken
+  */
   public function getToken($buffer, $offset) {
     if ("'" === substr($buffer, $offset, 1)) {
       return new FluentDOMSelectorCssToken(
@@ -44,12 +51,24 @@ class FluentDOMSelectorCssStatusStringSingle implements FluentDOMSelectorStatus 
     return NULL;
   }
 
+  /**
+  * Check if token ends status
+  * 
+  * @param FluentDOMSelectorCssToken $token
+  * @return boolean
+  */
   public function isEndToken($token) {
     return (
       $token->type == FluentDOMSelectorCssToken::TOKEN_SINGLEQUOTE_STRING_END
     );
   }
 
+  /**
+  * Get new (sub)status if needed.
+  * 
+  * @param FluentDOMSelectorCssToken $token
+  * @return FluentDOMSelectorStatus
+  */
   public function getNewStatus($token) {
     return NULL;
   }

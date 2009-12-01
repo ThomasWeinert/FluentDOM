@@ -16,11 +16,11 @@
 * @package FluentDOM
 * @subpackage Selector
 */
-
 interface FluentDOMSelectorStatus {
 
   /**
   * Try to get token in buffer at offset position.
+  * 
   * @param string $buffer
   * @param integer $offset
   * @return FluentDOMSelectorToken
@@ -29,13 +29,15 @@ interface FluentDOMSelectorStatus {
 
   /**
   * Check if token ends status
+  * 
   * @param FluentDOMSelectorToken $token
   * @return boolean
   */
   public function isEndToken($token);
 
   /**
-  * Get new status (subscanner) if needed.
+  * Get new (sub)status if needed.
+  * 
   * @param FluentDOMSelectorToken $token
   * @return FluentDOMSelectorStatus
   */

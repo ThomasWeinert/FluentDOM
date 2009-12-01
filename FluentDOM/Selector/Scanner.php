@@ -52,6 +52,7 @@ class FluentDOMSelectorScanner {
 
   /**
   * Scan selector string for tokens
+  * 
   * @param array $target token target
   * @param string $selector selector string
   * @param integer $offset start offset
@@ -88,6 +89,7 @@ class FluentDOMSelectorScanner {
 
   /**
   * Get next token
+  * 
   * @return FluentDOMSelectorToken|NULL
   */
   private function _next() {
@@ -101,6 +103,7 @@ class FluentDOMSelectorScanner {
 
   /**
   * Delegate to subscanner
+  * 
   * @param array $target
   * @param FluentDOMSelectorStatus $status
   * @return unknown_type

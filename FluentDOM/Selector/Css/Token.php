@@ -7,14 +7,14 @@
 * @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
 *
 * @package FluentDOM
-* @subpackage Selector
+* @subpackage Selector-CSS
 */
 
 /**
 * FluentDOMSelectorCssToken represents a token from a scan.
 *
 * @package FluentDOM
-* @subpackage Selector
+* @subpackage Selector-CSS
 */
 class FluentDOMSelectorCssToken extends FluentDOMSelectorToken {
 

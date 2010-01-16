@@ -632,13 +632,15 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * check if parameter is a valid callback function
   *
   * @param callback $callback
+  * @param boolean $allowGlobalFunctions
   * @access protected
   * @return boolean
   */
-  protected function _isCallback($callback) {
+  protected function _isCallback($callback, $allowGlobalFunctions = TRUE) {
     if ($callback instanceof Closure) {
       return TRUE;
-    } elseif (is_string($callback) &&
+    } elseif ($allowGlobalFunctions &&
+              is_string($callback) &&
               function_exists($callback)) {
       return is_callable($callback);
     } elseif (is_array($callback) &&
@@ -647,7 +649,37 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
               is_string($callback[1])) {
       return is_callable($callback);
     } else {
-      throw new BadFunctionCallException('Invalid callback argument');
+      throw new InvalidArgumentException('Invalid callback argument');
+    }
+  }
+
+  /**
+  * Convert a given content xml string into and array of nodes
+  *
+  * @param string $content
+  * @param boolean $includeTextNodes
+  * @param integer $limit
+  * @access private
+  * @return array
+  */
+  private function _getContentFragment($content, $includeTextNodes = TRUE, $limit = 0) {
+    $result = array();
+    $fragment = $this->_document->createDocumentFragment();
+    if ($fragment->appendXML($content)) {
+      for ($i = $fragment->childNodes->length - 1; $i >= 0; $i--) {
+        $element = $fragment->childNodes->item($i);
+        if ($element instanceof DOMElement ||
+            ($includeTextNodes && $this->_isNode($element))) {
+          array_unshift($result, $element);
+          $element->parentNode->removeChild($element);
+        }
+      }
+      if ($limit > 0 && count($result) >= $limit) {
+        return array_slice($result, 0, $limit);
+      }
+      return $result;
+    } else {
+      throw new UnexpectedValueException('Invalid document fragment');
     }
   }
 
@@ -667,22 +699,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
     } elseif ($includeTextNodes && $this->_isNode($content)) {
       $result = array($content);
     } elseif (is_string($content)) {
-      $fragment = $this->_document->createDocumentFragment();
-      if ($fragment->appendXML($content)) {
-        foreach ($fragment->childNodes as $element) {
-          if ($element instanceof DOMElement ||
-              ($includeTextNodes && $this->_isNode($element))) {
-            $element->parentNode->removeChild($element);
-            $result[] = $element;
-            if ($limit > 0 && count($result) >= $limit) {
-              break;
-            }
-          }
-        }
-        return $result;
-      } else {
-        throw new UnexpectedValueException('Invalid document fragment');
-      }
+      $result = $this->_getContentFragment($content, $includeTextNodes, $limit);
     } elseif ($content instanceof DOMNodeList ||
               $content instanceof Iterator ||
               $content instanceof IteratorAggregate ||
@@ -1287,36 +1304,65 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * Manipulation - Changing Contents
   */
 
+  private function _getInnerXml($node) {
+    $result = '';
+    foreach ($node->childNodes as $childNode) {
+      if ($this->_isNode($childNode)) {
+        $result .= $this->_document->saveXML($childNode);
+      }
+    }
+    return $result;
+  }
+
   /**
   * Get or set the xml contents of the first matched element.
   *
   * @example xml.php Usage Example: FluentDOM::xml()
-  * @param string $xml XML fragment
+  * @param string|callback|object Closure $xml XML fragment
   * @access public
   * @return string|FluentDOM
   */
   public function xml($xml = NULL) {
     if (isset($xml)) {
-      if (!empty($xml)) {
-        $fragment = $this->_document->createDocumentFragment();
-        if ($fragment->appendXML($xml)) {
-          foreach ($this->_array as $node) {
-            $node->nodeValue = '';
-            $node->appendChild($fragment->cloneNode(TRUE));
+      try {
+        $isCallback = $this->_isCallback($xml, FALSE);
+      } catch (InvalidArgumentException $e) {
+        $isCallback = FALSE;
+      }
+      if ($isCallback) {
+        foreach ($this->_array as $index => $node) {
+          $xmlString = call_user_func(
+            $xml,
+            $index,
+            $this->_getInnerXml($node)
+          );
+          $node->nodeValue = '';
+          if (!empty($xmlString)) {
+            $fragment = $this->_getContentFragment($xmlString, TRUE);
+            foreach ($fragment as $contentNode) {
+              $node->appendChild($contentNode->cloneNode(TRUE));
+            }
+          }
+        }
+      } else {
+        if (!empty($xml)) {
+          $fragment = $this->_getContentFragment($xml, TRUE);
+        } else {
+          $fragment = array();
+        }
+        foreach ($this->_array as $node) {
+          $node->nodeValue = '';
+          foreach ($fragment as $contentNode) {
+            $node->appendChild($contentNode->cloneNode(TRUE));
           }
         }
       }
       return $this;
     } else {
-      $result = '';
       if (isset($this->_array[0])) {
-        foreach ($this->_array[0]->childNodes as $childNode) {
-          if ($this->_isNode($childNode)) {
-            $result .= $this->_document->saveXML($childNode);
-          }
-        }
+        return $this->_getInnerXml($this->_array[0]);
       }
-      return $result;
+      return '';
     }
   }
 

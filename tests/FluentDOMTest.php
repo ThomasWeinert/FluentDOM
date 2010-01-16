@@ -396,7 +396,7 @@ class FluentDOMTest extends FluentDOMTestCase {
         ->find('//body//*')
         ->each('invalidCallbackFunctionName');
       $this->fail('An expected exception has not been raised.');
-    } catch (BadFunctionCallException $expected) {
+    } catch (InvalidArgumentException $expected) {
     }
   }
 
@@ -714,7 +714,7 @@ class FluentDOMTest extends FluentDOMTestCase {
       $fd->find('//p')
         ->map('invalidCallbackFunctionName');
         $this->fail('An expected exception has not been raised.');
-    } catch (BadFunctionCallException $expected) {
+    } catch (InvalidArgumentException $expected) {
     }
   }
 
@@ -1108,8 +1108,16 @@ class FluentDOMTest extends FluentDOMTestCase {
     $expect = '<item index="0">text1</item>'.
       '<item index="1">text2</item>'.
       '<item index="2">text3</item>';
-    $fd = $this->getFixtureFromString(self::XML)->find('//group')->xml();
-    $this->assertEquals($expect, $fd);
+    $xml = $this->getFixtureFromString(self::XML)->find('//group')->xml();
+    $this->assertEquals($expect, $xml);
+  }
+
+  /**
+  * @group TraversingChain
+  */
+  public function testXmlReadEmpty() {
+    $xml = $this->getFixtureFromString('<items/>')->find('/items/*')->xml();
+    $this->assertEquals('', $xml);
   }
 
   /**
@@ -1117,8 +1125,33 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testXmlWrite() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->find('//p[position() = last()]')
+    $fd
+      ->find('//p[position() = last()]')
       ->xml('<b>New</b>World');
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
+  }
+
+  /**
+  * @group TraversingChain
+  */
+  public function testXmlWriteEmpty() {
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd
+      ->find('//p')
+      ->xml('');
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
+  }
+
+  /**
+  * @group TraversingChain
+  */
+  public function testXmlWriteWithCallback() {
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd
+      ->find('//p')
+      ->xml(array($this, 'callbackForXml'));
     $this->assertTrue($fd instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
@@ -1710,6 +1743,17 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function callbackForAttr($index, $value) {
     return 'Callback #'.$value;
+  }
+
+  /**
+  * @uses testXmlWriteWithCallback
+  */
+  public function callbackForXml($index, $value) {
+    if ($index == 1) {
+      return '';
+    } else {
+      return strtoupper($value);
+    }
   }
 
   /**

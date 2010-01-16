@@ -1170,11 +1170,20 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testTextWrite() {
     $fd = $this->getFixtureFromString(self::XML)->find('//item');
-    $this->assertEquals('text1', $fd[0]->textContent);
-    $this->assertEquals('text2', $fd[1]->textContent);
     $textFd = $fd->text('changed');
     $this->assertEquals('changed', $fd[0]->textContent);
     $this->assertEquals('changed', $fd[1]->textContent);
+    $this->assertTrue($fd === $textFd);
+  }
+
+  /**
+  * @group TraversingChain
+  */
+  public function testTextWriteWithCallback() {
+    $fd = $this->getFixtureFromString(self::XML)->find('//item');
+    $textFd = $fd->text(array($this, 'callbackForText'));
+    $this->assertEquals('Callback #0', $fd[0]->textContent);
+    $this->assertEquals('Callback #1', $fd[1]->textContent);
     $this->assertTrue($fd === $textFd);
   }
 
@@ -1742,6 +1751,13 @@ class FluentDOMTest extends FluentDOMTestCase {
   * @uses testAttrWriteCallback
   */
   public function callbackForAttr($index, $value) {
+    return 'Callback #'.$value;
+  }
+
+  /**
+  * @uses testTextWriteCallback
+  */
+  public function callbackForText($index, $value) {
     return 'Callback #'.$value;
   }
 

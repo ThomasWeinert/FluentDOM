@@ -1318,7 +1318,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * Get or set the xml contents of the first matched element.
   *
   * @example xml.php Usage Example: FluentDOM::xml()
-  * @param string|callback|object Closure $xml XML fragment
+  * @param string|callback|Closure $xml XML fragment
   * @access public
   * @return string|FluentDOM
   */
@@ -1371,14 +1371,23 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * set the text contents of all matched elements.
   *
   * @example text.php Usage Example: FluentDOM::text()
-  * @param string $text
+  * @param string|callback|Closure $text
   * @access public
   * @return string|FluentDOM
   */
   public function text($text = NULL) {
     if (isset($text)) {
-      foreach ($this->_array as $node) {
-        $node->nodeValue = $text;
+      try {
+        $isCallback = $this->_isCallback($text, FALSE);
+      } catch (InvalidArgumentException $e) {
+        $isCallback = FALSE;
+      }
+      foreach ($this->_array as $index => $node) {
+        if ($isCallback) {
+          $node->nodeValue = call_user_func($text, $index, $node->nodeValue);
+        } else {
+          $node->nodeValue = $text;
+        }
       }
       return $this;
     } else {

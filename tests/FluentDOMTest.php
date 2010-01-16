@@ -517,9 +517,30 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testEq() {
     $fd = $this->getFixtureFromString(self::XML)->find('//*');
-    $this->assertTrue($fd->length > 1);
     $eqFd = $fd->eq(0);
-    $this->assertEquals(1, $eqFd->length);
+    $this->assertAttributeSame(
+      array(
+        $fd[0]
+      ),
+      '_array',
+      $eqFd
+    );
+    $this->assertTrue($eqFd !== $fd);
+  }
+
+  /**
+  * @group TraversingFilter
+  */
+  public function testEqWithNegativeOffset() {
+    $fd = $this->getFixtureFromString(self::XML)->find('/items/*');
+    $eqFd = $fd->eq(-2);
+    $this->assertAttributeSame(
+      array(
+        $fd[0]
+      ),
+      '_array',
+      $eqFd
+    );
     $this->assertTrue($eqFd !== $fd);
   }
 

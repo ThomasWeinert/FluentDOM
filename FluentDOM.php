@@ -809,7 +809,9 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
     $this->_parent = NULL;
     $this->_document->preserveWhiteSpace = FALSE;
     $this->_document->formatOutput = TRUE;
-    $this->_document->loadXML($this->_document->saveXML());
+    if (!empty($this->_document->documentElement)) {
+      $this->_document->loadXML($this->_document->saveXML());
+    }
     return $this;
   }
 
@@ -827,6 +829,9 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   */
   public function eq($position) {
     $result = $this->_spawn();
+    if ($position < 0) {
+      $position = count($this->_array) + $position;
+    }
     if (isset($this->_array[$position])) {
       $result->_push($this->_array[$position]);
     }
@@ -1119,7 +1124,8 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   }
 
   /**
-  * Get a set of elements containing the unique previous siblings of each of the matched set of elements.
+  * Get a set of elements containing the unique previous siblings of each of the
+  * matched set of elements.
   *
   * @example prev.php Usage Example: FluentDOM::prev()
   * @param string $expr XPath expression

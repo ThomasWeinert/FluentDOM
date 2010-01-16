@@ -558,6 +558,58 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group TraversingFilter
   */
+  public function testGet() {
+    $fd = $this->getFixtureFromString(self::XML)->find('/items/*');
+    $this->assertSame(
+      array(
+        $fd[0],
+        $fd[1]
+      ),
+      $fd->get()
+    );
+  }
+
+  /**
+  * @group TraversingFilter
+  */
+  public function testGetWithPosition() {
+    $fd = $this->getFixtureFromString(self::XML)->find('//*');
+    $this->assertSame(
+      array(
+        $fd[0]
+      ),
+      $fd->get(0)
+    );
+  }
+
+  /**
+  * @group TraversingFilter
+  */
+  public function testGetWithNegativePosition() {
+    $fd = $this->getFixtureFromString(self::XML)->find('/items/*');
+    $this->assertSame(
+      array(
+        $fd[0]
+      ),
+      $fd->get(-2)
+    );
+  }
+
+  /**
+  * @group TraversingFilter
+  */
+  public function testGetWithInvalidPosition() {
+    $fd = $this->getFixtureFromString(self::XML)->find('/*');
+    $this->assertSame(
+      array(
+      ),
+      $fd->get(99)
+    );
+  }
+
+  /**
+  * @group TraversingFilter
+  */
   public function testFilterWithFunction() {
     $fd = $this->getFixtureFromString(self::XML)->find('//*');
     $this->assertTrue($fd->length > 1);

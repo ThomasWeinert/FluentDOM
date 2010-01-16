@@ -865,6 +865,25 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   }
 
   /**
+  * Retrieve the matched DOM elements in an array. A negative position will be counted from the end.
+  * @parameter integer|NULL optional offset of a single element to get.
+  * @return array()
+  */
+  public function get($position = NULL) {
+    if (!isset($position)) {
+      return $this->_array;
+    }
+    if ($position < 0) {
+      $position = count($this->_array) + $position;
+    }
+    if (isset($this->_array[$position])) {
+      return array($this->_array[$position]);
+    } else {
+      return array();
+    }
+  }
+
+  /**
   * Checks the current selection against an expression and returns true,
   * if at least one element of the selection fits the given expression.
   *

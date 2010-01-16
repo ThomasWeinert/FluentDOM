@@ -495,7 +495,6 @@ class FluentDOMTest extends FluentDOMTestCase {
     $this->assertSame($expected, (string)$fd);
   }
 
-
   /**
   * @group CoreFunctions
   */
@@ -506,6 +505,20 @@ class FluentDOMTest extends FluentDOMTestCase {
     $expected = "<html><body><br></body></html>\n";
     $this->assertSame('text/html', $this->readAttribute($fd, '_contentType'));
     $this->assertSame($expected, (string)$fd);
+  }
+
+  /*
+  * @group CoreFunctions
+  */
+  public function testToArray() {
+    $fd = $this->getFixtureFromString(self::XML)->find('/items/*');
+    $this->assertSame(
+      array(
+        $fd[0],
+        $fd[1]
+      ),
+      $fd->toArray()
+    );
   }
 
   /*
@@ -1591,8 +1604,8 @@ class FluentDOMTest extends FluentDOMTestCase {
   public function testAttrWriteWithCallback() {
     $fd = $this->getFixtureFromString(self::XML)
       ->find('//group/item')
-      ->attr('callback', array($this, 'callbackForAttr'));
-    $this->assertEquals($fd[0]->nodeName, $fd->attr('callback'));
+      ->attr('index', array($this, 'callbackForAttr'));
+    $this->assertEquals('Callback #0', $fd->attr('index'));
   }
 
   /**
@@ -1695,8 +1708,8 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @uses testAttrWriteCallback
   */
-  public function callbackForAttr($node, $index) {
-    return $node->nodeName;
+  public function callbackForAttr($index, $value) {
+    return 'Callback #'.$value;
   }
 
   /**

@@ -790,6 +790,10 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
     return $this;
   }
 
+  /*
+  * Miscellaneous
+  */
+
   /**
   * Formats the current document, resets internal node array and other properties.
   *
@@ -813,6 +817,14 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
       $this->_document->loadXML($this->_document->saveXML());
     }
     return $this;
+  }
+
+  /**
+  * Retrieve the matched DOM elements in an array.
+  * @return array
+  */
+  public function toArray() {
+    return $this->_array;
   }
 
   /*
@@ -1857,7 +1869,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   *
   * @example attr.php Usage Example: FluentDOM:attr() Read an attribute value.
   * @param string|array $attribute attribute name or attribute list
-  * @param string|callback $value function callback or value
+  * @param string|callback $value function callback($index, $value) or value
   * @access public
   * @return string|FluentDOM attribute value or $this
   */
@@ -1885,13 +1897,13 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
       return NULL;
     } elseif (is_array($value) ||
               $value instanceof Closure) {
-      //value is an array (function callback) - execute ist and set result on each element
+      //value is function callback - execute it and set result on each element
       if ($this->_isQName($attribute)) {
         foreach ($this->_array as $index => $node) {
           if ($node instanceof DOMElement) {
             $node->setAttribute(
               $attribute,
-              call_user_func($value, $node, $index)
+              call_user_func($value, $index, $node->getAttribute($attribute))
             );
           }
         }

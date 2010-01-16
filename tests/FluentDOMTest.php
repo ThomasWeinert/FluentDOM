@@ -1182,8 +1182,8 @@ class FluentDOMTest extends FluentDOMTestCase {
   public function testTextWriteWithCallback() {
     $fd = $this->getFixtureFromString(self::XML)->find('//item');
     $textFd = $fd->text(array($this, 'callbackForText'));
-    $this->assertEquals('Callback #0', $fd[0]->textContent);
-    $this->assertEquals('Callback #1', $fd[1]->textContent);
+    $this->assertEquals('Callback #0: text1', $fd[0]->textContent);
+    $this->assertEquals('Callback #1: text2', $fd[1]->textContent);
     $this->assertTrue($fd === $textFd);
   }
 
@@ -1758,7 +1758,7 @@ class FluentDOMTest extends FluentDOMTestCase {
   * @uses testTextWriteCallback
   */
   public function callbackForText($index, $value) {
-    return 'Callback #'.$value;
+    return 'Callback #'.$index.': '.$value;
   }
 
   /**

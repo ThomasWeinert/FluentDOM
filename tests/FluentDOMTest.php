@@ -1704,9 +1704,8 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testAddClass() {
     $fd = $this->getFixtureFromString(self::XML)->find('//html/div');
-    $this->assertTrue($fd->hasClass('added') === FALSE);
     $fd->addClass('added');
-    $this->assertTrue($fd->hasClass('added') === TRUE);
+    $this->assertTrue($fd->hasClass('added'));
   }
 
   /**
@@ -1714,8 +1713,8 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testHasClass() {
     $fd = $this->getFixtureFromString(self::XML)->find('//html/div');
-    $this->assertTrue($fd->hasClass('test1') === TRUE);
-    $this->assertTrue($fd->hasClass('unknown') === FALSE);
+    $this->assertTrue($fd->hasClass('test1'));
+    $this->assertFalse($fd->hasClass('unknown'));
   }
 
   /**
@@ -1723,28 +1722,54 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testRemoveClass() {
     $fd = $this->getFixtureFromString(self::XML)->find('//html/div');
-    $this->assertEquals('test1 test2', $fd[0]->getAttribute('class'));
-    $this->assertEquals('test2', $fd[1]->getAttribute('class'));
     $fd->removeClass('test2');
     $this->assertEquals('test1', $fd[0]->getAttribute('class'));
-    $this->assertTrue($fd[1]->hasAttribute('class') === FALSE);
+    $this->assertFalse($fd[1]->hasAttribute('class'));
   }
 
   /**
   * @group Attributes
   */
-  public function testToggleClass() {
+  public function testRemoveClassWihtEmptyString() {
     $fd = $this->getFixtureFromString(self::XML)->find('//html/div');
-    $this->assertEquals('test1 test2', $fd[0]->getAttribute('class'));
-    $this->assertEquals('test2', $fd[1]->getAttribute('class'));
-    $fd->toggleClass('test1');
-    $this->assertEquals('test2', $fd[0]->getAttribute('class'));
-    $this->assertEquals('test2 test1', $fd[1]->getAttribute('class'));
+    $fd->removeClass();
+    $this->assertFalse($fd[0]->hasAttribute('class'));
+    $this->assertFalse($fd[1]->hasAttribute('class'));
   }
 
+  /**
+  * @group Attributes
+  * @dataProvider dataProviderToggleClass
+  */
+  public function testToggleClass($toggle, $mode, $expectedOne, $expectedTwo) {
+    $fd = $this->getFixtureFromString(self::XML)->find('//html/div');
+    $fd->toggleClass($toggle);
+    $this->assertEquals($expectedOne, $fd[0]->getAttribute('class'));
+    $this->assertEquals($expectedTwo, $fd[1]->getAttribute('class'));
+  }
+
+  /**
+  * @group Attributes
+  */
+  public function testToogleClassWithCallback() {
+    $fd = $this->getFixtureFromString(self::XML)->find('//html/div');
+    $fd->toggleClass(array($this, 'callbackForToggleClass'));
+    $this->assertEquals('test4', $fd[0]->getAttribute('class'));
+    $this->assertEquals('test4', $fd[1]->getAttribute('class'));
+  }
+
+  /**
+  * Data Provider
+  */
+  public function dataProviderToggleClass() {
+    return array(
+      array('test1', NULL, 'test2', 'test2 test1'),
+      array('test2 test4', NULL, 'test1 test4', 'test4')
+    );
+  }
 
   /*
-  * helper
+  * Callbacks
   */
 
   /**
@@ -1784,6 +1809,13 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function callbackTestFilterWithFunction($node, $index) {
     return $node->nodeName == "items";
+  }
+
+  /**
+  * @uses testToogleClassWithCallback()
+  */
+  public function callbackForToggleClass($index, $class) {
+    return $class.' test4';
   }
 }
 ?>

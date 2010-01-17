@@ -2019,7 +2019,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Adds the specified class(es) to each of the set of matched elements.
   *
-  * @param string $class
+  * @param string|callback|Closure $class
   * @access public
   * @return FluentDOM
   */
@@ -2030,7 +2030,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Returns true if the specified class is present on at least one of the set of matched elements.
   *
-  * @param string $class
+  * @param string|callback|Closure $class
   * @access public
   * @return boolean
   */
@@ -2050,11 +2050,11 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Removes all or the specified class(es) from the set of matched elements.
   *
-  * @param string|array $class
+  * @param string|callback|Closure $class
   * @access public
   * @return FluentDOM
   */
-  public function removeClass($class) {
+  public function removeClass($class = '') {
     return $this->toggleClass($class, FALSE);
   }
 
@@ -2064,41 +2064,59 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * toggles the specified class if the switch is NULL.
   *
   * @example toggleClass.php Usage Example: FluentDOM::toggleClass()
-  * @param string $class
+  * @param string|callback|Closure $class
   * @param NULL|boolean $switch toggle if NULL, add if TRUE, remove if FALSE
   * @access public
   * @return FluentDOM
   */
   public function toggleClass($class, $switch = NULL) {
-    foreach ($this->_array as $node) {
+    foreach ($this->_array as $index => $node) {
       if ($node instanceof DOMElement) {
-        if ($node->hasAttribute('class')) {
-          $currentClasses = array_flip(
-            preg_split('(\s+)', trim($node->getAttribute('class')))
+        try {
+          $isCallback = $this->_isCallback($class);
+        } catch (InvalidArgumentException $e) {
+          $isCallback = FALSE;
+        }
+        if ($isCallback) {
+          $classString = call_user_func(
+            $class, $index, $node->getAttribute('class')
           );
         } else {
-          $currentClasses = array();
+          $classString = $class;
         }
-        $toggledClasses = array_unique(preg_split('(\s+)', trim($class)));
-        $modified = FALSE;
-        foreach ($toggledClasses as $toggledClass) {
-          if (isset($currentClasses[$toggledClass])) {
-            if ($switch === FALSE || is_null($switch)) {
-              unset($currentClasses[$toggledClass]);
-              $modified = TRUE;
-            }
+        if (empty($classString) && $switch == FALSE) {
+          if ($node->hasAttribute('class')) {
+            $node->removeAttribute('class');
+          }
+        } else {
+          if ($node->hasAttribute('class')) {
+            $currentClasses = array_flip(
+              preg_split('(\s+)', trim($node->getAttribute('class')))
+            );
           } else {
-            if ($switch === TRUE || is_null($switch)) {
-              $currentClasses[$toggledClass] = TRUE;
-              $modified = TRUE;
+            $currentClasses = array();
+          }
+          $toggledClasses = array_unique(preg_split('(\s+)', trim($classString)));
+          $modified = FALSE;
+          foreach ($toggledClasses as $toggledClass) {
+            if (isset($currentClasses[$toggledClass])) {
+              if ($switch === FALSE || is_null($switch)) {
+                unset($currentClasses[$toggledClass]);
+                $modified = TRUE;
+              }
+            } else {
+              if ($switch === TRUE || is_null($switch)) {
+                $currentClasses[$toggledClass] = TRUE;
+                $modified = TRUE;
+              }
             }
           }
-        }
-        if ($modified) {
-          if (empty($currentClasses)) {
-            $node->removeAttribute('class');
-          } else {
-            $node->setAttribute('class', implode(' ', array_keys($currentClasses)));
+          if ($modified) {
+            if (empty($currentClasses)) {
+              $node->removeAttribute('class');
+            } else {
+              $node->setAttribute('class', implode(' ', array_keys($currentClasses)));
+            }
           }
         }
       }

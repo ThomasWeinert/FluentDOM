@@ -1702,19 +1702,26 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group Attributes
   */
-  public function testAddClass() {
+  public function testHasClassExpectingTrue() {
     $fd = $this->getFixtureFromString(self::XML)->find('//html/div');
-    $fd->addClass('added');
-    $this->assertTrue($fd->hasClass('added'));
+    $this->assertTrue($fd->hasClass('test1'));
   }
 
   /**
   * @group Attributes
   */
-  public function testHasClass() {
+  public function testHasClassExpectingFalse() {
     $fd = $this->getFixtureFromString(self::XML)->find('//html/div');
-    $this->assertTrue($fd->hasClass('test1'));
-    $this->assertFalse($fd->hasClass('unknown'));
+    $this->assertFalse($fd->hasClass('INVALID_CLASSNAME'));
+  }
+
+  /**
+  * @group Attributes
+  */
+  public function testAddClass() {
+    $fd = $this->getFixtureFromString(self::XML)->find('//html/div');
+    $fd->addClass('added');
+    $this->assertTrue($fd->hasClass('added'));
   }
 
   /**
@@ -1730,7 +1737,7 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group Attributes
   */
-  public function testRemoveClassWihtEmptyString() {
+  public function testRemoveClassWithEmptyString() {
     $fd = $this->getFixtureFromString(self::XML)->find('//html/div');
     $fd->removeClass();
     $this->assertFalse($fd[0]->hasAttribute('class'));

@@ -109,7 +109,7 @@ class FluentDOMStyle extends FluentDOM {
               }
             } elseif (is_string($value)) {
               $options[$property] = $value;
-            } elseif ($this->_isCallback($value)) {
+            } elseif ($this->_isCallback($value, FALSE, FALSE)) {
               $options[$property] = call_user_func(
                 $value,
                 $node,

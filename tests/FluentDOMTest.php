@@ -1819,14 +1819,14 @@ class FluentDOMTest extends FluentDOMTestCase {
   }
 
   /**
-  * @uses testAttrWriteCallback
+  * @uses testAttrWriteWithCallback
   */
   public function callbackForAttr($index, $value) {
     return 'Callback #'.$value;
   }
 
   /**
-  * @uses testTextWriteCallback
+  * @uses testTextWriteWithCallback
   */
   public function callbackForText($index, $text) {
     return 'Callback #'.$index.': '.$text;

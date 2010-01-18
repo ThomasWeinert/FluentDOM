@@ -1901,16 +1901,24 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
 
   /**
   * Create nodes list from content, if $content contains node(s)
-  * from another document the are imported.
+  * from another document they are imported. If $content is a valid QName an element
+  * of this name will be created
   *
   * @example node.php Usage Example: FluentDOM::node()
   * @param string|array|DOMNode|Iterator $content
+  * @param array $attr attributes set on created/imported elements
   * @access public
   * @return FluentDOM
   */
-  public function node($content) {
+  public function node($content, $attr = array()) {
     $result = $this->_spawn();
-    $result->_push($this->_getContentNodes($content));
+    $nodes = $this->_getContentNodes($content);
+    if ($nodes) {
+      $result->_push($nodes);
+      if (count($attr) > 0) {
+        $result->attr($attr);
+      }
+    }
     return $result;
   }
 

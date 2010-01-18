@@ -422,6 +422,23 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group CoreFunctions
   */
+  public function testNodeWithNameAndAttributes() {
+    $fd = new FluentDOM();
+    $doc = $fd->append(
+      $fd->node(
+        '<sample/>', array('attribute' => 'yes')
+      )
+    );
+    $this->assertTrue($doc instanceof FluentDOM);
+    $this->assertXmlStringEqualsXmlString(
+      '<?xml version="1.0"?>'."\n".'<sample attribute="yes"/>',
+      $doc->document->saveXML()
+    );
+  }
+
+  /**
+  * @group CoreFunctions
+  */
   public function testNodeWithDomelement() {
     $fd = $this->getFixtureFromString(self::XML);
     $nodes = $fd->node($fd->document->createElement('div'));

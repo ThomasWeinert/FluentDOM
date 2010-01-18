@@ -13,7 +13,7 @@
 /**
 * load necessary files
 */
-require_once dirname(__FILE__).'/FluentDOMTestCase.php';
+require_once(dirname(__FILE__).'/FluentDOMTestCase.php');
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
@@ -37,7 +37,7 @@ class FluentDOMTest_PHP5_3 extends FluentDOMTestCase {
           $fd
             ->find('//input')
             ->map(
-              function ($node, $index) {
+              function($node, $index) {
                 $nodeFd = new FluentDOM();
                 return $nodeFd->load($node)->attr("value");
               }

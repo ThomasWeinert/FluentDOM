@@ -13,9 +13,9 @@
 /**
 * load necessary files
 */
-require_once 'PHPUnit/Framework.php';
-require_once dirname(__FILE__).'/../../FluentDOM.php';
-require_once dirname(__FILE__).'/../../FluentDOM/Iterator.php';
+require_once('PHPUnit/Framework.php');
+require_once(dirname(__FILE__).'/../../FluentDOM.php');
+require_once(dirname(__FILE__).'/../../FluentDOM/Iterator.php');
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 

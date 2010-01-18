@@ -13,11 +13,11 @@
 /**
 * Load necessary files
 */
-require_once 'PHPUnit/Framework.php';
-require_once dirname(__FILE__).'/FluentDOM/AllTests.php';
-require_once dirname(__FILE__).'/FluentDOMTest.php';
+require_once('PHPUnit/Framework.php');
+require_once(dirname(__FILE__).'/FluentDOM/AllTests.php');
+require_once(dirname(__FILE__).'/FluentDOMTest.php');
 if (version_compare(PHP_VERSION, '5.3', '>=')) {
-  include_once dirname(__FILE__).'/FluentDOMTest_PHP5_3.php';
+  include_once(dirname(__FILE__).'/FluentDOMTest_PHP5_3.php');
 }
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);

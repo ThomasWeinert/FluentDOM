@@ -55,7 +55,10 @@ class FluentDOMTest extends FluentDOMTestCase {
     $node = $dom->appendChild($dom->createElement('html'));
     $fd = FluentDOM($node);
     $this->assertTrue($fd instanceof FluentDOM);
-    $this->assertEquals('html', $fd->document->documentElement->nodeName);
+    $this->assertTag(
+      array('tag' => 'html'),
+      $fd->document
+    );
   }
 
   /*
@@ -79,15 +82,17 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testLoaderMechanism() {
     $firstLoaderMock = $this->getMock('FluentDOMLoader');
-    $firstLoaderMock->expects($this->once())
-                    ->method('load')
-                    ->with($this->equalTo('test load string'), $this->equalTo('text/xml'))
-                    ->will($this->returnValue(FALSE));
+    $firstLoaderMock
+      ->expects($this->once())
+      ->method('load')
+      ->with($this->equalTo('test load string'), $this->equalTo('text/xml'))
+      ->will($this->returnValue(FALSE));
     $secondLoaderMock = $this->getMock('FluentDOMLoader');
-    $secondLoaderMock->expects($this->once())
-                     ->method('load')
-                     ->with($this->equalTo('test load string'), $this->equalTo('text/xml'))
-                     ->will($this->returnValue(new DOMDocument()));
+    $secondLoaderMock
+      ->expects($this->once())
+      ->method('load')
+      ->with($this->equalTo('test load string'), $this->equalTo('text/xml'))
+      ->will($this->returnValue(new DOMDocument()));
 
     $fd = new FluentDOM();
     $fd->setLoaders(array($firstLoaderMock, $secondLoaderMock));
@@ -105,10 +110,11 @@ class FluentDOMTest extends FluentDOMTestCase {
     $dom = new DOMDocument();
     $domNode = $dom->appendChild($dom->createElement('root'));
     $loaderMock = $this->getMock('FluentDOMLoader');
-    $loaderMock->expects($this->once())
-               ->method('load')
-               ->with($this->equalTo($domNode), $this->equalTo('text/xml'))
-               ->will($this->returnValue(array($dom, array($domNode))));
+    $loaderMock
+      ->expects($this->once())
+      ->method('load')
+      ->with($this->equalTo($domNode), $this->equalTo('text/xml'))
+      ->will($this->returnValue(array($dom, array($domNode))));
 
     $fd = new FluentDOM();
     $fd->setLoaders(array($loaderMock));
@@ -242,10 +248,11 @@ class FluentDOMTest extends FluentDOMTestCase {
     $dom = new DOMDocument();
     $dom->loadHTML('<html><body><br></body></html>');
     $loader = $this->getMock('FluentDOMLoader');
-    $loader->expects($this->once())
-           ->method('load')
-           ->with($this->equalTo(''), $this->equalTo('text/html'))
-           ->will($this->returnValue($dom));
+    $loader
+      ->expects($this->once())
+      ->method('load')
+      ->with($this->equalTo(''), $this->equalTo('text/html'))
+      ->will($this->returnValue($dom));
     $fd = new FluentDOM();
     $fd->setLoaders(array($loader));
     $fd = $fd->load('', 'text/html');
@@ -374,7 +381,8 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testEach() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->find('//body//*')
+    $fd
+      ->find('//body//*')
       ->each(
         create_function(
           '$node, $item',
@@ -499,8 +507,9 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testFormatOutput() {
     $fd = new FluentDOM();
-    $fd->append('<html><body><br/></body></html>')
-       ->formatOutput();
+    $fd
+      ->append('<html><body><br/></body></html>')
+      ->formatOutput();
     $expected =
        "<?xml version=\"1.0\"?>\n".
        "<html>\n".
@@ -517,8 +526,9 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testFormatOutputWithContentTypeHtml() {
     $fd = new FluentDOM();
-    $fd->append('<html><body><br/></body></html>')
-       ->formatOutput('text/html');
+    $fd
+      ->append('<html><body><br/></body></html>')
+      ->formatOutput('text/html');
     $expected = "<html><body><br></body></html>\n";
     $this->assertSame('text/html', $this->readAttribute($fd, '_contentType'));
     $this->assertSame($expected, (string)$fd);
@@ -631,8 +641,7 @@ class FluentDOMTest extends FluentDOMTestCase {
   public function testGetWithInvalidPosition() {
     $fd = $this->getFixtureFromString(self::XML)->find('/*');
     $this->assertSame(
-      array(
-      ),
+      array(),
       $fd->get(99)
     );
   }
@@ -672,7 +681,8 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testMap() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->find('//p')
+    $fd
+      ->find('//p')
       ->append(
         implode(
           ', ',
@@ -696,7 +706,8 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testMapMixedResult() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->find('//p')
+    $fd
+      ->find('//p')
       ->append(
         implode(
           ', ',
@@ -728,9 +739,10 @@ class FluentDOMTest extends FluentDOMTestCase {
   public function testMapInvalidCallback() {
     $fd = $this->getFixtureFromFile('testMap');
     try {
-      $fd->find('//p')
+      $fd
+        ->find('//p')
         ->map('invalidCallbackFunctionName');
-        $this->fail('An expected exception has not been raised.');
+      $this->fail('An expected exception has not been raised.');
     } catch (InvalidArgumentException $expected) {
     }
   }
@@ -762,7 +774,8 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testSliceByRangeStartLtEnd() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->find('//p')
+    $fd
+      ->find('//p')
       ->slice(0, 3)
       ->replaceAll('//div');
     $this->assertTrue($fd instanceof FluentDOM);
@@ -774,7 +787,8 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testSliceByRangeStartGtEnd() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->find('//p')
+    $fd
+      ->find('//p')
       ->slice(5, 2)
       ->replaceAll('//div');
     $this->assertTrue($fd instanceof FluentDOM);
@@ -786,7 +800,8 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testSliceByNegRange() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->find('//p')
+    $fd
+      ->find('//p')
       ->slice(1, -2)
       ->replaceAll('//div');
     $this->assertTrue($fd instanceof FluentDOM);
@@ -798,7 +813,8 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testSliceToEnd() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->find('//p')
+    $fd
+      ->find('//p')
       ->slice(3)
       ->replaceAll('//div');
     $this->assertTrue($fd instanceof FluentDOM);
@@ -814,7 +830,8 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testAddElements() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->add(
+    $fd
+      ->add(
         $fd->find('//div')
       )
       ->toggleClass('inB');
@@ -827,7 +844,8 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testAddFromExpression() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->add('//div')
+    $fd
+      ->add('//div')
       ->toggleClass('inB');
     $this->assertTrue($fd instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
@@ -838,7 +856,8 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testAddInContext() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->find('//p')
+    $fd
+      ->find('//p')
       ->add('//p/b')
       ->toggleClass('inB');
     $this->assertTrue($fd instanceof FluentDOM);
@@ -882,7 +901,8 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testChildren() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->find('//div[@id = "container"]/p')
+    $fd
+      ->find('//div[@id = "container"]/p')
       ->children()
       ->toggleClass('child');
     $this->assertTrue($fd instanceof FluentDOM);
@@ -894,7 +914,8 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testChildrenExpression() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->find('//div[@id = "container"]/p')
+    $fd
+      ->find('//div[@id = "container"]/p')
       ->children('name() = "em"')
       ->toggleClass('child');
     $this->assertTrue($fd instanceof FluentDOM);
@@ -951,7 +972,8 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testNextAll() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->find('//div[position() = 1]')
+    $fd
+      ->find('//div[position() = 1]')
       ->nextAll()
       ->addClass('after');
     $this->assertTrue($fd instanceof FluentDOM);
@@ -963,7 +985,8 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testParent() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->find('//body//*')
+    $fd
+      ->find('//body//*')
       ->each(
         create_function(
           '$node, $item',
@@ -1023,7 +1046,8 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testPrevExpression() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->find('//div[@class = "here"]')
+    $fd
+      ->find('//div[@class = "here"]')
       ->prev()
       ->addClass('nextTest');
     $this->assertTrue($fd instanceof FluentDOM);
@@ -1035,7 +1059,8 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testPrevAll() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->find('//div[@id = "start"]')
+    $fd
+      ->find('//div[@id = "start"]')
       ->prev()
       ->addClass('before');
     $this->assertTrue($fd instanceof FluentDOM);
@@ -1059,7 +1084,8 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testSiblings() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->find('//li[@class = "hilite"]')
+    $fd
+      ->find('//li[@class = "hilite"]')
       ->siblings()
       ->addClass('before');
     $this->assertTrue($fd instanceof FluentDOM);
@@ -1213,8 +1239,9 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testAppend() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd->find('//p')
-       ->append('<strong>Hello</strong>');
+    $fd
+      ->find('//p')
+      ->append('<strong>Hello</strong>');
     $this->assertTrue($fd instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
@@ -1250,7 +1277,6 @@ class FluentDOMTest extends FluentDOMTestCase {
     $doc = $fd
       ->find('//p')
       ->append(array($this, 'callbackForAppend'));
-    $this->assertTrue($doc instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
@@ -1260,7 +1286,6 @@ class FluentDOMTest extends FluentDOMTestCase {
   public function testAppendOnEmptyDocumentWithCallback() {
     $fd = new FluentDOM;
     $doc = $fd->append(array($this, 'callbackForAppendNode'));
-    $this->assertTrue($doc instanceof FluentDOM);
     $this->assertXmlStringEqualsXmlString(
       '<?xml version="1.0"?>'."\n".'<sample>Hello World</sample>',
       $doc->document->saveXML()
@@ -1272,9 +1297,9 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testAppendTo() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->find('//span')
+    $fd
+      ->find('//span')
       ->appendTo('//div[@id = "foo"]');
-    $this->assertTrue($fd instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
@@ -1285,7 +1310,6 @@ class FluentDOMTest extends FluentDOMTestCase {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//p')
       ->prepend('<strong>Hello</strong>');
-    $this->assertTrue($fd instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
@@ -1294,9 +1318,9 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testPrependTo() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->find('//span')
+    $fd
+      ->find('//span')
       ->prependTo('//div[@id = "foo"]');
-    $this->assertTrue($fd instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
@@ -1313,7 +1337,6 @@ class FluentDOMTest extends FluentDOMTestCase {
       ->find('//p')
       ->after('<b>Hello</b>')
       ->after(' World');
-    $this->assertTrue($fd instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
@@ -1322,11 +1345,11 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testBefore() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->formatOutput()
+    $fd
+      ->formatOutput()
       ->find('//p')
       ->before(' World')
       ->before('<b>Hello</b>');
-    $this->assertTrue($fd instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
@@ -1335,9 +1358,9 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testInsertAfter() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->find('//p')
+    $fd
+      ->find('//p')
       ->insertAfter('//div[@id = "foo"]');
-    $this->assertTrue($fd instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
@@ -1346,7 +1369,8 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testInsertBefore() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->find('//p')
+    $fd
+      ->find('//p')
       ->insertBefore('//div[@id = "foo"]');
     $this->assertTrue($fd instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
@@ -1361,9 +1385,9 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testWrap() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->find('//p')
+    $fd
+      ->find('//p')
       ->wrap('<div class="outer"><div class="inner"></div></div>');
-    $this->assertTrue($fd instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
@@ -1376,7 +1400,6 @@ class FluentDOMTest extends FluentDOMTestCase {
     $div = $dom->createElement('div');
     $div->setAttribute('class', 'wrapper');
     $fd->find('//p')->wrap($div);
-    $this->assertTrue($fd instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
@@ -1386,7 +1409,6 @@ class FluentDOMTest extends FluentDOMTestCase {
   public function testWrapWithDomnodelist() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $divs = $fd->xpath->query('//div[@class = "wrapper"]');
-    $this->assertTrue($fd instanceof FluentDOM);
     $fd->find('//p')->wrap($divs);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
@@ -1414,7 +1436,6 @@ class FluentDOMTest extends FluentDOMTestCase {
     $divs[0]->setAttribute('class', 'wrapper');
     $divs[1] = $dom->createElement('div');
     $fd->find('//p')->wrap($divs);
-    $this->assertTrue($fd instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
@@ -1423,9 +1444,9 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testWrapAllSingle() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->find('//p')
+    $fd
+      ->find('//p')
       ->wrapAll('<div class="wrapper"/>');
-    $this->assertTrue($fd instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
@@ -1434,9 +1455,9 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testWrapAllComplex() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->find('//p')
+    $fd
+      ->find('//p')
       ->wrapAll('<div class="wrapper"><div>INNER</div></div>');
-    $this->assertTrue($fd instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
@@ -1445,9 +1466,9 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testWrapInner() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->find('//p')
+    $fd
+      ->find('//p')
       ->wrapInner('<b></b>');
-    $this->assertTrue($fd instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
@@ -1460,9 +1481,9 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testReplaceWith() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->find('//p')
+    $fd
+      ->find('//p')
       ->replaceWith('<b>Paragraph. </b>');
-    $this->assertTrue($fd instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
@@ -1471,9 +1492,9 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testReplaceAll() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->node('<b id="sample">Paragraph. </b>')
+    $fd
+      ->node('<b id="sample">Paragraph. </b>')
       ->replaceAll('//p');
-    $this->assertTrue($fd instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
@@ -1482,11 +1503,11 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testReplaceAllWithNode() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->node('<b id="sample">Paragraph. </b>')
+    $fd
+      ->node('<b id="sample">Paragraph. </b>')
       ->replaceAll(
         $fd->find('//p')->item(1)
       );
-    $this->assertTrue($fd instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
@@ -1514,9 +1535,9 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testEmpty() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->find('//p[@class = "first"]')
+    $fd
+      ->find('//p[@class = "first"]')
       ->empty();
-    $this->assertTrue($fd instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
@@ -1525,9 +1546,9 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testRemove() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->find('//p[@class = "first"]')
+    $fd
+      ->find('//p[@class = "first"]')
       ->remove();
-    $this->assertTrue($fd instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
@@ -1536,9 +1557,9 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testRemoveWithExpression() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd->find('//p')
-       ->remove('@class = "first"');
-    $this->assertTrue($fd instanceof FluentDOM);
+    $fd
+      ->find('//p')
+      ->remove('@class = "first"');
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
@@ -1552,7 +1573,6 @@ class FluentDOMTest extends FluentDOMTestCase {
   public function testClone() {
     $fd = $this->getFixtureFromString(self::XML)->find('//item');
     $clonedNodes = $fd->clone();
-    $this->assertTrue($fd instanceof FluentDOM);
     $this->assertTrue($clonedNodes instanceof FluentDOM);
     $this->assertTrue($fd[0] !== $clonedNodes[0]);
     $this->assertEquals($fd[0]->nodeName, $clonedNodes[0]->nodeName);
@@ -1697,9 +1717,9 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testRemoveAttr() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd->find('//p')
-       ->removeAttr('index');
-    $this->assertTrue($fd instanceof FluentDOM);
+    $fd
+      ->find('//p')
+      ->removeAttr('index');
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
@@ -1720,9 +1740,9 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testRemoveAttrWithListParameter() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd->find('//p')
-       ->removeAttr(array('index', 'style'));
-    $this->assertTrue($fd instanceof FluentDOM);
+    $fd
+      ->find('//p')
+      ->removeAttr(array('index', 'style'));
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
@@ -1731,9 +1751,9 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testRemoveAttrWithAsteriskParameter() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd->find('//p')
-       ->removeAttr('*');
-    $this->assertTrue($fd instanceof FluentDOM);
+    $fd
+      ->find('//p')
+      ->removeAttr('*');
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 

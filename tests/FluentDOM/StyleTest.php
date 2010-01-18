@@ -13,8 +13,8 @@
 /**
 * load necessary files
 */
-require_once 'PHPUnit/Framework.php';
-require_once dirname(__FILE__).'/../../FluentDOM/Style.php';
+require_once('PHPUnit/Framework.php');
+require_once(dirname(__FILE__).'/../../FluentDOM/Style.php');
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
@@ -89,7 +89,7 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
   * @group CSS
   */
   public function testCssRead() {
-    $fd =$this->getFixture()->find('//div');
+    $fd = $this->getFixture()->find('//div');
     $this->assertTrue($fd instanceof FluentDOMStyle);
     $this->assertEquals('left', $fd->css('text-align'));
   }
@@ -98,7 +98,7 @@ class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
   * @group CSS
   */
   public function testCssReadWithInvalidProperty() {
-    $fd =$this->getFixture()->find('//div');
+    $fd = $this->getFixture()->find('//div');
     $this->assertTrue($fd instanceof FluentDOMStyle);
     $this->assertEquals(NULL, $fd->css('---'));
   }

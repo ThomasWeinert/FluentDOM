@@ -13,8 +13,8 @@
 /**
 * load necessary files
 */
-require_once 'PHPUnit/Framework.php';
-require_once dirname(__FILE__).'/../FluentDOM.php';
+require_once('PHPUnit/Framework.php');
+require_once(dirname(__FILE__).'/../FluentDOM.php');
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
@@ -54,7 +54,8 @@ abstract class FluentDOMTestCase extends PHPUnit_Framework_TestCase {
   */
   protected function assertFluentDOMEqualsXMLFile($functionName, $actual) {
     $fileName = $this->getFileName($functionName, 'tgt');
-    $this->assertXmlStringEqualsXmlFile($fileName, $actual);
+    $this->assertType('FluentDOM', $actual);
+    $this->assertXmlStringEqualsXmlFile($fileName, (string)$actual);
   }
 
   /**

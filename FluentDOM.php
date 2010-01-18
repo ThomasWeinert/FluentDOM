@@ -633,14 +633,15 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   *
   * @param callback $callback
   * @param boolean $allowGlobalFunctions
+  * @param boolean $silent (no InvalidArgumentException)
   * @access protected
   * @return boolean
   */
-  protected function _isCallback($callback, $allowGlobalFunctions = TRUE) {
+  protected function _isCallback($callback, $allowGlobalFunctions, $silent) {
     if ($callback instanceof Closure) {
       return TRUE;
-    } elseif ($allowGlobalFunctions &&
-              is_string($callback) &&
+    } elseif (is_string($callback) &&
+              $allowGlobalFunctions &&
               function_exists($callback)) {
       return is_callable($callback);
     } elseif (is_array($callback) &&
@@ -648,6 +649,8 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
               (is_object($callback[0]) || is_string($callback[0])) &&
               is_string($callback[1])) {
       return is_callable($callback);
+    } elseif ($silent) {
+      return FALSE;
     } else {
       throw new InvalidArgumentException('Invalid callback argument');
     }
@@ -799,7 +802,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   * @return FluentDOM
   */
   public function each($function) {
-    if ($this->_isCallback($function)) {
+    if ($this->_isCallback($function, TRUE, FALSE)) {
       foreach ($this->_array as $index => $node) {
         call_user_func($function, $node, $index);
       }
@@ -883,7 +886,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
       $check = TRUE;
       if (is_string($expr)) {
         $check = $this->_test($expr, $node, $index);
-      } elseif ($this->_isCallback($expr)) {
+      } elseif ($this->_isCallback($expr, TRUE, FALSE)) {
         $check = call_user_func($expr, $node, $index);
       }
       if ($check) {
@@ -943,7 +946,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   public function map($function) {
     $result = array();
     foreach ($this->_array as $index => $node) {
-      if ($this->_isCallback($function)) {
+      if ($this->_isCallback($function, TRUE, FALSE)) {
         $mapped = call_user_func($function, $node, $index);
       }
       if ($mapped === NULL) {
@@ -978,7 +981,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
       $check = FALSE;
       if (is_string($expr)) {
         $check = $this->_test($expr, $node, $index);
-      } elseif ($this->_isCallback($expr)) {
+      } elseif ($this->_isCallback($expr, TRUE, FALSE)) {
         $check = call_user_func($expr, $node, $index);
       }
       if (!$check) {
@@ -1324,11 +1327,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   */
   public function xml($xml = NULL) {
     if (isset($xml)) {
-      try {
-        $isCallback = $this->_isCallback($xml, FALSE);
-      } catch (InvalidArgumentException $e) {
-        $isCallback = FALSE;
-      }
+      $isCallback = $this->_isCallback($xml, FALSE, TRUE);
       if ($isCallback) {
         foreach ($this->_array as $index => $node) {
           $xmlString = call_user_func(
@@ -1377,11 +1376,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   */
   public function text($text = NULL) {
     if (isset($text)) {
-      try {
-        $isCallback = $this->_isCallback($text, FALSE);
-      } catch (InvalidArgumentException $e) {
-        $isCallback = FALSE;
-      }
+      $isCallback = $this->_isCallback($text, FALSE, TRUE);
       foreach ($this->_array as $index => $node) {
         if ($isCallback) {
           $node->nodeValue = call_user_func($text, $index, $node->nodeValue);
@@ -1463,15 +1458,42 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   */
   private function _insertChild($content, $first) {
     $result = $this->_spawn();
+    $isCallback = $this->_isCallback($content, FALSE, TRUE);
     if (empty($this->_array) &&
         $this->_useDocumentContext &&
         !isset($this->_document->documentElement)) {
-      $contentNode = $this->_getContentElement($content);
+      if ($isCallback) {
+        $contentNode = $this->_getContentElement(
+          call_user_func($content, 0, ''),
+          TRUE
+        );
+      } else {
+        $contentNode = $this->_getContentElement($content);
+      }
       $result->_push(
         $this->_document->appendChild(
           $contentNode
         )
       );
+    } elseif ($isCallback) {
+      foreach ($this->_array as $index => $node) {
+        $contentData = call_user_func(
+           $content,
+           $index,
+           $this->_getInnerXML($node)
+        );
+        if (!empty($contentData)) {
+          $contentNodes = $this->_getContentNodes($contentData, TRUE);
+          foreach ($contentNodes as $contentNode) {
+            $result->_push(
+              $node->insertBefore(
+                $contentNode->cloneNode(TRUE),
+                ($first && $node->hasChildNodes()) ? $node->childNodes->item(0) : NULL
+              )
+            );
+          }
+        }
+      }
     } else {
       $contentNodes = $this->_getContentNodes($content, TRUE);
       foreach ($this->_array as $node) {
@@ -2072,11 +2094,7 @@ class FluentDOM implements IteratorAggregate, Countable, ArrayAccess {
   public function toggleClass($class, $switch = NULL) {
     foreach ($this->_array as $index => $node) {
       if ($node instanceof DOMElement) {
-        try {
-          $isCallback = $this->_isCallback($class);
-        } catch (InvalidArgumentException $e) {
-          $isCallback = FALSE;
-        }
+        $isCallback = $this->_isCallback($class, FALSE, TRUE);
         if ($isCallback) {
           $classString = call_user_func(
             $class, $index, $node->getAttribute('class')

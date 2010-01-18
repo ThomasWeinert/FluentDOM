@@ -1228,6 +1228,31 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group Manipulation
   */
+  public function testAppendWithCallback() {
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $doc = $fd
+      ->find('//p')
+      ->append(array($this, 'callbackForAppend'));
+    $this->assertTrue($doc instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
+  }
+
+  /**
+  * @group Manipulation
+  */
+  public function testAppendOnEmptyDocumentWithCallback() {
+    $fd = new FluentDOM;
+    $doc = $fd->append(array($this, 'callbackForAppendNode'));
+    $this->assertTrue($doc instanceof FluentDOM);
+    $this->assertXmlStringEqualsXmlString(
+      '<?xml version="1.0"?>'."\n".'<sample>Hello World</sample>',
+      $doc->document->saveXML()
+    );
+  }
+
+  /**
+  * @group Manipulation
+  */
   public function testAppendTo() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd ->find('//span')
@@ -1780,6 +1805,20 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
 
   /**
+  * @uses testAppendWithCallback
+  */
+  public function callbackForAppend($index, $html) {
+    return strrev($html);
+  }
+
+  /**
+  * @uses testAppendOnEmptyDocumentWithCallback
+  */
+  public function callbackForAppendNode($index, $html) {
+    return '<sample>Hello World</sample>';
+  }
+
+  /**
   * @uses testAttrWriteCallback
   */
   public function callbackForAttr($index, $value) {
@@ -1789,18 +1828,18 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @uses testTextWriteCallback
   */
-  public function callbackForText($index, $value) {
-    return 'Callback #'.$index.': '.$value;
+  public function callbackForText($index, $text) {
+    return 'Callback #'.$index.': '.$text;
   }
 
   /**
   * @uses testXmlWriteWithCallback
   */
-  public function callbackForXml($index, $value) {
+  public function callbackForXml($index, $xml) {
     if ($index == 1) {
       return '';
     } else {
-      return strtoupper($value);
+      return strtoupper($xml);
     }
   }
 

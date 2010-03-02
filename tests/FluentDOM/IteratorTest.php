@@ -14,7 +14,7 @@
 * load necessary files
 */
 require_once('PHPUnit/Framework.php');
-require_once(dirname(__FILE__).'/../../FluentDOM.php');
+require_once(dirname(__FILE__).'/../../FluentDOM/Core.php');
 require_once(dirname(__FILE__).'/../../FluentDOM/Iterator.php');
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
@@ -28,7 +28,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 class FluentDOMIteratorTest extends PHPUnit_Framework_TestCase {
 
   public function testIteratorCurrent() {
-    $fd = $this->getMock('FluentDOM');
+    $fd = $this->getMock('FluentDOMCore');
     $fd->expects($this->once())
        ->method('item')
        ->with($this->equalTo(0))
@@ -38,13 +38,13 @@ class FluentDOMIteratorTest extends PHPUnit_Framework_TestCase {
   }
 
   public function testIteratorKey() {
-    $fd = $this->getMock('FluentDOM');
+    $fd = $this->getMock('FluentDOMCore');
     $fdi = new FluentDOMIterator($fd);
     $this->assertEquals(0, $fdi->key());
   }
 
   public function testIteratorNext() {
-    $fd = $this->getMock('FluentDOM');
+    $fd = $this->getMock('FluentDOMCore');
     $fdi = new FluentDOMIterator($fd);
     $this->assertEquals(0, $this->readAttribute($fdi, '_position'));
     $fdi->next();
@@ -52,7 +52,7 @@ class FluentDOMIteratorTest extends PHPUnit_Framework_TestCase {
   }
 
   public function testIteratorRewind() {
-    $fd = $this->getMock('FluentDOM');
+    $fd = $this->getMock('FluentDOMCore');
     $fdi = new FluentDOMIterator($fd);
     $fdi->next();
     $this->assertEquals(1, $this->readAttribute($fdi, '_position'));
@@ -61,7 +61,7 @@ class FluentDOMIteratorTest extends PHPUnit_Framework_TestCase {
   }
 
   public function testIteratorSeek() {
-    $fd = $this->getMock('FluentDOM');
+    $fd = $this->getMock('FluentDOMCore');
     $fd->expects($this->once())
        ->method('count')
        ->will($this->returnValue(2));
@@ -72,7 +72,7 @@ class FluentDOMIteratorTest extends PHPUnit_Framework_TestCase {
 
   public function testIteratorSeekToInvalidPosition() {
     try {
-      $fd = $this->getMock('FluentDOM');
+      $fd = $this->getMock('FluentDOMCore');
       $fd->expects($this->once())
          ->method('count')
          ->will($this->returnValue(1));
@@ -84,7 +84,7 @@ class FluentDOMIteratorTest extends PHPUnit_Framework_TestCase {
   }
 
   public function testIteratorValid() {
-    $fd = $this->getMock('FluentDOM');
+    $fd = $this->getMock('FluentDOMCore');
     $fd->expects($this->once())
        ->method('item')
        ->will($this->returnValue(new stdClass));
@@ -93,37 +93,45 @@ class FluentDOMIteratorTest extends PHPUnit_Framework_TestCase {
   }
 
   public function testGetChildren() {
-    $fd = $this->getMock('FluentDOM');
-    $fd->expects($this->once())
-       ->method('eq')
-       ->with($this->equalTo(0))
-       ->will($this->returnValue($fd));
-    $fd->expects($this->once())
-       ->method('find')
-       ->with($this->equalTo('node()'))
-       ->will($this->returnValue($fd));
-    $fd->expects($this->once())
-       ->method('getIterator')
-       ->will($this->returnValue(new FluentDOMIterator($fd)));
-    $fdi = new FluentDOMIterator($fd);
-    $this->assertTrue($fdi->getChildren() instanceof FluentDOMIterator);
+    $fdSource = $this->getMock('FluentDOMCore');
+    $fdSpawn = $this->getMock('FluentDOMCore');
+    $dom = new DOMDocument();
+    $node = $dom->creatEelement('parent');
+    $node->appendChild($dom->createElement('child'));
+    $fdSource
+      ->expects($this->once())
+      ->method('spawn')
+      ->will($this->returnValue($fdSpawn));
+    $fdSource
+      ->expects($this->once())
+      ->method('item')
+      ->with($this->equalTo(0))
+      ->will($this->returnValue($node));
+    $fdSpawn
+      ->expects($this->once())
+      ->method('push')
+      ->with($this->isInstanceOf('DOMNodeList'));
+    $fdi = new FluentDOMIterator($fdSource);
+    $this->assertType(
+      'FluentDOMIterator',
+      $fdi->getChildren()
+    );
   }
 
   public function testHasChildren() {
-    $fd = $this->getMock('FluentDOM');
-    $fd->expects($this->once())
-       ->method('eq')
-       ->with($this->equalTo(0))
-       ->will($this->returnValue($fd));
-    $fd->expects($this->once())
-       ->method('find')
-       ->with($this->equalTo('node()'))
-       ->will($this->returnValue($fd));
-    $fd->expects($this->once())
-       ->method('count')
-       ->will($this->returnValue(1));
+    $fd = $this->getMock('FluentDOMCore');
+    $node = $this->getMock('DOMElement', array(), array('dummy'));
+    $fd
+      ->expects($this->once())
+      ->method('item')
+      ->with($this->equalTo(0))
+      ->will($this->returnValue($node));
+    $node
+      ->expects($this->once())
+      ->method('hasChildNodes')
+      ->will($this->returnValue(TRUE));
     $fdi = new FluentDOMIterator($fd);
-    $this->assertEquals(TRUE, $fdi->hasChildren());
+    $this->assertTrue($fdi->hasChildren());
   }
 }
 ?>

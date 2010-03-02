@@ -14,10 +14,11 @@
 * Load necessary files
 */
 require_once('PHPUnit/Framework.php');
-require_once(dirname(__FILE__).'/Loader/AllTests.php');
+require_once(dirname(__FILE__).'/CoreTest.php');
 require_once(dirname(__FILE__).'/IteratorTest.php');
-require_once(dirname(__FILE__).'/StyleTest.php');
+require_once(dirname(__FILE__).'/Loader/AllTests.php');
 require_once(dirname(__FILE__).'/Selector/AllTests.php');
+require_once(dirname(__FILE__).'/StyleTest.php');
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
@@ -35,10 +36,11 @@ class FluentDOMClasses_AllTests {
   */
   public static function suite() {
     $suite = new PHPUnit_Framework_TestSuite('FluentDOM Classes');
+    $suite->addTestSuite('FluentDOMCoreTest');
     $suite->addTestSuite('FluentDOMIteratorTest');
-    $suite->addTestSuite('FluentDOMStyleTest');
     $suite->addTestSuite('FluentDOMLoader_AllTests');
     $suite->addTestSuite('FluentDOMSelector_AllTests');
+    $suite->addTestSuite('FluentDOMStyleTest');
     return $suite;
   }
 }

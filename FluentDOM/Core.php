@@ -105,7 +105,7 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   public function load($source, $contentType = 'text/xml') {
     $this->_array = array();
     $this->_setContentType($contentType);
-    if ($source instanceof FluentDOM) {
+    if ($source instanceof FluentDOMCore) {
       $this->_useDocumentContext = FALSE;
       $this->_document = $source->document;
       $this->_xpath = $source->_xpath;
@@ -126,7 +126,7 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
                     $loaded[0] instanceof DOMDocument &&
                     is_array($loaded[1])) {
             $this->_document = $loaded[0];
-            $this->_push($loaded[1]);
+            $this->push($loaded[1]);
             $this->_useDocumentContext = FALSE;
           }
           return $this;
@@ -266,13 +266,14 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
     switch ($name) {
     case 'length' :
     case 'xpath' :
+    case 'contentType' :
       return TRUE;
     case 'document' :
       return isset($this->_document);
     }
     return FALSE;
   }
-  
+
 
   /**
   * Return the XML output of the internal dom document
@@ -303,6 +304,31 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
       return $this->_array[$position];
     }
     return NULL;
+  }
+
+  /**
+  * Formats the current document, resets internal node array and other properties.
+  *
+  * The document is saved and reloaded, all variables with DOMNodes
+  * of this document will get invalid.
+  *
+  * @access public
+  * @return FluentDOM
+  */
+  public function formatOutput($contentType = NULL) {
+    if (isset($contentType)) {
+      $this->_setContentType($contentType);
+    }
+    $this->_array = array();
+    $this->_position = 0;
+    $this->_useDocumentContext = TRUE;
+    $this->_parent = NULL;
+    $this->_document->preserveWhiteSpace = FALSE;
+    $this->_document->formatOutput = TRUE;
+    if (!empty($this->_document->documentElement)) {
+      $this->_document->loadXML($this->_document->saveXML());
+    }
+    return $this;
   }
 
   /*
@@ -395,13 +421,50 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Create a new instance of the same class with $this as the parent. This is used for the chaining.
   *
-  * @access protected
+  * @access public
   * @return  FluentDOM
   */
-  protected function _spawn() {
+  public function spawn() {
     $className = get_class($this);
     $result = new $className();
     return $result->load($this);
+  }
+
+  /**
+  * Push new element(s) an the internal element list
+  *
+  * @uses _inList
+  * @param DOMElement|DOMNodeList|FluentDOM $elements
+  * @param boolean $unique ignore duplicates
+  * @access protected
+  * @return void
+  */
+  public function push($elements, $unique = FALSE) {
+    if ($this->_isNode($elements)) {
+      if ($elements->ownerDocument === $this->_document) {
+        if (!$unique || !$this->_inList($elements, $this->_array)) {
+          $this->_array[] = $elements;
+        }
+      } else {
+        throw new OutOfBoundsException('Node is not a part of this document');
+      }
+    } elseif ($elements instanceof DOMNodeList ||
+              $elements instanceof DOMDocumentFragment ||
+              $elements instanceof Iterator ||
+              $elements instanceof IteratorAggregate ||
+              is_array($elements)) {
+      foreach ($elements as $node) {
+        if ($this->_isNode($node)) {
+          if ($node->ownerDocument === $this->_document) {
+            if (!$unique || !$this->_inList($node, $this->_array)) {
+              $this->_array[] = $node;
+            }
+          } else {
+            throw new OutOfBoundsException('Node is not a part of this document');
+          }
+        }
+      }
+    }
   }
 
   /**
@@ -457,43 +520,6 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
       return $check->length > 0;
     } else {
       return (bool)$check;
-    }
-  }
-
-  /**
-  * Push new element(s) an the internal element list
-  *
-  * @uses _inList
-  * @param DOMElement|DOMNodeList|FluentDOM $elements
-  * @param boolean $unique ignore duplicates
-  * @access protected
-  * @return void
-  */
-  protected function _push($elements, $unique = FALSE) {
-    if ($this->_isNode($elements)) {
-      if ($elements->ownerDocument === $this->_document) {
-        if (!$unique || !$this->_inList($elements, $this->_array)) {
-          $this->_array[] = $elements;
-        }
-      } else {
-        throw new OutOfBoundsException('Node is not a part of this document');
-      }
-    } elseif ($elements instanceof DOMNodeList ||
-              $elements instanceof DOMDocumentFragment ||
-              $elements instanceof Iterator ||
-              $elements instanceof IteratorAggregate ||
-              is_array($elements)) {
-      foreach ($elements as $node) {
-        if ($this->_isNode($node)) {
-          if ($node->ownerDocument === $this->_document) {
-            if (!$unique || !$this->_inList($node, $this->_array)) {
-              $this->_array[] = $node;
-            }
-          } else {
-            throw new OutOfBoundsException('Node is not a part of this document');
-          }
-        }
-      }
     }
   }
 

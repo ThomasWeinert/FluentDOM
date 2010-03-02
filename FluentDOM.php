@@ -86,31 +86,6 @@ class FluentDOM extends FluentDOMCore {
   */
 
   /**
-  * Formats the current document, resets internal node array and other properties.
-  *
-  * The document is saved and reloaded, all variables with DOMNodes
-  * of this document will get invalid.
-  *
-  * @access public
-  * @return FluentDOM
-  */
-  public function formatOutput($contentType = NULL) {
-    if (isset($contentType)) {
-      $this->_setContentType($contentType);
-    }
-    $this->_array = array();
-    $this->_position = 0;
-    $this->_useDocumentContext = TRUE;
-    $this->_parent = NULL;
-    $this->_document->preserveWhiteSpace = FALSE;
-    $this->_document->formatOutput = TRUE;
-    if (!empty($this->_document->documentElement)) {
-      $this->_document->loadXML($this->_document->saveXML());
-    }
-    return $this;
-  }
-
-  /**
   * Retrieve the matched DOM elements in an array.
   * @return array
   */
@@ -131,12 +106,12 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   public function eq($position) {
-    $result = $this->_spawn();
+    $result = $this->spawn();
     if ($position < 0) {
       $position = count($this->_array) + $position;
     }
     if (isset($this->_array[$position])) {
-      $result->_push($this->_array[$position]);
+      $result->push($this->_array[$position]);
     }
     return $result;
   }
@@ -152,7 +127,7 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   public function filter($expr) {
-    $result = $this->_spawn();
+    $result = $this->spawn();
     foreach ($this->_array as $index => $node) {
       $check = TRUE;
       if (is_string($expr)) {
@@ -161,7 +136,7 @@ class FluentDOM extends FluentDOMCore {
         $check = call_user_func($expr, $node, $index);
       }
       if ($check) {
-        $result->_push($node);
+        $result->push($node);
       }
     }
     return $result;
@@ -247,7 +222,7 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   public function not($expr) {
-    $result = $this->_spawn();
+    $result = $this->spawn();
     foreach ($this->_array as $index => $node) {
       $check = FALSE;
       if (is_string($expr)) {
@@ -256,7 +231,7 @@ class FluentDOM extends FluentDOMCore {
         $check = call_user_func($expr, $node, $index);
       }
       if (!$check) {
-        $result->_push($node);
+        $result->push($node);
       }
     }
     return $result;
@@ -272,15 +247,15 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   public function slice($start, $end = NULL) {
-    $result = $this->_spawn();
+    $result = $this->spawn();
     if ($end === NULL) {
-      $result->_push(array_slice($this->_array, $start));
+      $result->push(array_slice($this->_array, $start));
     } elseif ($end < 0) {
-      $result->_push(array_slice($this->_array, $start, $end));
+      $result->push(array_slice($this->_array, $start, $end));
     } elseif ($end > $start) {
-      $result->_push(array_slice($this->_array, $start, $end - $start));
+      $result->push(array_slice($this->_array, $start, $end - $start));
     } else {
-      $result->_push(array_slice($this->_array, $end, $start - $end));
+      $result->push(array_slice($this->_array, $end, $start - $end));
     }
     return $result;
   }
@@ -298,14 +273,14 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   public function add($expr) {
-    $result = $this->_spawn();
-    $result->_push($this->_array);
+    $result = $this->spawn();
+    $result->push($this->_array);
     if (is_object($expr)) {
-      $result->_push($expr);
+      $result->push($expr);
     } elseif (isset($this->_parent)) {
-      $result->_push($this->_parent->find($expr));
+      $result->push($this->_parent->find($expr));
     } else {
-      $result->_push($this->find($expr));
+      $result->push($this->find($expr));
     }
     return $result;
   }
@@ -320,14 +295,14 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   public function children($expr = NULL) {
-    $result = $this->_spawn();
+    $result = $this->spawn();
     foreach ($this->_array as $node) {
       if (empty($expr)) {
-        $result->_push($node->childNodes, TRUE);
+        $result->push($node->childNodes, TRUE);
       } else {
         foreach ($node->childNodes as $childNode) {
           if ($this->_test($expr, $childNode)) {
-            $result->_push($childNode, TRUE);
+            $result->push($childNode, TRUE);
           }
         }
       }
@@ -345,13 +320,13 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   public function find($expr, $useDocumentContext = FALSE) {
-    $result = $this->_spawn();
+    $result = $this->spawn();
     if ($useDocumentContext ||
         $this->_useDocumentContext) {
-      $result->_push($this->_match($expr));
+      $result->push($this->_match($expr));
     } else {
       foreach ($this->_array as $contextNode) {
-        $result->_push($this->_match($expr, $contextNode));
+        $result->push($this->_match($expr, $contextNode));
       }
     }
     return $result;
@@ -367,7 +342,7 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   public function next($expr = NULL) {
-    $result = $this->_spawn();
+    $result = $this->spawn();
     foreach ($this->_array as $node) {
       $next = $node->nextSibling;
       while ($next instanceof DOMNode && !$this->_isNode($next)) {
@@ -375,7 +350,7 @@ class FluentDOM extends FluentDOMCore {
       }
       if (!empty($next)) {
         if (empty($expr) || $this->_test($expr, $next)) {
-          $result->_push($next, TRUE);
+          $result->push($next, TRUE);
         }
       }
     }
@@ -391,13 +366,13 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   public function nextAll($expr = NULL) {
-    $result = $this->_spawn();
+    $result = $this->spawn();
     foreach ($this->_array as $node) {
       $next = $node->nextSibling;
       while ($next instanceof DOMNode) {
         if ($this->_isNode($next)) {
           if (empty($expr) || $this->_test($expr, $next)) {
-            $result->_push($next, TRUE);
+            $result->push($next, TRUE);
           }
         }
         $next = $next->nextSibling;
@@ -414,10 +389,10 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   public function parent() {
-    $result = $this->_spawn();
+    $result = $this->spawn();
     foreach ($this->_array as $node) {
       if (isset($node->parentNode)) {
-        $result->_push($node->parentNode, TRUE);
+        $result->push($node->parentNode, TRUE);
       }
     }
     return $result;
@@ -432,13 +407,13 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   public function parents($expr = NULL) {
-    $result = $this->_spawn();
+    $result = $this->spawn();
     foreach ($this->_array as $node) {
       $parents = $this->_match('ancestor::*', $node);
       for ($i = $parents->length - 1; $i >= 0; --$i) {
         $parentNode = $parents->item($i);
         if (empty($expr) || $this->_test($expr, $parentNode)) {
-          $result->_push($parentNode, TRUE);
+          $result->push($parentNode, TRUE);
         }
       }
     }
@@ -455,7 +430,7 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   public function prev($expr = NULL) {
-    $result = $this->_spawn();
+    $result = $this->spawn();
     foreach ($this->_array as $node) {
       $previous = $node->previousSibling;
       while ($previous instanceof DOMNode && !$this->_isNode($previous)) {
@@ -463,7 +438,7 @@ class FluentDOM extends FluentDOMCore {
       }
       if (!empty($previous)) {
         if (empty($expr) || $this->_test($expr, $previous)) {
-          $result->_push($previous, TRUE);
+          $result->push($previous, TRUE);
         }
       }
     }
@@ -479,13 +454,13 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   public function prevAll($expr = NULL) {
-    $result = $this->_spawn();
+    $result = $this->spawn();
     foreach ($this->_array as $node) {
       $previous = $node->previousSibling;
       while ($previous instanceof DOMNode) {
         if ($this->_isNode($previous)) {
           if (empty($expr) || $this->_test($expr, $previous)) {
-            $result->_push($previous, TRUE);
+            $result->push($previous, TRUE);
           }
         }
         $previous = $previous->previousSibling;
@@ -504,14 +479,14 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   public function siblings($expr = NULL) {
-    $result = $this->_spawn();
+    $result = $this->spawn();
     foreach ($this->_array as $node) {
       if (isset($node->parentNode)) {
         foreach ($node->parentNode->childNodes as $childNode) {
           if ($this->_isNode($childNode) &&
               $childNode !== $node) {
             if (empty($expr) || $this->_test($expr, $childNode)) {
-              $result->_push($childNode, TRUE);
+              $result->push($childNode, TRUE);
             }
           }
         }
@@ -529,11 +504,11 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   public function closest($expr) {
-    $result = $this->_spawn();
+    $result = $this->spawn();
     foreach ($this->_array as $node) {
       while (isset($node)) {
         if ($this->_test($expr, $node)) {
-          $result->_push($node, TRUE);
+          $result->push($node, TRUE);
           break;
         }
         $node = $node->parentNode;
@@ -553,9 +528,9 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   public function andSelf() {
-    $result = $this->_spawn();
-    $result->_push($this->_array);
-    $result->_push($this->_parent);
+    $result = $this->spawn();
+    $result->push($this->_array);
+    $result->push($this->_parent);
     return $result;
   }
 
@@ -728,7 +703,7 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   protected function _insertChild($content, $first) {
-    $result = $this->_spawn();
+    $result = $this->spawn();
     $isCallback = $this->_isCallback($content, FALSE, TRUE);
     if (empty($this->_array) &&
         $this->_useDocumentContext &&
@@ -741,7 +716,7 @@ class FluentDOM extends FluentDOMCore {
       } else {
         $contentNode = $this->_getContentElement($content);
       }
-      $result->_push(
+      $result->push(
         $this->_document->appendChild(
           $contentNode
         )
@@ -756,7 +731,7 @@ class FluentDOM extends FluentDOMCore {
         if (!empty($contentData)) {
           $contentNodes = $this->_getContentNodes($contentData, TRUE);
           foreach ($contentNodes as $contentNode) {
-            $result->_push(
+            $result->push(
               $node->insertBefore(
                 $contentNode->cloneNode(TRUE),
                 ($first && $node->hasChildNodes()) ? $node->childNodes->item(0) : NULL
@@ -769,7 +744,7 @@ class FluentDOM extends FluentDOMCore {
       $contentNodes = $this->_getContentNodes($content, TRUE);
       foreach ($this->_array as $node) {
         foreach ($contentNodes as $contentNode) {
-          $result->_push(
+          $result->push(
             $node->insertBefore(
               $contentNode->cloneNode(TRUE),
               ($first && $node->hasChildNodes()) ? $node->childNodes->item(0) : NULL
@@ -791,13 +766,13 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   protected function _insertChildTo($selector, $first) {
-    $result = $this->_spawn();
+    $result = $this->spawn();
     $targets = $this->_getTargetNodes($selector);
     if (!empty($targets)) {
       foreach ($targets as $targetNode) {
         if ($targetNode instanceof DOMElement) {
           foreach ($this->_array as $node) {
-            $result->_push(
+            $result->push(
               $targetNode->insertBefore(
                 $node->cloneNode(TRUE),
                 ($first && $targetNode->hasChildNodes())
@@ -825,13 +800,13 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   public function after($content) {
-    $result = $this->_spawn();
+    $result = $this->spawn();
     if ($contentNodes = $this->_getContentNodes($content, TRUE)) {
       foreach ($this->_array as $node) {
         $beforeNode = $node->nextSibling;
         if (isset($node->parentNode)) {
           foreach ($contentNodes as $contentNode) {
-            $result->_push(
+            $result->push(
               $node->parentNode->insertBefore(
                 $contentNode->cloneNode(TRUE),
                 $beforeNode
@@ -853,12 +828,12 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   public function before($content) {
-    $result = $this->_spawn();
+    $result = $this->spawn();
     if ($contentNodes = $this->_getContentNodes($content, TRUE)) {
       foreach ($this->_array as $node) {
         if (isset($node->parentNode)) {
           foreach ($contentNodes as $contentNode) {
-            $result->_push(
+            $result->push(
               $node->parentNode->insertBefore(
                 $contentNode->cloneNode(TRUE),
                 $node
@@ -880,14 +855,14 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   public function insertAfter($selector) {
-    $result = $this->_spawn();
+    $result = $this->spawn();
     $targets = $this->_getTargetNodes($selector);
     if (!empty($targets)) {
       foreach ($targets as $targetNode) {
         if ($this->_isNode($targetNode) && isset($targetNode->parentNode)) {
           $beforeNode = $targetNode->nextSibling;
           foreach ($this->_array as $node) {
-            $result->_push(
+            $result->push(
               $targetNode->parentNode->insertBefore(
                 $node->cloneNode(TRUE),
                 $beforeNode
@@ -910,13 +885,13 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   public function insertBefore($selector) {
-    $result = $this->_spawn();
+    $result = $this->spawn();
     $targets = $this->_getTargetNodes($selector);
     if (!empty($targets)) {
       foreach ($targets as $targetNode) {
         if ($this->_isNode($targetNode) && isset($targetNode->parentNode)) {
           foreach ($this->_array as $node) {
-            $result->_push(
+            $result->push(
               $targetNode->parentNode->insertBefore(
                 $node->cloneNode(TRUE),
                 $targetNode
@@ -979,8 +954,8 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   public function wrap($content) {
-    $result = $this->_spawn();
-    $result->_push($this->_wrap($this->_array, $content));
+    $result = $this->spawn();
+    $result->push($this->_wrap($this->_array, $content));
     return $result;
   }
 
@@ -995,7 +970,7 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   public function wrapAll($content) {
-    $result = $this->_spawn();
+    $result = $this->spawn();
     $current = NULL;
     $counter = 0;
     $groups = array();
@@ -1033,7 +1008,7 @@ class FluentDOM extends FluentDOMCore {
           foreach ($group as $node) {
             $target->appendChild($node);
           }
-          $result->_push($node);
+          $result->push($node);
         }
       }
     }
@@ -1050,7 +1025,7 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   public function wrapInner($content) {
-    $result = $this->_spawn();
+    $result = $this->spawn();
     $elements = array();
     foreach ($this->_array as $node) {
       foreach ($node->childNodes as $childNode) {
@@ -1059,7 +1034,7 @@ class FluentDOM extends FluentDOMCore {
         }
       }
     }
-    $result->_push($this->_wrap($elements, $content));
+    $result->push($this->_wrap($elements, $content));
     return $result;
   }
 
@@ -1102,12 +1077,12 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   public function replaceAll($selector) {
-    $result = $this->_spawn();
+    $result = $this->spawn();
     $targetNodes = $this->_getTargetNodes($selector);
     foreach ($targetNodes as $targetNode) {
       if (isset($targetNode->parentNode)) {
         foreach ($this->_array as $node) {
-          $result->_push(
+          $result->push(
             $targetNode->parentNode->insertBefore(
               $node->cloneNode(TRUE),
               $targetNode
@@ -1155,11 +1130,11 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM removed elements
   */
   public function remove($expr = NULL) {
-    $result = $this->_spawn();
+    $result = $this->spawn();
     foreach ($this->_array as $node) {
       if (isset($node->parentNode)) {
         if (empty($expr) || $this->_test($expr, $node)) {
-          $result->_push($node->parentNode->removeChild($node));
+          $result->push($node->parentNode->removeChild($node));
         }
       }
     }
@@ -1182,10 +1157,10 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   public function node($content, $attr = array()) {
-    $result = $this->_spawn();
+    $result = $this->spawn();
     $nodes = $this->_getContentNodes($content);
     if ($nodes) {
-      $result->_push($nodes);
+      $result->push($nodes);
       if (count($attr) > 0) {
         $result->attr($attr);
       }
@@ -1209,9 +1184,9 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   protected function _cloneNodes() {
-    $result = $this->_spawn();
+    $result = $this->spawn();
     foreach ($this->_array as $node) {
-      $result->_push($node->cloneNode(TRUE));
+      $result->push($node->cloneNode(TRUE));
     }
     return $result;
   }

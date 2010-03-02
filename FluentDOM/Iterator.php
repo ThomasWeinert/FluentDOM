@@ -1,6 +1,6 @@
 <?php
 /**
-* FluentDOMIterator is the Iterator class for FluentDOM objects
+* FluentDOMIterator is the Iterator class for FluentDOMCore objects
 *
 * @version $Id$
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
@@ -10,32 +10,32 @@
 */
 
 /**
-* FluentDOMIterator is the Iterator class for FluentDOM objects
-* 
+* FluentDOMIterator is the Iterator class for FluentDOMCore objects
+*
 * @package FluentDOM
 */
 class FluentDOMIterator implements RecursiveIterator, SeekableIterator {
 
   /**
-  * internal position pointer variable 
+  * internal position pointer variable
   * @var integer
   */
   private $_position  = 0;
-  
+
   /**
-  * owner (object) of the iterator 
-  * @var FluentDOM
+  * owner (object) of the iterator
+  * @var FluentDOMCore
   */
   private $_owner = NULL;
 
   /**
-  * Remember the owner object (the FluentDOM object this iterator interates)
+  * Remember the owner object (the FluentDOMCore object this iterator interates)
   *
   * @param $owner
   * @access public
-  * @return FluentDOM
+  * @return FluentDOMCore
   */
-  public function __construct($owner) {
+  public function __construct(FluentDOMCore $owner) {
     $this->_owner = $owner;
   }
 
@@ -112,19 +112,22 @@ class FluentDOMIterator implements RecursiveIterator, SeekableIterator {
   * Get children of the current iterator element
   *
   * @access public
-  * @return object FluentDOM
+  * @return object FluentDOMCore
   */
   public function getChildren() {
-    return $this->_owner->eq($this->_position)->find('node()')->getIterator();
+    $fd = $this->_owner->spawn();
+    $fd->push($this->_owner->item($this->_position)->childNodes);
+    return new self($fd);
   }
 
   /**
   * Check if the current iterator element has children
   *
   * @access public
-  * @return object FluentDOM
+  * @return object FluentDOMCore
   */
   public function hasChildren() {
-    return (count($this->_owner->eq($this->_position)->find('node()')) > 0);
+    $item = $this->_owner->item($this->_position);
+    return $item->hasChildNodes();
   }
 }

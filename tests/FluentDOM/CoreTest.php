@@ -163,14 +163,29 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group Properties
-  * @covers FluentDOMCore::__get
-  * @covers FluentDOMCore::__set
-  * @covers FluentDOMCore::_xpath
+  * @covers FluentDOMCore::__isset
   */
-  public function testPropertyXpath() {
+  public function testIssetPropertyXpath() {
     $fd = $this->getFluentDOMCoreFixtureFromString(self::XML);
     $this->assertTrue(isset($fd->xpath));
+  }
+
+  /**
+  * @group Properties
+  * @covers FluentDOMCore::__get
+  * @covers FluentDOMCore::_xpath
+  */
+  public function testGetPropertyXpath() {
+    $fd = $this->getFluentDOMCoreFixtureFromString(self::XML);
     $this->assertTrue($fd->xpath instanceof DOMXPath);
+  }
+
+  /**
+  * @group Properties
+  * @covers FluentDOMCore::__set
+  */
+  public function testSetPropertyXpath() {
+    $fd = $this->getFluentDOMCoreFixtureFromString(self::XML);
     try {
       $fd->xpath = NULL;
       $this->fail('An expected exception has not been raised.');

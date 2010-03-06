@@ -129,11 +129,31 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group Properties
+  * @covers FluentDomCore::__isset
   */
-  public function testPropertyDocument() {
+  public function testIssetPropertyDocument() {
     $fd = $this->getFluentDOMCoreFixtureFromString(self::XML);
     $this->assertTrue(isset($fd->document));
-    $this->assertTrue($fd->document instanceof DOMDocument);
+  }
+
+  /**
+  * @group Properties
+  * @covers FluentDomCore::__get
+  */
+  public function testGetPropertyDocument() {
+    $fd = $this->getFluentDOMCoreFixtureFromString(self::XML);
+    $this->assertSame(
+      $this->readAttribute($fd, '_document'),
+      $fd->document
+    );
+  }
+
+  /**
+  * @group Properties
+  * @covers FluentDomCore::__set
+  */
+  public function testSetPropertyDocument() {
+    $fd = $this->getFluentDOMCoreFixtureFromString(self::XML);
     try {
       $fd->document = NULL;
       $this->fail('An expected exception has not been raised.');

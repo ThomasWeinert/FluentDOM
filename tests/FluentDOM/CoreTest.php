@@ -545,6 +545,20 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
     $this->assertSame($expected, (string)$fd);
   }
 
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::spawn
+  */
+  public function testSpawn() {
+    $fdParent = new FluentDOMCore;
+    $fdChild = $fdParent->spawn();
+    $this->assertAttributeSame(
+      $fdParent,
+      '_parent',
+      $fdChild
+    );
+  }
+
   /******************************
   * Fixtures
   ******************************/

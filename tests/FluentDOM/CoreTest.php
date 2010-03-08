@@ -55,6 +55,21 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
   /**
   * @group Load
   * @covers FluentDOMCore::load
+  */
+  public function testLoadWithFluentDOM() {
+    $fdParent = new FluentDOMCore();
+    $fdChild = new FluentDOMCore();
+    $fdChild->load($fdParent);
+    $this->assertAttributeEquals(
+      $fdParent,
+      '_parent',
+      $fdChild
+    );
+  }
+
+  /**
+  * @group Load
+  * @covers FluentDOMCore::load
   * @covers FluentDOMCore::setLoaders
   */
   public function testLoaderMechanism() {
@@ -103,9 +118,14 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
     );
   }
 
+  /**
+  * @group Load
+  * @covers FluentDOMCore::load
+  * @covers FluentDOMCore::_initLoaders
+  */
   public function testLoadersMechanismDefaultLoaders() {
     $dom = new DOMDocument();
-    $fd = new FluentDOMCore();
+    $fd = new FluentDOMCoreProxy();
     $fd->load($dom);
     $this->assertAttributeNotEquals(
       array(),
@@ -178,6 +198,19 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
   public function testGetPropertyXpath() {
     $fd = $this->getFluentDOMCoreFixtureFromString(self::XML);
     $this->assertTrue($fd->xpath instanceof DOMXPath);
+  }
+
+  /**
+  * @group Properties
+  * @covers FluentDOMCore::__get
+  * @covers FluentDOMCore::_xpath
+  */
+  public function testGetPropertyXpathDefaultNamespaceInitialization() {
+    $fd = $this->getFluentDOMCoreFixtureFromString('<sample xmlns="http://sample.tld/"/>');
+    $this->assertEquals(
+      1,
+      $fd->xpath->evaluate('count(//_:*)')
+    );
   }
 
   /**
@@ -432,6 +465,7 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group Interfaces
+  * @covers FluentDOMCore::getIterator
   */
   public function testInterfaceIteratorLoop() {
     $fd = $this->getFluentDOMCoreFixtureFromString(self::XML, '//item');
@@ -445,6 +479,7 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group Interfaces
+  * @covers FluentDOMCore::getIterator
   */
   public function testInterfaceRecursiveIterator() {
     $iterator = new RecursiveIteratorIterator(

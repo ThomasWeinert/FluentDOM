@@ -578,7 +578,7 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
   * @group CoreFunctions
   * @covers FluentDOMCore::push
   */
-  public function testPushWithArrayContaining() {
+  public function testPushWithArrayContainingDomnode() {
     $fd = new FluentDOMCore();
     $node = $fd->document->createElement('sample');
     $fd->push(array($node));
@@ -617,6 +617,37 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
       $this->fail('An expected exception has not been raised.');
     } catch (OutOfBoundsException $expected) {
     }
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::push
+  */
+  public function testPushWithInvalidArgumentExpectingException() {
+    $fd = new FluentDOMCore();
+    try {
+      $fd->push(42);
+      $this->fail('An expected exception has not been raised.');
+    } catch (InvalidArgumentException $expected) {
+    }
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_isNodeList
+  */
+  public function testIsNodeListWithArrayExspectingTrue() {
+    $fd = new FluentDOMCoreProxy();
+    $this->assertTrue($fd->_isNodeList(array()));
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_isNodeList
+  */
+  public function testIsNodeListWithArrayExspectingFalse() {
+    $fd = new FluentDOMCoreProxy();
+    $this->assertFalse($fd->_isNodeList(42));
   }
 
   /******************************

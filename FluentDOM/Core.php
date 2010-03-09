@@ -448,11 +448,7 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
       } else {
         throw new OutOfBoundsException('Node is not a part of this document');
       }
-    } elseif ($elements instanceof DOMNodeList ||
-              $elements instanceof DOMDocumentFragment ||
-              $elements instanceof Iterator ||
-              $elements instanceof IteratorAggregate ||
-              is_array($elements)) {
+    } elseif ($this->_isNodeList($elements)) {
       foreach ($elements as $node) {
         if ($this->_isNode($node)) {
           if ($node->ownerDocument === $this->_document) {
@@ -464,6 +460,8 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
           }
         }
       }
+    } elseif (!is_null($elements)) {
+      throw new InvalidArgumentException('Invalid elements variable.');
     }
   }
 
@@ -611,6 +609,23 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
                 !$node->isWhitespaceInElementContent()) {
         return TRUE;
       }
+    }
+    return FALSE;
+  }
+
+  /**
+  * Check if $elements is a iterateable node list
+  *
+  * @param DOMNodeList|DOMDocumentFragment|Iterator|IteratorAggregate|array $list
+  * @return boolean
+  */
+  protected function _isNodeList($elements) {
+    if ($elements instanceof DOMNodeList ||
+        $elements instanceof DOMDocumentFragment ||
+        $elements instanceof Iterator ||
+        $elements instanceof IteratorAggregate ||
+        is_array($elements)) {
+      return TRUE;
     }
     return FALSE;
   }

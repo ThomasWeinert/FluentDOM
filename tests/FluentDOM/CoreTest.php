@@ -559,6 +559,66 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
     );
   }
 
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::push
+  */
+  public function testPushWithDomnode() {
+    $fd = new FluentDOMCore();
+    $node = $fd->document->createElement('sample');
+    $fd->push($node);
+    $this->assertAttributeSame(
+      array($node),
+      '_array',
+      $fd
+    );
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::push
+  */
+  public function testPushWithArrayContaining() {
+    $fd = new FluentDOMCore();
+    $node = $fd->document->createElement('sample');
+    $fd->push(array($node));
+    $this->assertAttributeSame(
+      array($node),
+      '_array',
+      $fd
+    );
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::push
+  */
+  public function testPushWithForeignDomnodeExpectingException() {
+    $fd = new FluentDOMCore();
+    $dom = new DOMDocument();
+    $node = $dom->createElement('sample');
+    try {
+      $fd->push($node);
+      $this->fail('An expected exception has not been raised.');
+    } catch (OutOfBoundsException $expected) {
+    }
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::push
+  */
+  public function testPushWithArrayContainingForeignDomnodeExpectingException() {
+    $fd = new FluentDOMCore();
+    $dom = new DOMDocument();
+    $node = $dom->createElement('sample');
+    try {
+      $fd->push(array($node));
+      $this->fail('An expected exception has not been raised.');
+    } catch (OutOfBoundsException $expected) {
+    }
+  }
+
   /******************************
   * Fixtures
   ******************************/

@@ -680,6 +680,37 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group CoreFunctions
+  * @covers FluentDOMcore::_isQName
+  */
+  public function testIsQname() {
+    $fd = new FluentDOMCoreProxy();
+    $this->assertTrue($fd->_isQName('tag'));
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMcore::_isQName
+  */
+  public function testIsQnameWithNamespace() {
+    $fd = new FluentDOMCoreProxy();
+    $this->assertTrue($fd->_isQName('namespace:tag'));
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMcore::_isQName
+  */
+  public function testIsQnameWithEmptyNameExpectingException() {
+    $fd = new FluentDOMCoreProxy();
+    try {
+      $fd->_isQName('');
+      $this->fail('An expected exception has not been raised.');
+    } catch (UnexpectedValueException $expected) {
+    }
+  }
+
+  /**
+  * @group CoreFunctions
   * @covers FluentDOMcore::_isNode
   */
   public function testIsNodeWithDomnodeExpectingTrue() {
@@ -769,6 +800,10 @@ class FluentDOMCoreProxy extends FluentDOMCore {
 
   public function _test($expr, $context = NULL) {
     return parent::_test($expr, $context);
+  }
+
+  public function _isQName($name) {
+    return parent::_isQName($name);
   }
 
   public function _isNode($node) {

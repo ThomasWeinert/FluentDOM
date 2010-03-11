@@ -634,6 +634,39 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group CoreFunctions
+  * @covers FluentDOMcore::_isNode
+  */
+  public function testIsNodeWithDomnodeExpectingTrue() {
+    $dom = new DOMDocument();
+    $node = $dom->createElement('sample');
+    $fd = new FluentDOMCoreProxy();
+    $this->assertTrue($fd->_isNode($node));
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMcore::_isNode
+  */
+  public function testIsNodeWithDomtextExpectingTrue() {
+    $dom = new DOMDocument();
+    $node = $dom->createTextNode('sample');
+    $fd = new FluentDOMCoreProxy();
+    $this->assertTrue($fd->_isNode($node));
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMcore::_isNode
+  */
+  public function testIsNodeWithEmptyDomtextExpectingTrue() {
+    $dom = new DOMDocument();
+    $node = $dom->createTextNode('   ');
+    $fd = new FluentDOMCoreProxy();
+    $this->assertFalse($fd->_isNode($node));
+  }
+
+  /**
+  * @group CoreFunctions
   * @covers FluentDOMCore::_isNodeList
   */
   public function testIsNodeListWithArrayExpectingTrue() {
@@ -683,6 +716,10 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 ******************************/
 
 class FluentDOMCoreProxy extends FluentDOMCore {
+
+  public function _isNode($node) {
+    return parent::_isNode($node);
+  }
 
   public function _isNodeList($elements) {
     return parent::_isNodeList($elements);

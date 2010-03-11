@@ -636,7 +636,7 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
   * @group CoreFunctions
   * @covers FluentDOMCore::_isNodeList
   */
-  public function testIsNodeListWithArrayExspectingTrue() {
+  public function testIsNodeListWithArrayExpectingTrue() {
     $fd = new FluentDOMCoreProxy();
     $this->assertTrue($fd->_isNodeList(array()));
   }
@@ -645,7 +645,7 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
   * @group CoreFunctions
   * @covers FluentDOMCore::_isNodeList
   */
-  public function testIsNodeListWithArrayExspectingFalse() {
+  public function testIsNodeListWithArrayExpectingFalse() {
     $fd = new FluentDOMCoreProxy();
     $this->assertFalse($fd->_isNodeList(42));
   }
@@ -684,18 +684,7 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
 class FluentDOMCoreProxy extends FluentDOMCore {
 
-  public function __call($functionName, $arguments) {
-    if (method_exists($this, $functionName)) {
-      return call_user_func_array(array($this, $functionName), $arguments);
-    } else {
-      trigger_error(
-         sprintf(
-           'Call to undefined method %s::%s',
-           __CLASS__,
-           $functionName
-         ),
-         E_USER_ERROR
-       );
-    }
+  public function _isNodeList($elements) {
+    return parent::_isNodeList($elements);
   }
 }

@@ -512,8 +512,12 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   * @access protected
   * @return boolean
   */
-  protected function _test($expr, $context) {
-    $check = $this->_xpath()->evaluate($expr, $context);
+  protected function _test($expr, $context = NULL) {
+    if (isset($context)) {
+      $check = $this->_xpath()->evaluate($expr, $context);
+    } else {
+      $check = $this->_xpath()->evaluate($expr);
+    }
     if ($check instanceof DOMNodeList) {
       return $check->length > 0;
     } else {

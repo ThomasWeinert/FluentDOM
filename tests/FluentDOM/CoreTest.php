@@ -658,6 +658,28 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group CoreFunctions
+  * @covers FluentDOMcore::_test
+  */
+  public function testTestMatchingNodelist() {
+    $fd = $this->getFluentDOMCoreFixtureFromString(self::XML);
+    $this->assertTrue(
+      $fd->_test('//item')
+    );
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMcore::_test
+  */
+  public function testTestCountingNodesWithContextExpectingTrue() {
+    $fd = $this->getFluentDOMCoreFixtureFromString(self::XML, '/items/group');
+    $this->assertTrue(
+      $fd->_test('count(item)', $fd->item(0))
+    );
+  }
+
+  /**
+  * @group CoreFunctions
   * @covers FluentDOMcore::_isNode
   */
   public function testIsNodeWithDomnodeExpectingTrue() {
@@ -743,6 +765,10 @@ class FluentDOMCoreProxy extends FluentDOMCore {
 
   public function _match($expr, $context = NULL) {
     return parent::_match($expr, $context);
+  }
+
+  public function _test($expr, $context = NULL) {
+    return parent::_test($expr, $context);
   }
 
   public function _isNode($node) {

@@ -711,6 +711,27 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group CoreFunctions
+  * @covers FluentDOMCore::_isNCName
+  * @dataProvider dataProviderValidNCName
+  */
+  public function testIsNCName($tagName, $offset, $length) {
+    $fd = new FluentDOMCoreProxy();
+    $this->assertTrue($fd->_isNCName($tagName, $offset, $length));
+  }
+
+  public static function dataProviderValidNCName() {
+    return array(
+      array('html', 0, 0),
+      array('tag23', 0, 0),
+      array('sample-tag', 0, 0),
+      array('sampleTag', 0, 0),
+      array('ns:tag', 3, 0),
+      array('ns:tag', 0, 2),
+    );
+  }
+
+  /**
+  * @group CoreFunctions
   * @covers FluentDOMcore::_isNode
   */
   public function testIsNodeWithDomnodeExpectingTrue() {
@@ -804,6 +825,10 @@ class FluentDOMCoreProxy extends FluentDOMCore {
 
   public function _isQName($name) {
     return parent::_isQName($name);
+  }
+
+  public function _isNCName($name, $offset = 0, $length = 0) {
+    return parent::_isNCName($name, $offset, $length);
   }
 
   public function _isNode($node) {

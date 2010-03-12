@@ -551,13 +551,12 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   protected function _isQName($name) {
     if (empty($name)) {
       throw new UnexpectedValueException('Invalid QName: QName is empty.');
-    } elseif (FALSE !== strpos($name, ':')) {
-      list($namespace, $localName) = explode(':', $name, 2);
-      $this->_isNCName($namespace);
-      $this->_isNCName($localName, strlen($namespace));
+    } elseif (FALSE !== ($position = strpos($name, ':'))) {
+      $this->_isNCName($name, 0, $position);
+      $this->_isNCName($name, $position + 1);
       return TRUE;
     }
-    $this->_isNCName($name);
+    $this->_isNCName($name, 0);
     return TRUE;
   }
 
@@ -569,7 +568,7 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   * @access protected
   * @return boolean
   */
-  protected function _isNCName($name, $offset = 0) {
+  protected function _isNCName($name, $offset = 0, $length = 0) {
     $nameStartChar =
        'A-Z_a-z'.
        '\\x{C0}-\\x{D6}\\x{D8}-\\x{F6}\\x{F8}-\\x{2FF}\\x{370}-\\x{37D}'.
@@ -579,20 +578,27 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
     $nameChar =
        $nameStartChar.
        '\\.\\d\\x{B7}\\x{300}-\\x{36F}\\x{203F}-\\x{2040}';
-    if (empty($name)) {
+    if ($length > 0) {
+      $namePart = substr($name, $offset, $length);
+    } elseif ($offset > 0) {
+      $namePart = substr($name, $offset);
+    } else {
+      $namePart = $name;
+    }
+    if (empty($namePart)) {
       throw new UnexpectedValueException(
         'Invalid QName "'.$name.'": Missing QName part.'
       );
-    } elseif (preg_match('([^'.$nameChar.'])u', $name, $match, PREG_OFFSET_CAPTURE)) {
+    } elseif (preg_match('([^'.$nameChar.'-])u', $namePart, $match, PREG_OFFSET_CAPTURE)) {
       //invalid bytes and whitespaces
       $position = (int)$match[0][1];
       throw new UnexpectedValueException(
         'Invalid QName "'.$name.'": Invalid character at index '.($offset + $position).'.'
       );
-    } elseif (preg_match('(^[^'.$nameStartChar.'-])u', $name)) {
+    } elseif (preg_match('(^[^'.$nameStartChar.'])u', $namePart)) {
       //first char is a little more limited
       throw new UnexpectedValueException(
-        'Invalid QName "'.$name.'": Invalid character at .index '.$offset.'.'
+        'Invalid QName "'.$name.'": Invalid character at .index '.($offset + $position).'.'
       );
     }
     return TRUE;

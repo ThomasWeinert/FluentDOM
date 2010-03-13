@@ -703,19 +703,18 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
   /**
   * @group CoreFunctions
   * @covers FluentDOMcore::_isQName
+  * @dataProvider dataProviderValidQualifiedNames
   */
-  public function testIsQname() {
+  public function testIsQName($qualifiedName) {
     $fd = new FluentDOMCoreProxy();
-    $this->assertTrue($fd->_isQName('tag'));
+    $this->assertTrue($fd->_isQName($qualifiedName));
   }
 
-  /**
-  * @group CoreFunctions
-  * @covers FluentDOMcore::_isQName
-  */
-  public function testIsQnameWithNamespace() {
-    $fd = new FluentDOMCoreProxy();
-    $this->assertTrue($fd->_isQName('namespace:tag'));
+  public static function dataProviderValidQualifiedNames() {
+    return array(
+      array('tag'),
+      array('namespace:tag')
+    );
   }
 
   /**
@@ -748,7 +747,7 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
       array('sample-tag', 0, 0),
       array('sampleTag', 0, 0),
       array('ns:tag', 3, 0),
-      array('ns:tag', 0, 2),
+      array('ns:tag', 0, 2)
     );
   }
 

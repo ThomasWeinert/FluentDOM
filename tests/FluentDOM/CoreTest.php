@@ -732,6 +732,57 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group CoreFunctions
+  * @covers FluentDOMCore::_isNCName
+  */
+  public function testIsNCNameWithEmptyTagnameExpectingException() {
+    $fd = new FluentDOMCoreProxy();
+    try {
+      $fd->_isNCName('nc:', 3);
+      $this->fail('An expected exception has not been raised.');
+    } catch (UnexpectedValueException $expected) {
+      $this->assertEquals(
+        'Invalid QName "nc:": Missing QName part.',
+        $expected->getMessage()
+      );
+    }
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_isNCName
+  */
+  public function testIsNCNameWithInvalidTagnameCharExpectingException() {
+    $fd = new FluentDOMCoreProxy();
+    try {
+      $fd->_isNCName('nc:ta<g>', 3);
+      $this->fail('An expected exception has not been raised.');
+    } catch (UnexpectedValueException $expected) {
+      $this->assertEquals(
+        'Invalid QName "nc:ta<g>": Invalid character at index 5.',
+        $expected->getMessage()
+      );
+    }
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_isNCName
+  */
+  public function testIsNCNameWithInvalidTagnameStartingCharExpectingException() {
+    $fd = new FluentDOMCoreProxy();
+    try {
+      $fd->_isNCName('nc:1tag', 3);
+      $this->fail('An expected exception has not been raised.');
+    } catch (UnexpectedValueException $expected) {
+      $this->assertEquals(
+        'Invalid QName "nc:1tag": Invalid character at index 3.',
+        $expected->getMessage()
+      );
+    }
+  }
+
+  /**
+  * @group CoreFunctions
   * @covers FluentDOMcore::_isNode
   */
   public function testIsNodeWithDomnodeExpectingTrue() {

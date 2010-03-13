@@ -556,15 +556,16 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
       $this->_isNCName($name, $position + 1);
       return TRUE;
     }
-    $this->_isNCName($name, 0);
+    $this->_isNCName($name);
     return TRUE;
   }
 
   /**
   * Validate string as qualified node name part (namespace or local name)
   *
-  * @param string $name
-  * @param integer $offset index offset for excpetion messages
+  * @param string $name full QName
+  * @param integer $offset Offset of NCName part in QName
+  * @param integer $length Length of NCName part in QName
   * @access protected
   * @return boolean
   */
@@ -598,7 +599,7 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
     } elseif (preg_match('(^[^'.$nameStartChar.'])u', $namePart)) {
       //first char is a little more limited
       throw new UnexpectedValueException(
-        'Invalid QName "'.$name.'": Invalid character at .index '.($offset + $position).'.'
+        'Invalid QName "'.$name.'": Invalid character at index '.$offset.'.'
       );
     }
     return TRUE;

@@ -680,6 +680,28 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group CoreFunctions
+  * @covers FluentDOMcore::_inList
+  */
+  public function testInListExpectingTrue() {
+    $fd = $this->getFluentDOMCoreFixtureFromString(self::XML, '/items');
+    $this->assertTrue(
+      $fd->_inList($fd->document->documentElement)
+    );
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMcore::_inList
+  */
+  public function testInListExpectingFalse() {
+    $fd = $this->getFluentDOMCoreFixtureFromString(self::XML, '//item');
+    $this->assertFalse(
+      $fd->_inList($fd->document->documentElement)
+    );
+  }
+
+  /**
+  * @group CoreFunctions
   * @covers FluentDOMcore::_isQName
   */
   public function testIsQname() {
@@ -872,6 +894,10 @@ class FluentDOMCoreProxy extends FluentDOMCore {
 
   public function _test($expr, $context = NULL) {
     return parent::_test($expr, $context);
+  }
+
+  public function _inList($node) {
+    return parent::_inList($node);
   }
 
   public function _isQName($name) {

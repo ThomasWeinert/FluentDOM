@@ -856,6 +856,63 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
     $this->assertFalse($fd->_isNodeList(42));
   }
 
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_isCallback
+  */
+  public function testIsCallbackWithArrayCallbackExpectingTrue() {
+    $fd = new FluentDOMCoreProxy();
+    $this->assertTrue(
+      $fd->_isCallback(array($this, __METHOD__), FALSE, FALSE)
+    );
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_isCallback
+  */
+  public function testIsCallbackWithGlobalFunctionExpectingTrue() {
+    $fd = new FluentDOMCoreProxy();
+    $this->assertTrue(
+      $fd->_isCallback('strpos', TRUE, FALSE)
+    );
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_isCallback
+  */
+  public function testIsCallbackWithGlobalFunctionExpectingFalse() {
+    $fd = new FluentDOMCoreProxy();
+    $this->assertFalse(
+      $fd->_isCallback('strpos', FALSE, TRUE)
+    );
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_isCallback
+  */
+  public function testIsCallbackWithInvalidCallbackExpectingException() {
+    $fd = new FluentDOMCoreProxy();
+    try {
+      $fd->_isCallback('foo', FALSE, FALSE);
+      $this->fail('An expected exception has not been raised.');
+    } catch (InvalidArgumentException $expected) {
+    }
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_isCallback
+  */
+  public function testIsCallbackWithInvalidCallbackExpectingFalse() {
+    $fd = new FluentDOMCoreProxy();
+    $this->assertFalse(
+      $fd->_isCallback('foo', FALSE, TRUE)
+    );
+  }
+
   /******************************
   * Fixtures
   ******************************/
@@ -916,5 +973,9 @@ class FluentDOMCoreProxy extends FluentDOMCore {
 
   public function _isNodeList($elements) {
     return parent::_isNodeList($elements);
+  }
+
+  public function _isCallback($callback, $allowGlobalFunctions, $silent) {
+    return parent::_isCallback($callback, $allowGlobalFunctions, $silent);
   }
 }

@@ -713,7 +713,10 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
   public static function dataProviderValidQualifiedNames() {
     return array(
       array('tag'),
-      array('namespace:tag')
+      array('namespace:tag'),
+      array('_:_'),
+      array('_-_'),
+      array('_')
     );
   }
 

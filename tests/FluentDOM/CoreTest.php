@@ -1110,6 +1110,58 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
     );
   }
 
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_getTargetNodes
+  */
+  public function testGetTargetNodesWithSingleNodeExpectingArray() {
+    $fd = new FluentDOMCoreProxy();
+    $node = $fd->document->createElement('sample');
+    $this->assertSame(
+      array($node),
+      $fd->_getTargetNodes($node)
+    );
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_getTargetNodes
+  */
+  public function testGetTargetNodesWithStringExpectingDomnodelist() {
+    $fd = new FluentDOMCoreProxy();
+    $node = $fd->document->appendChild($fd->document->createElement('sample'));
+    $this->assertSame(
+      $node,
+      $fd->_getTargetNodes('/sample')->item(0)
+    );
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_getTargetNodes
+  */
+  public function testGetTargetNodesWithArrayExpectingArray() {
+    $fd = new FluentDOMCoreProxy();
+    $node = $fd->document->createElement('sample');
+    $this->assertSame(
+      array($node),
+      $fd->_getTargetNodes(array($node))
+    );
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_getTargetNodes
+  */
+  public function testGetTargetNodesWithInvalidSelectorExpectingException() {
+    $fd = new FluentDOMCoreProxy();
+    try {
+      $fd->_getTargetNodes(1);
+      $this->fail('An expected exception has not been raised.');
+    } catch (InvalidArgumentException $expected) {
+    }
+  }
+
   /******************************
   * Fixtures
   ******************************/
@@ -1182,5 +1234,9 @@ class FluentDOMCoreProxy extends FluentDOMCore {
 
   public function _getContentNodes($content, $includeTextNodes = TRUE, $limit = 0) {
     return parent:: _getContentNodes($content, $includeTextNodes, $limit);
+  }
+
+  public function _getTargetNodes($selector) {
+    return parent::_getTargetNodes($selector);
   }
 }

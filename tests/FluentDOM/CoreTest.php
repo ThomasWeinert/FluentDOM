@@ -913,6 +913,66 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
     );
   }
 
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_getContentFragment
+  */
+  public function testGetContentFragmentIncludeTextNodes() {
+    $fragment = '<sample/>sample';
+    $fd = new FluentDOMCoreProxy();
+    $nodes = $fd->_getContentFragment($fragment);
+    $this->assertType('DOMElement', $nodes[0]);
+    $this->assertType('DOMText', $nodes[1]);
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_getContentFragment
+  */
+  public function testGetContentFragmentIncludeTextNodesLimit() {
+    $fragment = '<sample/>sample';
+    $fd = new FluentDOMCoreProxy();
+    $nodes = $fd->_getContentFragment($fragment, TRUE, 1);
+    $this->assertType('DOMElement', $nodes[0]);
+    $this->assertEquals(1, count($nodes));
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_getContentFragment
+  */
+  public function testGetContentFragmentExcludeTextNodes() {
+    $fragment = '<sample/>sample';
+    $fd = new FluentDOMCoreProxy();
+    $nodes = $fd->_getContentFragment($fragment, FALSE);
+    $this->assertType('DOMElement', $nodes[0]);
+    $this->assertEquals(1, count($nodes));
+  }
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_getContentFragment
+  */
+  public function testGetContentFragmentOnlyTextNodes() {
+    $fragment = 'sample';
+    $fd = new FluentDOMCoreProxy();
+    $nodes = $fd->_getContentFragment($fragment);
+    $this->assertType('DOMText', $nodes[0]);
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_getContentFragment
+  */
+  public function testGetContentFragmentWithInvalidFragementExpectingException() {
+    $fragment = '<sample';
+    $fd = new FluentDOMCoreProxy();
+    try {
+      $nodes = $fd->_getContentFragment('', FALSE);
+      $this->fail('An expected exception has not been raised.');
+    } catch (UnexpectedValueException $expected) {
+    }
+  }
+
   /******************************
   * Fixtures
   ******************************/
@@ -977,5 +1037,9 @@ class FluentDOMCoreProxy extends FluentDOMCore {
 
   public function _isCallback($callback, $allowGlobalFunctions, $silent) {
     return parent::_isCallback($callback, $allowGlobalFunctions, $silent);
+  }
+
+  public function _getContentFragment($content, $includeTextNodes = TRUE, $limit = 0) {
+    return parent::_getContentFragment($content, $includeTextNodes, $limit);
   }
 }

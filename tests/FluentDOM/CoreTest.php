@@ -973,6 +973,143 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
     }
   }
 
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_getContentNodes
+  */
+  public function testGetContentNodesWithDomelement() {
+    $fd = new FluentDOMCoreProxy();
+    $node = $fd->document->createElement('sample');
+    $this->assertEquals(
+      array($node),
+      $fd->_getContentNodes($node)
+    );
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_getContentNodes
+  */
+  public function testGetContentNodesWithDomtext() {
+    $fd = new FluentDOMCoreProxy();
+    $node = $fd->document->createTextNode('sample');
+    $this->assertEquals(
+      array($node),
+      $fd->_getContentNodes($node)
+    );
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_getContentNodes
+  */
+  public function testGetContentNodesWithDomtextIgnoringTextNodesExpectingException() {
+    $fd = new FluentDOMCoreProxy();
+    $node = $fd->document->createTextNode('sample');
+    try {
+      $fd->_getContentNodes($node, FALSE);
+      $this->fail('An expected exception has not been raised.');
+    } catch (InvalidArgumentException $expected) {
+    }
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_getContentNodes
+  */
+  public function testGetContentNodesWithString() {
+    $fd = new FluentDOMCoreProxy();
+    $nodes = $fd->_getContentNodes('sample');
+    $this->assertType(
+      'DOMText', $nodes[0]
+    );
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_getContentNodes
+  */
+  public function testGetContentNodesWithStringIgnoringTextNodesExpectingException() {
+    $fd = new FluentDOMCoreProxy();
+    try {
+      $fd->_getContentNodes('sample', FALSE);
+      $this->fail('An expected exception has not been raised.');
+    } catch (UnexpectedValueException $expected) {
+    }
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_getContentNodes
+  */
+  public function testGetContentNodesWithMixedArray() {
+    $fd = new FluentDOMCoreProxy();
+    $nodes = array(
+      1,
+      'foo',
+      $elementNode = $fd->document->createElement('sample'),
+      $textNode = $fd->document->createTextNode('sample')
+    );
+    $this->assertEquals(
+      array($elementNode, $textNode),
+      $fd->_getContentNodes($nodes)
+    );
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_getContentNodes
+  */
+  public function testGetContentNodesWithArrayIgnoringTextNodes() {
+    $fd = new FluentDOMCoreProxy();
+    $nodes = array(
+      $elementNode = $fd->document->createElement('sample'),
+      $textNode = $fd->document->createTextNode('sample')
+    );
+    $this->assertEquals(
+      array($elementNode),
+      $fd->_getContentNodes($nodes, FALSE)
+    );
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_getContentNodes
+  */
+  public function testGetContentNodesWithArrayAndLimit() {
+    $fd = new FluentDOMCoreProxy();
+    $nodes = array(
+      $elementNode = $fd->document->createElement('sample'),
+      $textNode = $fd->document->createTextNode('sample')
+    );
+    $this->assertEquals(
+      array($elementNode),
+      $fd->_getContentNodes($nodes, TRUE, 1)
+    );
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_getContentNodes
+  */
+  public function testGetContentNodesWithNodeFromAnotherDocument() {
+    $fd = new FluentDOMCoreProxy();
+    $dom = new DOMDocument();
+    $nodes = array(
+      $elementNode = $dom->createElement('sample')
+    );
+    $actual = $fd->_getContentNodes($nodes);
+    $this->assertThat(
+      $actual[0],
+      $this->logicalAnd(
+        $this->equalTo($elementNode),
+        $this->logicalNot(
+          $this->identicalTo($elementNode)
+        )
+      )
+    );
+  }
+
   /******************************
   * Fixtures
   ******************************/
@@ -1041,5 +1178,9 @@ class FluentDOMCoreProxy extends FluentDOMCore {
 
   public function _getContentFragment($content, $includeTextNodes = TRUE, $limit = 0) {
     return parent::_getContentFragment($content, $includeTextNodes, $limit);
+  }
+
+  public function _getContentNodes($content, $includeTextNodes = TRUE, $limit = 0) {
+    return parent:: _getContentNodes($content, $includeTextNodes, $limit);
   }
 }

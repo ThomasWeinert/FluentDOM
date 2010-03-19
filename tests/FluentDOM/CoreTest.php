@@ -1112,6 +1112,33 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group CoreFunctions
+  * @covers FluentDOMCore::_getContentElement
+  */
+  public function testGetContentElementWithDomelement() {
+    $fd = new FluentDOMCoreProxy();
+    $node = $fd->document->createElement('sample');
+    $this->assertSame(
+      $node,
+      $fd->_getContentElement($node)
+    );
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_getContentElement
+  */
+  public function testGetContentElementWithArray() {
+    $fd = new FluentDOMCoreProxy();
+    $textNode = $fd->document->createTextNode('sample');
+    $elementNode = $fd->document->createElement('sample');
+    $this->assertSame(
+      $elementNode,
+      $fd->_getContentElement(array($textNode, $elementNode))
+    );
+  }
+
+  /**
+  * @group CoreFunctions
   * @covers FluentDOMCore::_getTargetNodes
   */
   public function testGetTargetNodesWithSingleNodeExpectingArray() {
@@ -1234,6 +1261,10 @@ class FluentDOMCoreProxy extends FluentDOMCore {
 
   public function _getContentNodes($content, $includeTextNodes = TRUE, $limit = 0) {
     return parent:: _getContentNodes($content, $includeTextNodes, $limit);
+  }
+
+  public function _getContentElement($content) {
+    return parent::_getContentElement($content);
   }
 
   public function _getTargetNodes($selector) {

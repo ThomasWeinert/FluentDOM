@@ -743,6 +743,22 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   }
 
   /**
+  * Convert $content to a DOMElement. If $content contains several elements use the first.
+  *
+  * @param string|array|DOMNode|Iterator $content
+  * @access protected
+  * @return DOMElement
+  */
+  protected function _getContentElement($content) {
+    if ($content instanceof DOMElement) {
+      return $content;
+    } else {
+      $contentNodes = $this->_getContentNodes($content, FALSE, 1);
+      return $contentNodes[0];
+    }
+  }
+
+  /**
   * Get the target nodes from a given $selector.
   *
   * A string will be used as XPath expression.
@@ -779,21 +795,5 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
       }
     }
     return $result;
-  }
-
-  /**
-  * Convert $content to a DOMElement. If $content contains several elements use the first.
-  *
-  * @param string|array|DOMNode|Iterator $content
-  * @access protected
-  * @return DOMElement
-  */
-  protected function _getContentElement($content) {
-    if ($content instanceof DOMElement) {
-      return $content;
-    } else {
-      $contentNodes = $this->_getContentNodes($content, FALSE, 1);
-      return $contentNodes[0];
-    }
   }
 }

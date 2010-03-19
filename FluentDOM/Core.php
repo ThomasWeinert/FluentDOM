@@ -716,10 +716,7 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
       $result = array($content);
     } elseif (is_string($content)) {
       $result = $this->_getContentFragment($content, $includeTextNodes, $limit);
-    } elseif ($content instanceof DOMNodeList ||
-              $content instanceof Iterator ||
-              $content instanceof IteratorAggregate ||
-              is_array($content)) {
+    } elseif ($this->_isNodeList($content)) {
       foreach ($content as $element) {
         if ($element instanceof DOMElement ||
             ($includeTextNodes && $this->_isNode($element))) {
@@ -758,10 +755,7 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
       return array($selector);
     } elseif (is_string($selector)) {
       return $this->_match($selector);
-    } elseif (is_array($selector) ||
-              $selector instanceof Iterator ||
-              $selector instanceof IteratorAggregate ||
-              $selector instanceof DOMNodeList) {
+    } elseif ($this->_isNodeList($selector)) {
       return $selector;
     } else {
       throw new InvalidArgumentException('Invalid selector');

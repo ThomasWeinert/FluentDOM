@@ -154,6 +154,57 @@ provide support for the usual stuff like XML and HTML files and strings.
 --------------------------------------------------------------------------------
  Changelog
 --------------------------------------------------------------------------------
+Version 3.0:
+- Documented: tutorial fir find()
+- Documented: optimized structure for html output
+- Documented: custom loaders
+- Implemented: moved require for FluentDOMLoader to top
+- Documented: basic usage examples
+- Documented: basic usage
+- Documented: basic load
+- Added: Tutorial - Create A Menu
+- Added: source files for menu tutorial
+- Added: missing test suite file
+- Added: subdirectory FluentDOM, moved and renamed all matching files, changed include/require
+- Added: check for empty NCName - Tested: empty NCName should throw an exception
+- Documented: removing QName check @todo
+- Implemented: QName relies now on exceptions
+- Implemented: RFC compatible QName check with exact error responses
+- Added: new usage examples
+- Implemented: corrected faulty target file
+- Documented: added missing phpdoc blocks, - Documented: fixed @return values
+- Implemented: removed defined, but never used variables
+- Implemented: closest() needs to match the current node, too
+- Tested: closest() needs to match the current node, too
+- Implemented: improved the closest() example, explaning a possible problem
+- Implemented: jQuery 1.3 traversing method: closest
+- added links to jQuery and schlitt.info - corrected misspelled words
+- Documented: added description from webpage
+- Documented: added tutorial file and linked it
+- Documented: fixed descriptions, parameter types and names
+- Documented: added @example tags for available examples
+- Documented: added @example for interface methods
+- Documented: fixed faulty svn:keyword identifier
+- Documented: fixing documentation errors, adding example links
+- Implemented: Column handling for FluentDOMLoaderPDO, much more compressed xml the loader now creates attributes for integer and decimal values and child elements for strings. The name of the column is used # as attribute and tag name.
+- Implemented: FluentDOMLoaderPDO use object properties for the tag names
+- Added: FluentDOMLoaderPDO
+- create a FluentDOM from a PDOStatement
+- Tested: FluentDOMLoaderPDO
+- Fixed: SimpleXMLElementTest.php file name
+- Tested: FluentDOM:removeAttr() with invalid parameter
+- Implemented: _spawn() is now a private method
+- Fixed: remove() now works with expression parameter
+- Tested: remove() with expression parameter
+- Added: removeAttr() with array parameter (list of attributes to remove)
+- Added: removeAttr() with asterisk (*) parameter (removes all attributes)
+- Tested: removeAttr() with array parameter
+- Tested: removeAttr() with asterisk (*) parameter
+- Fixed: DOMDocument are child classes from DOMNode
+- but are invalid sources for the FluentDOMLoaderDOMNode, check DOMNode for an valid ownerDocument property
+- Fixed: simple atom reader sample has to use the FluentDOM function an not the class directly
+- changed FluentDOMTestCase should be an abstract class
+- patch by Sebastian Bergmann
 
 Version 2.0
 - added: FluentDOMIterator

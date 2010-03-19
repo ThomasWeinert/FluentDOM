@@ -27,6 +27,12 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 class FluentDOMLoaderPDOTest extends PHPUnit_Framework_TestCase {
 
   public function testLoad() {
+    if (!extension_loaded('pdo')) {
+  	  $this->markTestSkipped('PDO extension not loaded');
+  	}
+  	if (!in_array('sqlite', PDO::getAvailableDrivers())) {
+  	  $this->markTestSkipped('PDO SQLite driver not loaded');
+  	}
     $loader = new FluentDOMLoaderPDO();
     $database = new PDO('sqlite:'.dirname(__FILE__).'/data/FluentDOMLoaderPDO.sqlite');
     $statement = $database->query('SELECT * FROM sample');

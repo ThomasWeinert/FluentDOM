@@ -1189,6 +1189,21 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
     }
   }
 
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_removeNodes
+  */
+  public function testRemoveNodes() {
+    $fd = new FluentDOMCoreProxy();
+    $node = $fd->document->appendChild($fd->document->createElement('sample'));
+    $actual = $fd->_removeNodes('/sample');
+    $this->assertSame(
+      array($node), $actual
+    );
+    $this->assertNull($actual[0]->parentNode);
+    $this->assertNull($fd->document->documentElement);
+  }
+
   /******************************
   * Fixtures
   ******************************/
@@ -1269,5 +1284,9 @@ class FluentDOMCoreProxy extends FluentDOMCore {
 
   public function _getTargetNodes($selector) {
     return parent::_getTargetNodes($selector);
+  }
+
+  public function _removeNodes($selector) {
+    return parent::_removeNodes($selector);
   }
 }

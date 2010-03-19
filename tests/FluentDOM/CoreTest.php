@@ -2,7 +2,7 @@
 /**
 * Collection of tests for the FluentDOMCore class
 *
-* @version $Id: FluentDOMTest.php 374 2010-01-18 11:02:58Z subjective $
+* @version $Id$
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
 * @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
 *

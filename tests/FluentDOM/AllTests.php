@@ -15,6 +15,9 @@
 */
 require_once('PHPUnit/Framework.php');
 require_once(dirname(__FILE__).'/CoreTest.php');
+if (version_compare(PHP_VERSION, '5.3', '>=')) {
+  include_once(dirname(__FILE__).'/CoreTest_PHP5_3.php');
+}
 require_once(dirname(__FILE__).'/IteratorTest.php');
 require_once(dirname(__FILE__).'/Loader/AllTests.php');
 require_once(dirname(__FILE__).'/Selector/AllTests.php');
@@ -37,6 +40,7 @@ class FluentDOMClasses_AllTests {
   public static function suite() {
     $suite = new PHPUnit_Framework_TestSuite('FluentDOM Classes');
     $suite->addTestSuite('FluentDOMCoreTest');
+    $suite->addTestSuite('FluentDOMCoreTest_PHP5_3');
     $suite->addTestSuite('FluentDOMIteratorTest');
     $suite->addTestSuite('FluentDOMLoader_AllTests');
     $suite->addTestSuite('FluentDOMSelector_AllTests');

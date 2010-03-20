@@ -155,7 +155,7 @@ provide support for the usual stuff like XML and HTML files and strings.
  Changelog
 --------------------------------------------------------------------------------
 Version 3.0:
-- Documented: tutorial fir find()
+- Documented: tutorial for find()
 - Documented: optimized structure for html output
 - Documented: custom loaders
 - Implemented: moved require for FluentDOMLoader to top
@@ -178,7 +178,7 @@ Version 3.0:
 - Tested: closest() needs to match the current node, too
 - Implemented: improved the closest() example, explaning a possible problem
 - Implemented: jQuery 1.3 traversing method: closest
-- added links to jQuery and schlitt.info - corrected misspelled words
+               added links to jQuery and schlitt.info - corrected misspelled words
 - Documented: added description from webpage
 - Documented: added tutorial file and linked it
 - Documented: fixed descriptions, parameter types and names
@@ -186,7 +186,9 @@ Version 3.0:
 - Documented: added @example for interface methods
 - Documented: fixed faulty svn:keyword identifier
 - Documented: fixing documentation errors, adding example links
-- Implemented: Column handling for FluentDOMLoaderPDO, much more compressed xml the loader now creates attributes for integer and decimal values and child elements for strings. The name of the column is used # as attribute and tag name.
+- Implemented: Column handling for FluentDOMLoaderPDO, much more compressed xml the loader now 
+               creates attributes for integer and decimal values and child elements for strings. 
+               The name of the column is used # as attribute and tag name.
 - Implemented: FluentDOMLoaderPDO use object properties for the tag names
 - Added: FluentDOMLoaderPDO
 - create a FluentDOM from a PDOStatement
@@ -200,8 +202,9 @@ Version 3.0:
 - Added: removeAttr() with asterisk (*) parameter (removes all attributes)
 - Tested: removeAttr() with array parameter
 - Tested: removeAttr() with asterisk (*) parameter
-- Fixed: DOMDocument are child classes from DOMNode
-- but are invalid sources for the FluentDOMLoaderDOMNode, check DOMNode for an valid ownerDocument property
+- Fixed: DOMDocument are child classes from DOMNode 
+         but are invalid sources for the FluentDOMLoaderDOMNode, check DOMNode for an valid 
+         ownerDocument property
 - Fixed: simple atom reader sample has to use the FluentDOM function an not the class directly
 - changed FluentDOMTestCase should be an abstract class
 - patch by Sebastian Bergmann

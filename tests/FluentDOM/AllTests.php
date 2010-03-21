@@ -40,7 +40,9 @@ class FluentDOMClasses_AllTests {
   public static function suite() {
     $suite = new PHPUnit_Framework_TestSuite('FluentDOM Classes');
     $suite->addTestSuite('FluentDOMCoreTest');
-    $suite->addTestSuite('FluentDOMCoreTest_PHP5_3');
+    if (version_compare(PHP_VERSION, '5.3', '>=')) {
+      $suite->addTestSuite('FluentDOMCoreTest_PHP5_3');
+    }
     $suite->addTestSuite('FluentDOMIteratorTest');
     $suite->addTestSuite('FluentDOMLoader_AllTests');
     $suite->addTestSuite('FluentDOMSelector_AllTests');

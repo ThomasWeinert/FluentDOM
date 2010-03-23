@@ -918,11 +918,21 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   protected function _wrap($elements, $content) {
-    $wrapperTemplate = $this->_getContentElement($content);
     $result = array();
-    if ($wrapperTemplate instanceof DOMElement) {
-      $simple = FALSE;
-      foreach ($elements as $node) {
+    $isCallback = $this->_isCallback($content, FALSE, TRUE);
+    if (!$isCallback) {
+      $wrapperTemplate = $this->_getContentElement($content);
+    }
+    $simple = FALSE;
+    foreach ($elements as $index => $node) {
+      if ($isCallback) {
+        $wrapperTemplate = NULL;
+        $wrapContent = call_user_func($content, $node, $index);
+        if (!empty($wrapContent)) {
+          $wrapperTemplate = $this->_getContentElement($wrapContent);
+        }
+      }
+      if ($wrapperTemplate instanceof DOMElement) {
         $wrapper = $wrapperTemplate->cloneNode(TRUE);
         if (!$simple) {
           $targets = $this->_match('.//*[count(*) = 0]', $wrapper);

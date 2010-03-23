@@ -1264,6 +1264,18 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group Manipulation
   * @group ManipulationAround
+  * @covers FluentDOM::_wrap
+  * @covers FluentDOM::wrap
+  */
+  public function testWrapWithCallback() {
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd->find('//p')->wrap(array($this, 'callbackTestWrapWithFunction'));
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
+  }
+
+  /**
+  * @group Manipulation
+  * @group ManipulationAround
   * @covers FluentDOM::wrapAll
   */
   public function testWrapAllSingle() {
@@ -1769,6 +1781,10 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function callbackTestFilterWithFunction($node, $index) {
     return $node->nodeName == "items";
+  }
+
+  public function callbackTestWrapWithFunction($node, $index) {
+    return '<div class="'.$node->textContent.'_'.$index.'" />';
   }
 
   /**

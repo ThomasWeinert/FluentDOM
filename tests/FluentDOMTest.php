@@ -1312,6 +1312,20 @@ class FluentDOMTest extends FluentDOMTestCase {
       ->wrapInner('<b></b>');
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
+  
+  /**
+  * @group Manipulation
+  * @group ManipulationAround
+  * @covers FluentDOM::_wrap
+  * @covers FluentDOM::wrapInner
+  */
+  public function testWrapInnerWithCallback() {
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd
+      ->find('//p')
+      ->wrapInner(array($this, 'callbackTestWrapInnerWithFunction'));
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
+  }
 
   /*
   * Manipulation - Replacing
@@ -1783,8 +1797,18 @@ class FluentDOMTest extends FluentDOMTestCase {
     return $node->nodeName == "items";
   }
 
+  /**
+  * @uses testWrapWithFunction()
+  */
   public function callbackTestWrapWithFunction($node, $index) {
     return '<div class="'.$node->textContent.'_'.$index.'" />';
+  }
+
+  /**
+  * @uses testWrapInnerWithFunction()
+  */
+  public function callbackTestWrapInnerWithFunction($node, $index) {
+    return '<b class="'.$node->textContent.'_'.$index.'" />';
   }
 
   /**

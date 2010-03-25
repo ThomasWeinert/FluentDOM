@@ -13,16 +13,16 @@
 /**
 * Load necessary files
 */
-require_once 'PHPUnit/Framework.php';
-$dir = dirname(__FILE__);
-require_once $dir.'/StringXMLTest.php';
-require_once $dir.'/FileXMLTest.php';
-require_once $dir.'/StringHTMLTest.php';
-require_once $dir.'/FileHTMLTest.php';
-require_once $dir.'/DOMDocumentTest.php';
-require_once $dir.'/DOMNodeTest.php';
-require_once $dir.'/SimpleXMLElementTest.php';
-require_once $dir.'/PDOTest.php';
+require_once('PHPUnit/Framework.php');
+require_once(dirname(__FILE__).'/DOMDocumentTest.php');
+require_once(dirname(__FILE__).'/DOMNodeTest.php');
+require_once(dirname(__FILE__).'/FileHTMLTest.php');
+require_once(dirname(__FILE__).'/FileXMLTest.php');
+require_once(dirname(__FILE__).'/PDOTest.php');
+require_once(dirname(__FILE__).'/SimpleXMLElementTest.php');
+require_once(dirname(__FILE__).'/StringHTMLTest.php');
+require_once(dirname(__FILE__).'/StringJSONTest.php');
+require_once(dirname(__FILE__).'/StringXMLTest.php');
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
@@ -40,14 +40,15 @@ class FluentDOMLoader_AllTests {
   public static function suite() {
     $suite = new PHPUnit_Framework_TestSuite('FluentDOM Loaders');
 
-    $suite->addTestSuite('FluentDOMLoaderStringXMLTest');
-    $suite->addTestSuite('FluentDOMLoaderStringHTMLTest');
-    $suite->addTestSuite('FluentDOMLoaderFileHTMLTest');
-    $suite->addTestSuite('FluentDOMLoaderFileXMLTest');
     $suite->addTestSuite('FluentDOMLoaderDOMDocumentTest');
     $suite->addTestSuite('FluentDOMLoaderDOMNodeTest');
-    $suite->addTestSuite('FluentDOMLoaderSimpleXMLElementTest');
+    $suite->addTestSuite('FluentDOMLoaderFileHTMLTest');
+    $suite->addTestSuite('FluentDOMLoaderFileXMLTest');
     $suite->addTestSuite('FluentDOMLoaderPDOTest');
+    $suite->addTestSuite('FluentDOMLoaderSimpleXMLElementTest');
+    $suite->addTestSuite('FluentDOMLoaderStringHTMLTest');
+    $suite->addTestSuite('FluentDOMLoaderStringJSONTest');
+    $suite->addTestSuite('FluentDOMLoaderStringXMLTest');
 
     return $suite;
   }

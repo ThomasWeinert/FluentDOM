@@ -1104,8 +1104,23 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testPrepend() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->find('//p')
+    $fd
+      ->find('//p')
       ->prepend('<strong>Hello</strong>');
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
+  }
+
+  /**
+  * @group Manipulation
+  * @group ManipulationInside
+  * @covers FluentDOM::_insertChild
+  * @covers FluentDOM::prepend
+  */
+  public function testPrependWithCallback() {
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd
+      ->find('//p')
+      ->prepend(array($this, 'callbackForPrepend'));
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
@@ -1312,7 +1327,7 @@ class FluentDOMTest extends FluentDOMTestCase {
       ->wrapInner('<b></b>');
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
-  
+
   /**
   * @group Manipulation
   * @group ManipulationAround
@@ -1747,15 +1762,22 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @uses testAppendWithCallback
   */
-  public function callbackForAppend($index, $html) {
-    return strrev($html);
+  public function callbackForAppend($index, $content) {
+    return strrev($content);
   }
 
   /**
   * @uses testAppendOnEmptyDocumentWithCallback
   */
-  public function callbackForAppendNode($index, $html) {
+  public function callbackForAppendNode($index, $content) {
     return '<sample>Hello World</sample>';
+  }
+
+  /**
+  * @uses testPrependWithCallback()
+  */
+  public function callbackForPrepend($index, $content) {
+    return 'Hello #'.($index + 1);
   }
 
   /**

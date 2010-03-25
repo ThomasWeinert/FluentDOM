@@ -100,7 +100,7 @@ class FluentDOMStyle extends FluentDOM {
     } else {
       //set value to all nodes
       if ($this->_isCSSProperty($property)) {
-        foreach ($this->_array as $node) {
+        foreach ($this->_array as $index => $node) {
           if ($node instanceof DOMElement) {
             $options = $this->_decodeStyleAttribute($node->getAttribute('style'));
             if (empty($value)) {
@@ -113,7 +113,7 @@ class FluentDOMStyle extends FluentDOM {
               $options[$property] = call_user_func(
                 $value,
                 $node,
-                $property,
+                $index,
                 empty($options[$property]) ? '' : $options[$property]
               );
             }

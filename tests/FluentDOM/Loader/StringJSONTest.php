@@ -47,7 +47,7 @@ class FluentDOMLoaderStringJSONTest extends PHPUnit_Framework_TestCase {
   * @group LoadersJSON
   * @covers FluentDOMLoaderStringJSON::load
   */
-  public function testLoadWithInvalidJSONExpectingException() {
+  public function testLoadWithInvalidJsonExpectingException() {
     $loader = new FluentDOMLoaderStringJSON();
     try {
       $result = $loader->load(
@@ -72,6 +72,7 @@ class FluentDOMLoaderStringJSONTest extends PHPUnit_Framework_TestCase {
   /**
   * @group Loaders
   * @group LoadersJSON
+  * @covers FluentDOMLoaderStringJSON::_addElement
   * @covers FluentDOMLoaderStringJSON::_toDom
   */
   public function testLoadWithSimpleObject() {
@@ -89,6 +90,44 @@ class FluentDOMLoaderStringJSONTest extends PHPUnit_Framework_TestCase {
   /**
   * @group Loaders
   * @group LoadersJSON
+  * @covers FluentDOMLoaderStringJSON::_addElement
+  * @covers FluentDOMLoaderStringJSON::_toDom
+  */
+  public function testLoadWithSimpleObjectAndTypeAttributes() {
+    $loader = new FluentDOMLoaderStringJSON();
+    $loader->typeAttributes = TRUE;
+    $result = $loader->load(
+      '{"foo":"bar"}',
+      'application/json'
+    );
+    $this->assertDOMDocumentEqualsXmlString(
+      '<json type="object"><foo type="string">bar</foo></json>',
+      $result[0]
+    );
+  }
+
+  /**
+  * @group Loaders
+  * @group LoadersJSON
+  * @covers FluentDOMLoaderStringJSON::_addElement
+  * @covers FluentDOMLoaderStringJSON::_toDom
+  */
+  public function testLoadWithComplexPropertyName() {
+    $loader = new FluentDOMLoaderStringJSON();
+    $result = $loader->load(
+      '{"foo bar":"bar"}',
+      'application/json'
+    );
+    $this->assertDOMDocumentEqualsXmlString(
+      '<json><foo-bar name="foo bar">bar</foo-bar></json>',
+      $result[0]
+    );
+  }
+
+  /**
+  * @group Loaders
+  * @group LoadersJSON
+  * @covers FluentDOMLoaderStringJSON::_addElement
   * @covers FluentDOMLoaderStringJSON::_toDom
   */
   public function testLoadWithBooleans() {
@@ -106,6 +145,7 @@ class FluentDOMLoaderStringJSONTest extends PHPUnit_Framework_TestCase {
   /**
   * @group Loaders
   * @group LoadersJSON
+  * @covers FluentDOMLoaderStringJSON::_addElement
   * @covers FluentDOMLoaderStringJSON::_toDom
   */
   public function testLoadWithChildObjects() {
@@ -123,6 +163,7 @@ class FluentDOMLoaderStringJSONTest extends PHPUnit_Framework_TestCase {
   /**
   * @group Loaders
   * @group LoadersJSON
+  * @covers FluentDOMLoaderStringJSON::_addElement
   * @covers FluentDOMLoaderStringJSON::_toDom
   */
   public function testLoadWithArray() {

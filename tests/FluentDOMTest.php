@@ -1174,6 +1174,20 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group Manipulation
   * @group ManipulationOutside
+  * @covers FluentDOM::before
+  */
+  public function testBeforeWithFunction() {
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd
+      ->formatOutput()
+      ->find('//p')
+      ->before(array($this, 'callbackForBefore'));
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
+  }
+
+  /**
+  * @group Manipulation
+  * @group ManipulationOutside
   * @covers FluentDOM::insertAfter
   */
   public function testInsertAfter() {
@@ -1771,6 +1785,13 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function callbackForAppendNode($index, $content) {
     return '<sample>Hello World</sample>';
+  }
+
+  /**
+  * @uses testPrependWithCallback()
+  */
+  public function callbackForBefore($index, $content) {
+    return '<p index="'.$index.'">Hi</p>';
   }
 
   /**

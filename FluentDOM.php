@@ -829,7 +829,29 @@ class FluentDOM extends FluentDOMCore {
   */
   public function before($content) {
     $result = $this->spawn();
-    if ($contentNodes = $this->_getContentNodes($content, TRUE)) {
+    $isCallback = $this->_isCallback($content, FALSE, TRUE);
+    if ($isCallback) {
+      foreach ($this->_array as $index => $node) {
+        if (isset($node->parentNode)) {
+          $contentString = call_user_func(
+            $content,
+            $index,
+            $this->_getInnerXML($node)
+          );
+          if (!empty($contentString) &&
+              $contentNodes = $this->_getContentNodes($contentString, TRUE)) {
+            foreach ($contentNodes as $contentNode) {
+              $result->push(
+                $node->parentNode->insertBefore(
+                  $contentNode->cloneNode(TRUE),
+                  $node
+                )
+              );
+            }
+          }
+        }
+      }
+    } elseif ($contentNodes = $this->_getContentNodes($content, TRUE)) {
       foreach ($this->_array as $node) {
         if (isset($node->parentNode)) {
           foreach ($contentNodes as $contentNode) {

@@ -24,6 +24,7 @@ require_once(dirname(__FILE__).'/../Loader.php');
 class FluentDOMLoaderStringJSON implements FluentDOMLoader {
 
   private $jsonErrors = array(
+    -1 => 'Unknown error has occurred',
     JSON_ERROR_NONE => 'No error has occurred',
     JSON_ERROR_DEPTH => 'The maximum stack depth has been exceeded',
     JSON_ERROR_CTRL_CHAR => 'Control character error, possibly incorrectly encoded',
@@ -49,7 +50,8 @@ class FluentDOMLoaderStringJSON implements FluentDOMLoader {
         $this->_toDom($documentElement, $json);
         return array($dom, array($documentElement));
       } else {
-        throw new UnexpectedValueException($this->jsonErrors[json_last_error()]);
+        $code = is_callable('json_last_error') ? json_last_error() : -1;
+        throw new UnexpectedValueException($this->jsonErrors[$code]);
       }
     }
     return FALSE;

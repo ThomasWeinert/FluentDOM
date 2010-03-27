@@ -14,6 +14,10 @@
 * Include the core class
 */
 require_once(dirname(__FILE__).'/FluentDOM/Core.php');
+/**
+* Include the handler helper class
+*/
+require_once(dirname(__FILE__).'/FluentDOM/Handler.php');
 
 /**
 * Function to create a new FluentDOM instance and loads data into it if
@@ -553,16 +557,6 @@ class FluentDOM extends FluentDOMCore {
   * Manipulation - Changing Contents
   */
 
-  protected function _getInnerXml($node) {
-    $result = '';
-    foreach ($node->childNodes as $childNode) {
-      if ($this->_isNode($childNode)) {
-        $result .= $this->_document->saveXML($childNode);
-      }
-    }
-    return $result;
-  }
-
   /**
   * Get or set the xml contents of the first matched element.
   *
@@ -654,7 +648,28 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   public function append($content) {
-    return $this->_insertChild($content, FALSE);
+    $result = $this->spawn();
+    if (empty($this->_array) &&
+        $this->_useDocumentContext &&
+        !isset($this->_document->documentElement)) {
+      if ($this->_isCallback($content, FALSE, TRUE)) {
+        $contentNode = $this->_getContentElement(
+          $this->_executeEasySetter($content, NULL, 0, '')
+        );
+      } else {
+        $contentNode = $this->_getContentElement($content);
+      }
+      $result->push($this->_document->appendChild($contentNode));
+    } else { 
+      $result->push(
+        $this->_applyContentToNodes(
+          $this->_array,
+          $content,
+          array($this->_getHandlers(), 'appendChildren')
+        )
+      );
+    }
+    return $result;
   }
 
   /**
@@ -667,7 +682,19 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   public function appendTo($selector) {
-    return $this->_insertChildTo($selector, FALSE);
+    $result = $this->spawn();
+    $targetNodes = $this->_getTargetNodes($selector);
+    if (!empty($targetNodes)) {
+      $result->push(
+        $this->_applyContentToNodes(
+          $targetNodes,
+          $this->_array,
+          array($this->_getHandlers(), 'appendChildren')
+        )
+      );
+      $this->_removeNodes($this->_array);
+    }
+    return $result;
   }
 
   /**
@@ -679,7 +706,15 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   public function prepend($content) {
-    return $this->_insertChild($content, TRUE);
+    $result = $this->spawn();
+    $result->push(
+      $this->_applyContentToNodes(
+        $this->_array,
+        $content,
+        array($this->_getHandlers(), 'insertChildrenBefore')
+      )
+    );
+    return $result;
   }
 
   /**
@@ -692,99 +727,17 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM list of all new elements
   */
   public function prependTo($selector) {
-    return $this->_insertChildTo($selector, TRUE);
-  }
-
-  /**
-  * Insert content to the inside of every matched element.
-  *
-  * @param string|array|DOMNode|Iterator $content
-  * @param boolean $first insert at first position (or last)
-  * @access protected
-  * @return FluentDOM
-  */
-  protected function _insertChild($content, $first) {
     $result = $this->spawn();
-    $isCallback = $this->_isCallback($content, FALSE, TRUE);
-    if (empty($this->_array) &&
-        $this->_useDocumentContext &&
-        !isset($this->_document->documentElement)) {
-      if ($isCallback) {
-        $contentNode = $this->_getContentElement(
-          call_user_func($content, NULL, 0, ''),
-          TRUE
-        );
-      } else {
-        $contentNode = $this->_getContentElement($content);
-      }
+    $targetNodes = $this->_getTargetNodes($selector);
+    if (!empty($targetNodes)) {
       $result->push(
-        $this->_document->appendChild(
-          $contentNode
+        $this->_applyContentToNodes(
+          $targetNodes,
+          $this->_array,
+          array($this->_getHandlers(), 'insertChildrenBefore')
         )
       );
-    } elseif ($isCallback) {
-      foreach ($this->_array as $index => $node) {
-        $contentData = call_user_func(
-           $content,
-           $node,
-           $index,
-           $this->_getInnerXML($node)
-        );
-        if (!empty($contentData)) {
-          $contentNodes = $this->_getContentNodes($contentData, TRUE);
-          foreach ($contentNodes as $contentNode) {
-            $result->push(
-              $node->insertBefore(
-                $contentNode->cloneNode(TRUE),
-                ($first && $node->hasChildNodes()) ? $node->childNodes->item(0) : NULL
-              )
-            );
-          }
-        }
-      }
-    } else {
-      $contentNodes = $this->_getContentNodes($content, TRUE);
-      foreach ($this->_array as $node) {
-        foreach ($contentNodes as $contentNode) {
-          $result->push(
-            $node->insertBefore(
-              $contentNode->cloneNode(TRUE),
-              ($first && $node->hasChildNodes()) ? $node->childNodes->item(0) : NULL
-            )
-          );
-        }
-      }
-    }
-    return $result;
-  }
-
-  /**
-  * Insert all of the matched elements to another, specified, set of elements.
-  * Returns all of the inserted elements.
-  *
-  * @param string|array|DOMNode|DOMNodeList|FluentDOM $selector
-  * @param boolean $first insert at first position (or last)
-  * @access public
-  * @return FluentDOM
-  */
-  protected function _insertChildTo($selector, $first) {
-    $result = $this->spawn();
-    $targets = $this->_getTargetNodes($selector);
-    if (!empty($targets)) {
-      foreach ($targets as $targetNode) {
-        if ($targetNode instanceof DOMElement) {
-          foreach ($this->_array as $node) {
-            $result->push(
-              $targetNode->insertBefore(
-                $node->cloneNode(TRUE),
-                ($first && $targetNode->hasChildNodes())
-                  ? $targetNode->childNodes->item(0) : NULL
-              )
-            );
-          }
-        }
-        $this->_removeNodes($this->_array);
-      }
+      $this->_removeNodes($this->_array);
     }
     return $result;
   }
@@ -803,47 +756,11 @@ class FluentDOM extends FluentDOMCore {
   */
   public function after($content) {
     $result = $this->spawn();
-    $isCallback = $this->_isCallback($content, FALSE, TRUE);
-    if ($isCallback) {
-      foreach ($this->_array as $index => $node) {
-        if (isset($node->parentNode)) {
-          $contentString = call_user_func(
-            $content,
-            $node,
-            $index,
-            $this->_getInnerXML($node)
-          );
-          if (!empty($contentString) &&
-              $contentNodes = $this->_getContentNodes($contentString, TRUE)) {
-            $beforeNode = $node->nextSibling;
-            if (isset($node->parentNode)) {
-              foreach ($contentNodes as $contentNode) {
-                $result->push(
-                  $node->parentNode->insertBefore(
-                    $contentNode->cloneNode(TRUE),
-                    $beforeNode
-                  )
-                );
-              }
-            }
-          }
-        }
-      }
-    } elseif ($contentNodes = $this->_getContentNodes($content, TRUE)) {
-      foreach ($this->_array as $node) {
-        $beforeNode = $node->nextSibling;
-        if (isset($node->parentNode)) {
-          foreach ($contentNodes as $contentNode) {
-            $result->push(
-              $node->parentNode->insertBefore(
-                $contentNode->cloneNode(TRUE),
-                $beforeNode
-              )
-            );
-          }
-        }
-      }
-    }
+    $result->push(
+      $this->_applyContentToNodes(
+        $this->_array, $content, array($this->_getHandlers(), 'insertNodesAfter')
+      )
+    );
     return $result;
   }
 
@@ -857,43 +774,11 @@ class FluentDOM extends FluentDOMCore {
   */
   public function before($content) {
     $result = $this->spawn();
-    $isCallback = $this->_isCallback($content, FALSE, TRUE);
-    if ($isCallback) {
-      foreach ($this->_array as $index => $node) {
-        if (isset($node->parentNode)) {
-          $contentString = call_user_func(
-            $content,
-            $node,
-            $index,
-            $this->_getInnerXML($node)
-          );
-          if (!empty($contentString) &&
-              $contentNodes = $this->_getContentNodes($contentString, TRUE)) {
-            foreach ($contentNodes as $contentNode) {
-              $result->push(
-                $node->parentNode->insertBefore(
-                  $contentNode->cloneNode(TRUE),
-                  $node
-                )
-              );
-            }
-          }
-        }
-      }
-    } elseif ($contentNodes = $this->_getContentNodes($content, TRUE)) {
-      foreach ($this->_array as $node) {
-        if (isset($node->parentNode)) {
-          foreach ($contentNodes as $contentNode) {
-            $result->push(
-              $node->parentNode->insertBefore(
-                $contentNode->cloneNode(TRUE),
-                $node
-              )
-            );
-          }
-        }
-      }
-    }
+    $result->push(
+      $this->_applyContentToNodes(
+        $this->_array, $content, array($this->_getHandlers(), 'insertNodesBefore')
+      )
+    );
     return $result;
   }
 
@@ -907,22 +792,16 @@ class FluentDOM extends FluentDOMCore {
   */
   public function insertAfter($selector) {
     $result = $this->spawn();
-    $targets = $this->_getTargetNodes($selector);
-    if (!empty($targets)) {
-      foreach ($targets as $targetNode) {
-        if ($this->_isNode($targetNode) && isset($targetNode->parentNode)) {
-          $beforeNode = $targetNode->nextSibling;
-          foreach ($this->_array as $node) {
-            $result->push(
-              $targetNode->parentNode->insertBefore(
-                $node->cloneNode(TRUE),
-                $beforeNode
-              )
-            );
-          }
-        }
-        $this->_removeNodes($this->_array);
-      }
+    $targetNodes = $this->_getTargetNodes($selector);
+    if (!empty($targetNodes)) {
+      $result->push(
+        $this->_applyContentToNodes(
+          $targetNodes,
+          $this->_array,
+          array($this->_getHandlers(), 'insertNodesAfter')
+        )
+      );
+      $this->_removeNodes($this->_array);
     }
     return $result;
   }
@@ -937,21 +816,16 @@ class FluentDOM extends FluentDOMCore {
   */
   public function insertBefore($selector) {
     $result = $this->spawn();
-    $targets = $this->_getTargetNodes($selector);
-    if (!empty($targets)) {
-      foreach ($targets as $targetNode) {
-        if ($this->_isNode($targetNode) && isset($targetNode->parentNode)) {
-          foreach ($this->_array as $node) {
-            $result->push(
-              $targetNode->parentNode->insertBefore(
-                $node->cloneNode(TRUE),
-                $targetNode
-              )
-            );
-          }
-        }
-        $this->_removeNodes($this->_array);
-      }
+    $targetNodes = $this->_getTargetNodes($selector);
+    if (!empty($targetNodes)) {
+      $result->push(
+        $this->_applyContentToNodes(
+          $targetNodes,
+          $this->_array,
+          array($this->_getHandlers(), 'insertNodesBefore')
+        )
+      );
+      $this->_removeNodes($this->_array);
     }
     return $result;
   }
@@ -1114,33 +988,13 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   public function replaceWith($content) {
-    $isCallback = $this->_isCallback($content, FALSE, TRUE);
-    if (!$isCallback) {
-      $contentNodes = $this->_getContentNodes($content);
-    }
-    foreach ($this->_array as $index => $node) {
-      if ($isCallback) {
-        $contentString = call_user_func(
-          $content,
-          $node,
-          $index,
-          $this->_getInnerXml($node)
-        );
-        $contentNodes = $this->_getContentNodes($contentString);
-      }
-      if (isset($node->parentNode) &&
-          !empty($contentNodes)) {
-        foreach ($contentNodes as $contentNode) {
-          $node->parentNode->insertBefore(
-            $contentNode->cloneNode(TRUE),
-            $node
-          );
-        }
-      }
-    }
+    $this->_applyContentToNodes(
+      $this->_array, $content, array($this->_getHandlers(), 'insertNodesBefore')
+    );
     $this->_removeNodes($this->_array);
     return $this;
   }
+  
 
   /**
   * Replaces the elements matched by the specified selector with the matched elements.
@@ -1153,19 +1007,14 @@ class FluentDOM extends FluentDOMCore {
   public function replaceAll($selector) {
     $result = $this->spawn();
     $targetNodes = $this->_getTargetNodes($selector);
-    foreach ($targetNodes as $targetNode) {
-      if (isset($targetNode->parentNode)) {
-        foreach ($this->_array as $node) {
-          $result->push(
-            $targetNode->parentNode->insertBefore(
-              $node->cloneNode(TRUE),
-              $targetNode
-            )
-          );
-        }
-      }
+    if (!empty($targetNodes)) {
+      $this->_applyContentToNodes(
+        $targetNodes,
+        $this->_array,
+        array($this->_getHandlers(), 'insertNodesBefore')
+      );
+      $this->_removeNodes($targetNodes);
     }
-    $this->_removeNodes($targetNodes);
     $this->_removeNodes($this->_array);
     return $result;
   }
@@ -1306,6 +1155,7 @@ class FluentDOM extends FluentDOMCore {
       if ($this->_isQName($attribute)) {
         foreach ($this->_array as $index => $node) {
           if ($node instanceof DOMElement) {
+            $newValue = 
             $node->setAttribute(
               $attribute,
               call_user_func($value, $node, $index, $node->getAttribute($attribute))

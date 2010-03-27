@@ -18,6 +18,10 @@ require_once(dirname(__FILE__).'/Iterator.php');
 * Include the loader interface.
 */
 require_once(dirname(__FILE__).'/Loader.php');
+/**
+* Include the handler class.
+*/
+require_once(dirname(__FILE__).'/Handler.php');
 
 /**
 * FluentDOMCore implements the core and interface functions for FluentDOM
@@ -779,6 +783,20 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   }
 
   /**
+  * Get the inner xml of a given node or in other words the xml of all children. 
+  * @param DOMNode $node
+  */
+  protected function _getInnerXml($node) {
+    $result = '';
+    foreach ($node->childNodes as $childNode) {
+      if ($this->_isNode($childNode)) {
+        $result .= $this->_document->saveXML($childNode);
+      }
+    }
+    return $result;
+  }
+
+  /**
   * Remove nodes from document tree
   *
   * @param string|array|DOMNode|DOMNodeList|FluentDOM $selector
@@ -795,5 +813,61 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
       }
     }
     return $result;
+  }
+  
+  /**
+  * Get the class/object providing the handler functions 
+  * 
+  * @return string|object 
+  */
+  protected function _getHandlers() {
+    return 'FluentDOMHandler';
+  }
+
+  /**
+  * Use a handler callback to apply a content argument to each node $targetNodes. The content
+  * argument can be an easy setter function                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+  * 
+  * @param array|DOMNodeList $targetNodes
+  * @param string|array|DOMNode|DOMNodeList|FluentDOM|Callback|Closure $content
+  * @param Callback|Closure $handler
+  */
+  protected function _applyContentToNodes($targetNodes, $content, $handler) {
+    $result = array();
+    $isEasySetterFunction = $this->_isCallback($content, FALSE, TRUE);
+    if (!$isEasySetterFunction) {
+      $contentNodes = $this->_getContentNodes($content);
+    }
+    foreach ($targetNodes as $index => $node) {
+      if ($isEasySetterFunction) {
+        $contentNodes = $this->_executeEasySetter(
+          $content, $node, $index, $this->_getInnerXml($node)
+        );
+      }
+      if (!empty($contentNodes)) {
+        $resultNodes = call_user_func($handler, $node, $contentNodes);
+        if (is_array($resultNodes)) {
+          $result = array_merge($result, $resultNodes);
+        }
+      }
+    }
+    return $result;
+  }
+
+  /**
+  * Execute the easy setter function for a node and return the new elements
+  * 
+  * @param Callback|Closure $easySetter
+  * @param DOMElement|DOMText $node
+  * @param integer $index
+  * @param string $value
+  * @return array
+  */
+  protected function _executeEasySetter($easySetter, $node, $index, $value) {
+    $contentData = call_user_func($easySetter, $node, $index, $value);
+    if (!empty($contentData)) {
+      return $this->_getContentNodes($contentData);
+    }
+    return array();
   }
 }

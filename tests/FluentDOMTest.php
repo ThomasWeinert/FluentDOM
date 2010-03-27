@@ -1012,7 +1012,6 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group Manipulation
   * @group ManipulationInside
-  * @covers FluentDOM::_insertChild
   * @covers FluentDOM::append
   */
   public function testAppend() {
@@ -1027,7 +1026,6 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group Manipulation
   * @group ManipulationInside
-  * @covers FluentDOM::_insertChild
   * @covers FluentDOM::append
   */
   public function testAppendDomelement() {
@@ -1039,7 +1037,6 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group Manipulation
   * @group ManipulationInside
-  * @covers FluentDOM::_insertChild
   * @covers FluentDOM::append
   */
   public function testAppendDomnodelist() {
@@ -1056,7 +1053,6 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group Manipulation
   * @group ManipulationInside
-  * @covers FluentDOM::_insertChild
   * @covers FluentDOM::append
   */
   public function testAppendWithCallback() {
@@ -1070,7 +1066,6 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group Manipulation
   * @group ManipulationInside
-  * @covers FluentDOM::_insertChild
   * @covers FluentDOM::append
   */
   public function testAppendOnEmptyDocumentWithCallback() {
@@ -1085,7 +1080,6 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group Manipulation
   * @group ManipulationInside
-  * @covers FluentDOM::_insertChildTo
   * @covers FluentDOM::appendTo
   */
   public function testAppendTo() {
@@ -1099,7 +1093,6 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group Manipulation
   * @group ManipulationInside
-  * @covers FluentDOM::_insertChild
   * @covers FluentDOM::prepend
   */
   public function testPrepend() {
@@ -1113,7 +1106,6 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group Manipulation
   * @group ManipulationInside
-  * @covers FluentDOM::_insertChild
   * @covers FluentDOM::prepend
   */
   public function testPrependWithCallback() {
@@ -1127,7 +1119,6 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group Manipulation
   * @group ManipulationInside
-  * @covers FluentDOM::_insertChildTo
   * @covers FluentDOM::prependTo
   */
   public function testPrependTo() {

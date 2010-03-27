@@ -521,6 +521,15 @@ class FluentDOM extends FluentDOMCore {
     return $result;
   }
 
+  /**
+  * Get a set of elements containing only the first of the currently selected elements.
+  *
+  * @return FluentDOM
+  */
+  public function first() {
+    return $this->eq(0);
+  }
+
   /*
   * Traversing - Chaining
   */

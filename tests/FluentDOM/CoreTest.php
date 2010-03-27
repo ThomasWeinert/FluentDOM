@@ -1191,6 +1191,18 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group CoreFunctions
+  * @covers FluentDOMCore::_getInnerXml
+  */
+  public function testGetInnerXml() {
+    $expect = '<item index="0">text1</item>'.
+      '<item index="1">text2</item>'.
+      '<item index="2">text3</item>';
+    $fd = $this->getFluentDOMCoreFixtureFromString(self::XML, '//group');
+    $this->assertEquals($expect, $fd->_getInnerXml($fd->item(0)));
+  }
+
+  /**
+  * @group CoreFunctions
   * @covers FluentDOMCore::_removeNodes
   */
   public function testRemoveNodes() {
@@ -1202,6 +1214,18 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
     );
     $this->assertNull($actual[0]->parentNode);
     $this->assertNull($fd->document->documentElement);
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_getHandler
+  */
+  public function testGetHandler() {
+    $fd = new FluentDOMCoreProxy();
+    $this->assertEquals(
+      'FluentDOMHandler',
+      $fd->_getHandler()
+    );
   }
 
   /******************************
@@ -1286,7 +1310,14 @@ class FluentDOMCoreProxy extends FluentDOMCore {
     return parent::_getTargetNodes($selector);
   }
 
+  public function _getInnerXml($node) {
+    return parent::_getInnerXml($node);
+  }
+
   public function _removeNodes($selector) {
     return parent::_removeNodes($selector);
+  }
+  public function _getHandler() {
+    return parent::_getHandler();
   }
 }

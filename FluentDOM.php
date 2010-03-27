@@ -660,12 +660,12 @@ class FluentDOM extends FluentDOMCore {
         $contentNode = $this->_getContentElement($content);
       }
       $result->push($this->_document->appendChild($contentNode));
-    } else { 
+    } else {
       $result->push(
         $this->_applyContentToNodes(
           $this->_array,
           $content,
-          array($this->_getHandlers(), 'appendChildren')
+          array($this->_getHandler(), 'appendChildren')
         )
       );
     }
@@ -689,7 +689,7 @@ class FluentDOM extends FluentDOMCore {
         $this->_applyContentToNodes(
           $targetNodes,
           $this->_array,
-          array($this->_getHandlers(), 'appendChildren')
+          array($this->_getHandler(), 'appendChildren')
         )
       );
       $this->_removeNodes($this->_array);
@@ -711,7 +711,7 @@ class FluentDOM extends FluentDOMCore {
       $this->_applyContentToNodes(
         $this->_array,
         $content,
-        array($this->_getHandlers(), 'insertChildrenBefore')
+        array($this->_getHandler(), 'insertChildrenBefore')
       )
     );
     return $result;
@@ -734,7 +734,7 @@ class FluentDOM extends FluentDOMCore {
         $this->_applyContentToNodes(
           $targetNodes,
           $this->_array,
-          array($this->_getHandlers(), 'insertChildrenBefore')
+          array($this->_getHandler(), 'insertChildrenBefore')
         )
       );
       $this->_removeNodes($this->_array);
@@ -758,7 +758,7 @@ class FluentDOM extends FluentDOMCore {
     $result = $this->spawn();
     $result->push(
       $this->_applyContentToNodes(
-        $this->_array, $content, array($this->_getHandlers(), 'insertNodesAfter')
+        $this->_array, $content, array($this->_getHandler(), 'insertNodesAfter')
       )
     );
     return $result;
@@ -776,7 +776,7 @@ class FluentDOM extends FluentDOMCore {
     $result = $this->spawn();
     $result->push(
       $this->_applyContentToNodes(
-        $this->_array, $content, array($this->_getHandlers(), 'insertNodesBefore')
+        $this->_array, $content, array($this->_getHandler(), 'insertNodesBefore')
       )
     );
     return $result;
@@ -798,7 +798,7 @@ class FluentDOM extends FluentDOMCore {
         $this->_applyContentToNodes(
           $targetNodes,
           $this->_array,
-          array($this->_getHandlers(), 'insertNodesAfter')
+          array($this->_getHandler(), 'insertNodesAfter')
         )
       );
       $this->_removeNodes($this->_array);
@@ -822,7 +822,7 @@ class FluentDOM extends FluentDOMCore {
         $this->_applyContentToNodes(
           $targetNodes,
           $this->_array,
-          array($this->_getHandlers(), 'insertNodesBefore')
+          array($this->_getHandler(), 'insertNodesBefore')
         )
       );
       $this->_removeNodes($this->_array);
@@ -989,12 +989,12 @@ class FluentDOM extends FluentDOMCore {
   */
   public function replaceWith($content) {
     $this->_applyContentToNodes(
-      $this->_array, $content, array($this->_getHandlers(), 'insertNodesBefore')
+      $this->_array, $content, array($this->_getHandler(), 'insertNodesBefore')
     );
     $this->_removeNodes($this->_array);
     return $this;
   }
-  
+
 
   /**
   * Replaces the elements matched by the specified selector with the matched elements.
@@ -1011,7 +1011,7 @@ class FluentDOM extends FluentDOMCore {
       $this->_applyContentToNodes(
         $targetNodes,
         $this->_array,
-        array($this->_getHandlers(), 'insertNodesBefore')
+        array($this->_getHandler(), 'insertNodesBefore')
       );
       $this->_removeNodes($targetNodes);
     }
@@ -1155,7 +1155,7 @@ class FluentDOM extends FluentDOMCore {
       if ($this->_isQName($attribute)) {
         foreach ($this->_array as $index => $node) {
           if ($node instanceof DOMElement) {
-            $newValue = 
+            $newValue =
             $node->setAttribute(
               $attribute,
               call_user_func($value, $node, $index, $node->getAttribute($attribute))

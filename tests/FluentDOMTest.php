@@ -909,7 +909,6 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group Manipulation
   * @group ManipulationInside
-  * @covers FluentDOM::_getInnerXml
   * @covers FluentDOM::xml
   */
   public function testXmlRead() {

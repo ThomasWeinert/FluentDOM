@@ -578,6 +578,7 @@ class FluentDOM extends FluentDOMCore {
         foreach ($this->_array as $index => $node) {
           $xmlString = call_user_func(
             $xml,
+            $node,
             $index,
             $this->_getInnerXml($node)
           );
@@ -625,7 +626,7 @@ class FluentDOM extends FluentDOMCore {
       $isCallback = $this->_isCallback($text, FALSE, TRUE);
       foreach ($this->_array as $index => $node) {
         if ($isCallback) {
-          $node->nodeValue = call_user_func($text, $index, $node->nodeValue);
+          $node->nodeValue = call_user_func($text, $node, $index, $node->nodeValue);
         } else {
           $node->nodeValue = $text;
         }
@@ -710,7 +711,7 @@ class FluentDOM extends FluentDOMCore {
         !isset($this->_document->documentElement)) {
       if ($isCallback) {
         $contentNode = $this->_getContentElement(
-          call_user_func($content, 0, ''),
+          call_user_func($content, NULL, 0, ''),
           TRUE
         );
       } else {
@@ -725,6 +726,7 @@ class FluentDOM extends FluentDOMCore {
       foreach ($this->_array as $index => $node) {
         $contentData = call_user_func(
            $content,
+           $node,
            $index,
            $this->_getInnerXML($node)
         );
@@ -807,6 +809,7 @@ class FluentDOM extends FluentDOMCore {
         if (isset($node->parentNode)) {
           $contentString = call_user_func(
             $content,
+            $node,
             $index,
             $this->_getInnerXML($node)
           );
@@ -860,6 +863,7 @@ class FluentDOM extends FluentDOMCore {
         if (isset($node->parentNode)) {
           $contentString = call_user_func(
             $content,
+            $node,
             $index,
             $this->_getInnerXML($node)
           );
@@ -1110,9 +1114,22 @@ class FluentDOM extends FluentDOMCore {
   * @return FluentDOM
   */
   public function replaceWith($content) {
-    $contentNodes = $this->_getContentNodes($content);
-    foreach ($this->_array as $node) {
-      if (isset($node->parentNode)) {
+    $isCallback = $this->_isCallback($content, FALSE, TRUE);
+    if (!$isCallback) {
+      $contentNodes = $this->_getContentNodes($content);
+    }
+    foreach ($this->_array as $index => $node) {
+      if ($isCallback) {
+        $contentString = call_user_func(
+          $content,
+          $node,
+          $index,
+          $this->_getInnerXml($node)
+        );
+        $contentNodes = $this->_getContentNodes($contentString);
+      }
+      if (isset($node->parentNode) &&
+          !empty($contentNodes)) {
         foreach ($contentNodes as $contentNode) {
           $node->parentNode->insertBefore(
             $contentNode->cloneNode(TRUE),
@@ -1291,7 +1308,7 @@ class FluentDOM extends FluentDOMCore {
           if ($node instanceof DOMElement) {
             $node->setAttribute(
               $attribute,
-              call_user_func($value, $index, $node->getAttribute($attribute))
+              call_user_func($value, $node, $index, $node->getAttribute($attribute))
             );
           }
         }
@@ -1408,7 +1425,7 @@ class FluentDOM extends FluentDOMCore {
         $isCallback = $this->_isCallback($class, FALSE, TRUE);
         if ($isCallback) {
           $classString = call_user_func(
-            $class, $index, $node->getAttribute('class')
+            $class, $node, $index, $node->getAttribute('class')
           );
         } else {
           $classString = $class;

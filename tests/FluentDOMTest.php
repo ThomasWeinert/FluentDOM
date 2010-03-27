@@ -1389,6 +1389,19 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group Manipulation
   * @group ManipulationReplace
+  * @covers FluentDOM::replaceWith
+  */
+  public function testReplaceWithWithFunction() {
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd
+      ->find('//p')
+      ->replaceWith(array($this, 'callbackForReplaceWith'));
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
+  }
+
+  /**
+  * @group Manipulation
+  * @group ManipulationReplace
   * @covers FluentDOM::replaceAll
   */
   public function testReplaceAll() {
@@ -1789,56 +1802,63 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @uses testAppendWithCallback
   */
-  public function callbackForAppend($index, $content) {
+  public function callbackForAppend($node, $index, $content) {
     return strrev($content);
   }
 
   /**
   * @uses testAppendOnEmptyDocumentWithCallback
   */
-  public function callbackForAppendNode($index, $content) {
+  public function callbackForAppendNode($node, $index, $content) {
     return '<sample>Hello World</sample>';
   }
 
   /**
-  * @uses testAfterWithfunction
+  * @uses testAfterWithFunction
   */
-  public function callbackForAfter($index, $content) {
+  public function callbackForAfter($node, $index, $content) {
     return '<p index="'.$index.'">Hi</p>';
   }
 
   /**
-  * @uses testBeforeWithfunction
+  * @uses testBeforeWithFunction
   */
-  public function callbackForBefore($index, $content) {
+  public function callbackForBefore($node, $index, $content) {
     return '<p index="'.$index.'">Hi</p>';
   }
 
   /**
-  * @uses testPrependWithCallback()
+  * @uses testPrependWithCallback
   */
-  public function callbackForPrepend($index, $content) {
+  public function callbackForPrepend($node, $index, $content) {
     return 'Hello #'.($index + 1);
+  }
+
+  /**
+  * @uses testReplaceWithWithFunction
+  */
+  public function callbackForReplaceWith($node, $index, $content) {
+    return '<div index="'.$index.'">'.$node->textContent.'</div>';
   }
 
   /**
   * @uses testAttrWriteWithCallback
   */
-  public function callbackForAttr($index, $value) {
-    return 'Callback #'.$value;
+  public function callbackForAttr($node, $index, $content) {
+    return 'Callback #'.$content;
   }
 
   /**
   * @uses testTextWriteWithCallback
   */
-  public function callbackForText($index, $text) {
+  public function callbackForText($node, $index, $text) {
     return 'Callback #'.$index.': '.$text;
   }
 
   /**
   * @uses testXmlWriteWithCallback
   */
-  public function callbackForXml($index, $xml) {
+  public function callbackForXml($node, $index, $xml) {
     if ($index == 1) {
       return '';
     } else {
@@ -1877,7 +1897,7 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @uses testToogleClassWithCallback()
   */
-  public function callbackForToggleClass($index, $class) {
+  public function callbackForToggleClass($node, $index, $class) {
     return $class.' test4';
   }
 }

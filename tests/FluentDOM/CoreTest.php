@@ -1228,6 +1228,77 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
     );
   }
 
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_applyContentToNodes
+  */
+  public function testApplyContentToNodes() {
+    $fd = new FluentDOMCoreProxy();
+    $fd->document->appendChild($fd->document->createElement('sample'));
+    $result = $fd->_applyContentToNodes(
+      array($fd->document->documentElement),
+      'Hello World',
+      array($this, 'callbackHandlerForApplyContentToNodes')
+    );
+    $this->assertSame(
+      $fd->document->documentElement->childNodes->item(0), $result[0]
+    );
+    $this->assertEquals('Hello World', $result[0]->textContent);
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_applyContentToNodes
+  * @covers FluentDOMCore::_executeEasySetter
+  */
+  public function testApplyContentToNodesWithEasySetter() {
+    $fd = new FluentDOMCoreProxy();
+    $fd->document->appendChild(
+      $fd->document->createElement('sample')
+    );
+    $fd->document->documentElement->appendChild(
+      $fd->document->createTextNode('Hello World!')
+    );
+    $result = $fd->_applyContentToNodes(
+      array($fd->document->documentElement),
+      array($this, 'callbackEasySetterForApplyContentToNodes'),
+      array($this, 'callbackHandlerForApplyContentToNodes')
+    );
+  }
+
+  public function callbackHandlerForApplyContentToNodes($targetNode, $contentNodes) {
+    $targetNode->appendChild($contentNodes[0]);
+    return $contentNodes;
+  }
+
+  public function callbackEasySetterForApplyContentToNodes($node, $index, $value) {
+    $this->assertType('DOMElement', $node);
+    $this->assertEquals(0, $index);
+    $this->assertEquals('Hello World!', $value);
+    return ' Hi Earth!';
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_executeEasySetter
+  */
+  public function testExecuteEasySetterExpectingEmptyArray() {
+    $fd = new FluentDOMCoreProxy();
+    $this->assertSame(
+      array(),
+      $fd->_executeEasySetter(
+        array($this, 'callbackEasySetterForEasySetterExpectingEmptyArray'),
+        NULL,
+        0,
+        ''
+      )
+    );
+  }
+
+  public function callbackEasySetterForEasySetterExpectingEmptyArray($node, $index, $value) {
+    return NULL;
+  }
+
   /******************************
   * Fixtures
   ******************************/
@@ -1317,7 +1388,16 @@ class FluentDOMCoreProxy extends FluentDOMCore {
   public function _removeNodes($selector) {
     return parent::_removeNodes($selector);
   }
+
   public function _getHandler() {
     return parent::_getHandler();
+  }
+
+  public function _applyContentToNodes($targetNodes, $content, $handler) {
+    return parent::_applyContentToNodes($targetNodes, $content, $handler);
+  }
+
+  public function _executeEasySetter($easySetter, $node, $index, $value) {
+    return parent::_executeEasySetter($easySetter, $node, $index, $value);
   }
 }

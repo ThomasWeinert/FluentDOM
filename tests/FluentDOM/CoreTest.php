@@ -1353,8 +1353,8 @@ class FluentDOMCoreProxy extends FluentDOMCore {
     return parent::_isNCName($name, $offset, $length);
   }
 
-  public function _isNode($node) {
-    return parent::_isNode($node);
+  public function _isNode($node, $ignoreTextNodes = FALSE) {
+    return parent::_isNode($node, $ignoreTextNodes);
   }
 
   public function _isNodeList($elements) {

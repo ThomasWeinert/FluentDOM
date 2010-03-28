@@ -290,8 +290,9 @@ class FluentDOM extends FluentDOMCore {
   }
 
   /**
-  * Get a set of elements containing all of the unique immediate
-  * children of each of the matched set of elements.
+  * Get a set of elements containing of the unique immediate
+  * childnodes including only elements (not textnodes) of each
+  * of the matched set of elements.
   *
   * @example children.php Usage Examples: FluentDOM::children()
   * @param string $expr XPath expression
@@ -302,7 +303,7 @@ class FluentDOM extends FluentDOMCore {
     $result = $this->spawn();
     foreach ($this->_array as $node) {
       if (empty($expr)) {
-        $result->push($node->childNodes, TRUE);
+        $result->push($node->childNodes, TRUE, TRUE);
       } else {
         foreach ($node->childNodes as $childNode) {
           if ($this->_test($expr, $childNode)) {
@@ -310,6 +311,21 @@ class FluentDOM extends FluentDOMCore {
           }
         }
       }
+    }
+    return $result;
+  }
+
+  /**
+  * Get a set of elements containing all of the unique immediate
+  * childnodes including elements and textnodes of each of the matched set of elements.
+  *
+  * @access public
+  * @return FluentDOM
+  */
+  public function contents() {
+    $result = $this->spawn();
+    foreach ($this->_array as $node) {
+      $result->push($node->childNodes, TRUE, FALSE);
     }
     return $result;
   }

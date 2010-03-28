@@ -440,11 +440,12 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   * @uses _inList
   * @param DOMElement|DOMNodeList|FluentDOM $elements
   * @param boolean $unique ignore duplicates
+  * @param boolean $ignoreTextNodes ignore text nodes
   * @access protected
   * @return void
   */
-  public function push($elements, $unique = FALSE) {
-    if ($this->_isNode($elements)) {
+  public function push($elements, $unique = FALSE, $ignoreTextNodes = FALSE) {
+    if ($this->_isNode($elements, $ignoreTextNodes)) {
       if ($elements->ownerDocument === $this->_document) {
         if (!$unique || !$this->_inList($elements, $this->_array)) {
           $this->_array[] = $elements;
@@ -454,7 +455,7 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
       }
     } elseif ($this->_isNodeList($elements)) {
       foreach ($elements as $node) {
-        if ($this->_isNode($node)) {
+        if ($this->_isNode($node, $ignoreTextNodes)) {
           if ($node->ownerDocument === $this->_document) {
             if (!$unique || !$this->_inList($node, $this->_array)) {
               $this->_array[] = $node;
@@ -613,16 +614,19 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   * Check if the DOMNode is DOMElement or DOMText with content
   *
   * @param DOMNode $node
+  * @param boolean $ignoreTextNodes
   * @access protected
   * @return boolean
   */
-  protected function _isNode($node) {
+  protected function _isNode($node, $ignoreTextNodes = FALSE) {
     if (is_object($node)) {
       if ($node instanceof DOMElement) {
         return TRUE;
-      } elseif ($node instanceof DOMText &&
-                !$node->isWhitespaceInElementContent()) {
-        return TRUE;
+      } elseif ($node instanceof DOMText) {
+        if (!$ignoreTextNodes &&
+            !$node->isWhitespaceInElementContent()) {
+          return TRUE;
+        }
       }
     }
     return FALSE;

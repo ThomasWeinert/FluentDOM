@@ -648,13 +648,10 @@ class FluentDOMTest extends FluentDOMTestCase {
   * @covers FluentDOM::children
   */
   public function testChildren() {
-    $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd
+    $fd = $this->getFixtureFromFile(__FUNCTION__)
       ->find('//div[@id = "container"]/p')
-      ->children()
-      ->toggleClass('child');
-    $this->assertTrue($fd instanceof FluentDOM);
-    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
+      ->children();
+    $this->assertEquals(2, $fd->length);
   }
 
   /**
@@ -663,13 +660,22 @@ class FluentDOMTest extends FluentDOMTestCase {
   * @covers FluentDOM::children
   */
   public function testChildrenExpression() {
-    $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd
+    $fd = $this->getFixtureFromFile(__FUNCTION__)
       ->find('//div[@id = "container"]/p')
-      ->children('name() = "em"')
-      ->toggleClass('child');
-    $this->assertTrue($fd instanceof FluentDOM);
-    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
+      ->children('name() = "em"');
+    $this->assertEquals(1, $fd->length);
+  }
+
+  /**
+  * @group Traversing
+  * @group TraversingFind
+  * @covers FluentDOM::contents
+  */
+  public function testContents() {
+    $fd = $this->getFixtureFromFile(__FUNCTION__)
+      ->find('//div[@id = "container"]/p')
+      ->contents();
+    $this->assertEquals(5, $fd->length);
   }
 
   /**

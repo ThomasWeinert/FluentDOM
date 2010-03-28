@@ -302,6 +302,18 @@ class FluentDOMTest extends FluentDOMTestCase {
     $this->assertNotSame($fd, $fdFilter);
   }
 
+   /**
+  * @group Traversing
+  * @group TraversingFilter
+  * @covers FluentDOM::last
+  */
+  public function testLast() {
+    $fd = $this->getFixtureFromString(self::XML)->find('//item');
+    $fdFilter = $fd->last();
+    $this->assertSame('2', $fdFilter->item(0)->getAttribute('index'));
+    $this->assertNotSame($fd, $fdFilter);
+  }
+
   /**
   * @group Traversing
   * @group TraversingFilter

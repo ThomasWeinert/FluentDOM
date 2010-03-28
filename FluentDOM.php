@@ -530,6 +530,15 @@ class FluentDOM extends FluentDOMCore {
     return $this->eq(0);
   }
 
+  /**
+  * Get a set of elements containing only the last of the currently selected elements.
+  *
+  * @return FluentDOM
+  */
+  public function last() {
+    return $this->eq(-1);
+  }
+
   /*
   * Traversing - Chaining
   */

@@ -13,8 +13,8 @@
 /**
 * load necessary files
 */
-require_once 'PHPUnit/Framework.php';
-require_once dirname(__FILE__).'/../../../../../../FluentDOM/Selector/Css.php';
+require_once('PHPUnit/Framework.php');
+require_once(dirname(__FILE__).'/../../../../../../FluentDOM/Selector/Css.php');
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 

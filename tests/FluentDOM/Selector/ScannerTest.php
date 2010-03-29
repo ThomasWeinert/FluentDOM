@@ -37,15 +37,17 @@ class FluentDOMSelectorScannerTest extends PHPUnit_Framework_TestCase {
     );
   }
 
-/**
+  /**
   * @covers FluentDOMSelectorScanner::scan
   * @covers FluentDOMSelectorScanner::_next
   */
   public function testScanWithSingleValidToken() {
     $token = $this->getTokenMockObjectFixture(6);
     $status = $this->getStatusMockObjectFixture(
-      array($token, NULL), // getToken() returns this elements
-      FALSE // isEndToken() returns FALSE
+      // getToken() returns this elements
+      array($token, NULL),
+      // isEndToken() returns FALSE
+      FALSE
     );
     $status
       ->expects($this->once())
@@ -69,8 +71,10 @@ class FluentDOMSelectorScannerTest extends PHPUnit_Framework_TestCase {
   public function testScanWithEndToken() {
     $token = $this->getTokenMockObjectFixture(6);
     $status = $this->getStatusMockObjectFixture(
-      array($token), // getToken() returns this elements
-      TRUE // isEndToken() returns TRUE
+      // getToken() returns this elements
+      array($token),
+      // isEndToken() returns TRUE
+      TRUE
     );
 
     $scanner = new FluentDOMSelectorScanner($status);
@@ -87,7 +91,7 @@ class FluentDOMSelectorScannerTest extends PHPUnit_Framework_TestCase {
   * @covers FluentDOMSelectorScanner::_next
   */
   public function testScanWithInvalidToken() {
-  $status = $this->getStatusMockObjectFixture(
+    $status = $this->getStatusMockObjectFixture(
       array(NULL) // getToken() returns this elements
     );
     $scanner = new FluentDOMSelectorScanner($status);
@@ -108,12 +112,16 @@ class FluentDOMSelectorScannerTest extends PHPUnit_Framework_TestCase {
     $tokenOne = $this->getTokenMockObjectFixture(6);
     $tokenTwo = $this->getTokenMockObjectFixture(4);
     $subStatus = $this->getStatusMockObjectFixture(
-      array($tokenTwo), // getToken() returns this elements
-      TRUE // isEndToken() returns TRUE
+      // getToken() returns this elements
+      array($tokenTwo),
+      // isEndToken() returns TRUE
+      TRUE
     );
     $status = $this->getStatusMockObjectFixture(
-      array($tokenOne, NULL), // getToken() returns this elements
-      FALSE // isEndToken() returns FALSE
+      // getToken() returns this elements
+      array($tokenOne, NULL),
+      // isEndToken() returns FALSE
+      FALSE
     );
     $status
       ->expects($this->once())
@@ -179,11 +187,11 @@ class FluentDOMSelectorScannerTest extends PHPUnit_Framework_TestCase {
         );
     }
     if (!is_null($isEndToken)) {
-    $status
-      ->expects($this->any())
-      ->method('isEndToken')
-      ->with($this->isInstanceOf('FluentDOMSelectorToken'))
-      ->will($this->returnValue($isEndToken));
+      $status
+        ->expects($this->any())
+        ->method('isEndToken')
+        ->with($this->isInstanceOf('FluentDOMSelectorToken'))
+        ->will($this->returnValue($isEndToken));
     }
     return $status;
   }

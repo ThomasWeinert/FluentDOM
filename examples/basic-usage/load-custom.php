@@ -5,12 +5,13 @@ require('../../FluentDOM.php');
 $xmlFile = 'hello.xml';
 
 class ExampleLoader implements FluentDOMLoader {
-  // this could implement checks, error handling, ... 
-	public function load($source, $type) {
-  	$dom = new DOMDocument();
-  	$dom->load($source);
-  	return $dom;
-  }	
+
+  // this could implement checks, error handling, ...
+  public function load($source, $type) {
+    $dom = new DOMDocument();
+    $dom->load($source);
+    return $dom;
+  }
 }
 
 $fd = new FluentDOM();

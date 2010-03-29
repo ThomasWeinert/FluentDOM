@@ -13,7 +13,7 @@
 /**
 * load necessary files
 */
-require_once (dirname(__FILE__).'/../FluentDOMTestCase.php');
+require_once(dirname(__FILE__).'/../FluentDOMTestCase.php');
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
@@ -30,13 +30,11 @@ class FluentDOMCoreTest_PHP5_3 extends PHPUnit_Framework_TestCase {
   * @covers FluentDOMCore::_isCallback
   */
   public function testIsCallbackWithClosureExpectingTrue() {
+    $closure = function() {
+    };
     $fd = new FluentDOMCoreProxy_PHP5_3();
     $this->assertTrue(
-      $fd->_isCallback(
-        function() {},
-        FALSE,
-        FALSE
-      )
+      $fd->_isCallback($closure, FALSE, FALSE)
     );
   }
 }

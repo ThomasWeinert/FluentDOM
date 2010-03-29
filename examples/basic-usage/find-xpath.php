@@ -15,4 +15,4 @@ foreach ($fd->find('//child') as $child) {
 }
 
 //find the <root> first then the second element in it
-var_dump($fd->find('/root')->find('*[2]')->item(0)->textContent); 
+var_dump($fd->find('/root')->find('*[2]')->item(0)->textContent);

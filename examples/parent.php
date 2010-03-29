@@ -41,11 +41,11 @@ echo FluentDOM($xml)
 
 
 function callback($node) {
-      $fluentNode = FluentDOM($node);
-      $fluentNode->prepend(
-        $fluentNode->document->createTextNode(
-          $fluentNode->parent()->item(0)->tagName.' > '
-        )
-      );
-    }
+  $fluentNode = FluentDOM($node);
+  $fluentNode->prepend(
+    $fluentNode->document->createTextNode(
+      $fluentNode->parent()->item(0)->tagName.' > '
+    )
+  );
+}
 ?>

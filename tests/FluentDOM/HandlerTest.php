@@ -2,7 +2,7 @@
 /**
 * Collection of test for the FluentDOMHandler class supporting PHP 5.2
 *
-* @version $Id: StyleTest.php 411 2010-03-25 18:38:08Z subjective $
+* @version $Id$
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
 * @copyright Copyright (c) 2009-2010 Bastian Feder, Thomas Weinert
 *

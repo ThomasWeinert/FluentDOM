@@ -64,8 +64,9 @@ class FluentDOMHandler {
     if ($targetNode instanceof DOMElement) {
       foreach ($contentNodes as $contentNode) {
         if ($contentNode instanceof DOMElement ||
-            $contentNode instanceof DOMText)
-        $result[] = $targetNode->appendChild($contentNode->cloneNode(TRUE));
+            $contentNode instanceof DOMText) {
+          $result[] = $targetNode->appendChild($contentNode->cloneNode(TRUE));
+        }
       }
     }
     return $result;
@@ -83,11 +84,12 @@ class FluentDOMHandler {
       $firstChild = $targetNode->hasChildNodes() ? $targetNode->childNodes->item(0) : NULL;
       foreach ($contentNodes as $contentNode) {
         if ($contentNode instanceof DOMElement ||
-            $contentNode instanceof DOMText)
-        $result[] = $targetNode->insertBefore(
-          $contentNode->cloneNode(TRUE),
-          $firstChild
-        );
+            $contentNode instanceof DOMText) {
+          $result[] = $targetNode->insertBefore(
+            $contentNode->cloneNode(TRUE),
+            $firstChild
+          );
+        }
       }
     }
     return $result;

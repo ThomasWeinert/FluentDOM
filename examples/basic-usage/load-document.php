@@ -4,7 +4,7 @@ require('../../FluentDOM.php');
 
 $xmlFile = 'hello.xml';
 
-// create object 
+// create object
 $fd = new FluentDOM();
 // use document attribute
 $fd->document->load($xmlFile);

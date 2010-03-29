@@ -30,21 +30,21 @@ require_once('../FluentDOM.php');
  */
 echo FluentDOM($xml)
   ->find('//p')
-  ->slice(0,3)
+  ->slice(0, 3)
   ->replaceAll('//div');
 
 echo "\n\n";
 
 echo FluentDOM($xml)
   ->find('//p')
-  ->slice(5,2)
+  ->slice(5, 2)
   ->replaceAll('//div');
 
 echo "\n\n";
 
 echo FluentDOM($xml)
   ->find('//p')
-  ->slice(1,-2)
+  ->slice(1, -2)
   ->replaceAll('//div');
 
 echo "\n\n";

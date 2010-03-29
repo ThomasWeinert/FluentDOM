@@ -2,7 +2,7 @@
 /**
 * FluentDOMSelectorStatus is the interface for FluentDOMSelectScanner status objects
 *
-* @version $Id: Iterator.php 345 2009-10-19 19:51:37Z subjective $
+* @version $Id$
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
 * @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
 *

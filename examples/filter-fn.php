@@ -26,12 +26,13 @@ echo FluentDOM($xml)
   ->find('//div')
   ->attr('border', 1)
   ->filter(
-      function($node, $index) {
-        if ($index == 1 || FluentDOM($node)->attr('id') == 'fourth') {
-          return TRUE;
-        }
-        return FALSE;
+    function($node, $index) {
+      if ($index == 1 ||
+          FluentDOM($node)->attr('id') == 'fourth') {
+        return TRUE;
       }
-    )
+      return FALSE;
+    }
+  )
   ->attr('style', 'text-align: center;');
 ?>

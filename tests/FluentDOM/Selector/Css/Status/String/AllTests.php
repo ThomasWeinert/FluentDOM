@@ -2,7 +2,7 @@
 /**
 * Definition file for the unit test suite for FluentDOM
 *
-* @version $Id: AllTests.php 296 2009-07-21 12:15:44Z subjective $
+* @version $Id$
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
 * @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
 *
@@ -13,9 +13,9 @@
 /**
 * Load necessary files
 */
-require_once 'PHPUnit/Framework.php';
-require_once dirname(__FILE__).'/DoubleTest.php';
-require_once dirname(__FILE__).'/SingleTest.php';
+require_once('PHPUnit/Framework.php');
+require_once(dirname(__FILE__).'/DoubleTest.php');
+require_once(dirname(__FILE__).'/SingleTest.php');
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 

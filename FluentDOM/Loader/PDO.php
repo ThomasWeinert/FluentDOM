@@ -13,7 +13,7 @@
 /**
 * include interface
 */
-require_once dirname(__FILE__).'/../Loader.php';
+require_once(dirname(__FILE__).'/../Loader.php');
 
 /**
 * Load FluentDOM from pdo result
@@ -40,7 +40,7 @@ class FluentDOMLoaderPDO implements FluentDOMLoader {
   */
   protected $_tagNameRoot = 'records';
   /**
-  * record element name 
+  * record element name
   * @var unknown_type
   */
   protected $_tagNameRecord = 'record';

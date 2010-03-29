@@ -2,7 +2,7 @@
 /**
 * FluentDOMCore implements the core and interface functions for FluentDOM
 *
-* @version $Id: FluentDOM.php 372 2010-01-18 06:48:24Z subjective $
+* @version $Id$
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
 * @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
 *

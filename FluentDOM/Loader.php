@@ -22,9 +22,8 @@ interface FluentDOMLoader {
   * load FluentDOM document data from a source
   *
   * @param mixed $source
-  * @param string $contentType 
-  * @access public
-  * @return DOMDocument|array(DOMDocument,DOMNode)|FALSE  
+  * @param string $contentType
+  * @return DOMDocument|array(DOMDocument,DOMNode)|FALSE
   */
   public function load($source, $contentType);
 }

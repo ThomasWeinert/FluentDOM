@@ -25,7 +25,6 @@ require_once(dirname(__FILE__).'/FluentDOM/Handler.php');
 *
 * @param mixed $source
 * @param string $contentType optional, default value 'text/xml'
-* @access public
 * @return FluentDOM
 */
 function FluentDOM($source = NULL, $contentType = 'text/xml') {
@@ -52,7 +51,6 @@ class FluentDOM extends FluentDOMCore {
   *
   * @param string $name
   * @param array $arguments
-  * @access public
   * @return mixed
   */
   public function __call($name, $arguments) {
@@ -73,7 +71,6 @@ class FluentDOM extends FluentDOMCore {
   * Execute a function within the context of every matched element.
   *
   * @param callback $function
-  * @access public
   * @return FluentDOM
   */
   public function each($function) {
@@ -91,6 +88,7 @@ class FluentDOM extends FluentDOMCore {
 
   /**
   * Retrieve the matched DOM elements in an array.
+  *
   * @return array
   */
   public function toArray() {
@@ -106,7 +104,6 @@ class FluentDOM extends FluentDOMCore {
   *
   * @example eq.php Usage Example: FluentDOM::eq()
   * @param integer $position Element index (start with 0)
-  * @access public
   * @return FluentDOM
   */
   public function eq($position) {
@@ -127,7 +124,6 @@ class FluentDOM extends FluentDOMCore {
   * @example filter-expr.php Usage Example: FluentDOM::filter() with XPath expression
   * @example filter-fn.php Usage Example: FluentDOM::filter() with Closure
   * @param string|callback $expr XPath expression or callback function
-  * @access public
   * @return FluentDOM
   */
   public function filter($expr) {
@@ -148,6 +144,7 @@ class FluentDOM extends FluentDOMCore {
 
   /**
   * Retrieve the matched DOM elements in an array. A negative position will be counted from the end.
+  *
   * @parameter integer|NULL optional offset of a single element to get.
   * @return array()
   */
@@ -171,7 +168,6 @@ class FluentDOM extends FluentDOMCore {
   *
   * @example is.php Usage Example: FluentDOM::is()
   * @param string $expr XPath expression
-  * @access public
   * @return boolean
   */
   public function is($expr) {
@@ -190,7 +186,6 @@ class FluentDOM extends FluentDOMCore {
   *
   * @example map.php Usage Example: FluentDOM::map()
   * @param callback $function
-  * @access public
   * @return array
   */
   public function map($function) {
@@ -222,7 +217,6 @@ class FluentDOM extends FluentDOMCore {
   *
   * @example not.php Usage Example: FluentDOM::not()
   * @param string|callback $expr XPath expression or callback function
-  * @access public
   * @return FluentDOM
   */
   public function not($expr) {
@@ -247,7 +241,6 @@ class FluentDOM extends FluentDOMCore {
   * @example slice.php Usage Example: FluentDOM::slice()
   * @param integer $start
   * @param integer $end
-  * @access public
   * @return FluentDOM
   */
   public function slice($start, $end = NULL) {
@@ -273,7 +266,6 @@ class FluentDOM extends FluentDOMCore {
   *
   * @example add.php Usage Examples: FluentDOM::add()
   * @param string $expr XPath expression
-  * @access public
   * @return FluentDOM
   */
   public function add($expr) {
@@ -296,7 +288,6 @@ class FluentDOM extends FluentDOMCore {
   *
   * @example children.php Usage Examples: FluentDOM::children()
   * @param string $expr XPath expression
-  * @access public
   * @return FluentDOM
   */
   public function children($expr = NULL) {
@@ -319,7 +310,6 @@ class FluentDOM extends FluentDOMCore {
   * Get a set of elements containing all of the unique immediate
   * childnodes including elements and textnodes of each of the matched set of elements.
   *
-  * @access public
   * @return FluentDOM
   */
   public function contents() {
@@ -336,7 +326,6 @@ class FluentDOM extends FluentDOMCore {
   * @example find.php Usage Example: FluentDOM::find()
   * @param string $expr XPath expression
   * @param boolean $useDocumentContext ignore current node list
-  * @access public
   * @return FluentDOM
   */
   public function find($expr, $useDocumentContext = FALSE) {
@@ -358,7 +347,6 @@ class FluentDOM extends FluentDOMCore {
   *
   * @example next.php Usage Example: FluentDOM::next()
   * @param string $expr XPath expression
-  * @access public
   * @return FluentDOM
   */
   public function next($expr = NULL) {
@@ -382,7 +370,6 @@ class FluentDOM extends FluentDOMCore {
   *
   * @example nextAll.php Usage Example: FluentDOM::nextAll()
   * @param string $expr XPath expression
-  * @access public
   * @return FluentDOM
   */
   public function nextAll($expr = NULL) {
@@ -405,7 +392,6 @@ class FluentDOM extends FluentDOMCore {
   * Get a set of elements containing the unique parents of the matched set of elements.
   *
   * @example parent.php Usage Example: FluentDOM::parent()
-  * @access public
   * @return FluentDOM
   */
   public function parent() {
@@ -423,7 +409,6 @@ class FluentDOM extends FluentDOMCore {
   *
   * @example parents.php Usage Example: FluentDOM::parents()
   * @param string $expr XPath expression
-  * @access public
   * @return FluentDOM
   */
   public function parents($expr = NULL) {
@@ -446,7 +431,6 @@ class FluentDOM extends FluentDOMCore {
   *
   * @example prev.php Usage Example: FluentDOM::prev()
   * @param string $expr XPath expression
-  * @access public
   * @return FluentDOM
   */
   public function prev($expr = NULL) {
@@ -470,7 +454,6 @@ class FluentDOM extends FluentDOMCore {
   *
   * @example prevAll.php Usage Example: FluentDOM::prevAll()
   * @param string $expr XPath expression
-  * @access public
   * @return FluentDOM
   */
   public function prevAll($expr = NULL) {
@@ -495,7 +478,6 @@ class FluentDOM extends FluentDOMCore {
   *
   * @example siblings.php Usage Example: FluentDOM::siblings()
   * @param string $expr XPath expression
-  * @access public
   * @return FluentDOM
   */
   public function siblings($expr = NULL) {
@@ -562,7 +544,6 @@ class FluentDOM extends FluentDOMCore {
   /**
   * Add the previous selection to the current selection.
   *
-  * @access public
   * @return FluentDOM
   */
   public function andSelf() {
@@ -576,7 +557,6 @@ class FluentDOM extends FluentDOMCore {
   * Revert the most recent traversing operation,
   * changing the set of matched elements to its previous state.
   *
-  * @access public
   * @return FluentDOM
   */
   public function end() {
@@ -595,8 +575,7 @@ class FluentDOM extends FluentDOMCore {
   * Get or set the xml contents of the first matched element.
   *
   * @example xml.php Usage Example: FluentDOM::xml()
-  * @param string|callback|Closure $xml XML fragment
-  * @access public
+  * @param string|Callback|Closure $xml XML fragment
   * @return string|FluentDOM
   */
   public function xml($xml = NULL) {
@@ -646,7 +625,6 @@ class FluentDOM extends FluentDOMCore {
   *
   * @example text.php Usage Example: FluentDOM::text()
   * @param string|callback|Closure $text
-  * @access public
   * @return string|FluentDOM
   */
   public function text($text = NULL) {
@@ -678,7 +656,6 @@ class FluentDOM extends FluentDOMCore {
   *
   * @example append.php Usage Example: FluentDOM::append()
   * @param string|array|DOMNode|Iterator $content DOMNode or DOMNodeList or xml fragment string
-  * @access public
   * @return FluentDOM
   */
   public function append($content) {
@@ -712,7 +689,6 @@ class FluentDOM extends FluentDOMCore {
   *
   * @example appendTo.php Usage Example: FluentDOM::appendTo()
   * @param string|array|DOMNode|DOMNodeList|FluentDOM $selector
-  * @access public
   * @return FluentDOM
   */
   public function appendTo($selector) {
@@ -736,7 +712,6 @@ class FluentDOM extends FluentDOMCore {
   *
   * @example prepend.php Usage Example: FluentDOM::prepend()
   * @param string|array|DOMNode|Iterator $content
-  * @access public
   * @return FluentDOM
   */
   public function prepend($content) {
@@ -757,7 +732,6 @@ class FluentDOM extends FluentDOMCore {
   *
   * @example prependTo.php Usage Example: FluentDOM::prependTo()
   * @param string|array|DOMNode|DOMNodeList|FluentDOM $selector
-  * @access public
   * @return FluentDOM list of all new elements
   */
   public function prependTo($selector) {
@@ -784,8 +758,7 @@ class FluentDOM extends FluentDOMCore {
   * Insert content after each of the matched elements.
   *
   * @example after.php Usage Example: FluentDOM::after()
-  * @param string|array|DOMNode|Iterator $content
-  * @access public
+  * @param string|array|DOMNode|DOMNodeList|Iterator|callback|Closure $content
   * @return FluentDOM
   */
   public function after($content) {
@@ -802,8 +775,7 @@ class FluentDOM extends FluentDOMCore {
   * Insert content before each of the matched elements.
   *
   * @example before.php Usage Example: FluentDOM::before()
-  * @param string|array|DOMNode|Iterator $content
-  * @access public
+  * @param string|array|DOMNode|DOMNodeList|Iterator|callback|Closure $content
   * @return FluentDOM
   */
   public function before($content) {
@@ -820,8 +792,7 @@ class FluentDOM extends FluentDOMCore {
   * Insert all of the matched elements after another, specified, set of elements.
   *
   * @example insertAfter.php Usage Example: FluentDOM::insertAfter()
-  * @param string|array|DOMNode|DOMNodeList|FluentDOM $selector
-  * @access public
+  * @param string|array|DOMNode|DOMNodeList|Iterator $selector
   * @return FluentDOM
   */
   public function insertAfter($selector) {
@@ -844,8 +815,7 @@ class FluentDOM extends FluentDOMCore {
   * Insert all of the matched elements before another, specified, set of elements.
   *
   * @example insertBefore.php Usage Example: FluentDOM::insertBefore()
-  * @param string|array|DOMNode|DOMNodeList|FluentDOM $selector
-  * @access public
+  * @param string|array|DOMNode|DOMNodeList|Iterator $selector
   * @return FluentDOM
   */
   public function insertBefore($selector) {
@@ -872,8 +842,7 @@ class FluentDOM extends FluentDOMCore {
   * Wrap $content around a set of elements
   *
   * @param array $elements
-  * @param string|array|DOMNode|Iterator $content
-  * @access protected
+  * @param string|array|DOMNode|DOMNodeList|Iterator|callback|Closure $content
   * @return FluentDOM
   */
   protected function _wrap($elements, $content) {
@@ -918,8 +887,7 @@ class FluentDOM extends FluentDOMCore {
   * If $content contains several elements the first one is used
   *
   * @example wrap.php Usage Example: FluentDOM::wrap()
-  * @param string|array|DOMNode|Iterator $content
-  * @access public
+  * @param string|array|DOMNode|DOMNodeList|Iterator|callback|Closure $content
   * @return FluentDOM
   */
   public function wrap($content) {
@@ -935,7 +903,6 @@ class FluentDOM extends FluentDOMCore {
   *
   * @example wrapAll.php Usage Example: FluentDOM::wrapAll()
   * @param string|array|DOMNode|Iterator $content
-  * @access public
   * @return FluentDOM
   */
   public function wrapAll($content) {
@@ -989,8 +956,7 @@ class FluentDOM extends FluentDOMCore {
   * (including text nodes) with an XML structure.
   *
   * @example wrapInner.php Usage Example: FluentDOM::wrapInner()
-  * @param string|array|DOMNode|Iterator $content
-  * @access public
+  * @param string|array|DOMNode|DOMNodeList|Iterator $content
   * @return FluentDOM
   */
   public function wrapInner($content) {
@@ -1017,8 +983,7 @@ class FluentDOM extends FluentDOMCore {
   * which has been removed from the DOM.
   *
   * @example replaceWith.php Usage Example: FluentDOM::replaceWith()
-  * @param string|array|DOMNode|Iterator $content
-  * @access public
+  * @param string|array|DOMNode|DOMNodeList|Iterator|callback|Closure $content
   * @return FluentDOM
   */
   public function replaceWith($content) {
@@ -1034,8 +999,7 @@ class FluentDOM extends FluentDOMCore {
   * Replaces the elements matched by the specified selector with the matched elements.
   *
   * @example replaceAll.php Usage Example: FluentDOM::replaceAll()
-  * @param string|array|DOMNode|DOMNodeList|FluentDOM $selector
-  * @access public
+  * @param string|array|DOMNode|DOMNodeList|Iterator $selector
   * @return FluentDOM
   */
   public function replaceAll($selector) {
@@ -1065,7 +1029,6 @@ class FluentDOM extends FluentDOMCore {
   * @see __call
   *
   * @example empty.php Usage Example: FluentDOM:empty()
-  * @access protected
   * @return FluentDOM
   */
   protected function _emptyNodes() {
@@ -1083,7 +1046,6 @@ class FluentDOM extends FluentDOMCore {
   *
   * @example remove.php Usage Example: FluentDOM::remove()
   * @param string $expr XPath expression
-  * @access public
   * @return FluentDOM removed elements
   */
   public function remove($expr = NULL) {
@@ -1108,9 +1070,8 @@ class FluentDOM extends FluentDOMCore {
   * of this name will be created
   *
   * @example node.php Usage Example: FluentDOM::node()
-  * @param string|array|DOMNode|Iterator $content
+  * @param string|array|DOMNode|DOMNodeList|Iterator $content
   * @param array $attr attributes set on created/imported elements
-  * @access public
   * @return FluentDOM
   */
   public function node($content, $attr = array()) {
@@ -1137,7 +1098,6 @@ class FluentDOM extends FluentDOMCore {
   * @see __call
   *
   * @example clone.php Usage Example: FluentDOM:clone()
-  * @access protected
   * @return FluentDOM
   */
   protected function _cloneNodes() {
@@ -1157,8 +1117,7 @@ class FluentDOM extends FluentDOMCore {
   *
   * @example attr.php Usage Example: FluentDOM:attr() Read an attribute value.
   * @param string|array $attribute attribute name or attribute list
-  * @param string|callback $value function callback($index, $value) or value
-  * @access public
+  * @param string|callback|Closure $value function callback($index, $value) or value
   * @return string|FluentDOM attribute value or $this
   */
   public function attr($attribute, $value = NULL) {
@@ -1215,7 +1174,6 @@ class FluentDOM extends FluentDOMCore {
   *
   * @example removeAttr.php Usage Example: FluentDOM::removeAttr()
   * @param string $name
-  * @access public
   * @return FluentDOM
   */
   public function removeAttr($name) {
@@ -1254,7 +1212,6 @@ class FluentDOM extends FluentDOMCore {
   * Adds the specified class(es) to each of the set of matched elements.
   *
   * @param string|callback|Closure $class
-  * @access public
   * @return FluentDOM
   */
   public function addClass($class) {
@@ -1265,7 +1222,6 @@ class FluentDOM extends FluentDOMCore {
   * Returns true if the specified class is present on at least one of the set of matched elements.
   *
   * @param string|callback|Closure $class
-  * @access public
   * @return boolean
   */
   public function hasClass($class) {
@@ -1285,7 +1241,6 @@ class FluentDOM extends FluentDOMCore {
   * Removes all or the specified class(es) from the set of matched elements.
   *
   * @param string|callback|Closure $class
-  * @access public
   * @return FluentDOM
   */
   public function removeClass($class = '') {
@@ -1300,7 +1255,6 @@ class FluentDOM extends FluentDOMCore {
   * @example toggleClass.php Usage Example: FluentDOM::toggleClass()
   * @param string|callback|Closure $class
   * @param NULL|boolean $switch toggle if NULL, add if TRUE, remove if FALSE
-  * @access public
   * @return FluentDOM
   */
   public function toggleClass($class, $switch = NULL) {
@@ -1354,4 +1308,3 @@ class FluentDOM extends FluentDOMCore {
     return $this;
   }
 }
-?>

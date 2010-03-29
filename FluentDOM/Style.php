@@ -21,7 +21,6 @@ require_once(dirname(__FILE__).'/../FluentDOM.php');
 *
 * @param mixed $source
 * @param string $contentType optional, default value 'text/xml'
-* @access public
 * @return object FluentDOMStyle
 */
 function FluentDOMStyle($source = NULL, $contentType = 'text/xml') {
@@ -51,7 +50,6 @@ class FluentDOMStyle extends FluentDOM {
   *
   * @param string|array $property
   * @param NULL|string|object Closure $value
-  * @access public
   * @return string|object FluentDOMStyle
   */
   public function css($property, $value = NULL) {
@@ -135,7 +133,6 @@ class FluentDOMStyle extends FluentDOM {
   * check if string is an valid css property name
   *
   * @param string $propertyName
-  * @access private
   * @return boolean
   */
   private function _isCSSProperty($propertyName) {
@@ -150,7 +147,6 @@ class FluentDOMStyle extends FluentDOM {
   * decode style attribute to css properties array
   *
   * @param string $styleString
-  * @access private
   * @return array
   */
   private function _decodeStyleAttribute($styleString) {
@@ -174,7 +170,6 @@ class FluentDOMStyle extends FluentDOM {
   * encode css options array for the style string
   *
   * @param array $properties
-  * @access private
   * @return string
   */
   private function _encodeStyleAttribute($properties) {
@@ -195,7 +190,6 @@ class FluentDOMStyle extends FluentDOM {
   *
   * @param string $propertyNameOne
   * @param string $propertyNameTwo
-  * @access private
   * @return integer
   */
   private function _compareCSSProperties($propertyNameOne, $propertyNameTwo) {
@@ -229,7 +223,6 @@ class FluentDOMStyle extends FluentDOM {
   /**
   * decodes the css property name into an compareable array
   *
-  * @access private
   * @return array
   */
   private function _getCSSPropertyElements($propertyName) {

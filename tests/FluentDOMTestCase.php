@@ -35,7 +35,6 @@ abstract class FluentDOMTestCase extends PHPUnit_Framework_TestCase {
   /**
   * initialize test suite
   *
-  * @access public
   * @return
   */
   function setUp() {
@@ -59,7 +58,6 @@ abstract class FluentDOMTestCase extends PHPUnit_Framework_TestCase {
   }
 
   /**
-  *
   * @param string $functionName
   * @return FluentDOM
   */
@@ -82,7 +80,6 @@ abstract class FluentDOMTestCase extends PHPUnit_Framework_TestCase {
 
   /**
   * @param string $string
-  * @access protected
   * @return FluentDOM
   */
   protected function getFixtureFromString($string) {
@@ -99,7 +96,6 @@ abstract class FluentDOMTestCase extends PHPUnit_Framework_TestCase {
   }
 
   /**
-  *
   * @param string $functionName
   * @param string $type
   * @return string

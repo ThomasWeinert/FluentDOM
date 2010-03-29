@@ -28,7 +28,6 @@ class FluentDOMLoaderFileXML implements FluentDOMLoader {
   *
   * @param string $source filename
   * @param string $contentType
-  * @access public
   * @return DOMDocument|FALSE
   */
   public function load($source, $contentType) {

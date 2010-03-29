@@ -28,7 +28,6 @@ class FluentDOMLoaderSimpleXMLElement implements FluentDOMLoader {
   *
   * @param SimpleXMLElement $source
   * @param string $contentType
-  * @access public
   * @return array(DOMDocument,DOMNode)|FALSE
   */
   public function load($source, $contentType) {

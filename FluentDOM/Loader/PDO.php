@@ -61,7 +61,6 @@ class FluentDOMLoaderPDO implements FluentDOMLoader {
   *
   * @param string $source xml string
   * @param string $contentType
-  * @access public
   * @return DOMDocument|FALSE
   */
   public function load($source, $contentType) {
@@ -113,7 +112,6 @@ class FluentDOMLoaderPDO implements FluentDOMLoader {
   /**
   * normalize column for tag name use
   *
-  * @access protected
   * @param string $name
   */
   protected function _normalizeColumnName($name) {
@@ -123,7 +121,6 @@ class FluentDOMLoaderPDO implements FluentDOMLoader {
   /**
   * get node type (attribute or element)
   *
-  * @access protected
   * @param array $columnData
   */
   protected function _getNodeType($columnData) {

@@ -28,7 +28,6 @@ class FluentDOMLoaderDOMDocument implements FluentDOMLoader {
   *
   * @param DOMDocument $source
   * @param string $contentType
-  * @access public
   * @return DOMDocument|FALSE
   */
   public function load($source, $contentType) {

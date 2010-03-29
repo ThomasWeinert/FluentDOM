@@ -37,43 +37,37 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
 
   /**
   * Associated DOMDocument object.
-  * @var DOMDocument
-  * @access protected
+  * @var DOMDocument $_document
   */
   protected $_document = NULL;
 
   /**
   * XPath object used to execute selectors
-  * @var DOMXPath
-  * @access protected
+  * @var DOMXPath $_xpath
   */
   protected $_xpath = NULL;
 
   /**
   * Use document context for expression (not selected nodes).
-  * @var boolean
-  * @access protected
+  * @var boolean $_useDocumentContext
   */
   protected $_useDocumentContext = TRUE;
 
   /**
   * Content type for output (xml, text/xml, html, text/html).
-  * @var string
-  * @access protected
+  * @var string $_contentType
   */
   protected $_contentType = 'text/xml';
 
   /**
   * Parent FluentDOM object (previous selection in chain).
-  * @var FluentDOM
-  * @access protected
+  * @var FluentDOM $_parent
   */
   protected $_parent = NULL;
 
   /**
   * Seleted element and text nodes
-  * @var array
-  * @access protected
+  * @var array $_array
   */
   protected $_array = array();
 
@@ -83,15 +77,13 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   * @see _initLoaders
   * @see _setLoader
   *
-  * @var array
-  * @access protected
+  * @var array $_loaders
   */
   protected $_loaders = NULL;
 
   /**
   * Constructor
   *
-  * @access public
   * @return FluentDOM
   */
   public function __construct() {
@@ -104,7 +96,6 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   *
   * @param mixed $source
   * @param string $contentType optional, default value 'text/xml'
-  * @access public
   */
   public function load($source, $contentType = 'text/xml') {
     $this->_array = array();
@@ -144,7 +135,6 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Initialize default loaders if they are not already initialized
   *
-  * @access protected
   * @return void
   */
   protected function _initLoaders() {
@@ -172,7 +162,6 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   *
   * @example iniloader/iniToXML.php Usage Example: Own loader object
   * @param $loaders
-  * @access public
   * @return FluentDOM
   */
   public function setLoaders($loaders) {
@@ -189,7 +178,6 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   * Setter for FluentDOM::_contentType property
   *
   * @param string $value
-  * @access protected
   * @return void
   */
   protected function _setContentType($value) {
@@ -218,7 +206,6 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   * implement dynamic properties using magic methods
   *
   * @param string $name
-  * @access public
   * @return mixed
   */
   public function __get($name) {
@@ -241,7 +228,6 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   *
   * @param string $name
   * @param mixed $value
-  * @access public
   * @return void
   */
   public function __set($name, $value) {
@@ -263,7 +249,6 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   * support isset for dynamic properties length and document
   *
   * @param string $name
-  * @access public
   * @return boolean
   */
   public function __isset($name) {
@@ -282,7 +267,6 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Return the XML output of the internal dom document
   *
-  * @access public
   * @return string
   */
   public function __toString() {
@@ -300,7 +284,6 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   * like in a DOMNodelist.
   *
   * @param integer $position
-  * @access public
   * @return DOMNode
   */
   public function item($position) {
@@ -316,7 +299,6 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   * The document is saved and reloaded, all variables with DOMNodes
   * of this document will get invalid.
   *
-  * @access public
   * @return FluentDOM
   */
   public function formatOutput($contentType = NULL) {
@@ -358,7 +340,6 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   * Get element count (Countable interface)
   *
   * @example interfaces/Countable.php Usage Example: Countable Interface
-  * @access public
   * @return integer
   */
   public function count() {
@@ -375,7 +356,6 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   * @example interfaces/ArrayAccess.php Usage Example: ArrayAccess Interface
   * @param integer $offset
   * @param mixed $value
-  * @access public
   * @return void
   */
   public function offsetSet($offset, $value) {
@@ -387,7 +367,6 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   *
   * @example interfaces/ArrayAccess.php Usage Example: ArrayAccess Interface
   * @param integer $offset
-  * @access public
   * @return boolean
   */
   public function offsetExists($offset) {
@@ -399,7 +378,6 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   *
   * @example interfaces/ArrayAccess.php Usage Example: ArrayAccess Interface
   * @param integer $offset
-  * @access public
   * @return void
   */
   public function offsetUnset($offset) {
@@ -410,9 +388,8 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   * Get element from internal array
   *
   * @example interfaces/ArrayAccess.php Usage Example: ArrayAccess Interface
-  * @param $offset
-  * @access public
-  * @return void
+  * @param integer $offset
+  * @return DOMNode|NULL
   */
   public function offsetGet($offset) {
     return isset($this->_array[$offset]) ? $this->_array[$offset] : NULL;
@@ -425,8 +402,7 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Create a new instance of the same class with $this as the parent. This is used for the chaining.
   *
-  * @access public
-  * @return  FluentDOM
+  * @return FluentDOM
   */
   public function spawn() {
     $className = get_class($this);
@@ -438,10 +414,9 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   * Push new element(s) an the internal element list
   *
   * @uses _inList
-  * @param DOMElement|DOMNodeList|FluentDOM $elements
+  * @param DOMNode|DOMNodeList|FluentDOM $elements
   * @param boolean $unique ignore duplicates
   * @param boolean $ignoreTextNodes ignore text nodes
-  * @access protected
   * @return void
   */
   public function push($elements, $unique = FALSE, $ignoreTextNodes = FALSE) {
@@ -474,7 +449,6 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   * Get a XPath object associated with the internal DOMDocument and register
   * default namespaces from the document element if availiable.
   *
-  * @access protected
   * @return DOMXPath
   */
   protected function _xpath() {
@@ -497,8 +471,7 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   * Match XPath expression agains context and return matched elements.
   *
   * @param string $expr
-  * @param DOMElement $context optional, default value NULL
-  * @access protected
+  * @param DOMNode $context optional, default value NULL
   * @return DOMNodeList
   */
   protected function _match($expr, $context = NULL) {
@@ -513,8 +486,7 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   * Test xpath expression against context and return true/false
   *
   * @param string $expr
-  * @param DOMElement $context optional, default value NULL
-  * @access protected
+  * @param DOMNode $context optional, default value NULL
   * @return boolean
   */
   protected function _test($expr, $context = NULL) {
@@ -533,8 +505,7 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Check if object is already in internal list
   *
-  * @param DOMElement $node
-  * @access protected
+  * @param DOMNode $node
   * @return boolean
   */
   protected function _inList($node) {
@@ -550,7 +521,6 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   * Validate string as qualified node name
   *
   * @param string $name
-  * @access protected
   * @return boolean
   */
   protected function _isQName($name) {
@@ -571,7 +541,6 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   * @param string $name full QName
   * @param integer $offset Offset of NCName part in QName
   * @param integer $length Length of NCName part in QName
-  * @access protected
   * @return boolean
   */
   protected function _isNCName($name, $offset = 0, $length = 0) {
@@ -615,7 +584,6 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   *
   * @param DOMNode $node
   * @param boolean $ignoreTextNodes
-  * @access protected
   * @return boolean
   */
   protected function _isNode($node, $ignoreTextNodes = FALSE) {
@@ -655,7 +623,6 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   * @param callback $callback
   * @param boolean $allowGlobalFunctions
   * @param boolean $silent (no InvalidArgumentException)
-  * @access protected
   * @return boolean
   */
   protected function _isCallback($callback, $allowGlobalFunctions, $silent) {
@@ -683,7 +650,6 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   * @param string $content
   * @param boolean $includeTextNodes
   * @param integer $limit
-  * @access protected
   * @return array
   */
   protected function _getContentFragment($content, $includeTextNodes = TRUE, $limit = 0) {
@@ -710,10 +676,9 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Convert a given content into and array of nodes
   *
-  * @param string|array|DOMNode|Iterator $content
+  * @param string|array|DOMElement|DOMText|Iterator $content
   * @param boolean $includeTextNodes
   * @param integer $limit
-  * @access protected
   * @return array
   */
   protected function _getContentNodes($content, $includeTextNodes = TRUE, $limit = 0) {
@@ -753,8 +718,7 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Convert $content to a DOMElement. If $content contains several elements use the first.
   *
-  * @param string|array|DOMNode|Iterator $content
-  * @access protected
+  * @param string|array|DOMElement|DOMNodeList|Iterator $content
   * @return DOMElement
   */
   protected function _getContentElement($content) {
@@ -771,8 +735,8 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   *
   * A string will be used as XPath expression.
   *
-  * @param string|array|DOMNode|DOMNodeList|FluentDOM $selector
-  * @return unknown_type
+  * @param string|array|DOMNode|DOMNodeList|Iterator $selector
+  * @return array
   */
   protected function _getTargetNodes($selector) {
     if ($this->_isNode($selector)) {
@@ -788,7 +752,8 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
 
   /**
   * Get the inner xml of a given node or in other words the xml of all children.
-  * @param DOMNode $node
+  * @param DOMElement $node
+  * @return string
   */
   protected function _getInnerXml($node) {
     $result = '';
@@ -803,9 +768,8 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Remove nodes from document tree
   *
-  * @param string|array|DOMNode|DOMNodeList|FluentDOM $selector
-  * @access protected
-  * @return array removed nodes
+  * @param string|array|DOMNode|DOMNodeList|Iterator $selector
+  * @return array $result removed nodes
   */
   protected function _removeNodes($selector) {
     $targetNodes = $this->_getTargetNodes($selector);
@@ -833,8 +797,8 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   * argument can be an easy setter function
   *
   * @param array|DOMNodeList $targetNodes
-  * @param string|array|DOMNode|DOMNodeList|FluentDOM|Callback|Closure $content
-  * @param Callback|Closure $handler
+  * @param string|array|DOMElement|DOMText|DOMNodeList|Iterator|callback|Closure $content
+  * @param callback|Closure $handler
   */
   protected function _applyContentToNodes($targetNodes, $content, $handler) {
     $result = array();
@@ -861,8 +825,8 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Execute the easy setter function for a node and return the new elements
   *
-  * @param Callback|Closure $easySetter
-  * @param DOMElement|DOMText $node
+  * @param callback|Closure $easySetter
+  * @param DOMNode $node
   * @param integer $index
   * @param string $value
   * @return array

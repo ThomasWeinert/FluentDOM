@@ -31,8 +31,7 @@ class FluentDOMIterator implements RecursiveIterator, SeekableIterator {
   /**
   * Remember the owner object (the FluentDOMCore object this iterator interates)
   *
-  * @param $owner
-  * @access public
+  * @param FluentDOMCore $owner
   * @return FluentDOMCore
   */
   public function __construct(FluentDOMCore $owner) {
@@ -46,7 +45,6 @@ class FluentDOMIterator implements RecursiveIterator, SeekableIterator {
   /**
   * Get current iterator element
   *
-  * @access public
   * @return object DOMNode
   */
   public function current() {
@@ -56,7 +54,6 @@ class FluentDOMIterator implements RecursiveIterator, SeekableIterator {
   /**
   * Get current iterator pointer
   *
-  * @access public
   * @return integer
   */
   public function key() {
@@ -66,7 +63,6 @@ class FluentDOMIterator implements RecursiveIterator, SeekableIterator {
   /**
   * Move iterator pointer to next element
   *
-  * @access public
   * @return void
   */
   public function next() {
@@ -76,7 +72,6 @@ class FluentDOMIterator implements RecursiveIterator, SeekableIterator {
   /**
   * Reset iterator pointer
   *
-  * @access public
   * @return void
   */
   public function rewind() {
@@ -87,7 +82,6 @@ class FluentDOMIterator implements RecursiveIterator, SeekableIterator {
   * Move iterator pointer to specified element
   *
   * @param integer $position
-  * @access public
   * @return void
   */
   public function seek($position) {
@@ -101,7 +95,6 @@ class FluentDOMIterator implements RecursiveIterator, SeekableIterator {
   /**
   * Check if current iterator pointer contains a valid element
   *
-  * @access public
   * @return boolean
   */
   public function valid() {
@@ -111,7 +104,6 @@ class FluentDOMIterator implements RecursiveIterator, SeekableIterator {
   /**
   * Get children of the current iterator element
   *
-  * @access public
   * @return object FluentDOMCore
   */
   public function getChildren() {
@@ -123,7 +115,6 @@ class FluentDOMIterator implements RecursiveIterator, SeekableIterator {
   /**
   * Check if the current iterator element has children
   *
-  * @access public
   * @return object FluentDOMCore
   */
   public function hasChildren() {

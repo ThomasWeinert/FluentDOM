@@ -28,7 +28,6 @@ class FluentDOMLoaderStringHTML implements FluentDOMLoader {
   *
   * @param string $source html string
   * @param string $contentType
-  * @access public
   * @return DOMDocument|FALSE
   */
   public function load($source, $contentType) {

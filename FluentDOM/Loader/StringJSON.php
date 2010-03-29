@@ -26,7 +26,7 @@ class FluentDOMLoaderStringJSON implements FluentDOMLoader {
 
   /**
   * JSON errors
-  * @var unknown_type
+  * @var array $jsonErrors
   */
   private $jsonErrors = array(
     -1 => 'Unknown error has occurred',
@@ -43,12 +43,11 @@ class FluentDOMLoaderStringJSON implements FluentDOMLoader {
   public $typeAttributes = FALSE;
 
   /**
-  * load DOMDocument from local XML file
+  * Load DOMDocument from local XML file
   *
   * @param string $source json encoded content
   * @param string $contentType
-  * @access public
-  * @return DOMElement|FALSE
+  * @return array(DOMDocument,DOMNode)|FALSE
   */
   public function load($source, $contentType) {
     if (is_string($source)) {
@@ -72,6 +71,7 @@ class FluentDOMLoaderStringJSON implements FluentDOMLoader {
 
   /**
   * Convert a JSON object structure to a DOMDocument
+  *
   * @param DOMElement $parentNode
   * @param mixed $current
   * @param integer $maxDepth simple recursion protection
@@ -103,6 +103,7 @@ class FluentDOMLoaderStringJSON implements FluentDOMLoader {
 
   /**
   * Add new element, sanitize tag name if nessesary
+  *
   * @param DOMElement $parentNode
   * @param string $tagName
   */

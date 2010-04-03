@@ -389,6 +389,31 @@ class FluentDOM extends FluentDOMCore {
   }
 
   /**
+  * Get all following siblings of each element up to but
+  * not including the element matched by the selector.
+  *
+  * @param string $expr XPath expression
+  * @return FluentDOM
+  */
+  public function nextUntil($expr = NULL) {
+    $result = $this->spawn();
+    foreach ($this->_array as $node) {
+      $next = $node->nextSibling;
+      while ($next instanceof DOMNode) {
+        if ($this->_isNode($next)) {
+          if (isset($expr) && $this->_test($expr, $next)) {
+            break;
+          } else {
+            $result->push($next, TRUE);
+          }
+        }
+        $next = $next->nextSibling;
+      }
+    }
+    return $result;
+  }
+
+  /**
   * Get a set of elements containing the unique parents of the matched set of elements.
   *
   * @example parent.php Usage Example: FluentDOM::parent()
@@ -420,6 +445,28 @@ class FluentDOM extends FluentDOMCore {
         if (empty($expr) || $this->_test($expr, $parentNode)) {
           $result->push($parentNode, TRUE);
         }
+      }
+    }
+    return $result;
+  }
+
+  /**
+  * Get the ancestors of each element in the current set of matched elements,
+  * up to but not including the element matched by the selector.
+  *
+  * @param string $expr XPath expression
+  * @return FluentDOM
+  */
+  public function parentsUntil($expr = NULL) {
+    $result = $this->spawn();
+    foreach ($this->_array as $node) {
+      $parents = $this->_match('ancestor::*', $node);
+      for ($i = $parents->length - 1; $i >= 0; --$i) {
+        $parentNode = $parents->item($i);
+        if (!empty($expr) && $this->_test($expr, $parentNode)) {
+          break;
+        }
+        $result->push($parentNode, TRUE);
       }
     }
     return $result;
@@ -463,6 +510,31 @@ class FluentDOM extends FluentDOMCore {
       while ($previous instanceof DOMNode) {
         if ($this->_isNode($previous)) {
           if (empty($expr) || $this->_test($expr, $previous)) {
+            $result->push($previous, TRUE);
+          }
+        }
+        $previous = $previous->previousSibling;
+      }
+    }
+    return $result;
+  }
+
+  /**
+  * Get all preceding siblings of each element up to but not including
+  * the element matched by the selector.
+  *
+  * @param string $expr XPath expression
+  * @return FluentDOM
+  */
+  public function prevUntil($expr = NULL) {
+    $result = $this->spawn();
+    foreach ($this->_array as $node) {
+      $previous = $node->previousSibling;
+      while ($previous instanceof DOMNode) {
+        if (isset($expr) && $this->_isNode($previous)) {
+          if ($this->_test($expr, $previous)) {
+            break;
+          } else {
             $result->push($previous, TRUE);
           }
         }

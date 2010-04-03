@@ -749,6 +749,20 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group Traversing
   * @group TraversingFind
+  * @covers FluentDOM::nextUntil
+  */
+  public function testNextUntil() {
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd
+      ->find('//*[@id = "term-2"]')
+      ->nextUntil('name() = "dt"')
+      ->addClass('next');
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
+  }
+
+  /**
+  * @group Traversing
+  * @group TraversingFind
   * @covers FluentDOM::parent
   */
   public function testParent() {
@@ -802,6 +816,20 @@ class FluentDOMTest extends FluentDOMTestCase {
   /**
   * @group Traversing
   * @group TraversingFind
+  * @covers FluentDOM::parentsUntil
+  */
+  public function testParentsUntil() {
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd
+      ->find('//li[contains(concat(" ", normalize-space(@class), " "),  " item-a ")]')
+      ->parentsUntil('contains(concat(" ", normalize-space(@class), " "),  " level-1 ")')
+      ->addClass('selectedParent');
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
+  }
+
+  /**
+  * @group Traversing
+  * @group TraversingFind
   * @covers FluentDOM::prev
   */
   public function testPrev() {
@@ -850,10 +878,24 @@ class FluentDOMTest extends FluentDOMTestCase {
   */
   public function testPrevAllExpression() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fd ->find('//div[@class= "here"]')
+    $fd
+      ->find('//div[@class= "here"]')
       ->prevAll('.//span')
       ->addClass('nextTest');
-    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
+  }
+
+  /**
+  * @group Traversing
+  * @group TraversingFind
+  * @covers FluentDOM::prevUntil
+  */
+  public function testPrevUntil() {
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd
+      ->find('//*[@id = "term-2"]')
+      ->prevUntil('name() = "dt"')
+      ->addClass('previous');
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 

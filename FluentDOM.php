@@ -163,6 +163,33 @@ class FluentDOM extends FluentDOMCore {
   }
 
   /**
+  * Reduce the set of matched elements to those that have
+  * a descendant that matches the selector or DOM element.
+  *
+  * @param string|DOMNode $expr XPath expression or DOMNode
+  * @return boolean
+  */
+  public function has($expr) {
+    $result = $this->spawn();
+    foreach ($this->_array as $node) {
+      if ($node instanceof DOMElement &&
+          $node->hasChildNodes()) {
+        foreach ($node->childNodes as $childNode) {
+          if ($expr instanceof DOMNode) {
+            if ($expr === $childNode) {
+              $result->push($node);
+              return $result;
+            }
+          } elseif ($this->_test($expr, $childNode)) {
+            $result->push($node);
+          }
+        }
+      }
+    }
+    return $result;
+  }
+
+  /**
   * Checks the current selection against an expression and returns true,
   * if at least one element of the selection fits the given expression.
   *

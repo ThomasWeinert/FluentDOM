@@ -290,6 +290,35 @@ class FluentDOMTest extends FluentDOMTestCase {
     $this->assertTrue($filterFd !== $fd);
   }
 
+  /**
+  * @group Traversing
+  * @group TraversingFilter
+  * @covers FluentDOM::has
+  */
+  public function testHas() {
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd
+      ->find('//li')
+      ->has('name() = "ul"')
+      ->addClass('withSubList');
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
+  }
+
+  /**
+  * @group Traversing
+  * @group TraversingFilter
+  * @covers FluentDOM::has
+  */
+  public function testHasWithNode() {
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $node = $fd->find('//ul')->item(1);
+    $fd
+      ->find('//li')
+      ->has($node)
+      ->addClass('withSubList');
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
+  }
+
    /**
   * @group Traversing
   * @group TraversingFilter

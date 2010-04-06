@@ -76,6 +76,64 @@ class FluentDOMTest extends FluentDOMTestCase {
 
   /**
   * @group Core
+  * @covers FluentDOM::index
+  */
+  public function testIndex() {
+    $fd = $this->getFixtureFromString(self::XML)->find('//item[@index >= 1]');
+    $this->assertEquals(
+      1,
+      $fd->index()
+    );
+  }
+
+  /**
+  * @group Core
+  * @covers FluentDOM::index
+  */
+  public function testIndexWithExpression() {
+    $fd = $this->getFixtureFromString(self::XML)->find('//item');
+    $this->assertEquals(
+      1,
+      $fd->index('@index = 1')
+    );
+  }
+
+  /**
+  * @group Core
+  * @covers FluentDOM::index
+  */
+  public function testIndexWithNonMatchingExpression() {
+    $fd = $this->getFixtureFromString(self::XML)->find('//item');
+    $this->assertEquals(
+      -1,
+      $fd->index('@index = 99')
+    );
+  }
+
+  /**
+  * @group Core
+  * @covers FluentDOM::index
+  */
+  public function testIndexWithNode() {
+    $fd = $this->getFixtureFromString(self::XML)->find('//item');
+    $node = $fd->get(1);
+    $this->assertEquals(
+      1,
+      $fd->index($node)
+    );
+  }
+
+  /**
+  * @group Core
+  * @covers FluentDOM::index
+  */
+  public function testIndexOnEmptyList() {
+    $fd = new FluentDOM();
+    $this->assertEquals(-1, $fd->index());
+  }
+
+  /**
+  * @group Core
   * @covers FluentDOM::toArray
   */
   public function testToArray() {

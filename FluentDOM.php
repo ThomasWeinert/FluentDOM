@@ -145,7 +145,7 @@ class FluentDOM extends FluentDOMCore {
   /**
   * Retrieve the matched DOM elements in an array. A negative position will be counted from the end.
   *
-  * @parameter integer|NULL optional offset of a single element to get.
+  * @param integer|NULL optional offset of a single element to get.
   * @return array()
   */
   public function get($position = NULL) {
@@ -160,6 +160,42 @@ class FluentDOM extends FluentDOMCore {
     } else {
       return array();
     }
+  }
+
+  /**
+  * Search for a given element from among the matched elements.
+  *
+  * @param NULL|string|DOMNode|DOMNodelist|Iterator $expr
+  * @return integer
+  */
+  public function index($expr = NULL) {
+    if (count($this->_array) > 0) {
+      if (is_null($expr)) {
+        $counter = -1;
+        $targetNode = $this->_array[0];
+        $nodeList = $this->_match('preceding-sibling::node()', $targetNode);
+        foreach ($nodeList as $node) {
+          if ($this->_isNode($node)) {
+            $counter++;
+          }
+        }
+        return $counter + 1;
+      } elseif (is_string($expr)) {
+        foreach ($this->_array as $index => $node) {
+          if ($this->_test($expr, $node)) {
+            return $index;
+          }
+        }
+      } else {
+        $targetNode = $this->_getContentElement($expr);
+        foreach ($this->_array as $index => $node) {
+          if ($node->isSameNode($targetNode)) {
+            return $index;
+          }
+        }
+      }
+    }
+    return -1;
   }
 
   /**

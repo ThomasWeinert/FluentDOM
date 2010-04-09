@@ -757,10 +757,14 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   */
   protected function _getInnerXml($node) {
     $result = '';
-    foreach ($node->childNodes as $childNode) {
-      if ($this->_isNode($childNode)) {
-        $result .= $this->_document->saveXML($childNode);
+    if ($node instanceof DOMElement) {
+      foreach ($node->childNodes as $childNode) {
+        if ($this->_isNode($childNode)) {
+          $result .= $this->_document->saveXML($childNode);
+        }
       }
+    } elseif ($node instanceof DOMText) {
+      return $node->textContent;
     }
     return $result;
   }

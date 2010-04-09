@@ -1203,6 +1203,16 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group CoreFunctions
+  * @covers FluentDOMCore::_getInnerXml
+  */
+  public function testGetInnerXmlOnTextNode() {
+    $expect = 'text1';
+    $fd = $this->getFluentDOMCoreFixtureFromString(self::XML, '//group/item/text()');
+    $this->assertEquals($expect, $fd->_getInnerXml($fd->item(0)));
+  }
+
+  /**
+  * @group CoreFunctions
   * @covers FluentDOMCore::_removeNodes
   */
   public function testRemoveNodes() {

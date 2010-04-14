@@ -1139,6 +1139,30 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group CoreFunctions
+  * @covers FluentDOMCore::_getContextNodes
+  */
+  public function testGetContextNodesExpectingCurrentSelection() {
+    $fd = $this->getFluentDOMCoreFixtureFromString(self::XML, '//item');
+    $this->assertSame(
+      $this->readAttribute($fd, '_array'),
+      $fd->_getContextNodes()
+    );
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_getContextNodes
+  */
+  public function testGetContextNodesWithExpressionExpectingArray() {
+    $fd = $this->getFluentDOMCoreFixtureFromString(self::XML);
+    $this->assertSame(
+      $fd->document->documentElement,
+      $fd->_getContextNodes('/items')->item(0)
+    );
+  }
+
+  /**
+  * @group CoreFunctions
   * @covers FluentDOMCore::_getTargetNodes
   */
   public function testGetTargetNodesWithSingleNodeExpectingArray() {
@@ -1385,6 +1409,10 @@ class FluentDOMCoreProxy extends FluentDOMCore {
 
   public function _getContentElement($content) {
     return parent::_getContentElement($content);
+  }
+
+  public function _getContextNodes($selector = NULL) {
+    return parent::_getContextNodes($selector);
   }
 
   public function _getTargetNodes($selector) {

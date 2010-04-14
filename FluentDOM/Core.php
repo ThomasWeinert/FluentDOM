@@ -750,6 +750,20 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
     }
   }
 
+  /*
+  * the context is the target of a selector or the current selection
+  *
+  * @param string|array|DOMNode|DOMNodeList|Iterator $selector
+  * @return unknown_type
+  */
+  protected function _getContextNodes($selector) {
+    if (is_null($selector)) {
+      return $this->_array;
+    } else {
+      return $this->_getTargetNodes($selector);
+    }
+  }
+
   /**
   * Get the inner xml of a given node or in other words the xml of all children.
   * @param DOMElement $node

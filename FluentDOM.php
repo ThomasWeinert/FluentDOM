@@ -640,9 +640,10 @@ class FluentDOM extends FluentDOMCore {
   * @param string $expr XPath expression
   * @return FluentDOM
   */
-  public function closest($expr) {
+  public function closest($expr, $context = NULL) {
     $result = $this->spawn();
-    foreach ($this->_array as $node) {
+    $context = $this->_getContextNodes($context);
+    foreach ($context as $node) {
       while (isset($node)) {
         if ($this->_test($expr, $node)) {
           $result->push($node, TRUE);

@@ -446,6 +446,20 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   }
 
   /**
+  * Gives access to an xpath evaluate on the current document
+  *
+  * @param string $expr
+  * @param DOMNode $context
+  */
+  public function evaluate($expr, DOMNode $context = NULL) {
+    if (isset($context)) {
+      return $this->_xpath()->evaluate($expr, $context);
+    } else {
+      return $this->_xpath()->evaluate($expr);
+    }
+  }
+
+  /**
   * Get a XPath object associated with the internal DOMDocument and register
   * default namespaces from the document element if availiable.
   *

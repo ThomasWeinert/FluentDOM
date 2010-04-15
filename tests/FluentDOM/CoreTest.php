@@ -634,6 +634,30 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group CoreFunctions
+  * @covers FluentDOMCore::evaluate
+  */
+  public function testEvaluate() {
+    $fd = $this->getFluentDOMCoreFixtureFromString(self::XML);
+    $this->assertEquals(
+      3,
+      $fd->evaluate('count(//item)')
+    );
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::evaluate
+  */
+  public function testEvaluateWithContext() {
+    $fd = $this->getFluentDOMCoreFixtureFromString(self::XML);
+    $this->assertEquals(
+      3,
+      $fd->evaluate('count(group/item)', $fd->document->documentElement)
+    );
+  }
+
+  /**
+  * @group CoreFunctions
   * @covers FluentDOMcore::_match
   */
   public function testMatch() {

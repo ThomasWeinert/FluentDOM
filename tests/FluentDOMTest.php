@@ -148,107 +148,6 @@ class FluentDOMTest extends FluentDOMTestCase {
   }
 
   /**
-  * @group Core
-  * @covers FluentDOM::node
-  */
-  public function testNode() {
-    $fd = $this->getFixtureFromFile(__FUNCTION__);
-    $fdItems = $this->getFixtureFromString(
-      '<samples><b id="first">Paragraph. </b></samples>'
-    );
-    $fd->node(
-        $fdItems
-          ->find('//b[@id = "first"]')
-          ->removeAttr('id')
-          ->addClass('imported')
-      )
-      ->replaceAll('//p');
-    $this->assertTrue($fd instanceof FluentDOM);
-    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
-  }
-
-  /**
-  * @group Core
-  * @covers FluentDOM::node
-  */
-  public function testNodeWithNameAndAttributes() {
-    $fd = new FluentDOM();
-    $doc = $fd->append(
-      $fd->node(
-        '<sample/>', array('attribute' => 'yes')
-      )
-    );
-    $this->assertTrue($doc instanceof FluentDOM);
-    $this->assertXmlStringEqualsXmlString(
-      '<?xml version="1.0"?>'."\n".'<sample attribute="yes"/>',
-      $doc->document->saveXML()
-    );
-  }
-
-  /**
-  * @group Core
-  * @covers FluentDOM::node
-  */
-  public function testNodeWithDomelement() {
-    $fd = $this->getFixtureFromString(self::XML);
-    $nodes = $fd->node($fd->document->createElement('div'));
-    $this->assertTrue($fd instanceof FluentDOM);
-    $this->assertEquals(1, count($nodes));
-  }
-
-  /**
-  * @group Core
-  * @covers FluentDOM::node
-  */
-  public function testNodeWithDomtext() {
-    $fd = $this->getFixtureFromString(self::XML);
-    $nodes = $fd->node($fd->document->createTextNode('div'));
-    $this->assertTrue($fd instanceof FluentDOM);
-    $this->assertEquals(1, count($nodes));
-  }
-
-  /**
-  * @group Core
-  * @covers FluentDOM::node
-  */
-  public function testNodeWithInvalidContent() {
-    try {
-      $fd = $this->getFixtureFromString(self::XML)
-        ->node(NULL);
-      $this->fail('An expected exception has not been raised.');
-    } catch (InvalidArgumentException $expected) {
-    }
-  }
-
-  /**
-  * @group Core
-  * @covers FluentDOM::node
-  */
-  public function testNodeWithEmptyContent() {
-    try {
-      $fd = $this->getFixtureFromString(self::XML)
-        ->node('');
-      $this->fail('An expected exception has not been raised.');
-    } catch (UnexpectedValueException $expected) {
-    }
-  }
-
-  /**
-  * @group Core
-  * @covers FluentDOM::node
-  */
-  public function testNodeWithEmptyList() {
-    try {
-      $fd = $this->getFixtureFromString(self::XML);
-      $fd->node(
-        $fd->find('UnknownTagName')
-      );
-      $this->fail('An expected exception has not been raised.');
-    } catch (UnexpectedValueException $expected) {
-    }
-  }
-
-  /**
   * @group Traversing
   * @covers FluentDOM::each
   */
@@ -687,7 +586,7 @@ class FluentDOMTest extends FluentDOMTestCase {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd
       ->find('//p')
-      ->add('//p/b')
+      ->add('.//b')
       ->toggleClass('inB');
     $this->assertTrue($fd instanceof FluentDOM);
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
@@ -698,35 +597,14 @@ class FluentDOMTest extends FluentDOMTestCase {
   * @group TraversingFind
   * @covers FluentDOM::add
   */
-  public function testAddInvalidForeignNodes() {
-    $fd = $this->getFixtureFromString(self::XML);
-    $itemsFd = $this->getFixtureFromString(self::XML)->find('//item');
-    try {
-      $fd
-        ->find('/items')
-        ->add($itemsFd);
-      $this->fail('An expected exception has not been raised.');
-        $this->fail('An expected exception has not been raised.');
-    } catch (OutOfBoundsException $expected) {
-    }
-  }
-
-  /**
-  * @group Traversing
-  * @group TraversingFind
-  * @covers FluentDOM::add
-  */
-  public function testAddInvalidForeignNode() {
-    $fd = $this->getFixtureFromString(self::XML);
-    $itemsFd = $this->getFixtureFromString(self::XML)->find('//item');
-    try {
-      $fd
-        ->find('/items')
-        ->add($itemsFd[0]);
-      $this->fail('An expected exception has not been raised.');
-        $this->fail('An expected exception has not been raised.');
-    } catch (OutOfBoundsException $expected) {
-    }
+  public function testAddWithContext() {
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd
+      ->find('//p')
+      ->add('.//b', $fd->document->documentElement)
+      ->toggleClass('inB');
+    $this->assertTrue($fd instanceof FluentDOM);
+    $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
   /**
@@ -1556,7 +1434,7 @@ class FluentDOMTest extends FluentDOMTestCase {
   public function testReplaceAll() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd
-      ->node('<b id="sample">Paragraph. </b>')
+      ->add('<b id="sample">Paragraph. </b>')
       ->replaceAll('//p');
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
@@ -1569,7 +1447,7 @@ class FluentDOMTest extends FluentDOMTestCase {
   public function testReplaceAllWithNode() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $fd
-      ->node('<b id="sample">Paragraph. </b>')
+      ->add('<b id="sample">Paragraph. </b>')
       ->replaceAll(
         $fd->find('//p')->item(1)
       );
@@ -1584,7 +1462,7 @@ class FluentDOMTest extends FluentDOMTestCase {
   public function testReplaceAllWithInvalidArgument() {
     try {
       $this->getFixtureFromString(self::XML)
-        ->node('<b id="sample">Paragraph. </b>')
+        ->add('<b id="sample">Paragraph. </b>')
         ->replaceAll(
           NULL
         );

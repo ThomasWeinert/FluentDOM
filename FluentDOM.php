@@ -331,15 +331,21 @@ class FluentDOM extends FluentDOMCore {
   * @param string $expr XPath expression
   * @return FluentDOM
   */
-  public function add($expr) {
+  public function add($expr, $context = NULL) {
     $result = $this->spawn();
-    $result->push($this->_array);
-    if (is_object($expr)) {
-      $result->push($expr);
-    } elseif (isset($this->_parent)) {
-      $result->push($this->_parent->find($expr));
+    $result->push($this->_array, TRUE);
+    if (isset($context)) {
+      $targetNodes = $this->_getTargetNodes($context);
+      if (!empty($targetNodes)) {
+        foreach ($targetNodes as $node) {
+          $result->push($this->_match($expr, $context), TRUE);
+        }
+      }
+    } elseif (is_object($expr) ||
+              (is_string($expr) && substr(ltrim($expr), 0, 1) == '<')) {
+      $result->push($this->_getContentNodes($expr));
     } else {
-      $result->push($this->find($expr));
+      $result->push($this->find($expr), TRUE);
     }
     return $result;
   }
@@ -1199,28 +1205,6 @@ class FluentDOM extends FluentDOMCore {
   /*
   * Manipulation - Creation
   */
-
-  /**
-  * Create nodes list from content, if $content contains node(s)
-  * from another document they are imported. If $content is a valid QName an element
-  * of this name will be created
-  *
-  * @example node.php Usage Example: FluentDOM::node()
-  * @param string|array|DOMNode|DOMNodeList|Iterator $content
-  * @param array $attr attributes set on created/imported elements
-  * @return FluentDOM
-  */
-  public function node($content, $attr = array()) {
-    $result = $this->spawn();
-    $nodes = $this->_getContentNodes($content);
-    if ($nodes) {
-      $result->push($nodes);
-      if (count($attr) > 0) {
-        $result->attr($attr);
-      }
-    }
-    return $result;
-  }
 
   /*
   * Manipulation - Copying

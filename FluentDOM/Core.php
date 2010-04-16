@@ -48,6 +48,12 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   protected $_xpath = NULL;
 
   /**
+  * List of namespaces to be registered for xpath expressions
+  * @var array
+  */
+  protected $_namespaces = array();
+
+  /**
   * Use document context for expression (not selected nodes).
   * @var boolean $_useDocumentContext
   */
@@ -407,6 +413,7 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   public function spawn() {
     $className = get_class($this);
     $result = new $className();
+    $result->_namespaces = $this->_namespaces;
     return $result->load($this);
   }
 
@@ -508,14 +515,36 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   }
 
   /**
+  * Register namespaces and or get namespaces
+  *
+  * @param array $namespaces If this parameter is empty the current namespaces are returned
+  * @return array|FluentDOMCore
+  */
+  public function namespaces(array $namespaces = NULL) {
+    if (is_null($namespaces)) {
+      return $this->_namespaces;
+    }
+    foreach ($namespaces as $prefix => $uri) {
+      if ($this->_isNCName($prefix)) {
+        $this->_xpath()->registerNamespace($prefix, $uri);
+        $this->_namespaces[$prefix] = $uri;
+      }
+    }
+    return $this;
+  }
+
+  /**
   * Get a XPath object associated with the internal DOMDocument and register
   * default namespaces from the document element if availiable.
   *
   * @return DOMXPath
   */
   protected function _xpath() {
-    if (empty($this->_xpath) || $this->_xpath->document != $this->_document) {
+    if (empty($this->_xpath) || $this->_xpath->document !== $this->_document) {
       $this->_xpath = new DOMXPath($this->_document);
+      foreach ($this->_namespaces as $prefix => $uri) {
+        $this->_xpath->registerNamespace($prefix, $uri);
+      }
       if ($this->_document->documentElement) {
         $uri = $this->_document->documentElement->lookupnamespaceURI('_');
         if (!isset($uri)) {

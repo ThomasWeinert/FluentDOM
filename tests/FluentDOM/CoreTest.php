@@ -205,7 +205,7 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
   * @covers FluentDOMCore::__get
   * @covers FluentDOMCore::_xpath
   */
-  public function testGetPropertyXpathDefaultNamespaceInitialization() {
+  public function testGetPropertyXpathWithDefaultNamespaceInitialization() {
     $fd = $this->getFluentDOMCoreFixtureFromString('<sample xmlns="http://sample.tld/"/>');
     $this->assertEquals(
       1,
@@ -215,6 +215,27 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group Properties
+  * @covers FluentDOMCore::__get
+  * @covers FluentDOMCore::_xpath
+  */
+  public function testGetPropertyXpathWithNamespaceInitialization() {
+    $fd = new FluentDOM();
+    $fd->namespaces(
+      array(
+        'foo' => 'http://sample.tld/1',
+        'bar' => 'http://sample.tld/2'
+      )
+    );
+    $fd->document->loadXML(
+      '<sample xmlns="http://sample.tld/1"><foo:child xmlns:foo="http://sample.tld/2"/></sample>'
+    );
+    $this->assertEquals(
+      1,
+      $fd->xpath->evaluate('count(//bar:child)')
+    );
+  }
+
+  /**
   * @covers FluentDOMCore::__set
   */
   public function testSetPropertyXpath() {
@@ -739,13 +760,13 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
       $fd->document->createTextNode('world'),
       $fd[0]
     );
-    $fd->_uniqueSort($nodes);
-    $this->assertEquals(4, count($unique));
+    $fd->push($nodes);
+    $fd->_uniqueSort();
+    $this->assertEquals(5, count($fd));
     $this->assertSame($nodes[3], $fd[0]);
     $this->assertSame($nodes[1], $fd[1]);
-    $this->assertSame($nodes[0], $fd[2]);
-    $this->assertSame($nodes[2], $fd[3]);
-
+    $this->assertSame($nodes[0], $fd[3]);
+    $this->assertSame($nodes[2], $fd[4]);
   }
 
   /**
@@ -769,6 +790,49 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals(
       3,
       $fd->evaluate('count(group/item)', $fd->document->documentElement)
+    );
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::namespaces
+  */
+  public function testNamespacesRegisterNamespaces() {
+    $fd = new FluentDOM();
+    $fdResult = $fd->namespaces(array('test' => 'http://test.only/'));
+    $this->assertAttributeEquals(
+      array('test' => 'http://test.only/'),
+      '_namespaces',
+      $fdResult
+    );
+    $this->assertSame($fd, $fdResult);
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::namespaces
+  */
+  public function testNamespacesGetNamespaces() {
+    $fd = new FluentDOM();
+    $fd->namespaces(array('test' => 'http://test.only/'));
+    $this->assertEquals(
+      array('test' => 'http://test.only/'),
+      $fd->namespaces()
+    );
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::namespaces
+  */
+  public function testNamespacesWithChaining() {
+    $fd = new FluentDOM();
+    $fd->namespaces(array('test' => 'http://test.only/'));
+    $fdChild = $fd->spawn();
+    $this->assertAttributeEquals(
+      array('test' => 'http://test.only/'),
+      '_namespaces',
+      $fdChild
     );
   }
 

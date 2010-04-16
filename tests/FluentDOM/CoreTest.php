@@ -634,6 +634,122 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group CoreFunctions
+  * @covers FluentDOMCore::unique
+  */
+  public function testUniqueWithArrayOfAppendedNodes() {
+    $fd = $this->getFluentDOMCoreFixtureFromString(self::XML, '//item');
+    $nodes = array(
+      $fd[1],
+      $fd[2],
+      $fd[0],
+      $fd[2],
+      $fd[1],
+      $fd[2],
+      $fd[0]
+    );
+    $unique = $fd->unique($nodes);
+    $this->assertEquals(3, count($unique));
+    $this->assertSame($fd[0], $unique[0]);
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::unique
+  */
+  public function testUniqueWithArrayOfCreatedNodes() {
+    $fd = new FluentDOM();
+    $nodes = array(
+      $fd->document->createElement('hello'),
+      $fd->document->createElement('world'),
+      $fd->document->createTextNode('!')
+    );
+    $nodes[] = $nodes[2];
+    $nodes[] = $nodes[1];
+    $nodes[] = $nodes[0];
+    $unique = $fd->unique($nodes);
+    $this->assertEquals(3, count($unique));
+    $this->assertEquals('hello', $unique[0]->tagName);
+    $this->assertEquals('world', $unique[1]->tagName);
+    $this->assertEquals('!', $unique[2]->textContent);
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::unique
+  */
+  public function testUniqueWithArrayOfAppenedAndCreatedNodes() {
+    $fd = $this->getFluentDOMCoreFixtureFromString(self::XML, '//item');
+    $nodes = array(
+      $fd->document->createElement('hello'),
+      $fd[1],
+      $fd->document->createTextNode('world'),
+      $fd[0]
+    );
+    $unique = $fd->unique($nodes);
+    $this->assertEquals(4, count($unique));
+    $this->assertSame($fd[0], $unique[0]);
+    $this->assertSame($fd[1], $unique[1]);
+    $this->assertEquals('hello', $unique[2]->tagName);
+    $this->assertEquals('world', $unique[3]->textContent);
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::unique
+  */
+  public function testUniqueWithIntegerExpectingException() {
+    $fd = new FluentDOM();
+    try {
+      $fd->unique(array(1));
+      $this->fail('An expected exception has not been raised.');
+    } catch (InvalidArgumentException $expected) {
+      $this->assertEquals(
+        'Array must only contain dom nodes, found "integer".',
+        $expected->getMessage()
+      );
+    }
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::unique
+  */
+  public function testUniqueWithObjectExpectingException() {
+    $fd = new FluentDOM();
+    try {
+      $fd->unique(array(new stdClass));
+      $this->fail('An expected exception has not been raised.');
+    } catch (InvalidArgumentException $expected) {
+      $this->assertEquals(
+        'Array must only contain dom nodes, found "stdClass".',
+        $expected->getMessage()
+      );
+    }
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_uniqueSort
+  */
+  public function testUniqueSort() {
+    $fd = $this->getFluentDOMCoreFixtureFromString(self::XML, '//item');
+    $nodes = array(
+      $fd->document->createElement('hello'),
+      $fd[1],
+      $fd->document->createTextNode('world'),
+      $fd[0]
+    );
+    $fd->_uniqueSort($nodes);
+    $this->assertEquals(4, count($unique));
+    $this->assertSame($nodes[3], $fd[0]);
+    $this->assertSame($nodes[1], $fd[1]);
+    $this->assertSame($nodes[0], $fd[2]);
+    $this->assertSame($nodes[2], $fd[3]);
+
+  }
+
+  /**
+  * @group CoreFunctions
   * @covers FluentDOMCore::evaluate
   */
   public function testEvaluate() {
@@ -1397,6 +1513,10 @@ class FluentDOMCoreProxy extends FluentDOMCore {
 
   public function _test($expr, $context = NULL) {
     return parent::_test($expr, $context);
+  }
+
+  public function _uniqueSort() {
+    return parent::_uniqueSort();
   }
 
   public function _inList($node) {

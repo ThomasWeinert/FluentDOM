@@ -415,34 +415,82 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   *
   * @uses _inList
   * @param DOMNode|DOMNodeList|FluentDOM $elements
-  * @param boolean $unique ignore duplicates
   * @param boolean $ignoreTextNodes ignore text nodes
   * @return void
   */
-  public function push($elements, $unique = FALSE, $ignoreTextNodes = FALSE) {
+  public function push($elements, $ignoreTextNodes = FALSE) {
     if ($this->_isNode($elements, $ignoreTextNodes)) {
-      if ($elements->ownerDocument === $this->_document) {
-        if (!$unique || !$this->_inList($elements, $this->_array)) {
-          $this->_array[] = $elements;
-        }
-      } else {
-        throw new OutOfBoundsException('Node is not a part of this document');
-      }
-    } elseif ($this->_isNodeList($elements)) {
-      foreach ($elements as $node) {
+      $elements = array($elements);
+    }
+    if ($this->_isNodeList($elements)) {
+      foreach ($elements as $index => $node) {
         if ($this->_isNode($node, $ignoreTextNodes)) {
           if ($node->ownerDocument === $this->_document) {
-            if (!$unique || !$this->_inList($node, $this->_array)) {
-              $this->_array[] = $node;
-            }
+            $this->_array[] = $node;
           } else {
-            throw new OutOfBoundsException('Node is not a part of this document');
+            throw new OutOfBoundsException(
+              sprintf(
+                'Node #%d is not a part of this document', $index
+              )
+            );
           }
         }
       }
     } elseif (!is_null($elements)) {
       throw new InvalidArgumentException('Invalid elements variable.');
     }
+  }
+
+  /**
+  * Sorts an array of DOM nodes based on document position, in place, with the duplicates removed.
+  * Note that this only works on arrays of DOM nodes, not strings or numbers.
+  *
+  * @param array $array array of DOM nodes
+  * @return array
+  */
+  public function unique(array $array) {
+    $sortable = array();
+    $unsortable = array();
+    foreach ($array as $node) {
+      if (!($node instanceof DOMNode)) {
+        throw new InvalidArgumentException(
+          sprintf(
+            'Array must only contain dom nodes, found "%s".',
+            is_object($node) ? get_class($node) : gettype($node)
+          )
+        );
+      }
+      if (isset($node->parentNode) ||
+          $node === $node->ownerDocument->documentElement) {
+        $position = (integer)$this->_xpath()->evaluate('count(preceding::node())', $node);
+        /* use the document position as index, ignore duplicates */
+        if (!isset($sortable[$position])) {
+          $sortable[$position] = $node;
+        }
+      } else {
+        $hash = spl_object_hash($node);
+        /* use the object hash as index, ignore duplicates */
+        if (!isset($unsortable[$hash])) {
+          $unsortable[$hash] = $node;
+        }
+      }
+    }
+    ksort($sortable, SORT_NUMERIC);
+    $result = array_values($sortable);
+    array_splice($result, count($result), 0, array_values($unsortable));
+    return $result;
+  }
+
+  /**
+  * Sorts the selected nodes, with the duplicates removed.
+  *
+  * @uses FluentDOMCore::unique
+  *
+  * @param array $array array of DOM nodes
+  * @return array
+  */
+  protected function _uniqueSort() {
+    $this->_array = $this->unique($this->_array);
   }
 
   /**

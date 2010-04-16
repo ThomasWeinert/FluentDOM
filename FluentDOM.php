@@ -333,20 +333,21 @@ class FluentDOM extends FluentDOMCore {
   */
   public function add($expr, $context = NULL) {
     $result = $this->spawn();
-    $result->push($this->_array, TRUE);
+    $result->push($this->_array);
     if (isset($context)) {
       $targetNodes = $this->_getTargetNodes($context);
       if (!empty($targetNodes)) {
         foreach ($targetNodes as $node) {
-          $result->push($this->_match($expr, $context), TRUE);
+          $result->push($this->_match($expr, $context));
         }
       }
     } elseif (is_object($expr) ||
               (is_string($expr) && substr(ltrim($expr), 0, 1) == '<')) {
       $result->push($this->_getContentNodes($expr));
     } else {
-      $result->push($this->find($expr), TRUE);
+      $result->push($this->find($expr));
     }
+    $result->_uniqueSort();
     return $result;
   }
 
@@ -363,7 +364,7 @@ class FluentDOM extends FluentDOMCore {
     $result = $this->spawn();
     foreach ($this->_array as $node) {
       if (empty($expr)) {
-        $result->push($node->childNodes, TRUE, TRUE);
+        $result->push($node->childNodes, TRUE);
       } else {
         foreach ($node->childNodes as $childNode) {
           if ($this->_test($expr, $childNode)) {
@@ -372,6 +373,7 @@ class FluentDOM extends FluentDOMCore {
         }
       }
     }
+    $result->_uniqueSort();
     return $result;
   }
 
@@ -384,8 +386,9 @@ class FluentDOM extends FluentDOMCore {
   public function contents() {
     $result = $this->spawn();
     foreach ($this->_array as $node) {
-      $result->push($node->childNodes, TRUE, FALSE);
+      $result->push($node->childNodes, FALSE);
     }
+    $result->_uniqueSort();
     return $result;
   }
 
@@ -427,10 +430,11 @@ class FluentDOM extends FluentDOMCore {
       }
       if (!empty($next)) {
         if (empty($expr) || $this->_test($expr, $next)) {
-          $result->push($next, TRUE);
+          $result->push($next);
         }
       }
     }
+    $result->_uniqueSort();
     return $result;
   }
 
@@ -448,7 +452,7 @@ class FluentDOM extends FluentDOMCore {
       while ($next instanceof DOMNode) {
         if ($this->_isNode($next)) {
           if (empty($expr) || $this->_test($expr, $next)) {
-            $result->push($next, TRUE);
+            $result->push($next);
           }
         }
         $next = $next->nextSibling;
@@ -473,7 +477,7 @@ class FluentDOM extends FluentDOMCore {
           if (isset($expr) && $this->_test($expr, $next)) {
             break;
           } else {
-            $result->push($next, TRUE);
+            $result->push($next);
           }
         }
         $next = $next->nextSibling;
@@ -492,14 +496,16 @@ class FluentDOM extends FluentDOMCore {
     $result = $this->spawn();
     foreach ($this->_array as $node) {
       if (isset($node->parentNode)) {
-        $result->push($node->parentNode, TRUE);
+        $result->push($node->parentNode);
       }
     }
+    $result->_uniqueSort();
     return $result;
   }
 
   /**
-  * Get a set of elements containing the unique ancestors of the matched set of elements.
+  * Get the ancestors of each element in the current set of matched elements,
+  * optionally filtered by a selector.
   *
   * @example parents.php Usage Example: FluentDOM::parents()
   * @param string $expr XPath expression
@@ -512,7 +518,7 @@ class FluentDOM extends FluentDOMCore {
       for ($i = $parents->length - 1; $i >= 0; --$i) {
         $parentNode = $parents->item($i);
         if (empty($expr) || $this->_test($expr, $parentNode)) {
-          $result->push($parentNode, TRUE);
+          $result->push($parentNode);
         }
       }
     }
@@ -535,7 +541,7 @@ class FluentDOM extends FluentDOMCore {
         if (!empty($expr) && $this->_test($expr, $parentNode)) {
           break;
         }
-        $result->push($parentNode, TRUE);
+        $result->push($parentNode);
       }
     }
     return $result;
@@ -558,10 +564,11 @@ class FluentDOM extends FluentDOMCore {
       }
       if (!empty($previous)) {
         if (empty($expr) || $this->_test($expr, $previous)) {
-          $result->push($previous, TRUE);
+          $result->push($previous);
         }
       }
     }
+    $result->_uniqueSort();
     return $result;
   }
 
@@ -579,7 +586,7 @@ class FluentDOM extends FluentDOMCore {
       while ($previous instanceof DOMNode) {
         if ($this->_isNode($previous)) {
           if (empty($expr) || $this->_test($expr, $previous)) {
-            $result->push($previous, TRUE);
+            $result->push($previous);
           }
         }
         $previous = $previous->previousSibling;
@@ -604,7 +611,7 @@ class FluentDOM extends FluentDOMCore {
           if ($this->_test($expr, $previous)) {
             break;
           } else {
-            $result->push($previous, TRUE);
+            $result->push($previous);
           }
         }
         $previous = $previous->previousSibling;
@@ -629,12 +636,13 @@ class FluentDOM extends FluentDOMCore {
           if ($this->_isNode($childNode) &&
               $childNode !== $node) {
             if (empty($expr) || $this->_test($expr, $childNode)) {
-              $result->push($childNode, TRUE);
+              $result->push($childNode);
             }
           }
         }
       }
     }
+    $result->_uniqueSort();
     return $result;
   }
 
@@ -652,7 +660,7 @@ class FluentDOM extends FluentDOMCore {
     foreach ($context as $node) {
       while (isset($node)) {
         if ($this->_test($expr, $node)) {
-          $result->push($node, TRUE);
+          $result->push($node);
           break;
         }
         $node = $node->parentNode;

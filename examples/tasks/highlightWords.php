@@ -52,7 +52,7 @@ class FluentDOMHighlighter {
   * Create highlighter and set string => class name mapping
   *
   * @param array $highlights
-  * @return FluentDOMhighlighter
+  * @return FluentDOMHighlighter
   */
   public function __construct(array $highlights) {
     $this->setHighlights($highlights);
@@ -82,7 +82,7 @@ class FluentDOMHighlighter {
     foreach ($highlights as $string => $className) {
       $key = strtolower($string);
       $this->_highlights[$key] = $className;
-      $pattern .= '|'.$key;
+      $pattern .= '|'.preg_quote($key);
     }
     $this->_pattern = '(('.substr($pattern, 1).'))ui';
   }

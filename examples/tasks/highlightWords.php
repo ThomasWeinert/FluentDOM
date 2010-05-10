@@ -3,7 +3,7 @@
 * Shows how to highlight several words in the body of a html document. It adds spans with specified
 * classes around the found words/word parts.
 *
-* @version $Id: after.php 322 2009-09-14 20:19:48Z subjective $
+* @version $Id$
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
 * @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
 */

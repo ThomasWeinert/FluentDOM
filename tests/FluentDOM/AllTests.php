@@ -21,7 +21,6 @@ if (version_compare(PHP_VERSION, '5.3', '>=')) {
 require_once(dirname(__FILE__).'/HandlerTest.php');
 require_once(dirname(__FILE__).'/IteratorTest.php');
 require_once(dirname(__FILE__).'/Loader/AllTests.php');
-require_once(dirname(__FILE__).'/Selector/AllTests.php');
 require_once(dirname(__FILE__).'/StyleTest.php');
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
@@ -47,7 +46,6 @@ class FluentDOMClasses_AllTests {
     $suite->addTestSuite('FluentDOMHandlerTest');
     $suite->addTestSuite('FluentDOMIteratorTest');
     $suite->addTestSuite('FluentDOMLoader_AllTests');
-    $suite->addTestSuite('FluentDOMSelector_AllTests');
     $suite->addTestSuite('FluentDOMStyleTest');
     return $suite;
   }

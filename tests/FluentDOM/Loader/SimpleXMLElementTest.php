@@ -14,7 +14,8 @@
 * load necessary files
 */
 require_once('PHPUnit/Framework.php');
-require_once(dirname(__FILE__).'/../../../FluentDOM/Loader/SimpleXMLElement.php');
+require_once(dirname(__FILE__).'/../../FluentDOMTestCase.php');
+require_once(dirname(__FILE__).'/../../../src/FluentDOM/Loader/SimpleXMLElement.php');
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
@@ -24,7 +25,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 * @package FluentDOM
 * @subpackage UnitTests
 */
-class FluentDOMLoaderSimpleXMLElementTest extends PHPUnit_Framework_TestCase {
+class FluentDOMLoaderSimpleXMLElementTest extends FluentDOMTestCase {
 
   public function testLoad() {
     $loader = new FluentDOMLoaderSimpleXMLElement();

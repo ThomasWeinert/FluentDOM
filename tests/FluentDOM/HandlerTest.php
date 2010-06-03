@@ -13,8 +13,7 @@
 /**
 * load necessary files
 */
-require_once('PHPUnit/Framework.php');
-require_once(dirname(__FILE__).'/../../FluentDOM/Handler.php');
+require_once (dirname(__FILE__).'/../FluentDOMTestCase.php');
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
@@ -24,7 +23,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 * @package FluentDOM
 * @subpackage Tests
 */
-class FluentDOMHandlerTest extends PHPUnit_Framework_TestCase {
+class FluentDOMHandlerTest extends FluentDOMTestCase {
 
   /**
   * @group Handler

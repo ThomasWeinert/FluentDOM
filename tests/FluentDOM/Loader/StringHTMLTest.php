@@ -14,7 +14,8 @@
 * load necessary files
 */
 require_once('PHPUnit/Framework.php');
-require_once(dirname(__FILE__).'/../../../FluentDOM/Loader/StringHTML.php');
+require_once(dirname(__FILE__).'/../../FluentDOMTestCase.php');
+require_once(dirname(__FILE__).'/../../../src/FluentDOM/Loader/StringHTML.php');
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
@@ -24,7 +25,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 * @package FluentDOM
 * @subpackage unitTests
 */
-class FluentDOMLoaderStringHTMLTest extends PHPUnit_Framework_TestCase {
+class FluentDOMLoaderStringHTMLTest extends FluentDOMTestCase {
 
   public function testLoad() {
     $loader = new FluentDOMLoaderStringHTML();

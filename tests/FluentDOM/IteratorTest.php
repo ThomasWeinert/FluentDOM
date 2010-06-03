@@ -13,9 +13,7 @@
 /**
 * load necessary files
 */
-require_once('PHPUnit/Framework.php');
-require_once(dirname(__FILE__).'/../../FluentDOM/Core.php');
-require_once(dirname(__FILE__).'/../../FluentDOM/Iterator.php');
+require_once (dirname(__FILE__).'/../FluentDOMTestCase.php');
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
@@ -25,7 +23,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 * @package FluentDOM
 * @subpackage Tests
 */
-class FluentDOMIteratorTest extends PHPUnit_Framework_TestCase {
+class FluentDOMIteratorTest extends FluentDOMTestCase {
 
   public function testIteratorCurrent() {
     $fd = $this->getMock('FluentDOMCore');

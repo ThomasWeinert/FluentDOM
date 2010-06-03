@@ -13,8 +13,8 @@
 /**
 * load necessary files
 */
-require_once('PHPUnit/Framework.php');
-require_once(dirname(__FILE__).'/../../FluentDOM/Style.php');
+require_once (dirname(__FILE__).'/../FluentDOMTestCase.php');
+require_once(dirname(__FILE__).'/../../src/FluentDOM/Style.php');
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
@@ -24,7 +24,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 * @package FluentDOM
 * @subpackage Tests
 */
-class FluentDOMStyleTest extends PHPUnit_Framework_TestCase {
+class FluentDOMStyleTest extends FluentDOMTestCase {
 
   const HTML = '
     <html>

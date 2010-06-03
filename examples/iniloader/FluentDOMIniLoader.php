@@ -4,7 +4,7 @@ require_once(dirname(__FILE__).'/../../src/FluentDOM/Loader.php');
 
 class FluentDOMIniLoader implements FluentDOMLoader {
 
-  public function load($source, $contentType) {
+  public function load($source, &$contentType) {
     if (is_string($source) &&
         in_array($contentType, array('ini', 'text/ini'))) {
 
@@ -12,6 +12,7 @@ class FluentDOMIniLoader implements FluentDOMLoader {
         throw new InvalidArgumentException('File not found: '. $source);
       }
 
+      $contentType = 'text/xml';
       if ($iniFile = parse_ini_file($source)) {
         $dom = new DOMDocument();
         $root = $dom->appendChild($dom->createElement('ini'));

@@ -29,13 +29,15 @@ class FluentDOMLoaderDOMDocumentTest extends FluentDOMTestCase {
 
   public function testLoad() {
     $loader = new FluentDOMLoaderDOMDocument();
-    $fd = $loader->load(new DOMDocument(), 'text/xml');
+    $contentType = 'text/xml';
+    $fd = $loader->load(new DOMDocument(), $contentType);
     $this->assertTrue($fd instanceof DOMDocument);
   }
 
   public function testLoadInvalid() {
     $loader = new FluentDOMLoaderDOMDocument();
-    $result = $loader->load(NULL, 'text/xml');
+    $contentType = 'text/xml';
+    $result = $loader->load(NULL, $contentType);
     $this->assertFalse($result);
   }
 }

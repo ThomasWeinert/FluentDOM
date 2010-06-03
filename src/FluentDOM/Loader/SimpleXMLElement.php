@@ -30,7 +30,7 @@ class FluentDOMLoaderSimpleXMLElement implements FluentDOMLoader {
   * @param string $contentType
   * @return array(DOMDocument,DOMNode)|FALSE
   */
-  public function load($source, $contentType) {
+  public function load($source, &$contentType) {
     if ($source instanceof SimpleXMLElement) {
       $node = dom_import_simplexml($source);
       return array($node->ownerDocument, array($node));

@@ -34,13 +34,15 @@ class FluentDOMLoaderStringJSONTest extends FluentDOMTestCase {
   */
   public function testLoad() {
     $loader = new FluentDOMLoaderStringJSON();
+    $contentType = 'application/json';
     $result = $loader->load(
       '{}',
-      'application/json'
+      $contentType
     );
     $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $result);
     $this->assertTrue($result[0] instanceof DOMDocument);
-    $this->assertSame('json', $result[1][0]->tagName);
+    $this->assertEquals('json', $result[1][0]->tagName);
+    $this->assertEquals('text/xml', $contentType);
   }
 
   /**
@@ -51,9 +53,10 @@ class FluentDOMLoaderStringJSONTest extends FluentDOMTestCase {
   public function testLoadWithInvalidJsonExpectingException() {
     $loader = new FluentDOMLoaderStringJSON();
     try {
+      $contentType = 'application/json';
       $result = $loader->load(
         '{foo}',
-        'application/json'
+        $contentType
       );
       $this->fail('An expected exception has not been raised.');
     } catch (UnexpectedValueException $expected) {
@@ -67,7 +70,8 @@ class FluentDOMLoaderStringJSONTest extends FluentDOMTestCase {
   */
   public function testLoadWithUnknownSourceExpectingFalse() {
     $loader = new FluentDOMLoaderStringJSON();
-    $this->assertFalse($loader->load('', 'text/xml'));
+    $contentType = 'text/xml';
+    $this->assertFalse($loader->load('', $contentType));
   }
 
   /**
@@ -78,9 +82,10 @@ class FluentDOMLoaderStringJSONTest extends FluentDOMTestCase {
   */
   public function testLoadWithSimpleObject() {
     $loader = new FluentDOMLoaderStringJSON();
+    $contentType = 'application/json';
     $result = $loader->load(
       '{"foo":"bar"}',
-      'application/json'
+      $contentType
     );
     $this->assertDOMDocumentEqualsXmlString(
       '<json><foo>bar</foo></json>',
@@ -97,9 +102,10 @@ class FluentDOMLoaderStringJSONTest extends FluentDOMTestCase {
   public function testLoadWithSimpleObjectAndTypeAttributes() {
     $loader = new FluentDOMLoaderStringJSON();
     $loader->typeAttributes = TRUE;
+    $contentType = 'application/json';
     $result = $loader->load(
       '{"foo":"bar"}',
-      'application/json'
+      $contentType
     );
     $this->assertDOMDocumentEqualsXmlString(
       '<json type="object"><foo type="string">bar</foo></json>',
@@ -115,9 +121,10 @@ class FluentDOMLoaderStringJSONTest extends FluentDOMTestCase {
   */
   public function testLoadWithComplexPropertyName() {
     $loader = new FluentDOMLoaderStringJSON();
+    $contentType = 'application/json';
     $result = $loader->load(
       '{"foo bar":"bar"}',
-      'application/json'
+      $contentType
     );
     $this->assertDOMDocumentEqualsXmlString(
       '<json><foo-bar name="foo bar">bar</foo-bar></json>',
@@ -133,9 +140,10 @@ class FluentDOMLoaderStringJSONTest extends FluentDOMTestCase {
   */
   public function testLoadWithBooleans() {
     $loader = new FluentDOMLoaderStringJSON();
+    $contentType = 'application/json';
     $result = $loader->load(
       '{"a":true,"b":false}',
-      'application/json'
+      $contentType
     );
     $this->assertDOMDocumentEqualsXmlString(
       '<json><a>1</a><b>0</b></json>',
@@ -151,9 +159,10 @@ class FluentDOMLoaderStringJSONTest extends FluentDOMTestCase {
   */
   public function testLoadWithChildObjects() {
     $loader = new FluentDOMLoaderStringJSON();
+    $contentType = 'application/json';
     $result = $loader->load(
       '{"a":{"object":1},"b":{"object":2}}',
-      'application/json'
+      $contentType
     );
     $this->assertDOMDocumentEqualsXmlString(
       '<json><a><object>1</object></a><b><object>2</object></b></json>',
@@ -169,9 +178,10 @@ class FluentDOMLoaderStringJSONTest extends FluentDOMTestCase {
   */
   public function testLoadWithArray() {
     $loader = new FluentDOMLoaderStringJSON();
+    $contentType = 'application/json';
     $result = $loader->load(
       '{"a":[1,2,3]}',
-      'application/json'
+      $contentType
     );
     $this->assertDOMDocumentEqualsXmlString(
       '<json><a><a-child>1</a-child><a-child>2</a-child><a-child>3</a-child></a></json>',

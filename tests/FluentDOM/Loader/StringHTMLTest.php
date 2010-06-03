@@ -29,14 +29,16 @@ class FluentDOMLoaderStringHTMLTest extends FluentDOMTestCase {
 
   public function testLoad() {
     $loader = new FluentDOMLoaderStringHTML();
-    $fd = $loader->load('<html><body></body></html>', 'text/html');
+    $contentType = 'text/html';
+    $fd = $loader->load('<html><body></body></html>', $contentType);
     $this->assertTrue($fd instanceof DOMDocument);
     $this->assertEquals('html', $fd->documentElement->nodeName);
   }
 
   public function testLoadInvalid() {
     $loader = new FluentDOMLoaderStringHTML();
-    $result = $loader->load('html', 'text/html');
+    $contentType = 'text/html';
+    $result = $loader->load('html', $contentType);
     $this->assertFalse($result);
   }
 }

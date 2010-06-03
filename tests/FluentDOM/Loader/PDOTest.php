@@ -37,7 +37,8 @@ class FluentDOMLoaderPDOTest extends FluentDOMTestCase {
     $loader = new FluentDOMLoaderPDO();
     $database = new PDO('sqlite:'.dirname(__FILE__).'/data/FluentDOMLoaderPDO.sqlite');
     $statement = $database->query('SELECT * FROM sample');
-    $result = $loader->load($statement, 'text/xml');
+    $contentType = 'text/xml';
+    $result = $loader->load($statement, $contentType);
     $this->assertTrue($result instanceof DOMDocument);
     $this->assertXmlStringEqualsXmlFile(
       dirname(__FILE__).'/data/FluentDOMLoaderPDO.xml',
@@ -47,7 +48,8 @@ class FluentDOMLoaderPDOTest extends FluentDOMTestCase {
 
   public function testLoadInvalid() {
     $loader = new FluentDOMLoaderPDO();
-    $result = $loader->load(NULL, 'text/xml');
+    $contentType = 'text/xml';
+    $result = $loader->load(NULL, $contentType);
     $this->assertFalse($result);
   }
 

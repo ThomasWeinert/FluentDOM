@@ -29,14 +29,16 @@ class FluentDOMLoaderStringXMLTest extends FluentDOMTestCase {
 
   public function testLoad() {
     $loader = new FluentDOMLoaderStringXML();
-    $dom = $loader->load('<sample/>', 'text/xml');
+    $contentType = 'text/xml';
+    $dom = $loader->load('<sample/>', $contentType);
     $this->assertTrue($dom instanceof DOMDocument);
     $this->assertEquals('sample', $dom->documentElement->nodeName);
   }
 
   public function testLoadInvalid() {
     $loader = new FluentDOMLoaderStringXML();
-    $result = $loader->load('foobar', 'text/xml');
+    $contentType = 'text/xml';
+    $result = $loader->load('foobar', $contentType);
     $this->assertFalse($result);
   }
 }

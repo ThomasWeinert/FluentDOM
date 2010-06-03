@@ -105,7 +105,6 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   */
   public function load($source, $contentType = 'text/xml') {
     $this->_array = array();
-    $this->_setContentType($contentType);
     if ($source instanceof FluentDOMCore) {
       $this->_useDocumentContext = FALSE;
       $this->_document = $source->document;
@@ -117,7 +116,7 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
       $this->_parent = NULL;
       $this->_initLoaders();
       foreach ($this->_loaders as $loader) {
-        if ($loaded = $loader->load($source, $this->_contentType)) {
+        if ($loaded = $loader->load($source, $contentType)) {
           if ($loaded instanceof DOMDocument) {
             $this->_useDocumentContext = TRUE;
             $this->_document = $loaded;
@@ -130,6 +129,7 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
             $this->push($loaded[1]);
             $this->_useDocumentContext = FALSE;
           }
+          $this->_setContentType($contentType);
           return $this;
         }
       }

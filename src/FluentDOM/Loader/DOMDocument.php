@@ -30,7 +30,7 @@ class FluentDOMLoaderDOMDocument implements FluentDOMLoader {
   * @param string $contentType
   * @return DOMDocument|FALSE
   */
-  public function load($source, $contentType) {
+  public function load($source, &$contentType) {
     if ($source instanceof DOMDocument) {
       return $source;
     }

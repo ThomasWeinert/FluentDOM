@@ -49,10 +49,11 @@ class FluentDOMLoaderStringJSON implements FluentDOMLoader {
   * @param string $contentType
   * @return array(DOMDocument,DOMNode)|FALSE
   */
-  public function load($source, $contentType) {
+  public function load($source, &$contentType) {
     if (is_string($source)) {
       $firstChar = substr(trim($source), 0, 1);
       if (in_array($firstChar, array('{', '['))) {
+        $contentType = 'text/xml';
         $json = json_decode($source);
         if ($json) {
           $dom = new DOMDocument();

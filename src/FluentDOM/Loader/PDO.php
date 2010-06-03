@@ -63,7 +63,7 @@ class FluentDOMLoaderPDO implements FluentDOMLoader {
   * @param string $contentType
   * @return DOMDocument|FALSE
   */
-  public function load($source, $contentType) {
+  public function load($source, &$contentType) {
     if (is_object($source) &&
         $source instanceof PDOStatement) {
       $source->setFetchMode(PDO::FETCH_NUM);

@@ -30,7 +30,7 @@ class FluentDOMLoaderDOMNode implements FluentDOMLoader {
   * @param string $contentType
   * @return array(DOMDocument,DOMNode)|FALSE
   */
-  public function load($source, $contentType) {
+  public function load($source, &$contentType) {
     if ($source instanceof DOMNode && !empty($source->ownerDocument)) {
       return array($source->ownerDocument, array($source));
     }

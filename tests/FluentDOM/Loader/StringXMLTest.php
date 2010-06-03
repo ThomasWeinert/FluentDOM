@@ -39,7 +39,7 @@ class FluentDOMLoaderStringXMLTest extends FluentDOMTestCase {
     $loader = new FluentDOMLoaderStringXML();
     $contentType = 'text/xml';
     $result = $loader->load('foobar', $contentType);
-    $this->assertFalse($result);
+    $this->assertNull($result);
   }
 }
 

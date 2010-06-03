@@ -23,7 +23,7 @@ interface FluentDOMLoader {
   *
   * @param mixed $source
   * @param string &$contentType
-  * @return DOMNode|FALSE
+  * @return DOMNode|NULL
   */
   public function load($source, &$contentType);
 }

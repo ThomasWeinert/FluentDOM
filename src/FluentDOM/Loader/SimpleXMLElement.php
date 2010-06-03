@@ -28,14 +28,14 @@ class FluentDOMLoaderSimpleXMLElement implements FluentDOMLoader {
   *
   * @param SimpleXMLElement $source
   * @param string $contentType
-  * @return array(DOMDocument,DOMNode)|FALSE
+  * @return DOMNode|NULL
   */
   public function load($source, &$contentType) {
     if ($source instanceof SimpleXMLElement) {
       $node = dom_import_simplexml($source);
-      return array($node->ownerDocument, array($node));
+      return $node;
     }
-    return FALSE;
+    return NULL;
   }
 }
 

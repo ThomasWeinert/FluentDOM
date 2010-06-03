@@ -33,16 +33,15 @@ class FluentDOMLoaderDOMNodeTest extends FluentDOMTestCase {
     $node = $dom->appendChild($dom->createElement('root'));
     $contentType = 'text/xml';
     $result = $loader->load($node, $contentType);
-    $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $result);
-    $this->assertTrue($result[0] instanceof DOMDocument);
-    $this->assertSame('root', $result[1][0]->tagName);
+    $this->assertTrue($result instanceof DOMNode);
+    $this->assertSame('root', $result->tagName);
   }
 
   public function testLoadInvalid() {
     $loader = new FluentDOMLoaderDOMNode();
     $contentType = 'text/xml';
     $result = $loader->load(NULL, $contentType);
-    $this->assertFalse($result);
+    $this->assertNull($result);
   }
 
   public function testLoadInvalidWithDOMDocument() {
@@ -50,7 +49,7 @@ class FluentDOMLoaderDOMNodeTest extends FluentDOMTestCase {
     $loader = new FluentDOMLoaderDOMNode();
     $contentType = 'text/xml';
     $result = $loader->load($dom, $contentType);
-    $this->assertFalse($result);
+    $this->assertNull($result);
   }
 }
 

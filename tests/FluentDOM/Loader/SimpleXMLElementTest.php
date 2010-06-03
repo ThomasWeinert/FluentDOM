@@ -32,16 +32,15 @@ class FluentDOMLoaderSimpleXMLElementTest extends FluentDOMTestCase {
     $simpleXML = simplexml_load_string('<root/>');
     $contentType = 'text/xml';
     $result = $loader->load($simpleXML, $contentType);
-    $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $result);
-    $this->assertTrue($result[0] instanceof DOMDocument);
-    $this->assertSame('root', $result[1][0]->tagName);
+    $this->assertTrue($result instanceof DOMNode);
+    $this->assertSame('root', $result->tagName);
   }
 
   public function testLoadInvalid() {
     $loader = new FluentDOMLoaderSimpleXMLElement();
     $contentType = 'text/xml';
     $result = $loader->load(NULL, $contentType);
-    $this->assertFalse($result);
+    $this->assertNull($result);
   }
 }
 

@@ -50,7 +50,7 @@ class FluentDOMLoaderPDOTest extends FluentDOMTestCase {
     $loader = new FluentDOMLoaderPDO();
     $contentType = 'text/xml';
     $result = $loader->load(NULL, $contentType);
-    $this->assertFalse($result);
+    $this->assertNull($result);
   }
 
   public function testSetTagNames() {

@@ -28,13 +28,13 @@ class FluentDOMLoaderDOMNode implements FluentDOMLoader {
   *
   * @param DOMNode $source
   * @param string $contentType
-  * @return array(DOMDocument,DOMNode)|FALSE
+  * @return DOMNode|NULL
   */
   public function load($source, &$contentType) {
     if ($source instanceof DOMNode && !empty($source->ownerDocument)) {
-      return array($source->ownerDocument, array($source));
+      return $source;
     }
-    return FALSE;
+    return NULL;
   }
 }
 

@@ -47,7 +47,7 @@ class FluentDOMLoaderStringJSON implements FluentDOMLoader {
   *
   * @param string $source json encoded content
   * @param string $contentType
-  * @return array(DOMDocument,DOMNode)|FALSE
+  * @return DOMNode|NULL
   */
   public function load($source, &$contentType) {
     if (is_string($source)) {
@@ -60,14 +60,14 @@ class FluentDOMLoaderStringJSON implements FluentDOMLoader {
           $documentElement = $dom->createElement('json');
           $dom->appendChild($documentElement);
           $this->_toDom($documentElement, $json);
-          return array($dom, array($documentElement));
+          return $documentElement;
         } else {
           $code = is_callable('json_last_error') ? json_last_error() : -1;
           throw new UnexpectedValueException($this->jsonErrors[$code]);
         }
       }
     }
-    return FALSE;
+    return NULL;
   }
 
   /**

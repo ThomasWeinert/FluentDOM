@@ -38,7 +38,7 @@ class FluentDOMLoaderDOMDocumentTest extends FluentDOMTestCase {
     $loader = new FluentDOMLoaderDOMDocument();
     $contentType = 'text/xml';
     $result = $loader->load(NULL, $contentType);
-    $this->assertFalse($result);
+    $this->assertNull($result);
   }
 }
 

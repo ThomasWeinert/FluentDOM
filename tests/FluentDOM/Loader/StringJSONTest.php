@@ -39,9 +39,8 @@ class FluentDOMLoaderStringJSONTest extends FluentDOMTestCase {
       '{}',
       $contentType
     );
-    $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $result);
-    $this->assertTrue($result[0] instanceof DOMDocument);
-    $this->assertEquals('json', $result[1][0]->tagName);
+    $this->assertTrue($result instanceof DOMNode);
+    $this->assertEquals('json', $result->tagName);
     $this->assertEquals('text/xml', $contentType);
   }
 
@@ -71,7 +70,7 @@ class FluentDOMLoaderStringJSONTest extends FluentDOMTestCase {
   public function testLoadWithUnknownSourceExpectingFalse() {
     $loader = new FluentDOMLoaderStringJSON();
     $contentType = 'text/xml';
-    $this->assertFalse($loader->load('', $contentType));
+    $this->assertNull($loader->load('', $contentType));
   }
 
   /**
@@ -89,7 +88,7 @@ class FluentDOMLoaderStringJSONTest extends FluentDOMTestCase {
     );
     $this->assertDOMDocumentEqualsXmlString(
       '<json><foo>bar</foo></json>',
-      $result[0]
+      $result->ownerDocument
     );
   }
 
@@ -109,7 +108,7 @@ class FluentDOMLoaderStringJSONTest extends FluentDOMTestCase {
     );
     $this->assertDOMDocumentEqualsXmlString(
       '<json type="object"><foo type="string">bar</foo></json>',
-      $result[0]
+      $result->ownerDocument
     );
   }
 
@@ -128,7 +127,7 @@ class FluentDOMLoaderStringJSONTest extends FluentDOMTestCase {
     );
     $this->assertDOMDocumentEqualsXmlString(
       '<json><foo-bar name="foo bar">bar</foo-bar></json>',
-      $result[0]
+      $result->ownerDocument
     );
   }
 
@@ -147,7 +146,7 @@ class FluentDOMLoaderStringJSONTest extends FluentDOMTestCase {
     );
     $this->assertDOMDocumentEqualsXmlString(
       '<json><a>1</a><b>0</b></json>',
-      $result[0]
+      $result->ownerDocument
     );
   }
 
@@ -166,7 +165,7 @@ class FluentDOMLoaderStringJSONTest extends FluentDOMTestCase {
     );
     $this->assertDOMDocumentEqualsXmlString(
       '<json><a><object>1</object></a><b><object>2</object></b></json>',
-      $result[0]
+      $result->ownerDocument
     );
   }
 
@@ -185,7 +184,7 @@ class FluentDOMLoaderStringJSONTest extends FluentDOMTestCase {
     );
     $this->assertDOMDocumentEqualsXmlString(
       '<json><a><a-child>1</a-child><a-child>2</a-child><a-child>3</a-child></a></json>',
-      $result[0]
+      $result->ownerDocument
     );
   }
 

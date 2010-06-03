@@ -39,7 +39,7 @@ class FluentDOMLoaderStringHTMLTest extends FluentDOMTestCase {
     $loader = new FluentDOMLoaderStringHTML();
     $contentType = 'text/html';
     $result = $loader->load('html', $contentType);
-    $this->assertFalse($result);
+    $this->assertNull($result);
   }
 }
 

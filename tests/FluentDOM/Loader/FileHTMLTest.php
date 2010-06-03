@@ -42,7 +42,7 @@ class FluentDOMLoaderFileHTMLTest extends FluentDOMTestCase {
     $loader = new FluentDOMLoaderFileHTML();
     $contentType = 'text/html';
     $result = $loader->load('<invalidFileName></invalidFileName>', $contentType);
-    $this->assertFalse($result);
+    $this->assertNull($result);
   }
 
   public function testLoadInvalid() {

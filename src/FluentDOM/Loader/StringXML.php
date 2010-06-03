@@ -28,7 +28,7 @@ class FluentDOMLoaderStringXML implements FluentDOMLoader {
   *
   * @param string $source xml string
   * @param string $contentType
-  * @return DOMDocument|FALSE
+  * @return DOMDocument|NULL
   */
   public function load($source, &$contentType) {
     if (is_string($source) &&
@@ -38,7 +38,7 @@ class FluentDOMLoaderStringXML implements FluentDOMLoader {
       $dom->loadXML($source);
       return $dom;
     }
-    return FALSE;
+    return NULL;
   }
 }
 

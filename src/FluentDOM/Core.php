@@ -120,13 +120,9 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
           if ($loaded instanceof DOMDocument) {
             $this->_useDocumentContext = TRUE;
             $this->_document = $loaded;
-          } elseif (is_array($loaded) &&
-                    isset($loaded[0]) &&
-                    isset($loaded[1]) &&
-                    $loaded[0] instanceof DOMDocument &&
-                    is_array($loaded[1])) {
-            $this->_document = $loaded[0];
-            $this->push($loaded[1]);
+          } elseif ($loaded instanceof DOMNode) {
+            $this->_document = $loaded->ownerDocument;
+            $this->push($loaded);
             $this->_useDocumentContext = FALSE;
           }
           $this->_setContentType($contentType);

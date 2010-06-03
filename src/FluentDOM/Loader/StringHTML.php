@@ -28,7 +28,7 @@ class FluentDOMLoaderStringHTML implements FluentDOMLoader {
   *
   * @param string $source html string
   * @param string $contentType
-  * @return DOMDocument|FALSE
+  * @return DOMDocument|NULL
   */
   public function load($source, &$contentType) {
     if (is_string($source) &&
@@ -42,7 +42,7 @@ class FluentDOMLoaderStringHTML implements FluentDOMLoader {
       libxml_use_internal_errors($errorSetting);
       return $dom;
     }
-    return FALSE;
+    return NULL;
   }
 }
 

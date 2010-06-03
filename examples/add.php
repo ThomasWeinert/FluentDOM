@@ -20,7 +20,7 @@ $xml = <<<XML
 XML;
 
 
-require_once('../FluentDOM.php');
+require_once('../src/FluentDOM.php');
 $dom = FluentDOM($xml);
 echo $dom
   ->find('//p')

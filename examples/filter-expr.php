@@ -21,7 +21,7 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../FluentDOM.php');
+require_once('../src/FluentDOM.php');
 echo FluentDOM($xml)
   ->find('//div')
   ->attr('border', 1)

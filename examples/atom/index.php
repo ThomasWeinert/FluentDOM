@@ -32,7 +32,7 @@
   </head>
   <body>
     <?php
-require_once('../../FluentDOM.php');
+require_once('../../src/FluentDOM.php');
 $dom = FluentDOM('./atom-sample.xml');
 
 $categories = array_unique($dom->find('//_:category')->map('callbackCategoryTerm'));

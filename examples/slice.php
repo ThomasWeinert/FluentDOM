@@ -23,7 +23,7 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../FluentDOM.php');
+require_once('../src/FluentDOM.php');
 
 /*
  * get first 3 paragraphs of the document and replace every <div> element with them

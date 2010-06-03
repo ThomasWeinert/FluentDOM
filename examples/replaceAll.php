@@ -20,9 +20,9 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../FluentDOM.php');
+require_once('../src/FluentDOM.php');
 $doc = FluentDOM($xml);
 echo FluentDOM($xml)
-  ->node('<b id="sample">Paragraph. </b>')
+  ->add('<b id="sample">Paragraph. </b>')
   ->replaceAll('//p');
 ?>

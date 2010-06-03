@@ -9,8 +9,8 @@
 * @subpackage examples
 */
 
-require_once(dirname(__FILE__).'/../../FluentDOM.php');
-require_once(dirname(__FILE__).'/../../FluentDOM/Loader/StringJSON.php');
+require_once(dirname(__FILE__).'/../../src/FluentDOM.php');
+require_once(dirname(__FILE__).'/../../src/FluentDOM/Loader/StringJSON.php');
 
 // get the loader object
 $jsonLoader = new FluentDOMLoaderStringJSON();

@@ -12,7 +12,7 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../../FluentDOM.php');
+require_once('../../src/FluentDOM.php');
 
 echo count(FluentDOM($xml)->find('//p')), ' <p> tags';
 ?>

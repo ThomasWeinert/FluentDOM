@@ -1,5 +1,5 @@
 <?php
-require('../../FluentDOM.php');
+require('../../src/FluentDOM.php');
 
 $fd = new FluentDOM();
 $fd->contentType = 'html';

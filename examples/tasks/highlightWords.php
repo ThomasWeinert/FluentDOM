@@ -26,7 +26,7 @@ $highlighter = new FluentDOMHighlighter(
     'jumps' => 'highlightThree'
   )
 );
-require('../../FluentDOM.php');
+require('../../src/FluentDOM.php');
 
 echo $highlighter->highlight(
   FluentDOM($html, 'html')->find('//body')

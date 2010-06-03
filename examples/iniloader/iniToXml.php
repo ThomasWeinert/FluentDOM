@@ -7,7 +7,7 @@
 * @subpackage examples
 */
 
-require_once(dirname(__FILE__).'/../../FluentDOM.php');
+require_once(dirname(__FILE__).'/../../src/FluentDOM.php');
 require_once(dirname(__FILE__).'/FluentDOMIniLoader.php');
 
 $iniFile = dirname(__FILE__).'/sample.ini';

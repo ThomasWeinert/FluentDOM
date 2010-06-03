@@ -21,7 +21,7 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../FluentDOM.php');
+require_once('../src/FluentDOM.php');
 echo FluentDOM($xml)
   ->find('//div')
   ->eq(2)

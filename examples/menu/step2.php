@@ -1,5 +1,5 @@
 <?php
-require('../../FluentDOM.php');
+require('../../src/FluentDOM.php');
 
 // create a FluentDOM
 $fd = new FluentDOM();

@@ -1,6 +1,6 @@
 <?php
 // include FluentDOM
-require('../../FluentDOM.php');
+require('../../src/FluentDOM.php');
 // define url
 $url = 'http://www.papaya-cms.com/';
 // load data from an url

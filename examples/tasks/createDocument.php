@@ -7,7 +7,7 @@
 */
 header('Content-type: text/plain');
 
-require_once('../../FluentDOM.php');
+require_once('../../src/FluentDOM.php');
 echo FluentDOM($doc = new DOMDocument())
   ->append('<html/>')
   ->append($doc->createElement('body'))

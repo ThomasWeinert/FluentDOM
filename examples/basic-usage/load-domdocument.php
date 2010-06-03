@@ -1,6 +1,6 @@
 <?php
 
-require('../../FluentDOM.php');
+require('../../src/FluentDOM.php');
 
 $xmlFile = 'hello.xml';
 

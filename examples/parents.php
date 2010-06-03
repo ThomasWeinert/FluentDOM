@@ -22,7 +22,7 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../FluentDOM.php');
+require_once('../src/FluentDOM.php');
 $dom = FluentDOM($xml);
 $parents = implode(
   ', ',

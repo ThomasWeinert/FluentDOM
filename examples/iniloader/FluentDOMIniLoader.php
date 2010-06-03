@@ -1,6 +1,6 @@
 <?php
 
-require_once(dirname(__FILE__).'/../../FluentDOMLoader.php');
+require_once(dirname(__FILE__).'/../../src/FluentDOM/Loader.php');
 
 class FluentDOMIniLoader implements FluentDOMLoader {
 

@@ -1,6 +1,6 @@
 <?php
 //include FluentDOM
-require('../../FluentDOM.php');
+require('../../src/FluentDOM.php');
 
 //load data from an url
 $html = file_get_contents('http://www.papaya-cms.com/');

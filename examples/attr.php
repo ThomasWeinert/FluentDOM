@@ -25,7 +25,7 @@ XML;
 
 
 echo "Example for function 'attr' using XML namespaces:\n\n";
-require_once('../FluentDOM.php');
+require_once('../src/FluentDOM.php');
 $dom = FluentDOM($xml);
 echo $dom
   ->find('//html:a')

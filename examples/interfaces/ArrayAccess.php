@@ -12,7 +12,7 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../../FluentDOM.php');
+require_once('../../src/FluentDOM.php');
 
 $dom = FluentDOM($xml)->find('//p');
 echo $dom[0]->textContent, ' ', $dom[2]->textContent;

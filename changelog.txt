@@ -1,3 +1,67 @@
+Version 4.0:
+
+This version has been restructured because the class had grown to large. The new structure allows
+better testing and inheritance. 
+
+It brings compatiblity to the jQuery 1.4 API changes. A callback argument is supported by many
+methods. 
+
+- Implemented: FluentDOMLoader implementations now return a DOMNode or NULL,
+               DOMDocument inherits from DOMNode 
+- Implemented: make the $contentType argument of FluentDOMLoader an reference,
+               so the loader can change it, set the changed version
+- Changed: Moved source files into subdirectory src
+- Changed: Splitting changelog.txt from readme.txt
+- Added: FluentDOMHighlighter example
+- Added: FluentDOMCore::namespace(), register namespaces for xpath expressions
+- Added: FluentDOMCore::unique(), sort an array of dom nodes and remove duplicates
+- Implemented: FluentDOM::add() now supports a xml snippet, an expression with an optional context
+               attribute or any kind of usable objects, nodes from other documents will be imported
+- Removed: FluentDOM::node() functionality now covered by add()
+- Added: FluentDOMCore::evaluate()
+- Added: $context argument to FluentDOM::closest()
+- Bugfix: FluentDOMCore::_getInnerXml() now returns the text content for a DOMText
+- Added: FluentDOM::index()
+- Added: FluentDOM::has()
+- Added: FluentDOM::nextUntil(), FluentDOM::prevUntil(), FluentDOM::parentsUntil()
+- Implemented: FluentDOM::children() now matches only elements (no text nodes any more)
+- Added: FluentDOM::contents() matches all childnodes including textnodes
+- Added: FluentDOM::last()
+- Added: FluentDOM::first()
+- Fixed: FluentDOMHandler::insertChildrenBefore(), new nodes had wrong order
+- Renamed: FluentDOMCore::_getHandlers() to FluentDOMCore::_getHandler()
+- Refactored: new FluentDOMCore::_applyContentToNodes() provides a generic way to manipulate
+              selected nodes using a callback function, this is used by the most manipulation
+              methods. FluentDOMHandler provides the callbacks
+- Implemented: first argument of all callbacks is $node
+              (unlike in js we can not set the scope in php, so this is not available)
+- Implemented: FluentDOM::replaceWith() with callback
+- Implemented: FluentDOM::after can now use a callback
+- Implemented: FluentDOM::before can now use a callback
+- Implemented: FluentDOMStyle::css() callback now has the following arguments: $node, $index, $value 
+- Added: FluentDOMLoaderStringJSON, loads a json string
+- Implemented: FluentDOM::_wrap() with callback
+- Tested: added @covers annotations
+- Implemented: $context for FluentDOMCore::_test() ist now optional
+- Added: FluentDOMCore::_isNodeList()
+- Implemented: FluentDOMIterator now works for FluentDOMCore
+- Implemented: FluentDOMCore::_spawn() is now publich and renamed to spawn()
+- Implemented: FluentDOMCore::_push() is now publich and renamed to push()
+- Implemented: splitting FluentDOMCore from FluentDOM
+- Implemented: support additional parameter $attr in FluentDOM::node()
+- Implemented: FluentDOM::append() supports function argument
+- Implemented: support for callback parameters in FluentDOM::addClass(),
+               FluentDOM::removeClass(),  FluentDOM::toggleClass()
+- Implemented: support for empty parameter in  FluentDOM::removeClass()
+- Added: Allow callback parameter for FluentDOM::text()
+- Added: Allow callback parameter for FluentDOM::xml()
+- Added: private function FluentDOM::_getContentFragment(),
+         converts a string to a list of xml elements
+- Added: optional parameter to FluentDOM::_isCallback(),
+         allow or disallow global functions
+- Implemented: changed attr() function parameters to match jQuery 1.4
+- Added: FluentDOM::get(), retrieve elements as array
+- Implemented: support negative position parameter for eq()
 Version 3.0:
 - Documented: tutorial for find()
 - Documented: optimized structure for html output

@@ -19,6 +19,11 @@ require_once(dirname(__FILE__).'/FluentDOM/Core.php');
 require_once(dirname(__FILE__).'/FluentDOM/Handler.php');
 
 /**
+* Include the attributes helper class
+*/
+require_once(dirname(__FILE__).'/FluentDOM/Attributes.php');
+
+/**
 * Function to create a new FluentDOM instance and loads data into it if
 * a valid $source is provided.
 *
@@ -37,7 +42,8 @@ function FluentDOM($source = NULL, $contentType = 'text/xml') {
 
 /**
 * FluentDOM implements a jQuery like replacement for DOMNodeList
-**
+*
+* @property FluentDOMAttributes $attr Access attributes
 * @method bool empty() Remove all child nodes from the set of matched elements.
 * @method DOMDocument clone() Clone matched DOM Elements and select the clones.
 *
@@ -62,6 +68,28 @@ class FluentDOM extends FluentDOMCore {
       throw new BadMethodCallException('Unknown method '.get_class($this).'::'.$name);
     }
   }
+
+  public function __get($name) {
+    switch ($name) {
+    case 'attr' :
+      return new FluentDOMAttributes($this);
+    }
+    return parent::__get($name);
+  }
+
+  public function __set($name, $value) {
+    switch ($name) {
+    case 'attr' :
+      if ($value instanceOf FluentDOMAttributes) {
+        $this->attr($value->toArray());
+      } else {
+        $this->attr($value);
+      }
+      return;
+    }
+    parent::__set($name, $value);
+  }
+
   /*
   * Object Accessors
   */

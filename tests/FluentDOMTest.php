@@ -517,6 +517,7 @@ class FluentDOMTest extends FluentDOMTestCase {
 
   /**
   * @group TraversingFilter
+  * @covers FluentDOM::slice
   */
   public function testSliceByNegRange() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
@@ -1727,6 +1728,47 @@ class FluentDOMTest extends FluentDOMTestCase {
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
   }
 
+  /**
+  * @group Attributes
+  * @covers FluentDOM::__get
+  */
+  public function testPropertyAttrGet() {
+    $fd = $this->getFixtureFromString(self::XML)->find('//item[2]');
+    $attr = $fd->attr;
+    $this->assertType('FluentDOMAttributes', $attr);
+    $this->assertAttributeSame(
+      $fd, '_fd', $attr
+    );
+  }
+
+  /**
+  * @group Attributes
+  * @covers FluentDOM::__set
+  */
+  public function testPropertyAttrSetWithArray() {
+    $fd = $this->getFixtureFromString('<sample/>')->find('/*');
+    $fd->attr = array(
+      'foo' => 1,
+      'bar' => 2
+    );
+    $this->assertEquals(
+      '<sample foo="1" bar="2"/>', $fd->document->saveXml($fd[0])
+    );
+  }
+
+  /**
+  * @group Attributes
+  * @covers FluentDOM::__set
+  */
+  public function testPropertyAttrSetWithFluentDOMAttributes() {
+    $fd = $this->getFixtureFromString('<sample><item foo="1"/><item/></sample>')->find('//item');
+    $fd->attr = $fd->attr;
+    $this->assertEquals(
+      '<sample><item foo="1"/><item foo="1"/></sample>',
+      $fd->document->saveXml($fd->document->documentElement)
+    );
+  }
+
   /*
   * Attributes - Classes
   */
@@ -1820,6 +1862,15 @@ class FluentDOMTest extends FluentDOMTestCase {
     $fd->toggleClass(array($this, 'callbackForToggleClass'));
     $this->assertEquals('test4', $fd[0]->getAttribute('class'));
     $this->assertEquals('test4', $fd[1]->getAttribute('class'));
+  }
+
+  /**
+  * @covers FluentDOM::__set
+  */
+  public function testMagicMethodSetInheritance() {
+    $fd = new FluentDOM();
+    $fd->SOME_DYNAMIC_PROPERTY = TRUE;
+    $this->assertTrue($fd->SOME_DYNAMIC_PROPERTY);
   }
 
   /*

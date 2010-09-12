@@ -34,11 +34,36 @@ class FluentDOMAttributesTest extends FluentDOMTestCase {
   * @covers FluentDOMAttributes::toArray
   */
   public function testToArray() {
-    $dom = new DOMDocument;
-    $node = $dom->createElement('sample');
-    $node->setAttribute('foo', 1);
-    $node->setAttribute('bar', 2);
-    $dom->appendChild($node);
+    $fd = $this->getFluentDOMWithNodeFixture(
+      $this->getSimpleDocumentNodeFixture()
+    );
+    $attr = new FluentDOMAttributes($fd);
+    $this->assertEquals(
+      array('foo' => 1, 'bar' => 2),
+      $attr->toArray()
+    );
+  }
+
+  /**
+  * @covers FluentDOMAttributes::getIterator
+  */
+  public function testGetIterator() {
+    $fd = $this->getFluentDOMWithNodeFixture(
+      $this->getSimpleDocumentNodeFixture()
+    );
+    $attr = new FluentDOMAttributes($fd);
+    $iterator = $attr->getIterator();
+    $this->assertEquals(
+      array('foo' => 1, 'bar' => 2),
+      $iterator->getArrayCopy()
+    );
+  }
+
+  /********************
+  * Fixtures
+  ********************/
+
+  public function getFluentDOMWithNodeFixture($node) {
     $fd = $this->getMock('FluentDOM');
     $fd
       ->expects($this->any())
@@ -50,10 +75,15 @@ class FluentDOMAttributesTest extends FluentDOMTestCase {
       ->method('offsetGet')
       ->with(0)
       ->will($this->returnValue($node));
-    $attr = new FluentDOMAttributes($fd);
-    $this->assertEquals(
-      array('foo' => 1, 'bar' => 2),
-      $attr->toArray()
-    );
+    return $fd;
+  }
+
+  public function getSimpleDocumentNodeFixture() {
+    $dom = new DOMDocument;
+    $node = $dom->createElement('sample');
+    $node->setAttribute('foo', 1);
+    $node->setAttribute('bar', 2);
+    $dom->appendChild($node);
+    return $node;
   }
 }

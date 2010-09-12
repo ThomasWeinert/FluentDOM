@@ -45,6 +45,19 @@ class FluentDOMAttributesTest extends FluentDOMTestCase {
   }
 
   /**
+  * @covers FluentDOMAttributes::count
+  */
+  public function testCountExpectingTwo() {
+    $fd = $this->getFluentDOMWithNodeFixture(
+      $this->getSimpleDocumentNodeFixture()
+    );
+    $attr = new FluentDOMAttributes($fd);
+    $this->assertEquals(
+      2, count($attr)
+    );
+  }
+
+  /**
   * @covers FluentDOMAttributes::getIterator
   */
   public function testGetIterator() {

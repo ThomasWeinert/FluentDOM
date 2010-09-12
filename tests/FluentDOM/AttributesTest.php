@@ -108,6 +108,19 @@ class FluentDOMAttributesTest extends FluentDOMTestCase {
   }
 
   /**
+  * @covers FluentDOMAttributes::offsetUnset
+  */
+  public function testOffsetUnset() {
+    $fd = $this->getMock('FluentDOM');
+    $fd
+      ->expects($this->once())
+      ->method('removeAttr')
+      ->with('name');
+    $attr = new FluentDOMAttributes($fd);
+    unset($attr['name']);
+  }
+
+  /**
   * @covers FluentDOMAttributes::count
   */
   public function testCountExpectingTwo() {

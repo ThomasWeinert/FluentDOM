@@ -73,6 +73,7 @@ class FluentDOMAttributes implements ArrayAccess, Countable, IteratorAggregate {
   * Read the specified attribute from the first node
   *
   * @see ArrayAccess::offsetGet()
+  * @see FluentDOM::attr()
   * @param string $name
   * @return string
   */
@@ -84,6 +85,7 @@ class FluentDOMAttributes implements ArrayAccess, Countable, IteratorAggregate {
   * Set the attribute on all selected element nodes
   *
   * @see ArrayAccess::offsetSet()
+  * @see FluentDOM::attr()
   * @param string $name
   * @param string $value
   */
@@ -91,6 +93,13 @@ class FluentDOMAttributes implements ArrayAccess, Countable, IteratorAggregate {
     $this->_fd->attr($name, $value);
   }
 
+  /**
+  * Remove the attribute(s) on all selected element nodes
+  *
+  * @see ArrayAccess::offsetUnset()
+  * @see FluentDOM::removeAttr()
+  * @param string|array $name
+  */
   public function offsetUnset($name) {
     $this->_fd->removeAttr($name);
   }

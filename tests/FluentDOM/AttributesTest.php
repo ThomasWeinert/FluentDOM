@@ -81,6 +81,33 @@ class FluentDOMAttributesTest extends FluentDOMTestCase {
   }
 
   /**
+  * @covers FluentDOMAttributes::offsetGet
+  */
+  public function testOffsetGet() {
+    $fd = $this->getMock('FluentDOM');
+    $fd
+      ->expects($this->once())
+      ->method('attr')
+      ->with('name')
+      ->will($this->returnValue('success'));
+    $attr = new FluentDOMAttributes($fd);
+    $this->assertEquals('success', $attr['name']);
+  }
+
+  /**
+  * @covers FluentDOMAttributes::offsetSet
+  */
+  public function testOffsetSet() {
+    $fd = $this->getMock('FluentDOM');
+    $fd
+      ->expects($this->once())
+      ->method('attr')
+      ->with('name', 'success');
+    $attr = new FluentDOMAttributes($fd);
+    $attr['name'] = 'success';
+  }
+
+  /**
   * @covers FluentDOMAttributes::count
   */
   public function testCountExpectingTwo() {

@@ -45,6 +45,42 @@ class FluentDOMAttributesTest extends FluentDOMTestCase {
   }
 
   /**
+  * @covers FluentDOMAttributes::offsetExists
+  */
+  public function testOffsetExistsExpectingTrue() {
+    $fd = $this->getFluentDOMWithNodeFixture(
+      $this->getSimpleDocumentNodeFixture()
+    );
+    $attr = new FluentDOMAttributes($fd);
+    $this->assertTrue(isset($attr['foo']));
+  }
+
+  /**
+  * @covers FluentDOMAttributes::offsetExists
+  */
+  public function testOffsetExistsExpectingFalse() {
+    $fd = $this->getFluentDOMWithNodeFixture(
+      $this->getSimpleDocumentNodeFixture()
+    );
+    $attr = new FluentDOMAttributes($fd);
+    $this->assertFalse(isset($attr['non_existing']));
+  }
+
+  /**
+  * @covers FluentDOMAttributes::offsetExists
+  */
+  public function testOffsetExistsWithoutSelectionExpectingFalse() {
+    $fd = $this->getMock('FluentDOM');
+    $fd
+      ->expects($this->any())
+      ->method('offsetExists')
+      ->with(0)
+      ->will($this->returnValue(FALSE));
+    $attr = new FluentDOMAttributes($fd);
+    $this->assertFalse(isset($attr['foo']));
+  }
+
+  /**
   * @covers FluentDOMAttributes::count
   */
   public function testCountExpectingTwo() {

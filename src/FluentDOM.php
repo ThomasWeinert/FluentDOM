@@ -744,6 +744,17 @@ class FluentDOM extends FluentDOMCore {
     }
   }
 
+  /**
+  * Reverse the order of the matched elements.
+  *
+  * @return FluentDOM
+  */
+  public function reverse() {
+    $result = $this->spawn();
+    $result->push(array_reverse($this->_array));
+    return $result;
+  }
+
   /*
   * Manipulation - Changing Contents
   */

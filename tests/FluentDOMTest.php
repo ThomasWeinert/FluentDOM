@@ -940,6 +940,16 @@ class FluentDOMTest extends FluentDOMTestCase {
     $this->assertTrue($endFdRoot === $endFdRoot2);
   }
 
+  /**
+  * @group Traversing
+  * @group TraversingChaining
+  * @covers FluentDOM::reverse
+  */
+  public function testReverse() {
+    $fd = $this->getFixtureFromString(self::XML)->find('//item')->reverse();
+    $this->assertEquals(2, $fd[0]->getAttribute('index'));
+  }
+
   /*
   * Manipulation - Inserting Inside
   */

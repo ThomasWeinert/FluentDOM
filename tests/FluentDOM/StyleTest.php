@@ -57,7 +57,6 @@ class FluentDOMStyleTest extends FluentDOMTestCase {
 
   /**
   * @group ManipulationCSS
-  * @covers FluentDOMStyle::_isCSSProperty
   * @covers FluentDOMStyle::css
   */
   public function testCssRead() {
@@ -68,7 +67,6 @@ class FluentDOMStyleTest extends FluentDOMTestCase {
 
   /**
   * @group ManipulationCSS
-  * @covers FluentDOMStyle::_isCSSProperty
   * @covers FluentDOMStyle::css
   */
   public function testCssReadWithInvalidProperty() {
@@ -140,7 +138,6 @@ class FluentDOMStyleTest extends FluentDOMTestCase {
 
   /**
   * @group ManipulationCSS
-  * @covers FluentDOMStyle::_isCSSProperty
   * @covers FluentDOMStyle::css
   */
   public function testCssWriteWithInvalidProperty() {
@@ -190,10 +187,6 @@ class FluentDOMStyleTest extends FluentDOMTestCase {
 
   /**
   * @group ManipulationCSS
-  * @covers FluentDOMStyle::_decodeStyleAttribute
-  * @covers FluentDOMStyle::_encodeStyleAttribute
-  * @covers FluentDOMStyle::_compareCSSProperties
-  * @covers FluentDOMStyle::_getCSSPropertyElements
   * @covers FluentDOMStyle::css
   */
   public function testCssSortPropertiesName() {
@@ -210,10 +203,6 @@ class FluentDOMStyleTest extends FluentDOMTestCase {
 
   /**
   * @group ManipulationCSS
-  * @covers FluentDOMStyle::_decodeStyleAttribute
-  * @covers FluentDOMStyle::_encodeStyleAttribute
-  * @covers FluentDOMStyle::_compareCSSProperties
-  * @covers FluentDOMStyle::_getCSSPropertyElements
   * @covers FluentDOMStyle::css
   */
   public function testCssSortPropertiesLevels() {
@@ -231,10 +220,6 @@ class FluentDOMStyleTest extends FluentDOMTestCase {
 
   /**
   * @group ManipulationCSS
-  * @covers FluentDOMStyle::_decodeStyleAttribute
-  * @covers FluentDOMStyle::_encodeStyleAttribute
-  * @covers FluentDOMStyle::_compareCSSProperties
-  * @covers FluentDOMStyle::_getCSSPropertyElements
   * @covers FluentDOMStyle::css
   */
   public function testCssSortPropertiesPrefix() {

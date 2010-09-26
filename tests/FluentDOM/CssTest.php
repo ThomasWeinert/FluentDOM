@@ -132,6 +132,18 @@ class FluentDOMCssTest extends FluentDOMTestCase {
       'two properties' => array(
         'height: auto; width: auto;',
         array('width' => 'auto', 'height' => 'auto')
+      ),
+      'detailed properties' => array(
+        'margin: 0; margin-top: 10px;',
+        array('margin-top' => '10px', 'margin' => '0')
+      ),
+      'browser properties' => array(
+        'box-sizing: border-box; -moz-box-sizing: border-box; -o-box-sizing: border-box;',
+        array(
+          '-o-box-sizing' => 'border-box',
+          'box-sizing' => 'border-box',
+          '-moz-box-sizing' => 'border-box'
+        )
       )
     );
   }

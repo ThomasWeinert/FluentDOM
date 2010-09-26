@@ -69,6 +69,16 @@ class FluentDOM extends FluentDOMCore {
     }
   }
 
+  /**
+  * Allow read access to "attr" as a dynamic property.
+  * Call inherited method for other properties.
+  *
+  * This allows to get/set xml attributes using array syntax.
+  *
+  * @see FluentDOM/FluentDOMCore::__get()
+  * @param string $name
+  * @return mixed
+  */
   public function __get($name) {
     switch ($name) {
     case 'attr' :
@@ -77,6 +87,16 @@ class FluentDOM extends FluentDOMCore {
     return parent::__get($name);
   }
 
+  /**
+  * Allow write access to "attr" as a dynamic property.
+  * Call inherited method for other properties.
+  *
+  * This allows to set tag attributes using an array.
+  *
+  * @see FluentDOM/FluentDOMCore::__get()
+  * @param string $name
+  * @param mixed $value
+  */
   public function __set($name, $value) {
     switch ($name) {
     case 'attr' :

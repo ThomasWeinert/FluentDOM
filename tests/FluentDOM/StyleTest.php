@@ -55,6 +55,49 @@ class FluentDOMStyleTest extends FluentDOMTestCase {
     $this->assertEquals('html', $fd->document->documentElement->nodeName);
   }
 
+
+  /**
+  * @group ManipulationCSS
+  * @covers FluentDOMStyle::__get
+  */
+  public function testPropertyCssGet() {
+    $fd = $this->getFluentDOMStyleFixture('<sample style="test: success"/>', '/*');
+    $css = $fd->css;
+    $this->assertType('FluentDOMCss', $css);
+    $this->assertAttributeSame(
+      $fd, '_fd', $css
+    );
+    $this->assertAttributeSame(
+      array('test' => 'success'), '_properties', $css
+    );
+  }
+
+  /**
+  * @group ManipulationCSS
+  * @covers FluentDOMStyle::__set
+  */
+  public function testPropertyCssSetWithArray() {
+    $fd = $this->getFluentDOMStyleFixture('<sample/>', '/*');
+    $fd->css = array('foo' => '1', 'bar' => '2');
+    $this->assertEquals(
+      '<sample style="bar: 2; foo: 1;"/>',
+      $fd->document->saveXml($fd->document->documentElement)
+    );
+  }
+
+  /**
+  * @group ManipulationCSS
+  * @covers FluentDOMStyle::__set
+  */
+  public function testPropertyCssSetWithFluentDOMCss() {
+    $fd = $this->getFluentDOMStyleFixture('<sample/>', '/*');
+    $fd->css = new FluentDOMCss(NULL, 'foo: 1; bar: 2;');
+    $this->assertEquals(
+      '<sample style="bar: 2; foo: 1;"/>',
+      $fd->document->saveXml($fd->document->documentElement)
+    );
+  }
+
   /**
   * @group ManipulationCSS
   * @covers FluentDOMStyle::css

@@ -75,11 +75,7 @@ class FluentDOMStyle extends FluentDOM {
   public function __set($name, $value) {
     switch ($name) {
     case 'css' :
-      if ($value instanceOf FluentDOMCss) {
-        $this->css($value->toArray());
-      } else {
-        $this->css($value);
-      }
+      $this->css($value);
       return;
     }
     parent::__set($name, $value);
@@ -113,7 +109,9 @@ class FluentDOMStyle extends FluentDOM {
       return NULL;
     } elseif (is_string($property)) {
       $propertyList = array($property => $value);
-    } elseif (is_array($property)) {
+    } elseif (is_array($property) ||
+              $property instanceOf Traverseable ||
+              $property instanceOf IteratorAggregate) {
       $propertyList = $property;
     } else {
       throw new InvalidArgumentException('Invalid css property name argument type.');

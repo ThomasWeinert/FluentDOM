@@ -12,7 +12,7 @@
 * @package FluentDOM
 */
 
-/*
+/**
 * FluentDOMAttributes is used for the FluentDOM:attr property, providing an array like interface
 * to the attributes of the selected nodes(s)
 *

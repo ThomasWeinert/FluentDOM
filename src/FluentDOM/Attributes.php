@@ -74,6 +74,7 @@ class FluentDOMAttributes implements ArrayAccess, Countable, IteratorAggregate {
   *
   * @see ArrayAccess::offsetGet()
   * @see FluentDOM::attr()
+  * @example properties/attr-get.php Usage: Get attribute property
   * @param string $name
   * @return string
   */
@@ -86,6 +87,7 @@ class FluentDOMAttributes implements ArrayAccess, Countable, IteratorAggregate {
   *
   * @see ArrayAccess::offsetSet()
   * @see FluentDOM::attr()
+  * @example properties/attr-set.php Usage: Set attribute property
   * @param string $name
   * @param string $value
   */
@@ -98,6 +100,7 @@ class FluentDOMAttributes implements ArrayAccess, Countable, IteratorAggregate {
   *
   * @see ArrayAccess::offsetUnset()
   * @see FluentDOM::removeAttr()
+  * @example properties/attr-unset.php Usage: Remove attribute properties
   * @param string|array $name
   */
   public function offsetUnset($name) {

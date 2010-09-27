@@ -120,17 +120,9 @@ class FluentDOMStyle extends FluentDOM {
       if ($node instanceof DOMElement) {
         $properties = new FluentDOMCss(NULL, $node->getAttribute('style'));
         foreach ($propertyList as $name => $value) {
-          if (!is_string($value) &&
-              is_callable($value, TRUE)) {
-            $properties[$name] = call_user_func(
-              $value,
-              $node,
-              $index,
-              isset($properties[$name]) ? $properties[$name] : NULL
-            );
-          } else  {
-            $properties[$name] = $value;
-          }
+          $properties[$name] = $properties->compileValue(
+            $value, $node, $index, isset($properties[$name]) ? $properties[$name] : NULL
+          );
         }
         if (count($properties) > 0) {
           $node->setAttribute('style', (string)$properties);

@@ -87,6 +87,55 @@ class FluentDOMCssTest extends FluentDOMTestCase {
   }
 
   /**
+  * @covers FluentDOMCss::offsetSet
+  */
+  public function testOffsetWithInvalidName() {
+    $css = new FluentDOMCss();
+    try {
+      $css['---'] = 'test';
+      $this->fail('An expected exception has now been thrown.');
+    } catch (InvalidArgumentException $e) {
+    }
+  }
+
+  /**
+  * @covers FluentDOMCss::offsetSet
+  */
+  public function testOffsetSetWithEmptyValue() {
+    $css = new FluentDOMCss(NULL, 'width: auto; height: auto;');
+    $css['width'] = '';
+    $this->assertEquals('height: auto;', (string)$css);
+  }
+
+  /**
+  * @covers FluentDOMCss::offsetSet
+  */
+  public function testOffsetSetUpdatesAttributes() {
+    $fd = new FluentDOM();
+    $fd->load('<sample style="width: 21px;"/>');
+    $fd = $fd->find('/*');
+    $css = new FluentDOMCss($fd);
+    $css['width'] = '42px';
+    $this->assertEquals(
+      '<sample style="width: 42px;"/>', $fd->document->saveXml($fd->document->documentElement)
+    );
+  }
+
+  /**
+  * @covers FluentDOMCss::offsetSet
+  */
+  public function testOffsetSetRemovesAttributes() {
+    $fd = new FluentDOM();
+    $fd->load('<sample style="width: 21px;"/>');
+    $fd = $fd->find('/*');
+    $css = new FluentDOMCss($fd);
+    $css['width'] = '';
+    $this->assertEquals(
+      '<sample/>', $fd->document->saveXml($fd->document->documentElement)
+    );
+  }
+
+  /**
   * @covers FluentDOMCss::decode
   * @dataProvider provideStyleStrings
   */

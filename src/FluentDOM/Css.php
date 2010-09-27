@@ -85,32 +85,28 @@ class FluentDOMCss implements ArrayAccess, Countable, IteratorAggregate {
     if (!$this->_isCSSProperty($name)) {
       throw new InvalidArgumentException('Invalid css property name: '.$name);
     }
-    if ((string)$value != '') {
-      $this->_properties[$name] = $value;
-    } elseif (array_key_exists($name, $this->_properties)) {
-      unset($this->_properties[$name]);
-    }
     if (isset($this->_fd)) {
       foreach ($this->_fd as $index => $node) {
         if ($node instanceof DOMElement) {
           $properties = new self(NULL, $node->getAttribute('style'));
-          if (!is_string($value) &&
-              is_callable($value, TRUE)) {
-            $properties[$name] = call_user_func(
-              $value,
-              $node,
-              $index,
-              isset($properties[$name]) ? $properties[$name] : NULL
-            );
-          } else  {
-            $properties[$name] = $value;
-          }
+          $properties[$name] = $this->compileValue(
+            $value,
+            $node,
+            $index,
+            isset($properties[$name]) ? $properties[$name] : NULL
+          );
           if (count($properties) > 0) {
             $node->setAttribute('style', (string)$properties);
           } else {
             $node->removeAttribute('style');
           }
         }
+      }
+    } else {
+      if ((string)$value != '') {
+        $this->_properties[$name] = $value;
+      } elseif (array_key_exists($name, $this->_properties)) {
+        unset($this->_properties[$name]);
       }
     }
   }
@@ -200,6 +196,28 @@ class FluentDOMCss implements ArrayAccess, Countable, IteratorAggregate {
       }
     }
     return substr($result, 1);
+  }
+
+  /**
+  * Compile value argument into a string (it can be an callback)
+  *
+  * @param string|Callback|Closure $value
+  * @param DOMElement $node
+  * @param integer $index
+  * @param string $currentValue
+  * @return string
+  */
+  public function compileValue($value, $node, $index, $currentValue) {
+    if (!is_string($value) &&
+        is_callable($value, TRUE)) {
+      return (string)call_user_func(
+        $value,
+        $node,
+        $index,
+        $currentValue
+      );
+    }
+    return (string)$value;
   }
 
   /**

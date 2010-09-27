@@ -183,9 +183,21 @@ class FluentDOMStyleTest extends FluentDOMTestCase {
   * @group ManipulationCSS
   * @covers FluentDOMStyle::css
   */
-  public function testCssWriteWithInvalidProperty() {
+  public function testCssWriteWithInvalidPropertySyntax() {
     try {
       $this->getFluentDOMStyleFixture(self::HTML, '//div')->css('---', '');
+      $this->fail('An expected exception has not been raised.');
+    } catch (InvalidArgumentException $expected) {
+    }
+  }
+
+  /**
+  * @group ManipulationCSS
+  * @covers FluentDOMStyle::css
+  */
+  public function testCssWriteWithInvalidPropertyType() {
+    try {
+      $this->getFluentDOMStyleFixture(self::HTML, '//div')->css(23, '');
       $this->fail('An expected exception has not been raised.');
     } catch (InvalidArgumentException $expected) {
     }

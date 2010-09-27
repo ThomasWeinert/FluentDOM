@@ -290,6 +290,16 @@ class FluentDOMStyleTest extends FluentDOMTestCase {
     $this->assertEquals($expect, $fd[2]->getAttribute('style'));
   }
 
+  /**
+  * @covers FluentDOMStyle::__set
+  * @covers FluentDOMStyle::__get
+  */
+  public function testPropertyInheritance() {
+    $fd = new FluentDOMStyle();
+    $fd->dynamicPropertyName = 23;
+    $this->assertEquals(23, $fd->dynamicPropertyName);
+  }
+
   /*
   * Callbacks
   */

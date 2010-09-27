@@ -110,8 +110,7 @@ class FluentDOMStyle extends FluentDOM {
     } elseif (is_string($property)) {
       $propertyList = array($property => $value);
     } elseif (is_array($property) ||
-              $property instanceOf Traverseable ||
-              $property instanceOf IteratorAggregate) {
+              $property instanceOf Traversable) {
       $propertyList = $property;
     } else {
       throw new InvalidArgumentException('Invalid css property name argument type.');

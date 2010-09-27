@@ -53,14 +53,34 @@ class FluentDOMCss implements ArrayAccess, Countable, IteratorAggregate {
     return $this->encode($this->_properties);
   }
 
+  /**
+  * Allow to use isset() and array syntax to check if a css property is set on
+  * the first matched node.
+  *
+  * @see ArrayAccess::offsetExists()
+  */
   public function offsetExists($name) {
     return isset($this->_properties[$name]);
   }
 
+  /**
+  * Allow to use array syntax to read a css property value from first matched node.
+  *
+  * @see ArrayAccess::offsetGet()
+  * @param string $name
+  * @return $value
+  */
   public function offsetGet($name) {
     return $this->_properties[$name];
   }
 
+  /**
+  * Allow to use array syntax to change a css property value on all matched nodes.
+  *
+  * @see ArrayAccess::offsetSet()
+  * @param string $name
+  * @param string $value
+  */
   public function offsetSet($name, $value) {
     if (!$this->_isCSSProperty($name)) {
       throw new InvalidArgumentException('Invalid css property name: '.$name);
@@ -95,6 +115,13 @@ class FluentDOMCss implements ArrayAccess, Countable, IteratorAggregate {
     }
   }
 
+  /**
+  * Allow to use unset and array syntax to remove a css property value on
+  * all matched nodes.
+  *
+  * @see ArrayAccess::offsetUnset()
+  * @param string $name
+  */
   public function offsetUnset($name) {
     if (array_key_exists($name, $this->_properties)) {
       unset($this->_properties[$name]);

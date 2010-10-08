@@ -16,8 +16,6 @@
 require_once (dirname(__FILE__).'/../FluentDOMTestCase.php');
 require_once(dirname(__FILE__).'/../../src/FluentDOM/Style.php');
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
-
 /**
 * Test class for FluentDOMStyle.
 *

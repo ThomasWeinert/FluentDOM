@@ -15,8 +15,6 @@
 */
 require_once (dirname(__FILE__).'/../FluentDOMTestCase.php');
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
-
 class FluentDOMAttributesTest extends FluentDOMTestCase {
 
   /**

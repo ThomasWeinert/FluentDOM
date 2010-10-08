@@ -15,8 +15,6 @@
 */
 require_once(dirname(__FILE__).'/FluentDOMTestCase.php');
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
-
 /**
 * Test class for FluentDOM.
 *
@@ -24,6 +22,14 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 * @subpackage unitTests
 */
 class FluentDOMTest_PHP5_3 extends FluentDOMTestCase {
+  protected function setUp() {
+    if (!version_compare(PHP_VERSION, '5.3', '>=')) {
+      $this->markTestSkipped(
+        'PHP 5.3 (or later) is required to run this test.'
+      );
+    }
+  }
+
 
   /**
   * @group TraversingFilter

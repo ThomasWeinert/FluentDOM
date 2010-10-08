@@ -13,10 +13,7 @@
 /**
 * load necessary files
 */
-require_once('PHPUnit/Framework.php');
 require_once(dirname(__FILE__).'/../src/FluentDOM.php');
-
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
 /**
 * Test class for FluentDOM.

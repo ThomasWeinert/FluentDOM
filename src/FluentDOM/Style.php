@@ -90,21 +90,13 @@ class FluentDOMStyle extends FluentDOM {
   */
   public function css($property, $value = NULL) {
     if (is_string($property) && is_null($value)) {
-      //get value from first DOMElement
-      $firstNode = NULL;
-      foreach ($this->_array as $node) {
-        if ($node instanceof DOMElement) {
-          $firstNode = $node;
-          break;
-        }
-      }
-      if (empty($firstNode)) {
-        return NULL;
-      } else {
+      try {
+        $firstNode = $this->_getContentElement($this->_array);
         $properties = new FluentDOMCss(NULL, $firstNode->getAttribute('style'));
         if (isset($properties[$property])) {
           return $properties[$property];
         }
+      } catch (UnexpectedValueException $e) {
       }
       return NULL;
     } elseif (is_string($property)) {

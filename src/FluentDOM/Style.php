@@ -15,9 +15,10 @@
 */
 require_once(dirname(__FILE__).'/../FluentDOM.php');
 /**
-* include the css property helper class (FluentDOM)
+* include the css property helper classes (FluentDOM)
 */
 require_once(dirname(__FILE__).'/../FluentDOM/Css.php');
+require_once(dirname(__FILE__).'/../FluentDOM/Css/Properties.php');
 
 /**
 * Function to create a new FluentDOMStyleinstance and loads data into it if
@@ -92,7 +93,7 @@ class FluentDOMStyle extends FluentDOM {
     if (is_string($property) && is_null($value)) {
       try {
         $firstNode = $this->_getContentElement($this->_array);
-        $properties = new FluentDOMCss(NULL, $firstNode->getAttribute('style'));
+        $properties = new FluentDOMCssProperties($firstNode->getAttribute('style'));
         if (isset($properties[$property])) {
           return $properties[$property];
         }
@@ -110,7 +111,7 @@ class FluentDOMStyle extends FluentDOM {
     //set list of properties to all elements
     foreach ($this->_array as $index => $node) {
       if ($node instanceof DOMElement) {
-        $properties = new FluentDOMCss(NULL, $node->getAttribute('style'));
+        $properties = new FluentDOMCssProperties($node->getAttribute('style'));
         foreach ($propertyList as $name => $value) {
           $properties[$name] = $properties->compileValue(
             $value, $node, $index, isset($properties[$name]) ? $properties[$name] : NULL

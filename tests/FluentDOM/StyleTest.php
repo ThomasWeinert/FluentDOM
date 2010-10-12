@@ -16,8 +16,6 @@
 require_once (dirname(__FILE__).'/../FluentDOMTestCase.php');
 require_once(dirname(__FILE__).'/../../src/FluentDOM/Style.php');
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
-
 /**
 * Test class for FluentDOMStyle.
 *
@@ -67,9 +65,6 @@ class FluentDOMStyleTest extends FluentDOMTestCase {
     $this->assertAttributeSame(
       $fd, '_fd', $css
     );
-    $this->assertAttributeSame(
-      array('test' => 'success'), '_properties', $css
-    );
   }
 
   /**
@@ -91,7 +86,7 @@ class FluentDOMStyleTest extends FluentDOMTestCase {
   */
   public function testPropertyCssSetWithFluentDOMCss() {
     $fd = $this->getFluentDOMStyleFixture('<sample/>', '/*');
-    $fd->css = new FluentDOMCss(NULL, 'foo: 1; bar: 2;');
+    $fd->css = new FluentDOMCssProperties('foo: 1; bar: 2;');
     $this->assertEquals(
       '<sample style="bar: 2; foo: 1;"/>',
       $fd->document->saveXml($fd->document->documentElement)

@@ -13,7 +13,6 @@
 /**
 * Load necessary files
 */
-require_once('PHPUnit/Framework.php');
 require_once(dirname(__FILE__).'/DOMDocumentTest.php');
 require_once(dirname(__FILE__).'/DOMNodeTest.php');
 require_once(dirname(__FILE__).'/FileHTMLTest.php');
@@ -23,8 +22,6 @@ require_once(dirname(__FILE__).'/SimpleXMLElementTest.php');
 require_once(dirname(__FILE__).'/StringHTMLTest.php');
 require_once(dirname(__FILE__).'/StringJSONTest.php');
 require_once(dirname(__FILE__).'/StringXMLTest.php');
-
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
 /**
 * @package FluentDOM

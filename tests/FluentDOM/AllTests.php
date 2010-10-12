@@ -13,7 +13,6 @@
 /**
 * Load necessary files
 */
-require_once('PHPUnit/Framework.php');
 require_once(dirname(__FILE__).'/AttributesTest.php');
 require_once(dirname(__FILE__).'/CssTest.php');
 require_once(dirname(__FILE__).'/CoreTest.php');
@@ -24,8 +23,6 @@ require_once(dirname(__FILE__).'/HandlerTest.php');
 require_once(dirname(__FILE__).'/IteratorTest.php');
 require_once(dirname(__FILE__).'/Loader/AllTests.php');
 require_once(dirname(__FILE__).'/StyleTest.php');
-
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
 /**
 *

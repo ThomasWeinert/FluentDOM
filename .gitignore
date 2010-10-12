@@ -1,1 +1,6 @@
 phpunit.xml
+.project
+.gitignore
+.buildpath
+docs/
+.settings

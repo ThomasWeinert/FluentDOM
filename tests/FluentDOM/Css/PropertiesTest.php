@@ -66,6 +66,8 @@ class FluentDOMCssPropertiesTest extends FluentDOMTestCase {
 
   /**
   * @covers FluentDOMCssProperties::offsetSet
+  * @covers FluentDOMCssProperties::_decodeName
+  * @covers FluentDOMCssProperties::_isCssProperty
   */
   public function testOffsetSet() {
     $css = new FluentDOMCssProperties();
@@ -77,6 +79,7 @@ class FluentDOMCssPropertiesTest extends FluentDOMTestCase {
 
   /**
   * @covers FluentDOMCssProperties::offsetSet
+  * @covers FluentDOMCssProperties::_isCssProperty
   */
   public function testOffsetSetWithInvalidName() {
     $css = new FluentDOMCssProperties();
@@ -93,6 +96,15 @@ class FluentDOMCssPropertiesTest extends FluentDOMTestCase {
   public function testOffsetSetWithEmptyValue() {
     $css = new FluentDOMCssProperties('width: auto; height: auto;');
     $css['width'] = '';
+    $this->assertEquals('height: auto;', (string)$css);
+  }
+
+  /**
+  * @covers FluentDOMCssProperties::offsetUnset
+  */
+  public function testOffsetUnsetWithEmptyValue() {
+    $css = new FluentDOMCssProperties('width: auto; height: auto;');
+    unset($css['width']);
     $this->assertEquals('height: auto;', (string)$css);
   }
 

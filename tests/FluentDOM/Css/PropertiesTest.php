@@ -136,6 +136,17 @@ class FluentDOMCssPropertiesTest extends FluentDOMTestCase {
     );
   }
 
+  /**
+  * @covers FluentDOMCssProperties::getIterator
+  */
+  public function testGetIterator() {
+    $css = new FluentDOMCssProperties('width: auto; height: auto;');
+    $this->assertEquals(
+      array('width' => 'auto', 'height' => 'auto'),
+      $css->getIterator()->getArrayCopy()
+    );
+  }
+
   /********************
   * data provider
   ********************/

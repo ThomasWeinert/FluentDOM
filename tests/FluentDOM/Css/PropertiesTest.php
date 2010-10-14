@@ -167,6 +167,48 @@ class FluentDOMCssPropertiesTest extends FluentDOMTestCase {
     );
   }
 
+  /**
+  * @covers FluentDOMCssProperties::compileValue
+  */
+  public function testCompileValueWithIntegerExpectingString() {
+    $dom = new DOMDocument();
+    $dom->appendChild($dom->createElement('sample'));
+    $css = new FluentDOMCssProperties('');
+    $this->assertSame(
+      '42',
+      $css->compileValue(
+        42,
+        $dom->documentElement,
+        23,
+        'success'
+      )
+    );
+  }
+
+  /**
+  * @covers FluentDOMCssProperties::compileValue
+  */
+  public function testCompileValueWithCallback() {
+    $dom = new DOMDocument();
+    $dom->appendChild($dom->createElement('sample'));
+    $css = new FluentDOMCssProperties('');
+    $this->assertSame(
+      'success',
+      $css->compileValue(
+        array($this, 'callbackForCompileValue'),
+        $dom->documentElement,
+        23,
+        'success'
+      )
+    );
+  }
+
+  public function callbackForCompileValue($node, $index, $value) {
+    $this->assertType('DOMElement', $node);
+    $this->assertEquals(23, $index);
+    return $value;
+  }
+
   /********************
   * data provider
   ********************/

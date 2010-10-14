@@ -147,6 +147,26 @@ class FluentDOMCssPropertiesTest extends FluentDOMTestCase {
     );
   }
 
+  /**
+  * @covers FluentDOMCssProperties::count
+  */
+  public function testCountExpectingZero() {
+    $css = new FluentDOMCssProperties('');
+    $this->assertEquals(
+      0, count($css)
+    );
+  }
+
+  /**
+  * @covers FluentDOMCssProperties::count
+  */
+  public function testCountExpectingTwo() {
+    $css = new FluentDOMCssProperties('width: auto; height: auto;');
+    $this->assertEquals(
+      2, count($css)
+    );
+  }
+
   /********************
   * data provider
   ********************/

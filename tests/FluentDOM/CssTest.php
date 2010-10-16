@@ -29,6 +29,57 @@ class FluentDOMCssTest extends FluentDOMTestCase {
   }
 
   /**
+  * @covers FluentDOMCss::offsetExists
+  */
+  public function testOffsetExistsExpectingTrue() {
+    $fd = new FluentDOMStyle();
+    $fd->load('<sample style="width: 21px;"/>');
+    $fd = $fd->find('/*');
+    $css = new FluentDOMCss($fd);
+    $this->assertTrue(isset($css['width']));
+  }
+
+  /**
+  * @covers FluentDOMCss::offsetExists
+  */
+  public function testOffsetExistsExpectingFalse() {
+    $fd = new FluentDOMStyle();
+    $fd->load('<sample style="width: 21px;"/>');
+    $fd = $fd->find('/*');
+    $css = new FluentDOMCss($fd);
+    $this->assertFalse(isset($css['height']));
+  }
+
+  /**
+  * @covers FluentDOMCss::offsetExists
+  */
+  public function testOffsetExistsWithoutElementExpectingFalse() {
+    $fd = new FluentDOMStyle();
+    $css = new FluentDOMCss($fd);
+    $this->assertFalse(isset($css['height']));
+  }
+
+  /**
+  * @covers FluentDOMCss::offsetGet
+  */
+  public function testOffsetGet() {
+    $fd = new FluentDOMStyle();
+    $fd->load('<sample style="width: 21px;"/>');
+    $fd = $fd->find('/*');
+    $css = new FluentDOMCss($fd);
+    $this->assertEquals('21px', $css['width']);
+  }
+
+  /**
+  * @covers FluentDOMCss::offsetGet
+  */
+  public function testOffsetGetWithoutElementExpectingFalse() {
+    $fd = new FluentDOMStyle();
+    $css = new FluentDOMCss($fd);
+    $this->assertFalse($css['height']);
+  }
+
+  /**
   * @covers FluentDOMCss::offsetSet
   */
   public function testOffsetSetUpdatesAttributes() {

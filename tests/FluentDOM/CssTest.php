@@ -106,4 +106,83 @@ class FluentDOMCssTest extends FluentDOMTestCase {
       '<sample/>', $fd->document->saveXml($fd->document->documentElement)
     );
   }
+
+  /**
+  * @covers FluentDOMCss::offsetUnset
+  */
+  public function testOffsetUnset() {
+    $fd = new FluentDOMStyle();
+    $fd->load('<sample style="width: 21px; height: 21px;"/>');
+    $fd = $fd->find('/*');
+    $css = new FluentDOMCss($fd);
+    unset($css['width']);
+    $this->assertEquals(
+      '<sample style="height: 21px;"/>', $fd->document->saveXml($fd->document->documentElement)
+    );
+  }
+
+  /**
+  * @covers FluentDOMCss::offsetUnset
+  */
+  public function testOffsetUnsetRemovesAttributes() {
+    $fd = new FluentDOMStyle();
+    $fd->load('<sample style="width: 21px;"/>');
+    $fd = $fd->find('/*');
+    $css = new FluentDOMCss($fd);
+    unset($css['width']);
+    $this->assertEquals(
+      '<sample/>', $fd->document->saveXml($fd->document->documentElement)
+    );
+  }
+
+  /**
+  * @covers FluentDOMCss::getIterator
+  */
+  public function testGetIteratorForFirstElement() {
+    $fd = new FluentDOMStyle();
+    $fd->load('<sample style="width: 21px;"/>');
+    $fd = $fd->find('/*');
+    $css = new FluentDOMCss($fd);
+    $this->assertEquals(
+      array('width' => '21px'),
+      $css->getIterator()->getArrayCopy()
+    );
+  }
+
+  /**
+  * @covers FluentDOMCss::getIterator
+  */
+  public function testGetIteratorExpectingEmptyIterator() {
+    $fd = new FluentDOMStyle();
+    $css = new FluentDOMCss($fd);
+    $this->assertEquals(
+      array(),
+      $css->getIterator()->getArrayCopy()
+    );
+  }
+
+  /**
+  * @covers FluentDOMCss::count
+  */
+  public function testCountExpectingTwo() {
+    $fd = new FluentDOMStyle();
+    $fd->load('<sample style="width: 21px; height: 21px;"/>');
+    $fd = $fd->find('/*');
+    $css = new FluentDOMCss($fd);
+    $this->assertEquals(
+      2, count($css)
+    );
+  }
+
+  /**
+  * @covers FluentDOMCss::count
+  */
+  public function testCountExpectingZero() {
+    $fd = new FluentDOMStyle();
+    $fd = $fd->find('/*');
+    $css = new FluentDOMCss($fd);
+    $this->assertEquals(
+      0, count($css)
+    );
+  }
 }

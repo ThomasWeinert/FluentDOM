@@ -98,7 +98,7 @@ class FluentDOMCss implements ArrayAccess, Countable, IteratorAggregate {
     foreach ($this->_fd as $node) {
       if ($node instanceof DOMElement &&
           $node->hasAttribute('style')) {
-        $properties = new self(NULL, $node->getAttribute('style'));
+        $properties = new FluentDOMCssProperties($node->getAttribute('style'));
         unset($properties[$name]);
         if (count($properties) > 0) {
           $node->setAttribute('style', (string)$properties);

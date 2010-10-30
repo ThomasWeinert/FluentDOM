@@ -126,11 +126,16 @@ class FluentDOMCssProperties implements ArrayAccess, IteratorAggregate, Countabl
   * Remove a css properties if it is set.
   *
   * @see ArrayAccess::offsetUnset()
-  * @param string $name
+  * @param string $names
   */
-  public function offsetUnset($name) {
-    if (array_key_exists($name, $this->_properties)) {
-      unset($this->_properties[$name]);
+  public function offsetUnset($names) {
+    if (!is_array($names)) {
+      $names = array($names);
+    }
+    foreach ($names as $property) {
+      if (array_key_exists($property, $this->_properties)) {
+        unset($this->_properties[$property]);
+      }
     }
   }
 

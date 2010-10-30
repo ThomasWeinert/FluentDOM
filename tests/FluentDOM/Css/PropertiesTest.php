@@ -102,10 +102,19 @@ class FluentDOMCssPropertiesTest extends FluentDOMTestCase {
   /**
   * @covers FluentDOMCssProperties::offsetUnset
   */
-  public function testOffsetUnsetWithEmptyValue() {
+  public function testOffsetUnset() {
     $css = new FluentDOMCssProperties('width: auto; height: auto;');
     unset($css['width']);
     $this->assertEquals('height: auto;', (string)$css);
+  }
+
+  /**
+  * @covers FluentDOMCssProperties::offsetUnset
+  */
+  public function testOffsetUnsetWithArray() {
+    $css = new FluentDOMCssProperties('width: auto; height: auto;');
+    unset($css[array('width', 'height')]);
+    $this->assertEquals('', (string)$css);
   }
 
   /**

@@ -87,12 +87,24 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   protected $_loaders = NULL;
 
   /**
+  * PHP 5.3.3 introduces a new parameter to DOMXPath::evaluate that allows to disable the
+  * automatic namespace registration of the context node. This increases performance but
+  * more important avoids conflicts.
+  *
+  * @var boolean
+  */
+  protected static $_registerNodeNS = NULL;
+
+  /**
   * Constructor
   *
   * @return FluentDOM
   */
   public function __construct() {
     $this->_document = new DOMDocument();
+    if (is_null(self::$_registerNodeNS)) {
+      self::$_registerNodeNS = version_compare(PHP_VERSION, '5.3.3', '>=');
+    }
   }
 
   /**
@@ -502,11 +514,7 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   * @param DOMNode $context
   */
   public function evaluate($expr, DOMNode $context = NULL) {
-    if (isset($context)) {
-      return $this->_xpath()->evaluate($expr, $context);
-    } else {
-      return $this->_xpath()->evaluate($expr);
-    }
+    return $this->_evaluate($expr, $context);
   }
 
   /**
@@ -554,17 +562,35 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   }
 
   /**
+  * Evaluate and XPath expression agains context and return the result.
+  *
+  * @param string $expr
+  * @param DOMNode $context optional, default value NULL
+  * @return mixed
+  */
+  protected function _evaluate($expr, DOMNode $context = NULL) {
+    if (self::$_registerNodeNS) {
+      return $this->_xpath()->evaluate($expr, $context, FALSE);
+    } elseif (isset($context)) {
+      return $this->_xpath()->evaluate($expr, $context);
+    } else {
+      return $this->_xpath()->evaluate($expr);
+    }
+  }
+
+  /**
   * Match XPath expression agains context and return matched elements.
   *
   * @param string $expr
   * @param DOMNode $context optional, default value NULL
   * @return DOMNodeList
   */
-  protected function _match($expr, $context = NULL) {
-    if (isset($context)) {
-      return $this->_xpath()->query($expr, $context);
+  protected function _match($expr, DOMNode $context = NULL) {
+    $list = $this->_evaluate($expr, $context);
+    if ($list instanceof DOMNodeList) {
+      return $list;
     } else {
-      return $this->_xpath()->query($expr);
+      throw new InvalidArgumentException('Given xpath expression did not return an node list.');
     }
   }
 
@@ -575,12 +601,8 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   * @param DOMNode $context optional, default value NULL
   * @return boolean
   */
-  protected function _test($expr, $context = NULL) {
-    if (isset($context)) {
-      $check = $this->_xpath()->evaluate($expr, $context);
-    } else {
-      $check = $this->_xpath()->evaluate($expr);
-    }
+  protected function _test($expr, DOMNode $context = NULL) {
+    $check = $this->_evaluate($expr, $context);
     if ($check instanceof DOMNodeList) {
       return $check->length > 0;
     } else {

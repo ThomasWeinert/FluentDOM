@@ -1569,6 +1569,11 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
 class FluentDOMCoreProxy extends FluentDOMCore {
 
+  public static $_registerNodeNS = NULL;
+
+  public function _evaluate($expr, $context = NULL) {
+    return parent::_evaluate($expr, $context);
+  }
   public function _match($expr, $context = NULL) {
     return parent::_match($expr, $context);
   }

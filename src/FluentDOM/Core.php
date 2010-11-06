@@ -93,7 +93,7 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   *
   * @var boolean
   */
-  protected static $_registerNodeNS = NULL;
+  protected $_registerNodeNS = NULL;
 
   /**
   * Constructor
@@ -102,9 +102,6 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   */
   public function __construct() {
     $this->_document = new DOMDocument();
-    if (is_null(self::$_registerNodeNS)) {
-      self::$_registerNodeNS = version_compare(PHP_VERSION, '5.3.3', '>=');
-    }
   }
 
   /**
@@ -561,6 +558,31 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
     return $this->_xpath;
   }
 
+
+  /**
+  * Provides a boolean switch that eables/disables the automatic registration of namespaces
+  * for the context node of an xpath expression evaluation.
+  *
+  * PHP 5.3.3 introduces a new parameter to DOMXPath::evaluate that allows to disable the
+  * automatic namespace registration of the context node. This increases performance but
+  * more important avoids conflicts.
+  *
+  * The value is initialized by checking the php version if needed.
+  *
+  * @param string $expr
+  * @param DOMNode $context optional, default value NULL
+  * @return mixed
+  */
+  protected function _registerNodeNamespaces($registerNodeNS = NULL) {
+    if (isset($registerNodeNS)) {
+      $this->_registerNodeNS = $registerNodeNS;
+    }
+    if (is_null($this->_registerNodeNS)) {
+      $this->_registerNodeNS = version_compare(PHP_VERSION, '5.3.3', '<');
+    }
+    return $this->_registerNodeNS;
+  }
+
   /**
   * Evaluate and XPath expression agains context and return the result.
   *
@@ -569,7 +591,7 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   * @return mixed
   */
   protected function _evaluate($expr, DOMNode $context = NULL) {
-    if (self::$_registerNodeNS) {
+    if (!$this->_registerNodeNamespaces()) {
       return $this->_xpath()->evaluate($expr, $context, FALSE);
     } elseif (isset($context)) {
       return $this->_xpath()->evaluate($expr, $context);

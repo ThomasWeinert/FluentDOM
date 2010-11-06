@@ -673,10 +673,20 @@ class FluentDOMTest extends FluentDOMTestCase {
   * @group TraversingFind
   * @covers FluentDOM::find
   */
-  public function testFindWithNamespaces() {
+  public function testFindWithDefaultNamespace() {
     $fd = $this->getFixtureFromFile(__FUNCTION__);
     $doc = $fd ->find('//_:entry');
     $this->assertEquals(25, $doc->length);
+  }
+
+  /**
+  * @group Traversing
+  * @group TraversingFind
+  * @covers FluentDOM::find
+  */
+  public function testFindWithRegisteredNamespace() {
+    $fd = $this->getFixtureFromFile(__FUNCTION__);
+    $fd->namespaces(array('openSearch' => 'http://a9.com/-/spec/opensearch/1.1/'));
     $value = $fd ->find('//openSearch:totalResults')->text();
     $this->assertEquals(38, $value);
   }

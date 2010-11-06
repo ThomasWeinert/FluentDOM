@@ -39,6 +39,17 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group Load
+  * @covers FluentDOMCore::__construct
+  */
+  public function testConstructor() {
+    $fd = new FluentDOMCore();
+    $this->assertAttributeType(
+      'DOMDocument', '_document', $fd
+    );
+  }
+
+  /**
+  * @group Load
   * @covers FluentDOMCore::load
   */
   public function testLoadWithInvalidSource() {
@@ -105,14 +116,14 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
       ->expects($this->once())
       ->method('load')
       ->with($this->equalTo($domNode), $this->equalTo('text/xml'))
-      ->will($this->returnValue(array($dom, array($domNode))));
+      ->will($this->returnValue($domNode));
 
     $fd = new FluentDOMCore();
     $fd->setLoaders(array($loaderMock));
+    $fd->load($domNode);
 
-    $this->assertSame(
-      $fd,
-      $fd->load($domNode)
+    $this->assertAttributeSame(
+      array($domNode), '_array', $fd
     );
   }
 
@@ -769,10 +780,44 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group CoreFunctions
+  * @covers FluentDOMCore::_registerNodeNamespaces
+  */
+  public function testRegisterNodeNamespaces() {
+    $fd = new FluentDOMCoreProxy();
+    $this->assertSame(
+      version_compare(PHP_VERSION, '5.3.3', '<'), $fd->_registerNodeNamespaces()
+    );
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_registerNodeNamespaces
+  */
+  public function testRegisterNodeNamespacesExpectingFalseAfterSet() {
+    $fd = new FluentDOMCoreProxy();
+    $this->assertFalse($fd->_registerNodeNamespaces(FALSE));
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_registerNodeNamespaces
+  */
+  public function testRegisterNodeNamespacesExpectingTrueAfterSet() {
+    $fd = new FluentDOMCoreProxy();
+    $this->assertTrue($fd->_registerNodeNamespaces(TRUE));
+  }
+
+  /**
+  * @group CoreFunctions
   * @covers FluentDOMCore::evaluate
+  * @covers FluentDOMCore::_evaluate
   */
   public function testEvaluate() {
+    if (version_compare(PHP_VERSION, '5.3.3', '<')) {
+      $this->markTestSkipped('$registerNodeNS parameter not availiable.');
+    }
     $fd = $this->getFluentDOMCoreFixtureFromString(self::XML);
+    $fd->_registerNodeNamespaces(FALSE);
     $this->assertEquals(
       3,
       $fd->evaluate('count(//item)')
@@ -782,9 +827,41 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
   /**
   * @group CoreFunctions
   * @covers FluentDOMCore::evaluate
+  * @covers FluentDOMCore::_evaluate
   */
   public function testEvaluateWithContext() {
+    if (version_compare(PHP_VERSION, '5.3.3', '<')) {
+      $this->markTestSkipped('$registerNodeNS parameter not availiable.');
+    }
     $fd = $this->getFluentDOMCoreFixtureFromString(self::XML);
+    $this->assertEquals(
+      3,
+      $fd->evaluate('count(group/item)', $fd->document->documentElement)
+    );
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::evaluate
+  * @covers FluentDOMCore::_evaluate
+  */
+  public function testEvaluateWithNamespaceRegistration() {
+    $fd = $this->getFluentDOMCoreFixtureFromString(self::XML);
+    $fd->_registerNodeNamespaces(TRUE);
+    $this->assertEquals(
+      3,
+      $fd->evaluate('count(//item)')
+    );
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::evaluate
+  * @covers FluentDOMCore::_evaluate
+  */
+  public function testEvaluateWithContextWithNamespaceRegistration() {
+    $fd = $this->getFluentDOMCoreFixtureFromString(self::XML);
+    $fd->_registerNodeNamespaces(TRUE);
     $this->assertEquals(
       3,
       $fd->evaluate('count(group/item)', $fd->document->documentElement)
@@ -836,7 +913,7 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group CoreFunctions
-  * @covers FluentDOMcore::_match
+  * @covers FluentDOMCore::_match
   */
   public function testMatch() {
     $fd = $this->getFluentDOMCoreFixtureFromString(self::XML);
@@ -848,7 +925,7 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group CoreFunctions
-  * @covers FluentDOMcore::_match
+  * @covers FluentDOMCore::_match
   */
   public function testMatchWithContext() {
     $fd = $this->getFluentDOMCoreFixtureFromString(self::XML, '/items/group');
@@ -860,7 +937,20 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group CoreFunctions
-  * @covers FluentDOMcore::_test
+  * @covers FluentDOMCore::_match
+  */
+  public function testMatchWithExpressionThatDoesNotReturnAList() {
+    $fd = $this->getFluentDOMCoreFixtureFromString(self::XML);
+    try {
+      $fd->_match('count(/items/group)');
+      $this->fail('An expected exception has not been thrown');
+    } catch (InvalidArgumentException $e) {
+    }
+  }
+
+  /**
+  * @group CoreFunctions
+  * @covers FluentDOMCore::_test
   */
   public function testTestMatchingNodelist() {
     $fd = $this->getFluentDOMCoreFixtureFromString(self::XML);
@@ -871,7 +961,7 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group CoreFunctions
-  * @covers FluentDOMcore::_test
+  * @covers FluentDOMCore::_test
   */
   public function testTestCountingNodesWithContextExpectingTrue() {
     $fd = $this->getFluentDOMCoreFixtureFromString(self::XML, '/items/group');
@@ -882,7 +972,7 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group CoreFunctions
-  * @covers FluentDOMcore::_inList
+  * @covers FluentDOMCore::_inList
   */
   public function testInListExpectingTrue() {
     $fd = $this->getFluentDOMCoreFixtureFromString(self::XML, '/items');
@@ -893,7 +983,7 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group CoreFunctions
-  * @covers FluentDOMcore::_inList
+  * @covers FluentDOMCore::_inList
   */
   public function testInListExpectingFalse() {
     $fd = $this->getFluentDOMCoreFixtureFromString(self::XML, '//item');
@@ -904,7 +994,7 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group CoreFunctions
-  * @covers FluentDOMcore::_isQName
+  * @covers FluentDOMCore::_isQName
   * @dataProvider dataProviderValidQualifiedNames
   */
   public function testIsQName($qualifiedName) {
@@ -924,7 +1014,7 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group CoreFunctions
-  * @covers FluentDOMcore::_isQName
+  * @covers FluentDOMCore::_isQName
   */
   public function testIsQnameWithEmptyNameExpectingException() {
     $fd = new FluentDOMCoreProxy();
@@ -1009,7 +1099,7 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group CoreFunctions
-  * @covers FluentDOMcore::_isNode
+  * @covers FluentDOMCore::_isNode
   */
   public function testIsNodeWithDomnodeExpectingTrue() {
     $dom = new DOMDocument();
@@ -1020,7 +1110,7 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group CoreFunctions
-  * @covers FluentDOMcore::_isNode
+  * @covers FluentDOMCore::_isNode
   */
   public function testIsNodeWithDomtextExpectingTrue() {
     $dom = new DOMDocument();
@@ -1031,7 +1121,7 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group CoreFunctions
-  * @covers FluentDOMcore::_isNode
+  * @covers FluentDOMCore::_isNode
   */
   public function testIsNodeWithEmptyDomtextExpectingTrue() {
     $dom = new DOMDocument();
@@ -1569,11 +1659,14 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
 class FluentDOMCoreProxy extends FluentDOMCore {
 
-  public static $_registerNodeNS = NULL;
+  public function _registerNodeNamespaces($registerNodeNS = NULL) {
+    return parent::_registerNodeNamespaces($registerNodeNS);
+  }
 
   public function _evaluate($expr, $context = NULL) {
     return parent::_evaluate($expr, $context);
   }
+
   public function _match($expr, $context = NULL) {
     return parent::_match($expr, $context);
   }

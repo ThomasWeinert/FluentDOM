@@ -1663,15 +1663,15 @@ class FluentDOMCoreProxy extends FluentDOMCore {
     return parent::_registerNodeNamespaces($registerNodeNS);
   }
 
-  public function _evaluate($expr, $context = NULL) {
+  public function _evaluate($expr, DOMNode $context = NULL) {
     return parent::_evaluate($expr, $context);
   }
 
-  public function _match($expr, $context = NULL) {
+  public function _match($expr, DOMNode $context = NULL) {
     return parent::_match($expr, $context);
   }
 
-  public function _test($expr, $context = NULL) {
+  public function _test($expr, DOMNode $context = NULL) {
     return parent::_test($expr, $context);
   }
 

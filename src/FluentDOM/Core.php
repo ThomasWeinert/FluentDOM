@@ -412,20 +412,25 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   /**
   * Create a new instance of the same class with $this as the parent. This is used for the chaining.
   *
-  * @return FluentDOM
+  * @param DOMNode|DOMNodeList|FluentDOM $elements
+  * @return FluentDOMCore
   */
-  public function spawn() {
+  public function spawn($elements = NULL) {
     $className = get_class($this);
     $result = new $className();
     $result->_namespaces = $this->_namespaces;
-    return $result->load($this);
+    $result->load($this);
+    if (isset($elements)) {
+      $result->push($elements);
+    }
+    return $result;
   }
 
   /**
   * Push new element(s) an the internal element list
   *
   * @uses _inList
-  * @param DOMNode|DOMNodeList|FluentDOM $elements
+  * @param DOMNode|DOMNodeList|FluentDOMCore $elements
   * @param boolean $ignoreTextNodes ignore text nodes
   * @return void
   */

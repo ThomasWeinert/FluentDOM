@@ -591,6 +591,24 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
 
   /**
   * @group CoreFunctions
+  * @covers FluentDOMCore::spawn
+  */
+  public function testSpawnWithElements() {
+    $dom = new DOMDocument;
+    $node = $dom->createElement('test');
+    $dom->appendChild($node);
+    $fdParent = new FluentDOMCore;
+    $fdParent->load($dom);
+    $fdChild = $fdParent->spawn($node);
+    $this->assertAttributeSame(
+      array($node),
+      '_array',
+      $fdChild
+    );
+  }
+
+  /**
+  * @group CoreFunctions
   * @covers FluentDOMCore::push
   */
   public function testPushWithDomnode() {

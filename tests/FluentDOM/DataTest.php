@@ -66,18 +66,52 @@ class FluentDOMDataTest extends FluentDOMTestCase {
     );
   }
 
+  /**
+  * @covers FluentDOMData::__set
+  * @covers FluentDOMData::encodeValue
+  * @dataProvider provideDataValues
+  */
+  public function testMagicMethodSet($expectedXml, $name, $value) {
+    $dom = new DOMDocument();
+    $dom->appendChild($dom->createElement('node'));
+    $data = new FluentDOMData($dom->documentElement);
+    $data->$name = $value;
+    $this->assertEquals(
+      $expectedXml, $dom->saveXml($dom->documentElement)
+    );
+  }
+
   public static function provideDataAttributes() {
     return array(
       'string' => array('World', 'Hello', '<node data-Hello="World"/>'),
       'boolean true' => array(TRUE, 'truth', '<node data-truth="true"/>'),
       'boolean false' => array(FALSE, 'lie', '<node data-lie="false"/>'),
-      'array' => array(array('1', '2'), 'list', '<node data-list="[1, 2]"/>'),
-      'object' => array(
-         self::createObjectFromArray(array('foo' => 'bar')),
-         'object',
-         '<node data-object=\'{"foo":"bar"}\'/>'
+      'array' => array(
+        array('1', '2'),
+        'list',
+        '<node data-list="[&quot;1&quot;,&quot;2&quot;]"/>'
       ),
-      'invalid object' => array(NULL, 'object', '<node data-object=\'{{"foo":"bar"}\'/>')
+      'object' => array(
+        self::createObjectFromArray(array('foo' => 'bar')),
+        'object',
+        '<node data-object="{&quot;foo&quot;:&quot;bar&quot;}"/>'
+      ),
+      'invalid object' => array(NULL, 'object', '<node data-object=\'{{"foo":"bar"}\'/>'),
+      'invalid attrbute' => array(NULL, 'unknown', '<node/>')
+    );
+  }
+
+  public static function provideDataValues() {
+    return array(
+      'string' => array('<node data-Hello="World"/>', 'Hello', 'World'),
+      'boolean true' => array('<node data-truth="true"/>', 'truth', TRUE),
+      'boolean false' => array('<node data-lie="false"/>', 'lie', FALSE),
+      'array' => array('<node data-list="[&quot;1&quot;,&quot;2&quot;]"/>', 'list', array('1', '2')),
+      'object' => array(
+        '<node data-object="{&quot;foo&quot;:&quot;bar&quot;}"/>',
+        'object',
+        self::createObjectFromArray(array('foo' => 'bar'))
+      )
     );
   }
 

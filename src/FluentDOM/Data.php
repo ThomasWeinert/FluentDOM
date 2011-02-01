@@ -15,7 +15,7 @@
 *
 * @package FluentDOM
 */
-class FluentDOMData {
+class FluentDOMData implements IteratorAggregate {
 
   /**
   * Attached element node
@@ -46,6 +46,15 @@ class FluentDOMData {
       }
     }
     return $result;
+  }
+
+  /**
+  * IteratorAggregate Interface: allow to iterate the data attributes
+  *
+  * @return ArrayIterator
+  */
+  public function getIterator() {
+    return new ArrayIterator($this->toArray());
   }
 
   /**

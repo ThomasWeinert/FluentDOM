@@ -52,6 +52,25 @@ class FluentDOMDataTest extends FluentDOMTestCase {
   }
 
   /**
+  * @covers FluentDOMData::getIterator
+  */
+  public function testGetIterator() {
+    $dom = new DOMDocument();
+    $dom->loadXML(
+      '<div data-role="page" data-hidden="true"></div>'
+    );
+    $data = new FluentDOMData($dom->documentElement);
+    $this->assertEquals(
+      array(
+        'role' => 'page',
+        'hidden' => TRUE
+      ),
+      $data->getIterator()->getArrayCopy()
+    );
+
+  }
+
+  /**
   * @covers FluentDOMData::__get
   * @covers FluentDOMData::decodeValue
   * @dataProvider provideDataAttributes

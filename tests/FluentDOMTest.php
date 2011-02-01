@@ -1642,6 +1642,50 @@ class FluentDOMTest extends FluentDOMTestCase {
     }
   }
 
+  /**
+  * @group AttributesData
+  * @covers FluentDOM::data
+  */
+  public function testDataRead() {
+    $fd = $this->getFixtureFromString('<sample data-foo="bar"/>')->find('//sample');
+    $this->assertEquals('bar', $fd->data('foo'));
+  }
+
+  /**
+  * @group AttributesData
+  * @covers FluentDOM::data
+  */
+  public function testDataReadWihtoutElement() {
+    $fd = $this->getFixtureFromString('<sample/>');
+    $this->assertEquals('', $fd->data('dummy'));
+  }
+
+  /**
+  * @group AttributesData
+  * @covers FluentDOM::data
+  */
+  public function testDataWrite() {
+    $fd = $this->getFixtureFromString('<sample/>')->find('//sample');
+    $fd->data('foo', 'bar');
+    $this->assertEquals(
+      '<sample data-foo="bar"/>',
+      $fd->document->saveXml($fd->document->documentElement)
+    );
+  }
+
+  /**
+  * @group AttributesData
+  * @covers FluentDOM::data
+  */
+  public function testDataWriteWithArray() {
+    $fd = $this->getFixtureFromString('<sample/>')->find('//sample');
+    $fd->data(array('foo' => 'bar', 'bar' => 'foo'));
+    $this->assertEquals(
+      '<sample data-foo="bar" data-bar="foo"/>',
+      $fd->document->saveXml($fd->document->documentElement)
+    );
+  }
+
   public static function dataProviderInvalidAttributeNames() {
     return array(
       array('1foo'),
@@ -1785,6 +1829,45 @@ class FluentDOMTest extends FluentDOMTestCase {
       '<sample><item foo="1"/><item foo="1"/></sample>',
       $fd->document->saveXml($fd->document->documentElement)
     );
+  }
+
+  /*
+  * Attributes - Data
+  */
+
+  /**
+  * @group DataAttributes
+  * @covers FluentDOM::__get
+  */
+  public function testPropertyDataGet() {
+    $fd = $this->getFixtureFromString('<sample data-foo="bar"/>')->find('//sample');
+    $this->assertEquals('bar', $fd->data->foo);
+  }
+
+  /**
+  * @group DataAttributes
+  * @covers FluentDOM::__get
+  */
+  public function testPropertyDataSet() {
+    $fd = $this->getFixtureFromString('<sample/>')->find('//sample');
+    $fd->data->foo = 'bar';
+    $this->assertEquals(
+      '<sample data-foo="bar"/>',
+      $fd->document->saveXml($fd->document->documentElement)
+    );
+  }
+
+  /**
+  * @group DataAttributes
+  * @covers FluentDOM::__get
+  */
+  public function testPropertyDatGetOnTextNodeExpectingException() {
+    $fd = $this->getFixtureFromString('<sample>foo</sample>')->find('//sample/text()');
+    try {
+      $dummy = $fd->data->something;
+      $this->fail('An expected exception has not been raised.');
+    } catch (UnexpectedValueException $e) {
+    }
   }
 
   /*

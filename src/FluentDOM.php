@@ -22,6 +22,10 @@ require_once(dirname(__FILE__).'/FluentDOM/Handler.php');
 * Include the attributes helper class
 */
 require_once(dirname(__FILE__).'/FluentDOM/Attributes.php');
+/**
+* Include the data-attributes helper class
+*/
+require_once(dirname(__FILE__).'/FluentDOM/Data.php');
 
 /**
 * Function to create a new FluentDOM instance and loads data into it if
@@ -83,6 +87,15 @@ class FluentDOM extends FluentDOMCore {
     switch ($name) {
     case 'attr' :
       return new FluentDOMAttributes($this);
+    case 'data' :
+      if (count($this->_array) > 0 &&
+          $this->_array[0] instanceof DOMElement) {
+        return new FluentDOMData($this->_array[0]);
+      } else {
+        throw new UnexpectedValueException(
+          'UnexpectedValueException: first selected node is no element.'
+        );
+      }
     }
     return parent::__get($name);
   }
@@ -1388,6 +1401,37 @@ class FluentDOM extends FluentDOMCore {
       }
     }
     return $this;
+  }
+
+  /**
+  * Read a data attribute from the first node or set data attributes n all lesected nodes.
+  *
+  * @param string|array $name data attribute identifier or array of data attributes to set
+  * @param mixed $value
+  * @return mixed
+  */
+  public function data($name, $value = NULL) {
+    if (!is_array($name) && is_null($value)) {
+      //reading
+      if (isset($this->_array[0]) &&
+          $this->_array[0] instanceof DOMElement) {
+        $data = new FluentDOMData($this->_array[0]);
+        return $data->$name;
+      }
+      return NULL;
+    } elseif (is_array($name)) {
+      $values = $name;
+    } else {
+      $values = array((string)$name => $value);
+    }
+    foreach ($this->_array as $node) {
+      if ($node instanceof DOMElement) {
+        $data = new FluentDOMData($node);
+        foreach ($values as $dataName => $dataValue) {
+          $data->$dataName = $dataValue;
+        }
+      }
+    }
   }
 
   /*

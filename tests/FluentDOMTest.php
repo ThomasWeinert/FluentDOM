@@ -1820,7 +1820,7 @@ class FluentDOMTest extends FluentDOMTestCase {
   * @group AttributesData
   * @covers FluentDOM::removeData
   */
-  public function testRemoveDataWihtInvalidName() {
+  public function testRemoveDataWithInvalidName() {
     $fd = $this->getFixtureFromString('<sample data-foo="bar" data-bar="foo"/>')->find('//sample');
     try {
       $fd->removeData('');

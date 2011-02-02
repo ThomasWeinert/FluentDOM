@@ -67,7 +67,26 @@ class FluentDOMDataTest extends FluentDOMTestCase {
       ),
       $data->getIterator()->getArrayCopy()
     );
+  }
 
+  /**
+  * @covers FluentDOMData::__isset
+  */
+  public function testMagicMethodIssetExpectingTrue() {
+    $dom = new DOMDocument();
+    $dom->loadXML('<node data-truth="true"/>');
+    $data = new FluentDOMData($dom->documentElement);
+    $this->assertTrue(isset($data->truth));
+  }
+
+  /**
+  * @covers FluentDOMData::__isset
+  */
+  public function testMagicMethodIssetExpectingFalse() {
+    $dom = new DOMDocument();
+    $dom->loadXML('<node data-truth="true"/>');
+    $data = new FluentDOMData($dom->documentElement);
+    $this->assertFalse(isset($data->lie));
   }
 
   /**
@@ -97,6 +116,20 @@ class FluentDOMDataTest extends FluentDOMTestCase {
     $data->$name = $value;
     $this->assertEquals(
       $expectedXml, $dom->saveXml($dom->documentElement)
+    );
+  }
+
+  /**
+  * @covers FluentDOMData::__unset
+  * @dataProvider provideDataValues
+  */
+  public function testMagicMethodUnset() {
+    $dom = new DOMDocument();
+    $dom->loadXml('<node data-truth="true"/>');
+    $data = new FluentDOMData($dom->documentElement);
+    unset($data->truth);
+    $this->assertEquals(
+      '<node/>', $dom->saveXml($dom->documentElement)
     );
   }
 

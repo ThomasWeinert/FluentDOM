@@ -63,7 +63,7 @@ class FluentDOMData implements IteratorAggregate {
   * @param string $name
   */
   public function __isset($name) {
-    $this->_node->hasAttribute('data-'.$name);
+    return $this->_node->hasAttribute('data-'.$name);
   }
 
   /**

@@ -58,6 +58,15 @@ class FluentDOMData implements IteratorAggregate {
   }
 
   /**
+  * Validate if the attached node has the data attribute.
+  *
+  * @param string $name
+  */
+  public function __isset($name) {
+    $this->_node->hasAttribute('data-'.$name);
+  }
+
+  /**
   * Change a data attribute on the attached node.
   *
   * @param string $name
@@ -78,6 +87,15 @@ class FluentDOMData implements IteratorAggregate {
     if ($this->_node->hasAttribute($name)) {
       return $this->decodeValue($this->_node->getAttribute($name));
     }
+  }
+
+  /**
+  * Remove a data attribute from the attached node.
+  *
+  * @param string $name
+  */
+  public function __unset($name) {
+    $this->_node->removeAttribute('data-'.$name);
   }
 
   /**

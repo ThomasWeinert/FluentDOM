@@ -1369,32 +1369,33 @@ class FluentDOM extends FluentDOMCore {
   }
 
   /**
-  * Remove an attribute from each of the matched elements.
+  * Remove an attribute from each of the matched elements. If $name is NULL or *,
+  * all attributes will be deleted.
   *
   * @example removeAttr.php Usage Example: FluentDOM::removeAttr()
   * @param string $name
   * @return FluentDOM
   */
   public function removeAttr($name) {
-    if (!empty($name)) {
-      if (is_string($name) && $name !== '*') {
-        $attributes = array($name);
-      } elseif (is_array($name)) {
-        $attributes = $name;
-      } elseif ($name !== '*') {
-        throw new InvalidArgumentException();
-      }
-      foreach ($this->_array as $node) {
-        if ($node instanceof DOMElement) {
-          if ($name === '*') {
-            for ($i = $node->attributes->length - 1; $i >= 0; $i--) {
-              $node->removeAttribute($node->attributes->item($i)->name);
-            }
-          } else {
-            foreach ($attributes as $attribute) {
-              if ($node->hasAttribute($attribute)) {
-                $node->removeAttribute($attribute);
-              }
+    if (is_null($name) || $name === '*') {
+      $attributes = NULL;
+    } elseif (is_string($name)) {
+      $attributes = array($name);
+    } elseif (is_array($name)) {
+      $attributes = $name;
+    } elseif ($name !== '*') {
+      throw new InvalidArgumentException();
+    }
+    foreach ($this->_array as $node) {
+      if ($node instanceof DOMElement) {
+        if (is_null($attributes)) {
+          for ($i = $node->attributes->length - 1; $i >= 0; $i--) {
+            $node->removeAttribute($node->attributes->item($i)->name);
+          }
+        } else {
+          foreach ($attributes as $attribute) {
+            if ($node->hasAttribute($attribute)) {
+              $node->removeAttribute($attribute);
             }
           }
         }
@@ -1406,6 +1407,7 @@ class FluentDOM extends FluentDOMCore {
   /**
   * Read a data attribute from the first node or set data attributes n all lesected nodes.
   *
+  * @example data.php Usage Example: FluentDOM::data()
   * @param string|array $name data attribute identifier or array of data attributes to set
   * @param mixed $value
   * @return mixed
@@ -1429,6 +1431,40 @@ class FluentDOM extends FluentDOMCore {
         $data = new FluentDOMData($node);
         foreach ($values as $dataName => $dataValue) {
           $data->$dataName = $dataValue;
+        }
+      }
+    }
+  }
+
+  /**
+  * Remove an data - attribute from each of the matched elements. If $name is NULL or *,
+  * all data attributes will be deleted.
+  *
+  * @example removeData.php Usage Example: FluentDOM::removeData()
+  * @param string $name
+  * @return FluentDOM
+  */
+  public function removeData($name = NULL) {
+    if (is_null($name) || $name === '*') {
+      $names = NULL;
+    } elseif (is_string($name) && trim($name != '')) {
+      $names = array($name);
+    } elseif (is_array($name)) {
+      $names = $name;
+    } else {
+      throw new InvalidArgumentException();
+    }
+    foreach ($this->_array as $node) {
+      if ($node instanceof DOMElement) {
+        $data = new FluentDOMData($node);
+        if (is_array($names)) {
+          foreach ($names as $dataName) {
+            unset($data->$dataName);
+          }
+        } else {
+          foreach ($data as $dataName => $dataValue) {
+            unset($data->$dataName);
+          }
         }
       }
     }

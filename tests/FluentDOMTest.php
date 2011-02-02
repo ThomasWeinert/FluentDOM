@@ -1642,50 +1642,6 @@ class FluentDOMTest extends FluentDOMTestCase {
     }
   }
 
-  /**
-  * @group AttributesData
-  * @covers FluentDOM::data
-  */
-  public function testDataRead() {
-    $fd = $this->getFixtureFromString('<sample data-foo="bar"/>')->find('//sample');
-    $this->assertEquals('bar', $fd->data('foo'));
-  }
-
-  /**
-  * @group AttributesData
-  * @covers FluentDOM::data
-  */
-  public function testDataReadWihtoutElement() {
-    $fd = $this->getFixtureFromString('<sample/>');
-    $this->assertEquals('', $fd->data('dummy'));
-  }
-
-  /**
-  * @group AttributesData
-  * @covers FluentDOM::data
-  */
-  public function testDataWrite() {
-    $fd = $this->getFixtureFromString('<sample/>')->find('//sample');
-    $fd->data('foo', 'bar');
-    $this->assertEquals(
-      '<sample data-foo="bar"/>',
-      $fd->document->saveXml($fd->document->documentElement)
-    );
-  }
-
-  /**
-  * @group AttributesData
-  * @covers FluentDOM::data
-  */
-  public function testDataWriteWithArray() {
-    $fd = $this->getFixtureFromString('<sample/>')->find('//sample');
-    $fd->data(array('foo' => 'bar', 'bar' => 'foo'));
-    $this->assertEquals(
-      '<sample data-foo="bar" data-bar="foo"/>',
-      $fd->document->saveXml($fd->document->documentElement)
-    );
-  }
-
   public static function dataProviderInvalidAttributeNames() {
     return array(
       array('1foo'),
@@ -1788,6 +1744,89 @@ class FluentDOMTest extends FluentDOMTestCase {
       ->find('//p')
       ->removeAttr('*');
     $this->assertFluentDOMEqualsXMLFile(__FUNCTION__, $fd);
+  }
+
+  /**
+  * @group AttributesData
+  * @covers FluentDOM::data
+  */
+  public function testDataRead() {
+    $fd = $this->getFixtureFromString('<sample data-foo="bar"/>')->find('//sample');
+    $this->assertEquals('bar', $fd->data('foo'));
+  }
+
+  /**
+  * @group AttributesData
+  * @covers FluentDOM::data
+  */
+  public function testDataReadWithoutElement() {
+    $fd = $this->getFixtureFromString('<sample/>');
+    $this->assertEquals('', $fd->data('dummy'));
+  }
+
+  /**
+  * @group AttributesData
+  * @covers FluentDOM::data
+  */
+  public function testDataWrite() {
+    $fd = $this->getFixtureFromString('<sample/>')->find('//sample');
+    $fd->data('foo', 'bar');
+    $this->assertEquals(
+      '<sample data-foo="bar"/>',
+      $fd->document->saveXml($fd->document->documentElement)
+    );
+  }
+
+  /**
+  * @group AttributesData
+  * @covers FluentDOM::removeData
+  */
+  public function testRemoveData() {
+    $fd = $this->getFixtureFromString('<sample data-foo="bar" data-bar="foo"/>')->find('//sample');
+    $fd->removeData('foo');
+    $this->assertEquals(
+      '<sample data-bar="foo"/>',
+      $fd->document->saveXml($fd->document->documentElement)
+    );
+  }
+
+  /**
+  * @group AttributesData
+  * @covers FluentDOM::removeData
+  */
+  public function testRemoveDataWithList() {
+    $fd = $this->getFixtureFromString('<sample data-foo="bar" data-bar="foo"/>')->find('//sample');
+    $fd->removeData(array('foo', 'bar'));
+    $this->assertEquals(
+      '<sample/>',
+      $fd->document->saveXml($fd->document->documentElement)
+    );
+  }
+
+  /**
+  * @group AttributesData
+  * @covers FluentDOM::removeData
+  */
+  public function testRemoveDataWithoutNamesRemovingAll() {
+    $fd = $this->getFixtureFromString('<sample data-foo="bar" data-bar="foo"/>')->find('//sample');
+    $fd->removeData();
+    $this->assertEquals(
+      '<sample/>',
+      $fd->document->saveXml($fd->document->documentElement)
+    );
+  }
+
+  /**
+  * @group AttributesData
+  * @covers FluentDOM::removeData
+  */
+  public function testRemoveDataWihtInvalidName() {
+    $fd = $this->getFixtureFromString('<sample data-foo="bar" data-bar="foo"/>')->find('//sample');
+    try {
+      $fd->removeData('');
+      $this->fail('An expected exception has not been thrown.');
+    } catch (InvalidArgumentException $e) {
+    }
   }
 
   /**

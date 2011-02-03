@@ -87,6 +87,7 @@ class FluentDOMData implements IteratorAggregate {
     if ($this->_node->hasAttribute($name)) {
       return $this->decodeValue($this->_node->getAttribute($name));
     }
+    return NULL;
   }
 
   /**

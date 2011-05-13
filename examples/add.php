@@ -1,4 +1,5 @@
 <?php
+// swtiched to ruby please delete
 /**
 *
 * @version $Id$
@@ -15,7 +16,7 @@ $xml = <<<XML
   <b>HELLO</b>
 
   <div>Another list of childNodes</div>
-</body>
+</body
 </html>
 XML;
 

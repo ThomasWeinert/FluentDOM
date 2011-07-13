@@ -70,6 +70,34 @@ class FluentDOMDataTest extends FluentDOMTestCase {
   }
 
   /**
+  * @covers FluentDOMData::count
+  */
+  public function testCountExpectingZero() {
+    $dom = new DOMDocument();
+    $dom->loadXML(
+      '<div></div>'
+    );
+    $data = new FluentDOMData($dom->documentElement);
+    $this->assertEquals(
+      0, count($data)
+    );
+  }
+
+  /**
+  * @covers FluentDOMData::count
+  */
+  public function testCountExpectingTwo() {
+    $dom = new DOMDocument();
+    $dom->loadXML(
+      '<div data-role="page" data-hidden="true"></div>'
+    );
+    $data = new FluentDOMData($dom->documentElement);
+    $this->assertEquals(
+      2, count($data)
+    );
+  }
+
+  /**
   * @covers FluentDOMData::__isset
   */
   public function testMagicMethodIssetExpectingTrue() {

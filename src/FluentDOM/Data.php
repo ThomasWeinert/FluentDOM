@@ -15,7 +15,7 @@
 *
 * @package FluentDOM
 */
-class FluentDOMData implements IteratorAggregate {
+class FluentDOMData implements IteratorAggregate, Countable {
 
   /**
   * Attached element node
@@ -55,6 +55,21 @@ class FluentDOMData implements IteratorAggregate {
   */
   public function getIterator() {
     return new ArrayIterator($this->toArray());
+  }
+
+  /**
+  * countable Interface: return the number of data attributes
+  *
+  * @return integer
+  */
+  public function count() {
+    $result = 0;
+    foreach ($this->_node->attributes as $attribute) {
+      if (0 === strpos(strtolower($attribute->name), 'data-')) {
+        ++$result;
+      }
+    }
+    return $result;
   }
 
   /**

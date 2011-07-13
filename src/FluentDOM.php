@@ -1470,6 +1470,26 @@ class FluentDOM extends FluentDOMCore {
     }
   }
 
+  /**
+  * Validate if the element has an data attributes attached. If it is called without an
+  * actual $element parameter, it will check the first matched node.
+  *
+  * @return DOMElement $element
+  * @return boolean
+  */
+  public function hasData(DOMElement $element = NULL) {
+    if (isset($element)) {
+      $data = new FluentDOMData($element);
+      return count($data) > 0;
+    }
+    if (isset($this->_array[0]) &&
+        $this->_array[0] instanceof DOMElement) {
+      $data = new FluentDOMData($this->_array[0]);
+      return count($data) > 0;
+    }
+    return FALSE;
+  }
+
   /*
   * Attributes - Classes
   */

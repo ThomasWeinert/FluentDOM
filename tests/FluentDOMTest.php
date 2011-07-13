@@ -1830,6 +1830,51 @@ class FluentDOMTest extends FluentDOMTestCase {
   }
 
   /**
+  * @group AttributesData
+  * @covers FluentDOM::hasData
+  */
+  public function testHasDataExpectingTrue() {
+    $fd = $this->getFixtureFromString('<sample data-foo="bar"/>')->find('//sample');
+    $this->assertTrue($fd->hasData());
+  }
+
+  /**
+  * @group AttributesData
+  * @covers FluentDOM::hasData
+  */
+  public function testHasDataExpectingFalse() {
+    $fd = $this->getFixtureFromString('<sample/>')->find('//sample');
+    $this->assertFalse($fd->hasData());
+  }
+
+  /**
+  * @group AttributesData
+  * @covers FluentDOM::hasData
+  */
+  public function testHasDataOnEmptyFluentDomExpectingFalse() {
+    $fd = $this->getFixtureFromString('<sample/>');
+    $this->assertFalse($fd->hasData());
+  }
+
+  /**
+  * @group AttributesData
+  * @covers FluentDOM::hasData
+  */
+  public function testHasDataOnElementExpectingTrue() {
+    $fd = $this->getFixtureFromString('<sample data-foo="bar"/>');
+    $this->assertTrue($fd->hasData($fd->document->documentElement));
+  }
+
+  /**
+  * @group AttributesData
+  * @covers FluentDOM::hasData
+  */
+  public function testHasDataOnElementExpectingFalse() {
+    $fd = $this->getFixtureFromString('<sample/>');
+    $this->assertFalse($fd->hasData($fd->document->documentElement));
+  }
+
+  /**
   * @group Attributes
   * @covers FluentDOM::__get
   */

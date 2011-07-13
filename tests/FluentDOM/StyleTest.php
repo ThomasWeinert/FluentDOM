@@ -331,10 +331,10 @@ class FluentDOMStyleTest extends FluentDOMTestCase {
       $loader
         ->expects($this->once())
         ->method('load')
-        ->with($this->equalTo(''))
+        ->with($this->equalTo('mocked'))
         ->will($this->returnValue($dom));
       $fd->setLoaders(array($loader));
-      $fd->load('');
+      $fd->load('mocked');
       if (!empty($xpath)) {
         $query = new DOMXPath($dom);
         $nodes = $query->evaluate($xpath);

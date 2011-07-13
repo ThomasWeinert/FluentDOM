@@ -58,6 +58,27 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
       $fd->load(1);
       $this->fail('An expected exception has not been raised.');
     } catch (InvalidArgumentException $expected) {
+      $this->assertEquals(
+        'Could not load invalid $source into FluentDOM object.',
+        $expected->getMessage()
+      );
+    }
+  }
+
+  /**
+  * @group Load
+  * @covers FluentDOMCore::load
+  */
+  public function testLoadWithEmptySource() {
+    $fd = new FluentDOMCore();
+    try {
+      $fd->load('');
+      $this->fail('An expected exception has not been raised.');
+    } catch (InvalidArgumentException $expected) {
+      $this->assertEquals(
+        'Can not load empty $source into FluentDOM object.',
+        $expected->getMessage()
+      );
     }
   }
 
@@ -407,11 +428,11 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
     $loader
       ->expects($this->once())
       ->method('load')
-      ->with($this->equalTo(''), $this->equalTo('text/html'))
+      ->with($this->equalTo('mocked'), $this->equalTo('text/html'))
       ->will($this->returnValue($dom));
     $fd = new FluentDOMCore();
     $fd->setLoaders(array($loader));
-    $fd = $fd->load('', 'text/html');
+    $fd = $fd->load('mocked', 'text/html');
     $this->assertEquals($dom->saveHTML(), (string)$fd);
   }
 
@@ -1656,10 +1677,10 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
       $loader
         ->expects($this->once())
         ->method('load')
-        ->with($this->equalTo(''))
+        ->with($this->equalTo('mocked'))
         ->will($this->returnValue($dom));
       $fd->setLoaders(array($loader));
-      $fd->load('');
+      $fd->load('mocked');
       if (!empty($xpath)) {
         $query = new DOMXPath($dom);
         $nodes = $query->evaluate($xpath);

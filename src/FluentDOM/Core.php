@@ -120,6 +120,10 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
       $this->_contentType = $source->_contentType;
       $this->_parent = $source;
       return $this;
+    } elseif (empty($source)) {
+      throw new InvalidArgumentException(
+        'Can not load empty $source into FluentDOM object.'
+      );
     } else {
       $this->_parent = NULL;
       $this->_initLoaders();
@@ -137,7 +141,9 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
           return $this;
         }
       }
-      throw new InvalidArgumentException('Invalid source object.');
+      throw new InvalidArgumentException(
+        'Could not load invalid $source into FluentDOM object.'
+      );
     }
     return $this;
   }

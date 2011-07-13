@@ -9,6 +9,7 @@ is disabled if possible. This improves performance, too.
 - Changed: XPath expression do not register the namespaces of the context element if possible.
            This should improve performance and avoid conflicts.
 - Changed: Tests now compatible to PHPUnit 3.5
+- Changed: FluentDOMCore::load() now throws an exception if the source is empty
 - Added: FluentDOM::$attr property access for xml attributes
 - Added: FluentDOM::$css property access to the css option in the style attribute
 - Added: FluentDOM::$data property access to HTML 5 data attributes

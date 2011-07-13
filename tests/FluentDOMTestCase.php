@@ -94,11 +94,11 @@ abstract class FluentDOMTestCase extends PHPUnit_Framework_TestCase {
     $loader = $this->getMock('FluentDOMLoader');
     $loader->expects($this->once())
            ->method('load')
-           ->with($this->equalTo(''))
+           ->with($this->equalTo('mocked'))
            ->will($this->returnValue($dom));
     $fd = new FluentDOM();
     $fd->setLoaders(array($loader));
-    return $fd->load('');
+    return $fd->load('mocked');
   }
 
   /**

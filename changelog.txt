@@ -1,3 +1,21 @@
+Version 4.1:
+
+For css() and attr() now property access is possible. HTML 5 data attributes are supported, too.
+
+In PHP 5.3 an third argument was introduced to DOMXPath::evaluate(). This allows to disable the
+automatic namespace registration. Because it is broken and completely wrong in the first place it 
+is disabled if possible. This improves performance, too.
+
+- Changed: XPath expression do not register the namespaces of the context element if possible.
+           This should improve performance and avoid conflicts.
+- Changed: Tests now compatible to PHPUnit 3.5
+- Added: FluentDOM::$attr property access for xml attributes
+- Added: FluentDOM::$css property access to the css option in the style attribute
+- Added: FluentDOM::$data property access to HTML 5 data attributes
+- Added: FluentDOM::data() read/write HTML 5 data attributes
+- Added: FluentDOM::removeData() remove HTML 5 data attributes access
+- Added: FluentDOM::reverse() reverse the order of the matched nodes.
+
 Version 4.0:
 
 This version has been restructured because the class had grown to large. The new structure allows

@@ -32,6 +32,7 @@ class FluentDOMDataTest extends FluentDOMTestCase {
 
   /**
   * @covers FluentDOMData::toArray
+  * @covers FluentDOMData::isDataProperty
   */
   public function testToArrayWithSeveralAttributes() {
     $dom = new DOMDocument();
@@ -46,6 +47,24 @@ class FluentDOMDataTest extends FluentDOMTestCase {
         'role' => 'page',
         'hidden' => TRUE,
         'options' => $options
+      ),
+      $data->toArray()
+    );
+  }
+
+  /**
+  * @covers FluentDOMData::toArray
+  * @covers FluentDOMData::decodeName
+  */
+  public function testToArrayWithComplexAttribute() {
+    $dom = new DOMDocument();
+    $dom->loadXML(
+      '<div data-options-name="John"></div>'
+    );
+    $data = new FluentDOMData($dom->documentElement);
+    $this->assertEquals(
+      array(
+        'optionsName' => 'John'
       ),
       $data->toArray()
     );
@@ -119,6 +138,7 @@ class FluentDOMDataTest extends FluentDOMTestCase {
 
   /**
   * @covers FluentDOMData::__get
+  * @covers FluentDOMData::encodeName
   * @covers FluentDOMData::decodeValue
   * @dataProvider provideDataAttributes
   */
@@ -134,6 +154,7 @@ class FluentDOMDataTest extends FluentDOMTestCase {
 
   /**
   * @covers FluentDOMData::__set
+  * @covers FluentDOMData::encodeName
   * @covers FluentDOMData::encodeValue
   * @dataProvider provideDataValues
   */
@@ -149,6 +170,7 @@ class FluentDOMDataTest extends FluentDOMTestCase {
 
   /**
   * @covers FluentDOMData::__unset
+  * @covers FluentDOMData::encodeName
   * @dataProvider provideDataValues
   */
   public function testMagicMethodUnset() {
@@ -163,7 +185,7 @@ class FluentDOMDataTest extends FluentDOMTestCase {
 
   public static function provideDataAttributes() {
     return array(
-      'string' => array('World', 'Hello', '<node data-Hello="World"/>'),
+      'string' => array('World', 'Hello', '<node data-hello="World"/>'),
       'boolean true' => array(TRUE, 'truth', '<node data-truth="true"/>'),
       'boolean false' => array(FALSE, 'lie', '<node data-lie="false"/>'),
       'array' => array(
@@ -177,13 +199,15 @@ class FluentDOMDataTest extends FluentDOMTestCase {
         '<node data-object="{&quot;foo&quot;:&quot;bar&quot;}"/>'
       ),
       'invalid object' => array(NULL, 'object', '<node data-object=\'{{"foo":"bar"}\'/>'),
-      'invalid attrbute' => array(NULL, 'unknown', '<node/>')
+      'invalid attrbute' => array(NULL, 'unknown', '<node/>'),
+      'complex name' => array(1, 'complexName', '<node data-complex-name="1"/>'),
+      'abbreviation' => array(1, 'someABBRName', '<node data-some-abbr-name="1"/>')
     );
   }
 
   public static function provideDataValues() {
     return array(
-      'string' => array('<node data-Hello="World"/>', 'Hello', 'World'),
+      'string' => array('<node data-hello="World"/>', 'hello', 'World'),
       'boolean true' => array('<node data-truth="true"/>', 'truth', TRUE),
       'boolean false' => array('<node data-lie="false"/>', 'lie', FALSE),
       'array' => array('<node data-list="[&quot;1&quot;,&quot;2&quot;]"/>', 'list', array('1', '2')),
@@ -191,7 +215,9 @@ class FluentDOMDataTest extends FluentDOMTestCase {
         '<node data-object="{&quot;foo&quot;:&quot;bar&quot;}"/>',
         'object',
         self::createObjectFromArray(array('foo' => 'bar'))
-      )
+      ),
+      'complex name' => array('<node data-say-hello="World"/>', 'sayHello', 'World'),
+      'abbreviation' => array('<node data-some-abbr-name="1"/>', 'someABBRName', 1),
     );
   }
 

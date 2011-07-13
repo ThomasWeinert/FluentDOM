@@ -41,8 +41,8 @@ class FluentDOMData implements IteratorAggregate, Countable {
   public function toArray() {
     $result = array();
     foreach ($this->_node->attributes as $attribute) {
-      if (0 === strpos(strtolower($attribute->name), 'data-')) {
-        $result[substr($attribute->name, 5)] = $this->decodeValue($attribute->value);
+      if ($this->isDataProperty($attribute->name)) {
+        $result[$this->decodeName($attribute->name)] = $this->decodeValue($attribute->value);
       }
     }
     return $result;
@@ -65,7 +65,7 @@ class FluentDOMData implements IteratorAggregate, Countable {
   public function count() {
     $result = 0;
     foreach ($this->_node->attributes as $attribute) {
-      if (0 === strpos(strtolower($attribute->name), 'data-')) {
+      if ($this->isDataProperty($attribute->name)) {
         ++$result;
       }
     }
@@ -78,7 +78,7 @@ class FluentDOMData implements IteratorAggregate, Countable {
   * @param string $name
   */
   public function __isset($name) {
-    return $this->_node->hasAttribute('data-'.$name);
+    return $this->_node->hasAttribute($this->encodeName($name));
   }
 
   /**
@@ -88,7 +88,7 @@ class FluentDOMData implements IteratorAggregate, Countable {
   * @param mixed $value
   */
   public function __set($name, $value) {
-    $this->_node->setAttribute('data-'.$name, $this->encodeValue($value));
+    $this->_node->setAttribute($this->encodeName($name), $this->encodeValue($value));
   }
 
   /**
@@ -98,7 +98,7 @@ class FluentDOMData implements IteratorAggregate, Countable {
   * @return mixed
   */
   public function __get($name) {
-    $name = 'data-'.$name;
+    $name = $this->encodeName($name);
     if ($this->_node->hasAttribute($name)) {
       return $this->decodeValue($this->_node->getAttribute($name));
     }
@@ -111,7 +111,45 @@ class FluentDOMData implements IteratorAggregate, Countable {
   * @param string $name
   */
   public function __unset($name) {
-    $this->_node->removeAttribute('data-'.$name);
+    $this->_node->removeAttribute($this->encodeName($name));
+  }
+
+  /**
+  * Validate if the given attribute name is a data property name
+  *
+  * @param string $name
+  */
+  private function isDataProperty($name) {
+    return (0 === strpos($name, 'data-') && $name == strtolower($name));
+  }
+
+  /**
+  * Normalize a property name from camel case to lowercase with hyphens.
+  *
+  * @param string $name
+  */
+  private function encodeName($name) {
+    if (preg_match('(^[a-z][a-z\d]*([A-Z]+[a-z\d]*)+$)DS', $name)) {
+      $camelCasePattern = '((?:[a-z][a-z\d]+)|(?:[A-Z][a-z\d]+)|(?:[A-Z]+(?![a-z\d])))S';
+      if (preg_match_all($camelCasePattern, $name, $matches)) {
+        $name = implode('-', $matches[0]);
+      }
+    }
+    return 'data-'.strToLower($name);
+  }
+
+  /**
+  * Convert the given attribute name with hyphens to camel case.
+  *
+  * @param string $name
+  */
+  private function decodeName($name) {
+    $parts = explode('-', strToLower(substr($name, 5)));
+    $result = array_shift($parts);
+    foreach ($parts as $part) {
+      $result .= ucFirst($part);
+    }
+    return $result;
   }
 
   /**

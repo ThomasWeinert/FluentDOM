@@ -13,7 +13,8 @@ is disabled if possible. This improves performance, too.
 - Added: FluentDOM::$css property access to the css option in the style attribute
 - Added: FluentDOM::$data property access to HTML 5 data attributes
 - Added: FluentDOM::data() read/write HTML 5 data attributes
-- Added: FluentDOM::removeData() remove HTML 5 data attributes access
+- Added: FluentDOM::removeData() remove HTML 5 data attributes
+- Added: FluentDOM::hasData() check if an element has HTML 5 data attributes
 - Added: FluentDOM::reverse() reverse the order of the matched nodes.
 
 Version 4.0:

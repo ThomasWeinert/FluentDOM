@@ -68,11 +68,11 @@
         HTML strings, DOMDocument DOMNode objects or a FluentDOM object. The following two samples
         do the same.
       </para>
-      <refsect3>
+      <refsect3 id="{@id basic-usage-function-sample}">
         <title>Function Sample</title>
         {@example basic-usage/function.php}
       </refsect3>
-      <refsect3>
+      <refsect3 id="{@id basic-usage-object}">
         <title>Object Sample</title>
         {@example basic-usage/object.php}
       </refsect3>
@@ -84,7 +84,7 @@
         is the FluentDOM function. But sometimes you need more. The default loaders
         do not support URLs for example. But here are other ways:
       </para>
-      <refsect3>
+      <refsect3 id="{@id basic-usage-load-prepare-document}">
         <title>Prepare A DOMDocument</title>
         <para>
           The first way is to create a DOMDocument with custom logic and load this into the
@@ -92,7 +92,7 @@
         </para>
         {@example basic-usage/load-domdocument.php}
       </refsect3>
-      <refsect3>
+      <refsect3 id="{@id basic-usage-load-use-document-property}">
         <title>Use The "document" Attribute</title>
         <para>
           The FluentDOM has an read only attribute <literal>document</literal>. You can not
@@ -101,7 +101,7 @@
         </para>
         {@example basic-usage/load-document.php}
       </refsect3>
-      <refsect3>
+      <refsect3 id="{@id basic-usage-load-custom-loader}">
         <title>Custom Loader</title>
         <para>
           FluentDOM allows to use custom loaders. This are simple classes implementing the
@@ -214,7 +214,7 @@
         <listitem><literal>.</literal> - Current element</listitem>
         <listitem><literal>..</literal> - Parent element</listitem>
       </itemizedlist>
-      <refsect3>
+      <refsect3 id="{@id xpath-syntax-samples}">
         <title>Simple XPath Selector Samples</title>
         <para>
           -match the document element with the name "element-name".

@@ -41,6 +41,8 @@ function FluentDOMStyle($source = NULL, $contentType = 'text/xml') {
 * FluentDOMStyle extends the FluentDOM class with a function to edit
 * the style attribute of html tags
 *
+* @property FluentDOMCss $css Access the style attribute
+*
 * @package FluentDOM
 */
 class FluentDOMStyle extends FluentDOM {

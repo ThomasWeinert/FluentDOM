@@ -48,6 +48,7 @@ function FluentDOM($source = NULL, $contentType = 'text/xml') {
 * FluentDOM implements a jQuery like replacement for DOMNodeList
 *
 * @property FluentDOMAttributes $attr Access attributes
+* @property FluentDOMData $data Access HTML 5 data attributes
 * @method bool empty() Remove all child nodes from the set of matched elements.
 * @method DOMDocument clone() Clone matched DOM Elements and select the clones.
 *
@@ -1474,7 +1475,7 @@ class FluentDOM extends FluentDOMCore {
   * Validate if the element has an data attributes attached. If it is called without an
   * actual $element parameter, it will check the first matched node.
   *
-  * @return DOMElement $element
+  * @param DOMElement $element
   * @return boolean
   */
   public function hasData(DOMElement $element = NULL) {

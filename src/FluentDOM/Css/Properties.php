@@ -1,5 +1,20 @@
 <?php
+/**
+* FluentDOMCssProperties provides an array access to a css style string. It is used to
+* modify the attribute values of style attributes.
+*
+* @license http://www.opensource.org/licenses/mit-license.php The MIT License
+* @copyright Copyright (c) 2009-2010 Bastian Feder, Thomas Weinert
+*
+* @package FluentDOM
+*/
 
+/**
+* FluentDOMCssProperties provides an array access to a css style string. It is used to
+* modify the attribute values of style attributes.
+*
+* @package FluentDOM
+*/
 class FluentDOMCssProperties implements ArrayAccess, IteratorAggregate, Countable {
 
   /**

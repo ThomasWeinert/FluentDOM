@@ -1,10 +1,8 @@
-$Id$
-
 --------------------------------------------------------------------------------
  FluentDOM
  
- Version: 4.0 dev
- Copyright: 2009 Bastian Feder, Thomas Weinert
+ Version: 4 dev
+ Copyright: 2009-2011 Bastian Feder, Thomas Weinert
  Licence: The MIT License
           http://www.opensource.org/licenses/mit-license.php
 --------------------------------------------------------------------------------
@@ -134,6 +132,23 @@ Iterator for FluentDOM objects. Used for syntax sugar.
 Interface for loader classes. They are used to import document content from
 all kinds of sources.
 
+* FluentDOMAttributes
+
+Provides the attributes handling.
+
+* FluentDOMCss
+
+Provides the 'style' atrribute handling
+
+* FluentDOMCssProperties
+
+Provides decode/encoding for a style attribute value. Allows to manipulate the 
+css properties.
+
+* FluentDOMData
+
+Provide array access to the HTML 5 data attributes.
+
 --------------------------------------------------------------------------------
  Syntax Sugar
 --------------------------------------------------------------------------------
@@ -147,6 +162,9 @@ output the xml (or html) of the associated DOMDocument.
 
 FluentDOM has two methods namespaces() and evaluate(), that can be sued to do
 direct xpath queries.
+
+For the attribute handling array syntax is supported. You can use $fd->attr,
+$fd->data and $fd->css.
 
 --------------------------------------------------------------------------------
  Loaders

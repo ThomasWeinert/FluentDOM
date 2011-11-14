@@ -108,7 +108,7 @@ class FluentDOMIteratorTest extends FluentDOMTestCase {
       ->method('push')
       ->with($this->isInstanceOf('DOMNodeList'));
     $fdi = new FluentDOMIterator($fdSource);
-    $this->assertType(
+    $this->assertInstanceOf(
       'FluentDOMIterator',
       $fdi->getChildren()
     );
@@ -130,4 +130,3 @@ class FluentDOMIteratorTest extends FluentDOMTestCase {
     $this->assertTrue($fdi->hasChildren());
   }
 }
-?>

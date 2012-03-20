@@ -59,7 +59,7 @@ abstract class FluentDOMTestCase extends PHPUnit_Framework_TestCase {
   */
   protected function assertFluentDOMEqualsXMLFile($functionName, $actual) {
     $fileName = $this->getFileName($functionName, 'tgt');
-    $this->assertType('FluentDOM', $actual);
+    $this->assertInstanceOf('FluentDOM', $actual);
     $this->assertXmlStringEqualsXmlFile($fileName, (string)$actual);
   }
 

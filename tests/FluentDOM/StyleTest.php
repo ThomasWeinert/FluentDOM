@@ -61,7 +61,7 @@ class FluentDOMStyleTest extends FluentDOMTestCase {
   public function testPropertyCssGet() {
     $fd = $this->getFluentDOMStyleFixture('<sample style="test: success"/>', '/*');
     $css = $fd->css;
-    $this->assertType('FluentDOMCss', $css);
+    $this->assertInstanceOf('FluentDOMCss', $css);
     $this->assertAttributeSame(
       $fd, '_fd', $css
     );

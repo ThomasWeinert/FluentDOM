@@ -10,19 +10,7 @@
 * @subpackage unitTests
 */
 
-/**
-* load necessary files
-*/
 require_once(dirname(__FILE__).'/../src/FluentDOM.php');
-
-/**
-* whitelist the src directory
-*/
-if (version_compare(PHPUnit_Runner_Version::id(), '3.5', '>=')) {
-  PHP_CodeCoverage_Filter::getInstance()->addDirectoryToWhitelist(
-    dirname(dirname(__FILE__)).'/src/', '.php'
-  );
-}
 
 /**
 * Test class for FluentDOM.

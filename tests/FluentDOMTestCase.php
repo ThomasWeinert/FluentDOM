@@ -10,19 +10,7 @@
 * @subpackage unitTests
 */
 
-/**
-* load necessary files
-*/
 require_once(dirname(__FILE__).'/../src/FluentDOM.php');
-
-/**
-* whitelist the src directory
-*/
-if (version_compare(PHPUnit_Runner_Version::id(), '3.5', '>=')) {
-  PHP_CodeCoverage_Filter::getInstance()->addDirectoryToWhitelist(
-    dirname(dirname(__FILE__)).'/src/', '.php'
-  );
-}
 
 /**
 * Test class for FluentDOM.
@@ -59,7 +47,7 @@ abstract class FluentDOMTestCase extends PHPUnit_Framework_TestCase {
   */
   protected function assertFluentDOMEqualsXMLFile($functionName, $actual) {
     $fileName = $this->getFileName($functionName, 'tgt');
-    $this->assertType('FluentDOM', $actual);
+    $this->assertInstanceOf('FluentDOM', $actual);
     $this->assertXmlStringEqualsXmlFile($fileName, (string)$actual);
   }
 

@@ -345,3 +345,4 @@ class FluentDOMStyleTest extends FluentDOMTestCase {
     return $fd;
   }
 }
+?>

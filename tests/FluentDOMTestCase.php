@@ -10,9 +10,6 @@
 * @subpackage unitTests
 */
 
-/**
-* load necessary files
-*/
 require_once(dirname(__FILE__).'/../src/FluentDOM.php');
 
 /**

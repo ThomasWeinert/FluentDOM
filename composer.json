@@ -1,0 +1,14 @@
+{
+    "name": "fluentdom/fluentdom",
+    "type": "library",
+    "description": "A fluent api for the php dom extension.",
+    "keywords": ["xml","dom","jquery"],
+    "license": "MIT",
+    "homepage": "http://fluentdom.org",
+    "authors": [
+        {"name": "FluentDOM Contributors", "homepage": "https://github.com/FluentDOM/FluentDOM/contributors"}
+    ],
+    "require": {
+        "php": ">=5.2.0"
+    }
+}

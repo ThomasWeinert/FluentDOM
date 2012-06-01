@@ -21,7 +21,7 @@ require_once (dirname(__FILE__).'/../FluentDOMTestCase.php');
 * @package FluentDOM
 * @subpackage unitTests
 */
-class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
+class FluentDOMCoreTest extends \PHPUnit_Framework_TestCase {
 
   const XML = '
     <items version="1.0">
@@ -1351,7 +1351,9 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
   public function testGetContentNodesWithString() {
     $fd = new FluentDOMCoreProxy();
     $nodes = $fd->_getContentNodes('sample');
-    $this->assertInstanceOf('DOMText', $nodes[0]);
+    $this->assertInstanceOf(
+      'DOMText', $nodes[0]
+    );
   }
 
   /**

@@ -4,3 +4,4 @@ phpunit.xml
 .buildpath
 docs/
 .settings
+vendor

@@ -1,8 +1,15 @@
-phpunit.xml
-.project
-.gitignore
-.buildpath
+# Ignore generated docs
 docs/
-.settings
+
+# Ignore composer files
 vendor
+
+# Ignore IDE specific files
+## phpStrom
+.idea
+
+## Eclipse
+.settings
+.project
+.buildpath
 

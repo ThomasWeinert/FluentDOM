@@ -1881,7 +1881,7 @@ class FluentDOMTest extends FluentDOMTestCase {
   public function testPropertyAttrGet() {
     $fd = $this->getFixtureFromString(self::XML)->find('//item[2]');
     $attr = $fd->attr;
-    $this->assertType('FluentDOMAttributes', $attr);
+    $this->assertInstanceOf('FluentDOMAttributes', $attr);
     $this->assertAttributeSame(
       $fd, '_fd', $attr
     );
@@ -2164,4 +2164,3 @@ class FluentDOMTest extends FluentDOMTestCase {
     return $class.' test4';
   }
 }
-?>

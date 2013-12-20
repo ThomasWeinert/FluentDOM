@@ -62,5 +62,17 @@ namespace FluentDOM {
         $dom->saveXml($dom->documentElement)
       );
     }
+
+    /**
+     * @covers FluentDOM\Document::appendElement
+     */
+    public function testAppendElement() {
+      $dom = new Document();
+      $dom->appendElement('test', 'text', array('attribute' => 'value'));
+      $this->assertEquals(
+        '<test attribute="value">text</test>',
+        $dom->saveXML($dom->documentElement)
+      );
+    }
   }
 }

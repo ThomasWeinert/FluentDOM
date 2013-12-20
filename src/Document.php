@@ -2,6 +2,9 @@
 
 namespace FluentDOM {
 
+  /**
+   * @property Element $document
+   */
   class Document extends \DOMDocument {
 
     /**
@@ -61,6 +64,13 @@ namespace FluentDOM {
       if (!empty($content)) {
         $node->appendChild($this->createTextNode($content));
       }
+      return $node;
+    }
+
+    public function appendElement($name, $content = '', array $attributes = NULL) {
+      $this->appendChild(
+        $node = $this->createElement($name, $content, $attributes)
+      );
       return $node;
     }
   }

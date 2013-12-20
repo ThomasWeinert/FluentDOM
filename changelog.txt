@@ -1,9 +1,14 @@
+Version 5:
+
+Complete Rewrite!
+- Original FluentDOM functionality is now in FluentDOM\Query.
+
 Version 4.1:
 
 For css() and attr() now property access is possible. HTML 5 data attributes are supported, too.
 
 In PHP 5.3 an third argument was introduced to DOMXPath::evaluate(). This allows to disable the
-automatic namespace registration. Because it is broken and completely wrong in the first place it 
+automatic namespace registration. Because it is broken and completely wrong in the first place it
 is disabled if possible. This improves performance, too.
 
 - Changed: XPath expression do not register the namespaces of the context element if possible.
@@ -21,13 +26,13 @@ is disabled if possible. This improves performance, too.
 Version 4.0:
 
 This version has been restructured because the class had grown to large. The new structure allows
-better testing and inheritance. 
+better testing and inheritance.
 
 It brings compatiblity to the jQuery 1.4 API changes. A callback argument is supported by many
-methods. 
+methods.
 
 - Implemented: FluentDOMLoader implementations now return a DOMNode or NULL,
-               DOMDocument inherits from DOMNode 
+               DOMDocument inherits from DOMNode
 - Implemented: make the $contentType argument of FluentDOMLoader an reference,
                so the loader can change it, set the changed version
 - Changed: Moved source files into subdirectory src
@@ -58,7 +63,7 @@ methods.
 - Implemented: FluentDOM::replaceWith() with callback
 - Implemented: FluentDOM::after can now use a callback
 - Implemented: FluentDOM::before can now use a callback
-- Implemented: FluentDOMStyle::css() callback now has the following arguments: $node, $index, $value 
+- Implemented: FluentDOMStyle::css() callback now has the following arguments: $node, $index, $value
 - Added: FluentDOMLoaderStringJSON, loads a json string
 - Implemented: FluentDOM::_wrap() with callback
 - Tested: added @covers annotations
@@ -114,8 +119,8 @@ Version 3.0:
 - Documented: added @example for interface methods
 - Documented: fixed faulty svn:keyword identifier
 - Documented: fixing documentation errors, adding example links
-- Implemented: Column handling for FluentDOMLoaderPDO, much more compressed xml the loader now 
-               creates attributes for integer and decimal values and child elements for strings. 
+- Implemented: Column handling for FluentDOMLoaderPDO, much more compressed xml the loader now
+               creates attributes for integer and decimal values and child elements for strings.
                The name of the column is used # as attribute and tag name.
 - Implemented: FluentDOMLoaderPDO use object properties for the tag names
 - Added: FluentDOMLoaderPDO
@@ -130,8 +135,8 @@ Version 3.0:
 - Added: removeAttr() with asterisk (*) parameter (removes all attributes)
 - Tested: removeAttr() with array parameter
 - Tested: removeAttr() with asterisk (*) parameter
-- Fixed: DOMDocument are child classes from DOMNode 
-         but are invalid sources for the FluentDOMLoaderDOMNode, check DOMNode for an valid 
+- Fixed: DOMDocument are child classes from DOMNode
+         but are invalid sources for the FluentDOMLoaderDOMNode, check DOMNode for an valid
          ownerDocument property
 - Fixed: simple atom reader sample has to use the FluentDOM function an not the class directly
 - changed FluentDOMTestCase should be an abstract class

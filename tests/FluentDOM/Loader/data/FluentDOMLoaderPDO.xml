@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<records>
-  <record sample_integer="1">
-    <sample_varchar>FOO</sample_varchar>
-    <sample_text>BAR</sample_text>
-  </record>
-</records>

@@ -2,7 +2,7 @@
 
 namespace FluentDOM {
 
-  require_once('../src/_require.php');
+  require_once(__DIR__.'/../src/_require.php');
 
   class DocumentTest extends \PHPUnit_Framework_TestCase {
 

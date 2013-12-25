@@ -2,7 +2,7 @@
 
 namespace FluentDOM {
 
-  class Query implements \Countable, \IteratorAggregate {
+  class Query implements \ArrayAccess, \Countable, \IteratorAggregate {
 
     /**
      * @var Query|NULL
@@ -184,7 +184,58 @@ namespace FluentDOM {
      */
     public function getIterator() {
       return new Query\Iterator($this);
+    }/*
+  * Interface - ArrayAccess
+  */
+
+    /**
+     * Check if index exists in internal array
+     *
+     * @example interfaces/ArrayAccess.php Usage Example: ArrayAccess Interface
+     * @param integer $offset
+     * @return boolean
+     */
+    public function offsetExists($offset) {
+      return isset($this->_nodes[$offset]);
     }
+
+    /**
+     * Get element from internal array
+     *
+     * @example interfaces/ArrayAccess.php Usage Example: ArrayAccess Interface
+     * @param integer $offset
+     * @return \DOMNode|NULL
+     */
+    public function offsetGet($offset) {
+      return isset($this->_nodes[$offset]) ? $this->_nodes[$offset] : NULL;
+    }
+
+    /**
+     * If somebody tries to modify the internal array throw an exception.
+     *
+     * @example interfaces/ArrayAccess.php Usage Example: ArrayAccess Interface
+     * @param integer $offset
+     * @param mixed $value
+     * @return void
+     */
+    public function offsetSet($offset, $value) {
+      throw new \BadMethodCallException('List is read only');
+    }
+
+    /**
+     * If somebody tries to remove an element from the internal array throw an exception.
+     *
+     * @example interfaces/ArrayAccess.php Usage Example: ArrayAccess Interface
+     * @param integer $offset
+     * @return void
+     */
+    public function offsetUnset($offset) {
+      throw new \BadMethodCallException('List is read only');
+    }
+
+    /*
+     * Traversing
+     */
 
     /**
      * @return Query|NULL

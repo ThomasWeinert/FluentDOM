@@ -20,6 +20,19 @@ namespace FluentDOM {
     ';
 
     /**
+     * @group Load
+     * @covers Query::load
+     */
+    public function testLoadWithDocument() {
+      $fd = new Query();
+      $fd->load($dom = new \DOMDocument());
+      $this->assertSame(
+        $dom,
+        $fd->document
+      );
+    }
+
+    /**
      * @group CoreFunctions
      * @covers Query::spawn
      */
@@ -122,6 +135,127 @@ namespace FluentDOM {
     public function testInterfaceCountableExpectingZero() {
       $fd = $this->getQueryFixtureFromString(self::XML, '//non-existing');
       $this->assertCount(0, $fd);
+    }
+
+    /**
+     * @group Properties
+     * @covers FluentDOM\Query::__isset
+     * @covers FluentDOM\Query::__get
+     * @covers FluentDOM\Query::__set
+     */
+    public function testDynamicProperty() {
+      $fd = new Query();
+      $this->assertEquals(FALSE, isset($fd->dynamicProperty));
+      $this->assertEquals(NULL, $fd->dynamicProperty);
+      $fd->dynamicProperty = 'test';
+      $this->assertEquals(TRUE, isset($fd->dynamicProperty));
+      $this->assertEquals('test', $fd->dynamicProperty);
+    }
+    /**
+     * @covers FluentDOM\Query::__set
+     */
+    public function testSetPropertyXpath() {
+      $fd = $this->getQueryFixtureFromString(self::XML);
+      $this->setExpectedException('BadMethodCallException');
+      $fd->xpath = $fd->xpath;
+    }
+
+    /**
+     * @group Properties
+     * @covers FluentDOM\Query::__isset
+     */
+    public function testIssetPropertyLength() {
+      $fd = new Query();
+      $this->assertTrue(isset($fd->length));
+    }
+
+    /**
+     * @group Properties
+     * @covers FluentDOM\Query::__get
+     */
+    public function testGetPropertyLength() {
+      $fd = $this->getQueryFixtureFromString(self::XML, '//item');
+      $this->assertEquals(3, $fd->length);
+    }
+
+    /**
+     * @group Properties
+     * @covers FluentDOM\Query::__set
+     */
+    public function testSetPropertyLength() {
+      $fd = new Query;
+      $this->setExpectedException('BadMethodCallException');
+      $fd->length = 50;
+    }
+
+    /**
+     * @group Properties
+     * @covers FluentDOM\Query::__isset
+     */
+    public function testIssetPropertyContentType() {
+      $fd = new Query();
+      $this->assertTrue(isset($fd->contentType));
+    }
+
+
+    /**
+     * @group Properties
+     * @covers FluentDOM\Query::__get
+     */
+    public function testGetPropertyContentType() {
+      $fd = new Query();
+      $this->assertEquals('text/xml', $fd->contentType);
+    }
+
+    /**
+     * @group Properties
+     * @covers FluentDOM\Query::__set
+     * @covers FluentDOM\Query::_setContentType
+     * @dataProvider getContentTypeSamples
+     */
+    public function testSetPropertyContentType($contentType, $expected) {
+      $fd = new Query();
+      $fd->contentType = $contentType;
+      $this->assertAttributeEquals($expected, '_contentType', $fd);
+    }
+
+    public function getContentTypeSamples() {
+      return array(
+        array('text/xml', 'text/xml'),
+        array('text/html', 'text/html'),
+        array('xml', 'text/xml'),
+        array('html', 'text/html'),
+        array('TEXT/XML', 'text/xml'),
+        array('TEXT/HTML', 'text/html'),
+        array('XML', 'text/xml'),
+        array('HTML', 'text/html')
+      );
+    }
+
+    /**
+     * @group Properties
+     * @covers FluentDOM\Query::__set
+     * @covers FluentDOM\Query::setContentType
+     */
+    public function testSetPropertyContentTypeChaining() {
+      $fdParent = new Query();
+      $fdChild = $fdParent->spawn();
+      $fdChild->contentType = 'text/html';
+      $this->assertEquals(
+        'text/html',
+        $fdParent->contentType
+      );
+    }
+
+    /**
+     * @group Properties
+     * @covers FluentDOM\Query::__set
+     * @covers FluentDOM\Query::setContentType
+     */
+    public function testSetPropertyContentTypeInvalid() {
+      $fd = new Query();
+      $this->setExpectedException('UnexpectedValueException');
+      $fd->contentType = 'Invalid Type';
     }
 
     /******************************

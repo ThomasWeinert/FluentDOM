@@ -2,6 +2,14 @@
 
 namespace FluentDOM {
 
+  /**
+   * Class Query
+   *
+   * @property string $contentType Output type - text/xml or text/html
+   * @property-read integer $length The amount of elements found by selector.
+   * @property-read \DOMDocument $document Internal DOMDocument object
+   * @property-read \DOMXPath $xpath Internal XPath object
+   */
   class Query implements \ArrayAccess, \Countable, \IteratorAggregate {
 
     /**
@@ -24,9 +32,14 @@ namespace FluentDOM {
      */
     private $_document = NULL;
 
+    /**
+     * Content type for output (xml, text/xml, html, text/html).
+     * @var string $_contentType
+     */
+    protected $_contentType = 'text/xml';
+
     public function load($source) {
       if ($source instanceOf Query) {
-        $this->_parent = $source;
         $this->_document = $source->_document;
       } elseif ($source instanceof \DOMDocument) {
         $this->_document = $source;
@@ -75,7 +88,7 @@ namespace FluentDOM {
     /**
      * Create a new instance of the same class with $this as the parent. This is used for the chaining.
      *
-     * @param \Traversable|Query $elements
+     * @param \Traversable|\DOMNode|Query $elements
      * @return Query
      */
     public function spawn($elements = NULL) {
@@ -83,6 +96,8 @@ namespace FluentDOM {
        * @var Query $result
        */
       $result = new $this;
+      $result->_parent = $this;
+      $result->_contentType = $this->contentType;
       $result->load($this);
       if (isset($elements)) {
         $result->push($elements);
@@ -98,7 +113,6 @@ namespace FluentDOM {
      * @param boolean $ignoreTextNodes ignore text nodes
      * @throws \OutOfBoundsException
      * @throws \InvalidArgumentException
-     * @return void
      */
     public function push($elements, $ignoreTextNodes = FALSE) {
       if ($this->isNode($elements, $ignoreTextNodes)) {
@@ -216,7 +230,7 @@ namespace FluentDOM {
      * @example interfaces/ArrayAccess.php Usage Example: ArrayAccess Interface
      * @param integer $offset
      * @param mixed $value
-     * @return void
+     * @throws \BadMethodCallException
      */
     public function offsetSet($offset, $value) {
       throw new \BadMethodCallException('List is read only');
@@ -227,10 +241,77 @@ namespace FluentDOM {
      *
      * @example interfaces/ArrayAccess.php Usage Example: ArrayAccess Interface
      * @param integer $offset
-     * @return void
      */
     public function offsetUnset($offset) {
       throw new \BadMethodCallException('List is read only');
+    }
+
+    /**
+     * Virtual properties, validate existence
+     *
+     * @param string $name
+     * @return bool
+     */
+    public function __isset($name) {
+      switch ($name) {
+      case 'length' :
+      case 'xpath' :
+      case 'contentType' :
+        return TRUE;
+      case 'document' :
+        return isset($this->_document);
+      }
+      return FALSE;
+    }
+
+    /**
+     * Virtual properties, read property
+     *
+     * @param string $name
+     * @return mixed
+     * @throws \LogicException
+     */
+    public function __get($name) {
+      switch ($name) {
+      case 'contentType' :
+        return $this->_contentType;
+      case 'document' :
+        return $this->getDocument();
+      case 'length' :
+        return count($this->_nodes);
+      case 'xpath' :
+        return $this->xpath();
+      default :
+        return NULL;
+      }
+    }
+
+    public function __set($name, $value) {
+      switch ($name) {
+      case 'contentType' :
+        $this->setContentType($value);
+        break;
+      case 'document' :
+      case 'length' :
+      case 'xpath' :
+        throw new \BadMethodCallException('Can not set readonly value.');
+      default :
+        $this->$name = $value;
+        break;
+      }
+    }
+
+    public function __unset($name) {
+      switch ($name) {
+      case 'contentType' :
+      case 'document' :
+      case 'length' :
+      case 'xpath' :
+        throw new \BadMethodCallException('Can not remove property.');
+      default :
+        unset($this->$name);
+        break;
+      }
     }
 
     /*
@@ -297,6 +378,41 @@ namespace FluentDOM {
         return TRUE;
       }
       throw new \InvalidArgumentException('Invalid callback argument');
+    }
+
+    /**
+     * Setter for Query::_contentType property
+     *
+     * @param string $value
+     * @throws \UnexpectedValueException
+     */
+    private function setContentType($value) {
+      switch (strtolower($value)) {
+      case 'xml' :
+      case 'application/xml' :
+      case 'text/xml' :
+        $newContentType = 'text/xml';
+        break;
+      case 'html' :
+      case 'text/html' :
+        $newContentType = 'text/html';
+        break;
+      default :
+        throw new \UnexpectedValueException('Invalid content type value');
+      }
+      if ($this->_contentType != $newContentType) {
+        $this->_contentType = $newContentType;
+        if (isset($this->_parent)) {
+          $this->_parent->contentType = $newContentType;
+        }
+      }
+    }
+
+    private function getDocument() {
+      if (NULL === $this->_document) {
+        $this->_document = new Document();
+      }
+      return $this->_document;
     }
   }
 }

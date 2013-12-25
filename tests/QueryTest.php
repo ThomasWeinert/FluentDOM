@@ -104,6 +104,26 @@ namespace FluentDOM {
       unset($query[2]);
     }
 
+    /**
+     * @group Interfaces
+     * @group Countable
+     * @covers FluentDOMCore::count
+     */
+    public function testInterfaceCountableExpecting3() {
+      $fd = $this->getQueryFixtureFromString(self::XML, '//item');
+      $this->assertCount(3, $fd);
+    }
+
+    /**
+     * @group Interfaces
+     * @group Countable
+     * @covers FluentDOMCore::count
+     */
+    public function testInterfaceCountableExpectingZero() {
+      $fd = $this->getQueryFixtureFromString(self::XML, '//non-existing');
+      $this->assertCount(0, $fd);
+    }
+
     /******************************
      * Fixtures
      ******************************/

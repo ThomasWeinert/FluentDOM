@@ -1,9 +1,12 @@
 <?php
 namespace FluentDOM\Query {
 
-  require_once(__DIR__.'/../../src/_require.php');
+  use FluentDOM\Query;
+  use FluentDOM\TestCase;
 
-  class IteratorTest extends \PHPUnit_Framework_TestCase {
+  require_once(__DIR__.'/../TestCase.php');
+
+  class IteratorTest extends TestCase {
 
     public function testIteratorCurrent() {
       $fd = $this->getMock('FluentDOM\\Query');

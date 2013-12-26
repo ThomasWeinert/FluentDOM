@@ -38,6 +38,11 @@ namespace FluentDOM {
      */
     private $_contentType = 'text/xml';
 
+    /**
+     * Use document context for expression (not selected nodes).
+     * @var boolean $_useDocumentContext
+     */
+    private $_useDocumentContext = TRUE;
 
     /**
      * Load a $source. The type of the source depends on the loaders. If no explicit loaders are set
@@ -48,6 +53,7 @@ namespace FluentDOM {
      */
     public function load($source, $contentType = 'text/xml') {
       $dom = FALSE;
+      $this->_useDocumentContext = TRUE;
       if ($source instanceof Query) {
         $dom = $source->getDocument();
       } elseif ($source instanceof \DOMDocument) {
@@ -55,6 +61,7 @@ namespace FluentDOM {
       } elseif ($source instanceof \DOMNode) {
         $dom = $source->ownerDocument;
         $this->_nodes = array($source);
+        $this->_useDocumentContext = FALSE;
       }
       if ($dom instanceof \DOMDocument) {
         $this->_document = $dom;
@@ -158,6 +165,7 @@ namespace FluentDOM {
         $elements = array($elements);
       }
       if ($this->isNodeList($elements)) {
+        $this->_useDocumentContext = FALSE;
         foreach ($elements as $index => $node) {
           if ($this->isNode($node, $ignoreTextNodes)) {
             if ($node->ownerDocument === $this->_document) {
@@ -481,6 +489,48 @@ namespace FluentDOM {
         $this->_document = new Document();
       }
       return $this->_document;
+    }
+
+    /**
+     * Match XPath expression against context and return matched elements.
+     *
+     * @param string $expr
+     * @param \DOMNode $context optional, default value NULL
+     * @throws \InvalidArgumentException
+     * @return \DOMNodeList
+     */
+    private function getNodes($expr, \DOMNode $context = NULL) {
+      $list = $this->xpath()->evaluate($expr, $context);
+      if ($list instanceof \DOMNodeList) {
+        return $list;
+      } else {
+        throw new \InvalidArgumentException('Given xpath expression did not return an node list.');
+      }
+    }
+
+    /*********************
+     * Traversing
+     ********************/
+
+    /**
+     * Searches for descendent elements that match the specified expression.
+     *
+     * @example find.php Usage Example: FluentDOM::find()
+     * @param string $expr XPath expression
+     * @param boolean $useDocumentContext ignore current node list
+     * @return Query
+     */
+    public function find($expr, $useDocumentContext = FALSE) {
+      $result = $this->spawn();
+      if ($useDocumentContext ||
+        $this->_useDocumentContext) {
+        $result->push($this->getNodes($expr));
+      } else {
+        foreach ($this->_nodes as $contextNode) {
+          $result->push($this->getNodes($expr, $contextNode));
+        }
+      }
+      return $result;
     }
   }
 }

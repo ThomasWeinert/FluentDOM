@@ -2,9 +2,9 @@
 
 namespace FluentDOM {
 
-  require_once(__DIR__.'/../src/_require.php');
+  require_once(__DIR__.'/TestCase.php');
 
-  class ElementTest extends \PHPUnit_Framework_TestCase {
+  class ElementTest extends TestCase {
 
     /**
      * @covers FluentDOM\Element::appendElement

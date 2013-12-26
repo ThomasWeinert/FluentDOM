@@ -1,32 +1,9 @@
 <?php
 namespace FluentDOM {
 
-  require_once(__DIR__.'/../src/_require.php');
+  require_once(__DIR__.'/TestCase.php');
 
-  class QueryTest extends \PHPUnit_Framework_TestCase {
-
-    const XML = '
-      <items version="1.0">
-        <group id="1st">
-          <item index="0">text1</item>
-          <item index="1">text2</item>
-          <item index="2">text3</item>
-        </group>
-        <html>
-          <div class="test1 test2">class testing</div>
-          <div class="test2">class testing</div>
-        </html>
-      </items>
-    ';
-
-    const HTML = '
-      <html>
-        <body>
-          <p>Paragraph One</p>
-          <p>Paragraph Two</p>
-        </body>
-      </html>
-    ';
+  class QueryTest extends TestCase {
 
     /**
      * @group Load
@@ -321,26 +298,6 @@ namespace FluentDOM {
       $fd = $fd->load($dom);
       $fd->contentType = 'html';
       $this->assertEquals($dom->saveHTML(), (string)$fd);
-    }
-
-    /******************************
-     * Fixtures
-     ******************************/
-
-    function getQueryFixtureFromString($string = NULL, $xpath = NULL) {
-      $fd = new Query();
-      if (!empty($string)) {
-        $dom = new \DOMDocument();
-        $dom->loadXML($string);
-        $fd->load($dom);
-        if (!empty($xpath)) {
-          $query = new Xpath($dom);
-          $nodes = $query->evaluate($xpath);
-          $fd = $fd->spawn();
-          $fd->push($nodes);
-        }
-      }
-      return $fd;
     }
   }
 }

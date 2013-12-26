@@ -2,9 +2,9 @@
 
 namespace FluentDOM {
 
-  require_once(__DIR__.'/../src/_require.php');
+  require_once(__DIR__.'/TestCase.php');
 
-  class DocumentTest extends \PHPUnit_Framework_TestCase {
+  class DocumentTest extends TestCase {
 
     /**
      * @covers FluentDOM\Document::xpath

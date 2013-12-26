@@ -43,6 +43,38 @@ namespace FluentDOM {
 
     /**
      * @group CoreFunctions
+     * @covers Query::formatOutput
+     */
+    public function testFormatOutput() {
+      $fd = new Query();
+      $fd->document->loadXml('<html><body><br/></body></html>');
+      $fd->formatOutput();
+      $expected =
+        "<?xml version=\"1.0\"?>\n".
+        "<html>\n".
+        "  <body>\n".
+        "    <br/>\n".
+        "  </body>\n".
+        "</html>\n";
+      $this->assertEquals('text/xml', $fd->contentType);
+      $this->assertSame($expected, (string)$fd);
+    }
+
+    /**
+     * @group CoreFunctions
+     * @covers Query::formatOutput
+     */
+    public function testFormatOutputWithContentTypeHtml() {
+      $fd = new Query();
+      $fd->document->loadXml('<html><body><br/></body></html>');
+      $fd->formatOutput('text/html');
+      $expected = "<html><body><br></body></html>\n";
+      $this->assertEquals('text/html', $fd->contentType);
+      $this->assertSame($expected, (string)$fd);
+    }
+
+    /**
+     * @group CoreFunctions
      * @covers Query::spawn
      */
     public function testSpawn() {

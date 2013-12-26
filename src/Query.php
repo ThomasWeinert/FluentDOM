@@ -44,9 +44,9 @@ namespace FluentDOM {
      * FluentDOM\Query will use a set of default loaders for xml/html and DOM.
      *
      * @param mixed $source
-     * @param string $type optional, default value 'text/xml'
+     * @param string $contentType optional, default value 'text/xml'
      */
-    public function load($source, $type = 'text/xml') {
+    public function load($source, $contentType = 'text/xml') {
       $dom = FALSE;
       if ($source instanceof Query) {
         $dom = $source->getDocument();
@@ -58,7 +58,7 @@ namespace FluentDOM {
       }
       if ($dom instanceof \DOMDocument) {
         $this->_document = $dom;
-        $this->setContentType($type);
+        $this->setContentType($contentType);
         return $this;
       } else {
         throw new \InvalidArgumentException(
@@ -70,6 +70,30 @@ namespace FluentDOM {
     /*
      * Core functions
      */
+
+    /**
+     * Formats the current document, resets internal node array and other properties.
+     *
+     * The document is saved and reloaded, all variables with DOMNodes
+     * of this document will get invalid.
+     *
+     * @param string $contentType
+     * @return Query
+     */
+    public function formatOutput($contentType = NULL) {
+      if (isset($contentType)) {
+        $this->setContentType($contentType);
+      }
+      $this->_array = array();
+      $this->_useDocumentContext = TRUE;
+      $this->_parent = NULL;
+      $this->_document->preserveWhiteSpace = FALSE;
+      $this->_document->formatOutput = TRUE;
+      if (!empty($this->_document->documentElement)) {
+        $this->_document->loadXML($this->_document->saveXML());
+      }
+      return $this;
+    }
 
     /**
      * The item() method is used to access elements in the node list,

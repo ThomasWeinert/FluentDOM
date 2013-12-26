@@ -51,7 +51,7 @@ namespace FluentDOM {
      * @throws \UnexpectedValueException
      * @return Query
      */
-    protected function getQueryFixtureFromFile($functionName) {
+    protected function getQueryFixtureFromFunctionName($functionName) {
       $fileName = $this->getFileName($functionName, 'src');
       if (!file_exists($fileName)) {
         throw new \UnexpectedValueException('File Not Found: '. $fileName);
@@ -89,7 +89,8 @@ namespace FluentDOM {
      * @return string
      */
     protected function getFileName($functionName, $type) {
-      return sprintf('%s/TestData/%s%s.%s.xml',
+      return sprintf(
+        '%s/TestData/%s%s.%s.xml',
         empty($this->_directory) ? __DIR__ : $this->_directory,
         strToLower(substr($functionName, 4, 1)),
         substr($functionName, 5),

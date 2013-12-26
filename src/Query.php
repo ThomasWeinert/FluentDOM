@@ -288,6 +288,7 @@ namespace FluentDOM {
      *
      * @example interfaces/ArrayAccess.php Usage Example: ArrayAccess Interface
      * @param integer $offset
+     * @throws \BadMethodCallException
      */
     public function offsetUnset($offset) {
       throw new \BadMethodCallException('List is read only');
@@ -437,26 +438,6 @@ namespace FluentDOM {
     }
 
     /**
-     * check if parameter is a valid callback function
-     *
-     * @param callback $callback
-     * @param boolean $allowGlobalFunctions
-     * @param boolean $silent (no InvalidArgumentException)
-     * @throws \InvalidArgumentException
-     * @return boolean
-     */
-    private function isCallback($callback, $allowGlobalFunctions, $silent) {
-      if (is_string($callback) && !$allowGlobalFunctions) {
-        if ($silent) {
-          return FALSE;
-        }
-      } elseif (is_callable($callback)) {
-        return TRUE;
-      }
-      throw new \InvalidArgumentException('Invalid callback argument');
-    }
-
-    /**
      * Setter for Query::_contentType property
      *
      * @param string $value
@@ -500,7 +481,7 @@ namespace FluentDOM {
      * @return \DOMNodeList
      */
     private function getNodes($expr, \DOMNode $context = NULL) {
-      $list = $this->xpath()->evaluate($expr, $context);
+      $list = $this->xpath()->evaluate($expr, $context, FALSE);
       if ($list instanceof \DOMNodeList) {
         return $list;
       } else {
@@ -513,7 +494,20 @@ namespace FluentDOM {
      ********************/
 
     /**
-     * Searches for descendent elements that match the specified expression.
+     * Execute a function within the context of every matched element.
+     *
+     * @param callable $function
+     * @return Query
+     */
+    public function each(callable $function) {
+      foreach ($this->_nodes as $index => $node) {
+        call_user_func($function, $node, $index);
+      }
+      return $this;
+    }
+
+    /**
+     * Searches for descendant elements that match the specified expression.
      *
      * @example find.php Usage Example: FluentDOM::find()
      * @param string $expr XPath expression

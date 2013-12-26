@@ -36,16 +36,30 @@ namespace FluentDOM {
      * Content type for output (xml, text/xml, html, text/html).
      * @var string $_contentType
      */
-    protected $_contentType = 'text/xml';
+    private $_contentType = 'text/xml';
 
-    public function load($source) {
-      if ($source instanceOf Query) {
-        $this->_document = $source->_document;
+
+    /**
+     * Load a $source. The type of the source depends on the loaders. If no explicit loaders are set
+     * FluentDOM\Query will use a set of default loaders for xml/html and DOM.
+     *
+     * @param mixed $source
+     * @param string $type optional, default value 'text/xml'
+     */
+    public function load($source, $type = 'text/xml') {
+      $dom = FALSE;
+      if ($source instanceof Query) {
+        $dom = $source->getDocument();
       } elseif ($source instanceof \DOMDocument) {
-        $this->_document = $source;
+        $dom = $source;
       } elseif ($source instanceof \DOMNode) {
-        $this->_document = $source->ownerDocument;
+        $dom = $source->ownerDocument;
         $this->_nodes = array($source);
+      }
+      if ($dom instanceof \DOMDocument) {
+        $this->_document = $dom;
+        $this->setContentType($type);
+        return $this;
       } else {
         throw new \InvalidArgumentException(
           "Can not load: ".(is_object($source) ? get_class($source) : gettype($source))
@@ -97,8 +111,9 @@ namespace FluentDOM {
        */
       $result = new $this;
       $result->_parent = $this;
+      $result->_document = $this->_document;
+      $result->_xpath = $this->_xpath;
       $result->_contentType = $this->contentType;
-      $result->load($this);
       if (isset($elements)) {
         $result->push($elements);
       }
@@ -286,6 +301,13 @@ namespace FluentDOM {
       }
     }
 
+    /**
+     * Block changing the readonly dynamic property
+     *
+     * @param string $name
+     * @param mixed $value
+     * @throws \BadMethodCallException
+     */
     public function __set($name, $value) {
       switch ($name) {
       case 'contentType' :
@@ -301,6 +323,13 @@ namespace FluentDOM {
       }
     }
 
+    /**
+     * Throws an exception if somebody tries to unset one
+     * of the dznamic properties
+     *
+     * @param string $name
+     * @throws \BadMethodCallException
+     */
     public function __unset($name) {
       switch ($name) {
       case 'contentType' :
@@ -311,6 +340,21 @@ namespace FluentDOM {
       default :
         unset($this->$name);
         break;
+      }
+    }
+
+    /**
+     * Return the XML output of the internal dom document
+     *
+     * @return string
+     */
+    public function __toString() {
+      switch ($this->_contentType) {
+      case 'html' :
+      case 'text/html' :
+        return $this->getDocument()->saveHTML();
+      default :
+        return $this->getDocument()->saveXML();
       }
     }
 
@@ -409,7 +453,7 @@ namespace FluentDOM {
     }
 
     private function getDocument() {
-      if (NULL === $this->_document) {
+      if (!($this->_document instanceof \DOMDocument)) {
         $this->_document = new Document();
       }
       return $this->_document;

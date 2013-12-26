@@ -19,6 +19,15 @@ namespace FluentDOM {
       </items>
     ';
 
+    const HTML = '
+      <html>
+        <body>
+          <p>Paragraph One</p>
+          <p>Paragraph Two</p>
+        </body>
+      </html>
+    ';
+
     /**
      * @group Load
      * @covers Query::load
@@ -256,6 +265,30 @@ namespace FluentDOM {
       $fd = new Query();
       $this->setExpectedException('UnexpectedValueException');
       $fd->contentType = 'Invalid Type';
+    }
+
+    /**
+     * @group MagicFunctions
+     * @group StringCastable
+     * @covers FluentDOM\Query::__toString
+     */
+    public function testMagicToString() {
+      $fd = $this->getQueryFixtureFromString(self::XML);
+      $this->assertEquals($fd->document->saveXML(), (string)$fd);
+    }
+
+    /**
+     * @group MagicFunctions
+     * @group StringCastable
+     * @covers FluentDOM\Query::__toString
+     */
+    public function testMagicToStringHtml() {
+      $dom = new \DOMDocument();
+      $dom->loadHTML(self::HTML);
+      $fd = new Query();
+      $fd = $fd->load($dom);
+      $fd->contentType = 'html';
+      $this->assertEquals($dom->saveHTML(), (string)$fd);
     }
 
     /******************************

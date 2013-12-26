@@ -9,6 +9,9 @@ namespace FluentDOM {
    * @property-read integer $length The amount of elements found by selector.
    * @property-read \DOMDocument $document Internal DOMDocument object
    * @property-read \DOMXPath $xpath Internal XPath object
+   *
+   * @method Query clone() Clone matched nodes and select the clones.
+   * @method bool empty() Remove all child nodes from the set of matched elements.
    */
   class Query implements \ArrayAccess, \Countable, \IteratorAggregate {
 
@@ -18,7 +21,7 @@ namespace FluentDOM {
     private $_parent = NULL;
 
     /**
-     * @var array
+     * @var array(\DOMNode)
      */
     private $_nodes = array();
 
@@ -377,6 +380,24 @@ namespace FluentDOM {
     }
 
     /**
+     * declaring an empty() or clone() method will crash the parser so we use some magic
+     *
+     * @param string $name
+     * @param array $arguments
+     * @return mixed
+     */
+    public function __call($name, $arguments) {
+      switch (strtolower($name)) {
+      case 'empty' :
+        return $this->emptyNodes();
+      case 'clone' :
+        return $this->cloneNodes();
+      default :
+        throw new \BadMethodCallException('Unknown method '.get_class($this).'::'.$name);
+      }
+    }
+
+    /**
      * Return the XML output of the internal dom document
      *
      * @return string
@@ -525,6 +546,53 @@ namespace FluentDOM {
         }
       }
       return $result;
+    }
+
+    /*********************
+     * Manipulation
+     ********************/
+
+    /**
+     * Clone matched DOM Elements and select the clones.
+     *
+     * This is the clone() method - but because clone
+     * is a reserved word we can no declare it directly
+     * @see __call
+     *
+     * @example clone.php Usage Example: FluentDOM\Query:clone()
+     * @return Query
+     */
+    private function cloneNodes() {
+      $result = $this->spawn();
+      foreach ($this->_nodes as $node) {
+        /**
+         * @var \DOMNode $node
+         */
+        $result->push($node->cloneNode(TRUE));
+      }
+      return $result;
+    }
+
+    /**
+     * Remove all child nodes from the set of matched elements.
+     *
+     * This is the empty() method - but because empty
+     * is a reserved word we can no declare it directly
+     * @see __call
+     *
+     * @example empty.php Usage Example: FluentDOM\Query:empty()
+     * @return Query
+     */
+    private function emptyNodes() {
+      foreach ($this->_nodes as $node) {
+        if ($node instanceof \DOMElement ||
+            $node instanceof \DOMText ||
+            $node instanceof \DOMCdataSection) {
+          $node->nodeValue = '';
+        }
+      }
+      $this->_useDocumentContext = TRUE;
+      return $this;
     }
   }
 }

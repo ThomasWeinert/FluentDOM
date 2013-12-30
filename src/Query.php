@@ -585,6 +585,64 @@ namespace FluentDOM {
       return $result;
     }
 
+    /**
+     * Get the inner xml of a given node or in other words the xml of all children.
+     *
+     * @param \DOMElement $node
+     * @return string
+     */
+    private function getInnerXml($node) {
+      $result = '';
+      if ($node instanceof \DOMElement) {
+        $dom = $this->getDocument();
+        foreach ($node->childNodes as $childNode) {
+          if ($this->isNode($childNode)) {
+            $result .= $dom->saveXML($childNode);
+          }
+        }
+      } elseif ($node instanceof \DOMText || $node instanceOf \DOMCdataSection) {
+        return $node->textContent;
+      }
+      return $result;
+    }
+
+    /*********************
+     * Core
+     ********************/
+
+    /**
+     * Use a handler callback to apply a content argument to each node $targetNodes. The content
+     * argument can be an easy setter function
+     *
+     * @param array|\DOMNodeList $targetNodes
+     * @param string|array|\DOMNode|\DOMNodeList|\Traversable|callable $content
+     * @param callable $handler
+     */
+    protected function apply($targetNodes, $content, $handler) {
+      $result = array();
+      $isSetterFunction = FALSE;
+      if (!is_string($content) && is_callable($content)) {
+        $isSetterFunction = TRUE;
+      } else {
+        $contentNodes = $this->getContentNodes($content);
+      }
+      foreach ($targetNodes as $index => $node) {
+        if ($isSetterFunction) {
+          $contentData = call_user_func($content, $node, $index, $this->getInnerXml($node));
+          if (!empty($contentData)) {
+            $contentNodes = $this->getContentNodes($contentData);
+          }
+        }
+        if (!empty($contentNodes)) {
+          $resultNodes = call_user_func($handler, $node, $contentNodes);
+          if (is_array($resultNodes)) {
+            $result = array_merge($result, $resultNodes);
+          }
+        }
+      }
+      return $result;
+    }
+
     /*********************
      * Traversing
      ********************/
@@ -662,6 +720,37 @@ namespace FluentDOM {
     /*********************
      * Manipulation
      ********************/
+
+    /**
+     * Insert content after each of the matched elements.
+     *
+     * @example after.php Usage Example: FluentDOM\Query::after()
+     * @param string|array|\DOMNode|\DOMNodeList|\Traversable|callable $content
+     * @return Query
+     */
+    public function after($content) {
+      $result = $this->spawn();
+      $result->push(
+        $this->apply(
+          $this->_nodes,
+          $content,
+          function ($targetNode, $contentNodes) {
+            $result = array();
+            if (isset($targetNode->parentNode) &&
+              !empty($contentNodes)) {
+              $beforeNode = $targetNode->nextSibling;
+              foreach ($contentNodes as $contentNode) {
+                $result[] = $targetNode->parentNode->insertBefore(
+                  $contentNode->cloneNode(TRUE), $beforeNode
+                );
+              }
+            }
+            return $result;
+          }
+        )
+      );
+      return $result;
+    }
 
     /**
      * Clone matched DOM Elements and select the clones.

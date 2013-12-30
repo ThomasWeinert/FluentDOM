@@ -6,3 +6,5 @@ require(__DIR__.'/Xpath.php');
 
 require(__DIR__.'/Query.php');
 require(__DIR__.'/Query/Iterator.php');
+
+require(__DIR__.'/QualifiedName.php');

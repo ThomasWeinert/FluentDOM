@@ -635,7 +635,7 @@ namespace FluentDOM {
      * @param string|array|\DOMElement|\DOMNodeList|\Traversable $content
      * @return \DOMElement
      */
-    protected function getContentElement($content) {
+    private function getContentElement($content) {
       if ($content instanceof \DOMElement) {
         return $content;
       } else {
@@ -661,6 +661,28 @@ namespace FluentDOM {
         }
       } elseif ($node instanceof \DOMText || $node instanceOf \DOMCdataSection) {
         return $node->textContent;
+      }
+      return $result;
+    }
+
+    /**
+     * Append to content nodes to the target nodes.
+     *
+     * @param $targetNode
+     * @param $contentNodes
+     * @return array new nodes
+     */
+    private function appendNodesTo($targetNode, $contentNodes) {
+      $result = array();
+      if ($targetNode instanceof \DOMElement) {
+        foreach ($contentNodes as $contentNode) {
+          /**
+           * @var \DOMNode $contentNode
+           */
+          if ($this->isNode($contentNode)) {
+            $result[] = $targetNode->appendChild($contentNode->cloneNode(TRUE));
+          }
+        }
       }
       return $result;
     }
@@ -700,6 +722,22 @@ namespace FluentDOM {
         }
       }
       return $result;
+    }
+
+    /**
+     * Test that xpath expression matches context and return true/false
+     *
+     * @param string $expr
+     * @param \DOMNode $context optional, default value NULL
+     * @return boolean
+     */
+    protected function matches($expr, \DOMNode $context = NULL) {
+      $check = $this->xpath->evaluate($expr, $context);
+      if ($check instanceof \DOMNodeList) {
+        return $check->length > 0;
+      } else {
+        return (bool)$check;
+      }
     }
 
     /*********************
@@ -852,18 +890,36 @@ namespace FluentDOM {
             $this->_nodes,
             $content,
             function($targetNode, $contentNodes) {
-              $result = array();
-              if ($targetNode instanceof \DOMElement) {
-                foreach ($contentNodes as $contentNode) {
-                  if ($contentNode instanceof \DOMNode) {
-                    $result[] = $targetNode->appendChild($contentNode->cloneNode(TRUE));
-                  }
-                }
-              }
-              return $result;
+              return $this->appendNodesTo($targetNode, $contentNodes);
             }
           )
         );
+      }
+      return $result;
+    }
+
+    /**
+     * Append all of the matched elements to another, specified, set of elements.
+     * Returns all of the inserted elements.
+     *
+     * @example appendTo.php Usage Example: FluentDOM::appendTo()
+     * @param string|array|\DOMNode|\DOMNodeList|Query $selector
+     * @return Query
+     */
+    public function appendTo($selector) {
+      $result = $this->spawn();
+      $targetNodes = $this->getNodes($selector);
+      if (!empty($targetNodes)) {
+        $result->push(
+          $this->apply(
+            $targetNodes,
+            $this->_nodes,
+            function ($targetNode, $contentNodes) {
+              return $this->appendNodesTo($targetNode, $contentNodes);
+            }
+          )
+        );
+        $this->remove();
       }
       return $result;
     }
@@ -909,6 +965,24 @@ namespace FluentDOM {
       }
       $this->_useDocumentContext = TRUE;
       return $this;
+    }
+    /**
+     * Removes all matched elements from the DOM.
+     *
+     * @example remove.php Usage Example: FluentDOM\Query::remove()
+     * @param string $expr XPath expression
+     * @return Query removed elements
+     */
+    public function remove($expr = NULL) {
+      $result = $this->spawn();
+      foreach ($this->_nodes as $node) {
+        if (isset($node->parentNode)) {
+          if (empty($expr) || $this->matches($expr, $node)) {
+            $result->push($node->parentNode->removeChild($node));
+          }
+        }
+      }
+      return $result;
     }
 
     /****************************

@@ -15,6 +15,7 @@ namespace FluentDOM {
         <html>
           <div class="test1 test2">class testing</div>
           <div class="test2">class testing</div>
+          <div>class testing</div>
         </html>
       </items>
     ';

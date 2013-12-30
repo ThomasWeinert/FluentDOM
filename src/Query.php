@@ -94,7 +94,7 @@ namespace FluentDOM {
       if (isset($contentType)) {
         $this->setContentType($contentType);
       }
-      $this->_array = array();
+      $this->_nodes = array();
       $this->_useDocumentContext = TRUE;
       $this->_parent = NULL;
       $this->_document->preserveWhiteSpace = FALSE;
@@ -268,7 +268,7 @@ namespace FluentDOM {
      *
      * @example interfaces/ArrayAccess.php Usage Example: ArrayAccess Interface
      * @param integer $offset
-     * @return \DOMNode|NULL
+     * @return \DOMNode|\DOMElement|NULL
      */
     public function offsetGet($offset) {
       return isset($this->_nodes[$offset]) ? $this->_nodes[$offset] : NULL;
@@ -713,6 +713,45 @@ namespace FluentDOM {
     /*************************
      * Manipulation - Classes
      ************************/
+
+    /**
+     * Adds the specified class(es) to each of the set of matched elements.
+     *
+     * @param string|callable $class
+     * @return Query
+     */
+    public function addClass($class) {
+      return $this->toggleClass($class, TRUE);
+    }
+
+    /**
+     * Returns true if the specified class is present on at least one of the set of matched elements.
+     *
+     * @param string|callable $class
+     * @return boolean
+     */
+    public function hasClass($class) {
+      foreach ($this->_nodes as $node) {
+        if ($node instanceof \DOMElement &&
+          $node->hasAttribute('class')) {
+          $classes = preg_split('(\s+)', trim($node->getAttribute('class')));
+          if (in_array($class, $classes)) {
+            return TRUE;
+          }
+        }
+      }
+      return FALSE;
+    }
+
+    /**
+     * Removes all or the specified class(es) from the set of matched elements.
+     *
+     * @param string|callable $class
+     * @return Query
+     */
+    public function removeClass($class = '') {
+      return $this->toggleClass($class, FALSE);
+    }
 
     /**
      * Adds the specified class if the switch is TRUE,

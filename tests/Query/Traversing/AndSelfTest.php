@@ -6,7 +6,7 @@ namespace FluentDOM\Query {
 
   require_once(__DIR__.'/../../TestCase.php');
 
-  class TraversingAddSelfTest extends TestCase {
+  class TraversingAndSelfTest extends TestCase {
 
     protected $_directory = __DIR__;
 

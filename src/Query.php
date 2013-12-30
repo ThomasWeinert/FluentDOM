@@ -675,6 +675,18 @@ namespace FluentDOM {
     }
 
     /**
+     * Add the previous selection to the current selection.
+     *
+     * @return Query
+     */
+    public function andSelf() {
+      $result = $this->spawn();
+      $result->push($this->_nodes);
+      $result->push($this->_parent);
+      return $result;
+    }
+
+    /**
      * Execute a function within the context of every matched element.
      *
      * @param callable $function
@@ -740,6 +752,9 @@ namespace FluentDOM {
               !empty($contentNodes)) {
               $beforeNode = $targetNode->nextSibling;
               foreach ($contentNodes as $contentNode) {
+                /**
+                 * @var \DOMNode $contentNode
+                 */
                 $result[] = $targetNode->parentNode->insertBefore(
                   $contentNode->cloneNode(TRUE), $beforeNode
                 );

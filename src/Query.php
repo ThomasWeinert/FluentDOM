@@ -145,8 +145,8 @@ namespace FluentDOM {
        */
       $result = new $this;
       $result->_parent = $this;
-      $result->_document = $this->_document;
-      $result->_xpath = $this->_xpath;
+      $result->_document = $this->getDocument();
+      $result->_xpath = $this->xpath();
       $result->_contentType = $this->contentType;
       if (isset($elements)) {
         $result->push($elements);
@@ -452,6 +452,50 @@ namespace FluentDOM {
     }
 
     /**
+     * check if parameter is a valid callback function
+     *
+     * @param callback $callback
+     * @param boolean $allowGlobalFunctions
+     * @param boolean $silent (no InvalidArgumentException)
+     * @return boolean
+     */
+    private function isCallable($callback, $allowGlobalFunctions = FALSE, $silent = TRUE) {
+      if ($callback instanceof \Closure) {
+        return TRUE;
+      } elseif (is_string($callback) &&
+        $allowGlobalFunctions &&
+        function_exists($callback)) {
+        return is_callable($callback);
+      } elseif (is_array($callback) &&
+        count($callback) == 2 &&
+        (is_object($callback[0]) || is_string($callback[0])) &&
+        is_string($callback[1])) {
+        return is_callable($callback);
+      } elseif ($silent) {
+        return FALSE;
+      } else {
+        throw new \InvalidArgumentException('Invalid callback argument');
+      }
+    }
+
+    /**
+     * Execute the callback function for a node and return the new elements
+     *
+     * @param callable $easySetter
+     * @param \DOMNode $node
+     * @param integer $index
+     * @param string $value
+     * @return array
+     */
+    protected function executeNodeCallback($callback, $node, $index, $value) {
+      $contentData = call_user_func($callback, $node, $index, $value);
+      if (!empty($contentData)) {
+        return $this->getContentNodes($contentData);
+      }
+      return array();
+    }
+
+    /**
      * Setter for Query::_contentType property
      *
      * @param string $value
@@ -524,7 +568,7 @@ namespace FluentDOM {
      */
     private function getContentFragment($content, $includeTextNodes = TRUE, $limit = 0) {
       $result = array();
-      $fragment = $this->_document->createDocumentFragment();
+      $fragment = $this->getDocument()->createDocumentFragment();
       if ($fragment->appendXML($content)) {
         for ($i = $fragment->childNodes->length - 1; $i >= 0; $i--) {
           $element = $fragment->childNodes->item($i);
@@ -586,6 +630,21 @@ namespace FluentDOM {
     }
 
     /**
+     * Convert $content to a DOMElement. If $content contains several elements use the first.
+     *
+     * @param string|array|\DOMElement|\DOMNodeList|\Traversable $content
+     * @return \DOMElement
+     */
+    protected function getContentElement($content) {
+      if ($content instanceof \DOMElement) {
+        return $content;
+      } else {
+        $contentNodes = $this->getContentNodes($content, FALSE, 1);
+        return $contentNodes[0];
+      }
+    }
+
+    /**
      * Get the inner xml of a given node or in other words the xml of all children.
      *
      * @param \DOMElement $node
@@ -621,7 +680,7 @@ namespace FluentDOM {
     protected function apply($targetNodes, $content, $handler) {
       $result = array();
       $isSetterFunction = FALSE;
-      if (!is_string($content) && is_callable($content)) {
+      if ($this->isCallable($content)) {
         $isSetterFunction = TRUE;
       } else {
         $contentNodes = $this->getContentNodes($content);
@@ -767,6 +826,48 @@ namespace FluentDOM {
       return $result;
     }
 
+   /**
+   * Append content to the inside of every matched element.
+   *
+   * @example append.php Usage Example: FluentDOM::append()
+   * @param string|array|\DOMNode|\Traversable|callable $content DOMNode or DOMNodeList or xml fragment string
+   * @return Query
+   */
+    public function append($content) {
+      $result = $this->spawn();
+      if (empty($this->_nodes) &&
+        $this->_useDocumentContext &&
+        !isset($this->_document->documentElement)) {
+        if ($this->isCallable($content)) {
+          $contentNode = $this->getContentElement(
+            $this->executeNodeCallback($content, NULL, 0, '')
+          );
+        } else {
+          $contentNode = $this->getContentElement($content);
+        }
+        $result->push($this->_document->appendChild($contentNode));
+      } else {
+        $result->push(
+          $this->apply(
+            $this->_nodes,
+            $content,
+            function($targetNode, $contentNodes) {
+              $result = array();
+              if ($targetNode instanceof \DOMElement) {
+                foreach ($contentNodes as $contentNode) {
+                  if ($contentNode instanceof \DOMNode) {
+                    $result[] = $targetNode->appendChild($contentNode->cloneNode(TRUE));
+                  }
+                }
+              }
+              return $result;
+            }
+          )
+        );
+      }
+      return $result;
+    }
+
     /**
      * Clone matched DOM Elements and select the clones.
      *
@@ -868,7 +969,7 @@ namespace FluentDOM {
      * @return Query
      */
     public function toggleClass($class, $switch = NULL) {
-      $isCallback = !is_string($class) && is_callable($class);
+      $isCallback = $this->isCallable($class);
       foreach ($this->_nodes as $index => $node) {
         if ($node instanceof \DOMElement) {
           if ($isCallback) {

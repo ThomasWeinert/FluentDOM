@@ -412,16 +412,9 @@ namespace FluentDOM {
       }
     }
 
-    /*
-     * Traversing
-     */
-
-    /**
-     * @return Query|NULL
-     */
-    public function end() {
-      return $this->_parent;
-    }
+    /******************
+     * Internal
+     *****************/
 
     /**
      * Check if the DOMNode is DOMElement or DOMText with content
@@ -496,23 +489,132 @@ namespace FluentDOM {
     /**
      * Match XPath expression against context and return matched elements.
      *
-     * @param string $expr
+     * @param string|\DOMNode|\DOMNodeList $selector
      * @param \DOMNode $context optional, default value NULL
      * @throws \InvalidArgumentException
      * @return \DOMNodeList
      */
-    private function getNodes($expr, \DOMNode $context = NULL) {
-      $list = $this->xpath()->evaluate($expr, $context, FALSE);
-      if ($list instanceof \DOMNodeList) {
-        return $list;
+    private function getNodes($selector, \DOMNode $context = NULL, $disallowEmpty = FALSE) {
+      if ($this->isNode($selector)) {
+        $result = array($selector);
+      } elseif (is_string($selector)) {
+        $result = $this->xpath()->evaluate($selector, $context, FALSE);
+        if (!($result instanceof \DOMNodeList)) {
+          throw new \InvalidArgumentException('Given xpath expression did not return an node list.');
+        }
+        $result = iterator_to_array($result);
+      } elseif ($this->isNodeList($selector)) {
+        $result = iterator_to_array($selector);
       } else {
-        throw new \InvalidArgumentException('Given xpath expression did not return an node list.');
+        throw new \InvalidArgumentException('Invalid selector');
       }
+      if ($disallowEmpty && count($result) < 1) {
+        throw new \InvalidArgumentException('Empty node list.');
+      }
+      return $result;
+    }
+
+    /**
+     * Convert a given content xml string into and array of nodes
+     *
+     * @param string $content
+     * @param boolean $includeTextNodes
+     * @param integer $limit
+     * @return array
+     */
+    private function getContentFragment($content, $includeTextNodes = TRUE, $limit = 0) {
+      $result = array();
+      $fragment = $this->_document->createDocumentFragment();
+      if ($fragment->appendXML($content)) {
+        for ($i = $fragment->childNodes->length - 1; $i >= 0; $i--) {
+          $element = $fragment->childNodes->item($i);
+          if ($element instanceof \DOMElement ||
+            ($includeTextNodes && $this->isNode($element))) {
+            array_unshift($result, $element);
+            $element->parentNode->removeChild($element);
+          }
+        }
+        if ($limit > 0 && count($result) >= $limit) {
+          return array_slice($result, 0, $limit);
+        }
+        return $result;
+      } else {
+        throw new \UnexpectedValueException('Invalid document fragment');
+      }
+    }
+
+    /**
+     * Convert a given content into and array of nodes
+     *
+     * @param string|array|\DOMNode|\Traversable $content
+     * @param boolean $includeTextNodes
+     * @param integer $limit
+     * @return array
+     */
+    private function getContentNodes($content, $includeTextNodes = TRUE, $limit = 0) {
+      $result = array();
+      if ($content instanceof \DOMElement) {
+        $result = array($content);
+      } elseif ($includeTextNodes && $this->isNode($content)) {
+        $result = array($content);
+      } elseif (is_string($content)) {
+        $result = $this->getContentFragment($content, $includeTextNodes, $limit);
+      } elseif ($this->isNodeList($content)) {
+        foreach ($content as $element) {
+          if ($element instanceof \DOMElement ||
+            ($includeTextNodes && $this->isNode($element))) {
+            $result[] = $element;
+            if ($limit > 0 && count($result) >= $limit) {
+              break;
+            }
+          }
+        }
+      } else {
+        throw new \InvalidArgumentException('Invalid content parameter');
+      }
+      if (empty($result)) {
+        throw new \UnexpectedValueException('No element found');
+      } else {
+        //if a node is not in the current document import it
+        foreach ($result as $index => $node) {
+          if ($node->ownerDocument !== $this->_document) {
+            $result[$index] = $this->_document->importNode($node, TRUE);
+          }
+        }
+      }
+      return $result;
     }
 
     /*********************
      * Traversing
      ********************/
+
+    /**
+     * Adds more elements, matched by the given expression, to the set of matched elements.
+     *
+     * @example add.php Usage Examples: FluentDOM::add()
+     * @param string $expr XPath expression
+     * @return Query
+     */
+    public function add($expr, $context = NULL) {
+      $result = $this->spawn();
+      $result->push($this->_nodes);
+      if (isset($context)) {
+        $targetNodes = $this->getNodes($context);
+        if (!empty($targetNodes)) {
+          foreach ($targetNodes as $node) {
+            $result->push($this->getNodes($expr, $node));
+          }
+        }
+      } elseif (is_object($expr) ||
+                (is_string($expr) && substr(ltrim($expr), 0, 1) == '<')) {
+        $result->push($this->getContentNodes($expr));
+      } else {
+        $result->push($this->find($expr));
+      }
+      $this->_nodes = $this->unique($this->_nodes);
+      return $result;
+    }
 
     /**
      * Execute a function within the context of every matched element.
@@ -525,6 +627,15 @@ namespace FluentDOM {
         call_user_func($function, $node, $index);
       }
       return $this;
+    }
+
+    /**
+     * Return the parent FluentDOM/Query object.
+     *
+     * @return Query|NULL
+     */
+    public function end() {
+      return $this->_parent;
     }
 
     /**
@@ -592,6 +703,75 @@ namespace FluentDOM {
         }
       }
       $this->_useDocumentContext = TRUE;
+      return $this;
+    }
+
+    /****************************
+     * Manipulation - Attributes
+     ***************************/
+
+    /*************************
+     * Manipulation - Classes
+     ************************/
+
+    /**
+     * Adds the specified class if the switch is TRUE,
+     * removes the specified class if the switch is FALSE,
+     * toggles the specified class if the switch is NULL.
+     *
+     * @example toggleClass.php Usage Example: FluentDOM::toggleClass()
+     * @param string|callable $class
+     * @param NULL|boolean $switch toggle if NULL, add if TRUE, remove if FALSE
+     * @return Query
+     */
+    public function toggleClass($class, $switch = NULL) {
+      $isCallback = !is_string($class) && is_callable($class);
+      foreach ($this->_nodes as $index => $node) {
+        if ($node instanceof \DOMElement) {
+          if ($isCallback) {
+            $classString = call_user_func(
+              $class, $node, $index, $node->getAttribute('class')
+            );
+          } else {
+            $classString = $class;
+          }
+          if (empty($classString) && $switch == FALSE) {
+            if ($node->hasAttribute('class')) {
+              $node->removeAttribute('class');
+            }
+          } else {
+            if ($node->hasAttribute('class')) {
+              $currentClasses = array_flip(
+                preg_split('(\s+)', trim($node->getAttribute('class')))
+              );
+            } else {
+              $currentClasses = array();
+            }
+            $toggledClasses = array_unique(preg_split('(\s+)', trim($classString)));
+            $modified = FALSE;
+            foreach ($toggledClasses as $toggledClass) {
+              if (isset($currentClasses[$toggledClass])) {
+                if ($switch === FALSE || is_null($switch)) {
+                  unset($currentClasses[$toggledClass]);
+                  $modified = TRUE;
+                }
+              } else {
+                if ($switch === TRUE || is_null($switch)) {
+                  $currentClasses[$toggledClass] = TRUE;
+                  $modified = TRUE;
+                }
+              }
+            }
+            if ($modified) {
+              if (empty($currentClasses)) {
+                $node->removeAttribute('class');
+              } else {
+                $node->setAttribute('class', implode(' ', array_keys($currentClasses)));
+              }
+            }
+          }
+        }
+      }
       return $this;
     }
   }

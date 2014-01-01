@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<html>
+<head></head>
+<body>
+  <div>
+    <p index="0" style="padding: 1em;">Hello</p>
+    <p index="1" class="blame" style="padding: 1em;">cruel</p>
+    <p index="2">World</p>
+  </div>
+</body>
+</html>

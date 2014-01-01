@@ -989,6 +989,93 @@ namespace FluentDOM {
      * Manipulation - Attributes
      ***************************/
 
+    /**
+     * Access a property on the first matched element or set the attribute(s) of all matched elements
+     *
+     * @example attr.php Usage Example: FluentDOM:attr() Read an attribute value.
+     * @param string|array $attribute attribute name or attribute list
+     * @param string|callable $value function callback($index, $value) or value
+     * @return string|Query attribute value or $this
+     */
+    public function attr($attribute, $value = NULL) {
+      if (is_array($attribute) && count($attribute) > 0) {
+        //expr is an array of attributes and values - set on each element
+        foreach ($attribute as $key => $value) {
+          $name = (new QualifiedName($key))->name;
+          foreach ($this->_nodes as $node) {
+            if ($node instanceof \DOMElement) {
+              $node->setAttribute($name, $value);
+            }
+          }
+        }
+      } elseif (is_null($value)) {
+        //empty value - read attribute from first element in list
+        $attribute = (new QualifiedName($attribute))->name;
+        if (count($this->_nodes) > 0) {
+          $node = $this->_nodes[0];
+          if ($node instanceof \DOMElement) {
+            return $node->getAttribute($attribute);
+          }
+        }
+        return NULL;
+      } elseif ($this->isCallable($value)) {
+        //value is function callback - execute it and set result on each element
+        $attribute = (new QualifiedName($attribute))->name;
+        foreach ($this->_nodes as $index => $node) {
+          if ($node instanceof \DOMElement) {
+            $node->setAttribute(
+              $attribute,
+              call_user_func($value, $node, $index, $node->getAttribute($attribute))
+            );
+          }
+        }
+      } else {
+        // set attribute value of each element
+        $attribute = (new QualifiedName($attribute))->name;
+        foreach ($this->_nodes as $node) {
+          if ($node instanceof \DOMElement) {
+            $node->setAttribute($attribute, (string)$value);
+          }
+        }
+      }
+      return $this;
+    }
+
+    /**
+     * Remove an attribute from each of the matched elements. If $name is NULL or *,
+     * all attributes will be deleted.
+     *
+     * @example removeAttr.php Usage Example: FluentDOM::removeAttr()
+     * @param string $name
+     * @return Query
+     */
+    public function removeAttr($name) {
+      $attributes = NULL;
+      if (is_string($name) && $name !== '*') {
+        $attributes = array($name);
+      } elseif (is_array($name)) {
+        $attributes = $name;
+      } elseif ($name !== '*') {
+        throw new \InvalidArgumentException();
+      }
+      foreach ($this->_nodes as $node) {
+        if ($node instanceof \DOMElement) {
+          if (is_null($attributes)) {
+            for ($i = $node->attributes->length - 1; $i >= 0; $i--) {
+              $node->removeAttribute($node->attributes->item($i)->name);
+            }
+          } else {
+            foreach ($attributes as $attribute) {
+              if ($node->hasAttribute($attribute)) {
+                $node->removeAttribute($attribute);
+              }
+            }
+          }
+        }
+      }
+      return $this;
+    }
+
     /*************************
      * Manipulation - Classes
      ************************/

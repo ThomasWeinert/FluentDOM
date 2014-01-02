@@ -1330,6 +1330,28 @@ namespace FluentDOM {
       return $result;
     }
 
+    /**
+     * Selects a subset of the matched elements.
+     *
+     * @example slice.php Usage Example: FluentDOM\Query::slice()
+     * @param integer $start
+     * @param integer $end
+     * @return Query
+     */
+    public function slice($start, $end = NULL) {
+      $result = $this->spawn();
+      if ($end === NULL) {
+        $result->push(array_slice($this->_nodes, $start));
+      } elseif ($end < 0) {
+        $result->push(array_slice($this->_nodes, $start, $end));
+      } elseif ($end > $start) {
+        $result->push(array_slice($this->_nodes, $start, $end - $start));
+      } else {
+        $result->push(array_slice($this->_nodes, $end, $start - $end));
+      }
+      return $result;
+    }
+
     /*********************
      * Manipulation
      ********************/
@@ -1371,7 +1393,7 @@ namespace FluentDOM {
    /**
    * Append content to the inside of every matched element.
    *
-   * @example append.php Usage Example: FluentDOM::append()
+   * @example append.php Usage Example: FluentDOM\Query::append()
    * @param string|array|\DOMNode|\Traversable|callable $content DOMNode or DOMNodeList or xml fragment string
    * @return Query
    */
@@ -1406,7 +1428,7 @@ namespace FluentDOM {
      * Append all of the matched elements to another, specified, set of elements.
      * Returns all of the inserted elements.
      *
-     * @example appendTo.php Usage Example: FluentDOM::appendTo()
+     * @example appendTo.php Usage Example: FluentDOM\Query::appendTo()
      * @param string|array|\DOMNode|\DOMNodeList|Query $selector
      * @return Query
      */
@@ -1431,7 +1453,7 @@ namespace FluentDOM {
     /**
      * Insert content before each of the matched elements.
      *
-     * @example before.php Usage Example: FluentDOM::before()
+     * @example before.php Usage Example: FluentDOM\Query::before()
      * @param string|array|\DOMNode|\Traversable|callable $content
      * @return Query
      */
@@ -1533,7 +1555,7 @@ namespace FluentDOM {
     /**
      * Insert all of the matched elements before another, specified, set of elements.
      *
-     * @example insertBefore.php Usage Example: FluentDOM::insertBefore()
+     * @example insertBefore.php Usage Example: FluentDOM\Query::insertBefore()
      * @param string|array|\DOMNode|\Traversable $selector
      * @return Query
      */
@@ -1768,7 +1790,7 @@ namespace FluentDOM {
      * Remove an attribute from each of the matched elements. If $name is NULL or *,
      * all attributes will be deleted.
      *
-     * @example removeAttr.php Usage Example: FluentDOM::removeAttr()
+     * @example removeAttr.php Usage Example: FluentDOM\Query::removeAttr()
      * @param string $name
      * @return Query
      */
@@ -1848,7 +1870,7 @@ namespace FluentDOM {
      * removes the specified class if the switch is FALSE,
      * toggles the specified class if the switch is NULL.
      *
-     * @example toggleClass.php Usage Example: FluentDOM::toggleClass()
+     * @example toggleClass.php Usage Example: FluentDOM\Query::toggleClass()
      * @param string|callable $class
      * @param NULL|boolean $switch toggle if NULL, add if TRUE, remove if FALSE
      * @return Query

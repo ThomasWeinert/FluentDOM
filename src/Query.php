@@ -1087,6 +1087,31 @@ namespace FluentDOM {
       return $result;
     }
 
+    /**
+     * Get a set of elements containing the unique next siblings of each of the
+     * given set of elements.
+     *
+     * @example next.php Usage Example: FluentDOM\Query::next()
+     * @param string $expr XPath expression
+     * @return Query
+     */
+    public function next($expr = NULL) {
+      $result = $this->spawn();
+      foreach ($this->_nodes as $node) {
+        $next = $node->nextSibling;
+        while ($next instanceof \DOMNode && !$this->isNode($next)) {
+          $next = $next->nextSibling;
+        }
+        if (!empty($next)) {
+          if (empty($expr) || $this->matches($expr, $next)) {
+            $result->push($next);
+          }
+        }
+      }
+      $result->_nodes = $this->unique($result->_nodes);
+      return $result;
+    }
+
     /*********************
      * Manipulation
      ********************/
@@ -1353,6 +1378,34 @@ namespace FluentDOM {
         }
       }
       return $result;
+    }
+
+    /**
+     * Get the combined text contents of all matched elements or
+     * set the text contents of all matched elements.
+     *
+     * @example text.php Usage Example: FluentDOM\Query::text()
+     * @param string|callable $text
+     * @return string|Query
+     */
+    public function text($text = NULL) {
+      if (isset($text)) {
+        $isCallback = $this->isCallable($text, FALSE, TRUE);
+        foreach ($this->_nodes as $index => $node) {
+          if ($isCallback) {
+            $node->nodeValue = call_user_func($text, $node, $index, $node->nodeValue);
+          } else {
+            $node->nodeValue = $text;
+          }
+        }
+        return $this;
+      } else {
+        $result = '';
+        foreach ($this->_nodes as $node) {
+          $result .= $node->textContent;
+        }
+        return $result;
+      }
     }
 
     /****************************

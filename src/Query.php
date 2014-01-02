@@ -784,6 +784,33 @@ namespace FluentDOM {
     }
 
     /**
+     * Get a set of elements containing of the unique immediate
+     * child nodes including only elements (not text nodes) of each
+     * of the matched set of elements.
+     *
+     * @example children.php Usage Examples: FluentDOM\Query::children()
+     * @param string $expr XPath expression
+     * @return Query
+     */
+    public function children($expr = NULL) {
+      $nodes = array();
+      foreach ($this->_nodes as $node) {
+        if (empty($expr)) {
+          $nodes = iterator_to_array($node->childNodes);
+        } else {
+          foreach ($node->childNodes as $childNode) {
+            if ($this->matches($expr, $childNode)) {
+              $nodes[] = $childNode;
+            }
+          }
+        }
+      }
+      $result = $this->spawn();
+      $result->push($this->unique($nodes), TRUE);
+      return $result;
+    }
+
+    /**
      * Execute a function within the context of every matched element.
      *
      * @param callable $function

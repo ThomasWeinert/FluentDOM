@@ -1057,6 +1057,36 @@ namespace FluentDOM {
       return $this->eq(-1);
     }
 
+    /**
+     * Translate a set of elements in the FluentDOM\Query object into
+     * another set of values in an array (which may, or may not contain elements).
+     *
+     * If the callback function returns an array each element of the array will be added to the
+     * result array. All other variable types are put directly into the result array.
+     *
+     * @example map.php Usage Example: FluentDOM\Query::map()
+     * @param callable $function
+     * @return array
+     */
+    public function map(Callable $function) {
+      $result = array();
+      foreach ($this->_nodes as $index => $node) {
+        $mapped = call_user_func($function, $node, $index);
+        if ($mapped === NULL) {
+          continue;
+        } elseif ($mapped instanceof \Traversable || is_array($mapped)) {
+          foreach ($mapped as $element) {
+            if ($element !== NULL) {
+              $result[] = $element;
+            }
+          }
+        } else {
+          $result[] = $mapped;
+        }
+      }
+      return $result;
+    }
+
     /*********************
      * Manipulation
      ********************/

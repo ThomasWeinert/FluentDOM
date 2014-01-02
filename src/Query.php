@@ -1877,6 +1877,62 @@ namespace FluentDOM {
       return $result;
     }
 
+    /**
+     * Get or set the xml contents of the first matched element.
+     *
+     * @example xml.php Usage Example: FluentDOM::xml()
+     * @param string|callable $xml XML fragment
+     * @return string|Query
+     */
+    public function xml($xml = NULL) {
+      if (isset($xml)) {
+        $isCallback = $this->isCallable($xml, FALSE, TRUE);
+        if ($isCallback) {
+          foreach ($this->_nodes as $index => $node) {
+            $xmlString = call_user_func(
+              $xml,
+              $node,
+              $index,
+              $this->getInnerXml($node)
+            );
+            $node->nodeValue = '';
+            if (!empty($xmlString)) {
+              $fragment = $this->getContentFragment($xmlString, TRUE);
+              foreach ($fragment as $contentNode) {
+                /**
+                 * @var \DOMNode $node
+                 * @var \DOMNode $contentNode
+                 */
+                $node->appendChild($contentNode->cloneNode(TRUE));
+              }
+            }
+          }
+        } else {
+          if (!empty($xml)) {
+            $fragment = $this->getContentFragment($xml, TRUE);
+          } else {
+            $fragment = array();
+          }
+          foreach ($this->_nodes as $node) {
+            $node->nodeValue = '';
+            foreach ($fragment as $contentNode) {
+              /**
+               * @var \DOMNode $node
+               * @var \DOMNode $contentNode
+               */
+              $node->appendChild($contentNode->cloneNode(TRUE));
+            }
+          }
+        }
+        return $this;
+      } else {
+        if (isset($this->_nodes[0])) {
+          return $this->getInnerXml($this->_nodes[0]);
+        }
+        return '';
+      }
+    }
+
     /****************************
      * Manipulation - Attributes
      ***************************/

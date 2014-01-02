@@ -10,7 +10,6 @@ namespace FluentDOM\Query {
 
     protected $_directory = __DIR__;
 
-
     /**
      * @group Core
      * @covers FluentDOM\Query::toArray

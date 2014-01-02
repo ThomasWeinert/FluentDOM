@@ -169,13 +169,14 @@ namespace FluentDOM {
       $this->assertEquals(TRUE, isset($fd->dynamicProperty));
       $this->assertEquals('test', $fd->dynamicProperty);
     }
+
     /**
      * @covers FluentDOM\Query::__set
      */
     public function testSetPropertyXpath() {
       $fd = $this->getQueryFixtureFromString(self::XML);
       $this->setExpectedException('BadMethodCallException');
-      $fd->xpath = $fd->xpath;
+      $fd->xpath = $fd->xpath();
     }
 
     /**

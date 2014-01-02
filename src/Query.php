@@ -838,6 +838,21 @@ namespace FluentDOM {
     }
 
     /**
+     * Get a set of elements containing all of the unique immediate
+     * child nodes including elements and text nodes of each of the matched set of elements.
+     *
+     * @return Query
+     */
+    public function contents() {
+      $result = $this->spawn();
+      foreach ($this->_nodes as $node) {
+        $result->push($node->childNodes, FALSE);
+      }
+      $result->_nodes = $this->unique($result->_nodes);
+      return $result;
+    }
+
+    /**
      * Execute a function within the context of every matched element.
      *
      * @param callable $function

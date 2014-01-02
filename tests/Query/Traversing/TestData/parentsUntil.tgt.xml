@@ -1,0 +1,22 @@
+<html>
+<head></head>
+<body>
+<ul class="level-1">
+  <li class="item-i">I</li>
+  <li class="item-ii selectedParent">II
+    <ul class="level-2 selectedParent">
+      <li class="item-a">A</li>
+      <li class="item-b">B
+        <ul class="level-3">
+          <li class="item-1">1</li>
+          <li class="item-2">2</li>
+          <li class="item-3">3</li>
+        </ul>
+      </li>
+      <li class="item-c">C</li>
+    </ul>
+  </li>
+  <li class="item-iii">III</li>
+</ul>
+</body>
+</html>

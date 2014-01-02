@@ -1245,6 +1245,50 @@ namespace FluentDOM {
       return $result;
     }
 
+    /**
+     * Get the ancestors of each element in the current set of matched elements,
+     * optionally filtered by a selector.
+     *
+     * @example parents.php Usage Example: FluentDOM\Query::parents()
+     * @param string $expr XPath expression
+     * @return Query
+     */
+    public function parents($expr = NULL) {
+      $result = $this->spawn();
+      foreach ($this->_nodes as $node) {
+        $parents = $this->xpath()->evaluate('ancestor::*', $node);
+        for ($i = $parents->length - 1; $i >= 0; --$i) {
+          $parentNode = $parents->item($i);
+          if (empty($expr) || $this->matches($expr, $parentNode)) {
+            $result->push($parentNode);
+          }
+        }
+      }
+      return $result;
+    }
+
+    /**
+     * Get the ancestors of each element in the current set of matched elements,
+     * up to but not including the element matched by the selector.
+     *
+     * @param string $expr XPath expression
+     * @return Query
+     */
+    public function parentsUntil($expr = NULL) {
+      $result = $this->spawn();
+      foreach ($this->_nodes as $node) {
+        $parents = $this->xpath()->evaluate('ancestor::*', $node);
+        for ($i = $parents->length - 1; $i >= 0; --$i) {
+          $parentNode = $parents->item($i);
+          if (!empty($expr) && $this->matches($expr, $parentNode)) {
+            break;
+          }
+          $result->push($parentNode);
+        }
+      }
+      return $result;
+    }
+
     /*********************
      * Manipulation
      ********************/

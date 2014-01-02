@@ -875,6 +875,24 @@ namespace FluentDOM {
     }
 
     /**
+     * Reduce the set of matched elements to a single element.
+     *
+     * @example eq.php Usage Example: FluentDOM::eq()
+     * @param integer $position Element index (start with 0)
+     * @return Query
+     */
+    public function eq($position) {
+      $result = $this->spawn();
+      if ($position < 0) {
+        $position = count($this->_nodes) + $position;
+      }
+      if (isset($this->_nodes[$position])) {
+        $result->push($this->_nodes[$position]);
+      }
+      return $result;
+    }
+
+    /**
      * Searches for descendant elements that match the specified expression.
      *
      * @example find.php Usage Example: FluentDOM::find()

@@ -967,6 +967,32 @@ namespace FluentDOM {
       }
     }
 
+    /**
+     * Reduce the set of matched elements to those that have
+     * a descendant that matches the selector or DOM element.
+     *
+     * @param string|\DOMNode $expr XPath expression or DOMNode
+     * @return Query
+     */
+    public function has($expr) {
+      $result = $this->spawn();
+      foreach ($this->_nodes as $node) {
+        if ($node instanceof \DOMElement &&
+          $node->hasChildNodes()) {
+          foreach ($node->childNodes as $childNode) {
+            if ($expr instanceof \DOMNode) {
+              if ($expr === $childNode) {
+                $result->push($node);
+                return $result;
+              }
+            } elseif ($this->matches($expr, $childNode)) {
+              $result->push($node);
+            }
+          }
+        }
+      }
+      return $result;
+    }
 
     /**
      * Get a set of elements containing only the last of the currently selected elements.

@@ -666,6 +666,51 @@ namespace FluentDOM {
     }
 
     /**
+     * Wrap $content around a set of elements
+     *
+     * @param array $elements
+     * @param string|array|\DOMNode|\Traversable|callable $content
+     * @return Query
+     */
+    private function wrapNodes($elements, $content) {
+      $result = array();
+      $wrapperTemplate = NULL;
+      $isCallback = $this->isCallable($content, FALSE, TRUE);
+      if (!$isCallback) {
+        $wrapperTemplate = $this->getContentElement($content);
+      }
+      $simple = FALSE;
+      foreach ($elements as $index => $node) {
+        if ($isCallback) {
+          $wrapperTemplate = NULL;
+          $wrapContent = call_user_func($content, $node, $index);
+          if (!empty($wrapContent)) {
+            $wrapperTemplate = $this->getContentElement($wrapContent);
+          }
+        }
+        if ($wrapperTemplate instanceof \DOMElement) {
+          $wrapper = $wrapperTemplate->cloneNode(TRUE);
+          $targets = NULL;
+          if (!$simple) {
+            $targets = $this->xpath()->evaluate('.//*[count(*) = 0]', $wrapper);
+          }
+          if ($simple || $targets->length == 0) {
+            $target = $wrapper;
+            $simple = TRUE;
+          } else {
+            $target = $targets->item(0);
+          }
+          if (isset($node->parentNode)) {
+            $node->parentNode->insertBefore($wrapper, $node);
+          }
+          $target->appendChild($node);
+          $result[] = $node;
+        }
+      }
+      return $result;
+    }
+
+    /**
      * Append to content nodes to the target nodes.
      *
      * @param $targetNode
@@ -1737,6 +1782,99 @@ namespace FluentDOM {
         }
         return $result;
       }
+    }
+
+    /**
+     * Wrap each matched element with the specified content.
+     *
+     * If $content contains several elements the first one is used
+     *
+     * @example wrap.php Usage Example: FluentDOM\Query::wrap()
+     * @param string|array|\DOMNode|\Traversable|callable $content
+     * @return Query
+     */
+    public function wrap($content) {
+      $result = $this->spawn();
+      $result->push($this->wrapNodes($this->_nodes, $content));
+      return $result;
+    }
+
+    /**
+     * Wrap al matched elements with the specified content
+     *
+     * If the matched elements are not siblings, wrap each group of siblings.
+     *
+     * @example wrapAll.php Usage Example: FluentDOM::wrapAll()
+     * @param string|array|\DOMNode|\Traversable $content
+     * @return Query
+     */
+    public function wrapAll($content) {
+      $result = $this->spawn();
+      $current = NULL;
+      $counter = 0;
+      $groups = array();
+      //group elements by previous node - ignore whitespace text nodes
+      foreach ($this->_nodes as $node) {
+        $previous = $node->previousSibling;
+        while ($previous instanceof \DOMText && $previous->isWhitespaceInElementContent()) {
+          $previous = $previous->previousSibling;
+        }
+        if ($previous !== $current) {
+          $counter++;
+        }
+        $groups[$counter][] = $node;
+        $current = $node;
+      }
+      if (count($groups) > 0) {
+        $wrapperTemplate = $this->getContentElement($content);
+        $simple = FALSE;
+        foreach ($groups as $group) {
+          if (isset($group[0])) {
+            $node = $group[0];
+            $wrapper = $wrapperTemplate->cloneNode(TRUE);
+            $targets = NULL;
+            if (!$simple) {
+              $targets = $this->xpath()->evaluate('.//*[count(*) = 0]', $wrapper);
+            }
+            if ($simple || $targets->length == 0) {
+              $target = $wrapper;
+              $simple = TRUE;
+            } else {
+              $target = $targets->item(0);
+            }
+            if (isset($node->parentNode)) {
+              $node->parentNode->insertBefore($wrapper, $node);
+            }
+            foreach ($group as $node) {
+              $target->appendChild($node);
+            }
+            $result->push($node);
+          }
+        }
+      }
+      return $result;
+    }
+
+    /**
+     * Wrap the inner child contents of each matched element
+     * (including text nodes) with an XML structure.
+     *
+     * @example wrapInner.php Usage Example: FluentDOM\Query::wrapInner()
+     * @param string|array|\DOMNode|\Traversable $content
+     * @return Query
+     */
+    public function wrapInner($content) {
+      $result = $this->spawn();
+      $elements = array();
+      foreach ($this->_nodes as $node) {
+        foreach ($node->childNodes as $childNode) {
+          if ($this->isNode($childNode)) {
+            $elements[] = $childNode;
+          }
+        }
+      }
+      $result->push($this->wrapNodes($elements, $content));
+      return $result;
     }
 
     /****************************

@@ -1574,6 +1574,53 @@ namespace FluentDOM {
     }
 
     /**
+     * Replaces the elements matched by the specified selector with the matched elements.
+     *
+     * @example replaceAll.php Usage Example: FluentDOM\Query::replaceAll()
+     * @param string|array|\DOMNode|\Traversable $selector
+     * @return Query
+     */
+    public function replaceAll($selector) {
+      $result = $this->spawn();
+      $targetNodes = $this->getNodes($selector);
+      if (!empty($targetNodes)) {
+        $this->apply(
+          $targetNodes,
+          $this->_nodes,
+          function($targetNode, $contentNodes) {
+            return $this->insertNodesBefore($targetNode, $contentNodes);
+          }
+        );
+        $target = $this->spawn();
+        $target->push($targetNodes);
+        $target->remove();
+      }
+      $this->remove();
+      return $result;
+    }
+
+    /**
+     * Replaces all matched elements with the specified HTML or DOM elements.
+     * This returns the element that was just replaced,
+     * which has been removed from the DOM.
+     *
+     * @example replaceWith.php Usage Example: FluentDOM\Query::replaceWith()
+     * @param string|array|\DOMNode|\Traversable|callable $content
+     * @return Query
+     */
+    public function replaceWith($content) {
+      $this->apply(
+        $this->_nodes,
+        $content,
+        function($targetNode, $contentNodes) {
+          return $this->insertNodesBefore($targetNode, $contentNodes);
+        }
+      );
+      $this->remove();
+      return $this;
+    }
+
+    /**
      * Removes all matched elements from the DOM.
      *
      * @example remove.php Usage Example: FluentDOM\Query::remove()

@@ -925,6 +925,39 @@ namespace FluentDOM {
     }
 
     /**
+     * Insert content before each of the matched elements.
+     *
+     * @example before.php Usage Example: FluentDOM::before()
+     * @param string|array|\DOMNode|\Traversable|callable $content
+     * @return Query
+     */
+    public function before($content) {
+      $result = $this->spawn();
+      $result->push(
+        $this->apply(
+          $this->_nodes,
+          $content,
+          function($targetNode, $contentNodes) {
+            $result = array();
+            if (isset($targetNode->parentNode) &&
+              !empty($contentNodes)) {
+              foreach ($contentNodes as $contentNode) {
+                /**
+                 * @var \DOMNode $contentNode
+                 */
+                $result[] = $targetNode->parentNode->insertBefore(
+                  $contentNode->cloneNode(TRUE), $targetNode
+                );
+              }
+            }
+            return $result;
+          }
+        )
+      );
+      return $result;
+    }
+
+    /**
      * Clone matched DOM Elements and select the clones.
      *
      * This is the clone() method - but because clone
@@ -966,6 +999,7 @@ namespace FluentDOM {
       $this->_useDocumentContext = TRUE;
       return $this;
     }
+
     /**
      * Removes all matched elements from the DOM.
      *
@@ -1062,6 +1096,7 @@ namespace FluentDOM {
         if ($node instanceof \DOMElement) {
           if (is_null($attributes)) {
             for ($i = $node->attributes->length - 1; $i >= 0; $i--) {
+              /** @noinspection PhpUndefinedFieldInspection */
               $node->removeAttribute($node->attributes->item($i)->name);
             }
           } else {

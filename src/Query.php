@@ -110,7 +110,7 @@ namespace FluentDOM {
      * like in a DOMNodelist.
      *
      * @param integer $position
-     * @return \DOMNode
+     * @return \DOMElement|\DOMNode
      */
     public function item($position) {
       if (isset($this->_nodes[$position])) {
@@ -946,6 +946,27 @@ namespace FluentDOM {
     public function first() {
       return $this->eq(0);
     }
+
+    /**
+     * Retrieve the matched DOM elements in an array. A negative position will be counted from the end.
+     *
+     * @param integer|NULL optional offset of a single element to get.
+     * @return array
+     */
+    public function get($position = NULL) {
+      if (!isset($position)) {
+        return $this->_nodes;
+      }
+      if ($position < 0) {
+        $position = count($this->_nodes) + $position;
+      }
+      if (isset($this->_nodes[$position])) {
+        return array($this->_nodes[$position]);
+      } else {
+        return array();
+      }
+    }
+
 
     /**
      * Get a set of elements containing only the last of the currently selected elements.

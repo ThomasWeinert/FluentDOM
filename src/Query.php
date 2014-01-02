@@ -699,7 +699,7 @@ namespace FluentDOM {
      * @param string|array|\DOMNode|\DOMNodeList|\Traversable|callable $content
      * @param callable $handler
      */
-    protected function apply($targetNodes, $content, $handler) {
+    public function apply($targetNodes, $content, $handler) {
       $result = array();
       $isSetterFunction = FALSE;
       if ($this->isCallable($content)) {
@@ -725,13 +725,52 @@ namespace FluentDOM {
     }
 
     /**
+     * Search for a given element from among the matched elements.
+     *
+     * @param NULL|string|\DOMNode|\Traversable $expr
+     * @return integer
+     */
+    public function index($expr = NULL) {
+      if (count($this->_nodes) > 0) {
+        if (is_null($expr)) {
+          $counter = -1;
+          $targetNode = $this->_nodes[0];
+          $nodeList = $this->getNodes('preceding-sibling::node()', $targetNode);
+          foreach ($nodeList as $node) {
+            if ($this->isNode($node)) {
+              $counter++;
+            }
+          }
+          return $counter + 1;
+        } elseif (is_string($expr)) {
+          foreach ($this->_nodes as $index => $node) {
+            if ($this->matches($expr, $node)) {
+              return $index;
+            }
+          }
+        } else {
+          $targetNode = $this->getContentElement($expr);
+          foreach ($this->_nodes as $index => $node) {
+            /**
+             * @var \DOMNode $node
+             */
+            if ($node->isSameNode($targetNode)) {
+              return $index;
+            }
+          }
+        }
+      }
+      return -1;
+    }
+
+    /**
      * Test that xpath expression matches context and return true/false
      *
      * @param string $expr
      * @param \DOMNode $context optional, default value NULL
      * @return boolean
      */
-    protected function matches($expr, \DOMNode $context = NULL) {
+    public function matches($expr, \DOMNode $context = NULL) {
       $check = $this->xpath->evaluate($expr, $context);
       if ($check instanceof \DOMNodeList) {
         return $check->length > 0;

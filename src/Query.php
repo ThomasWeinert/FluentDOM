@@ -893,6 +893,31 @@ namespace FluentDOM {
     }
 
     /**
+     * Removes all elements from the set of matched elements that do not match
+     * the specified expression(s).
+     *
+     * @example filter-expr.php Usage Example: FluentDOM\Query::filter() with XPath expression
+     * @example filter-fn.php Usage Example: FluentDOM\Query::filter() with Closure
+     * @param string|callable $expr XPath expression or callback function
+     * @return Query
+     */
+    public function filter($expr) {
+      $result = $this->spawn();
+      foreach ($this->_nodes as $index => $node) {
+        $check = TRUE;
+        if (is_string($expr)) {
+          $check = $this->matches($expr, $node, $index);
+        } elseif (is_callable($expr)) {
+          $check = call_user_func($expr, $node, $index);
+        }
+        if ($check) {
+          $result->push($node);
+        }
+      }
+      return $result;
+    }
+
+    /**
      * Searches for descendant elements that match the specified expression.
      *
      * @example find.php Usage Example: FluentDOM::find()

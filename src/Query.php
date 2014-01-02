@@ -1283,5 +1283,95 @@ namespace FluentDOM {
       }
       return $this;
     }
+
+    /*********************************
+     * Manipulation - Data Attributes
+     ********************************/
+
+    /**
+     * Read a data attribute from the first node or set data attributes n all lesected nodes.
+     *
+     * @example data.php Usage Example: FluentDOM\Query::data()
+     * @param string|array $name data attribute identifier or array of data attributes to set
+     * @param mixed $value
+     * @return mixed
+     */
+    public function data($name, $value = NULL) {
+      if (!is_array($name) && is_null($value)) {
+        //reading
+        if (isset($this->_nodes[0]) &&
+          $this->_nodes[0] instanceof \DOMElement) {
+          $data = new Query\Data($this->_nodes[0]);
+          return $data->$name;
+        }
+        return NULL;
+      } elseif (is_array($name)) {
+        $values = $name;
+      } else {
+        $values = array((string)$name => $value);
+      }
+      foreach ($this->_nodes as $node) {
+        if ($node instanceof \DOMElement) {
+          $data = new Query\Data($node);
+          foreach ($values as $dataName => $dataValue) {
+            $data->$dataName = $dataValue;
+          }
+        }
+      }
+    }
+
+    /**
+     * Remove an data - attribute from each of the matched elements. If $name is NULL or *,
+     * all data attributes will be deleted.
+     *
+     * @example removeData.php Usage Example: FluentDOM\Query::removeData()
+     * @param string $name
+     * @return Query
+     */
+    public function removeData($name = NULL) {
+      if (is_null($name) || $name === '*') {
+        $names = NULL;
+      } elseif (is_string($name) && trim($name != '')) {
+        $names = array($name);
+      } elseif (is_array($name)) {
+        $names = $name;
+      } else {
+        throw new \InvalidArgumentException();
+      }
+      foreach ($this->_nodes as $node) {
+        if ($node instanceof \DOMElement) {
+          $data = new Query\Data($node);
+          if (is_array($names)) {
+            foreach ($names as $dataName) {
+              unset($data->$dataName);
+            }
+          } else {
+            foreach ($data as $dataName => $dataValue) {
+              unset($data->$dataName);
+            }
+          }
+        }
+      }
+    }
+
+    /**
+     * Validate if the element has an data attributes attached. If it is called without an
+     * actual $element parameter, it will check the first matched node.
+     *
+     * @param \DOMElement $element
+     * @return boolean
+     */
+    public function hasData(\DOMElement $element = NULL) {
+      if (isset($element)) {
+        $data = new Query\Data($element);
+        return count($data) > 0;
+      }
+      if (isset($this->_nodes[0]) &&
+        $this->_nodes[0] instanceof \DOMElement) {
+        $data = new Query\Data($this->_nodes[0]);
+        return count($data) > 0;
+      }
+      return FALSE;
+    }
   }
 }

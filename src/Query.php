@@ -543,7 +543,7 @@ namespace FluentDOM {
         $result = array($selector);
       } elseif (is_string($selector)) {
         $result = $this->xpath()->evaluate($selector, $context, FALSE);
-        if (!($result instanceof \DOMNodeList)) {
+        if (!($result instanceof \Traversable)) {
           throw new \InvalidArgumentException('Given xpath expression did not return an node list.');
         }
         $result = iterator_to_array($result);
@@ -807,6 +807,33 @@ namespace FluentDOM {
       }
       $result = $this->spawn();
       $result->push($this->unique($nodes), TRUE);
+      return $result;
+    }
+
+    /**
+     * Get a set of elements containing the closest parent element that matches the specified
+     * selector, the starting element included.
+     *
+     * @example closest.php Usage Example: FluentDOM\Query::closest()
+     * @param string $selector XPath expression
+     * @return Query
+     */
+    public function closest($selector, $context = NULL) {
+      $result = $this->spawn();
+      if (is_null($context)) {
+        $context = $this->_nodes;
+      } else {
+        $context = $this->getNodes($context);
+      }
+      foreach ($context as $node) {
+        while (isset($node)) {
+          if ($this->matches($selector, $node)) {
+            $result->push($node);
+            break;
+          }
+          $node = $node->parentNode;
+        }
+      }
       return $result;
     }
 

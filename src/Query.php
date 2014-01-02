@@ -268,7 +268,7 @@ namespace FluentDOM {
      *
      * @example interfaces/ArrayAccess.php Usage Example: ArrayAccess Interface
      * @param integer $offset
-     * @return \DOMNode|\DOMElement|NULL
+     * @return \DOMElement|\DOMNode|NULL
      */
     public function offsetGet($offset) {
       return isset($this->_nodes[$offset]) ? $this->_nodes[$offset] : NULL;
@@ -973,12 +973,16 @@ namespace FluentDOM {
     }
 
     /**
-     * Return the parent FluentDOM/Query object.
+     * Return the parent FluentDOM\Query object.
      *
      * @return Query|NULL
      */
     public function end() {
-      return $this->_parent;
+      if ($this->_parent instanceof Query) {
+        return $this->_parent;
+      } else {
+        return $this;
+      }
     }
 
     /**
@@ -1286,6 +1290,17 @@ namespace FluentDOM {
           $result->push($parentNode);
         }
       }
+      return $result;
+    }
+
+    /**
+     * Reverse the order of the matched elements.
+     *
+     * @return Query
+     */
+    public function reverse() {
+      $result = $this->spawn();
+      $result->push(array_reverse($this->_nodes));
       return $result;
     }
 

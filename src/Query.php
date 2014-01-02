@@ -1112,6 +1112,54 @@ namespace FluentDOM {
       return $result;
     }
 
+    /**
+     * Find all sibling elements after the current element.
+     *
+     * @example nextAll.php Usage Example: FluentDOM\Query::nextAll()
+     * @param string $expr XPath expression
+     * @return Query
+     */
+    public function nextAll($expr = NULL) {
+      $result = $this->spawn();
+      foreach ($this->_nodes as $node) {
+        $next = $node->nextSibling;
+        while ($next instanceof \DOMNode) {
+          if ($this->isNode($next)) {
+            if (empty($expr) || $this->matches($expr, $next)) {
+              $result->push($next);
+            }
+          }
+          $next = $next->nextSibling;
+        }
+      }
+      return $result;
+    }
+
+    /**
+     * Get all following siblings of each element up to but
+     * not including the element matched by the selector.
+     *
+     * @param string $expr XPath expression
+     * @return Query
+     */
+    public function nextUntil($expr = NULL) {
+      $result = $this->spawn();
+      foreach ($this->_nodes as $node) {
+        $next = $node->nextSibling;
+        while ($next instanceof \DOMNode) {
+          if ($this->isNode($next)) {
+            if (isset($expr) && $this->matches($expr, $next)) {
+              break;
+            } else {
+              $result->push($next);
+            }
+          }
+          $next = $next->nextSibling;
+        }
+      }
+      return $result;
+    }
+
     /*********************
      * Manipulation
      ********************/

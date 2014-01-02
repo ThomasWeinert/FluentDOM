@@ -1548,6 +1548,32 @@ namespace FluentDOM {
     }
 
     /**
+     * Prepend all of the matched elements to another, specified, set of elements.
+     * Returns all of the inserted elements.
+     *
+     * @example prependTo.php Usage Example: FluentDOM\Query::prependTo()
+     * @param string|array|\DOMNode|\DOMNodeList|Query $selector
+     * @return Query list of all new elements
+     */
+    public function prependTo($selector) {
+      $result = $this->spawn();
+      $targetNodes = $this->getNodes($selector);
+      if (!empty($targetNodes)) {
+        $result->push(
+          $this->apply(
+            $targetNodes,
+            $this->_nodes,
+            function($targetNode, $contentNodes) {
+              return $this->insertChildrenBefore($targetNode, $contentNodes);
+            }
+          )
+        );
+        $this->remove();
+      }
+      return $result;
+    }
+
+    /**
      * Removes all matched elements from the DOM.
      *
      * @example remove.php Usage Example: FluentDOM\Query::remove()

@@ -22,5 +22,22 @@ namespace FluentDOM\Query {
         ->prepend('<strong>Hello</strong>');
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
+
+    /**
+     * @group Manipulation
+     * @group ManipulationInside
+     * @covers FluentDOM\Query::prepend
+     */
+    public function testPrependWithCallback() {
+      $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
+      $fd
+        ->find('//p')
+        ->prepend(
+          function($node, $index) {
+            return 'Hello #'.($index + 1);
+          }
+        );
+      $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
+    }
   }
 }

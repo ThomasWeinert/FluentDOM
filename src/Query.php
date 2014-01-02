@@ -1217,6 +1217,81 @@ namespace FluentDOM {
     }
 
     /**
+     * Insert all of the matched elements after another, specified, set of elements.
+     *
+     * @example insertAfter.php Usage Example: FluentDOM\Query::insertAfter()
+     * @param string|array|\DOMNode|\Traversable $selector
+     * @return Query
+     */
+    public function insertAfter($selector) {
+      $result = $this->spawn();
+      $targetNodes = $this->getNodes($selector);
+      if (!empty($targetNodes)) {
+        $result->push(
+          $this->apply(
+            $targetNodes,
+            $this->_nodes,
+            function ($targetNode, $contentNodes) {
+              $result = array();
+              if (isset($targetNode->parentNode) &&
+                !empty($contentNodes)) {
+                $beforeNode = $targetNode->nextSibling;
+                foreach ($contentNodes as $contentNode) {
+                  /**
+                   * @var \DOMNode $contentNode
+                   */
+                  $result[] = $targetNode->parentNode->insertBefore(
+                    $contentNode->cloneNode(TRUE), $beforeNode
+                  );
+                }
+              }
+              return $result;
+            }
+          )
+        );
+        $this->remove();
+      }
+      return $result;
+    }
+
+    /**
+     * Insert all of the matched elements before another, specified, set of elements.
+     *
+     * @example insertBefore.php Usage Example: FluentDOM::insertBefore()
+     * @param string|array|\DOMNode|\Traversable $selector
+     * @return Query
+     */
+    public function insertBefore($selector) {
+      $result = $this->spawn();
+      $targetNodes = $this->getNodes($selector);
+      if (!empty($targetNodes)) {
+        $result->push(
+          $this->apply(
+            $targetNodes,
+            $this->_nodes,
+            function ($targetNode, $contentNodes) {
+              $result = array();
+              if (isset($targetNode->parentNode) &&
+                !empty($contentNodes)) {
+                foreach ($contentNodes as $contentNode) {
+                  /**
+                   * @var \DOMNode $contentNode
+                   */
+                  $result[] = $targetNode->parentNode->insertBefore(
+                    $contentNode->cloneNode(TRUE), $targetNode
+                  );
+                }
+              }
+              return $result;
+            }
+          )
+        );
+        $this->remove();
+      }
+      return $result;
+    }
+
+    /**
      * Removes all matched elements from the DOM.
      *
      * @example remove.php Usage Example: FluentDOM\Query::remove()
@@ -1436,7 +1511,7 @@ namespace FluentDOM {
      ********************************/
 
     /**
-     * Read a data attribute from the first node or set data attributes n all lesected nodes.
+     * Read a data attribute from the first node or set data attributes n all selected nodes.
      *
      * @example data.php Usage Example: FluentDOM\Query::data()
      * @param string|array $name data attribute identifier or array of data attributes to set
@@ -1465,6 +1540,7 @@ namespace FluentDOM {
           }
         }
       }
+      return NULL;
     }
 
     /**

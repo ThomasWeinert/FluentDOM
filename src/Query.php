@@ -1034,6 +1034,21 @@ namespace FluentDOM {
     }
 
     /**
+     * Checks the current selection against an expression and returns true,
+     * if at least one element of the selection fits the given expression.
+     *
+     * @example is.php Usage Example: FluentDOM\Query::is()
+     * @param string $expr XPath expression
+     * @return boolean
+     */
+    public function is($expr) {
+      foreach ($this->_nodes as $node) {
+        return $this->matches($expr, $node);
+      }
+      return FALSE;
+    }
+
+    /**
      * Get a set of elements containing only the last of the currently selected elements.
      *
      * @return Query

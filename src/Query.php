@@ -832,6 +832,15 @@ namespace FluentDOM {
     }
 
     /**
+     * Retrieve the matched DOM nodes in an array.
+     *
+     * @return array
+     */
+    public function toArray() {
+      return $this->_nodes;
+    }
+
+    /**
      * Test that xpath expression matches context and return true/false
      *
      * @param string $expr

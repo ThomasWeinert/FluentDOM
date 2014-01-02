@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<html>
+<head/>
+<body>
+  <div>body &gt; div,
+    <span>div &gt; span, </span>
+    <b>div &gt; b </b>
+  </div>
+  <p>body &gt; p,
+    <span>p &gt; span,
+      <em>span &gt; em </em>
+    </span>
+  </p>
+  <div>body &gt; div,
+    <strong>div &gt; strong,
+      <span>strong &gt; span, </span>
+      <em>strong &gt; em,
+        <b>em &gt; b, </b>
+      </em>
+    </strong>
+    <b>div &gt; b </b>
+  </div>
+</body>
+</html>

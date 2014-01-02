@@ -672,7 +672,7 @@ namespace FluentDOM {
      * @param $contentNodes
      * @return array new nodes
      */
-    private function appendNodesTo($targetNode, $contentNodes) {
+    private function appendChildren($targetNode, $contentNodes) {
       $result = array();
       if ($targetNode instanceof \DOMElement) {
         foreach ($contentNodes as $contentNode) {
@@ -682,6 +682,74 @@ namespace FluentDOM {
           if ($this->isNode($contentNode)) {
             $result[] = $targetNode->appendChild($contentNode->cloneNode(TRUE));
           }
+        }
+      }
+      return $result;
+    }
+
+    /**
+     * Insert nodes into target as first childs.
+     *
+     * @param \DOMNode $targetNode
+     * @param array|\DOMNodeList|Query $contentNodes
+     */
+    private function insertChildrenBefore($targetNode, $contentNodes) {
+      $result = array();
+      if ($targetNode instanceof \DOMElement) {
+        $firstChild = $targetNode->hasChildNodes() ? $targetNode->childNodes->item(0) : NULL;
+        foreach ($contentNodes as $contentNode) {
+          /**
+           * @var \DOMNode $contentNode
+           */
+          if ($this->isNode($contentNode)) {
+            $result[] = $targetNode->insertBefore(
+              $contentNode->cloneNode(TRUE),
+              $firstChild
+            );
+          }
+        }
+      }
+      return $result;
+    }
+
+    /**
+     * Insert nodes after the target node.
+     * @param \DOMNode $targetNode
+     * @param array|\DOMNodeList|Query $contentNodes
+     */
+    public static function insertNodesAfter($targetNode, $contentNodes) {
+      $result = array();
+      if (isset($targetNode->parentNode) &&
+        !empty($contentNodes)) {
+        $beforeNode = $targetNode->nextSibling;
+        foreach ($contentNodes as $contentNode) {
+          /**
+           * @var \DOMNode $contentNode
+           */
+          $result[] = $targetNode->parentNode->insertBefore(
+            $contentNode->cloneNode(TRUE), $beforeNode
+          );
+        }
+      }
+      return $result;
+    }
+
+    /**
+     * Insert nodes before the target node.
+     * @param \DOMNode $targetNode
+     * @param array|\DOMNodeList|Query $contentNodes
+     */
+    private function insertNodesBefore($targetNode, $contentNodes) {
+      $result = array();
+      if (isset($targetNode->parentNode) &&
+        !empty($contentNodes)) {
+        foreach ($contentNodes as $contentNode) {
+          /**
+           * @var \DOMNode $contentNode
+           */
+          $result[] = $targetNode->parentNode->insertBefore(
+            $contentNode->cloneNode(TRUE), $targetNode
+          );
         }
       }
       return $result;
@@ -1160,6 +1228,23 @@ namespace FluentDOM {
       return $result;
     }
 
+    /**
+     * Get a set of elements containing the unique parents of the matched set of elements.
+     *
+     * @example parent.php Usage Example: FluentDOM\Query::parent()
+     * @return Query
+     */
+    public function parent() {
+      $result = $this->spawn();
+      foreach ($this->_nodes as $node) {
+        if (isset($node->parentNode)) {
+          $result->push($node->parentNode);
+        }
+      }
+      $result->_nodes = $this->unique($result->_nodes);
+      return $result;
+    }
+
     /*********************
      * Manipulation
      ********************/
@@ -1224,7 +1309,7 @@ namespace FluentDOM {
             $this->_nodes,
             $content,
             function($targetNode, $contentNodes) {
-              return $this->appendNodesTo($targetNode, $contentNodes);
+              return $this->appendChildren($targetNode, $contentNodes);
             }
           )
         );
@@ -1249,7 +1334,7 @@ namespace FluentDOM {
             $targetNodes,
             $this->_nodes,
             function ($targetNode, $contentNodes) {
-              return $this->appendNodesTo($targetNode, $contentNodes);
+              return $this->appendChildren($targetNode, $contentNodes);
             }
           )
         );
@@ -1272,19 +1357,7 @@ namespace FluentDOM {
           $this->_nodes,
           $content,
           function($targetNode, $contentNodes) {
-            $result = array();
-            if (isset($targetNode->parentNode) &&
-              !empty($contentNodes)) {
-              foreach ($contentNodes as $contentNode) {
-                /**
-                 * @var \DOMNode $contentNode
-                 */
-                $result[] = $targetNode->parentNode->insertBefore(
-                  $contentNode->cloneNode(TRUE), $targetNode
-                );
-              }
-            }
-            return $result;
+            return $this->insertNodesBefore($targetNode, $contentNodes);
           }
         )
       );
@@ -1406,6 +1479,27 @@ namespace FluentDOM {
         );
         $this->remove();
       }
+      return $result;
+    }
+
+    /**
+     * Prepend content to the inside of every matched element.
+     *
+     * @example prepend.php Usage Example: FluentDOM\Query::prepend()
+     * @param string|array|\DOMNode|\Traversable $content
+     * @return Query
+     */
+    public function prepend($content) {
+      $result = $this->spawn();
+      $result->push(
+        $this->apply(
+          $this->_nodes,
+          $content,
+          function ($targetNode, $contentNodes) {
+            return $this->insertChildrenBefore($targetNode, $contentNodes);
+          }
+        )
+      );
       return $result;
     }
 

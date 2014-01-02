@@ -938,6 +938,24 @@ namespace FluentDOM {
       return $result;
     }
 
+    /**
+     * Get a set of elements containing only the first of the currently selected elements.
+     *
+     * @return Query
+     */
+    public function first() {
+      return $this->eq(0);
+    }
+
+    /**
+     * Get a set of elements containing only the last of the currently selected elements.
+     *
+     * @return Query
+     */
+    public function last() {
+      return $this->eq(-1);
+    }
+
     /*********************
      * Manipulation
      ********************/

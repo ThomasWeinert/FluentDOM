@@ -988,7 +988,7 @@ namespace FluentDOM {
     /**
      * Reduce the set of matched elements to a single element.
      *
-     * @example eq.php Usage Example: FluentDOM::eq()
+     * @example eq.php Usage Example: FluentDOM\Query::eq()
      * @param integer $position Element index (start with 0)
      * @return Query
      */
@@ -1301,6 +1301,32 @@ namespace FluentDOM {
     public function reverse() {
       $result = $this->spawn();
       $result->push(array_reverse($this->_nodes));
+      return $result;
+    }
+
+    /**
+     * Get a set of elements containing all of the unique siblings of each of the
+     * matched set of elements.
+     *
+     * @example siblings.php Usage Example: FluentDOM\Query::siblings()
+     * @param string $expr XPath expression
+     * @return Query
+     */
+    public function siblings($expr = NULL) {
+      $result = $this->spawn();
+      foreach ($this->_nodes as $node) {
+        if (isset($node->parentNode)) {
+          foreach ($node->parentNode->childNodes as $childNode) {
+            if ($this->isNode($childNode) &&
+              $childNode !== $node) {
+              if (empty($expr) || $this->matches($expr, $childNode)) {
+                $result->push($childNode);
+              }
+            }
+          }
+        }
+      }
+      $result->_nodes = $this->unique($result->_nodes);
       return $result;
     }
 

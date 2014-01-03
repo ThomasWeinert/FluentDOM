@@ -8,7 +8,7 @@
 --------------------------------------------------------------------------------
 
 FluentDOM provides an easy to use fluent interface for DOMDocument. We tried to
-keep the jQuery API but adapted iweweqt to PHP and the server environment.
+keep the jQuery API but adapted it to PHP and the server environment.
 
 The idea was born in a workshop of Tobias Schlitt (http://schlitt.info) about
 the PHP XML extensions at the IPC Spring in Berlin. He used this idea to show
@@ -29,6 +29,7 @@ Table Of Contents:
 * Usage
 * Similarities With jQuery
 * Differences To jQuery
+* Backwards Compatibility Breaks
 
 --------------------------------------------------------------------------------
  URLs
@@ -88,3 +89,14 @@ us to implement. And as a nice topping it supports namespaces, too.
 
 With a few exceptions FluentDOM handles text nodes just like element nodes.
 You can select, traverse and manipulate them.
+
+--------------------------------------------------------------------------------
+ Backwards Compatibility Breaks
+--------------------------------------------------------------------------------
+
+Version 5 is a major rewrite. It now uses namespaces. The original FluentDOM
+classes (FluentDOM, FluentDOMCore and FluentDOMStyle are merged into the new
+FluentDOM\Query class.
+
+New classes extend the existing DOM classes of PHP to provide convenience and
+work around bugs.

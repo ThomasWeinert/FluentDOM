@@ -9,7 +9,7 @@
         {"name": "FluentDOM Contributors", "homepage": "https://github.com/FluentDOM/FluentDOM/contributors"}
     ],
     "require": {
-        "php": ">=5.2.0"
+        "php": ">=5.4.0"
     },
 
     "autoload": {

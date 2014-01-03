@@ -47,6 +47,20 @@ namespace FluentDOM\Query {
       $this->_fd = $fd;
     }
 
+    /**
+     * Get the style properties from the first node in the Query object
+     *
+     * @return Css\Properties|null
+     */
+    private function getStyleProperties() {
+      if (isset($this->_fd[0]) && ($node = $this->_fd[0]) instanceof \DOMElement) {
+        /**
+         * @var \DOMElement $node
+         */
+        return new Css\Properties($node->getAttribute('style'));
+      }
+      return NULL;
+    }
 
     /**
      * Allow to use isset() and array syntax to check if a css property is set on
@@ -55,9 +69,7 @@ namespace FluentDOM\Query {
      * @see \ArrayAccess::offsetExists()
      */
     public function offsetExists($name) {
-      if (isset($this->_fd[0]) &&
-        $this->_fd[0] instanceof \DOMElement) {
-        $properties = new Css\Properties($this->_fd[0]->getAttribute('style'));
+      if ($properties = $this->getStyleProperties()) {
         return isset($properties[$name]);
       }
       return FALSE;
@@ -68,12 +80,10 @@ namespace FluentDOM\Query {
      *
      * @see ArrayAccess::offsetGet()
      * @param string $name
-     * @return $value
+     * @return bool|mixed $value
      */
     public function offsetGet($name) {
-      if (isset($this->_fd[0]) &&
-        $this->_fd[0] instanceof \DOMElement) {
-        $properties = new Css\Properties($this->_fd[0]->getAttribute('style'));
+      if ($properties = $this->getStyleProperties()) {
         return $properties[$name];
       }
       return FALSE;
@@ -119,9 +129,7 @@ namespace FluentDOM\Query {
      * @return Iterator
      */
     public function getIterator() {
-      if (isset($this->_fd[0]) &&
-        $this->_fd[0] instanceof \DOMElement) {
-        $properties = new Css\Properties($this->_fd[0]->getAttribute('style'));
+      if ($properties = $this->getStyleProperties()) {
         return $properties->getIterator();
       }
       return new \EmptyIterator();
@@ -134,9 +142,7 @@ namespace FluentDOM\Query {
      * @return integer
      */
     public function count() {
-      if (isset($this->_fd[0]) &&
-        $this->_fd[0] instanceof \DOMElement) {
-        $properties = new Css\Properties($this->_fd[0]->getAttribute('style'));
+      if ($properties = $this->getStyleProperties()) {
         return count($properties);
       }
       return 0;

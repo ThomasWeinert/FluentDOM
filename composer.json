@@ -11,8 +11,8 @@
     "require": {
         "php": ">=5.4.0"
     },
-
     "autoload": {
-        "files" : ["src/_require.php"]
+        "files" : ["src/FluentDOM.php"],
+        "psr0" : "src/"
     }
 }

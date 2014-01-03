@@ -56,6 +56,8 @@ namespace FluentDOM {
      *
      * @param mixed $source
      * @param string $contentType optional, default value 'text/xml'
+     * @throws \InvalidArgumentException
+     * @return $this
      */
     public function load($source, $contentType = 'text/xml') {
       $dom = FALSE;
@@ -160,8 +162,7 @@ namespace FluentDOM {
     /**
      * Push new element(s) an the internal element list
      *
-     * @uses _inList
-     * @param \DOMNode|\DOMNodeList|Query $elements
+     * @param \DOMNode|\Traversable|array $elements
      * @param boolean $ignoreTextNodes ignore text nodes
      * @throws \OutOfBoundsException
      * @throws \InvalidArgumentException
@@ -325,8 +326,8 @@ namespace FluentDOM {
      * Virtual properties, read property
      *
      * @param string $name
+     * @throws \UnexpectedValueException
      * @return mixed
-     * @throws \LogicException
      */
     public function __get($name) {
       switch ($name) {
@@ -416,6 +417,7 @@ namespace FluentDOM {
      *
      * @param string $name
      * @param array $arguments
+     * @throws \BadMethodCallException
      * @return mixed
      */
     public function __call($name, $arguments) {
@@ -489,6 +491,7 @@ namespace FluentDOM {
      * @param callback $callback
      * @param boolean $allowGlobalFunctions
      * @param boolean $silent (no InvalidArgumentException)
+     * @throws \InvalidArgumentException
      * @return boolean
      */
     private function isCallable($callback, $allowGlobalFunctions = FALSE, $silent = TRUE) {
@@ -513,7 +516,7 @@ namespace FluentDOM {
     /**
      * Execute the callback function for a node and return the new elements
      *
-     * @param callable $easySetter
+     * @param $callback
      * @param \DOMNode $node
      * @param integer $index
      * @param string $value
@@ -567,6 +570,7 @@ namespace FluentDOM {
      *
      * @param string|\DOMNode|\DOMNodeList $selector
      * @param \DOMNode $context optional, default value NULL
+     * @param bool $disallowEmpty
      * @throws \InvalidArgumentException
      * @return \DOMNodeList
      */
@@ -596,6 +600,7 @@ namespace FluentDOM {
      * @param string $content
      * @param boolean $includeTextNodes
      * @param integer $limit
+     * @throws \UnexpectedValueException
      * @return array
      */
     private function getContentFragment($content, $includeTextNodes = TRUE, $limit = 0) {
@@ -625,6 +630,8 @@ namespace FluentDOM {
      * @param string|array|\DOMNode|\Traversable $content
      * @param boolean $includeTextNodes
      * @param integer $limit
+     * @throws \UnexpectedValueException
+     * @throws \InvalidArgumentException
      * @return array
      */
     private function getContentNodes($content, $includeTextNodes = TRUE, $limit = 0) {
@@ -773,6 +780,7 @@ namespace FluentDOM {
      *
      * @param \DOMNode $targetNode
      * @param array|\DOMNodeList|Query $contentNodes
+     * @return array
      */
     private function insertChildrenBefore($targetNode, $contentNodes) {
       $result = array();
@@ -797,6 +805,7 @@ namespace FluentDOM {
      * Insert nodes after the target node.
      * @param \DOMNode $targetNode
      * @param array|\DOMNodeList|Query $contentNodes
+     * @return array
      */
     public static function insertNodesAfter($targetNode, $contentNodes) {
       $result = array();
@@ -848,6 +857,7 @@ namespace FluentDOM {
      * @param array|\DOMNodeList $targetNodes
      * @param string|array|\DOMNode|\DOMNodeList|\Traversable|callable $content
      * @param callable $handler
+     * @return array
      */
     public function apply($targetNodes, $content, $handler) {
       $result = array();
@@ -947,6 +957,7 @@ namespace FluentDOM {
      *
      * @example add.php Usage Examples: FluentDOM::add()
      * @param string $expr XPath expression
+     * @param array|\Traversable $context
      * @return Query
      */
     public function add($expr, $context = NULL) {
@@ -1014,6 +1025,7 @@ namespace FluentDOM {
      *
      * @example closest.php Usage Example: FluentDOM\Query::closest()
      * @param string $selector XPath expression
+     * @param array|\Traversable $context
      * @return Query
      */
     public function closest($selector, $context = NULL) {
@@ -2032,6 +2044,7 @@ namespace FluentDOM {
      *
      * @example removeAttr.php Usage Example: FluentDOM\Query::removeAttr()
      * @param string $name
+     * @throws \InvalidArgumentException
      * @return Query
      */
     public function removeAttr($name) {
@@ -2175,6 +2188,7 @@ namespace FluentDOM {
      *
      * @param string|array $property
      * @param NULL|string|object|callable $value
+     * @throws \InvalidArgumentException
      * @return string|object|Query
      */
     public function css($property, $value = NULL) {
@@ -2258,6 +2272,7 @@ namespace FluentDOM {
      *
      * @example removeData.php Usage Example: FluentDOM\Query::removeData()
      * @param string $name
+     * @throws \InvalidArgumentException
      * @return Query
      */
     public function removeData($name = NULL) {

@@ -37,13 +37,10 @@ namespace FluentDOM\Query {
      * @covers FluentDOM\Query::attr
      */
     public function testAttrReadInvalid() {
-      try {
-        $this->getQueryFixtureFromString(self::XML)
-          ->find('//item')
-          ->attr('');
-        $this->fail('An expected exception has not been raised.');
-      } catch (\UnexpectedValueException $expected) {
-      }
+      $this->setExpectedException('UnexpectedValueException');
+      $this->getQueryFixtureFromString(self::XML)
+        ->find('//item')
+        ->attr('');
     }
 
     /**
@@ -199,5 +196,46 @@ namespace FluentDOM\Query {
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
 
+    /**
+     * @group Attributes
+     * @covers FluentDOM\Query::__get
+     */
+    public function testPropertyAttrGet() {
+      $fd = $this->getQueryFixtureFromString(self::XML)->find('//item[2]');
+      $attr = $fd->attr;
+      $this->assertInstanceOf('FluentDOM\\Query\\Attributes', $attr);
+      $this->assertAttributeSame(
+        $fd, '_fd', $attr
+      );
+    }
+
+    /**
+     * @group Attributes
+     * @covers FluentDOM\Query::__set
+     */
+    public function testPropertyAttrSetWithArray() {
+      $fd = $this->getQueryFixtureFromString('<sample/>')->find('/*');
+      $fd->attr = array(
+        'foo' => 1,
+        'bar' => 2
+      );
+      $this->assertEquals(
+        '<sample foo="1" bar="2"/>', $fd->document->saveXml($fd[0])
+      );
+    }
+
+    /**
+     * @group Attributes
+     * @covers FluentDOM\Query::__set
+     */
+    public function testPropertyAttrSetWithFluentDOMAttributes() {
+      $fd = $this->getQueryFixtureFromString('<sample><item foo="1"/><item/></sample>')->find('//item');
+      $buffer = $fd->attr;
+      $fd->attr = $buffer;
+      $this->assertEquals(
+        '<sample><item foo="1"/><item foo="1"/></sample>',
+        $fd->document->saveXml($fd->document->documentElement)
+      );
+    }
   }
 }

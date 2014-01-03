@@ -9,6 +9,9 @@ namespace FluentDOM {
    * @property-read integer $length The amount of elements found by selector.
    * @property-read \DOMDocument $document Internal DOMDocument object
    * @property-read \DOMXPath $xpath Internal XPath object
+   * @property Query\Attributes $attr
+   * @property Query\Data $data
+   * @property Query\Css $css
    *
    * @method Query clone() Clone matched nodes and select the clones.
    * @method bool empty() Remove all child nodes from the set of matched elements.
@@ -305,9 +308,11 @@ namespace FluentDOM {
      */
     public function __isset($name) {
       switch ($name) {
+      case 'attr' :
+      case 'contentType' :
+      case 'data' :
       case 'length' :
       case 'xpath' :
-      case 'contentType' :
         return TRUE;
       case 'document' :
         return isset($this->_document);
@@ -324,6 +329,17 @@ namespace FluentDOM {
      */
     public function __get($name) {
       switch ($name) {
+      case 'attr' :
+        return new Query\Attributes($this);
+      case 'data' :
+        if (count($this->_nodes) > 0 &&
+          $this->_nodes[0] instanceof \DOMElement) {
+          return new Query\Data($this->_array[0]);
+        } else {
+          throw new \UnexpectedValueException(
+            'UnexpectedValueException: first selected node is no element.'
+          );
+        }
       case 'contentType' :
         return $this->_contentType;
       case 'document' :
@@ -346,9 +362,17 @@ namespace FluentDOM {
      */
     public function __set($name, $value) {
       switch ($name) {
+      case 'attr' :
+        if ($value instanceOf Query\Attributes) {
+          $this->attr($value->toArray());
+        } else {
+          $this->attr($value);
+        }
+        return;
       case 'contentType' :
         $this->setContentType($value);
         break;
+      case 'data' :
       case 'document' :
       case 'length' :
       case 'xpath' :
@@ -361,14 +385,16 @@ namespace FluentDOM {
 
     /**
      * Throws an exception if somebody tries to unset one
-     * of the dznamic properties
+     * of the dynamic properties
      *
      * @param string $name
      * @throws \BadMethodCallException
      */
     public function __unset($name) {
       switch ($name) {
+      case 'attr' :
       case 'contentType' :
+      case 'data' :
       case 'document' :
       case 'length' :
       case 'xpath' :
@@ -783,6 +809,7 @@ namespace FluentDOM {
      * Insert nodes before the target node.
      * @param \DOMNode $targetNode
      * @param array|\DOMNodeList|Query $contentNodes
+     * @return array
      */
     private function insertNodesBefore($targetNode, $contentNodes) {
       $result = array();

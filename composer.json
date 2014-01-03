@@ -10,5 +10,9 @@
     ],
     "require": {
         "php": ">=5.2.0"
+    },
+
+    "autoload": {
+        "files" : ["src/_require.php"]
     }
 }

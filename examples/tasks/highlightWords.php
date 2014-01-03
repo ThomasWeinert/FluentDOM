@@ -29,7 +29,7 @@ $highlighter = new FluentDOMHighlighter(
 require('../../src/FluentDOM.php');
 
 echo $highlighter->highlight(
-  FluentDOM($html, 'html')->find('//body')
+  FluentDOM($html, 'text/html')->find('//body')
 );
 
 /**
@@ -44,7 +44,7 @@ class FluentDOMHighlighter {
   protected $_highlights = array();
   /**
   * Created pattern to match and split the content of the text nodes
-  * @var unknown_type
+  * @var string
   */
   protected $_pattern = '';
 
@@ -59,10 +59,12 @@ class FluentDOMHighlighter {
   }
 
   /**
-  * Apply Highlight to FluentDOM selection
-  *
-  * @return FluentDOM
-  */
+   * Apply Highlight to FluentDOM selection
+   *
+   * @param FluentDOM $fd
+   *
+   * @return FluentDOM
+   */
   public function highlight(FluentDOM $fd) {
     $fd
       ->find('descendant-or-self::text()')

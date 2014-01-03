@@ -4,9 +4,7 @@
  * interface html5 data properties of a node.
  *
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2014 Bastian Feder, Thomas Weinert
- *
- * @package FluentDOM
+ * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
  */
 
 namespace FluentDOM\Query {

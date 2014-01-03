@@ -1,9 +1,15 @@
 <?php
+/**
+ * FluentDOM\Query implements a jQuery like replacement for DOMNodeList
+ *
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
+ */
 
 namespace FluentDOM {
 
   /**
-   * Class Query
+   * FluentDOM\Query implements a jQuery like replacement for DOMNodeList
    *
    * @property string $contentType Output type - text/xml or text/html
    * @property-read integer $length The amount of elements found by selector.

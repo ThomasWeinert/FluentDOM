@@ -3,7 +3,7 @@
  * FluentDOM\Query\Iterator is the Iterator class for FluentDOM\Query objects
  *
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2013 Bastian Feder, Thomas Weinert
+ * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
  */
 
 namespace FluentDOM\Query {
@@ -12,8 +12,6 @@ namespace FluentDOM\Query {
 
   /**
    * FluentDOM\Query\Iterator is the Iterator class for FluentDOM\Query objects
-   *
-   * @package FluentDOM
    */
   class Iterator implements \RecursiveIterator, \SeekableIterator {
 

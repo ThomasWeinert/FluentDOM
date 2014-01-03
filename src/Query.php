@@ -310,6 +310,7 @@ namespace FluentDOM {
       switch ($name) {
       case 'attr' :
       case 'contentType' :
+      case 'css' :
       case 'data' :
       case 'length' :
       case 'xpath' :
@@ -331,10 +332,12 @@ namespace FluentDOM {
       switch ($name) {
       case 'attr' :
         return new Query\Attributes($this);
+      case 'css' :
+        return new Query\Css($this, $this->attr('style'));
       case 'data' :
         if (count($this->_nodes) > 0 &&
           $this->_nodes[0] instanceof \DOMElement) {
-          return new Query\Data($this->_array[0]);
+          return new Query\Data($this->_nodes[0]);
         } else {
           throw new \UnexpectedValueException(
             'UnexpectedValueException: first selected node is no element.'
@@ -368,9 +371,12 @@ namespace FluentDOM {
         } else {
           $this->attr($value);
         }
-        return;
+        break;
       case 'contentType' :
         $this->setContentType($value);
+        break;
+      case 'css' :
+        $this->css($value);
         break;
       case 'data' :
       case 'document' :
@@ -691,6 +697,10 @@ namespace FluentDOM {
       return $result;
     }
 
+    private function uniqueSortNodes() {
+      $this->_nodes = $this->unique($this->_nodes);
+    }
+
     /**
      * Wrap $content around a set of elements
      *
@@ -955,7 +965,7 @@ namespace FluentDOM {
       } else {
         $result->push($this->find($expr));
       }
-      $this->_nodes = $this->unique($this->_nodes);
+      $this->uniqueSortNodes();
       return $result;
     }
 
@@ -1036,7 +1046,7 @@ namespace FluentDOM {
       foreach ($this->_nodes as $node) {
         $result->push($node->childNodes, FALSE);
       }
-      $result->_nodes = $this->unique($result->_nodes);
+      $this->uniqueSortNodes();
       return $result;
     }
 
@@ -1261,7 +1271,7 @@ namespace FluentDOM {
           }
         }
       }
-      $result->_nodes = $this->unique($result->_nodes);
+      $this->uniqueSortNodes();
       return $result;
     }
 
@@ -1326,7 +1336,7 @@ namespace FluentDOM {
           $result->push($node->parentNode);
         }
       }
-      $result->_nodes = $this->unique($result->_nodes);
+      $this->uniqueSortNodes();
       return $result;
     }
 
@@ -1407,7 +1417,7 @@ namespace FluentDOM {
           }
         }
       }
-      $result->_nodes = $this->unique($result->_nodes);
+      $this->uniqueSortNodes();
       return $result;
     }
 
@@ -2150,6 +2160,55 @@ namespace FluentDOM {
                 $node->setAttribute('class', implode(' ', array_keys($currentClasses)));
               }
             }
+          }
+        }
+      }
+      return $this;
+    }
+
+    /*************************************
+     * Manipulation - CSS Style Attribute
+     ************************************/
+
+    /**
+     * get or set CSS values in style attributes
+     *
+     * @param string|array $property
+     * @param NULL|string|object|callable $value
+     * @return string|object|Query
+     */
+    public function css($property, $value = NULL) {
+      if (is_string($property) && is_null($value)) {
+        try {
+          $firstNode = $this->getContentElement($this->_nodes);
+          $properties = new Query\Css\Properties($firstNode->getAttribute('style'));
+          if (isset($properties[$property])) {
+            return $properties[$property];
+          }
+        } catch (\UnexpectedValueException $e) {
+        }
+        return NULL;
+      } elseif (is_string($property)) {
+        $propertyList = array($property => $value);
+      } elseif (is_array($property) ||
+        $property instanceOf \Traversable) {
+        $propertyList = $property;
+      } else {
+        throw new \InvalidArgumentException('Invalid css property name argument type.');
+      }
+      //set list of properties to all elements
+      foreach ($this->_nodes as $index => $node) {
+        if ($node instanceof \DOMElement) {
+          $properties = new Query\Css\Properties($node->getAttribute('style'));
+          foreach ($propertyList as $name => $value) {
+            $properties[$name] = $properties->compileValue(
+              $value, $node, $index, isset($properties[$name]) ? $properties[$name] : NULL
+            );
+          }
+          if (count($properties) > 0) {
+            $node->setAttribute('style', (string)$properties);
+          } elseif ($node->hasAttribute('style')) {
+            $node->removeAttribute('style');
           }
         }
       }

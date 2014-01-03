@@ -57,6 +57,12 @@ namespace FluentDOM {
     private $_useDocumentContext = TRUE;
 
     /**
+     * A list of loaders for different data sources
+     * @var Loaders $loaders
+     */
+    private $_loaders = NULL;
+
+    /**
      * Load a $source. The type of the source depends on the loaders. If no explicit loaders are set
      * FluentDOM\Query will use a set of default loaders for xml/html and DOM.
      *
@@ -76,6 +82,15 @@ namespace FluentDOM {
         $dom = $source->ownerDocument;
         $this->_nodes = array($source);
         $this->_useDocumentContext = FALSE;
+      } else {
+        foreach ($this->loaders() as $loader) {
+          /**
+           * @var LoaderInterface $loader
+           */
+          if ($loader->supports($contentType) && ($dom = $loader->getDocument($source))) {
+            break;
+          }
+        }
       }
       if ($dom instanceof \DOMDocument) {
         $this->_document = $dom;
@@ -86,6 +101,17 @@ namespace FluentDOM {
           "Can not load: ".(is_object($source) ? get_class($source) : gettype($source))
         );
       }
+    }
+
+    public function loaders(Loaders $loaders = NULL) {
+      if (isset($loaders)) {
+        $this->_loaders = $loaders;
+      } elseif (NULL === $loaders) {
+        $this->_loaders = new Loaders(
+          [new Loader\XmlString()]
+        );
+      }
+      return $this->_loaders;
     }
 
     /*

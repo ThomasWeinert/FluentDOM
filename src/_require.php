@@ -4,6 +4,10 @@ require(__DIR__.'/FluentDOM/Document.php');
 require(__DIR__.'/FluentDOM/Element.php');
 require(__DIR__.'/FluentDOM/Xpath.php');
 
+require(__DIR__.'/FluentDOM/LoaderInterface.php');
+require(__DIR__.'/FluentDOM/Loader/XmlString.php');
+require(__DIR__.'/FluentDOM/Loaders.php');
+
 require(__DIR__.'/FluentDOM/Query.php');
 require(__DIR__.'/FluentDOM/Query/Attributes.php');
 require(__DIR__.'/FluentDOM/Query/Css.php');

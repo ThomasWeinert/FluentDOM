@@ -10,6 +10,6 @@ class FluentDOM {
     }
     $query = new FluentDOM\Query();
     $query->load($source, $contentType);
-    return $source;
+    return $query;
   }
 }

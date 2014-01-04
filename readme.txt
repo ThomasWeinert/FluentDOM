@@ -69,7 +69,7 @@ Many thanks to the jQuery (jquery.com) people for their work, who did an
 exceptional job describing their interfaces and providing examples. This saved
 us a lot of work. We implemented most of the jQuery methods into FluentDOM
 
-To be able to write PHPUnit Tests and develop FluentDOM a lot of examples where
+To be able to write PHPUnit Tests and develop FluentDOM a lot of examples were
 written. Most of them are copied and adapted from or are deeply inspired by the
 jQuery documentation. They are located in the 'examples' folder.
 Once again many thanks to the jQuery team.

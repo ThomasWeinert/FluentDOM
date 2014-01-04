@@ -15,7 +15,7 @@ namespace FluentDOM\Loader {
       return FALSE;
     }
 
-    public function getDocument($source) {
+    public function load($source) {
       if (0 === strpos($source, '<')) {
         $dom = new Document();
         $dom->loadXML($source);

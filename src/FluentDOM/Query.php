@@ -88,14 +88,7 @@ namespace FluentDOM {
         $this->_nodes = array($source);
         $this->_useDocumentContext = FALSE;
       } else {
-        foreach ($this->loaders() as $loader) {
-          /**
-           * @var LoaderInterface $loader
-           */
-          if ($loader->supports($contentType) && ($dom = $loader->getDocument($source))) {
-            break;
-          }
-        }
+        $dom = $this->loaders()->load($source, $contentType);
       }
       if ($dom instanceof \DOMDocument) {
         $this->_document = $dom;

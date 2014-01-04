@@ -64,6 +64,8 @@ namespace FluentDOM {
     }
 
     /**
+     * @covers FluentDOM\Document::__construct
+     * @covers FluentDOM\Document::createElement
      * @covers FluentDOM\Document::appendElement
      */
     public function testAppendElement() {
@@ -71,6 +73,21 @@ namespace FluentDOM {
       $dom->appendElement('test', 'text', array('attribute' => 'value'));
       $this->assertEquals(
         '<test attribute="value">text</test>',
+        $dom->saveXML($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Document::__construct
+     * @covers FluentDOM\Document::createElement
+     * @covers FluentDOM\Document::appendElement
+     */
+    public function testAppendElementWithNamespace() {
+      $dom = new Document();
+      $dom->registerNamespace('foo', 'urn:foo');
+      $dom->appendElement('foo:test', 'text', array('foo:attribute' => 'value'));
+      $this->assertEquals(
+        '<foo:test xmlns:foo="urn:foo" foo:attribute="value">text</foo:test>',
         $dom->saveXML($dom->documentElement)
       );
     }

@@ -12,6 +12,8 @@ namespace FluentDOM {
   /**
    * FluentDOM\Xpath extends PHPs DOMXpath class. It disables the
    * automatic namespace registration by default and, throws notices for the query method.
+   *
+   * @property boolean registerNodeNamespaces
    */
   class Xpath extends \DOMXPath {
 
@@ -59,12 +61,47 @@ namespace FluentDOM {
     }
 
     /**
+     * Quote (and escape) a value to use it in an xpath expression.
+     *
+     * Xpath 1 does not have a way to escape quotes, it only allows
+     * double quotes in single quoted literals and single quotes in double
+     * quoted literals.
+     *
+     * If both quotes are included in the string, the method will generate a
+     * concat() function call.
+     *
+     * @param string $string
+     * @return string
+     */
+    public function quote($string) {
+      $hasSingleQuote = FALSE !== strpos($string, "'");
+      if ($hasSingleQuote) {
+        $hasDoubleQuote = FALSE !== strpos($string, '"');
+        if ($hasDoubleQuote) {
+          $result = '';
+          $parts = explode('"', $string);
+          foreach ($parts as $part) {
+            $result .= ", '\"'";
+            if ("" !== $part) {
+              $result .= ', "'.$part.'"';
+            }
+          };
+          return 'concat('.substr($result, 7).')';
+        } else {
+          return '"'.$string.'"';
+        }
+      } else {
+        return "'".$string."'";
+      }
+    }
+
+    /**
      * @param $name
      * @return bool
      */
     public function __isset($name) {
       switch ($name) {
-      case 'registerNodeNamesspaces' :
+      case 'registerNodeNamespaces' :
         return TRUE;
       }
       return isset($this->$name);
@@ -76,7 +113,7 @@ namespace FluentDOM {
      */
     public function __get($name) {
       switch ($name) {
-      case 'registerNodeNamesspaces' :
+      case 'registerNodeNamespaces' :
         return $this->_registerNodeNamespaces;
       }
       return $this->$name;
@@ -89,10 +126,11 @@ namespace FluentDOM {
      */
     public function __set($name, $value) {
       switch ($name) {
-      case 'registerNodeNamesspaces' :
+      case 'registerNodeNamespaces' :
         $this->_registerNodeNamespaces = (bool)$value;
+        return;
       }
-      return $this->$name = $value;
+      $this->$name = $value;
     }
 
     /**
@@ -100,7 +138,7 @@ namespace FluentDOM {
      */
     public function __unset($name) {
       switch ($name) {
-      case 'registerNodeNamesspaces' :
+      case 'registerNodeNamespaces' :
         $this->_registerNodeNamespaces = FALSE;
       }
       unset($this->$name);

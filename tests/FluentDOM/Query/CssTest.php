@@ -28,6 +28,7 @@ namespace FluentDOM\Query {
 
     /**
      * @covers FluentDOM\Query\Css::offsetExists
+     * @covers FluentDOM\Query\Css::getStyleProperties
      */
     public function testOffsetExistsExpectingTrue() {
       $fd = new Query();
@@ -39,6 +40,7 @@ namespace FluentDOM\Query {
 
     /**
      * @covers FluentDOM\Query\Css::offsetExists
+     * @covers FluentDOM\Query\Css::getStyleProperties
      */
     public function testOffsetExistsExpectingFalse() {
       $fd = new Query();
@@ -50,6 +52,7 @@ namespace FluentDOM\Query {
 
     /**
      * @covers FluentDOM\Query\Css::offsetExists
+     * @covers FluentDOM\Query\Css::getStyleProperties
      */
     public function testOffsetExistsWithoutElementExpectingFalse() {
       $fd = new Query();
@@ -59,6 +62,7 @@ namespace FluentDOM\Query {
 
     /**
      * @covers FluentDOM\Query\Css::offsetGet
+     * @covers FluentDOM\Query\Css::getStyleProperties
      */
     public function testOffsetGet() {
       $fd = new Query();
@@ -70,6 +74,7 @@ namespace FluentDOM\Query {
 
     /**
      * @covers FluentDOM\Query\Css::offsetGet
+     * @covers FluentDOM\Query\Css::getStyleProperties
      */
     public function testOffsetGetWithoutElementExpectingFalse() {
       $fd = new Query();

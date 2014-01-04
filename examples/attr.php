@@ -11,7 +11,7 @@ $xml = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <html:html xmlns:html='http://www.w3.org/1999/xhtml'>
  <html:head>
-  <html:title>FluentDOM project page</html:title>
+  <html:title>Examples: FluentDOM\Query::attr()</html:title>
  </html:head>
  <html:body>
   <html:p>

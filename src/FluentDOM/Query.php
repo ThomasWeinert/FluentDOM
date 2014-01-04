@@ -15,11 +15,11 @@ namespace FluentDOM {
    * @property-read integer $length The amount of elements found by selector.
    * @property-read \DOMDocument $document Internal DOMDocument object
    * @property-read \DOMXPath $xpath Internal XPath object
-   * @property Query\Attributes $attr
-   * @property Query\Data $data
-   * @property Query\Css $css
+   * @property \FluentDOM\Query\Attributes $attr
+   * @property \FluentDOM\Query\Data $data
+   * @property \FluentDOM\Query\Css $css
    *
-   * @method Query clone() Clone matched nodes and select the clones.
+   * @method \FluentDOM\Query clone() Clone matched nodes and select the clones.
    * @method bool empty() Remove all child nodes from the set of matched elements.
    */
   class Query implements \ArrayAccess, \Countable, \IteratorAggregate {

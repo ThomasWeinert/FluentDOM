@@ -1,15 +1,15 @@
 <?php
 /**
-*
-* @version $Id$
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
-* @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
+* @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
 */
 header('Content-type: text/plain');
 
 $xml = <<<XML
 <html>
-<head></head>
+  <head>
+    <title>Examples: FluentDOM\Query::append()</title>
+  </head>
 <body>
   <p>I would like to say: </p>
   <items>
@@ -28,18 +28,16 @@ $xml = <<<XML
 XML;
 
 require_once('../src/FluentDOM.php');
-echo FluentDOM($xml)
+FluentDOM::Query($xml)
   ->find('//p')
   ->append('<strong>Hello</strong>')
   ->formatOutput();
 
 echo "\n\n";
 
-$dom = FluentDOM($xml);
+$dom = FluentDOM::Query($xml);
 $items = $dom->find('//group/item');
 echo $dom
   ->find('//html/div')
   ->append($items)
   ->formatOutput();
-
-?>

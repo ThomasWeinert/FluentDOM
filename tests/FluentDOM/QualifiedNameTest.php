@@ -92,5 +92,64 @@ namespace FluentDOM {
       $this->assertEquals('ns:tag', $qualifiedName->name);
       $this->assertEquals('ns', $qualifiedName->prefix);
     }
+
+    /**
+     * @covers FluentDOM\QualifiedName
+     * @dataProvider providePropertyNames
+     */
+    public function testPropertiesExistsExpectingTrue($property) {
+      $qualifiedName = new QualifiedName('ns:tag');
+      $this->assertTrue(isset($qualifiedName->$property));
+    }
+
+    /**
+     * @covers FluentDOM\QualifiedName
+     */
+    public function testPropertiesExistsExpectingFalse() {
+      $qualifiedName = new QualifiedName('ns:tag');
+      $this->assertFalse(isset($qualifiedName->invalidPropertyName));
+    }
+
+    /**
+     * @covers FluentDOM\QualifiedName
+     */
+    public function testPropertyGetWithInvalidPropertyExpectingException() {
+      $qualifiedName = new QualifiedName('ns:tag');
+      $this->setExpectedException('LogicException');
+      $qualifiedName->invalidPropertyName;
+    }
+
+    /**
+     * @covers FluentDOM\QualifiedName
+     */
+    public function testPropertySetExpectingException() {
+      $qualifiedName = new QualifiedName('ns:tag');
+      $this->setExpectedException('LogicException');
+      $qualifiedName->name = 'foo';
+    }
+
+    /**
+     * @covers FluentDOM\QualifiedName
+     */
+    public function testPropertyUnsetExpectingException() {
+      $qualifiedName = new QualifiedName('ns:tag');
+      $this->setExpectedException('LogicException');
+      unset($qualifiedName->name);
+    }
+
+    /*************************
+     * Data Provider
+     ************************/
+
+    /**
+     * @return array
+     */
+    public static function providePropertyNames() {
+      return [
+        ['name'],
+        ['prefix'],
+        ['localName'],
+      ];
+    }
   }
 }

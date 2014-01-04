@@ -1,4 +1,10 @@
 <?php
+/**
+ * Create an object from a string that contains a valid Qualified XML name.
+ *
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
+ */
 
 namespace FluentDOM {
 
@@ -85,7 +91,7 @@ namespace FluentDOM {
     }
 
     /**
-     * Allow to convert the Qname object to a string.
+     * Allow to convert the qualified name object to a string.
      *
      * @return string
      */
@@ -107,11 +113,10 @@ namespace FluentDOM {
         return TRUE;
       }
       return FALSE;
-
     }
 
     /**
-     * Read danmic property, throw exception for invalid properties.
+     * Read dynamic property, throw exception for invalid properties.
      *
      * @param $property
      * @return string

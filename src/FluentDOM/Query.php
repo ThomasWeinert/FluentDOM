@@ -40,6 +40,11 @@ namespace FluentDOM {
     private $_xpath = NULL;
 
     /**
+     * @var array
+     */
+    private $_namespaces = [];
+
+    /**
      * @var \DOMDocument
      */
     private $_document = NULL;
@@ -166,6 +171,9 @@ namespace FluentDOM {
         return $this->_xpath;
       } else {
         $this->_xpath = new Xpath($this->_document);
+        foreach ($this->_namespaces as $prefix => $namespace) {
+          $this->_xpath->registerNamespace($prefix, $namespace);
+        }
         return $this->_xpath;
       }
     }
@@ -264,9 +272,24 @@ namespace FluentDOM {
       return $result;
     }
 
-    /*
-     * Interfaces
+    /**
+     * Register a namespace for selectors/expressions
+     *
+     * @param string $prefix
+     * @param string $namespace
      */
+    public function registerNamespace($prefix, $namespace) {
+      $this->_namespaces[$prefix] = $namespace;
+      if (isset($this->_xpath)) {
+        $this->_xpath->registerNamespace($prefix, $namespace);
+      } elseif ($this->_document instanceof Document) {
+        $this->_document->xpath()->registerNamespace($prefix, $namespace);
+      }
+    }
+
+    /**************
+     * Interfaces
+     *************/
 
     /**
      * Countable interface

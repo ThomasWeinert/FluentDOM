@@ -1,15 +1,15 @@
 <?php
 /**
-*
-* @version $Id$
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
-* @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
+* @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
 */
 header('Content-type: text/plain');
 
 $xml = <<<XML
 <html>
-<head></head>
+  <head>
+    <title>Examples: FluentDOM\Query::add()</title>
+  </head>
 <body>
   <p>I would like to say: <b>HELLO</b></p>
   <b>HELLO</b>
@@ -19,9 +19,8 @@ $xml = <<<XML
 </html>
 XML;
 
-
-require_once('../src/FluentDOM.php');
-$dom = FluentDOM($xml);
+require('../src/FluentDOM.php');
+$dom = FluentDOM::Query($xml);
 echo $dom
   ->find('//p')
   ->add('//p/b')
@@ -29,7 +28,7 @@ echo $dom
 
 echo "\n\n";
 
-$dom = FluentDOM($xml);
+$dom = FluentDOM::Query($xml);
 echo $dom
   ->find('//p')
   ->add(
@@ -39,7 +38,7 @@ echo $dom
 
 echo "\n\n";
 
-$dom = FluentDOM($xml);
+$dom = FluentDOM::Query($xml);
 echo $dom
   ->add(
     $dom->find('//div')
@@ -48,9 +47,7 @@ echo $dom
 
 echo "\n\n";
 
-$dom = FluentDOM($xml);
+$dom = FluentDOM::Query($xml);
 echo $dom
   ->add('//div')
   ->toggleClass('inB');
-
-?>

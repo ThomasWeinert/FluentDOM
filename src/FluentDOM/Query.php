@@ -15,11 +15,11 @@ namespace FluentDOM {
    * @property-read integer $length The amount of elements found by selector.
    * @property-read \DOMDocument $document Internal DOMDocument object
    * @property-read \DOMXPath $xpath Internal XPath object
-   * @property Query\Attributes $attr
-   * @property Query\Data $data
-   * @property Query\Css $css
+   * @property \FluentDOM\Query\Attributes $attr
+   * @property \FluentDOM\Query\Data $data
+   * @property \FluentDOM\Query\Css $css
    *
-   * @method Query clone() Clone matched nodes and select the clones.
+   * @method \FluentDOM\Query clone() Clone matched nodes and select the clones.
    * @method bool empty() Remove all child nodes from the set of matched elements.
    */
   class Query implements \ArrayAccess, \Countable, \IteratorAggregate {
@@ -40,6 +40,11 @@ namespace FluentDOM {
     private $_xpath = NULL;
 
     /**
+     * @var array
+     */
+    private $_namespaces = [];
+
+    /**
      * @var \DOMDocument
      */
     private $_document = NULL;
@@ -55,6 +60,12 @@ namespace FluentDOM {
      * @var boolean $_useDocumentContext
      */
     private $_useDocumentContext = TRUE;
+
+    /**
+     * A list of loaders for different data sources
+     * @var Loaders $loaders
+     */
+    private $_loaders = NULL;
 
     /**
      * Load a $source. The type of the source depends on the loaders. If no explicit loaders are set
@@ -76,6 +87,15 @@ namespace FluentDOM {
         $dom = $source->ownerDocument;
         $this->_nodes = array($source);
         $this->_useDocumentContext = FALSE;
+      } else {
+        foreach ($this->loaders() as $loader) {
+          /**
+           * @var LoaderInterface $loader
+           */
+          if ($loader->supports($contentType) && ($dom = $loader->getDocument($source))) {
+            break;
+          }
+        }
       }
       if ($dom instanceof \DOMDocument) {
         $this->_document = $dom;
@@ -86,6 +106,17 @@ namespace FluentDOM {
           "Can not load: ".(is_object($source) ? get_class($source) : gettype($source))
         );
       }
+    }
+
+    public function loaders(Loaders $loaders = NULL) {
+      if (isset($loaders)) {
+        $this->_loaders = $loaders;
+      } elseif (NULL === $loaders) {
+        $this->_loaders = new Loaders(
+          [new Loader\XmlString()]
+        );
+      }
+      return $this->_loaders;
     }
 
     /*
@@ -140,6 +171,9 @@ namespace FluentDOM {
         return $this->_xpath;
       } else {
         $this->_xpath = new Xpath($this->_document);
+        foreach ($this->_namespaces as $prefix => $namespace) {
+          $this->_xpath->registerNamespace($prefix, $namespace);
+        }
         return $this->_xpath;
       }
     }
@@ -238,9 +272,24 @@ namespace FluentDOM {
       return $result;
     }
 
-    /*
-     * Interfaces
+    /**
+     * Register a namespace for selectors/expressions
+     *
+     * @param string $prefix
+     * @param string $namespace
      */
+    public function registerNamespace($prefix, $namespace) {
+      $this->_namespaces[$prefix] = $namespace;
+      if (isset($this->_xpath)) {
+        $this->_xpath->registerNamespace($prefix, $namespace);
+      } elseif ($this->_document instanceof Document) {
+        $this->_document->xpath()->registerNamespace($prefix, $namespace);
+      }
+    }
+
+    /**************
+     * Interfaces
+     *************/
 
     /**
      * Countable interface

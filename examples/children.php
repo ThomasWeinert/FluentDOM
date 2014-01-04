@@ -1,15 +1,15 @@
 <?php
 /**
-*
-* @version $Id$
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
-* @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
+* @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
 */
 header('Content-type: text/plain');
 
 $xml = <<<XML
 <html>
-<head></head>
+  <head>
+    <title>Examples: FluentDOM\Query::children()</title>
+  </head>
 <body>
   <div id="container">
     <p>This <span>is the <em>way</em> we</span>
@@ -20,15 +20,14 @@ $xml = <<<XML
 XML;
 
 require_once('../src/FluentDOM.php');
-echo FluentDOM($xml)
+echo FluentDOM::Query($xml)
   ->find('//div[@id = "container"]/p')
   ->children()
   ->toggleClass('child');
 
 echo "\n\n";
 
-echo FluentDOM($xml)
+echo FluentDOM::Query($xml)
   ->find('//div[@id = "container"]/p')
   ->children('name() = "em"')
   ->toggleClass('child');
-?>

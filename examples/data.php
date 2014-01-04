@@ -3,7 +3,7 @@
 * Example file for function 'data'
 *
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
-* @copyright Copyright (c) 2011 Bastian Feder, Thomas Weinert
+* @copyright Copyright (c) 2011-2014 Bastian Feder, Thomas Weinert
 */
 header('Content-type: text/plain');
 
@@ -14,7 +14,7 @@ XML;
 
 echo "Example for function 'data':\n\n";
 require_once('../src/FluentDOM.php');
-$fd = FluentDOM($xml)->find('//div');
+$fd = FluentDOM::Query($xml)->find('//div');
 
 var_dump($fd->data('role'));
 var_dump($fd->data('hidden'));

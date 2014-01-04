@@ -1,20 +1,21 @@
 <?php
 /**
-* FluentDOM::closest() Usage example
+* FluentDOM\Query::closest() Usage example
 *
 * Be aware that you check the current context node.
-* The expression 'li' whould search for a node containing a <li> child node.
+* The expression 'li' would search for a node containing a <li> child node.
 * The example uses the self:: axis to avoid this.
 *
-* @version $Id$
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
-* @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
+* @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
 */
 header('Content-type: text/plain');
 
 $xml = <<<XML
 <html>
-<head></head>
+  <head>
+    <title>Examples: FluentDOM\Query::closest()</title>
+  </head>
 <body>
   <ul class="myList">
     <li class="red"><b>The <i>first <u>item</u></i></b>.</li>
@@ -29,10 +30,8 @@ $xml = <<<XML
 XML;
 
 require_once('../src/FluentDOM.php');
-$dom = FluentDOM($xml);
+$dom = FluentDOM::Query($xml);
 echo $dom
   ->find('//u')
   ->closest('self::li')
   ->addClass('foundIt');
-
-?>

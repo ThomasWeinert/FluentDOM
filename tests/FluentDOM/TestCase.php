@@ -1,7 +1,7 @@
 <?php
 namespace FluentDOM {
 
-  require_once(__DIR__.'/../src/_require.php');
+  require_once(__DIR__.'/../../src/_require.php');
 
   abstract class TestCase extends \PHPUnit_Framework_TestCase {
 

@@ -13,8 +13,8 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationRemove
-     * @covers FluentDOM::__call
-     * @covers FluentDOM::_emptyNodes
+     * @covers FluentDOM\Query::__call
+     * @covers FluentDOM\Query::emptyNodes
      */
     public function testEmpty() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);

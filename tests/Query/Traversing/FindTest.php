@@ -13,7 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM::find
+     * @covers FluentDOM\Query::find
      */
     public function testFind() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('/*');
@@ -26,7 +26,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM::find
+     * @covers FluentDOM\Query::find
      */
     public function testFindFromRootNode() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('/*');

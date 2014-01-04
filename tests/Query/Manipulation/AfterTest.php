@@ -13,7 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationOutside
-     * @covers FluentDOM::after
+     * @covers FluentDOM\Query::after
      */
     public function testAfter() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -27,7 +27,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationOutside
-     * @covers FluentDOM::after
+     * @covers FluentDOM\Query::after
      */
     public function testAfterWithFunction() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);

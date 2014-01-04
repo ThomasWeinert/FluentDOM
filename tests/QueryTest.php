@@ -7,7 +7,7 @@ namespace FluentDOM {
 
     /**
      * @group Load
-     * @covers Query::load
+     * @covers FluentDOM\Query::load
      */
     public function testLoadWithDocument() {
       $fd = new Query();
@@ -20,7 +20,7 @@ namespace FluentDOM {
 
     /**
      * @group CoreFunctions
-     * @covers Query::formatOutput
+     * @covers FluentDOM\Query::formatOutput
      */
     public function testFormatOutput() {
       $fd = new Query();
@@ -39,7 +39,7 @@ namespace FluentDOM {
 
     /**
      * @group CoreFunctions
-     * @covers Query::formatOutput
+     * @covers FluentDOM\Query::formatOutput
      */
     public function testFormatOutputWithContentTypeHtml() {
       $fd = new Query();
@@ -52,7 +52,7 @@ namespace FluentDOM {
 
     /**
      * @group CoreFunctions
-     * @covers Query::spawn
+     * @covers FluentDOM\Query::spawn
      */
     public function testSpawn() {
       $fdParent = new Query;
@@ -66,7 +66,7 @@ namespace FluentDOM {
 
     /**
      * @group CoreFunctions
-     * @covers Query::spawn
+     * @covers FluentDOM\Query::spawn
      */
     public function testSpawnWithElements() {
       $dom = new \DOMDocument;
@@ -84,7 +84,7 @@ namespace FluentDOM {
     /**
      * @group Interfaces
      * @group ArrayAccess
-     * @covers Query::offsetExists
+     * @covers FluentDOM\Query::offsetExists
      *
      */
     public function testOffsetExistsExpectingTrue() {
@@ -95,7 +95,7 @@ namespace FluentDOM {
     /**
      * @group Interfaces
      * @group ArrayAccess
-     * @covers Query::offsetExists
+     * @covers FluentDOM\Query::offsetExists
      *
      */
     public function testOffsetExistsExpectingFalse() {
@@ -106,7 +106,7 @@ namespace FluentDOM {
     /**
      * @group Interfaces
      * @group ArrayAccess
-     * @covers Query::offsetGet
+     * @covers FluentDOM\Query::offsetGet
      */
     public function testOffsetGet() {
       $query = $this->getQueryFixtureFromString(self::XML, '//item');
@@ -116,7 +116,7 @@ namespace FluentDOM {
     /**
      * @group Interfaces
      * @group ArrayAccess
-     * @covers Query::offsetGet
+     * @covers FluentDOM\Query::offsetGet
      */
     public function testOffsetSetExpectingException() {
       $query = $this->getQueryFixtureFromString(self::XML, '//item');
@@ -127,7 +127,7 @@ namespace FluentDOM {
     /**
      * @group Interfaces
      * @group ArrayAccess
-     * @covers Query::offsetGet
+     * @covers FluentDOM\Query::offsetGet
      */
     public function testOffsetUnsetExpectingException() {
       $query = $this->getQueryFixtureFromString(self::XML, '//item');
@@ -138,7 +138,7 @@ namespace FluentDOM {
     /**
      * @group Interfaces
      * @group Countable
-     * @covers FluentDOMCore::count
+     * @covers FluentDOM\Query::count
      */
     public function testInterfaceCountableExpecting3() {
       $fd = $this->getQueryFixtureFromString(self::XML, '//item');
@@ -148,7 +148,7 @@ namespace FluentDOM {
     /**
      * @group Interfaces
      * @group Countable
-     * @covers FluentDOMCore::count
+     * @covers FluentDOM\Query::count
      */
     public function testInterfaceCountableExpectingZero() {
       $fd = $this->getQueryFixtureFromString(self::XML, '//non-existing');
@@ -229,7 +229,7 @@ namespace FluentDOM {
     /**
      * @group Properties
      * @covers FluentDOM\Query::__set
-     * @covers FluentDOM\Query::_setContentType
+     * @covers FluentDOM\Query::setContentType
      * @dataProvider getContentTypeSamples
      */
     public function testSetPropertyContentType($contentType, $expected) {

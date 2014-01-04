@@ -10,7 +10,7 @@ namespace FluentDOM\Query {
 
     protected $_directory = __DIR__;
     /**
-     * @covers FluentDOM\Data::__construct
+     * @covers FluentDOM\Query\Data::__construct
      */
     public function testConstructor() {
       $dom = new \DOMDocument();
@@ -22,8 +22,8 @@ namespace FluentDOM\Query {
     }
 
     /**
-     * @covers FluentDOM\Data::toArray
-     * @covers FluentDOM\Data::isDataProperty
+     * @covers FluentDOM\Query\Data::toArray
+     * @covers FluentDOM\Query\Data::isDataProperty
      */
     public function testToArrayWithSeveralAttributes() {
       $dom = new \DOMDocument();
@@ -44,8 +44,8 @@ namespace FluentDOM\Query {
     }
 
     /**
-     * @covers FluentDOM\Data::toArray
-     * @covers FluentDOM\Data::decodeName
+     * @covers FluentDOM\Query\Data::toArray
+     * @covers FluentDOM\Query\Data::decodeName
      */
     public function testToArrayWithComplexAttribute() {
       $dom = new \DOMDocument();
@@ -62,7 +62,7 @@ namespace FluentDOM\Query {
     }
 
     /**
-     * @covers FluentDOM\Data::getIterator
+     * @covers FluentDOM\Query\Data::getIterator
      */
     public function testGetIterator() {
       $dom = new \DOMDocument();
@@ -80,7 +80,7 @@ namespace FluentDOM\Query {
     }
 
     /**
-     * @covers FluentDOM\Data::count
+     * @covers FluentDOM\Query\Data::count
      */
     public function testCountExpectingZero() {
       $dom = new \DOMDocument();
@@ -94,7 +94,7 @@ namespace FluentDOM\Query {
     }
 
     /**
-     * @covers FluentDOM\Data::count
+     * @covers FluentDOM\Query\Data::count
      */
     public function testCountExpectingTwo() {
       $dom = new \DOMDocument();
@@ -108,7 +108,7 @@ namespace FluentDOM\Query {
     }
 
     /**
-     * @covers FluentDOM\Data::__isset
+     * @covers FluentDOM\Query\Data::__isset
      */
     public function testMagicMethodIssetExpectingTrue() {
       $dom = new \DOMDocument();
@@ -118,7 +118,7 @@ namespace FluentDOM\Query {
     }
 
     /**
-     * @covers FluentDOM\Data::__isset
+     * @covers FluentDOM\Query\Data::__isset
      */
     public function testMagicMethodIssetExpectingFalse() {
       $dom = new \DOMDocument();
@@ -128,9 +128,9 @@ namespace FluentDOM\Query {
     }
 
     /**
-     * @covers FluentDOM\Data::__get
-     * @covers FluentDOM\Data::encodeName
-     * @covers FluentDOM\Data::decodeValue
+     * @covers FluentDOM\Query\Data::__get
+     * @covers FluentDOM\Query\Data::encodeName
+     * @covers FluentDOM\Query\Data::decodeValue
      * @dataProvider provideDataAttributes
      */
     public function testMagicMethodGet($expected, $name, $xml) {
@@ -144,9 +144,9 @@ namespace FluentDOM\Query {
     }
 
     /**
-     * @covers FluentDOM\Data::__set
-     * @covers FluentDOM\Data::encodeName
-     * @covers FluentDOM\Data::encodeValue
+     * @covers FluentDOM\Query\Data::__set
+     * @covers FluentDOM\Query\Data::encodeName
+     * @covers FluentDOM\Query\Data::encodeValue
      * @dataProvider provideDataValues
      */
     public function testMagicMethodSet($expectedXml, $name, $value) {
@@ -160,8 +160,8 @@ namespace FluentDOM\Query {
     }
 
     /**
-     * @covers FluentDOM\Data::__unset
-     * @covers FluentDOM\Data::encodeName
+     * @covers FluentDOM\Query\Data::__unset
+     * @covers FluentDOM\Query\Data::encodeName
      * @dataProvider provideDataValues
      */
     public function testMagicMethodUnset() {

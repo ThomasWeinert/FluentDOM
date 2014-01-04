@@ -12,7 +12,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM::nextAll
+     * @covers FluentDOM\Query::nextAll
      */
     public function testNextAll() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);

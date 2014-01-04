@@ -46,7 +46,7 @@ namespace FluentDOM\Query {
      */
     public function testWrapWithNodeList() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
-      $divs = $fd->xpath->query('//div[@class = "wrapper"]');
+      $divs = $fd->xpath->evaluate('//div[@class = "wrapper"]');
       $fd->find('//p')->wrap($divs);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }

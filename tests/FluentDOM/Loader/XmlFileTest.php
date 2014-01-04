@@ -5,38 +5,38 @@ namespace FluentDOM\Loader {
 
   require_once(__DIR__.'/../TestCase.php');
 
-  class LoaderXmlStringTest extends TestCase {
+  class LoaderXmlFileTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Loader\XmlString
+     * @covers FluentDOM\Loader\XmlFile
      */
     public function testSupportsExpectingTrue() {
-      $loader = new XmlString();
+      $loader = new XmlFile();
       $this->assertTrue($loader->supports('text/xml'));
     }
 
     /**
-     * @covers FluentDOM\Loader\XmlString
+     * @covers FluentDOM\Loader\XmlFile
      */
     public function testSupportsExpectingFalse() {
-      $loader = new XmlString();
+      $loader = new XmlFile();
       $this->assertFalse($loader->supports('text/html'));
     }
 
     /**
-     * @covers FluentDOM\Loader\XmlString
+     * @covers FluentDOM\Loader\XmlFile
      */
     public function testLoadWithValidXml() {
-      $loader = new XmlString();
-      $this->assertInstanceOf('DOMDocument', $loader->load('<xml/>'));
+      $loader = new XmlFile();
+      $this->assertInstanceOf('DOMDocument', $loader->load('data://text/plain,'.urlencode('<xml/>')));
     }
 
     /**
-     * @covers FluentDOM\Loader\XmlString
+     * @covers FluentDOM\Loader\XmlFile
      */
     public function testLoadWithInvalidXml() {
-      $loader = new XmlString();
-      $this->assertNull($loader->load('no xml'));
+      $loader = new XmlFile();
+      $this->assertNull($loader->load('<node/>'));
     }
   }
 }

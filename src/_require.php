@@ -5,6 +5,7 @@ require(__DIR__.'/FluentDOM/Element.php');
 require(__DIR__.'/FluentDOM/Xpath.php');
 
 require(__DIR__.'/FluentDOM/LoaderInterface.php');
+require(__DIR__.'/FluentDOM/Loader/XmlFile.php');
 require(__DIR__.'/FluentDOM/Loader/XmlString.php');
 require(__DIR__.'/FluentDOM/Loaders.php');
 

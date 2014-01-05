@@ -2,10 +2,8 @@
 /**
 * Shows how to highlight several words in the body of a html document. It adds spans with specified
 * classes around the found words/word parts.
-*
-* @version $Id$
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
-* @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
+* @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
 */
 
 $html = <<<HTML
@@ -29,7 +27,7 @@ $highlighter = new FluentDOMHighlighter(
 require('../../src/FluentDOM.php');
 
 echo $highlighter->highlight(
-  FluentDOM($html, 'text/html')->find('//body')
+  FluentDOM::Query($html, 'text/html')->find('//body')
 );
 
 /**
@@ -61,11 +59,11 @@ class FluentDOMHighlighter {
   /**
    * Apply Highlight to FluentDOM selection
    *
-   * @param FluentDOM $fd
+   * @param FluentDOM\Query $fd
    *
-   * @return FluentDOM
+   * @return FluentDOM\Query
    */
-  public function highlight(FluentDOM $fd) {
+  public function highlight(FluentDOM\Query $fd) {
     $fd
       ->find('descendant-or-self::text()')
       ->each(array($this, 'replace'));
@@ -126,7 +124,7 @@ class FluentDOMHighlighter {
         $string = strtolower($part);
         if (isset($this->_highlights[$string])) {
           $span = $node->ownerDocument->createElement('span');
-          $items[] = FluentDOM($span)
+          $items[] = FluentDOM::Query($span)
             ->addClass($this->_highlights[$string])
             ->text($part)
             ->item(0);
@@ -135,7 +133,7 @@ class FluentDOMHighlighter {
         }
       }
       // replace the text node
-      FluentDOM($node)->replaceWith($items);
+      FluentDOM::Query($node)->replaceWith($items);
     }
   }
 }

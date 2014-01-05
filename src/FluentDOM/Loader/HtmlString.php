@@ -14,16 +14,16 @@ namespace FluentDOM\Loader {
   /**
    * Load a DOM document from a xml string
    */
-  class XmlString implements LoaderInterface {
+  class HtmlString implements LoaderInterface {
 
     /**
      * @see LoaderInterface::supports
-     * @param string $source
+     * @param string $contentType
      * @return bool
      */
     public function supports($contentType) {
       switch ($contentType) {
-      case 'text/xml' :
+      case 'text/html' :
         return TRUE;
       }
       return FALSE;
@@ -37,7 +37,11 @@ namespace FluentDOM\Loader {
     public function load($source) {
       if (0 === strpos($source, '<')) {
         $dom = new Document();
-        $dom->loadXML($source);
+        $errorSetting = libxml_use_internal_errors(TRUE);
+        libxml_clear_errors();
+        $dom->loadHTML($source);
+        libxml_clear_errors();
+        libxml_use_internal_errors($errorSetting);
         return $dom;
       }
       return NULL;

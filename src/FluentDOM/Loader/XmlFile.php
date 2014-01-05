@@ -31,7 +31,7 @@ namespace FluentDOM\Loader {
 
     /**
      * @see LoaderInterface::load
-     * @param string $contentType
+     * @param string $source
      * @return bool
      */
     public function load($source) {

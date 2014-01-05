@@ -1,6 +1,6 @@
 <?php
 /**
- * Load a DOM document from a xml string
+ * Load a DOM document from a xml file
  *
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
@@ -12,18 +12,18 @@ namespace FluentDOM\Loader {
   use FluentDOM\LoaderInterface;
 
   /**
-   * Load a DOM document from a xml string
+   * Load a DOM document from a xml file
    */
-  class XmlString implements LoaderInterface {
+  class HtmlFile implements LoaderInterface {
 
     /**
      * @see LoaderInterface::supports
-     * @param string $source
+     * @param string $contentType
      * @return bool
      */
     public function supports($contentType) {
       switch ($contentType) {
-      case 'text/xml' :
+      case 'text/html' :
         return TRUE;
       }
       return FALSE;
@@ -35,9 +35,13 @@ namespace FluentDOM\Loader {
      * @return bool
      */
     public function load($source) {
-      if (0 === strpos($source, '<')) {
+      if (0 !== strpos($source, '<')) {
         $dom = new Document();
-        $dom->loadXML($source);
+        $errorSetting = libxml_use_internal_errors(TRUE);
+        libxml_clear_errors();
+        $dom->loadHTMLFile($source);
+        libxml_clear_errors();
+        libxml_use_internal_errors($errorSetting);
         return $dom;
       }
       return NULL;

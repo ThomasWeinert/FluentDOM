@@ -106,7 +106,12 @@ namespace FluentDOM {
         $this->_loaders = $loaders;
       } elseif (NULL === $loaders) {
         $this->_loaders = new Loaders(
-          [new Loader\XmlString()]
+          [
+            new Loader\XmlFile(),
+            new Loader\XmlString(),
+            new Loader\HtmlFile(),
+            new Loader\HtmlString()
+          ]
         );
       }
       return $this->_loaders;

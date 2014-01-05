@@ -101,9 +101,25 @@ namespace FluentDOM {
       }
     }
 
-    public function loaders(Loaders $loaders = NULL) {
+    /**
+     * Set the loaders list.
+     *
+     * @param Loaders|LoaderInterface|array|\Traversable $loaders
+     * @return Loaders
+     */
+    public function loaders($loaders = NULL) {
       if (isset($loaders)) {
-        $this->_loaders = $loaders;
+        if ($loaders instanceOf Loaders) {
+          $this->_loaders = $loaders;
+        } elseif ($loaders instanceOf LoaderInterface) {
+          $this->_loaders = new Loaders([$loaders]);
+        } elseif (is_array($loaders) || $loaders instanceOf \Traversable) {
+          $this->_loaders = new Loaders($loaders);
+        } else {
+          return new \InvalidArgumentException(
+            "Invalid loader(s) argument."
+          );
+        }
       } elseif (NULL === $loaders) {
         $this->_loaders = new Loaders(
           [

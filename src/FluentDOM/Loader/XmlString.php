@@ -34,8 +34,9 @@ namespace FluentDOM\Loader {
      * @param string $source
      * @return bool
      */
-    public function load($source) {
-      if (0 === strpos($source, '<')) {
+    public function load($source, $contentType = 'text/xml') {
+      if ($this->supports($contentType) &&
+          0 === strpos($source, '<')) {
         $dom = new Document();
         $dom->loadXML($source);
         return $dom;

@@ -1,7 +1,7 @@
 <?php
 require('../../src/FluentDOM.php');
 
-$fd = FluentDOM('find.xml');
+$fd = FluentDOM::Query('find.xml');
 
 // find the document element <root>
 var_dump($fd->find('/root')->item(0)->nodeName);

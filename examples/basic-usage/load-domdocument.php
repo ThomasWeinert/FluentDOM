@@ -9,6 +9,6 @@ $dom = new DOMDocument();
 $dom->load($xmlFile);
 
 // load
-echo FluentDOM($dom)
+echo FluentDOM::Query($dom)
   ->find('/message')
   ->text('Hello World!');

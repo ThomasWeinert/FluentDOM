@@ -16,7 +16,7 @@ namespace FluentDOM {
    * The list is iterated until a valid document is returned by the loader
    *
    */
-  class Loaders implements \IteratorAggregate {
+  class Loaders implements \IteratorAggregate, LoaderInterface {
 
     private $_list = array();
 

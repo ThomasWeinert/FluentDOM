@@ -29,9 +29,10 @@ namespace FluentDOM {
      * Load the data source and return the new DOM document. Return NULL if
      * the data source could not be loaded.
      *
-     * @param $source
+     * @param mixed $source
+     * @param string $contentType
      * @return NULL|\DOMDocument
      */
-    function load($source);
+    function load($source, $contentType = 'text/xml');
   }
 }

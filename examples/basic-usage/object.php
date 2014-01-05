@@ -1,11 +1,11 @@
 <?php
 
-require('../../src/FluentDOM.php');
+require('../../src/_require.php');
 
 $xmlFile = 'hello.xml';
 
 // create object
-$fd = new FluentDOM();
+$fd = new FluentDOM\Query();
 // load file
 $fd->load($xmlFile);
 

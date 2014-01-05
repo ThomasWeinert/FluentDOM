@@ -1471,6 +1471,79 @@ namespace FluentDOM {
       }
       return $result;
     }
+    /**
+     * Get a set of elements containing the unique previous siblings of each of the
+     * matched set of elements.
+     *
+     * @example prev.php Usage Example: FluentDOM\Query::prev()
+     * @param string $expr XPath expression
+     * @return Query
+     */
+    public function prev($expr = NULL) {
+      $result = $this->spawn();
+      foreach ($this->_nodes as $node) {
+        $previous = $node->previousSibling;
+        while ($previous instanceof \DOMNode && !$this->isNode($previous)) {
+          $previous = $previous->previousSibling;
+        }
+        if (!empty($previous)) {
+          if (empty($expr) || $this->matches($expr, $previous)) {
+            $result->push($previous);
+          }
+        }
+      }
+      $result->uniqueSortNodes();
+      return $result;
+    }
+
+    /**
+     * Find all sibling elements in front of the current element.
+     *
+     * @example prevAll.php Usage Example: FluentDOM\Query::prevAll()
+     * @param string $expr XPath expression
+     * @return Query
+     */
+    public function prevAll($expr = NULL) {
+      $result = $this->spawn();
+      foreach ($this->_nodes as $node) {
+        $previous = $node->previousSibling;
+        while ($previous instanceof \DOMNode) {
+          if ($this->isNode($previous)) {
+            if (empty($expr) || $this->matches($expr, $previous)) {
+              $result->push($previous);
+            }
+          }
+          $previous = $previous->previousSibling;
+        }
+      }
+      return $result;
+    }
+
+    /**
+     * Get all preceding siblings of each element up to but not including
+     * the element matched by the selector.
+     *
+     * @param string $expr XPath expression
+     * @return Query
+     */
+    public function prevUntil($expr = NULL) {
+      $result = $this->spawn();
+      foreach ($this->_nodes as $node) {
+        $previous = $node->previousSibling;
+        while ($previous instanceof \DOMNode) {
+          if (isset($expr) && $this->isNode($previous)) {
+            if ($this->matches($expr, $previous)) {
+              break;
+            } else {
+              $result->push($previous);
+            }
+          }
+          $previous = $previous->previousSibling;
+        }
+      }
+      return $result;
+    }
+
 
     /**
      * Reverse the order of the matched elements.

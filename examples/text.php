@@ -1,22 +1,22 @@
 <?php
 /**
-*
-* @version $Id$
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
-* @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
+* @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
 */
 header('Content-type: text/plain');
 
 $xml = <<<XML
 <html>
-<head></head>
-<body>
-  <div>
-    <p>Hello</p>
-    <p>cruel</p>
-    <p>World!</p>
-  </div>
-</body>
+  <head>
+    <title>Examples: FluentDOM\Query::text()</title>
+  </head>
+  <body>
+    <div>
+      <p>Hello</p>
+      <p>cruel</p>
+      <p>World!</p>
+    </div>
+  </body>
 </html>
 XML;
 
@@ -25,7 +25,7 @@ require_once('../src/FluentDOM.php');
 /*
  * replace text content of 2nd paragraph
  */
-echo FluentDOM($xml)
+echo FluentDOM::Query($xml)
   ->find('//p[position() = 2]')
   ->text('nice');
 
@@ -34,7 +34,7 @@ echo "\n\n";
 /*
  * replace text content of every paragraph
  */
-echo FluentDOM($xml)
+echo FluentDOM::Query($xml)
   ->find('//p')
   ->text('nice');
 
@@ -46,8 +46,7 @@ echo "\n\n";
  *
  * replace text content of 2nd paragraph
  */
-echo FluentDOM($xml)
+echo FluentDOM::Query($xml)
   ->find('//p[position() = 1]')
   ->next()
   ->text('nice');
-?>

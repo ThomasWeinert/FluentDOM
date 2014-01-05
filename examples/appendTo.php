@@ -10,10 +10,10 @@ $xml = <<<XML
   <head>
     <title>Examples: FluentDOM\Query::appendTo()</title>
   </head>
-<body>
-  <span>I have nothing more to say... </span>
-  <div id="foo">FOO! </div>
-</body>
+  <body>
+    <span>I have nothing more to say... </span>
+    <div id="foo">FOO! </div>
+  </body>
 </html>
 XML;
 

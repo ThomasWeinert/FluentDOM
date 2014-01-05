@@ -16,21 +16,22 @@ $xml = <<<XML
   <head>
     <title>Examples: FluentDOM\Query::closest()</title>
   </head>
-<body>
-  <ul class="myList">
-    <li class="red"><b>The <i>first <u>item</u></i></b>.</li>
-    <li class="green"><b>The <i>second <u>item</u></i></b>.</li>
-    <li class="yellow"><b>The <i>third <u>item</u></i></b>.</li>
-    <li class="blue"><b>The <i>fourth <u>item</u></i></b>.</li>
-  </ul>
-  <p>Class of the last clicked item: <span id="display"> </span>
-  </p>
-</body>
+  <body>
+    <ul class="myList">
+      <li class="red"><b>The <i>first <u>item</u></i></b>.</li>
+      <li class="green"><b>The <i>second <u>item</u></i></b>.</li>
+      <li class="yellow"><b>The <i>third <u>item</u></i></b>.</li>
+      <li class="blue"><b>The <i>fourth <u>item</u></i></b>.</li>
+    </ul>
+    <p>
+      Class of the last clicked item: <span id="display"> </span>
+    </p>
+  </body>
 </html>
 XML;
 
 require_once('../src/FluentDOM.php');
-$dom = FluentDOM::Query($xml);
+$dom = FluentDOM::Query($xml, 'text/html');
 echo $dom
   ->find('//u')
   ->closest('self::li')

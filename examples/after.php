@@ -10,9 +10,9 @@ $xml = <<<XML
   <head>
     <title>Examples: FluentDOM\Query::after()</title>
   </head>
-<body>
-  <p>I would like to say: </p>
-</body>
+  <body>
+    <p>I would like to say: </p>
+  </body>
 </html>
 XML;
 

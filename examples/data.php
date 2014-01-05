@@ -8,7 +8,7 @@
 header('Content-type: text/plain');
 
 $xml = <<<XML
-<div data-role="page" data-hidden="true" data-options='{"name":"John"}'></div>
+<div data-role="page" data-hidden="true" data-options='{"name":"John"}'> </div>
 XML;
 
 

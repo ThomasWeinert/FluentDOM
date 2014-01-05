@@ -1,26 +1,25 @@
 <?php
 /**
-*
-* @version $Id$
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
-* @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
+* @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
 */
 header('Content-type: text/plain');
 
 $xml = <<<XML
 <html>
-<head></head>
-<body>
-  <p>Hello</p>
-  <p>cruel</p>
-  <p>World</p>
-</body>
+  <head>
+    <title>Examples: FluentDOM\Query::xml()</title>
+  </head>
+  <body>
+    <p>Hello</p>
+    <p>cruel</p>
+    <p>World</p>
+  </body>
 </html>
 XML;
 
 require_once('../src/FluentDOM.php');
 
-echo FluentDOM($xml)
+echo FluentDOM::Query($xml)
   ->find('//p[position() = last()]')
   ->xml('<b>New</b>World');
-?>

@@ -10,9 +10,9 @@ $xml = <<<XML
   <head>
     <title>Examples: FluentDOM\Query::before()</title>
   </head>
-<body>
-  <p> is what I said...</p>
-</body>
+  <body>
+    <p> is what I said...</p>
+  </body>
 </html>
 XML;
 

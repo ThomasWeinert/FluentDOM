@@ -10,12 +10,12 @@ $xml = <<<XML
   <head>
     <title>Examples: FluentDOM\Query::children()</title>
   </head>
-<body>
-  <div id="container">
-    <p>This <span>is the <em>way</em> we</span>
-    write <em>the</em> demo,</p>
-  </div>
-</body>
+  <body>
+    <div id="container">
+      <p>This <span>is the <em>way</em> we</span>
+      write <em>the</em> demo,</p>
+    </div>
+  </body>
 </html>
 XML;
 

@@ -10,12 +10,12 @@ $xml = <<<XML
   <head>
     <title>Examples: FluentDOM\Query::add()</title>
   </head>
-<body>
-  <p>I would like to say: <b>HELLO</b></p>
-  <b>HELLO</b>
+  <body>
+    <p>I would like to say: <b>HELLO</b></p>
+    <b>HELLO</b>
 
-  <div>Another list of childNodes</div>
-</body>
+    <div>Another list of childNodes</div>
+  </body>
 </html>
 XML;
 

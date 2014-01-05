@@ -8,13 +8,13 @@
 header('Content-type: text/plain');
 
 $xml = <<<XML
-<div data-role="page" data-hidden="true" data-options='{"name":"John"}'></div>
+<div data-role="page" data-hidden="true" data-options='{"name":"John"}'> </div>
 XML;
 
 
 echo "Example for function 'removeData':\n\n";
 require_once('../src/FluentDOM.php');
-$fd = FluentDOM($xml)->find('//div');
+$fd = FluentDOM::Query($xml)->find('//div');
 
 $fd->removeData('options');
 

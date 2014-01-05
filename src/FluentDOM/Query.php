@@ -92,7 +92,7 @@ namespace FluentDOM {
       }
       if ($dom instanceof \DOMDocument) {
         $this->_document = $dom;
-        $this->setContentType($contentType);
+        $this->setContentType($contentType, TRUE);
         return $this;
       } else {
         throw new \InvalidArgumentException(
@@ -604,19 +604,27 @@ namespace FluentDOM {
      * @param string $value
      * @throws \UnexpectedValueException
      */
-    private function setContentType($value) {
-      switch (strtolower($value)) {
-      case 'xml' :
-      case 'application/xml' :
-      case 'text/xml' :
-        $newContentType = 'text/xml';
-        break;
-      case 'html' :
-      case 'text/html' :
-        $newContentType = 'text/html';
-        break;
-      default :
-        throw new \UnexpectedValueException('Invalid content type value');
+    private function setContentType($value, $silentFallback = FALSE) {
+      try {
+        switch (strtolower($value)) {
+        case 'xml' :
+        case 'application/xml' :
+        case 'text/xml' :
+          $newContentType = 'text/xml';
+          break;
+        case 'html' :
+        case 'text/html' :
+          $newContentType = 'text/html';
+          break;
+        default :
+          throw new \UnexpectedValueException('Invalid content type value');
+        }
+      } catch (\UnexpectedValueException $e) {
+        if ($silentFallback) {
+          $newContentType = 'text/xml';
+        } else {
+          throw $e;
+        }
       }
       if ($this->_contentType != $newContentType) {
         $this->_contentType = $newContentType;

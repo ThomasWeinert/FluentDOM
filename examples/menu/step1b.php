@@ -1,8 +1,8 @@
 <?php
-require('../../src/FluentDOM.php');
+require('../../src/_require.php');
 
 // create a FluentDOM
-$fd = new FluentDOM();
+$fd = new FluentDOM\Query();
 // we generate html
 $fd->contentType = 'html';
 
@@ -14,4 +14,3 @@ $menu = $fd->append(
 
 // output the created document
 echo $fd;
-?>

@@ -23,6 +23,7 @@ namespace FluentDOM\Loader {
      */
     public function supports($contentType) {
       switch ($contentType) {
+      case 'html' :
       case 'text/html' :
         return TRUE;
       }

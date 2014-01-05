@@ -1316,6 +1316,29 @@ namespace FluentDOM {
     }
 
     /**
+     * Removes elements matching the specified expression from the set of matched elements.
+     *
+     * @example not.php Usage Example: FluentDOM\Query::not()
+     * @param string|callback $expr XPath expression or callback function
+     * @return Query
+     */
+    public function not($expr) {
+      $result = $this->spawn();
+      foreach ($this->_nodes as $index => $node) {
+        $check = FALSE;
+        if (is_string($expr)) {
+          $check = $this->matches($expr, $node, $index);
+        } elseif ($this->isCallable($expr, TRUE, FALSE)) {
+          $check = call_user_func($expr, $node, $index);
+        }
+        if (!$check) {
+          $result->push($node);
+        }
+      }
+      return $result;
+    }
+
+    /**
      * Get a set of elements containing the unique next siblings of each of the
      * given set of elements.
      *

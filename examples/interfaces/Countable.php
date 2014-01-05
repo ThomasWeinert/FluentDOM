@@ -3,7 +3,9 @@ header('Content-type: text/plain');
 
 $xml = <<<XML
 <html>
-<head></head>
+  <head>
+    <title>Examples: FluentDOM\Query Countable interface</title>
+  </head>
 <body>
   <p>Hello</p>
   <p>cruel</p>
@@ -14,5 +16,4 @@ XML;
 
 require_once('../../src/FluentDOM.php');
 
-echo count(FluentDOM($xml)->find('//p')), ' <p> tags';
-?>
+echo count(FluentDOM::Query($xml)->find('//p')), ' <p> tags';

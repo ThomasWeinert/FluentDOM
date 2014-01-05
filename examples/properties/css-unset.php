@@ -3,7 +3,7 @@
 * Example file for property 'css'
 *
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
-* @copyright Copyright (c) 2010 Bastian Feder, Thomas Weinert
+* @copyright Copyright (c) 2010-2014 Bastian Feder, Thomas Weinert
 */
 header('Content-type: text/plain');
 
@@ -23,7 +23,7 @@ $html = <<<HTML
 HTML;
 
 echo "Example for property 'css' - remove properties:\n\n";
-require_once('../../src/FluentDOM/Style.php');
-$fd = FluentDOMStyle($html, 'text/html')->find('/html/body//*');
+require_once('../../src/FluentDOM.php');
+$fd = FluentDOM::Query($html, 'text/html')->find('/html/body//*');
 unset($fd->css[array('color', 'font-weight')]);
 echo (string)$fd;

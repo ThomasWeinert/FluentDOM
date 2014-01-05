@@ -3,7 +3,9 @@ header('Content-type: text/plain');
 
 $xml = <<<XML
 <html>
-<head></head>
+  <head>
+    <title>Examples: FluentDOM\Query IteratorAggregate interface</title>
+  </head>
 <body>
   <p>Hello</p>
   <p>cruel</p>
@@ -14,7 +16,6 @@ XML;
 
 require_once('../../src/FluentDOM.php');
 
-foreach (FluentDOM($xml)->find('//p') as $key => $value) {
+foreach (FluentDOM::Query($xml)->find('//p') as $key => $value) {
   echo $key, ': ', $value->nodeName, "\n";
 }
-?>

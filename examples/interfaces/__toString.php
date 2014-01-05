@@ -3,7 +3,9 @@ header('Content-type: text/plain');
 
 $xml = <<<XML
 <html>
-<head></head>
+  <head>
+    <title>Examples: FluentDOM\Query::__toString()</title>
+  </head>
 <body>
   <p>Hello</p><p>cruel</p><p>World</p>
 </body>
@@ -12,8 +14,7 @@ XML;
 
 require_once('../../src/FluentDOM.php');
 
-echo FluentDOM($xml)
+echo FluentDOM::Query($xml)
   ->find('//p')
   ->addClass('default')
   ->formatOutput();
-?>

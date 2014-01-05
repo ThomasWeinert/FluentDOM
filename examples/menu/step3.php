@@ -1,7 +1,7 @@
 <?php
-require('../../src/FluentDOM.php');
+require('../../src/_require.php');
 
-$fd = new FluentDOM();
+$fd = new FluentDOM\Query();
 $fd->contentType = 'html';
 
 $menu = $fd->append('<ul/>');
@@ -33,4 +33,3 @@ $menu
   ->text('Alert Sample');
 
 echo $fd;
-?>

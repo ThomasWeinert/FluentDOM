@@ -1,23 +1,15 @@
 <?php
 /**
-* Sample how to use a custom FluentDOMLoader
-*
-* @version $Id$
-* @package FluentDOM
-* @subpackage examples
+* Sample how to use a custom FluentDOM loader
 */
 
-require_once(dirname(__FILE__).'/../../src/FluentDOM.php');
-require_once(dirname(__FILE__).'/FluentDOMIniLoader.php');
+require_once(__DIR__.'/../../src/_require.php');
+require_once(__DIR__.'/IniLoader.php');
 
-$iniFile = dirname(__FILE__).'/sample.ini';
+$iniFile = __DIR__.'/sample.ini';
 
-$fd = new FluentDOM();
-$fd->setLoaders(
-  array(
-    new FluentDOMIniLoader()
-  )
-);
+$fd = new FluentDOM\Query();
+$fd->loaders(new IniLoader());
 
 header('Content-type: text/plain');
 echo $fd->load($iniFile, 'text/ini')->formatOutput();
@@ -25,4 +17,3 @@ echo $fd->load($iniFile, 'text/ini')->formatOutput();
 echo "\n\n";
 echo 'URL: ', $fd->find('//URL')->text();
 
-?>

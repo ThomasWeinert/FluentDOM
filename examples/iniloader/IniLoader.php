@@ -1,18 +1,20 @@
 <?php
 
-require_once(dirname(__FILE__).'/../../src/FluentDOM/Loader.php');
+require_once(dirname(__FILE__).'/../../src/_require.php');
 
-class FluentDOMIniLoader implements FluentDOMLoader {
+class IniLoader implements FluentDOM\LoaderInterface {
 
-  public function load($source, &$contentType) {
-    if (is_string($source) &&
-        in_array($contentType, array('ini', 'text/ini'))) {
+  public function supports($contentType) {
+    return in_array($contentType, array('ini', 'text/ini'));
+  }
+
+  public function load($source, $contentType = 'text/ini') {
+    if (is_string($source) && $this->supports($contentType)) {
 
       if (!file_exists($source)) {
         throw new InvalidArgumentException('File not found: '. $source);
       }
 
-      $contentType = 'text/xml';
       if ($iniFile = parse_ini_file($source)) {
         $dom = new DOMDocument();
         $root = $dom->appendChild($dom->createElement('ini'));
@@ -23,7 +25,7 @@ class FluentDOMIniLoader implements FluentDOMLoader {
     return FALSE;
   }
 
-  protected function _arrayToNodes(&$dom, &$node, $data) {
+  private function _arrayToNodes(DOMDocument $dom, DOMNode $node, $data) {
     if (is_array($data)) {
       foreach ($data as $key => $val) {
         if (preg_match('(^\d+$)', $key)) {
@@ -55,4 +57,3 @@ class FluentDOMIniLoader implements FluentDOMLoader {
 
 }
 
-?>

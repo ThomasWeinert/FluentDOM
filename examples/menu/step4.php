@@ -1,7 +1,7 @@
 <?php
-require('../../src/FluentDOM.php');
+require('../../src/_require.php');
 
-$fd = new FluentDOM();
+$fd = new FluentDOM\Query();
 $fd->contentType = 'html';
 
 $menu = $fd->append('<ul/>');
@@ -40,4 +40,3 @@ $fd
   ->addClass('last');
 
 echo $fd;
-?>

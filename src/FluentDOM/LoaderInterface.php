@@ -33,6 +33,6 @@ namespace FluentDOM {
      * @param string $contentType
      * @return NULL|\DOMDocument
      */
-    function load($source, $contentType = 'text/xml');
+    function load($source, $contentType);
   }
 }

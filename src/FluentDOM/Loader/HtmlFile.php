@@ -32,9 +32,10 @@ namespace FluentDOM\Loader {
     /**
      * @see LoaderInterface::load
      * @param string $source
+     * @param string $contentType
      * @return bool
      */
-    public function load($source, $contentType = 'text/xml') {
+    public function load($source, $contentType) {
       if ($this->supports($contentType) &&
           0 !== strpos($source, '<')) {
         $dom = new Document();

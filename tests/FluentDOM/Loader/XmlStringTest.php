@@ -28,7 +28,13 @@ namespace FluentDOM\Loader {
      */
     public function testLoadWithValidXml() {
       $loader = new XmlString();
-      $this->assertInstanceOf('DOMDocument', $loader->load('<xml/>'));
+      $this->assertInstanceOf(
+        'DOMDocument',
+        $loader->load(
+          '<xml/>',
+          'text/xml'
+        )
+      );
     }
 
     /**
@@ -36,7 +42,12 @@ namespace FluentDOM\Loader {
      */
     public function testLoadWithInvalidXml() {
       $loader = new XmlString();
-      $this->assertNull($loader->load('no xml'));
+      $this->assertNull(
+        $loader->load(
+          'no xml',
+          'text/xml'
+        )
+      );
     }
   }
 }

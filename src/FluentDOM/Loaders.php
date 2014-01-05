@@ -89,13 +89,13 @@ namespace FluentDOM {
      * @param string $contentType
      * @return \DOMDocument|NULL
      */
-    public function load($source, $contentType = 'text/xml') {
+    public function load($source, $contentType) {
       $dom = NULL;
       foreach ($this as $loader) {
         /**
          * @var LoaderInterface $loader
          */
-        if ($loader->supports($contentType) && ($dom = $loader->load($source))) {
+        if ($loader->supports($contentType) && ($dom = $loader->load($source, $contentType))) {
           break;
         }
       }

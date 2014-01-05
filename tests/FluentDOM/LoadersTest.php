@@ -90,10 +90,10 @@ namespace FluentDOM {
       $loaderTwo
         ->expects($this->once())
         ->method('load')
-        ->with('DATA')
+        ->with('DATA', 'text/xml')
         ->will($this->returnValue($dom = new \DOMDOcument));
       $loaders = new Loaders([$loaderOne, $loaderTwo]);
-      $this->assertSame($dom, $loaders->load('DATA'));
+      $this->assertSame($dom, $loaders->load('DATA', 'text/xml'));
     }
   }
 }

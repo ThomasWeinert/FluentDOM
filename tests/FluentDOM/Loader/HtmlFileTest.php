@@ -20,7 +20,7 @@ namespace FluentDOM\Loader {
      */
     public function testSupportsExpectingFalse() {
       $loader = new HtmlFile();
-      $this->assertFalse($loader->supports('text/xtml'));
+      $this->assertFalse($loader->supports('text/xml'));
     }
 
     /**
@@ -28,7 +28,13 @@ namespace FluentDOM\Loader {
      */
     public function testLoadWithValidXml() {
       $loader = new HtmlFile();
-      $this->assertInstanceOf('DOMDocument', $loader->load('data://text/plain,'.urlencode('<html/>')));
+      $this->assertInstanceOf(
+        'DOMDocument',
+        $loader->load(
+          'data://text/plain,'.urlencode('<html/>'),
+          'text/html'
+        )
+      );
     }
 
     /**
@@ -36,7 +42,12 @@ namespace FluentDOM\Loader {
      */
     public function testLoadWithInvalidXml() {
       $loader = new HtmlFile();
-      $this->assertNull($loader->load('<node/>'));
+      $this->assertNull(
+        $loader->load(
+          '<node/>',
+          'text/xml'
+        )
+      );
     }
   }
 }

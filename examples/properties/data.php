@@ -8,13 +8,13 @@
 header('Content-type: text/plain');
 
 $xml = <<<XML
-<div data-role="page" data-hidden="true" data-options='{"name":"John"}'></div>
+<div data-role="page" data-hidden="true" data-options='{"name":"John"}'> </div>
 XML;
 
 
 echo "Example for property 'data':\n";
 require_once('../../src/FluentDOM.php');
-$fd = FluentDOM($xml)->find('//div');
+$fd = FluentDOM::Query($xml)->find('//div');
 
 echo "\nRead:\n";
 var_dump($fd->data->role);

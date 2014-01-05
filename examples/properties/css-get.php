@@ -3,7 +3,7 @@
 * Example file for property 'attr'
 *
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
-* @copyright Copyright (c) 2010 Bastian Feder, Thomas Weinert
+* @copyright Copyright (c) 2010-2014 Bastian Feder, Thomas Weinert
 */
 header('Content-type: text/plain');
 
@@ -23,9 +23,9 @@ $html = <<<HTML
 HTML;
 
 echo "Example for property 'css' - reading color:\n\n";
-require_once('../../src/FluentDOM/Style.php');
-$fd = FluentDOM($html, 'text/html')->find('//a');
+require_once('../../src/FluentDOM.php');
+$fd = FluentDOM::Query($html, 'text/html')->find('//a');
 foreach ($fd as $node) {
-  $fdNode = FluentDOMStyle($node);
+  $fdNode = FluentDOM::Query($node);
   echo $fdNode->css['color'], "\n";
 }

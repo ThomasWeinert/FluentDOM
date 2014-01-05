@@ -87,7 +87,7 @@ namespace FluentDOM {
         $dom = $source->ownerDocument;
         $this->_nodes = array($source);
         $this->_useDocumentContext = FALSE;
-      } else {
+      } elseif ($this->loaders()->supports($contentType)) {
         $dom = $this->loaders()->load($source, $contentType);
       }
       if ($dom instanceof \DOMDocument) {
@@ -114,11 +114,11 @@ namespace FluentDOM {
         } elseif (is_array($loaders) || $loaders instanceOf \Traversable) {
           $this->_loaders = new Loaders($loaders);
         } else {
-          return new \InvalidArgumentException(
+          throw new \InvalidArgumentException(
             "Invalid loader(s) argument."
           );
         }
-      } elseif (NULL === $loaders) {
+      } elseif (NULL === $this->_loaders) {
         $this->_loaders = new Loaders(
           [
             new Loader\XmlFile(),
@@ -205,6 +205,7 @@ namespace FluentDOM {
       $result->_document = $this->getDocument();
       $result->_xpath = $this->xpath();
       $result->_contentType = $this->contentType;
+      $result->_namespaces = $this->_namespaces;
       if (isset($elements)) {
         $result->push($elements);
       }

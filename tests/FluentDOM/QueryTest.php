@@ -19,6 +19,71 @@ namespace FluentDOM {
     }
 
     /**
+     * @group Load
+     * @covers FluentDOM\Query::load
+     */
+    public function testLoadWithCustomLoader() {
+      $loader = $this->getMock('FluentDOM\LoaderInterface');
+      $loader
+        ->expects($this->once())
+        ->method('supports')
+        ->with('text/xml')
+        ->will($this->returnValue(TRUE));
+      $loader
+        ->expects($this->once())
+        ->method('load')
+        ->with('DATA', 'text/xml')
+        ->will($this->returnValue($dom = new \DOMDocument()));
+      $fd = new Query();
+      $fd->loaders($loader);
+      $fd->load('DATA');
+      $this->assertSame(
+        $dom,
+        $fd->document
+      );
+    }
+
+    /**
+     * @group Load
+     * @covers FluentDOM\Query::loaders
+     */
+    public function testLoadersGetAfterSet() {
+      $loaders = $this->getMock('FluentDOM\LoaderInterface');
+      $fd = new \FluentDOM\Query();
+      $fd->loaders($loaders);
+      $this->assertSame($loaders, $fd->loaders());
+    }
+
+    /**
+     * @group Load
+     * @covers FluentDOM\Query::loaders
+     */
+    public function testLoadersGetImplicitCreate() {
+      $fd = new \FluentDOM\Query();
+      $this->assertInstanceOf('FluentDOM\LoaderInterface', $fd->loaders());
+    }
+
+    /**
+     * @group Load
+     * @covers FluentDOM\Query::loaders
+     */
+    public function testLoadersGetCreateFromArray() {
+      $fd = new \FluentDOM\Query();
+      $fd->loaders([$loader = $this->getMock('FluentDOM\LoaderInterface')]);
+      $this->assertInstanceOf('FluentDOM\LoaderInterface', $fd->loaders());
+      $this->assertSame([$loader], iterator_to_array($fd->loaders()));
+    }
+    /**
+     * @group Load
+     * @covers FluentDOM\Query::loaders
+     */
+    public function testLoadersGetWithInvalidLoaderExpectingException() {
+      $fd = new \FluentDOM\Query();
+      $this->setExpectedException('InvalidArgumentException');
+      $fd->loaders('FOO');
+    }
+
+    /**
      * @group CoreFunctions
      * @covers FluentDOM\Query::formatOutput
      */

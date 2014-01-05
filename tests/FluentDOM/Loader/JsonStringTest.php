@@ -84,7 +84,6 @@ namespace FluentDOM\Loader {
         ),
         'json'
       );
-      echo $dom->saveXml();
       $this->assertXmlStringEqualsXmlString(
         '<?xml version="1.0" encoding="UTF-8"?>
          <json:json xmlns:json="urn:carica-json-dom.2013">

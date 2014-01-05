@@ -1,6 +1,6 @@
 <?php
 
-class FluentDOM {
+abstract class FluentDOM {
 
   private static $_load = TRUE;
 

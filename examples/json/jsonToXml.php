@@ -2,29 +2,30 @@
 /**
 * Sample how to use the JSON loader
 *
-* It loads the FluentDOM twitter timeline. This is only an example, Twitter provides XML, too.
-*
-* @version $Id$
-* @package FluentDOM
-* @subpackage examples
+* It loads the FluentDOM github timeline.
 */
 
-require_once(dirname(__FILE__).'/../../src/FluentDOM.php');
-require_once(dirname(__FILE__).'/../../src/FluentDOM/Loader/StringJSON.php');
+require_once(dirname(__FILE__).'/../../src/_require.php');
 
 // get the loader object
-$jsonLoader = new FluentDOMLoaderStringJSON();
+$jsonLoader = new FluentDOM\Loader\JsonString();
 // activate type attributes
 $jsonLoader->typeAttributes = TRUE;
 // get a FluentDOM
-$fd = new FluentDOM();
+$fd = new FluentDOM\Query();
 // inject the loader object
-$fd->setLoaders(array($jsonLoader));
+$fd->loaders($jsonLoader);
 
-$url = 'http://twitter.com/status/user_timeline/FluentDOM.json?count=10';
-$json = file_get_contents($url);
+$url = 'https://api.github.com/repos/FluentDOM/FluentDOM/commits?per_page=5';
+$options = array(
+  'http'=>array(
+    'method' => "GET",
+    'header' => "User-Agent: Awesome-Octocat-App\r\n"
+  )
+);
+
+$json = file_get_contents($url, NULL, stream_context_create($options));
 
 header('Content-type: text/xml');
-echo $fd->load($json)->formatOutput();
+echo $fd->load($json, "json")->formatOutput();
 
-?>

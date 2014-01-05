@@ -16,14 +16,14 @@ Escaped literal markup sequences: \/\/, \!\!, \#\#.'
 HTML;
 
 echo $markup->replace(
-  FluentDOM($html, 'text/html')->find('//body')
+  FluentDOM::Query($html, 'text/html')->find('//body')
 );
 
 class FluentDOMMarkupReplacer {
 
   /**
-  * Splitting pattern, all parentheises will be captured if not empty.
-  * so make sure only a siongle one matches each parkup
+  * Splitting pattern, all parentheses will be captured if not empty.
+  * so make sure only a single one matches each markup
   *
   * @var string
   */
@@ -36,10 +36,10 @@ class FluentDOMMarkupReplacer {
 
   /**
   * List of replacements, first match is used to covert the element
-  * 
+  *
   * pattern => array(element name, attributes, text content)
   *
-  * If a pattern matches the configuration is used to create the 
+  * If a pattern matches the configuration is used to create the
   * replacement node. The configuration constists of an element name
   * a list of attributes and the text content of the new element.
   *
@@ -67,7 +67,7 @@ class FluentDOMMarkupReplacer {
       'a', array('href' => '$1'), '$1'
     )
   );
-  
+
   /**
   * A list of replacement done on the strings to replace escapin sequences
   *
@@ -78,20 +78,20 @@ class FluentDOMMarkupReplacer {
     '\\!\\!' => '!!',
     '\\#\\#' => '##'
   );
-  
+
   /**
   * Replace markup in all text nodes inside the current selection
   *
-  * @param FluentDOM $fd
-  * @return FluentDOM
+  * @param FluentDOM\Query $fd
+  * @return FluentDOM\Query
   */
-  public function replace(FluentDOM $fd) {
+  public function replace(FluentDOM\Query $fd) {
     $fd
       ->find('descendant-or-self::text()')
       ->each(array($this, 'replaceNode'));
     return $fd->spawn();
   }
-  
+
   /**
   * Callback used to replace a single text node.
   *
@@ -101,9 +101,9 @@ class FluentDOMMarkupReplacer {
     if (preg_match($this->_splitPattern, $node->nodeValue)) {
       // split using the pattern, but capture the delimiter strings
       $parts = preg_split(
-        $this->_splitPattern, 
-        $node->nodeValue, 
-        -1, 
+        $this->_splitPattern,
+        $node->nodeValue,
+        -1,
         PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE
       );
       $items = array();
@@ -111,16 +111,16 @@ class FluentDOMMarkupReplacer {
         $items[] = $this->createNodes($node->ownerDocument, $part);
       }
       // replace the text node
-      FluentDOM($node)->replaceWith($items);
+      FluentDOM::Query($node)->replaceWith($items);
     } else {
-      FluentDOM($node)
+      FluentDOM::Query($node)
         ->text(
-          strtr(FluentDOM($node)->text(), $this->_escapings
+          strtr(FluentDOM::Query($node)->text(), $this->_escapings
         )
       );
     }
   }
-  
+
   /**
   * Create nodes for the given string
   *

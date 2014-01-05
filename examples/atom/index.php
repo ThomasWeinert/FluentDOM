@@ -1,9 +1,7 @@
 <?php
 /**
-*
-* @version $Id$
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
-* @copyright Copyright (c) 2009 Bastian Feder, Thomas Weinert
+* @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
 */
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -33,9 +31,17 @@
   <body>
     <?php
 require_once('../../src/FluentDOM.php');
-$dom = FluentDOM('./atom-sample.xml');
+$dom = FluentDOM::Query('./atom-sample.xml');
+$dom->registerNamespace('atom', 'http://www.w3.org/2005/Atom');
 
-$categories = array_unique($dom->find('//_:category')->map('callbackCategoryTerm'));
+$categories = array_unique(
+  $dom
+    ->find('//atom:category')
+    ->map(
+      function (\DOMElement $node) {
+        return $node->getAttribute('term');
+      }
+    ));
 if (count($categories) > 0) {
   echo '<ul class="categories">'."\n";
   foreach ($categories as $category) {
@@ -48,22 +54,22 @@ if (count($categories) > 0) {
   echo '</ul>'."\n";
 }
 
-if (empty($_GET['label'])) {
-  $expr = '//_:entry';
+if (empty($atomGET['label'])) {
+  $expr = '//atom:entry';
 } else {
-  $expr = '//_:entry[_:category[@term = "'.htmlspecialchars($_GET['label']).'"]]';
+  $expr = '//atom:entry[atom:category[@term = "'.htmlspecialchars($_GET['label']).'"]]';
 }
 foreach ($dom->find($expr) as $entryNode) {
   echo '<div class="entry">'."\n";
-  $entry = FluentDOM($entryNode);
+  $entry = FluentDOM::Query($entryNode);
   printf(
     '<h2><a href="%s">%s</a></h2>'."\n",
     htmlspecialchars(
-      $entry->find('.//_:link[@rel = "alternate" and @type = "text/html"]')->attr('href')
+      $entry->find('.//atom:link[@rel = "alternate" and @type = "text/html"]')->attr('href')
     ),
-    htmlspecialchars($entry->find('.//_:title')->text())
+    htmlspecialchars($entry->find('.//atom:title')->text())
   );
-  $summary = $entry->find('.//_:summary|.//_:content');
+  $summary = $entry->find('.//atom:summary|.//atom:content');
   switch ($summary->attr('type')) {
   case 'html' :
   case 'text/html' :
@@ -90,8 +96,3 @@ foreach ($dom->find($expr) as $entryNode) {
     ?>
   </body>
 </html>
-<?php
-function callbackCategoryTerm($node) {
-  return $node->getAttribute('term');
-}
-?>

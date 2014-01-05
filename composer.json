@@ -13,6 +13,6 @@
     },
     "autoload": {
         "files" : ["src/FluentDOM.php"],
-        "psr0" : "src/"
+        "psr-4": {"FluentDOM\\": "src/FluentDOM"}
     }
 }

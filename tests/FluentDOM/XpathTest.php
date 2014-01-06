@@ -169,6 +169,16 @@ namespace FluentDOM {
       $this->assertFalse(isset($xpath->foo));
     }
 
+    /**
+     * @covers FluentDOM\Xpath
+     */
+    public function testPropertyGetWithUnknownPropertyExpectingPHPError() {
+      $dom = new \DOMDocument();
+      $xpath = new Xpath($dom);
+      $this->setExpectedException('PHPUnit_Framework_Error_Notice');
+      $xpath->someUnknownProperty;
+    }
+
     /***************************
      * Data Provider
      **************************/

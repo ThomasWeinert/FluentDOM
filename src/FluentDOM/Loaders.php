@@ -16,7 +16,7 @@ namespace FluentDOM {
    * The list is iterated until a valid document is returned by the loader
    *
    */
-  class Loaders implements \IteratorAggregate, LoaderInterface {
+  class Loaders implements \IteratorAggregate, Loadable {
 
     private $_list = array();
 
@@ -36,16 +36,16 @@ namespace FluentDOM {
     /**
      * Add a loader to the list
      *
-     * @param LoaderInterface $loader
+     * @param Loadable $loader
      */
-    public function add(LoaderInterface $loader) {
+    public function add(Loadable $loader) {
       $this->_list[spl_object_hash($loader)] = $loader;
     }
 
     /**
      * Remove a loader to the list
      *
-     * @param LoaderInterface $loader
+     * @param Loadable $loader
      */
     public function remove($loader) {
       $key = spl_object_hash($loader);
@@ -72,7 +72,7 @@ namespace FluentDOM {
     public function supports($contentType) {
       foreach ($this as $loader) {
         /**
-         * @var LoaderInterface $loader
+         * @var Loadable $loader
          */
         if ($loader->supports($contentType)) {
           return TRUE;
@@ -93,7 +93,7 @@ namespace FluentDOM {
       $dom = NULL;
       foreach ($this as $loader) {
         /**
-         * @var LoaderInterface $loader
+         * @var Loadable $loader
          */
         if ($loader->supports($contentType) && ($dom = $loader->load($source, $contentType))) {
           break;

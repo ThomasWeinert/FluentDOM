@@ -23,7 +23,7 @@ namespace FluentDOM {
      * @covers FluentDOM\Query::load
      */
     public function testLoadWithCustomLoader() {
-      $loader = $this->getMock('FluentDOM\LoaderInterface');
+      $loader = $this->getMock('FluentDOM\Loadable');
       $loader
         ->expects($this->once())
         ->method('supports')
@@ -48,7 +48,7 @@ namespace FluentDOM {
      * @covers FluentDOM\Query::loaders
      */
     public function testLoadersGetAfterSet() {
-      $loaders = $this->getMock('FluentDOM\LoaderInterface');
+      $loaders = $this->getMock('FluentDOM\Loadable');
       $fd = new \FluentDOM\Query();
       $fd->loaders($loaders);
       $this->assertSame($loaders, $fd->loaders());
@@ -60,7 +60,7 @@ namespace FluentDOM {
      */
     public function testLoadersGetImplicitCreate() {
       $fd = new \FluentDOM\Query();
-      $this->assertInstanceOf('FluentDOM\LoaderInterface', $fd->loaders());
+      $this->assertInstanceOf('FluentDOM\Loadable', $fd->loaders());
     }
 
     /**
@@ -69,8 +69,8 @@ namespace FluentDOM {
      */
     public function testLoadersGetCreateFromArray() {
       $fd = new \FluentDOM\Query();
-      $fd->loaders([$loader = $this->getMock('FluentDOM\LoaderInterface')]);
-      $this->assertInstanceOf('FluentDOM\LoaderInterface', $fd->loaders());
+      $fd->loaders([$loader = $this->getMock('FluentDOM\Loadable')]);
+      $this->assertInstanceOf('FluentDOM\Loadable', $fd->loaders());
       $this->assertSame([$loader], iterator_to_array($fd->loaders()));
     }
     /**

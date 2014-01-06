@@ -9,15 +9,15 @@
 namespace FluentDOM\Loader {
 
   use FluentDOM\Document;
-  use FluentDOM\LoaderInterface;
+  use FluentDOM\Loadable;
 
   /**
    * Load a DOM document from a xml string
    */
-  class XmlString implements LoaderInterface {
+  class XmlString implements Loadable {
 
     /**
-     * @see LoaderInterface::supports
+     * @see Loadable::supports
      * @param string $source
      * @return bool
      */
@@ -32,7 +32,7 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @see LoaderInterface::load
+     * @see Loadable::load
      * @param string $source
      * @param string $contentType
      * @return bool

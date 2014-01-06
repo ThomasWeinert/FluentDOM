@@ -9,12 +9,12 @@
 namespace FluentDOM\Loader {
 
   use FluentDOM\Document;
-  use FluentDOM\LoaderInterface;
+  use FluentDOM\Loadable;
 
   /**
    * Load a DOM document from a json structure
    */
-  class JsonString implements LoaderInterface {
+  class JsonString implements Loadable {
 
     const XMLNS = 'urn:carica-json-dom.2013';
     const DEFAULT_QNAME = '_';
@@ -63,7 +63,7 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @see LoaderInterface::supports
+     * @see Loadable::supports
      * @param $contentType
      * @return bool
      */

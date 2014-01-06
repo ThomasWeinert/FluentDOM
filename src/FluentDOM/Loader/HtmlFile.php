@@ -9,15 +9,15 @@
 namespace FluentDOM\Loader {
 
   use FluentDOM\Document;
-  use FluentDOM\LoaderInterface;
+  use FluentDOM\Loadable;
 
   /**
    * Load a DOM document from a xml file
    */
-  class HtmlFile implements LoaderInterface {
+  class HtmlFile implements Loadable {
 
     /**
-     * @see LoaderInterface::supports
+     * @see Loadable::supports
      * @param string $contentType
      * @return bool
      */
@@ -31,7 +31,7 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @see LoaderInterface::load
+     * @see Loadable::load
      * @param string $source
      * @param string $contentType
      * @return bool

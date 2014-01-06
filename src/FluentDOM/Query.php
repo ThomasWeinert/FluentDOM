@@ -63,7 +63,7 @@ namespace FluentDOM {
 
     /**
      * A list of loaders for different data sources
-     * @var LoaderInterface $loaders
+     * @var Loadable $loaders
      */
     private $_loaders = NULL;
 
@@ -104,12 +104,12 @@ namespace FluentDOM {
     /**
      * Set the loaders list.
      *
-     * @param LoaderInterface|array|\Traversable $loaders
-     * @return LoaderInterface
+     * @param Loadable|array|\Traversable $loaders
+     * @return Loadable
      */
     public function loaders($loaders = NULL) {
       if (isset($loaders)) {
-        if ($loaders instanceOf LoaderInterface) {
+        if ($loaders instanceOf Loadable) {
           $this->_loaders = $loaders;
         } elseif (is_array($loaders) || $loaders instanceOf \Traversable) {
           $this->_loaders = new Loaders($loaders);

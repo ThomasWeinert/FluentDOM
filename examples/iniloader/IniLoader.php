@@ -2,7 +2,7 @@
 
 require_once(dirname(__FILE__).'/../../src/_require.php');
 
-class IniLoader implements FluentDOM\LoaderInterface {
+class IniLoader implements FluentDOM\Loadable {
 
   public function supports($contentType) {
     return in_array($contentType, array('ini', 'text/ini'));

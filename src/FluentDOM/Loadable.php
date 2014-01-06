@@ -1,6 +1,6 @@
 <?php
 /**
- * FluentDOM\LoaderInterface describes an interface for loader objects that can be used to load
+ * FluentDOM\Loadable describes an interface for loader objects that can be used to load
  * a data source into a DOM document.
  *
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
@@ -10,12 +10,12 @@
 namespace FluentDOM {
 
   /**
-   * FluentDOM\LoaderInterface describes an interface for loader objects that can be used to load
+   * FluentDOM\Loadable describes an interface for loader objects that can be used to load
    * a data source into a DOM document.
    *
    * The class can be attached to a FluentDOM\Query objects using the FluentDOM\Loaders class.
    */
-  interface LoaderInterface {
+  interface Loadable {
 
     /**
      * Validate if the loader supports the given content type

@@ -11,8 +11,8 @@ namespace FluentDOM {
     public function testConstructorWithTwoLoaders() {
       $loaders = new Loaders(
         $list = [
-          $this->getMock('FluentDOM\LoaderInterface'),
-          $this->getMock('FluentDOM\LoaderInterface')
+          $this->getMock('FluentDOM\Loadable'),
+          $this->getMock('FluentDOM\Loadable')
         ]
       );
       $this->assertSame($list, iterator_to_array($loaders));
@@ -24,7 +24,7 @@ namespace FluentDOM {
     public function testAdd() {
       $loaders = new Loaders();
       $loaders->add(
-        $loader = $this->getMock('FluentDOM\LoaderInterface')
+        $loader = $this->getMock('FluentDOM\Loadable')
       );
       $this->assertSame([$loader], iterator_to_array($loaders));
     }
@@ -35,8 +35,8 @@ namespace FluentDOM {
     public function testRemove() {
       $loaders = new Loaders(
         [
-          $loaderOne = $this->getMock('FluentDOM\LoaderInterface'),
-          $loaderTwo = $this->getMock('FluentDOM\LoaderInterface')
+          $loaderOne = $this->getMock('FluentDOM\Loadable'),
+          $loaderTwo = $this->getMock('FluentDOM\Loadable')
         ]
       );
       $loaders->remove($loaderOne);
@@ -47,7 +47,7 @@ namespace FluentDOM {
      * @covers FluentDOM\Loaders
      */
     public function testSupportsExpectingTrue() {
-      $loader = $this->getMock('FluentDOM\LoaderInterface');
+      $loader = $this->getMock('FluentDOM\Loadable');
       $loader
         ->expects($this->once())
         ->method('supports')
@@ -61,7 +61,7 @@ namespace FluentDOM {
      * @covers FluentDOM\Loaders
      */
     public function testSupportsExpectingFalse() {
-      $loader = $this->getMock('FluentDOM\LoaderInterface');
+      $loader = $this->getMock('FluentDOM\Loadable');
       $loader
         ->expects($this->once())
         ->method('supports')
@@ -75,13 +75,13 @@ namespace FluentDOM {
      * @covers FluentDOM\Loaders
      */
     public function testLoadUsesSecondLoader() {
-      $loaderOne = $this->getMock('FluentDOM\LoaderInterface');
+      $loaderOne = $this->getMock('FluentDOM\Loadable');
       $loaderOne
         ->expects($this->once())
         ->method('supports')
         ->with('text/xml')
         ->will($this->returnValue(FALSE));
-      $loaderTwo = $this->getMock('FluentDOM\LoaderInterface');
+      $loaderTwo = $this->getMock('FluentDOM\Loadable');
       $loaderTwo
         ->expects($this->once())
         ->method('supports')

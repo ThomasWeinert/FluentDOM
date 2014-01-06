@@ -5,7 +5,7 @@ require('../../src/_require.php');
 
 $xmlFile = 'hello.xml';
 
-class ExampleLoader implements FluentDOM\LoaderInterface {
+class ExampleLoader implements FluentDOM\Loadable {
 
   public function supports($contentType) {
     return TRUE;

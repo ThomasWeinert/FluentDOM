@@ -29,6 +29,33 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Document::registerNamespace
+     * @covers FluentDOM\Document::xpath
+     */
+    public function testNamespaceIsRegisteredOnExistingXpath() {
+      $dom = new Document();
+      $dom->loadXML('<test xmlns:foo="urn:foo" foo:result="success"/>');
+      $xpath = $dom->xpath();
+      $dom->registerNamespace('bar', 'urn:foo');
+      $this->assertEquals(
+        'success', $xpath->evaluate('string(/test/@bar:result)')
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Document::registerNamespace
+     * @covers FluentDOM\Document::xpath
+     */
+    public function testNamespaceIsRegisteredOnNewXpath() {
+      $dom = new Document();
+      $dom->loadXML('<test xmlns:foo="urn:foo" foo:result="success"/>');
+      $dom->registerNamespace('bar', 'urn:foo');
+      $this->assertEquals(
+        'success', $dom->xpath()->evaluate('string(/test/@bar:result)')
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Document::registerNamespace
      * @covers FluentDOM\Document::getNamespace
      */
     public function testGetNamespaceAfterRegister() {

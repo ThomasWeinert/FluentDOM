@@ -117,6 +117,24 @@ namespace FluentDOM {
 
     /**
      * @group CoreFunctions
+     * @covers FluentDOM\Query::item
+     */
+    public function testItem() {
+      $fd = $this->getQueryFixtureFromString(self::XML, '/*');
+      $this->assertEquals($fd->document->documentElement, $fd->item(0));
+    }
+
+    /**
+     * @group CoreFunctions
+     * @covers FluentDOM\Query::item
+     */
+    public function testItemExpectingNull() {
+      $fd = new Query();
+      $this->assertNull($fd->item(0));
+    }
+
+    /**
+     * @group CoreFunctions
      * @covers FluentDOM\Query::spawn
      */
     public function testSpawn() {

@@ -124,5 +124,19 @@ namespace FluentDOM\Loader {
         'json'
       );
     }
+
+    /**
+     * @covers FluentDOM\Loader\JsonString
+     */
+    public function testLoadStoppingAtMaxDepth() {
+      $loader = new JsonString(0, 1);
+      $this->assertXmlStringEqualsXmlString(
+        '<?xml version="1.0" encoding="UTF-8"?>
+         <json:json xmlns:json="urn:carica-json-dom.2013"><foo/></json:json>',
+        $loader
+          ->load(json_encode(['foo' => [1, 2, 3]]), 'json')
+          ->saveXML()
+      );
+    }
   }
 }

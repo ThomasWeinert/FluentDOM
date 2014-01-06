@@ -1,10 +1,11 @@
 <?php
+require(__DIR__.'/FluentDOM/Appendable.php');
+require(__DIR__.'/FluentDOM/Loadable.php');
 
 require(__DIR__.'/FluentDOM/Document.php');
 require(__DIR__.'/FluentDOM/Element.php');
 require(__DIR__.'/FluentDOM/Xpath.php');
 
-require(__DIR__.'/FluentDOM/Loadable.php');
 require(__DIR__.'/FluentDOM/Loader/JsonString.php');
 require(__DIR__.'/FluentDOM/Loader/HtmlFile.php');
 require(__DIR__.'/FluentDOM/Loader/HtmlString.php');

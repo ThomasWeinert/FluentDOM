@@ -53,5 +53,15 @@ namespace FluentDOM {
         );
       }
     }
+
+    /**
+     * Call an object to append itself to the element.
+     *
+     * @param Appendable $object
+     * @return NULL|Element
+     */
+    public function append(Appendable $object) {
+      return $object->appendTo($this);
+    }
   }
 }

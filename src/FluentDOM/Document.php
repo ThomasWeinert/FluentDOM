@@ -88,7 +88,7 @@ namespace FluentDOM {
      * @param array $attributes
      * @return \DOMElement
      */
-    public function createElement($name, $content = NULL, array $attributes = array()) {
+    public function createElement($name, $content = NULL, array $attributes = NULL) {
       if (FALSE !== ($position = strpos($name, ':'))) {
         $node = parent::createElementNS(
           $this->getNamespace(substr($name, 0, $position)),

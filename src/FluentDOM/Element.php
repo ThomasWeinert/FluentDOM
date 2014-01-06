@@ -16,21 +16,6 @@ namespace FluentDOM {
   class Element extends \DOMElement {
 
     /**
-     * Append an child element
-     *
-     * @param string $name
-     * @param string $content
-     * @param array $attributes
-     * @return \DOMElement
-     */
-    public function appendElement($name, $content = '', array $attributes = NULL) {
-      $this->appendChild(
-        $node = $this->ownerDocument->createElement($name, $content, $attributes)
-      );
-      return $node;
-    }
-
-    /**
      * Set an attribute on an element
      *
      * @param string $name
@@ -62,6 +47,32 @@ namespace FluentDOM {
      */
     public function append(Appendable $object) {
       return $object->appendTo($this);
+    }
+
+    /**
+     * Append an child element
+     *
+     * @param string $name
+     * @param string $content
+     * @param array $attributes
+     * @return \DOMElement
+     */
+    public function appendElement($name, $content = '', array $attributes = NULL) {
+      $this->appendChild(
+        $node = $this->ownerDocument->createElement($name, $content, $attributes)
+      );
+      return $node;
+    }
+
+    /**
+     * Append an xml fragment to the element node
+     *
+     * @param string $xmlFragment
+     */
+    public function appendXml($xmlFragment) {
+      $fragment = $this->ownerDocument->createDocumentFragment();
+      $fragment->appendXML($xmlFragment);
+      $this->appendChild($fragment);
     }
   }
 }

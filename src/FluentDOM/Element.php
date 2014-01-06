@@ -34,8 +34,7 @@ namespace FluentDOM {
      * Set an attribute on an element
      *
      * @param string $name
-     * @param string $content
-     * @param array $attributes
+     * @param string $value
      * @return \DOMElement
      */
     public function setAttribute($name, $value) {

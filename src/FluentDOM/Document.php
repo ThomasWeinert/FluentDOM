@@ -10,7 +10,7 @@
 namespace FluentDOM {
 
   /**
-   * @property Element $document
+   * @property Element $documentElement
    */
   class Document extends \DOMDocument {
 

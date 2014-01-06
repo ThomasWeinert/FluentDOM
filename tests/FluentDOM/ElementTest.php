@@ -18,5 +18,32 @@ namespace FluentDOM {
         $dom->saveXML($dom->documentElement)
       );
     }
+
+    /**
+     * @covers FluentDOM\Element::setAttribute
+     */
+    public function testSetAttribute() {
+      $dom = new Document();
+      $dom->appendChild($dom->createElement('root'));
+      $dom->documentElement->setAttribute('attribute', 'value');
+      $this->assertEquals(
+        '<root attribute="value"/>',
+        $dom->saveXML($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::setAttribute
+     */
+    public function testSetAttributeWithNamespace() {
+      $dom = new Document();
+      $dom->registerNamespace('foo', 'urn:foo');
+      $dom->appendChild($dom->createElement('root'));
+      $dom->documentElement->setAttribute('foo:attribute', 'value');
+      $this->assertEquals(
+        '<root xmlns:foo="urn:foo" foo:attribute="value"/>',
+        $dom->saveXML($dom->documentElement)
+      );
+    }
   }
 }

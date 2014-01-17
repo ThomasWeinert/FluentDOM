@@ -254,6 +254,18 @@ namespace FluentDOM\Query {
         $fd->document->saveXml($fd->document->documentElement)
       );
     }
+    /**
+     * @group AttributesData
+     * @covers FluentDOM\Query::data
+     */
+    public function testDataWriteUsingArray() {
+      $fd = $this->getQueryFixtureFromString('<sample/>')->find('//sample');
+      $fd->data(['foo' => 'bar']);
+      $this->assertEquals(
+        '<sample data-foo="bar"/>',
+        $fd->document->saveXml($fd->document->documentElement)
+      );
+    }
 
     /**
      * @group AttributesData

@@ -28,6 +28,38 @@ namespace FluentDOM\Query {
      * @group TraversingFind
      * @covers FluentDOM\Query::closest
      */
+    public function testClosestWithContext() {
+      $fd = $this->getQueryFixtureFromString(self::XML);
+      $context =  $fd
+        ->find('//item');
+      $attribute = $fd
+        ->find('//item')
+        ->closest('name() = "group"', $context)
+        ->attr("id");
+      $this->assertEquals('1st', $attribute);
+    }
+
+    /**
+     * @group Traversing
+     * @group TraversingFind
+     * @covers FluentDOM\Query::closest
+     */
+    public function testClosestWithContextExpectingNull() {
+      $fd = $this->getQueryFixtureFromString(self::XML);
+      $context =  $fd
+        ->find('//div');
+      $attribute = $fd
+        ->find('//item')
+        ->closest('name() = "group"', $context)
+        ->attr("id");
+      $this->assertNull($attribute);
+    }
+
+    /**
+     * @group Traversing
+     * @group TraversingFind
+     * @covers FluentDOM\Query::closest
+     */
     public function testClosestIsCurrentNode() {
       $attribute = $this->getQueryFixtureFromString(self::XML)
         ->find('//item')

@@ -182,7 +182,7 @@ namespace FluentDOM {
       } elseif (isset($this->_xpath) && $this->_xpath->document === $this->_document) {
         return $this->_xpath;
       } else {
-        $this->_xpath = new Xpath($this->_document);
+        $this->_xpath = new Xpath($this->getDocument());
         foreach ($this->_namespaces as $prefix => $namespace) {
           $this->_xpath->registerNamespace($prefix, $namespace);
         }
@@ -634,6 +634,11 @@ namespace FluentDOM {
       }
     }
 
+    /**
+     * Get the associated DOM, create one if here isn't one yet.
+     *
+     * @return \DOMDocument|Document
+     */
     private function getDocument() {
       if (!($this->_document instanceof \DOMDocument)) {
         $this->_document = new Document();

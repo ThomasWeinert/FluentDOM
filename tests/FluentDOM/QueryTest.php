@@ -48,10 +48,11 @@ namespace FluentDOM {
      * @covers FluentDOM\Query::loaders
      */
     public function testLoadersGetAfterSet() {
-      $loaders = $this->getMock('FluentDOM\Loadable');
+      $loader = $this->getMock('FluentDOM\Loadable');
       $fd = new \FluentDOM\Query();
-      $fd->loaders($loaders);
-      $this->assertSame($loaders, $fd->loaders());
+      /** @noinspection PhpParamsInspection */
+      $fd->loaders($loader);
+      $this->assertSame($loader, $fd->loaders());
     }
 
     /**
@@ -292,6 +293,18 @@ namespace FluentDOM {
 
     /**
      * @group Properties
+     * @covers FluentDOM\Query::__get
+     * @covers FluentDOM\Query::getDocument
+     */
+    public function testGetPropertyDocumentImplicitCreate() {
+      $fd = new Query;
+      $document = $fd->document;
+      $this->assertInstanceOf('FluentDOM\\Document', $document);
+      $this->assertSame($document, $fd->document);
+    }
+
+    /**
+     * @group Properties
      * @covers FluentDOM\Query::__isset
      */
     public function testIssetPropertyContentType() {
@@ -382,6 +395,58 @@ namespace FluentDOM {
       $fd = $fd->load($dom);
       $fd->contentType = 'html';
       $this->assertEquals($dom->saveHTML(), (string)$fd);
+    }
+
+    /**
+     * @group MagicFunctions
+     * @covers FluentDOM\Query::__call()
+     */
+    public function testMagicMethodCallWithUnknownMethodExpectingException() {
+      $fd = new Query();
+      $this->setExpectedException('BadMethodCallException');
+      $fd->invalidMethodCall();
+    }
+
+    /**
+     * @group Core
+     * @covers FluentDOM\Query::xpath()
+     */
+    public function testXpathGetFromDocument() {
+      $dom = new Document();
+      $fd = new Query();
+      $fd = $fd->load($dom);
+      $this->assertSame(
+        $dom->xpath(), $fd->xpath()
+      );
+    }
+
+    /**
+     * @group Core
+     * @covers FluentDOM\Query::xpath()
+     */
+    public function testXpathGetImplicitCreate() {
+      $dom = new \DOMDocument();
+      $fd = new Query();
+      $fd = $fd->load($dom);
+      $xpath = $fd->xpath();
+      $this->assertSame(
+        $xpath, $fd->xpath()
+      );
+    }
+
+    /**
+     * @group Core
+     * @covers FluentDOM\Query::xpath()
+     */
+    public function testXpathGetImplicitCreateWithNamespace() {
+      $dom = new \DOMDocument();
+      $fd = new Query();
+      $fd = $fd->load($dom);
+      $fd->registerNamespace('foo', 'urn:foo');
+      $xpath = $fd->xpath();
+      $this->assertSame(
+        $xpath, $fd->xpath()
+      );
     }
   }
 }

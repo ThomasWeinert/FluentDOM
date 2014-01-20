@@ -93,6 +93,8 @@ namespace FluentDOM {
       if ($dom instanceof \DOMDocument) {
         $this->_document = $dom;
         $this->setContentType($contentType, TRUE);
+        unset($this->_xpath);
+        $this->applyNamespaces();
         return $this;
       } else {
         throw new \InvalidArgumentException(
@@ -183,10 +185,24 @@ namespace FluentDOM {
         return $this->_xpath;
       } else {
         $this->_xpath = new Xpath($this->getDocument());
+        $this->applyNamespaces();
+        return $this->_xpath;
+      }
+    }
+
+    /**
+     * apply stored namespaces to attached document or xpath object
+     */
+    private function applyNamespaces() {
+      $dom = $this->getDocument();
+      if ($dom instanceof Document) {
+        foreach ($this->_namespaces as $prefix => $namespace) {
+          $dom->registerNamespace($prefix, $namespace);
+        }
+      } elseif (isset($this->_xpath)) {
         foreach ($this->_namespaces as $prefix => $namespace) {
           $this->_xpath->registerNamespace($prefix, $namespace);
         }
-        return $this->_xpath;
       }
     }
 
@@ -293,10 +309,11 @@ namespace FluentDOM {
      */
     public function registerNamespace($prefix, $namespace) {
       $this->_namespaces[$prefix] = $namespace;
-      if (isset($this->_xpath)) {
+      $dom = $this->getDocument();
+      if ($dom instanceOf Document) {
+        $dom->registerNamespace($prefix, $namespace);
+      } elseif (isset($this->_xpath)) {
         $this->_xpath->registerNamespace($prefix, $namespace);
-      } elseif ($this->_document instanceof Document) {
-        $this->_document->xpath()->registerNamespace($prefix, $namespace);
       }
     }
 
@@ -642,6 +659,9 @@ namespace FluentDOM {
     private function getDocument() {
       if (!($this->_document instanceof \DOMDocument)) {
         $this->_document = new Document();
+        foreach ($this->_namespaces as $prefix => $namespace) {
+          $this->_document->registerNamespace($prefix, $namespace);
+        }
       }
       return $this->_document;
     }

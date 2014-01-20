@@ -550,6 +550,8 @@ namespace FluentDOM {
     /**
      * @group Core
      * @covers FluentDOM\Query::xpath()
+     * @covers FluentDOM\Query::registerNamespace()
+     * @covers FluentDOM\Query::applyNamespaces
      */
     public function testXpathGetImplicitCreateWithNamespace() {
       $dom = new \DOMDocument();
@@ -560,6 +562,31 @@ namespace FluentDOM {
       $this->assertSame(
         $xpath, $fd->xpath()
       );
+    }
+
+    /**
+     * @group Core
+     * @covers FluentDOM\Query::registerNamespace
+     * @covers FluentDOM\Query::applyNamespaces
+     */
+    public function testRegisterNamespaceBeforeLoad() {
+      $fd = new Query();
+      $fd->registerNamespace('f', 'urn:foo');
+      $fd->load('<foo:foo xmlns:foo="urn:foo"/>');
+      $this->assertEquals(1, $fd->xpath()->evaluate('count(/f:foo)'));
+    }
+
+    /**
+     * @group Core
+     * @covers FluentDOM\Query::registerNamespace
+     * @covers FluentDOM\Query::applyNamespaces
+     */
+    public function testRegisterNamespaceAfterLoad() {
+      $fd = new Query();
+      $fd->load('<foo:foo xmlns:foo="urn:foo"/>', 'text/xml');
+      $fd->registerNamespace('f', 'urn:foo');
+      var_dump($fd->document->getNamespace('f'));
+      $this->assertEquals(1, $fd->xpath()->evaluate('count(/f:foo)'));
     }
   }
 }

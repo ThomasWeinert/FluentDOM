@@ -245,6 +245,40 @@ namespace FluentDOM {
     }
 
     /**
+     * @group CoreFunctions
+     * @covers FluentDOM\Query::unique
+     */
+    public function testUnique() {
+      $fd = new Query();
+      $fd->document->appendElement('test');
+      $nodes = $fd->unique(
+        [$fd->document->documentElement, $fd->document->documentElement]
+      );
+      $this->assertCount(1, $nodes);
+    }
+
+    /**
+     * @group CoreFunctions
+     * @covers FluentDOM\Query::unique
+     */
+    public function testUniqueWithUnattachedNodes() {
+      $fd = new Query();
+      $node = $fd->document->createElement("test");
+      $nodes = $fd->unique([$node, $node]);
+      $this->assertCount(1, $nodes);
+    }
+
+    /**
+     * @group CoreFunctions
+     * @covers FluentDOM\Query::unique
+     */
+    public function testUniqueWithInvalidElementInList() {
+      $fd = new Query();
+      $this->setExpectedException('InvalidArgumentException');
+      $fd->unique(['Invalid']);
+    }
+
+    /**
      * @group Interfaces
      * @group ArrayAccess
      * @covers FluentDOM\Query::offsetExists

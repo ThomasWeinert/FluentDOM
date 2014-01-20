@@ -9,6 +9,17 @@ namespace FluentDOM {
      * @group Load
      * @covers FluentDOM\Query::load
      */
+    public function testLoadWithQuery() {
+      $fdOne = new Query();
+      $fdTwo = new Query();
+      $fdTwo->load($fdOne);
+      $this->assertSame($fdOne->document, $fdTwo->document);
+    }
+
+    /**
+     * @group Load
+     * @covers FluentDOM\Query::load
+     */
     public function testLoadWithDocument() {
       $fd = new Query();
       $fd->load($dom = new \DOMDocument());
@@ -16,6 +27,19 @@ namespace FluentDOM {
         $dom,
         $fd->document
       );
+    }
+
+    /**
+     * @group Load
+     * @covers FluentDOM\Query::load
+     */
+    public function testLoadWithDomNode() {
+      $dom = new \DOMDocument();
+      $dom->appendChild($dom->createElement('test'));
+      $fd = new Query();
+      $fd->load($dom->documentElement);
+      $this->assertSame($dom, $fd->document);
+      $this->assertCount(1, $fd);
     }
 
     /**
@@ -41,6 +65,16 @@ namespace FluentDOM {
         $dom,
         $fd->document
       );
+    }
+
+    /**
+     * @group Load
+     * @covers FluentDOM\Query::load
+     */
+    public function testLoadWithInvalidArgumentExpectingException() {
+      $fd = new Query();
+      $this->setExpectedException('InvalidArgumentException');
+      $fd->load(NULL, 'unknown');
     }
 
     /**

@@ -13,7 +13,7 @@ namespace FluentDOM {
    *
    * @property string $contentType Output type - text/xml or text/html
    * @property-read integer $length The amount of elements found by selector.
-   * @property-read \DOMDocument $document Internal DOMDocument object
+   * @property-read Document|\DOMDocument $document Internal DOMDocument object
    * @property-read \DOMXPath $xpath Internal XPath object
    * @property \FluentDOM\Query\Attributes $attr
    * @property \FluentDOM\Query\Data $data

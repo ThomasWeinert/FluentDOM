@@ -83,7 +83,7 @@ namespace FluentDOM {
      */
     public function testLoadersGetAfterSet() {
       $loader = $this->getMock('FluentDOM\Loadable');
-      $fd = new \FluentDOM\Query();
+      $fd = new Query();
       /** @noinspection PhpParamsInspection */
       $fd->loaders($loader);
       $this->assertSame($loader, $fd->loaders());
@@ -94,7 +94,7 @@ namespace FluentDOM {
      * @covers FluentDOM\Query::loaders
      */
     public function testLoadersGetImplicitCreate() {
-      $fd = new \FluentDOM\Query();
+      $fd = new Query();
       $this->assertInstanceOf('FluentDOM\Loadable', $fd->loaders());
     }
 
@@ -103,7 +103,7 @@ namespace FluentDOM {
      * @covers FluentDOM\Query::loaders
      */
     public function testLoadersGetCreateFromArray() {
-      $fd = new \FluentDOM\Query();
+      $fd = new Query();
       $fd->loaders([$loader = $this->getMock('FluentDOM\Loadable')]);
       $this->assertInstanceOf('FluentDOM\Loadable', $fd->loaders());
       $this->assertSame([$loader], iterator_to_array($fd->loaders()));
@@ -114,7 +114,7 @@ namespace FluentDOM {
      * @covers FluentDOM\Query::loaders
      */
     public function testLoadersGetWithInvalidLoaderExpectingException() {
-      $fd = new \FluentDOM\Query();
+      $fd = new Query();
       $this->setExpectedException('InvalidArgumentException');
       $fd->loaders('FOO');
     }

@@ -108,6 +108,7 @@ namespace FluentDOM {
       $this->assertInstanceOf('FluentDOM\Loadable', $fd->loaders());
       $this->assertSame([$loader], iterator_to_array($fd->loaders()));
     }
+
     /**
      * @group Load
      * @covers FluentDOM\Query::loaders
@@ -116,6 +117,50 @@ namespace FluentDOM {
       $fd = new \FluentDOM\Query();
       $this->setExpectedException('InvalidArgumentException');
       $fd->loaders('FOO');
+    }
+
+    /**
+     * @group Load
+     * @covers FluentDOM\Query::push
+     */
+    public function testPushWithNode() {
+      $fd = new Query();
+      $fd->document->appendElement('test');
+      $fd->push($fd->document->documentElement);
+      $this->assertCount(1, $fd);
+    }
+
+    /**
+     * @group Load
+     * @covers FluentDOM\Query::push
+     */
+    public function testPushWithTraversable() {
+      $fd = new Query();
+      $fd->document->appendElement('test');
+      $fd->push([$fd->document->documentElement]);
+      $this->assertCount(1, $fd);
+    }
+
+    /**
+     * @group Load
+     * @covers FluentDOM\Query::push
+     */
+    public function testPushWithInvalidArgumentExpectingException() {
+      $fd = new Query();
+      $this->setExpectedException('InvalidArgumentException');
+      $fd->push(FALSE);
+    }
+
+    /**
+     * @group Load
+     * @covers FluentDOM\Query::push
+     */
+    public function testPushNodeFromDifferentDocumentExpectingException() {
+      $dom = new Document();
+      $dom->appendElement('test');
+      $fd = new Query();
+      $this->setExpectedException('OutOfBoundsException');
+      $fd->push($dom->documentElement);
     }
 
     /**

@@ -417,6 +417,25 @@ namespace FluentDOM {
 
     /**
      * @group Properties
+     * @covers FluentDOM\Query::__isset
+     */
+    public function testIssetPropertyDocumentExpectingFalse() {
+      $fd = new Query();
+      $this->assertFalse(isset($fd->document));
+    }
+
+    /**
+     * @group Properties
+     * @covers FluentDOM\Query::__isset
+     */
+    public function testIssetPropertyDocumentExpectingTrue() {
+      $fd = new Query();
+      $fd->document;
+      $this->assertTrue(isset($fd->document));
+    }
+
+    /**
+     * @group Properties
      * @covers FluentDOM\Query::__get
      * @covers FluentDOM\Query::getDocument
      */

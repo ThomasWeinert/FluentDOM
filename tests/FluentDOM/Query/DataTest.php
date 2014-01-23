@@ -368,5 +368,29 @@ namespace FluentDOM\Query {
       $fd = $this->getQueryFixtureFromString('<sample/>');
       $this->assertFalse($fd->hasData($fd->document->documentElement));
     }
+
+
+    /*****************************
+     * Property interface on Query
+     *****************************/
+
+    /**
+     * @group AttributesData
+     * @covers FluentDOM\Query::__get
+     */
+    public function testDataPropertyRead() {
+      $fd = $this->getQueryFixtureFromString('<sample data-foo="bar"/>')->find('//sample');
+      $this->assertEquals(['foo' => 'bar'], iterator_to_array($fd->data));
+    }
+
+    /**
+     * @group AttributesData
+     * @covers FluentDOM\Query::__get
+     */
+    public function testDataPropertyReadOnEmptyListExpectingException() {
+      $fd = new Query();
+      $this->setExpectedException('UnexpectedValueException');
+      $fd->data;
+    }
   }
 }

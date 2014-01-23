@@ -585,7 +585,21 @@ namespace FluentDOM {
       $fd = new Query();
       $fd->load('<foo:foo xmlns:foo="urn:foo"/>', 'text/xml');
       $fd->registerNamespace('f', 'urn:foo');
-      var_dump($fd->document->getNamespace('f'));
+      $this->assertEquals(1, $fd->xpath()->evaluate('count(/f:foo)'));
+    }
+
+    /**
+     * @group Core
+     * @covers FluentDOM\Query::registerNamespace
+     * @covers FluentDOM\Query::applyNamespaces
+     */
+    public function testRegisterNamespaceAfterLoadOnCreatedXpath() {
+      $dom = new \DOMDocument();
+      $dom->loadXML('<foo:foo xmlns:foo="urn:foo"/>');
+      $fd = new Query();
+      $fd->load($dom, 'text/xml');
+      $fd->xpath();
+      $fd->registerNamespace('f', 'urn:foo');
       $this->assertEquals(1, $fd->xpath()->evaluate('count(/f:foo)'));
     }
   }

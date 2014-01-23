@@ -280,6 +280,17 @@ namespace FluentDOM {
 
     /**
      * @group Interfaces
+     * @group IteratorAggregate
+     * @covers FluentDOM\Query::getIterator
+     */
+    public function testIterator() {
+      $query = $this->getQueryFixtureFromString(self::XML, '//item');
+      $this->assertInstanceOf('FluentDOM\Query\Iterator', $query->getIterator());
+      $this->assertcount(3, iterator_to_array($query));
+    }
+
+    /**
+     * @group Interfaces
      * @group ArrayAccess
      * @covers FluentDOM\Query::offsetExists
      *

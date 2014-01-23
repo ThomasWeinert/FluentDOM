@@ -669,9 +669,7 @@ namespace FluentDOM {
     private function getDocument() {
       if (!($this->_document instanceof \DOMDocument)) {
         $this->_document = new Document();
-        foreach ($this->_namespaces as $prefix => $namespace) {
-          $this->_document->registerNamespace($prefix, $namespace);
-        }
+        $this->applyNamespaces();
       }
       return $this->_document;
     }

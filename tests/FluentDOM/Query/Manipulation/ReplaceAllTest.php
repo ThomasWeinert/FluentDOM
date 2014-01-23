@@ -13,6 +13,8 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationReplace
      * @covers FluentDOM\Query::replaceAll
+     * @covers FluentDOM\Query::apply
+     * @covers FluentDOM\Query::insertNodesBefore
      */
     public function testReplaceAll() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -26,6 +28,7 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationReplace
      * @covers FluentDOM\Query::replaceAll
+     * @covers FluentDOM\Query::insertNodesBefore
      */
     public function testReplaceAllWithNode() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -41,6 +44,8 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationReplace
      * @covers FluentDOM\Query::replaceAll
+     * @covers FluentDOM\Query::apply
+     * @covers FluentDOM\Query::insertNodesBefore
      */
     public function testReplaceAllWithInvalidArgument() {
       $this->setExpectedException('InvalidArgumentException');

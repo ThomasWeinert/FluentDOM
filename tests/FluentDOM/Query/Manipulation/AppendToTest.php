@@ -14,6 +14,8 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationInside
      * @covers FluentDOM\Query::appendTo
+     * @covers FluentDOM\Query::apply
+     * @covers FluentDOM\Query::appendChildren
      */
     public function testAppendTo() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);

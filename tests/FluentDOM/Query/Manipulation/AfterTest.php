@@ -14,6 +14,8 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationOutside
      * @covers FluentDOM\Query::after
+     * @covers FluentDOM\Query::apply
+     * @covers FluentDOM\Query::insertNodesAfter
      */
     public function testAfter() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -28,6 +30,8 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationOutside
      * @covers FluentDOM\Query::after
+     * @covers FluentDOM\Query::apply
+     * @covers FluentDOM\Query::insertNodesAfter
      */
     public function testAfterWithFunction() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);

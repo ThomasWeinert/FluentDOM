@@ -14,6 +14,8 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationOutside
      * @covers FluentDOM\Query::before
+     * @covers FluentDOM\Query::apply
+     * @covers FluentDOM\Query::insertNodesBefore
      */
     public function testBefore() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -29,6 +31,8 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationOutside
      * @covers FluentDOM\Query::before
+     * @covers FluentDOM\Query::apply
+     * @covers FluentDOM\Query::insertNodesBefore
      */
     public function testBeforeWithFunction() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);

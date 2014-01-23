@@ -14,6 +14,8 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationReplace
      * @covers FluentDOM\Query::replaceWith
+     * @covers FluentDOM\Query::apply
+     * @covers FluentDOM\Query::insertNodesBefore
      */
     public function testReplaceWith() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -27,6 +29,8 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationReplace
      * @covers FluentDOM\Query::replaceWith
+     * @covers FluentDOM\Query::apply
+     * @covers FluentDOM\Query::insertNodesBefore
      */
     public function testReplaceWithWithFunction() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);

@@ -14,6 +14,8 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationInside
      * @covers FluentDOM\Query::prepend
+     * @covers FluentDOM\Query::apply
+     * @covers FluentDOM\Query::insertChildrenBefore
      */
     public function testPrepend() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -27,6 +29,8 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationInside
      * @covers FluentDOM\Query::prepend
+     * @covers FluentDOM\Query::apply
+     * @covers FluentDOM\Query::insertChildrenBefore
      */
     public function testPrependWithCallback() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);

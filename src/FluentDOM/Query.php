@@ -1678,20 +1678,7 @@ namespace FluentDOM {
           $this->_nodes,
           $content,
           function ($targetNode, $contentNodes) {
-            $result = array();
-            if (isset($targetNode->parentNode) &&
-              !empty($contentNodes)) {
-              $beforeNode = $targetNode->nextSibling;
-              foreach ($contentNodes as $contentNode) {
-                /**
-                 * @var \DOMNode $contentNode
-                 */
-                $result[] = $targetNode->parentNode->insertBefore(
-                  $contentNode->cloneNode(TRUE), $beforeNode
-                );
-              }
-            }
-            return $result;
+            return $this->insertNodesAfter($targetNode, $contentNodes);
           }
         )
       );

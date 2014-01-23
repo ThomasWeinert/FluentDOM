@@ -324,7 +324,7 @@ namespace FluentDOM {
     /**
      * @group Interfaces
      * @group ArrayAccess
-     * @covers FluentDOM\Query::offsetGet
+     * @covers FluentDOM\Query::offsetSet
      */
     public function testOffsetSetExpectingException() {
       $query = $this->getQueryFixtureFromString(self::XML, '//item');
@@ -335,7 +335,7 @@ namespace FluentDOM {
     /**
      * @group Interfaces
      * @group ArrayAccess
-     * @covers FluentDOM\Query::offsetGet
+     * @covers FluentDOM\Query::offsetUnset
      */
     public function testOffsetUnsetExpectingException() {
       $query = $this->getQueryFixtureFromString(self::XML, '//item');

@@ -490,11 +490,21 @@ namespace FluentDOM {
       case 'document' :
       case 'length' :
       case 'xpath' :
-        throw new \BadMethodCallException('Can not remove property.');
-      default :
-        unset($this->$name);
-        break;
+        throw new \BadMethodCallException(
+          sprintf(
+            'Can not unset property %s::$%s',
+            get_class($this),
+            $name
+          )
+        );
       }
+      throw new \BadMethodCallException(
+        sprintf(
+          'Can not unset non existing property %s::$%s',
+          get_class($this),
+          $name
+        )
+      );
     }
 
     /**

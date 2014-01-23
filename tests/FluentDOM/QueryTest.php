@@ -368,6 +368,7 @@ namespace FluentDOM {
      * @covers FluentDOM\Query::__isset
      * @covers FluentDOM\Query::__get
      * @covers FluentDOM\Query::__set
+     * @covers FluentDOM\Query::__unset
      */
     public function testDynamicProperty() {
       $fd = new Query();
@@ -376,6 +377,17 @@ namespace FluentDOM {
       $fd->dynamicProperty = 'test';
       $this->assertEquals(TRUE, isset($fd->dynamicProperty));
       $this->assertEquals('test', $fd->dynamicProperty);
+      unset($fd->dynamicProperty);
+    }
+
+    /**
+     * @group Properties
+     * @covers FluentDOM\Query::__unset
+     */
+    public function testDynamicPropertyUnsetOnNonExistingPropertyExpectingException() {
+      $fd = new Query();
+      $this->setExpectedException('BadMethodCallException');
+      unset($fd->dynamicProperty);
     }
 
     /**
@@ -413,6 +425,16 @@ namespace FluentDOM {
       $fd = new Query;
       $this->setExpectedException('BadMethodCallException');
       $fd->length = 50;
+    }
+
+    /**
+     * @group Properties
+     * @covers FluentDOM\Query::__unset
+     */
+    public function testUnsetPropertyLength() {
+      $fd = new Query;
+      $this->setExpectedException('BadMethodCallException');
+      unset($fd->length);
     }
 
     /**

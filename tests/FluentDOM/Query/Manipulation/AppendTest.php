@@ -14,6 +14,8 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationInside
      * @covers FluentDOM\Query::append
+     * @covers FluentDOM\Query::getContentElement
+     * @covers FluentDOM\Query::getContentNodes
      */
     public function testAppend() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -28,8 +30,10 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationInside
      * @covers FluentDOM\Query::append
+     * @covers FluentDOM\Query::getContentElement
+     * @covers FluentDOM\Query::getContentNodes
      */
-    public function testAppendDomelement() {
+    public function testAppendXmlString() {
       $fd = new Query();
       $fd->append('<strong>Hello</strong>');
       $this->assertEquals('strong', $fd->find('/strong')->item(0)->nodeName);
@@ -39,6 +43,21 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationInside
      * @covers FluentDOM\Query::append
+     * @covers FluentDOM\Query::getContentElement
+     * @covers FluentDOM\Query::getContentNodes
+     */
+    public function testAppendDomElement() {
+      $fd = new Query();
+      $fd->append($fd->document->createElement('strong'));
+      $this->assertEquals('strong', $fd->find('/strong')->item(0)->nodeName);
+    }
+
+    /**
+     * @group Manipulation
+     * @group ManipulationInside
+     * @covers FluentDOM\Query::append
+     * @covers FluentDOM\Query::getContentElement
+     * @covers FluentDOM\Query::getContentNodes
      */
     public function testAppendDomnodelist() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -55,6 +74,8 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationInside
      * @covers FluentDOM\Query::append
+     * @covers FluentDOM\Query::getContentElement
+     * @covers FluentDOM\Query::getContentNodes
      */
     public function testAppendWithCallback() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -72,6 +93,8 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationInside
      * @covers FluentDOM\Query::append
+     * @covers FluentDOM\Query::getContentElement
+     * @covers FluentDOM\Query::getContentNodes
      */
     public function testAppendOnEmptyDocumentWithCallback() {
       $fd = new Query();

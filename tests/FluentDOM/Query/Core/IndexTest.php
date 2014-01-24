@@ -6,13 +6,15 @@ namespace FluentDOM\Query {
 
   require_once(__DIR__.'/../../TestCase.php');
 
-  class TraversingIndexTest extends TestCase {
+  class CoreIndexTest extends TestCase {
 
     protected $_directory = __DIR__;
 
     /**
      * @group Core
      * @covers FluentDOM\Query::index
+     * @covers FluentDOM\Query::getNodes
+     * @covers FluentDOM\Query::getContentElement
      */
     public function testIndex() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//item[@index >= 1]');
@@ -25,6 +27,8 @@ namespace FluentDOM\Query {
     /**
      * @group Core
      * @covers FluentDOM\Query::index
+     * @covers FluentDOM\Query::getNodes
+     * @covers FluentDOM\Query::getContentElement
      */
     public function testIndexWithExpression() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//item');
@@ -37,6 +41,8 @@ namespace FluentDOM\Query {
     /**
      * @group Core
      * @covers FluentDOM\Query::index
+     * @covers FluentDOM\Query::getNodes
+     * @covers FluentDOM\Query::getContentElement
      */
     public function testIndexWithNonMatchingExpression() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//item');
@@ -49,6 +55,8 @@ namespace FluentDOM\Query {
     /**
      * @group Core
      * @covers FluentDOM\Query::index
+     * @covers FluentDOM\Query::getNodes
+     * @covers FluentDOM\Query::getContentElement
      */
     public function testIndexWithNode() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//item');
@@ -62,25 +70,12 @@ namespace FluentDOM\Query {
     /**
      * @group Core
      * @covers FluentDOM\Query::index
+     * @covers FluentDOM\Query::getNodes
+     * @covers FluentDOM\Query::getContentElement
      */
     public function testIndexOnEmptyList() {
       $fd = new Query();
       $this->assertEquals(-1, $fd->index());
-    }
-
-    /**
-     * @group Core
-     * @covers FluentDOM\Query::toArray
-     */
-    public function testToArray() {
-      $fd = $this->getQueryFixtureFromString(self::XML)->find('/items/*');
-      $this->assertSame(
-        array(
-          $fd[0],
-          $fd[1]
-        ),
-        iterator_to_array($fd)
-      );
     }
   }
 }

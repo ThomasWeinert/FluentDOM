@@ -14,6 +14,7 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationInside
      * @covers FluentDOM\Query::xml
+     * @covers FluentDOM\Query::getInnerXml
      */
     public function testXmlRead() {
       $expect = '<item index="0">text1</item>'.
@@ -27,6 +28,21 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationInside
      * @covers FluentDOM\Query::xml
+     * @covers FluentDOM\Query::getInnerXml
+     */
+    public function testXmlReadWithTextNodes() {
+      $expect = 'text1';
+      $xml = $this->getQueryFixtureFromString(self::XML)
+        ->find('//group/item/text()')
+        ->xml();
+      $this->assertEquals($expect, $xml);
+    }
+
+    /**
+     * @group Manipulation
+     * @group ManipulationInside
+     * @covers FluentDOM\Query::xml
+     * @covers FluentDOM\Query::getInnerXml
      */
     public function testXmlReadEmpty() {
       $xml = $this->getQueryFixtureFromString('<items/>')->find('/items/*')->xml();
@@ -37,6 +53,7 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationInside
      * @covers FluentDOM\Query::xml
+     * @covers FluentDOM\Query::getInnerXml
      */
     public function testXmlWrite() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -51,6 +68,7 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationInside
      * @covers FluentDOM\Query::xml
+     * @covers FluentDOM\Query::getInnerXml
      */
     public function testXmlWriteEmpty() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -65,6 +83,7 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationInside
      * @covers FluentDOM\Query::xml
+     * @covers FluentDOM\Query::getInnerXml
      */
     public function testXmlWriteWithCallback() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);

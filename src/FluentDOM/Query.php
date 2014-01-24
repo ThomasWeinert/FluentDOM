@@ -542,7 +542,7 @@ namespace FluentDOM {
     }
 
     /******************
-     * Internal
+     * Utility
      *****************/
 
     /**
@@ -552,15 +552,15 @@ namespace FluentDOM {
      * @param boolean $ignoreTextNodes
      * @return boolean
      */
-    private function isNode($node, $ignoreTextNodes = FALSE) {
-      if (is_object($node)) {
-        if ($node instanceof \DOMElement) {
+    public function isNode($node, $ignoreTextNodes = FALSE) {
+      if ($node instanceof \DOMElement) {
+        return TRUE;
+      } elseif (!$ignoreTextNodes) {
+        if ($node instanceof \DOMCdataSection) {
           return TRUE;
-        } elseif ($node instanceof \DOMText) {
-          if (!$ignoreTextNodes &&
-            !$node->isWhitespaceInElementContent()) {
-            return TRUE;
-          }
+        } elseif ($node instanceof \DOMText &&
+                  !$node->isWhitespaceInElementContent()) {
+          return TRUE;
         }
       }
       return FALSE;
@@ -572,7 +572,7 @@ namespace FluentDOM {
      * @param array|\Traversable $elements
      * @return boolean
      */
-    private function isNodeList($elements) {
+    public function isNodeList($elements) {
       if ($elements instanceof \Traversable ||
           is_array($elements)) {
         return TRUE;
@@ -589,7 +589,7 @@ namespace FluentDOM {
      * @throws \InvalidArgumentException
      * @return boolean
      */
-    private function isCallable($callback, $allowGlobalFunctions = FALSE, $silent = TRUE) {
+    public function isCallable($callback, $allowGlobalFunctions = FALSE, $silent = TRUE) {
       if ($callback instanceof \Closure) {
         return TRUE;
       } elseif (is_string($callback) &&
@@ -608,22 +608,9 @@ namespace FluentDOM {
       }
     }
 
-    /**
-     * Execute the callback function for a node and return the new elements
-     *
-     * @param $callback
-     * @param \DOMNode $node
-     * @param integer $index
-     * @param string $value
-     * @return array
-     */
-    protected function executeNodeCallback($callback, $node, $index, $value) {
-      $contentData = call_user_func($callback, $node, $index, $value);
-      if (!empty($contentData)) {
-        return $this->getContentNodes($contentData);
-      }
-      return array();
-    }
+    /******************
+     * Internal
+     *****************/
 
     /**
      * Setter for Query::_contentType property
@@ -1698,9 +1685,7 @@ namespace FluentDOM {
         $this->_useDocumentContext &&
         !isset($this->_document->documentElement)) {
         if ($this->isCallable($content)) {
-          $contentNode = $this->getContentElement(
-            $this->executeNodeCallback($content, NULL, 0, '')
-          );
+          $contentNode = $this->getContentElement($content(NULL, 0, ''));
         } else {
           $contentNode = $this->getContentElement($content);
         }

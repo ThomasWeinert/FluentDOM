@@ -728,5 +728,133 @@ namespace FluentDOM {
       $fd->registerNamespace('f', 'urn:foo');
       $this->assertEquals(1, $fd->xpath()->evaluate('count(/f:foo)'));
     }
+
+    /**
+     * @group Utility
+     * @group Constraints
+     * @dataProvider provideValidNodes
+     * @covers FluentDOM\Query::isNode
+     */
+    public function testIsNodeExpectingTrue($node) {
+      $query = new Query();
+      $this->assertTrue($query->isNode($node));
+    }
+
+    public static function provideValidNodes() {
+      $dom = new \DOMDocument();
+      return array(
+        array($dom->createElement('element')),
+        array($dom->createTextNode('text')),
+        array($dom->createCDATASection('text'))
+      );
+    }
+
+    /**
+     * @group Utility
+     * @group Constraints
+     * @covers FluentDOM\Query::isNode
+     * @dataProvider provideInvalidNodes
+     */
+    public function testIsNodeExpectingFalse($node, $ignoreTextNodes = FALSE) {
+      $query = new Query();
+      $this->assertFalse($query->isNode($node, $ignoreTextNodes));
+    }
+
+    public static function provideInvalidNodes() {
+      $dom = new \DOMDocument();
+      return array(
+        array('string'),
+        array($dom->createTextNode('text'), TRUE),
+        array($dom->createCDATASection('text'), TRUE)
+      );
+    }
+
+    /**
+     * @group Utility
+     * @group Constraints
+     * @dataProvider provideNodeLists
+     * @covers FluentDOM\Query::isNodeList
+     */
+    public function testIsNodeListExpectingTrue($list) {
+      $query = new Query();
+      $this->assertTrue($query->isNodeList($list));
+    }
+
+    public static function provideNodeLists() {
+      $dom = new \DOMDocument();
+      return array(
+        array(array($dom->createElement('element'))),
+        array($dom->getElementsByTagName('text'))
+      );
+    }
+
+    /**
+     * @group Utility
+     * @group Constraints
+     * @covers FluentDOM\Query::isNodeList
+     */
+    public function testIsNodeListExpectingFalse() {
+      $query = new Query();
+      $this->assertFalse($query->isNodeList('string'));
+    }
+
+    /**
+     * @group Utility
+     * @group Constraints
+     * @dataProvider provideCallables
+     * @covers FluentDOM\Query::isCallable
+     */
+    public function testIsCallable($callable) {
+      $query = new Query();
+      $this->assertTrue($query->isCallable($callable));
+    }
+
+    public function provideCallables() {
+      return array(
+        array(function() {}),
+        array(array($this, 'provideCallables'))
+      );
+    }
+
+    /**
+     * @group Utility
+     * @group Constraints
+     * @covers FluentDOM\Query::isCallable
+     */
+    public function testIsCallableWithGlobalFunctionExpectingTrue() {
+      $query = new Query();
+      $this->assertTrue($query->isCallable('strpos', TRUE));
+    }
+
+    /**
+     * @group Utility
+     * @group Constraints
+     * @covers FluentDOM\Query::isCallable
+     */
+    public function testIsCallableWithGlobalFunctionExpectingFalse() {
+      $query = new Query();
+      $this->assertFalse($query->isCallable('strpos', FALSE));
+    }
+
+    /**
+     * @group Utility
+     * @group Constraints
+     * @covers FluentDOM\Query::isCallable
+     */
+    public function testIsCallableExpectingFalse() {
+      $query = new Query();
+      $this->assertFalse($query->isCallable(NULL));
+    }
+
+    /**
+     * @group Utility
+     * @group Constraints
+     * @covers FluentDOM\Query::isCallable
+     */
+    public function testIsCallableExpectingException() {
+      $query = new Query();
+      $this->setExpectedException('InvalidArgumentException');
+      $query->isCallable(NULL, FALSE, FALSE);
+    }
   }
 }

@@ -24,5 +24,18 @@ namespace FluentDOM\Query {
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
 
+    /**
+     * @group Manipulation
+     * @group ManipulationRemove
+     * @covers FluentDOM\Query::__call
+     * @covers FluentDOM\Query::emptyNodes
+     */
+    public function testEmptyWithTextNode() {
+      $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
+      $fd
+        ->find('//p[@class = "first"]/text()')
+        ->empty();
+      $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
+    }
   }
 }

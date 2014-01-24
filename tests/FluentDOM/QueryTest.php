@@ -79,6 +79,18 @@ namespace FluentDOM {
 
     /**
      * @group Load
+     * @covers FluentDOM\Query::load
+     * @covers FluentDOM\Query::setContentType
+     */
+    public function testLoadWithInvalidContentTypeFallbackToXml() {
+      $dom = new Document();
+      $fd = new Query();
+      $fd->load($dom, 'unknown');
+      $this->assertEquals('text/xml', $fd->contentType);
+    }
+
+    /**
+     * @group Load
      * @covers FluentDOM\Query::loaders
      */
     public function testLoadersGetAfterSet() {
@@ -276,6 +288,60 @@ namespace FluentDOM {
       $fd = new Query();
       $this->setExpectedException('InvalidArgumentException');
       $fd->unique(['Invalid']);
+    }
+
+    /**
+     * @group CoreFunctions
+     * @covers FluentDOM\Query::matches
+     */
+    public function testMatchesWithNodeListExpectingTrue() {
+      $query = $this->getQueryFixtureFromString(self::XML);
+      $this->assertTrue($query->matches('/*'));
+    }
+
+    /**
+     * @group CoreFunctions
+     * @covers FluentDOM\Query::matches
+     */
+    public function testMatchesWithNodeListExpectingFalse() {
+      $query = $this->getQueryFixtureFromString(self::XML);
+      $this->assertFalse($query->matches('invalid'));
+    }
+
+    /**
+     * @group CoreFunctions
+     * @covers FluentDOM\Query::matches
+     */
+    public function testMatchesWithScalarExpectingTrue() {
+      $query = $this->getQueryFixtureFromString(self::XML);
+      $this->assertTrue(
+        $query->matches('count(/items)')
+      );
+    }
+
+    /**
+     * @group CoreFunctions
+     * @covers FluentDOM\Query::matches
+     */
+    public function testMatchesWithScalarAndContextExpectingTrue() {
+      $query = $this->getQueryFixtureFromString(self::XML);
+      $this->assertTrue(
+        $query->matches(
+          'count(item)',
+          $query->xpath()->evaluate('//group')->item(0)
+        )
+      );
+    }
+
+    /**
+     * @group CoreFunctions
+     * @covers FluentDOM\Query::matches
+     */
+    public function testMatchesWithScalarExpectingFalse() {
+      $query = $this->getQueryFixtureFromString(self::XML);
+      $this->assertFalse(
+        $query->matches('count(item)')
+      );
     }
 
     /**
@@ -477,7 +543,6 @@ namespace FluentDOM {
       $this->assertTrue(isset($fd->contentType));
     }
 
-
     /**
      * @group Properties
      * @covers FluentDOM\Query::__get
@@ -536,6 +601,15 @@ namespace FluentDOM {
       $fd = new Query();
       $this->setExpectedException('UnexpectedValueException');
       $fd->contentType = 'Invalid Type';
+    }
+
+    /**
+     * @group Properties
+     * @covers FluentDOM\Query::__get
+     */
+    public function testGetPropertyXpath() {
+      $fd = new Query();
+      $this->assertInstanceOf('FluentDOM\Xpath', $fd->xpath);
     }
 
     /**

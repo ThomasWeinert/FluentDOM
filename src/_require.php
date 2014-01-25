@@ -1,4 +1,5 @@
 <?php
+// @codeCoverageIgnoreStart
 require(__DIR__.'/FluentDOM/Appendable.php');
 require(__DIR__.'/FluentDOM/Loadable.php');
 
@@ -21,3 +22,4 @@ require(__DIR__.'/FluentDOM/Query/Data.php');
 require(__DIR__.'/FluentDOM/Query/Iterator.php');
 
 require(__DIR__.'/FluentDOM/QualifiedName.php');
+// @codeCoverageIgnoreEnd

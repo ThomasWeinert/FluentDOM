@@ -670,7 +670,7 @@ namespace FluentDOM {
      * @throws \InvalidArgumentException
      * @return \DOMNodeList
      */
-    private function getNodes($selector, \DOMNode $context = NULL, $disallowEmpty = FALSE) {
+    private function getNodes($selector, \DOMNode $context = NULL) {
       if ($this->isNode($selector)) {
         $result = array($selector);
       } elseif (is_string($selector)) {
@@ -680,12 +680,9 @@ namespace FluentDOM {
         }
         $result = iterator_to_array($result);
       } elseif ($this->isNodeList($selector)) {
-        $result = iterator_to_array($selector);
+        $result = is_array($selector) ? $selector : iterator_to_array($selector);
       } else {
         throw new \InvalidArgumentException('Invalid selector');
-      }
-      if ($disallowEmpty && count($result) < 1) {
-        throw new \InvalidArgumentException('Empty node list.');
       }
       return $result;
     }

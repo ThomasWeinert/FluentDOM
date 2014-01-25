@@ -771,12 +771,8 @@ namespace FluentDOM {
      * @return \DOMElement
      */
     private function getContentElement($content) {
-      if ($content instanceof \DOMElement) {
-        return $content;
-      } else {
-        $contentNodes = $this->getContentNodes($content, FALSE, 1);
-        return $contentNodes[0];
-      }
+      $contentNodes = $this->getContentNodes($content, FALSE, 1);
+      return $contentNodes[0];
     }
 
     /**

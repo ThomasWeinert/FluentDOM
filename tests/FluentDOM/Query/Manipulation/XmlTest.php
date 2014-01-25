@@ -6,7 +6,7 @@ namespace FluentDOM\Query {
 
   require_once(__DIR__.'/../../TestCase.php');
 
-  class TraversingXmlTest extends TestCase {
+  class ManipulationXmlTest extends TestCase {
 
     protected $_directory = __DIR__;
 
@@ -106,6 +106,19 @@ namespace FluentDOM\Query {
         );
       $this->assertInstanceOf('FluentDOM\\Query', $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
+    }
+
+    /**
+     * @group Manipulation
+     * @group ManipulationInside
+     * @covers FluentDOM\Query::xml
+     * @covers FluentDOM\Query::getInnerXml
+     * @covers FluentDOM\Query::getContentFragment
+     */
+    public function testXmlWriteWithInvalidDataExpectingException() {
+      $fd = new Query();
+      $this->setExpectedException('UnexpectedValueException');
+      @$fd->xml(new \stdClass());
     }
   }
 }

@@ -16,6 +16,7 @@ namespace FluentDOM\Query {
      * @covers FluentDOM\Query::append
      * @covers FluentDOM\Query::getContentElement
      * @covers FluentDOM\Query::getContentNodes
+     * @covers FluentDOM\Query::getContentFragment
      */
     public function testAppend() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -32,6 +33,7 @@ namespace FluentDOM\Query {
      * @covers FluentDOM\Query::append
      * @covers FluentDOM\Query::getContentElement
      * @covers FluentDOM\Query::getContentNodes
+     * @covers FluentDOM\Query::getContentFragment
      */
     public function testAppendXmlString() {
       $fd = new Query();
@@ -95,6 +97,7 @@ namespace FluentDOM\Query {
      * @covers FluentDOM\Query::append
      * @covers FluentDOM\Query::getContentElement
      * @covers FluentDOM\Query::getContentNodes
+     * @covers FluentDOM\Query::getContentFragment
      */
     public function testAppendOnEmptyDocumentWithCallback() {
       $fd = new Query();
@@ -107,6 +110,107 @@ namespace FluentDOM\Query {
         '<?xml version="1.0"?>'."\n".'<sample>Hello World</sample>',
         $doc->document->saveXML()
       );
+    }
+
+    /**
+     * @group Manipulation
+     * @group ManipulationInside
+     * @covers FluentDOM\Query::append
+     * @covers FluentDOM\Query::getContentElement
+     * @covers FluentDOM\Query::getContentNodes
+     * @covers FluentDOM\Query::getContentFragment
+     */
+    public function testAppendFragmentWithMultipleNodesToDocument() {
+      $fd = new Query();
+      $fd->append('<first/><second/>');
+      $this->assertXmlStringEqualsXmlString(
+        '<?xml version="1.0"?>'."\n".'<first/>',
+        (string)$fd
+      );
+    }
+
+    /**
+     * @group Manipulation
+     * @group ManipulationInside
+     * @covers FluentDOM\Query::append
+     * @covers FluentDOM\Query::getContentElement
+     * @covers FluentDOM\Query::getContentNodes
+     */
+    public function testAppendWithMultipleNodesFromOtherDomToDocument() {
+      $dom = new \DOMDocument();
+      $fd = new Query();
+      $fd->append(
+        [
+          $dom->createElement('first'),
+          $dom->createElement('second')
+        ]
+      );
+      $this->assertXmlStringEqualsXmlString(
+        '<?xml version="1.0"?>'."\n".'<first/>',
+        (string)$fd
+      );
+    }
+
+    /**
+     * @group Manipulation
+     * @group ManipulationInside
+     * @covers FluentDOM\Query::append
+     * @covers FluentDOM\Query::getContentElement
+     * @covers FluentDOM\Query::getContentNodes
+     */
+    public function testAppendWithElementFromOtherDocument() {
+      $dom = new \DOMDocument();
+      $fd = new Query();
+      $fd->append($dom->createElement('first'));
+      $this->assertXmlStringEqualsXmlString(
+        '<?xml version="1.0"?>'."\n".'<first/>',
+        (string)$fd
+      );
+    }
+
+    /**
+     * @group Manipulation
+     * @group ManipulationInside
+     * @covers FluentDOM\Query::append
+     * @covers FluentDOM\Query::getContentElement
+     * @covers FluentDOM\Query::getContentNodes
+     */
+    public function testAppendWithTextNodeFromOtherDocument() {
+      $dom = new \DOMDocument();
+      $fd = new Query();
+      $fd
+        ->append('<first/>')
+        ->append($dom->createTextNode('text'));
+      $this->assertXmlStringEqualsXmlString(
+        '<?xml version="1.0"?>'."\n".'<first>text</first>',
+        (string)$fd
+      );
+    }
+
+    /**
+     * @group Manipulation
+     * @group ManipulationInside
+     * @covers FluentDOM\Query::append
+     * @covers FluentDOM\Query::getContentElement
+     * @covers FluentDOM\Query::getContentNodes
+     */
+    public function testAppendWithInvalidArgumentExpectingException() {
+      $fd = new Query();
+      $this->setExpectedException('InvalidArgumentException');
+      $fd->append(new \stdClass());
+    }
+
+    /**
+     * @group Manipulation
+     * @group ManipulationInside
+     * @covers FluentDOM\Query::append
+     * @covers FluentDOM\Query::getContentElement
+     * @covers FluentDOM\Query::getContentNodes
+     */
+    public function testAppendWithEmptyArgumentExpectingException() {
+      $fd = new Query();
+      $this->setExpectedException('UnexpectedValueException');
+      $fd->append([]);
     }
   }
 }

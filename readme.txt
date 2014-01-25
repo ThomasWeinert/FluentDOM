@@ -19,7 +19,8 @@ FluentDOM is a test driven project. We write tests before and during the
 development. You will find the PHPUnit test in the "tests" subdirectory.
 
 Version 5 is a complete rewrite. It is updated to the new PHP 5.4 syntax. It
-now provides classes, that extend PHPs DOMDocument.
+now provides classes that extend PHPs DOMDocument. Another focus was
+XML namespace support.
 
 --------------------------------------------------------------------------------
 
@@ -49,11 +50,11 @@ FluentDOM needs at least PHP 5.4.
  Usage
 --------------------------------------------------------------------------------
 
-echo FluentDOM\FluentDOM\Query('sample.xml')
+echo FluentDOM::Query('sample.xml')
   ->find('//h1[@id = "title"]')
   ->text('Hello World!');
 
-The sample create a new FluentDOM query object, loads the sample.xml file,
+The sample creates a new FluentDOM query object, loads the sample.xml file,
 looks for a tag <h1> with the attribute "id" that has the value "title",
 sets the content of this tag to "Hello World" and outputs the manipulated
 document.
@@ -91,12 +92,15 @@ With a few exceptions FluentDOM handles text nodes just like element nodes.
 You can select, traverse and manipulate them.
 
 --------------------------------------------------------------------------------
- Backwards Compatibility Breaks
+ Backwards Compatibility Breaks To FluentDOM 4.x
 --------------------------------------------------------------------------------
 
-Version 5 is a major rewrite. It now uses namespaces. The original FluentDOM
-classes (FluentDOM, FluentDOMCore and FluentDOMStyle are merged into the new
-FluentDOM\Query class.
+Version 5 is a major rewrite. It now uses php namespaces. The original FluentDOM
+classes (FluentDOM, FluentDOMCore and FluentDOMStyle) are merged into the new
+FluentDOM\Query class. Here is a FluentDOM class in the global namespace with
+factory functions. FluentDOM::query() creates a new Fluent\Query instance.
 
 New classes extend the existing DOM classes of PHP to provide convenience and
 work around bugs.
+
+The old Loaders are gone and replaced with the new FluentDOM\Loadable interface.

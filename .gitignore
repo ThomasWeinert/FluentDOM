@@ -12,3 +12,7 @@ vendor
 .settings
 .project
 .buildpath
+
+/build
+
+/phpunit.xml

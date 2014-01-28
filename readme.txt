@@ -104,3 +104,6 @@ New classes extend the existing DOM classes of PHP to provide convenience and
 work around bugs.
 
 The old Loaders are gone and replaced with the new FluentDOM\Loadable interface.
+
+The registerNamespaces() method was replaced with a registerNamespace() method,
+having the same arguments like DOMXpath::registerNamespace().

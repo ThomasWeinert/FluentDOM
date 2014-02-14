@@ -2114,7 +2114,8 @@ namespace FluentDOM {
     }
 
     /**
-     * Get or set the xml contents of the first matched element.
+     * Get xml contents of the first matched element or set the
+     * xml contents of all selected element nodes.
      *
      * @example xml.php Usage Example: FluentDOM::xml()
      * @param string|callable $xml XML fragment
@@ -2167,6 +2168,71 @@ namespace FluentDOM {
         }
         return '';
       }
+    }
+
+    /**
+     * Get html contents of the first matched element or set the
+     * html contents of all selected element nodes.
+     *
+     * @param null $html
+     * @return string
+     */
+    public function html($html = NULL) {
+      if (isset($html)) {
+        $isCallback = $this->isCallable($html, FALSE, TRUE);
+        if ($isCallback) {
+          foreach ($this->_nodes as $index => $node) {
+            $htmlString = call_user_func(
+              $html,
+              $node,
+              $index,
+              $this->getInnerXml($node)
+            );
+            $node->nodeValue = '';
+            if (!empty($htmlString)) {
+              $fragment = $this->getHtmlFragment($htmlString, TRUE);
+              foreach ($fragment as $contentNode) {
+                /**
+                 * @var \DOMNode $node
+                 * @var \DOMNode $contentNode
+                 */
+                $node->appendChild($this->getDocument()->importNode($contentNode, TRUE));
+              }
+            }
+          }
+        } else {
+          $fragment = $this->getHtmlFragment($html);
+          foreach ($this->_nodes as $node) {
+            $node->nodeValue = '';
+            foreach ($fragment as $contentNode) {
+             /**
+               * @var \DOMNode $node
+               * @var \DOMNode $contentNode
+               */
+              $node->appendChild($this->getDocument()->importNode($contentNode, TRUE));
+            }
+          }
+        }
+        return $this;
+      }
+      if (isset($this->_nodes[0]) &&
+          $this->isNode($this->_nodes[0], TRUE)) {
+        $result = '';
+        foreach ($this->_nodes[0]->childNodes as $node) {
+          $result .= $this->getDocument()->saveHTML($node);
+        }
+        return $result;
+      }
+      return '';
+    }
+
+    private function getHtmlFragment($html) {
+      $dom = new Document();
+      $status = libxml_use_internal_errors(TRUE);
+      $dom->loadHtml('<html-fragment>'.$html.'</html-fragment>');
+      libxml_clear_errors();
+      libxml_use_internal_errors($status);
+      return iterator_to_array($dom->xpath()->evaluate('//html-fragment[1]/node()'));
     }
 
     /****************************

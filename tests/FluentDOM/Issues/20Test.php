@@ -6,7 +6,7 @@ namespace FluentDOM {
   class Issue20Test extends TestCase {
 
     public function testAppendElementInConstructor() {
-      $message = new Message();
+      $message = new Issue20_Message();
       $this->assertXmlStringEqualsXmlString(
         '<?xml version="1.0" encoding="UTF-8"?><message/>',
         (string)$message
@@ -14,7 +14,7 @@ namespace FluentDOM {
     }
   }
 
-  class Message extends Query {
+  class Issue20_Message extends Query {
 
     function __construct(){
       $this->append("<message/>");

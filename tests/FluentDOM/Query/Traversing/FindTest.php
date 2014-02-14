@@ -30,6 +30,19 @@ namespace FluentDOM\Query {
      * @covers FluentDOM\Query::find
      * @covers FluentDOM\Query::getNodes
      */
+    public function testFindWithSelectorCallback() {
+      $fd = $this->getQueryFixtureFromString(self::XML);
+      $fd->onPrepareSelector = function() {return '//item'; };
+      $fd = $fd->find('/*');
+      $this->assertEquals(3, $fd->length);
+    }
+
+    /**
+     * @group Traversing
+     * @group TraversingFind
+     * @covers FluentDOM\Query::find
+     * @covers FluentDOM\Query::getNodes
+     */
     public function testFindFromRootNode() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('/*');
       $this->assertEquals(1, $fd->length);
@@ -72,7 +85,7 @@ namespace FluentDOM\Query {
       $fd = $this->getQueryFixtureFromString(self::XML);
       $this->setExpectedException(
         'InvalidArgumentException',
-        'Given xpath expression did not return an node list.'
+        'Given selector did not return an node list.'
       );
       $fd->find('count(*)');
     }

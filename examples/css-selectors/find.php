@@ -8,10 +8,10 @@ header('Content-type: text/plain');
 $xml = <<<XML
 <html>
   <head>
-    <title>Examples: FluentDOM\Query::find()</title>
+    <title>Examples: FluentDOM\QueryCss::find()</title>
   </head>
   <body>
-    <p><span class="edit">Hello</span>, how are you?</p>
+    <p><span>Hello</span>, how are you?</p>
     <p>Me? I'm <span>good</span>.</p>
   </body>
 </html>

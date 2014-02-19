@@ -303,6 +303,16 @@ namespace FluentDOM {
      * @group CoreFunctions
      * @covers FluentDOM\Query::matches
      */
+    public function testMatchesWithSelectorCallbackExpectingTrue() {
+      $query = $this->getQueryFixtureFromString(self::XML);
+      $query->onPrepareSelector = function($selector) { return '/'.$selector; };
+      $this->assertTrue($query->matches('*'));
+    }
+
+    /**
+     * @group CoreFunctions
+     * @covers FluentDOM\Query::matches
+     */
     public function testMatchesWithNodeListExpectingFalse() {
       $query = $this->getQueryFixtureFromString(self::XML);
       $this->assertFalse($query->matches('invalid'));
@@ -342,6 +352,29 @@ namespace FluentDOM {
       $this->assertFalse(
         $query->matches('count(item)')
       );
+    }
+
+    /**
+     * @group CoreFunctions
+     * @covers FluentDOM\Query::__get
+     * @covers FluentDOM\Query::__set
+     */
+    public function testGetAfterSetOnPrepareSelector() {
+      $query = new Query();
+      $query->onPrepareSelector = $callback = function() {};
+      $this->assertSame($callback, $query->onPrepareSelector);
+      $spawn = $query->spawn();
+      $this->assertSame($callback, $spawn->onPrepareSelector);
+    }
+
+    /**
+     * @group CoreFunctions
+     * @covers FluentDOM\Query::__set
+     */
+    public function testSetOnPrepareSelectorExpectingException() {
+      $query = new Query();
+      $this->setExpectedException('InvalidArgumentException');
+      $query->onPrepareSelector = FALSE;
     }
 
     /**
@@ -643,6 +676,7 @@ namespace FluentDOM {
     public function testMagicMethodCallWithUnknownMethodExpectingException() {
       $fd = new Query();
       $this->setExpectedException('BadMethodCallException');
+      /** @noinspection PhpUndefinedMethodInspection */
       $fd->invalidMethodCall();
     }
 

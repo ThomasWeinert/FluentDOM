@@ -16,4 +16,15 @@ abstract class FluentDOM {
     }
     return $query;
   }
+
+  public static function QueryCss($source = NULL, $contentType = 'text/xml') {
+    if (!class_exists('PhpCss')) {
+      throw new \LogicException('Install "carica/phpcss" to support css selectors.');
+    }
+    $query = self::Query($source, $contentType);
+    $query->onPrepareSelector = function($selector) {
+      return \PhpCss::toXpath($selector);
+    };
+    return $query;
+  }
 }

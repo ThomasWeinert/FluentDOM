@@ -12,6 +12,7 @@ namespace FluentDOM {
    * FluentDOM\Query implements a jQuery like replacement for DOMNodeList
    *
    * @property string $contentType Output type - text/xml or text/html
+   * @property callable $onPrepareSelector A callback to convert the selector into xpath
    * @property-read integer $length The amount of elements found by selector.
    * @property-read Document|\DOMDocument $document Internal DOMDocument object
    * @property-read \DOMXPath $xpath Internal XPath object
@@ -66,6 +67,13 @@ namespace FluentDOM {
      * @var Loadable $loaders
      */
     private $_loaders = NULL;
+
+    /**
+     * A callback used to convert the selector to xpath before use
+     *
+     * @var callable
+     */
+    private $_onPrepareSelector = NULL;
 
     /**
      * Load a $source. The type of the source depends on the loaders. If no explicit loaders are set
@@ -213,15 +221,11 @@ namespace FluentDOM {
      * @return Query
      */
     public function spawn($elements = NULL) {
-      /**
-       * @var Query $result
-       */
-      $result = new $this;
+      $result = clone $this;
       $result->_parent = $this;
       $result->_document = $this->getDocument();
       $result->_xpath = $this->xpath();
-      $result->_contentType = $this->contentType;
-      $result->_namespaces = $this->_namespaces;
+      $result->_nodes = array();
       if (isset($elements)) {
         $result->push($elements);
       }
@@ -437,6 +441,8 @@ namespace FluentDOM {
         return count($this->_nodes);
       case 'xpath' :
         return $this->xpath();
+      case 'onPrepareSelector' :
+        return $this->_onPrepareSelector;
       default :
         return NULL;
       }
@@ -463,6 +469,11 @@ namespace FluentDOM {
         break;
       case 'css' :
         $this->css($value);
+        break;
+      case 'onPrepareSelector' :
+        if ($this->isCallable($value, TRUE, FALSE)) {
+          $this->_onPrepareSelector = $value;
+        }
         break;
       case 'data' :
       case 'document' :
@@ -662,7 +673,7 @@ namespace FluentDOM {
     }
 
     /**
-     * Match XPath expression against context and return matched elements.
+     * Match selector against context and return matched elements.
      *
      * @param string|\DOMNode|\DOMNodeList $selector
      * @param \DOMNode $context optional, default value NULL
@@ -674,9 +685,12 @@ namespace FluentDOM {
       if ($this->isNode($selector)) {
         $result = array($selector);
       } elseif (is_string($selector)) {
+        if (isset($this->_onPrepareSelector)) {
+          $selector = call_user_func($this->_onPrepareSelector, $selector);
+        }
         $result = $this->xpath()->evaluate($selector, $context, FALSE);
         if (!($result instanceof \Traversable)) {
-          throw new \InvalidArgumentException('Given xpath expression did not return an node list.');
+          throw new \InvalidArgumentException('Given selector did not return an node list.');
         }
         $result = iterator_to_array($result);
       } elseif ($this->isNodeList($selector)) {
@@ -976,12 +990,12 @@ namespace FluentDOM {
     /**
      * Search for a given element from among the matched elements.
      *
-     * @param NULL|string|\DOMNode|\Traversable $expr
+     * @param NULL|string|\DOMNode|\Traversable $selector
      * @return integer
      */
-    public function index($expr = NULL) {
+    public function index($selector = NULL) {
       if (count($this->_nodes) > 0) {
-        if (is_null($expr)) {
+        if (is_null($selector)) {
           $counter = -1;
           $targetNode = $this->_nodes[0];
           $nodeList = $this->getNodes('preceding-sibling::node()', $targetNode);
@@ -991,14 +1005,14 @@ namespace FluentDOM {
             }
           }
           return $counter + 1;
-        } elseif (is_string($expr)) {
+        } elseif (is_string($selector)) {
           foreach ($this->_nodes as $index => $node) {
-            if ($this->matches($expr, $node)) {
+            if ($this->matches($selector, $node)) {
               return $index;
             }
           }
         } else {
-          $targetNode = $this->getContentElement($expr);
+          $targetNode = $this->getContentElement($selector);
           foreach ($this->_nodes as $index => $node) {
             /**
              * @var \DOMNode $node
@@ -1022,14 +1036,17 @@ namespace FluentDOM {
     }
 
     /**
-     * Test that xpath expression matches context and return true/false
+     * Test that selector matches context and return true/false
      *
-     * @param string $expr
+     * @param string $selector
      * @param \DOMNode $context optional, default value NULL
      * @return boolean
      */
-    public function matches($expr, \DOMNode $context = NULL) {
-      $check = $this->xpath->evaluate($expr, $context);
+    public function matches($selector, \DOMNode $context = NULL) {
+      if (isset($this->_onPrepareSelector)) {
+        $selector = call_user_func($this->_onPrepareSelector, $selector);
+      }
+      $check = $this->xpath->evaluate($selector, $context);
       if ($check instanceof \DOMNodeList) {
         return $check->length > 0;
       } else {
@@ -1045,25 +1062,25 @@ namespace FluentDOM {
      * Adds more elements, matched by the given expression, to the set of matched elements.
      *
      * @example add.php Usage Examples: FluentDOM::add()
-     * @param string $expr XPath expression
+     * @param string $selector selector
      * @param array|\Traversable $context
      * @return Query
      */
-    public function add($expr, $context = NULL) {
+    public function add($selector, $context = NULL) {
       $result = $this->spawn();
       $result->push($this->_nodes);
       if (isset($context)) {
         $targetNodes = $this->getNodes($context);
         if (!empty($targetNodes)) {
           foreach ($targetNodes as $node) {
-            $result->push($this->getNodes($expr, $node));
+            $result->push($this->getNodes($selector, $node));
           }
         }
-      } elseif (is_object($expr) ||
-                (is_string($expr) && substr(ltrim($expr), 0, 1) == '<')) {
-        $result->push($this->getContentNodes($expr));
+      } elseif (is_object($selector) ||
+                (is_string($selector) && substr(ltrim($selector), 0, 1) == '<')) {
+        $result->push($this->getContentNodes($selector));
       } else {
-        $result->push($this->find($expr));
+        $result->push($this->find($selector));
       }
       $this->uniqueSortNodes();
       return $result;
@@ -1087,17 +1104,17 @@ namespace FluentDOM {
      * of the matched set of elements.
      *
      * @example children.php Usage Examples: FluentDOM\Query::children()
-     * @param string $expr XPath expression
+     * @param string $selector selector
      * @return Query
      */
-    public function children($expr = NULL) {
+    public function children($selector = NULL) {
       $nodes = array();
       foreach ($this->_nodes as $node) {
-        if (empty($expr)) {
+        if (empty($selector)) {
           $nodes = iterator_to_array($node->childNodes);
         } else {
           foreach ($node->childNodes as $childNode) {
-            if ($this->matches($expr, $childNode)) {
+            if ($this->matches($selector, $childNode)) {
               $nodes[] = $childNode;
             }
           }
@@ -1113,7 +1130,7 @@ namespace FluentDOM {
      * selector, the starting element included.
      *
      * @example closest.php Usage Example: FluentDOM\Query::closest()
-     * @param string $selector XPath expression
+     * @param string $selector selector
      * @param array|\Traversable $context
      * @return Query
      */
@@ -1199,19 +1216,19 @@ namespace FluentDOM {
      * Removes all elements from the set of matched elements that do not match
      * the specified expression(s).
      *
-     * @example filter-expr.php Usage Example: FluentDOM\Query::filter() with XPath expression
+     * @example filter-expr.php Usage Example: FluentDOM\Query::filter() with selector
      * @example filter-fn.php Usage Example: FluentDOM\Query::filter() with Closure
-     * @param string|callable $expr XPath expression or callback function
+     * @param string|callable $selector selector or callback function
      * @return Query
      */
-    public function filter($expr) {
+    public function filter($selector) {
       $result = $this->spawn();
       foreach ($this->_nodes as $index => $node) {
         $check = TRUE;
-        if (is_string($expr)) {
-          $check = $this->matches($expr, $node, $index);
-        } elseif (is_callable($expr)) {
-          $check = call_user_func($expr, $node, $index);
+        if (is_string($selector)) {
+          $check = $this->matches($selector, $node, $index);
+        } elseif (is_callable($selector)) {
+          $check = call_user_func($selector, $node, $index);
         }
         if ($check) {
           $result->push($node);
@@ -1224,18 +1241,18 @@ namespace FluentDOM {
      * Searches for descendant elements that match the specified expression.
      *
      * @example find.php Usage Example: FluentDOM::find()
-     * @param string $expr XPath expression
+     * @param string $selector selector
      * @param boolean $useDocumentContext ignore current node list
      * @return Query
      */
-    public function find($expr, $useDocumentContext = FALSE) {
+    public function find($selector, $useDocumentContext = FALSE) {
       $result = $this->spawn();
       if ($useDocumentContext ||
         $this->_useDocumentContext) {
-        $result->push($this->getNodes($expr));
+        $result->push($this->getNodes($selector));
       } else {
         foreach ($this->_nodes as $contextNode) {
-          $result->push($this->getNodes($expr, $contextNode));
+          $result->push($this->getNodes($selector, $contextNode));
         }
       }
       return $result;
@@ -1274,21 +1291,21 @@ namespace FluentDOM {
      * Reduce the set of matched elements to those that have
      * a descendant that matches the selector or DOM element.
      *
-     * @param string|\DOMNode $expr XPath expression or DOMNode
+     * @param string|\DOMNode $selector selector or DOMNode
      * @return Query
      */
-    public function has($expr) {
+    public function has($selector) {
       $result = $this->spawn();
       foreach ($this->_nodes as $node) {
         if ($node instanceof \DOMElement &&
           $node->hasChildNodes()) {
           foreach ($node->childNodes as $childNode) {
-            if ($expr instanceof \DOMNode) {
-              if ($expr === $childNode) {
+            if ($selector instanceof \DOMNode) {
+              if ($selector === $childNode) {
                 $result->push($node);
                 return $result;
               }
-            } elseif ($this->matches($expr, $childNode)) {
+            } elseif ($this->matches($selector, $childNode)) {
               $result->push($node);
             }
           }
@@ -1302,12 +1319,12 @@ namespace FluentDOM {
      * if at least one element of the selection fits the given expression.
      *
      * @example is.php Usage Example: FluentDOM\Query::is()
-     * @param string $expr XPath expression
+     * @param string $selector selector
      * @return boolean
      */
-    public function is($expr) {
+    public function is($selector) {
       foreach ($this->_nodes as $node) {
-        return $this->matches($expr, $node);
+        return $this->matches($selector, $node);
       }
       return FALSE;
     }
@@ -1355,17 +1372,17 @@ namespace FluentDOM {
      * Removes elements matching the specified expression from the set of matched elements.
      *
      * @example not.php Usage Example: FluentDOM\Query::not()
-     * @param string|callback $expr XPath expression or callback function
+     * @param string|callback $selector selector or callback function
      * @return Query
      */
-    public function not($expr) {
+    public function not($selector) {
       $result = $this->spawn();
       foreach ($this->_nodes as $index => $node) {
         $check = FALSE;
-        if (is_string($expr)) {
-          $check = $this->matches($expr, $node, $index);
-        } elseif ($this->isCallable($expr, TRUE, FALSE)) {
-          $check = call_user_func($expr, $node, $index);
+        if (is_string($selector)) {
+          $check = $this->matches($selector, $node, $index);
+        } elseif ($this->isCallable($selector, TRUE, FALSE)) {
+          $check = call_user_func($selector, $node, $index);
         }
         if (!$check) {
           $result->push($node);
@@ -1379,10 +1396,10 @@ namespace FluentDOM {
      * given set of elements.
      *
      * @example next.php Usage Example: FluentDOM\Query::next()
-     * @param string $expr XPath expression
+     * @param string $selector
      * @return Query
      */
-    public function next($expr = NULL) {
+    public function next($selector = NULL) {
       $result = $this->spawn();
       foreach ($this->_nodes as $node) {
         $next = $node->nextSibling;
@@ -1390,7 +1407,7 @@ namespace FluentDOM {
           $next = $next->nextSibling;
         }
         if (!empty($next)) {
-          if (empty($expr) || $this->matches($expr, $next)) {
+          if (empty($selector) || $this->matches($selector, $next)) {
             $result->push($next);
           }
         }
@@ -1403,16 +1420,16 @@ namespace FluentDOM {
      * Find all sibling elements after the current element.
      *
      * @example nextAll.php Usage Example: FluentDOM\Query::nextAll()
-     * @param string $expr XPath expression
+     * @param string $selector selector
      * @return Query
      */
-    public function nextAll($expr = NULL) {
+    public function nextAll($selector = NULL) {
       $result = $this->spawn();
       foreach ($this->_nodes as $node) {
         $next = $node->nextSibling;
         while ($next instanceof \DOMNode) {
           if ($this->isNode($next)) {
-            if (empty($expr) || $this->matches($expr, $next)) {
+            if (empty($selector) || $this->matches($selector, $next)) {
               $result->push($next);
             }
           }
@@ -1426,16 +1443,16 @@ namespace FluentDOM {
      * Get all following siblings of each element up to but
      * not including the element matched by the selector.
      *
-     * @param string $expr XPath expression
+     * @param string $selector selector
      * @return Query
      */
-    public function nextUntil($expr = NULL) {
+    public function nextUntil($selector = NULL) {
       $result = $this->spawn();
       foreach ($this->_nodes as $node) {
         $next = $node->nextSibling;
         while ($next instanceof \DOMNode) {
           if ($this->isNode($next)) {
-            if (isset($expr) && $this->matches($expr, $next)) {
+            if (isset($selector) && $this->matches($selector, $next)) {
               break;
             } else {
               $result->push($next);
@@ -1469,16 +1486,16 @@ namespace FluentDOM {
      * optionally filtered by a selector.
      *
      * @example parents.php Usage Example: FluentDOM\Query::parents()
-     * @param string $expr XPath expression
+     * @param string $selector selector
      * @return Query
      */
-    public function parents($expr = NULL) {
+    public function parents($selector = NULL) {
       $result = $this->spawn();
       foreach ($this->_nodes as $node) {
         $parents = $this->xpath()->evaluate('ancestor::*', $node);
         for ($i = $parents->length - 1; $i >= 0; --$i) {
           $parentNode = $parents->item($i);
-          if (empty($expr) || $this->matches($expr, $parentNode)) {
+          if (empty($selector) || $this->matches($selector, $parentNode)) {
             $result->push($parentNode);
           }
         }
@@ -1490,16 +1507,16 @@ namespace FluentDOM {
      * Get the ancestors of each element in the current set of matched elements,
      * up to but not including the element matched by the selector.
      *
-     * @param string $expr XPath expression
+     * @param string $selector selector
      * @return Query
      */
-    public function parentsUntil($expr = NULL) {
+    public function parentsUntil($selector = NULL) {
       $result = $this->spawn();
       foreach ($this->_nodes as $node) {
         $parents = $this->xpath()->evaluate('ancestor::*', $node);
         for ($i = $parents->length - 1; $i >= 0; --$i) {
           $parentNode = $parents->item($i);
-          if (!empty($expr) && $this->matches($expr, $parentNode)) {
+          if (!empty($selector) && $this->matches($selector, $parentNode)) {
             break;
           }
           $result->push($parentNode);
@@ -1512,10 +1529,10 @@ namespace FluentDOM {
      * matched set of elements.
      *
      * @example prev.php Usage Example: FluentDOM\Query::prev()
-     * @param string $expr XPath expression
+     * @param string $selector selector
      * @return Query
      */
-    public function prev($expr = NULL) {
+    public function prev($selector = NULL) {
       $result = $this->spawn();
       foreach ($this->_nodes as $node) {
         $previous = $node->previousSibling;
@@ -1523,7 +1540,7 @@ namespace FluentDOM {
           $previous = $previous->previousSibling;
         }
         if (!empty($previous)) {
-          if (empty($expr) || $this->matches($expr, $previous)) {
+          if (empty($selector) || $this->matches($selector, $previous)) {
             $result->push($previous);
           }
         }
@@ -1536,16 +1553,16 @@ namespace FluentDOM {
      * Find all sibling elements in front of the current element.
      *
      * @example prevAll.php Usage Example: FluentDOM\Query::prevAll()
-     * @param string $expr XPath expression
+     * @param string $selector selector
      * @return Query
      */
-    public function prevAll($expr = NULL) {
+    public function prevAll($selector = NULL) {
       $result = $this->spawn();
       foreach ($this->_nodes as $node) {
         $previous = $node->previousSibling;
         while ($previous instanceof \DOMNode) {
           if ($this->isNode($previous)) {
-            if (empty($expr) || $this->matches($expr, $previous)) {
+            if (empty($selector) || $this->matches($selector, $previous)) {
               $result->push($previous);
             }
           }
@@ -1559,16 +1576,16 @@ namespace FluentDOM {
      * Get all preceding siblings of each element up to but not including
      * the element matched by the selector.
      *
-     * @param string $expr XPath expression
+     * @param string $selector selector
      * @return Query
      */
-    public function prevUntil($expr = NULL) {
+    public function prevUntil($selector = NULL) {
       $result = $this->spawn();
       foreach ($this->_nodes as $node) {
         $previous = $node->previousSibling;
         while ($previous instanceof \DOMNode) {
-          if (isset($expr) && $this->isNode($previous)) {
-            if ($this->matches($expr, $previous)) {
+          if (isset($selector) && $this->isNode($previous)) {
+            if ($this->matches($selector, $previous)) {
               break;
             } else {
               $result->push($previous);
@@ -1597,17 +1614,17 @@ namespace FluentDOM {
      * matched set of elements.
      *
      * @example siblings.php Usage Example: FluentDOM\Query::siblings()
-     * @param string $expr XPath expression
+     * @param string $selector selector
      * @return Query
      */
-    public function siblings($expr = NULL) {
+    public function siblings($selector = NULL) {
       $result = $this->spawn();
       foreach ($this->_nodes as $node) {
         if (isset($node->parentNode)) {
           foreach ($node->parentNode->childNodes as $childNode) {
             if ($this->isNode($childNode) &&
               $childNode !== $node) {
-              if (empty($expr) || $this->matches($expr, $childNode)) {
+              if (empty($selector) || $this->matches($selector, $childNode)) {
                 $result->push($childNode);
               }
             }
@@ -1960,14 +1977,14 @@ namespace FluentDOM {
      * Removes all matched elements from the DOM.
      *
      * @example remove.php Usage Example: FluentDOM\Query::remove()
-     * @param string $expr XPath expression
+     * @param string $selector selector
      * @return Query removed elements
      */
-    public function remove($expr = NULL) {
+    public function remove($selector = NULL) {
       $result = $this->spawn();
       foreach ($this->_nodes as $node) {
         if (isset($node->parentNode)) {
-          if (empty($expr) || $this->matches($expr, $node)) {
+          if (empty($selector) || $this->matches($selector, $node)) {
             $result->push($node->parentNode->removeChild($node));
           }
         }

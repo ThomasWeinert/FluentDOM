@@ -11,6 +11,9 @@
     "require": {
         "php": ">=5.4.0"
     },
+    "suggest": {
+      "carica/phpcss": "Allows to use css selectors with FluentDOM::QueryCss()."
+    },
     "autoload": {
         "files" : ["src/FluentDOM.php"],
         "psr-4": {"FluentDOM\\": "src/FluentDOM"}

@@ -35,5 +35,18 @@ namespace FluentDOM\Query {
         ->remove('@class = "first"');
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
+
+    /**
+     * @group Manipulation
+     * @group ManipulationRemove
+     * @covers FluentDOM\Query::remove
+     */
+    public function testAppendRemovedNodes() {
+      $fd = $this->getQueryFixtureFromString(self::XML)
+        ->find('//item')
+        ->remove()
+        ->appendTo('//group');
+      $this->assertXmlStringEqualsXmlString(self::XML, (string)$fd);
+    }
   }
 }

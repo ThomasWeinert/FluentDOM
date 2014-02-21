@@ -6,6 +6,32 @@ namespace FluentDOM {
   class QueryTest extends TestCase {
 
     /**
+     * @covers FluentDOM\Query::__construct
+     */
+    public function testConstructorWithXml() {
+      $dom = new \DOMDocument();
+      $dom->appendChild($dom->createElement('xml'));
+      $fd = new Query($dom);
+      $this->assertEquals(
+        '<?xml version="1.0"?>'."\n".'<xml/>'."\n",
+        (string)$fd
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Query::__construct
+     */
+    public function testConstructorWithHtml() {
+      $dom = new \DOMDocument();
+      $dom->appendChild($dom->createElement('html'));
+      $fd = new Query($dom, 'html');
+      $this->assertEquals(
+        '<html></html>'."\n",
+        (string)$fd
+      );
+    }
+
+    /**
      * @group Load
      * @covers FluentDOM\Query::load
      */

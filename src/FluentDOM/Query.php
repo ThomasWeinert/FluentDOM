@@ -76,6 +76,18 @@ namespace FluentDOM {
     private $_onPrepareSelector = NULL;
 
     /**
+     * @param mixed $source
+     * @param null|string $contentType
+     */
+    public function __construct($source = NULL, $contentType = NULL) {
+      if (isset($source)) {
+        $this->load($source, $contentType);
+      } elseif (isset($contentType)) {
+        $this->setContentType($contentType);
+      }
+    }
+
+    /**
      * Load a $source. The type of the source depends on the loaders. If no explicit loaders are set
      * FluentDOM\Query will use a set of default loaders for xml/html and DOM.
      *

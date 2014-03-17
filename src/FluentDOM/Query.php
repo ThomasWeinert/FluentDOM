@@ -2275,7 +2275,7 @@ namespace FluentDOM {
         $attribute = (new QualifiedName($attribute))->name;
         if (count($this->_nodes) > 0) {
           $node = $this->_nodes[0];
-          if ($node instanceof \DOMElement) {
+          if ($node instanceof \DOMElement && $node->hasAttribute($attribute)) {
             return $node->getAttribute($attribute);
           }
         }
@@ -2301,6 +2301,23 @@ namespace FluentDOM {
         }
       }
       return $this;
+    }
+
+    /**
+     * Returns true if the specified attribute is present on at least one of
+     * the set of matched elements.
+     *
+     * @param string $name
+     * @return bool
+     */
+    public function hasAttr($name) {
+      foreach ($this->_nodes as $node) {
+        if ($node instanceof \DOMElement &&
+          $node->hasAttribute($name)) {
+          return TRUE;
+        }
+      }
+      return FALSE;
     }
 
     /**

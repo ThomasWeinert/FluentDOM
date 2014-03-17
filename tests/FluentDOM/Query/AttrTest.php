@@ -49,7 +49,19 @@ namespace FluentDOM\Query {
      */
     public function testAttrReadNoMatch() {
       $fd = $this->getQueryFixtureFromString(self::XML)->attr('index');
-      $this->assertTrue(empty($fd));
+      $this->assertNull($fd);
+    }
+
+    /**
+     * @group Attributes
+     * @covers FluentDOM\Query::attr
+     */
+    public function testAttrReadNoAttribute() {
+      $fd = $this
+        ->getQueryFixtureFromString(self::XML)
+        ->find('//group')
+        ->attr('index');
+      $this->assertNull($fd);
     }
 
     /**
@@ -148,6 +160,44 @@ namespace FluentDOM\Query {
           }
         );
       $this->assertEquals('Callback #0', $fd->attr('index'));
+    }
+
+    /**
+     * @group Attributes
+     * @covers FluentDOM\Query::hasAttr
+     */
+    public function testHasAttrExpectingTrue() {
+      $this->assertTrue(
+        $this->getQueryFixtureFromString(self::XML)
+          ->find('//group/item')
+          ->hasAttr('index')
+      );
+    }
+
+    /**
+     * @group Attributes
+     * @covers FluentDOM\Query::hasAttr
+     */
+    public function testHasAttrNotOnFirstNodeExpectingTrue() {
+      $this->assertTrue(
+        $this->getQueryFixtureFromString(self::XML)
+          ->find('//group/item')
+          ->find('//group')
+          ->andSelf()
+          ->hasAttr('index')
+      );
+    }
+
+    /**
+     * @group Attributes
+     * @covers FluentDOM\Query::hasAttr
+     */
+    public function testHasAttrExpectingFalse() {
+      $this->assertFalse(
+        $this->getQueryFixtureFromString(self::XML)
+          ->find('//group')
+          ->hasAttr('index')
+      );
     }
 
     /**

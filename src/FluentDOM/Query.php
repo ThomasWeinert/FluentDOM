@@ -16,11 +16,11 @@ namespace FluentDOM {
    * @property-read integer $length The amount of elements found by selector.
    * @property-read Document|\DOMDocument $document Internal DOMDocument object
    * @property-read \DOMXPath $xpath Internal XPath object
-   * @property \FluentDOM\Query\Attributes $attr
-   * @property \FluentDOM\Query\Data $data
-   * @property \FluentDOM\Query\Css $css
+   * @property Query\Attributes $attr
+   * @property Query\Data $data
+   * @property Query\Css $css
    *
-   * @method \FluentDOM\Query clone() Clone matched nodes and select the clones.
+   * @method Query clone() Clone matched nodes and select the clones.
    * @method bool empty() Remove all child nodes from the set of matched elements.
    */
   class Query implements \ArrayAccess, \Countable, \IteratorAggregate {
@@ -127,6 +127,7 @@ namespace FluentDOM {
      * Set the loaders list.
      *
      * @param Loadable|array|\Traversable $loaders
+     * @throws \InvalidArgumentException
      * @return Loadable
      */
     public function loaders($loaders = NULL) {
@@ -639,6 +640,8 @@ namespace FluentDOM {
      * Setter for Query::_contentType property
      *
      * @param string $value
+     * @param bool $silentFallback
+     * @throws \Exception
      * @throws \UnexpectedValueException
      */
     private function setContentType($value, $silentFallback = FALSE) {
@@ -689,7 +692,6 @@ namespace FluentDOM {
      *
      * @param string|\DOMNode|\DOMNodeList $selector
      * @param \DOMNode $context optional, default value NULL
-     * @param bool $disallowEmpty
      * @throws \InvalidArgumentException
      * @return \DOMNodeList
      */
@@ -2275,7 +2277,7 @@ namespace FluentDOM {
         $attribute = (new QualifiedName($attribute))->name;
         if (count($this->_nodes) > 0) {
           $node = $this->_nodes[0];
-          if ($node instanceof \DOMElement) {
+          if ($node instanceof \DOMElement && $node->hasAttribute($attribute)) {
             return $node->getAttribute($attribute);
           }
         }
@@ -2301,6 +2303,23 @@ namespace FluentDOM {
         }
       }
       return $this;
+    }
+
+    /**
+     * Returns true if the specified attribute is present on at least one of
+     * the set of matched elements.
+     *
+     * @param string $name
+     * @return bool
+     */
+    public function hasAttr($name) {
+      foreach ($this->_nodes as $node) {
+        if ($node instanceof \DOMElement &&
+          $node->hasAttribute($name)) {
+          return TRUE;
+        }
+      }
+      return FALSE;
     }
 
     /**

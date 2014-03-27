@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Carica PhpCss" default="build">
+
+  <property name="builddir" value="${project.basedir}/build" />
+
+  <target name="build" depends="documentation">
+  </target>
+
+  <target name="documentation" depends="phploc,phpmd,phpunit,phpdox">
+  </target>
+
+  <target name="prepare">
+    <echo msg="Making directory ./build" />
+    <mkdir dir="${builddir}" />
+    <mkdir dir="${builddir}/logs" />
+    <mkdir dir="${builddir}/coverage" />
+  </target>
+
+  <target name="phpunit" depends="prepare">
+    <exec executable="phpunit" passthru="true">
+      <arg value="--coverage-xml"/>
+      <arg file="${builddir}/coverage/xml"/>
+      <arg value="--coverage-html"/>
+      <arg file="${builddir}/coverage/html"/>
+      <arg value="-c"/>
+      <arg file="phpunit.xml.dist"/>
+    </exec>
+  </target>
+
+  <target name="phpdox" depends="prepare">
+    <exec command="phpdox" passthru="true"/>
+  </target>
+
+  <target name="phpmd" depends="prepare">
+    <exec executable="phpmd" passthru="true">
+      <arg path="./src"/>
+      <arg value="xml"/>
+      <arg value="codesize,design,unusedcode"/>
+      <arg value="--reportfile"/>
+      <arg file="${builddir}/logs/phpmd.xml"/>
+    </exec>
+  </target>
+
+  <target name="phploc" depends="prepare">
+    <exec executable="phploc" passthru="true">
+      <arg value="--log-xml"/>
+      <arg file="${builddir}/logs/phploc.xml"/>
+      <arg path="./src"/>
+    </exec>
+  </target>
+</project>

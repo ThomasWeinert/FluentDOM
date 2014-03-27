@@ -74,5 +74,23 @@ namespace FluentDOM {
       $fragment->appendXML($xmlFragment);
       $this->appendChild($fragment);
     }
+
+    /**
+     * save the element node as XML
+     *
+     * @return string
+     */
+    public function saveXml() {
+      return $this->ownerDocument->saveXML($this);
+    }
+
+    /**
+     * save the element node as HTML
+     *
+     * @return string
+     */
+    public function saveHtml() {
+      return $this->ownerDocument->saveHTML($this);
+    }
   }
 }

@@ -87,7 +87,24 @@ namespace FluentDOM {
         '<root><test attribute="value">text</test></root>',
         $dom->saveXML($dom->documentElement)
       );
+    }
 
+    /**
+     * @covers FluentDOM\Element::saveXml
+     */
+    public function testSaveXml() {
+      $dom = new Document();
+      $node = $dom->appendChild($dom->createElement('div'));
+      $this->assertEquals('<div/>', $node->saveXml());
+    }
+
+    /**
+     * @covers FluentDOM\Element::saveHtml
+     */
+    public function testSaveHtml() {
+      $dom = new Document();
+      $node = $dom->appendChild($dom->createElement('div'));
+      $this->assertEquals('<div></div>', $node->saveHtml());
     }
   }
 }

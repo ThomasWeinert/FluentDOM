@@ -1,7 +1,21 @@
 Version 5:
 
 Complete Rewrite!
-- Original FluentDOM functionality is now in FluentDOM\Query.
+- PHP Namespaces, PSR-4 comatible, Composer support
+- Original FluentDOM functionality is now merged in FluentDOM\Query.
+- FluentDOM() function creates an FluentDOM\Query instance
+- FluentDOM\Query has a new loader concept
+- FluentDOM\Query allows to register a selector callback,
+  allowing for CSS selectors using PhpCss
+- Several classes that extend the default DOM classes, fixing bugs
+  and provide convinience
+
+- Changed: FluentDOM\Query::spawn() now clones the current object
+- Added: FluentDOM\Query::html()
+- Added: FluentDOM\Query::outerXml()
+- Added: FluentDOM\Document - extends DOMDocument
+- Added: FluentDOM\Element - extends DOMElement
+- Added: FluentDOM\Xpath - extends DOMXpath
 
 Version 4.1:
 

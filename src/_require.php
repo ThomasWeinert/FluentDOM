@@ -2,6 +2,9 @@
 // @codeCoverageIgnoreStart
 require(__DIR__.'/FluentDOM/Appendable.php');
 require(__DIR__.'/FluentDOM/Loadable.php');
+require(__DIR__.'/FluentDOM/XmlSerializable.php');
+
+require(__DIR__.'/FluentDOM/XmlSerialize.php');
 
 require(__DIR__.'/FluentDOM/Document.php');
 require(__DIR__.'/FluentDOM/Element.php');

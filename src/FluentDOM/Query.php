@@ -2132,8 +2132,8 @@ namespace FluentDOM {
      * xml contents of all selected element nodes.
      *
      * @example xml.php Usage Example: FluentDOM::xml()
-     * @param string|callable $xml XML fragment
-     * @return string|Query
+     * @param string|callable|NULL $xml XML fragment
+     * @return string|self
      */
     public function xml($xml = NULL) {
       if (isset($xml)) {
@@ -2185,16 +2185,75 @@ namespace FluentDOM {
     }
 
     /**
+     * Get the first matched node as XML or replace all
+     * matched nodes with the provided fragment.
+     *
+     * @param string|callable|NULL $xml
+     * @return string|self
+     */
+    function outerXml($xml = NULL) {
+      if (isset($xml)) {
+        $isCallback = $this->isCallable($xml, FALSE, TRUE);
+        if ($isCallback) {
+          /** @var \DOMNode $node */
+          foreach ($this->_nodes as $index => $node) {
+            $xmlString = call_user_func(
+              $xml,
+              $node,
+              $index,
+              $this->getDocument()->saveXML($node)
+            );
+            if (!empty($xmlString)) {
+              $fragment = $this->getContentFragment($xmlString, TRUE);
+              /** @var \DOMNode $contentNode */
+              foreach ($fragment as $contentNode) {
+                $node->parentNode->insertBefore(
+                  $contentNode->cloneNode(TRUE),
+                  $node
+                );
+              }
+            }
+            $node->parentNode->removeChild($node);
+          }
+        } else {
+          if (!empty($xml)) {
+            $fragment = $this->getContentFragment($xml, TRUE);
+          } else {
+            $fragment = array();
+          }
+          /** @var \DOMNode $node */
+          foreach ($this->_nodes as $node) {
+            /** @var \DOMNode $contentNode */
+            foreach ($fragment as $contentNode) {
+              $node->parentNode->insertBefore(
+                $contentNode->cloneNode(TRUE),
+                $node
+              );
+            }
+            $node->parentNode->removeChild($node);
+          }
+        }
+        return $this;
+      } else {
+        if (isset($this->_nodes[0]) && $this->isNode($this->_nodes[0])) {
+          return $this->getDocument()->saveXml($this->_nodes[0]);
+        }
+        return '';
+      }
+    }
+
+    /**
      * Get html contents of the first matched element or set the
      * html contents of all selected element nodes.
      *
-     * @param null $html
-     * @return string
+     * @param string|callable|NULL $html
+     * @return string|self
      */
     public function html($html = NULL) {
       if (isset($html)) {
         $isCallback = $this->isCallable($html, FALSE, TRUE);
         if ($isCallback) {
+          /** @var \DOMNode $node */
           foreach ($this->_nodes as $index => $node) {
             $htmlString = call_user_func(
               $html,
@@ -2205,25 +2264,24 @@ namespace FluentDOM {
             $node->nodeValue = '';
             if (!empty($htmlString)) {
               $fragment = $this->getHtmlFragment($htmlString, TRUE);
+              /** @var \DOMNode $contentNode */
               foreach ($fragment as $contentNode) {
-                /**
-                 * @var \DOMNode $node
-                 * @var \DOMNode $contentNode
-                 */
-                $node->appendChild($this->getDocument()->importNode($contentNode, TRUE));
+                $node->appendChild(
+                  $this->getDocument()->importNode($contentNode, TRUE)
+                );
               }
             }
           }
         } else {
           $fragment = $this->getHtmlFragment($html);
+          /** @var \DOMNode $node */
           foreach ($this->_nodes as $node) {
             $node->nodeValue = '';
+            /** @var \DOMNode $contentNode */
             foreach ($fragment as $contentNode) {
-             /**
-               * @var \DOMNode $node
-               * @var \DOMNode $contentNode
-               */
-              $node->appendChild($this->getDocument()->importNode($contentNode, TRUE));
+              $node->appendChild(
+                $this->getDocument()->importNode($contentNode, TRUE)
+              );
             }
           }
         }

@@ -86,7 +86,7 @@ namespace FluentDOM {
      * @param string $name
      * @param string $content
      * @param array $attributes
-     * @return \DOMElement
+     * @return Element
      */
     public function createElement($name, $content = NULL, array $attributes = NULL) {
       if (FALSE !== ($position = strpos($name, ':'))) {
@@ -114,7 +114,7 @@ namespace FluentDOM {
      * @param $name
      * @param string $content
      * @param array $attributes
-     * @return \DOMElement
+     * @return Element
      */
     public function appendElement($name, $content = '', array $attributes = NULL) {
       $this->appendChild(

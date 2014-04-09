@@ -25,6 +25,14 @@ namespace FluentDOM {
     private $_namespaces = [];
 
     /**
+     * @var array
+     */
+    private $_reserved = [
+      'xml' => 'http://www.w3.org/XML/1998/namespace',
+      'xmlns' => 'http://www.w3.org/2000/xmlns/'
+    ];
+
+    /**
      * @param string $version
      * @param string $encoding
      */
@@ -58,6 +66,11 @@ namespace FluentDOM {
      * @param string $namespace
      */
     public function registerNamespace($prefix, $namespace) {
+      if (isset($this->_reserved[$prefix])) {
+        throw new \LogicException(
+          sprintf('Can not register reserved namespace prefix "%s"', $prefix)
+        );
+      }
       $this->_namespaces[$prefix] = $namespace;
       if (isset($this->_xpath)) {
         $this->_xpath->registerNamespace($prefix, $namespace);
@@ -71,6 +84,9 @@ namespace FluentDOM {
      * @return null
      */
     public function getNamespace($prefix) {
+      if (isset($this->_reserved[$prefix])) {
+        return $this->_reserved[$prefix];
+      }
       if (isset($this->_namespaces[$prefix])) {
         return $this->_namespaces[$prefix];
       }
@@ -90,8 +106,14 @@ namespace FluentDOM {
      */
     public function createElement($name, $content = NULL, array $attributes = NULL) {
       if (FALSE !== ($position = strpos($name, ':'))) {
+        $prefix = substr($name, 0, $position);
+        if (isset($this->_reserved[$prefix])) {
+          throw new \LogicException(
+            sprintf('Can not use reserved namespace prefix "%s" in element name', $prefix)
+          );
+        }
         $node = parent::createElementNS(
-          $this->getNamespace(substr($name, 0, $position)),
+          $this->getNamespace($prefix),
           $name
         );
       } else {
@@ -104,6 +126,31 @@ namespace FluentDOM {
       }
       if (!empty($content)) {
         $node->appendChild($this->createTextNode($content));
+      }
+      return $node;
+    }
+
+    /**
+     * If here is a ':' in the attribute name, consider it a namespace prefix
+     * registered on the document.
+     *
+     * Allow to add a attribute value directly.
+     *
+     * @param string $name
+     * @param string|null $value
+     * @return \DOMAttr
+     */
+    public function createAttribute($name, $value = NULL) {
+      if (FALSE !== ($position = strpos($name, ':'))) {
+        $node = parent::createAttributeNS(
+          $this->getNamespace(substr($name, 0, $position)),
+          $name
+        );
+      } else {
+        $node = parent::createAttribute($name);
+      }
+      if (isset($value)) {
+        $node->value = $value;
       }
       return $node;
     }

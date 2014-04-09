@@ -12,6 +12,8 @@ namespace FluentDOM {
   /**
    * FluentDOM\Element extends PHPs DOMDocument class. It adds some generic namespace handling on
    * the document level and registers extended Node classes for convenience.
+   *
+   * @property Document $ownerElement
    */
   class Element extends \DOMElement {
 
@@ -20,7 +22,7 @@ namespace FluentDOM {
      *
      * @param string $name
      * @param string $value
-     * @return \DOMElement
+     * @return \DOMAttr
      */
     public function setAttribute($name, $value) {
       if ($this->ownerDocument instanceOf Document &&

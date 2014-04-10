@@ -36,9 +36,13 @@ FluentDOM needs at least PHP 5.4.
 
 ## Usage
 
-    echo FluentDOM('sample.xml')
-      ->find('//h1[@id = "title"]')
-      ->text('Hello World!');
+```php
+<?php
+echo FluentDOM('sample.xml')
+  ->find('//h1[@id = "title"]')
+  ->text('Hello World!');
+?>
+```
 
 The sample creates a new FluentDOM query object, loads the sample.xml file,
 looks for a tag &lt;h1> with the attribute "id" that has the value "title",
@@ -87,25 +91,29 @@ even register a default namespace for elements.
 
 This creates the example feed from the [RFC4287](http://tools.ietf.org/html/rfc4287#section-1.1)
 
-    $dom = new FluentDOM\Document();
-    $dom->registerNamespace('#default', 'http://www.w3.org/2005/Atom');
+```php
+<?php
+$dom = new FluentDOM\Document();
+$dom->registerNamespace('#default', 'http://www.w3.org/2005/Atom');
 
-    $feed = $dom->appendElement('feed');
-    $feed->appendElement('title', 'Example Feed');
-    $feed->appendElement('link', NULL, ['href' => 'http://example.org/']);
-    $feed->appendElement('updated', '2003-12-13T18:30:02Z');
-    $feed->appendElement('author')->appendElement('name', 'John Doe');
-    $feed->appendElement('id', 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6');
+$feed = $dom->appendElement('feed');
+$feed->appendElement('title', 'Example Feed');
+$feed->appendElement('link', NULL, ['href' => 'http://example.org/']);
+$feed->appendElement('updated', '2003-12-13T18:30:02Z');
+$feed->appendElement('author')->appendElement('name', 'John Doe');
+$feed->appendElement('id', 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6');
 
-    $entry = $feed->appendElement('entry');
-    $entry->appendElement('title', 'Atom-Powered Robots Run Amok');
-    $entry->appendElement('link', NULL, ['href' => 'http://example.org/2003/12/13/atom03']);
-    $entry->appendElement('id', 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a');
-    $entry->appendElement('updated', '2003-12-13T18:30:02Z');
-    $entry->appendElement('summary', 'Some text.');
+$entry = $feed->appendElement('entry');
+$entry->appendElement('title', 'Atom-Powered Robots Run Amok');
+$entry->appendElement('link', NULL, ['href' => 'http://example.org/2003/12/13/atom03']);
+$entry->appendElement('id', 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a');
+$entry->appendElement('updated', '2003-12-13T18:30:02Z');
+$entry->appendElement('summary', 'Some text.');
 
-    $dom->formatOutput = TRUE;
-    echo $dom->saveXml();
+$dom->formatOutput = TRUE;
+echo $dom->saveXml();
+?>
+```
 
 ## Backwards Compatibility Breaks To &lt;5
 

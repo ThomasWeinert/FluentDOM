@@ -70,11 +70,13 @@ namespace FluentDOM {
     /**
      * @covers FluentDOM\Document::getNamespace
      */
-    public function testGetNamespaceWithoutRegisterExpectingNull() {
+    public function testGetNamespaceWithoutRegisterExpectingException() {
       $dom = new Document();
-      $this->assertNull(
-        $dom->getNamespace('test')
+      $this->setExpectedException(
+        'LogicException',
+        'Unknown namespace prefix "test".'
       );
+      $dom->getNamespace('test');
     }
 
     /**
@@ -87,6 +89,45 @@ namespace FluentDOM {
       $this->assertEquals(
         '<test:example xmlns:test="urn:success"/>',
         $dom->saveXml($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Document::createElement
+     */
+    public function testCreateElementWithXmlNamespacePrefixExpectingException() {
+      $dom = new Document();
+      $this->setExpectedException(
+        'LogicException',
+        'Can not use reserved namespace prefix "xml" in element name'
+      );
+      $dom->appendChild($dom->createElement('xml:example'));
+    }
+
+    /**
+     * @covers FluentDOM\Document::createElement
+     */
+    public function testCreateAttribute() {
+      $dom = new Document();
+      $node = $dom->appendChild($dom->createElement('example'));
+      $node->appendChild($dom->createAttribute('attribute'));
+      $this->assertEquals(
+        '<example attribute=""/>',
+        $node->saveXml()
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Document::createElement
+     */
+    public function testCreateAttributeWithNamespace() {
+      $dom = new Document();
+      $dom->registerNamespace('test', 'urn:success');
+      $node = $dom->appendChild($dom->createElement('example'));
+      $node->appendChild($dom->createAttribute('test:attribute', 'success'));
+      $this->assertEquals(
+        '<example xmlns:test="urn:success" test:attribute="success"/>',
+        $node->saveXml()
       );
     }
 

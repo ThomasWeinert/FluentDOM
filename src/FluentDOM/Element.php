@@ -25,19 +25,19 @@ namespace FluentDOM {
      * @return \DOMAttr
      */
     public function setAttribute($name, $value) {
-      if ($this->ownerDocument instanceOf Document &&
-          FALSE !== ($position = strpos($name, ':'))) {
+      $namespace = '';
+      if (
+        $this->ownerDocument instanceOf Document &&
+        FALSE !== ($position = strpos($name, ':'))
+      ) {
+        $prefix = substr($name, 0, $position);
+        $namespace = $this->ownerDocument->getNamespace($prefix);
+      }
+      if ($namespace != '') {
         /** @noinspection PhpVoidFunctionResultUsedInspection */
-        return parent::setAttributeNS(
-          $this->ownerDocument->getNamespace(substr($name, 0, $position)),
-          $name,
-          $value
-        );
+        return parent::setAttributeNS($namespace, $name, $value);
       } else {
-        return parent::setAttribute(
-          $name,
-          $value
-        );
+        return parent::setAttribute($name, $value);
       }
     }
 

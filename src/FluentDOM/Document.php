@@ -64,15 +64,17 @@ namespace FluentDOM {
      *
      * @param string $prefix
      * @param string $namespace
+     * @throws \LogicException
      */
     public function registerNamespace($prefix, $namespace) {
+      $prefix = $this->validatePrefix($prefix);
       if (isset($this->_reserved[$prefix])) {
         throw new \LogicException(
-          sprintf('Can not register reserved namespace prefix "%s"', $prefix)
+          sprintf('Can not register reserved namespace prefix "%s".', $prefix)
         );
       }
       $this->_namespaces[$prefix] = $namespace;
-      if (isset($this->_xpath)) {
+      if (isset($this->_xpath) && $prefix !== '#default') {
         $this->_xpath->registerNamespace($prefix, $namespace);
       }
     }
@@ -81,16 +83,27 @@ namespace FluentDOM {
      * Get the namespace for a given prefix
      *
      * @param string $prefix
+     * @throws \LogicException
      * @return null
      */
     public function getNamespace($prefix) {
+      $prefix = $this->validatePrefix($prefix);
       if (isset($this->_reserved[$prefix])) {
         return $this->_reserved[$prefix];
       }
       if (isset($this->_namespaces[$prefix])) {
         return $this->_namespaces[$prefix];
       }
-      return NULL;
+      if ($prefix === '#default') {
+        return '';
+      }
+      throw new \LogicException(
+        sprintf('Unknown namespace prefix "%s".', $prefix)
+      );
+    }
+
+    private function validatePrefix($prefix) {
+      return empty($prefix) ? '#default' : $prefix;
     }
 
     /**
@@ -102,20 +115,30 @@ namespace FluentDOM {
      * @param string $name
      * @param string $content
      * @param array $attributes
+     * @throws \LogicException
      * @return Element
      */
     public function createElement($name, $content = NULL, array $attributes = NULL) {
+      $namespace = '';
       if (FALSE !== ($position = strpos($name, ':'))) {
         $prefix = substr($name, 0, $position);
-        if (isset($this->_reserved[$prefix])) {
-          throw new \LogicException(
-            sprintf('Can not use reserved namespace prefix "%s" in element name', $prefix)
-          );
+        if ($prefix != '') {
+          if (isset($this->_reserved[$prefix])) {
+            throw new \LogicException(
+              sprintf('Can not use reserved namespace prefix "%s" in element name.', $prefix)
+            );
+          }
+          $namespace = $this->getNamespace($prefix);
+        } else {
+          $name = substr($name, 1);
         }
-        $node = parent::createElementNS(
-          $this->getNamespace($prefix),
-          $name
-        );
+      } else {
+        $namespace = $this->getNamespace('#default');
+      }
+      if ($namespace != '') {
+        $node = parent::createElementNS($namespace, $name);
+      } elseif (isset($this->_namespaces['#default'])) {
+        $node = parent::createElementNS('', $name);
       } else {
         $node = parent::createElement($name);
       }
@@ -141,11 +164,13 @@ namespace FluentDOM {
      * @return \DOMAttr
      */
     public function createAttribute($name, $value = NULL) {
+      $namespace = '';
       if (FALSE !== ($position = strpos($name, ':'))) {
-        $node = parent::createAttributeNS(
-          $this->getNamespace(substr($name, 0, $position)),
-          $name
-        );
+        $prefix = substr($name, 0, $position);
+        $namespace = $this->getNamespace($prefix);
+      }
+      if ($namespace != '') {
+        $node = parent::createAttributeNS($namespace, $name);
       } else {
         $node = parent::createAttribute($name);
       }

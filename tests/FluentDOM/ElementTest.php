@@ -34,6 +34,33 @@ namespace FluentDOM {
     }
 
     /**
+     * @covers FluentDOM\Element::setAttribute
+     */
+    public function testSetAttributeXmlAttribute() {
+      $dom = new Document();
+      $dom->registerNamespace('foo', 'urn:foo');
+      $dom->appendChild($dom->createElement('root'));
+      $dom->documentElement->setAttribute('xml:id', 'value');
+      $this->assertEquals(
+        '<root xml:id="value"/>',
+        $dom->saveXML($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::setAttribute
+     */
+    public function testSetAttributeXmlnsAttribute() {
+      $dom = new Document();
+      $dom->appendChild($dom->createElement('root'));
+      $dom->documentElement->setAttribute('xmlns:foo', 'urn:foo');
+      $this->assertEquals(
+        '<root xmlns:foo="urn:foo"/>',
+        $dom->saveXML($dom->documentElement)
+      );
+    }
+
+    /**
      * @covers FluentDOM\Element::append
      */
     public function testAppend() {
@@ -85,6 +112,21 @@ namespace FluentDOM {
       );
       $this->assertEquals(
         '<root><test attribute="value">text</test></root>',
+        $dom->saveXML($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::appendXml
+     */
+    public function testAppendXmlWithNamspace() {
+      $dom = new Document();
+      $dom->appendChild($dom->createElement('root'));
+      $dom->documentElement->appendXml(
+        '<foo:test xmlns:foo="urn:foo" foo:attribute="value">text</foo:test>'
+      );
+      $this->assertEquals(
+        '<root><foo:test xmlns:foo="urn:foo" foo:attribute="value">text</foo:test></root>',
         $dom->saveXML($dom->documentElement)
       );
     }

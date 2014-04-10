@@ -1,9 +1,9 @@
 # FluentDOM
 
-  Version: 5 dev
-  Copyright: 2009-2014 Bastian Feder, Thomas Weinert
-  Licence: [The MIT License](http://www.opensource.org/licenses/mit-license.php)
-  Build Status: [![Build Status](https://travis-ci.org/FluentDOM/FluentDOM.svg?branch=master)](https://travis-ci.org/FluentDOM/FluentDOM)
+  Version: 5 dev <br />
+  Copyright: 2009-2014 Bastian Feder, Thomas Weinert <br />
+  Licence: [The MIT License](http://www.opensource.org/licenses/mit-license.php) <br />
+  Build Status: [![Build Status](https://travis-ci.org/FluentDOM/FluentDOM.svg?branch=master)](https://travis-ci.org/FluentDOM/FluentDOM) <br />
 
 --------------------------------------------------------------------------------
 
@@ -24,8 +24,13 @@ XML namespace support.
 
 --------------------------------------------------------------------------------
 
-* auto-gen TOC:
-{:toc}
+## Table Of Contents:
+* Requirements
+* Usage
+* Similarities With jQuery
+* Differences To jQuery
+* Extensions to PHPs DOM classes
+* Backwards Compatibility Breaks
 
 ## Requirements
 
@@ -40,11 +45,11 @@ FluentDOM needs at least PHP 5.4.
       ->text('Hello World!');
 
 The sample creates a new FluentDOM query object, loads the sample.xml file,
-looks for a tag <h1> with the attribute "id" that has the value "title",
+looks for a tag &lt;h1> with the attribute "id" that has the value "title",
 sets the content of this tag to "Hello World" and outputs the manipulated
 document.
 
-# Similarities With jQuery
+## Similarities With jQuery
 
 FluentDOM was created after the jQuery API and concepts. You will notice that
 the most method names and parameters are the same.

@@ -5,8 +5,6 @@
   Licence: [The MIT License](http://www.opensource.org/licenses/mit-license.php) <br />
   Build Status: [![Build Status](https://travis-ci.org/FluentDOM/FluentDOM.svg?branch=master)](https://travis-ci.org/FluentDOM/FluentDOM) <br />
 
---------------------------------------------------------------------------------
-
 FluentDOM provides an easy to use fluent interface for DOMDocument. We tried to
 keep the jQuery API but adapted it to PHP and the server environment.
 
@@ -21,8 +19,6 @@ development. You will find the PHPUnit test in the "tests" subdirectory.
 Version 5 is a complete rewrite. It is updated to the new PHP 5.4 syntax. It
 now provides classes that extend PHPs DOMDocument. Another focus was
 XML namespace support.
-
---------------------------------------------------------------------------------
 
 ## Table Of Contents:
 * Requirements
@@ -111,13 +107,13 @@ This creates the example feed from the [RFC4287](http://tools.ietf.org/html/rfc4
     $dom->formatOutput = TRUE;
     echo $dom->saveXml();
 
-## Backwards Compatibility Breaks To FluentDOM 4.x
+## Backwards Compatibility Breaks To &lt;5
 
 Version 5 is a major rewrite. It now uses php namespaces. The original FluentDOM
 classes (FluentDOM, FluentDOMCore and FluentDOMStyle) are merged into the new
 FluentDOM\Query class.
 
-The old Loaders are gone and replaced with the new FluentDOM\Loadable interface.
+The old loaders are gone and replaced with the new FluentDOM\Loadable interface.
 
 The registerNamespaces() method was replaced with a registerNamespace() method,
 having the same arguments like DOMXpath::registerNamespace().

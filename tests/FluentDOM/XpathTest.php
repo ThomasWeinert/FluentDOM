@@ -110,17 +110,53 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Xpath
-     * @dataProvider provideValuesForQuote
-     * @param $value
      */
-    public function testQuote($value) {
-      $xml = '<node value="'.htmlspecialchars($value, ENT_XML1 | ENT_QUOTES, 'UTF-8').'"/>';
+    public function testFirstOfMatchingNode() {
       $dom = new \DOMDocument();
-      $dom->loadXML($xml);
+      $dom->loadXml('<foo/>');
+      $xpath = new Xpath($dom);
+      $this->assertSame(
+        $dom->documentElement,
+        $xpath->firstOf('//foo')
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Xpath
+     */
+    public function testFirstOfMatchingNothingExpectingNull() {
+      $dom = new \DOMDocument();
+      $dom->loadXml('<foo/>');
+      $xpath = new Xpath($dom);
+      $this->assertNull(
+        $xpath->firstOf('//bar')
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Xpath
+     */
+    public function testFirstOfMatchingScalarExpectingNull() {
+      $dom = new \DOMDocument();
+      $dom->loadXml('<foo>bar</foo>');
+      $xpath = new Xpath($dom);
+      $this->assertNull(
+        $xpath->firstOf('string(//foo)')
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Xpath
+     * @dataProvider provideValuesForQuote
+     * @param string $expected
+     * @param string $value
+     */
+    public function testQuote($expected, $value) {
+      $dom = new \DOMDocument();
       $xpath = new Xpath($dom);
       $this->assertEquals(
-        1,
-        $xpath->evaluate('count(//node[@value = '.$xpath->quote($value).'])')
+        $expected,
+        $xpath->quote($value)
       );
     }
 
@@ -188,11 +224,11 @@ namespace FluentDOM {
      */
     public static function provideValuesForQuote() {
       return [
-        'simple string' => ['foo'],
-        'single quote' => ["'"],
-        'double quote' => ['"'],
-        'quotes' => ['\'"'],
-        'complex quotes' => ['O\'Haras "Hello World!"']
+        'simple string' => ["'foo'", 'foo'],
+        'single quote' => ['"\'"', "'"],
+        'double quote' => ["'\"'", '"'],
+        'quotes' => ['concat("\'", \'"\')', '\'"'],
+        'complex quotes' => ['concat("O\'Haras ", \'"Hello World!"\')', 'O\'Haras "Hello World!"']
       ];
     }
   }

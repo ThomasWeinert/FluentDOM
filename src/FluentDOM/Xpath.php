@@ -36,6 +36,12 @@ namespace FluentDOM {
     }
 
     /**
+     * Fetch nodes or scalar valeus from the DOM using Xpath expression.
+     *
+     * The main difference to DOMXpath::evaluate() is the handlign of the third
+     * argument. Namespace registration can be changed using the property and
+     * ist disabled by default.
+     *
      * @param string $expression
      * @param \DOMNode $contextNode
      * @param NULL|boolean $registerNodeNS
@@ -47,6 +53,10 @@ namespace FluentDOM {
     }
 
     /**
+     * Fetch nodes defined by the xpath expression and return the node list.
+     *
+     * This method is deprecated and only implemented for BC. Plase use evaluate()
+     *
      * @param string $expression
      * @param \DOMNode $contextNode
      * @param NULL|boolean $registerNodeNS
@@ -58,6 +68,22 @@ namespace FluentDOM {
       );
       $registerNodeNS = $registerNodeNS ?: $this->_registerNodeNamespaces;
       return parent::query($expression, $contextNode, (bool)$registerNodeNS);
+    }
+
+    /**
+     * Returns the first node matched by the expression or NULL.
+     *
+     * @param string $expression
+     * @param \DOMNode $contextNode
+     * @param NULL|boolean $registerNodeNS
+     * @return \DOMNode|null
+     */
+    public function firstOf($expression, \DOMNode $contextNode = NULL, $registerNodeNS = NULL) {
+      $nodes = $this->evaluate($expression, $contextNode, $registerNodeNS);
+      if ($nodes instanceof \DOMNodeList && $nodes->length > 0) {
+        return $nodes->item(0);
+      }
+      return NULL;
     }
 
     /**
@@ -79,14 +105,12 @@ namespace FluentDOM {
         $hasDoubleQuote = FALSE !== strpos($string, '"');
         if ($hasDoubleQuote) {
           $result = '';
-          $parts = explode('"', $string);
-          foreach ($parts as $part) {
-            $result .= ", '\"'";
-            if ("" !== $part) {
-              $result .= ', "'.$part.'"';
-            }
-          };
-          return 'concat('.substr($result, 7).')';
+          preg_match_all('("[^\']*|[^"]+)', $string, $matches);
+          foreach ($matches[0] as $part) {
+            $quoteChar = (substr($part, 0, 1) == '"') ? "'" : '"';
+            $result .= ", ".$quoteChar.$part.$quoteChar;
+          }
+          return 'concat('.substr($result, 2).')';
         } else {
           return '"'.$string.'"';
         }

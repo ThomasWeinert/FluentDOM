@@ -29,6 +29,7 @@ XML namespace support for document creation.
 ## Table Of Contents:
 * Requirements
 * Usage
+* Packagist
 * Similarities With jQuery
 * Differences To jQuery
 * Extensions to PHPs DOM classes
@@ -55,6 +56,18 @@ The sample creates a new FluentDOM query object, loads the sample.xml file,
 looks for a tag &lt;h1> with the attribute "id" that has the value "title",
 sets the content of this tag to "Hello World" and outputs the manipulated
 document.
+
+## Packagist
+
+FluentDOM is available on [Packagist.org](https://packagist.org/packages/fluentdom/fluentdom), just add the dependency to your composer.json.
+
+```javascript
+{
+  "require" : {
+    "fluentdom/fluentdom": "v5.0.0-RC1"
+  }
+}
+```
 
 ## Similarities With jQuery
 

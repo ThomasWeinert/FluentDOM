@@ -119,7 +119,7 @@ namespace FluentDOM {
     /**
      * @covers FluentDOM\Element::appendXml
      */
-    public function testAppendXmlWithNamspace() {
+    public function testAppendXmlWithNamespace() {
       $dom = new Document();
       $dom->appendChild($dom->createElement('root'));
       $dom->documentElement->appendXml(
@@ -141,12 +141,35 @@ namespace FluentDOM {
     }
 
     /**
+     * @covers FluentDOM\Element::saveXmlFragment
+     */
+    public function testSaveXmlFragment() {
+      $dom = new Document();
+      $node = $dom->appendChild($dom->createElement('div'));
+      $node->appendChild($dom->createTextNode("text"));
+      $node->appendChild($dom->createElement("br"));
+      $this->assertEquals('text<br/>', $node->saveXmlFragment());
+    }
+
+    /**
      * @covers FluentDOM\Element::saveHtml
      */
     public function testSaveHtml() {
       $dom = new Document();
       $node = $dom->appendChild($dom->createElement('div'));
       $this->assertEquals('<div></div>', $node->saveHtml());
+    }
+
+    /**
+     * @covers FluentDOM\Element::evaluate
+     */
+    public function testEvaluate() {
+      $dom = new Document();
+      $dom->loadXml('<foo>success</foo>');
+      $this->assertEquals(
+        'success',
+        $dom->documentElement->evaluate('string(.)')
+      );
     }
   }
 }

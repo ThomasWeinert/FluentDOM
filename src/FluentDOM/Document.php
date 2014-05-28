@@ -194,5 +194,18 @@ namespace FluentDOM {
       );
       return $node;
     }
+
+    /**
+     * Evaluate an xpath expression on the document.
+     *
+     * @param string $expression
+     * @param \DOMNode $context
+     * @return mixed
+     */
+    public function evaluate($expression, \DOMNode $context = NULL) {
+      return $this->xpath()->evaluate(
+        $expression, isset($context) ? $context : NULL
+      );
+    }
   }
 }

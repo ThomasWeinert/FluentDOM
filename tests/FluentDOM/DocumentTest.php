@@ -159,5 +159,29 @@ namespace FluentDOM {
         $dom->saveXML($dom->documentElement)
       );
     }
+
+    /**
+     * @covers FluentDOM\Document::evaluate
+     */
+    public function testEvaluate() {
+      $dom = new Document();
+      $dom->loadXml('<foo>success</foo>');
+      $this->assertEquals(
+        'success',
+        $dom->evaluate('string(/foo)')
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Document::evaluate
+     */
+    public function testEvaluateWithContext() {
+      $dom = new Document();
+      $dom->loadXml('<foo>success</foo>');
+      $this->assertEquals(
+        'success',
+        $dom->evaluate('string(.)', $dom->documentElement)
+      );
+    }
   }
 }

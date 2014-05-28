@@ -87,12 +87,39 @@ namespace FluentDOM {
     }
 
     /**
+     * Save the child nodes of this element as an XML fragment.
+     *
+     * @return string
+     */
+    public function saveXmlFragment() {
+      $result = '';
+      foreach ($this->childNodes as $child) {
+        $result .= $this->ownerDocument->saveXML($child);
+      }
+      return $result;
+    }
+
+    /**
      * save the element node as HTML
      *
      * @return string
      */
     public function saveHtml() {
       return $this->ownerDocument->saveHTML($this);
+    }
+
+    /**
+     * Evaluate an xpath expression in the context of this
+     * element.
+     *
+     * @param string $expression
+     * @param \DOMNode $context
+     * @return mixed
+     */
+    public function evaluate($expression, \DOMNode $context = NULL) {
+      return $this->ownerDocument->xpath()->evaluate(
+        $expression, isset($context) ? $context : $this
+      );
     }
   }
 }

@@ -1,6 +1,6 @@
 # FluentDOM
 
-[![Build Status](https://travis-ci.org/ThomasWeinert/PhpCss.svg?branch=master)](https://travis-ci.org/ThomasWeinert/PhpCss)
+[![Build Status](https://travis-ci.org/FluentDOM/FluentDOM.svg?branch=master)](https://travis-ci.org/FluentDOM/FluentDOM)
 [![License](https://poser.pugx.org/fluentdom/fluentdom/license.svg)](https://packagist.org/packages/fluentdom/fluentdom)
 [![Total Downloads](https://poser.pugx.org/fluentdom/fluentdom/downloads.svg)](https://packagist.org/packages/fluentdom/fluentdom)
 [![Latest Stable Version](https://poser.pugx.org/fluentdom/fluentdom/v/stable.svg)](https://packagist.org/packages/fluentdom/fluentdom)

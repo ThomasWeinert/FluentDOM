@@ -64,7 +64,7 @@ FluentDOM is available on [Packagist.org](https://packagist.org/packages/fluentd
 ```javascript
 {
   "require" : {
-    "fluentdom/fluentdom": "v5.0.0-RC1"
+    "fluentdom/fluentdom": "5.x"
   }
 }
 ```

@@ -138,5 +138,19 @@ namespace FluentDOM\Loader {
           ->saveXML()
       );
     }
+
+    /**
+     * @covers FluentDOM\Loader\JsonString
+     */
+    public function testLoadWithEmptyArray() {
+      $loader = new JsonString(0, 1);
+      $this->assertXmlStringEqualsXmlString(
+        '<?xml version="1.0" encoding="UTF-8"?>
+         <json:json xmlns:json="urn:carica-json-dom.2013" json:type="array"/>',
+        $loader
+          ->load('[]', 'json')
+          ->saveXML()
+      );
+    }
   }
 }

@@ -90,7 +90,7 @@ namespace FluentDOM\Loader {
         $firstChar = substr(trim($source), 0, 1);
         if (in_array($firstChar, array('{', '['))) {
           $json = json_decode($source);
-          if ($json) {
+          if ($json || is_array($json)) {
             $dom = new Document('1.0', 'UTF-8');
             $dom->appendChild(
               $root = $dom->createElementNS(self::XMLNS, 'json:json')

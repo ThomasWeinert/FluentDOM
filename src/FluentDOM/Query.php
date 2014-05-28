@@ -147,7 +147,8 @@ namespace FluentDOM {
             new Loader\XmlFile(),
             new Loader\XmlString(),
             new Loader\HtmlFile(),
-            new Loader\HtmlString()
+            new Loader\HtmlString(),
+            new Loader\JsonString()
           ]
         );
       }

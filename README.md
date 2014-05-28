@@ -1,9 +1,14 @@
 # FluentDOM
 
+[![Build Status](https://travis-ci.org/ThomasWeinert/PhpCss.svg?branch=master)](https://travis-ci.org/ThomasWeinert/PhpCss)
+[![License](https://poser.pugx.org/fluentdom/fluentdom/license.svg)](https://packagist.org/packages/fluentdom/fluentdom)
+[![Total Downloads](https://poser.pugx.org/fluentdom/fluentdom/downloads.svg)](https://packagist.org/packages/fluentdom/fluentdom)
+[![Latest Stable Version](https://poser.pugx.org/fluentdom/fluentdom/v/stable.svg)](https://packagist.org/packages/fluentdom/fluentdom)
+[![Latest Unstable Version](https://poser.pugx.org/fluentdom/fluentdom/v/unstable.svg)](https://packagist.org/packages/fluentdom/fluentdom)
+
   Version: 5 dev <br />
   Copyright: 2009-2014 Bastian Feder, Thomas Weinert <br />
   Licence: [The MIT License](http://www.opensource.org/licenses/mit-license.php) <br />
-  Build Status: [![Build Status](https://travis-ci.org/FluentDOM/FluentDOM.svg?branch=master)](https://travis-ci.org/FluentDOM/FluentDOM) <br />
 
 FluentDOM provides an easy to use fluent interface for DOMDocument. We tried to
 keep the jQuery API but adapted it to PHP and the server environment.

@@ -82,6 +82,60 @@ namespace FluentDOM {
     /**
      * @covers FluentDOM\Document::createElement
      */
+    public function testCreateElementWithContent() {
+      $dom = new Document();
+      $dom->appendChild($dom->createElement('example', 'Content & More'));
+      $this->assertEquals(
+        '<example>Content &amp; More</example>',
+        $dom->saveXml($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Document::createElement
+     */
+    public function testCreateElementWithContentAndAttribute() {
+      $dom = new Document();
+      $dom->appendChild(
+        $dom->createElement('example', 'Content & More', ['attr' => 'value'])
+      );
+      $this->assertEquals(
+        '<example attr="value">Content &amp; More</example>',
+        $dom->saveXml($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Document::createElement
+     */
+    public function testCreateElementWithAttributeAsSecondArgument() {
+      $dom = new Document();
+      $dom->appendChild(
+        $dom->createElement('example', ['attr' => 'value'])
+      );
+      $this->assertEquals(
+        '<example attr="value"/>',
+        $dom->saveXml($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Document::createElement
+     */
+    public function testCreateElementWithAttributeAsSecondAndThirdArgument() {
+      $dom = new Document();
+      $dom->appendChild(
+        $dom->createElement('example', ['attr1' => 'one'], ['attr2' => 'two'])
+      );
+      $this->assertEquals(
+        '<example attr1="one" attr2="two"/>',
+        $dom->saveXml($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Document::createElement
+     */
     public function testCreateElementWithNamespace() {
       $dom = new Document();
       $dom->registerNamespace('test', 'urn:success');

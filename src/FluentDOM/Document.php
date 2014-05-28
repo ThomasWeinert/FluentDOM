@@ -112,14 +112,22 @@ namespace FluentDOM {
      *
      * Allow to add a text content and attributes directly.
      *
+     * If $content is an array, the $content argument  will be merged with the $attributes
+     * argument.
+     *
      * @param string $name
-     * @param string $content
+     * @param string|array $content
      * @param array $attributes
      * @throws \LogicException
      * @return Element
      */
     public function createElement($name, $content = NULL, array $attributes = NULL) {
       $namespace = '';
+      if (is_array($content)) {
+        $attributes = NULL === $attributes
+          ? $content : array_merge($content, $attributes);
+        $content = NULL;
+      }
       if (FALSE !== ($position = strpos($name, ':'))) {
         $prefix = substr($name, 0, $position);
         if ($prefix != '') {

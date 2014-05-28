@@ -24,7 +24,7 @@ development. You will find the PHPUnit test in the "tests" subdirectory.
 
 Version 5 is a complete rewrite. It is updated to the new PHP 5.4 syntax. It
 now provides classes that extend PHPs DOMDocument. Another focus was
-XML namespace support.
+XML namespace support for document creation.
 
 ## Table Of Contents:
 * Requirements
@@ -33,6 +33,7 @@ XML namespace support.
 * Differences To jQuery
 * Extensions to PHPs DOM classes
 * Backwards Compatibility Breaks
+* CSS 3 Selectors
 
 ## Requirements
 
@@ -73,10 +74,9 @@ Once again many thanks to the jQuery team.
 
 ### 1) XPath selectors
 
-Every method that supports a selector uses XPath not CSS selectors. Since XPath
-is supported by the ext/xml extension, no extra parsing need to be
-done. This should be faster processing the selectors and btw it was easier for
-us to implement. And as a nice topping it supports namespaces, too.
+By default every method that supports a selector uses XPath not CSS selectors.
+Since XPath is supported by the ext/dom extension, no extra parsing need to be
+done. This should be faster processing the selectors and btw it was easier to implement.
 
 ### 2) Text nodes
 
@@ -131,3 +131,17 @@ The old loaders are gone and replaced with the new FluentDOM\Loadable interface.
 
 The registerNamespaces() method was replaced with a registerNamespace() method,
 having the same arguments like DOMXpath::registerNamespace().
+
+## CSS 3 Selectors
+
+If you install [PhpCss](https://github.com/ThomasWeinert/PhpCss) into a project,
+you can use the FluentDOM::QueryCss() function. It returns a FluentDOM instance
+supporting CSS 3 selectors.
+
+```php
+<?php
+$fd = FluentDOM::QueryCss('sample.xml')
+  ->find('h1#title')
+  ->text('Hello World!');
+?>
+```

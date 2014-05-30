@@ -728,7 +728,10 @@ namespace FluentDOM {
     private function getContentFragment($content, $includeTextNodes = TRUE, $limit = 0) {
       $result = array();
       $fragment = $this->getDocument()->createDocumentFragment();
-      if ($fragment->appendXML($content)) {
+      if (
+        (is_string($content) || method_exists($content, '__toString')) &&
+        $fragment->appendXML($content)
+      ) {
         for ($i = $fragment->childNodes->length - 1; $i >= 0; $i--) {
           $element = $fragment->childNodes->item($i);
           if ($element instanceof \DOMElement ||

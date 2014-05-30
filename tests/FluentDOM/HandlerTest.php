@@ -40,7 +40,7 @@ class FluentDOMHandlerTest extends FluentDOMTestCase {
       '<sample><samplechild/><child/>Hello World</sample>',
       $dom->saveXML($dom->documentElement)
     );
-    $this->assertEquals($nodes, $resultNodes);
+    $this->assertNodeListEqualsNodeList($nodes, $resultNodes);
     $this->assertNotSame($nodes[0], $resultNodes[0]);
     $this->assertNotSame($nodes[1], $resultNodes[1]);
   }
@@ -62,7 +62,7 @@ class FluentDOMHandlerTest extends FluentDOMTestCase {
       '<sample><child/>Hello World<samplechild/></sample>',
       $dom->saveXML($dom->documentElement)
     );
-    $this->assertEquals($nodes, $resultNodes);
+    $this->assertNodeListEqualsNodeList($nodes, $resultNodes);
     $this->assertNotSame($nodes[0], $resultNodes[0]);
     $this->assertNotSame($nodes[1], $resultNodes[1]);
   }
@@ -84,7 +84,7 @@ class FluentDOMHandlerTest extends FluentDOMTestCase {
       '<sample><samplechild/><child/>Hello World</sample>',
       $dom->saveXML($dom->documentElement)
     );
-    $this->assertEquals($nodes, $resultNodes);
+    $this->assertNodeListEqualsNodeList($nodes, $resultNodes);
     $this->assertNotSame($nodes[0], $resultNodes[0]);
     $this->assertNotSame($nodes[1], $resultNodes[1]);
   }
@@ -106,7 +106,7 @@ class FluentDOMHandlerTest extends FluentDOMTestCase {
       '<sample><child/>Hello World<samplechild/></sample>',
       $dom->saveXML($dom->documentElement)
     );
-    $this->assertEquals($nodes, $resultNodes);
+    $this->assertNodeListEqualsNodeList($nodes, $resultNodes);
     $this->assertNotSame($nodes[0], $resultNodes[0]);
     $this->assertNotSame($nodes[1], $resultNodes[1]);
   }

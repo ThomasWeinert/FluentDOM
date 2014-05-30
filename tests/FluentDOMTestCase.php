@@ -55,6 +55,31 @@ abstract class FluentDOMTestCase extends PHPUnit_Framework_TestCase {
   }
 
   /**
+   *
+   * @param $expected
+   * @param $actual
+   */
+  public function assertNodeListEqualsNodeList($expected, $actual) {
+    if (is_array($expected) && is_array($actual)) {
+      $expectedKeys = array_keys($expected);
+      $actualKeys = array_keys($actual);
+      $this->assertEquals($expectedKeys, $actualKeys);
+      foreach ($expected as $index => $expectedNode) {
+        $actualNode = $actual[$index];
+        if ($actualNode instanceof DOMNode &&
+            $expectedNode instanceof DOMNode) {
+          $this->assertEquals(
+            $expectedNode->ownerDocument->saveXML($expectedNode),
+            $actualNode->ownerDocument->saveXML($actualNode)
+          );
+        }
+      }
+    } else {
+      $this->assertEquals($expected, $actual);
+    }
+  }
+
+  /**
   * @param string $functionName
   * @return FluentDOM
   */

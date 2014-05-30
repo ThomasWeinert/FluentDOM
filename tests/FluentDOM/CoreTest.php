@@ -21,7 +21,7 @@ require_once (dirname(__FILE__).'/../FluentDOMTestCase.php');
 * @package FluentDOM
 * @subpackage unitTests
 */
-class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
+class FluentDOMCoreTest extends FluentDOMTestCase {
 
   const XML = '
     <items version="1.0">
@@ -1311,7 +1311,7 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
   public function testGetContentNodesWithDomelement() {
     $fd = new FluentDOMCoreProxy();
     $node = $fd->document->createElement('sample');
-    $this->assertEquals(
+    $this->assertNodeListEqualsNodeList(
       array($node),
       $fd->_getContentNodes($node)
     );
@@ -1324,7 +1324,7 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
   public function testGetContentNodesWithDomtext() {
     $fd = new FluentDOMCoreProxy();
     $node = $fd->document->createTextNode('sample');
-    $this->assertEquals(
+    $this->assertNodeListEqualsNodeList(
       array($node),
       $fd->_getContentNodes($node)
     );
@@ -1381,7 +1381,7 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
       $elementNode = $fd->document->createElement('sample'),
       $textNode = $fd->document->createTextNode('sample')
     );
-    $this->assertEquals(
+    $this->assertNodeListEqualsNodeList(
       array($elementNode, $textNode),
       $fd->_getContentNodes($nodes)
     );
@@ -1397,7 +1397,7 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
       $elementNode = $fd->document->createElement('sample'),
       $textNode = $fd->document->createTextNode('sample')
     );
-    $this->assertEquals(
+    $this->assertNodeListEqualsNodeList(
       array($elementNode),
       $fd->_getContentNodes($nodes, FALSE)
     );
@@ -1413,7 +1413,7 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
       $elementNode = $fd->document->createElement('sample'),
       $textNode = $fd->document->createTextNode('sample')
     );
-    $this->assertEquals(
+    $this->assertNodeListEqualsNodeList(
       array($elementNode),
       $fd->_getContentNodes($nodes, TRUE, 1)
     );
@@ -1430,15 +1430,11 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
       $elementNode = $dom->createElement('sample')
     );
     $actual = $fd->_getContentNodes($nodes);
-    $this->assertThat(
-      $actual[0],
-      $this->logicalAnd(
-        $this->equalTo($elementNode),
-        $this->logicalNot(
-          $this->identicalTo($elementNode)
-        )
-      )
+    $this->assertEquals(
+      $actual[0]->ownerDocument->saveXml($actual[0]),
+      $dom->saveXml($elementNode)
     );
+    $this->assertNotSame($actual[0], $elementNode);
   }
 
   /**

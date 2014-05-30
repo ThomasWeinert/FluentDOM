@@ -56,7 +56,7 @@ echo FluentDOM('sample.xml')
 ```
 
 The sample create a new FluentDOM object, loads the sample.xml file, looks for
-an tag <h1> with the attribute "id" that has the value "title", sets the
+an tag &lt;h1> with the attribute "id" that has the value "title", sets the
 content of this tag to "Hello World" and outputs the manipulated document.
 
 ## Similarities With jQuery

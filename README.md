@@ -38,9 +38,21 @@ XML namespace support for document creation.
 
 ## Requirements
 
-1) PHP >= 5.4
+### PHP
 
-FluentDOM needs at least PHP 5.4.
+ * PHP >= 5.4
+ * ext/dom
+
+FluentDOM needs at least PHP 5.4 and the DOM extension. For some features
+additional extensions might be needed, like ext/json to load JSON strings.
+
+### HHVM
+
+ * HHVM >= 3.0
+
+The support is incomplete. FluentDOM\Query should work, but the extended
+DOM classes will not. Here is an [issue](https://github.com/facebook/hhvm/issues/1848)
+with DOMDocument::registerNodeClass() at the moment.
 
 ## Usage
 

@@ -886,9 +886,7 @@ namespace FluentDOM {
       $result = array();
       if ($targetNode instanceof \DOMElement) {
         foreach ($contentNodes as $contentNode) {
-          /**
-           * @var \DOMNode $contentNode
-           */
+          /** @var \DOMNode $contentNode */
           if ($this->isNode($contentNode)) {
             $result[] = $targetNode->appendChild($contentNode->cloneNode(TRUE));
           }
@@ -909,9 +907,7 @@ namespace FluentDOM {
       if ($targetNode instanceof \DOMElement) {
         $firstChild = $targetNode->hasChildNodes() ? $targetNode->childNodes->item(0) : NULL;
         foreach ($contentNodes as $contentNode) {
-          /**
-           * @var \DOMNode $contentNode
-           */
+          /** @var \DOMNode $contentNode */
           if ($this->isNode($contentNode)) {
             $result[] = $targetNode->insertBefore(
               $contentNode->cloneNode(TRUE),
@@ -932,11 +928,10 @@ namespace FluentDOM {
     public static function insertNodesAfter($targetNode, $contentNodes) {
       $result = array();
       if ($targetNode instanceof \DOMNode && !empty($contentNodes)) {
-        $beforeNode = $targetNode->nextSibling;
+        $beforeNode = ($targetNode->nextSibling instanceof \DOMNode)
+          ? $targetNode->nextSibling : NULL;
         foreach ($contentNodes as $contentNode) {
-          /**
-           * @var \DOMNode $contentNode
-           */
+          /** @var \DOMNode $contentNode */
           $result[] = $targetNode->parentNode->insertBefore(
             $contentNode->cloneNode(TRUE), $beforeNode
           );
@@ -955,9 +950,7 @@ namespace FluentDOM {
       $result = array();
       if ($targetNode instanceof \DOMNode && !empty($contentNodes)) {
         foreach ($contentNodes as $contentNode) {
-          /**
-           * @var \DOMNode $contentNode
-           */
+          /** @var \DOMNode $contentNode */
           $result[] = $targetNode->parentNode->insertBefore(
             $contentNode->cloneNode(TRUE), $targetNode
           );
@@ -1031,9 +1024,7 @@ namespace FluentDOM {
         } else {
           $targetNode = $this->getContentElement($selector);
           foreach ($this->_nodes as $index => $node) {
-            /**
-             * @var \DOMNode $node
-             */
+            /** @var \DOMNode $node */
             if ($node->isSameNode($targetNode)) {
               return $index;
             }
@@ -1791,9 +1782,7 @@ namespace FluentDOM {
     private function cloneNodes() {
       $result = $this->spawn();
       foreach ($this->_nodes as $node) {
-        /**
-         * @var \DOMNode $node
-         */
+        /** @var \DOMNode $node */
         $result->push($node->cloneNode(TRUE));
       }
       return $result;
@@ -1844,9 +1833,7 @@ namespace FluentDOM {
               ) {
                 $beforeNode = $targetNode->nextSibling;
                 foreach ($contentNodes as $contentNode) {
-                  /**
-                   * @var \DOMNode $contentNode
-                   */
+                  /** @var \DOMNode $contentNode */
                   $result[] = $targetNode->parentNode->insertBefore(
                     $contentNode->cloneNode(TRUE), $beforeNode
                   );
@@ -1883,9 +1870,7 @@ namespace FluentDOM {
                 !empty($contentNodes)
               ) {
                 foreach ($contentNodes as $contentNode) {
-                  /**
-                   * @var \DOMNode $contentNode
-                   */
+                  /** @var \DOMNode $contentNode */
                   $result[] = $targetNode->parentNode->insertBefore(
                     $contentNode->cloneNode(TRUE), $targetNode
                   );

@@ -808,7 +808,7 @@ namespace FluentDOM {
     /**
      * Get the inner xml of a given node or in other words the xml of all children.
      *
-     * @param \DOMElement $node
+     * @param \DOMNode $node
      * @return string
      */
     private function getInnerXml($node) {
@@ -905,14 +905,21 @@ namespace FluentDOM {
     private function insertChildrenBefore($targetNode, $contentNodes) {
       $result = array();
       if ($targetNode instanceof \DOMElement) {
-        $firstChild = $targetNode->hasChildNodes() ? $targetNode->childNodes->item(0) : NULL;
+        $hasChild = $targetNode->hasChildNodes();
+        $firstChild = $hasChild ? $targetNode->childNodes->item(0) : NULL;
         foreach ($contentNodes as $contentNode) {
           /** @var \DOMNode $contentNode */
           if ($this->isNode($contentNode)) {
-            $result[] = $targetNode->insertBefore(
-              $contentNode->cloneNode(TRUE),
-              $firstChild
-            );
+            if ($hasChild) {
+              $result[] = $targetNode->insertBefore(
+                $contentNode->cloneNode(TRUE),
+                $firstChild
+              );
+            } else {
+              $result[] = $targetNode->appendChild(
+                $contentNode->cloneNode(TRUE)
+              );
+            }
           }
         }
       }
@@ -927,14 +934,23 @@ namespace FluentDOM {
      */
     public static function insertNodesAfter($targetNode, $contentNodes) {
       $result = array();
-      if ($targetNode instanceof \DOMNode && !empty($contentNodes)) {
-        $beforeNode = ($targetNode->nextSibling instanceof \DOMNode)
-          ? $targetNode->nextSibling : NULL;
+      if (
+        isset($targetNode->parentNode) &&
+        !empty($contentNodes)
+      ) {
+        $beforeNode = $targetNode->nextSibling;
+        $hasSibling = $beforeNode instanceof \DOMNode;
         foreach ($contentNodes as $contentNode) {
           /** @var \DOMNode $contentNode */
-          $result[] = $targetNode->parentNode->insertBefore(
-            $contentNode->cloneNode(TRUE), $beforeNode
-          );
+          if ($hasSibling) {
+            $result[] = $targetNode->parentNode->insertBefore(
+              $contentNode->cloneNode(TRUE), $beforeNode
+            );
+          } else {
+            $result[] = $targetNode->parentNode->appendChild(
+              $contentNode->cloneNode(TRUE)
+            );
+          }
         }
       }
       return $result;
@@ -948,7 +964,10 @@ namespace FluentDOM {
      */
     private function insertNodesBefore($targetNode, $contentNodes) {
       $result = array();
-      if ($targetNode instanceof \DOMNode && !empty($contentNodes)) {
+      if (
+        isset($targetNode->parentNode) &&
+        !empty($contentNodes)
+      ) {
         foreach ($contentNodes as $contentNode) {
           /** @var \DOMNode $contentNode */
           $result[] = $targetNode->parentNode->insertBefore(

@@ -7,6 +7,19 @@ namespace FluentDOM {
   class DocumentTest extends TestCase {
 
     /**
+     * @covers FluentDOM\Document::__construct
+     */
+    public function testDocumentRegistersNodeClass() {
+      $dom = new Document();
+      $node = $dom->appendElement('test');
+      $this->assertInstanceOf(
+        'FluentDOM\\Element',
+        $node,
+        "Node class registration failed."
+      );
+    }
+
+    /**
      * @covers FluentDOM\Document::xpath
      */
     public function testXpathImplicitCreate() {
@@ -20,6 +33,11 @@ namespace FluentDOM {
      * @covers FluentDOM\Document::xpath
      */
     public function testXpathImplicitCreateAfterDocumentLoad() {
+      if (defined('HHVM_VERSION')) {
+        $this->markTestSkipped(
+          'HHVM does not need to recreate the Xpath instance.'
+        );
+      }
       $dom = new Document();
       $xpath = $dom->xpath();
       $dom->loadXML('<test/>');

@@ -298,7 +298,8 @@ namespace FluentDOM {
             )
           );
         }
-        if (isset($node->parentNode) ||
+        if (
+          ($node->parentNode instanceof \DOMNode) ||
           $node === $node->ownerDocument->documentElement) {
           $position = (integer)$this->xpath()->evaluate('count(preceding::node())', $node);
           /* use the document position as index, ignore duplicates */
@@ -864,7 +865,7 @@ namespace FluentDOM {
           } else {
             $target = $targets->item(0);
           }
-          if (isset($node->parentNode)) {
+          if ($node->parentNode instanceof \DOMNode) {
             $node->parentNode->insertBefore($wrapper, $node);
           }
           $target->appendChild($node);
@@ -930,8 +931,7 @@ namespace FluentDOM {
      */
     public static function insertNodesAfter($targetNode, $contentNodes) {
       $result = array();
-      if (isset($targetNode->parentNode) &&
-        !empty($contentNodes)) {
+      if ($targetNode instanceof \DOMNode && !empty($contentNodes)) {
         $beforeNode = $targetNode->nextSibling;
         foreach ($contentNodes as $contentNode) {
           /**
@@ -953,8 +953,7 @@ namespace FluentDOM {
      */
     private function insertNodesBefore($targetNode, $contentNodes) {
       $result = array();
-      if (isset($targetNode->parentNode) &&
-        !empty($contentNodes)) {
+      if ($targetNode instanceof \DOMNode && !empty($contentNodes)) {
         foreach ($contentNodes as $contentNode) {
           /**
            * @var \DOMNode $contentNode
@@ -1491,11 +1490,11 @@ namespace FluentDOM {
     public function parent() {
       $result = $this->spawn();
       foreach ($this->_nodes as $node) {
-        if (isset($node->parentNode)) {
+        if ($node->parentNode instanceof \DOMNode) {
           $result->push($node->parentNode);
         }
       }
-      $this->uniqueSortNodes();
+      $result->uniqueSortNodes();
       return $result;
     }
 
@@ -1638,7 +1637,7 @@ namespace FluentDOM {
     public function siblings($selector = NULL) {
       $result = $this->spawn();
       foreach ($this->_nodes as $node) {
-        if (isset($node->parentNode)) {
+        if ($node->parentNode instanceof \DOMNode) {
           foreach ($node->parentNode->childNodes as $childNode) {
             if ($this->isNode($childNode) &&
               $childNode !== $node) {
@@ -1839,8 +1838,10 @@ namespace FluentDOM {
             $this->_nodes,
             function ($targetNode, $contentNodes) {
               $result = array();
-              if (isset($targetNode->parentNode) &&
-                !empty($contentNodes)) {
+              if (
+                $targetNode->parentNode instanceof \DOMNode &&
+                !empty($contentNodes)
+              ) {
                 $beforeNode = $targetNode->nextSibling;
                 foreach ($contentNodes as $contentNode) {
                   /**
@@ -1877,8 +1878,10 @@ namespace FluentDOM {
             $this->_nodes,
             function ($targetNode, $contentNodes) {
               $result = array();
-              if (isset($targetNode->parentNode) &&
-                !empty($contentNodes)) {
+              if (
+                $targetNode->parentNode instanceof \DOMNode &&
+                !empty($contentNodes)
+              ) {
                 foreach ($contentNodes as $contentNode) {
                   /**
                    * @var \DOMNode $contentNode
@@ -2001,7 +2004,7 @@ namespace FluentDOM {
     public function remove($selector = NULL) {
       $result = $this->spawn();
       foreach ($this->_nodes as $node) {
-        if (isset($node->parentNode)) {
+        if ($node->parentNode instanceof \DOMNode) {
           if (empty($selector) || $this->matches($selector, $node)) {
             $result->push($node->parentNode->removeChild($node));
           }
@@ -2096,7 +2099,7 @@ namespace FluentDOM {
             } else {
               $target = $targets->item(0);
             }
-            if (isset($node->parentNode)) {
+            if ($node->parentNode instanceof \DOMNode) {
               $node->parentNode->insertBefore($wrapper, $node);
             }
             foreach ($group as $node) {

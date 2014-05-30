@@ -48,11 +48,15 @@ additional extensions might be needed, like ext/json to load JSON strings.
 
 ### HHVM
 
- * HHVM >= 3.0
+ * HHVM >= 3.1
 
-The support is incomplete. FluentDOM\Query should work, but the extended
-DOM classes will not. Here is an [issue](https://github.com/facebook/hhvm/issues/1848)
-with DOMDocument::registerNodeClass() at the moment.
+FluentDOM works with HHVM 3.1. Here is an [issue](https://github.com/facebook/hhvm/issues/1848)
+with DOMDocument::registerNodeClass() and DOMDocument::createElement() at the moment,
+but FluentDOM\Document includes a workaround.
+
+The automatic namespace registration can not be disabled at the moment, HHVM does not
+support the 3rd argument for DOMXPath::evaluate(). FluentDOM\Xpath will
+ignore it.
 
 ## Usage
 

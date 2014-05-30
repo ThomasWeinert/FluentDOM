@@ -158,7 +158,19 @@ namespace FluentDOM {
       if (!empty($content)) {
         $node->appendChild($this->createTextNode($content));
       }
-      return $node;
+      return $this->ensureNodeClass($node);
+    }
+
+    /**
+     * @param string $namespaceURI
+     * @param string $qualifiedName
+     * @param null $value
+     * @return \DOMElement|\DOMNode
+     */
+    public function createElementNS($namespaceURI, $qualifiedName, $value = null) {
+      return $this->ensureNodeClass(
+        parent::createElementNS($namespaceURI, $qualifiedName, $value)
+      );
     }
 
     /**
@@ -214,6 +226,21 @@ namespace FluentDOM {
       return $this->xpath()->evaluate(
         $expression, isset($context) ? $context : NULL
       );
+    }
+
+    /**
+     * This is workaround for issue
+     *
+     * @param \DOMNode|Element $node
+     * @return \DOMNode
+     */
+    private function ensureNodeClass(\DOMNode $node) {
+      if (
+        !($node instanceof Element) &&
+        ($node instanceof \DOMElement)) {
+        return $node->ownerDocument->importNode($node, TRUE);
+      }
+      return $node;
     }
   }
 }

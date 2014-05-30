@@ -15,6 +15,18 @@ namespace FluentDOM {
       $this->assertInstanceOf(
         'FluentDOM\\Element',
         $node,
+        "Node class registration failed for createElement."
+      );
+    }
+    /**
+     * @covers FluentDOM\Document::__construct
+     */
+    public function testDocumentRegistersNodeClassLoadingXml() {
+      $dom = new Document();
+      $dom->appendElement('test');
+      $this->assertInstanceOf(
+        'FluentDOM\\Element',
+        $dom->documentElement,
         "Node class registration failed."
       );
     }

@@ -20,6 +20,19 @@ namespace FluentDOM {
     private $_registerNodeNamespaces = FALSE;
 
     /**
+     * HHVM and some old PHP versions do have a $document property by default
+     * Add it is it was not found after executing parent constructor.
+     *
+     * @param \DOMDocument $dom
+     */
+    public function __construct(\DOMDocument $dom) {
+      parent::__construct($dom);
+      if (!isset($this->document)) {
+        $this->document = $dom;
+      }
+    }
+
+    /**
      * If the owner document is a FluentDOM\Document register the namesspace on the
      * document object, too.
      *

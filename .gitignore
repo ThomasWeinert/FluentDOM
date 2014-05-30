@@ -4,3 +4,5 @@ phpunit.xml
 .buildpath
 docs/
 .settings
+/.idea
+/vendor

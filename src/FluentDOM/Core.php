@@ -322,7 +322,6 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
       $this->_setContentType($contentType);
     }
     $this->_array = array();
-    $this->_position = 0;
     $this->_useDocumentContext = TRUE;
     $this->_parent = NULL;
     $this->_document->preserveWhiteSpace = FALSE;

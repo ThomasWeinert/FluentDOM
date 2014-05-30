@@ -22,6 +22,11 @@ namespace FluentDOM {
      * @covers FluentDOM\Xpath
      */
     public function testEvaluateDoesNotRegisterNodeNamespaces() {
+      if (defined('HHVM_VERSION')) {
+        $this->markTestSkipped(
+          'Can not disable automatic namespace registration in HHVM'
+        );
+      }
       $dom = new \DOMDocument();
       $dom->loadXml(
         '<foo:root xmlns:foo="urn:foo">
@@ -62,6 +67,11 @@ namespace FluentDOM {
      * @covers FluentDOM\Xpath
      */
     public function testQueryDoesNotRegisterNodeNamespaces() {
+      if (defined('HHVM_VERSION')) {
+        $this->markTestSkipped(
+          'Can not disable automatic namespace registration in HHVM'
+        );
+      }
       $dom = new \DOMDocument();
       $dom->loadXml(
         '<foo:root xmlns:foo="urn:foo">
@@ -102,10 +112,15 @@ namespace FluentDOM {
      * @covers FluentDOM\Xpath
      */
     public function testQueryGeneratesDeprecatedError() {
+      $current = error_reporting();
+      if (($current & E_USER_DEPRECATED) != E_USER_DEPRECATED) {
+        error_reporting($current | E_USER_DEPRECATED);
+      }
       $dom = new \DOMDocument();
       $xpath = new Xpath($dom);
       $this->setExpectedException('PHPUnit_Framework_Error_Deprecated');
       $xpath->query('*');
+      error_reporting($current);
     }
 
     /**

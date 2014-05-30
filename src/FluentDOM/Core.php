@@ -481,7 +481,7 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
           )
         );
       }
-      if (isset($node->parentNode) ||
+      if ($node->parentNode instanceof DOMNode ||
           $node === $node->ownerDocument->documentElement) {
         $position = (integer)$this->_xpath()->evaluate('count(preceding::node())', $node);
         /* use the document position as index, ignore duplicates */
@@ -559,9 +559,16 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
         $uri = $this->_document->documentElement->lookupnamespaceURI('_');
         if (!isset($uri)) {
           $uri = $this->_document->documentElement->lookupnamespaceURI(NULL);
-          if (isset($uri)) {
-            $this->_xpath->registerNamespace('_', $uri);
-          }
+        }
+        if (
+          !isset($uri) &&
+          $this->_document->documentElement instanceof DOMElement &&
+          $this->_document->documentElement->hasAttribute('xmlns')
+        ) {
+          $uri = $this->_document->documentElement->getAttribute('xmlns');
+        }
+        if (isset($uri)) {
+          $this->_xpath->registerNamespace('_', $uri);
         }
       }
     }
@@ -588,7 +595,10 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
       $this->_registerNodeNS = $registerNodeNS;
     }
     if (is_null($this->_registerNodeNS)) {
-      $this->_registerNodeNS = version_compare(PHP_VERSION, '5.3.3', '<');
+      $this->_registerNodeNS = (
+        version_compare(PHP_VERSION, '5.3.3', '<') ||
+        defined('HHVM_VERSION')
+      );
     }
     return $this->_registerNodeNS;
   }
@@ -795,7 +805,11 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
   protected function _getContentFragment($content, $includeTextNodes = TRUE, $limit = 0) {
     $result = array();
     $fragment = $this->_document->createDocumentFragment();
-    if ($fragment->appendXML($content)) {
+    if (
+      (is_string($content) || method_exists($content, '__toString')) &&
+      (string)$content != '' &&
+      $fragment->appendXML($content)
+    ) {
       for ($i = $fragment->childNodes->length - 1; $i >= 0; $i--) {
         $element = $fragment->childNodes->item($i);
         if ($element instanceof DOMElement ||
@@ -934,7 +948,7 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
     $result = array();
     foreach ($targetNodes as $node) {
       if ($node instanceof DOMNode &&
-          isset($node->parentNode)) {
+          $node->parentNode instanceof DOMNode) {
         $result[] = $node->parentNode->removeChild($node);
       }
     }

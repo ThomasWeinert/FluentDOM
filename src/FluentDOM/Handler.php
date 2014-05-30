@@ -23,13 +23,20 @@ class FluentDOMHandler {
   */
   public static function insertNodesAfter($targetNode, $contentNodes) {
     $result = array();
-    if (isset($targetNode->parentNode) &&
+    if ($targetNode->parentNode instanceof DOMNode &&
         !empty($contentNodes)) {
       $beforeNode = $targetNode->nextSibling;
+      $hasContext = $beforeNode instanceof DOMNode;
       foreach ($contentNodes as $contentNode) {
-        $result[] = $targetNode->parentNode->insertBefore(
-          $contentNode->cloneNode(TRUE), $beforeNode
-        );
+        if ($hasContext) {
+          $result[] = $targetNode->parentNode->insertBefore(
+            $contentNode->cloneNode(TRUE), $beforeNode
+          );
+        } else {
+          $result[] = $targetNode->parentNode->appendChild(
+            $contentNode->cloneNode(TRUE)
+          );
+        }
       }
     }
     return $result;
@@ -42,7 +49,7 @@ class FluentDOMHandler {
   */
   public static function insertNodesBefore($targetNode, $contentNodes) {
     $result = array();
-    if (isset($targetNode->parentNode) &&
+    if ($targetNode->parentNode instanceof DOMNode &&
         !empty($contentNodes)) {
       foreach ($contentNodes as $contentNode) {
         $result[] = $targetNode->parentNode->insertBefore(
@@ -82,13 +89,20 @@ class FluentDOMHandler {
     $result = array();
     if ($targetNode instanceof DOMElement) {
       $firstChild = $targetNode->hasChildNodes() ? $targetNode->childNodes->item(0) : NULL;
+      $hasContext = $firstChild instanceof DOMNode;
       foreach ($contentNodes as $contentNode) {
         if ($contentNode instanceof DOMElement ||
             $contentNode instanceof DOMText) {
-          $result[] = $targetNode->insertBefore(
-            $contentNode->cloneNode(TRUE),
-            $firstChild
-          );
+          if ($hasContext) {
+            $result[] = $targetNode->insertBefore(
+              $contentNode->cloneNode(TRUE),
+              $firstChild
+            );
+          } else {
+            $result[] = $targetNode->appendChild(
+              $contentNode->cloneNode(TRUE)
+            );
+          }
         }
       }
     }

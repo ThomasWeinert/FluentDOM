@@ -556,7 +556,7 @@ class FluentDOM extends FluentDOMCore {
   public function parent() {
     $result = $this->spawn();
     foreach ($this->_array as $node) {
-      if (isset($node->parentNode)) {
+      if ($node->parentNode instanceof DOMNode) {
         $result->push($node->parentNode);
       }
     }
@@ -692,7 +692,7 @@ class FluentDOM extends FluentDOMCore {
   public function siblings($expr = NULL) {
     $result = $this->spawn();
     foreach ($this->_array as $node) {
-      if (isset($node->parentNode)) {
+      if ($node->parentNode instanceof DOMNode) {
         foreach ($node->parentNode->childNodes as $childNode) {
           if ($this->_isNode($childNode) &&
               $childNode !== $node) {
@@ -1093,7 +1093,7 @@ class FluentDOM extends FluentDOMCore {
         } else {
           $target = $targets->item(0);
         }
-        if (isset($node->parentNode)) {
+        if ($node->parentNode instanceof DOMNode) {
           $node->parentNode->insertBefore($wrapper, $node);
         }
         $target->appendChild($node);
@@ -1160,7 +1160,7 @@ class FluentDOM extends FluentDOMCore {
           } else {
             $target = $targets->item(0);
           }
-          if (isset($node->parentNode)) {
+          if ($node->parentNode instanceof DOMNode) {
             $node->parentNode->insertBefore($wrapper, $node);
           }
           foreach ($group as $node) {
@@ -1273,7 +1273,7 @@ class FluentDOM extends FluentDOMCore {
   public function remove($expr = NULL) {
     $result = $this->spawn();
     foreach ($this->_array as $node) {
-      if (isset($node->parentNode)) {
+      if ($node->parentNode instanceof DOMNode) {
         if (empty($expr) || $this->_test($expr, $node)) {
           $result->push($node->parentNode->removeChild($node));
         }

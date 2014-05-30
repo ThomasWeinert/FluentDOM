@@ -31,7 +31,8 @@ class FluentDOMLoaderDOMNode implements FluentDOMLoader {
   * @return DOMNode|NULL
   */
   public function load($source, &$contentType) {
-    if ($source instanceof DOMNode && !empty($source->ownerDocument)) {
+    if ($source instanceof DOMNode &&
+        $source->ownerDocument instanceof DOMDocument) {
       return $source;
     }
     return NULL;

@@ -824,7 +824,8 @@ class FluentDOMCoreTest extends FluentDOMTestCase {
   public function testRegisterNodeNamespaces() {
     $fd = new FluentDOMCoreProxy();
     $this->assertSame(
-      version_compare(PHP_VERSION, '5.3.3', '<'), $fd->_registerNodeNamespaces()
+      version_compare(PHP_VERSION, '5.3.3', '<') || defined('HHVM_VERSION'),
+      $fd->_registerNodeNamespaces()
     );
   }
 
@@ -852,7 +853,7 @@ class FluentDOMCoreTest extends FluentDOMTestCase {
   * @covers FluentDOMCore::_evaluate
   */
   public function testEvaluate() {
-    if (version_compare(PHP_VERSION, '5.3.3', '<')) {
+    if (version_compare(PHP_VERSION, '5.3.3', '<') || defined('HHVM_VERSION')) {
       $this->markTestSkipped('$registerNodeNS parameter not availiable.');
     }
     $fd = $this->getFluentDOMCoreFixtureFromString(self::XML);

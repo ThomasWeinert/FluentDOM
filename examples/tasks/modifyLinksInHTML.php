@@ -1,18 +1,18 @@
 <?php
 // include FluentDOM
-require('../../src/FluentDOM.php');
+require('../../vendor/autoload.php');
 // define url
 $url = 'http://www.papaya-cms.com/';
 // load data from an url
 $html = file_get_contents($url);
 
-$fd = FluentDOM::Query($html, 'html')
+$fd = FluentDOM($html, 'html')
   // find links
   ->find('//a[@href]')
   ->each(
     function ($node) use ($url) {
       //convert node to FluentDOM
-      $item = FluentDOM::Query($node);
+      $item = FluentDOM($node);
       // check for relative url
       if (!preg_match('(^[a-zA-Z]+://)', $item->attr('href'))) {
         // add base url

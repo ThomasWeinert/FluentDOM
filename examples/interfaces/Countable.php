@@ -14,6 +14,6 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../../src/FluentDOM.php');
+require_once('../../vendor/autoload.php');
 
-echo count(FluentDOM::Query($xml)->find('//p')), ' <p> tags';
+echo count(FluentDOM($xml)->find('//p')), ' <p> tags';

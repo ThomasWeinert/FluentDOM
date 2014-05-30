@@ -24,8 +24,8 @@ XML;
 
 
 echo "Example for function 'attr' using XML namespaces:\n\n";
-require('../src/FluentDOM.php');
-$dom = FluentDOM::Query($xml);
+require('../vendor/autoload.php');
+$dom = FluentDOM($xml);
 $dom->registerNamespace('h', 'http://www.w3.org/1999/xhtml');
 echo $dom
   ->find('//h:a')

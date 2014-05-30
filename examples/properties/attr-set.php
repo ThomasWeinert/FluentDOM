@@ -23,8 +23,8 @@ $html = <<<HTML
 HTML;
 
 echo "Example for property 'attr'- set attributes:\n\n";
-require_once('../../src/FluentDOM.php');
-$fd = FluentDOM::Query($html, 'text/html');
+require_once('../../vendor/autoload.php');
+$fd = FluentDOM($html, 'text/html');
 $fd
   ->find('//a')
   ->attr['target'] = '_top';

@@ -14,8 +14,8 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../../src/FluentDOM.php');
+require_once('../../vendor/autoload.php');
 
-foreach (FluentDOM::Query($xml)->find('//p') as $key => $value) {
+foreach (FluentDOM($xml)->find('//p') as $key => $value) {
   echo $key, ': ', $value->nodeName, "\n";
 }

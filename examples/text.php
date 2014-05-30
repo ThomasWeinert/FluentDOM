@@ -20,12 +20,12 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../src/FluentDOM.php');
+require_once('../vendor/autoload.php');
 
 /*
  * replace text content of 2nd paragraph
  */
-echo FluentDOM::Query($xml)
+echo FluentDOM($xml)
   ->find('//p[position() = 2]')
   ->text('nice');
 
@@ -34,7 +34,7 @@ echo "\n\n";
 /*
  * replace text content of every paragraph
  */
-echo FluentDOM::Query($xml)
+echo FluentDOM($xml)
   ->find('//p')
   ->text('nice');
 
@@ -46,7 +46,7 @@ echo "\n\n";
  *
  * replace text content of 2nd paragraph
  */
-echo FluentDOM::Query($xml)
+echo FluentDOM($xml)
   ->find('//p[position() = 1]')
   ->next()
   ->text('nice');

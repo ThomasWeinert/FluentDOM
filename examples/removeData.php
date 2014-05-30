@@ -13,8 +13,8 @@ XML;
 
 
 echo "Example for function 'removeData':\n\n";
-require_once('../src/FluentDOM.php');
-$fd = FluentDOM::Query($xml)->find('//div');
+require_once('../vendor/autoload.php');
+$fd = FluentDOM($xml)->find('//div');
 
 $fd->removeData('options');
 

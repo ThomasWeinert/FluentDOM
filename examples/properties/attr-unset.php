@@ -23,8 +23,8 @@ $html = <<<HTML
 HTML;
 
 echo "Example for property 'attr' - remove attributes:\n\n";
-require_once('../../src/FluentDOM.php');
-$fd = FluentDOM::Query($html, 'text/html')->find('/html/body//*');
+require_once('../../vendor/autoload.php');
+$fd = FluentDOM($html, 'text/html')->find('/html/body//*');
 // like $fd->removeAttr(array('style', 'target')); but array syntax
 unset($fd->attr[array('style', 'target')]);
 echo (string)$fd;

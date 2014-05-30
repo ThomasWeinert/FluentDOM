@@ -24,15 +24,15 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../src/FluentDOM.php');
-echo FluentDOM::Query($xml)
+require_once('../vendor/autoload.php');
+echo FluentDOM($xml)
   ->find('//div[@id = "start"]')
   ->prev()
   ->addClass('before');
 
 echo "\n\n";
 
-echo FluentDOM::Query($xml)
+echo FluentDOM($xml)
   ->find('//div[@class= "here"]')
   ->prev('.//span')
   ->addClass('nextTest');

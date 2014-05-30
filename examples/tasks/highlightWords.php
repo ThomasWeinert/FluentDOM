@@ -24,10 +24,10 @@ $highlighter = new FluentDOMHighlighter(
     'jumps' => 'highlightThree'
   )
 );
-require('../../src/FluentDOM.php');
+require('../../vendor/autoload.php');
 
 echo $highlighter->highlight(
-  FluentDOM::Query($html, 'text/html')->find('//body')
+  FluentDOM($html, 'text/html')->find('//body')
 );
 
 /**
@@ -124,7 +124,7 @@ class FluentDOMHighlighter {
         $string = strtolower($part);
         if (isset($this->_highlights[$string])) {
           $span = $node->ownerDocument->createElement('span');
-          $items[] = FluentDOM::Query($span)
+          $items[] = FluentDOM($span)
             ->addClass($this->_highlights[$string])
             ->text($part)
             ->item(0);
@@ -133,7 +133,7 @@ class FluentDOMHighlighter {
         }
       }
       // replace the text node
-      FluentDOM::Query($node)->replaceWith($items);
+      FluentDOM($node)->replaceWith($items);
     }
   }
 }

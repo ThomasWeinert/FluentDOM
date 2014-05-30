@@ -13,8 +13,8 @@ XML;
 
 
 echo "Example for property 'data':\n";
-require_once('../../src/FluentDOM.php');
-$fd = FluentDOM::Query($xml)->find('//div');
+require_once('../../vendor/autoload.php');
+$fd = FluentDOM($xml)->find('//div');
 
 echo "\nRead:\n";
 var_dump($fd->data->role);

@@ -19,8 +19,8 @@ $xml = <<<XML
 </html>
 XML;
 
-require('../src/FluentDOM.php');
-$dom = FluentDOM::Query($xml);
+require('../vendor/autoload.php');
+$dom = FluentDOM($xml);
 echo $dom
   ->find('//p')
   ->add('//p/b')
@@ -28,7 +28,7 @@ echo $dom
 
 echo "\n\n";
 
-$dom = FluentDOM::Query($xml);
+$dom = FluentDOM($xml);
 echo $dom
   ->find('//p')
   ->add(
@@ -38,7 +38,7 @@ echo $dom
 
 echo "\n\n";
 
-$dom = FluentDOM::Query($xml);
+$dom = FluentDOM($xml);
 echo $dom
   ->add(
     $dom->find('//div')
@@ -47,7 +47,7 @@ echo $dom
 
 echo "\n\n";
 
-$dom = FluentDOM::Query($xml);
+$dom = FluentDOM($xml);
 echo $dom
   ->add('//div')
   ->toggleClass('inB');

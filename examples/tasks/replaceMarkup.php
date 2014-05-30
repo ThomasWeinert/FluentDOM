@@ -1,6 +1,6 @@
 <?php
 
-require('../../src/FluentDOM.php');
+require('../../vendor/autoload.php');
 $markup = new FluentDOMMarkupReplacer();
 
 $html = <<<HTML
@@ -16,7 +16,7 @@ Escaped literal markup sequences: \/\/, \!\!, \#\#.'
 HTML;
 
 echo $markup->replace(
-  FluentDOM::Query($html, 'text/html')->find('//body')
+  FluentDOM($html, 'text/html')->find('//body')
 );
 
 class FluentDOMMarkupReplacer {
@@ -111,11 +111,11 @@ class FluentDOMMarkupReplacer {
         $items[] = $this->createNodes($node->ownerDocument, $part);
       }
       // replace the text node
-      FluentDOM::Query($node)->replaceWith($items);
+      FluentDOM($node)->replaceWith($items);
     } else {
-      FluentDOM::Query($node)
+      FluentDOM($node)
         ->text(
-          strtr(FluentDOM::Query($node)->text(), $this->_escapings
+          strtr(FluentDOM($node)->text(), $this->_escapings
         )
       );
     }

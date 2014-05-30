@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__.'/../src/FluentDOM.php');
+require_once(__DIR__.'/../vendor/autoload.php');
 
 class FluentDOMTest extends \PHPUnit_Framework_TestCase {
 

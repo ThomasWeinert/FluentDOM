@@ -21,14 +21,14 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../src/FluentDOM.php');
-echo FluentDOM::Query($xml)
+require_once('../vendor/autoload.php');
+echo FluentDOM($xml)
   ->find('//div')
   ->attr('border', 1)
   ->filter(
     function($node, $index) {
       if ($index == 1 ||
-          FluentDOM::Query($node)->attr('id') == 'fourth') {
+          FluentDOM($node)->attr('id') == 'fourth') {
         return TRUE;
       }
       return FALSE;

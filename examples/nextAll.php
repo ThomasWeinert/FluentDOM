@@ -19,8 +19,8 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../src/FluentDOM.php');
-echo FluentDOM::Query($xml)
+require_once('../vendor/autoload.php');
+echo FluentDOM($xml)
   ->find('//div[position() = 1]')
   ->nextAll()
   ->addClass('after');

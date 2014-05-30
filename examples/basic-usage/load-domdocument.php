@@ -1,6 +1,6 @@
 <?php
 
-require('../../src/FluentDOM.php');
+require('../../vendor/autoload.php');
 
 $xmlFile = 'hello.xml';
 
@@ -9,6 +9,6 @@ $dom = new DOMDocument();
 $dom->load($xmlFile);
 
 // load
-echo FluentDOM::Query($dom)
+echo FluentDOM($dom)
   ->find('/message')
   ->text('Hello World!');

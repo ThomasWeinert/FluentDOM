@@ -23,7 +23,7 @@ $html = <<<HTML
 HTML;
 
 echo "Example for property 'css' - remove properties:\n\n";
-require_once('../../src/FluentDOM.php');
-$fd = FluentDOM::Query($html, 'text/html')->find('/html/body//*');
+require_once('../../vendor/autoload.php');
+$fd = FluentDOM($html, 'text/html')->find('/html/body//*');
 unset($fd->css[array('color', 'font-weight')]);
 echo (string)$fd;

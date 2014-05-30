@@ -21,8 +21,8 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../src/FluentDOM.php');
-echo FluentDOM::Query($xml, 'text/html')
+require_once('../vendor/autoload.php');
+echo FluentDOM($xml, 'text/html')
   ->find('//div')
   ->eq(2)
   ->addClass('emphased');

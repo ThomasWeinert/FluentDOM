@@ -1,11 +1,11 @@
 <?php
 
-require('../../src/FluentDOM.php');
+require('../../vendor/autoload.php');
 
 $xmlFile = 'hello.xml';
 
 // create and load
-echo FluentDOM::Query($xmlFile)
+echo FluentDOM($xmlFile)
   // find root node
   ->find('/message')
   // replace text content

@@ -14,10 +14,10 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../../src/FluentDOM.php');
+require_once('../../vendor/autoload.php');
 
 $iterator = new RecursiveIteratorIterator(
-  FluentDOM::Query($xml)->find('/*'),
+  FluentDOM($xml)->find('/*'),
   RecursiveIteratorIterator::SELF_FIRST
 );
 foreach ($iterator as $key => $value) {

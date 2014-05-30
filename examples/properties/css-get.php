@@ -23,9 +23,9 @@ $html = <<<HTML
 HTML;
 
 echo "Example for property 'css' - reading color:\n\n";
-require_once('../../src/FluentDOM.php');
-$fd = FluentDOM::Query($html, 'text/html')->find('//a');
+require_once('../../vendor/autoload.php');
+$fd = FluentDOM($html, 'text/html')->find('//a');
 foreach ($fd as $node) {
-  $fdNode = FluentDOM::Query($node);
+  $fdNode = FluentDOM($node);
   echo $fdNode->css['color'], "\n";
 }

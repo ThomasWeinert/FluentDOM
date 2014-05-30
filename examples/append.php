@@ -27,15 +27,15 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../src/FluentDOM.php');
-FluentDOM::Query($xml)
+require_once('../vendor/autoload.php');
+FluentDOM($xml)
   ->find('//p')
   ->append('<strong>Hello</strong>')
   ->formatOutput();
 
 echo "\n\n";
 
-$dom = FluentDOM::Query($xml);
+$dom = FluentDOM($xml);
 $items = $dom->find('//group/item');
 echo $dom
   ->find('//html/div')

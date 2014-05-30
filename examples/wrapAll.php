@@ -22,14 +22,14 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../src/FluentDOM.php');
+require_once('../vendor/autoload.php');
 
-echo FluentDOM::Query($xml)
+echo FluentDOM($xml)
   ->find('//p')
   ->wrapAll('<div class="wrapper" />');
 
 echo "\n\n";
 
-echo FluentDOM::Query($xml)
+echo FluentDOM($xml)
   ->find('//p')
   ->wrapAll('<div class="wrapper"><div>INNER</div></div>');

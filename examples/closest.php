@@ -30,8 +30,8 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../src/FluentDOM.php');
-$dom = FluentDOM::Query($xml, 'text/html');
+require_once('../vendor/autoload.php');
+$dom = FluentDOM($xml, 'text/html');
 echo $dom
   ->find('//u')
   ->closest('self::li')

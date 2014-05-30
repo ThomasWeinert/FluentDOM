@@ -1,11 +1,11 @@
 <?php
 
-require('../../src/FluentDOM.php');
+require('../../vendor/autoload.php');
 
 $xmlFile = 'hello.xml';
 
 // create object
-$fd = FluentDOM::Query();
+$fd = FluentDOM();
 // use document attribute
 $fd->document->load($xmlFile);
 

@@ -1,6 +1,6 @@
 <?php
 
-require('../../src/FluentDOM.php');
+require('../../vendor/autoload.php');
 require('../../src/_require.php');
 
 $xmlFile = 'hello.xml';
@@ -19,7 +19,7 @@ class ExampleLoader implements FluentDOM\Loadable {
   }
 }
 
-$fd = FluentDOM::Query();
+$fd = FluentDOM();
 // set loader(s)
 $fd->loaders(
   new ExampleLoader

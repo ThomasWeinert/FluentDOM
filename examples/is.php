@@ -17,8 +17,8 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../src/FluentDOM.php');
-$dom = FluentDOM::Query($xml);
+require_once('../vendor/autoload.php');
+$dom = FluentDOM($xml);
 $isFormParent = $dom
   ->find('//input[@type = "checkbox"]')
   ->parent()

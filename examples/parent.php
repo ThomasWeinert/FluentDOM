@@ -33,15 +33,15 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../src/FluentDOM.php');
+require_once('../vendor/autoload.php');
 
-echo FluentDOM::Query($xml)
+echo FluentDOM($xml)
   ->find('//body//*')
   ->each('callback');
 
 
 function callback($node) {
-  $fluentNode = FluentDOM::Query($node);
+  $fluentNode = FluentDOM($node);
   $fluentNode->prepend(
     $fluentNode->document->createTextNode(
       $fluentNode->parent()->item(0)->tagName.' > '

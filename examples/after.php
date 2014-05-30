@@ -16,8 +16,8 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../src/FluentDOM.php');
-echo FluentDOM::Query($xml)
+require_once('../vendor/autoload.php');
+echo FluentDOM($xml)
   ->find('//p')
   ->after('<b>Hello</b>')
   ->after(' World');

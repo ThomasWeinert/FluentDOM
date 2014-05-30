@@ -14,7 +14,7 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../../src/FluentDOM.php');
+require_once('../../vendor/autoload.php');
 
-$dom = FluentDOM::Query($xml)->find('//p');
+$dom = FluentDOM($xml)->find('//p');
 echo $dom[0]->textContent, ' ', $dom[2]->textContent;

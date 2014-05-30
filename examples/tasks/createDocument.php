@@ -5,8 +5,8 @@
 */
 header('Content-type: text/plain');
 
-require_once('../../src/FluentDOM.php');
-echo FluentDOM::Query($doc = new DOMDocument())
+require_once('../../vendor/autoload.php');
+echo FluentDOM($doc = new DOMDocument())
   ->append('<html/>')
   ->append($doc->createElement('body'))
   ->addClass('created')

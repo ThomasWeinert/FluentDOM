@@ -20,8 +20,8 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../src/FluentDOM.php');
-$doc = FluentDOM::Query($xml);
-echo FluentDOM::Query($xml)
+require_once('../vendor/autoload.php');
+$doc = FluentDOM($xml);
+echo FluentDOM($xml)
   ->add('<b id="sample">Paragraph. </b>')
   ->replaceAll('//p');

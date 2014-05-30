@@ -30,8 +30,8 @@
   </head>
   <body>
     <?php
-require_once('../../src/FluentDOM.php');
-$dom = FluentDOM::Query('./atom-sample.xml');
+require_once('../../vendor/autoload.php');
+$dom = FluentDOM('./atom-sample.xml');
 $dom->registerNamespace('atom', 'http://www.w3.org/2005/Atom');
 
 $categories = array_unique(
@@ -61,7 +61,7 @@ if (empty($atomGET['label'])) {
 }
 foreach ($dom->find($expr) as $entryNode) {
   echo '<div class="entry">'."\n";
-  $entry = FluentDOM::Query($entryNode);
+  $entry = FluentDOM($entryNode);
   printf(
     '<h2><a href="%s">%s</a></h2>'."\n",
     htmlspecialchars(

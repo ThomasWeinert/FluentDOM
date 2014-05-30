@@ -31,7 +31,7 @@ namespace FluentDOM\Loader {
       $this->assertInstanceOf(
         'DOMDocument',
         $loader->load(
-          'data://text/plain,'.urlencode('<xml/>'),
+          __DIR__.'/TestData/loader.xml',
           'text/xml'
         )
       );

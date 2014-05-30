@@ -49,7 +49,11 @@ namespace FluentDOM {
      */
     public function evaluate($expression, \DOMNode $contextNode = NULL, $registerNodeNS = NULL) {
       $registerNodeNS = $registerNodeNS ?: $this->_registerNodeNamespaces;
-      return parent::evaluate($expression, $contextNode, (bool)$registerNodeNS);
+      if ($this->canDisableNamespaceRegistration()) {
+        return parent::evaluate($expression, $contextNode, (bool)$registerNodeNS);
+      } else {
+        return parent::evaluate($expression, $contextNode);
+      }
     }
 
     /**
@@ -67,7 +71,11 @@ namespace FluentDOM {
         'Please use XPath::evaluate() not XPath::query().', E_USER_DEPRECATED
       );
       $registerNodeNS = $registerNodeNS ?: $this->_registerNodeNamespaces;
-      return parent::query($expression, $contextNode, (bool)$registerNodeNS);
+      if ($this->canDisableNamespaceRegistration()) {
+        return parent::query($expression, $contextNode, (bool)$registerNodeNS);
+      } else {
+        return parent::query($expression, $contextNode);
+      }
     }
 
     /**
@@ -166,6 +174,16 @@ namespace FluentDOM {
         $this->_registerNodeNamespaces = FALSE;
       }
       unset($this->$name);
+    }
+
+    /**
+     * HHVM is missing the third argument for evaluate()/query()
+     * and can not disable the autmatic namespace registration
+     * 
+     * @return bool
+     */
+    private function canDisableNamespaceRegistration() {
+      return !defined('HHVM_VERSION');
     }
   }
 }

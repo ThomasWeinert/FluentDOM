@@ -906,13 +906,20 @@ namespace FluentDOM {
       $result = array();
       if ($targetNode instanceof \DOMElement) {
         $firstChild = $targetNode->hasChildNodes() ? $targetNode->childNodes->item(0) : NULL;
+        $hasContext = $firstChild instanceof \DOMNode;
         foreach ($contentNodes as $contentNode) {
           /** @var \DOMNode $contentNode */
           if ($this->isNode($contentNode)) {
-            $result[] = $targetNode->insertBefore(
-              $contentNode->cloneNode(TRUE),
-              $firstChild
-            );
+            if ($hasContext) {
+              $result[] = $targetNode->insertBefore(
+                $contentNode->cloneNode(TRUE),
+                $firstChild
+              );
+            } else {
+              $result[] = $targetNode->appendChild(
+                $contentNode->cloneNode(TRUE)
+              );
+            }
           }
         }
       }
@@ -930,11 +937,18 @@ namespace FluentDOM {
       if ($targetNode instanceof \DOMNode && !empty($contentNodes)) {
         $beforeNode = ($targetNode->nextSibling instanceof \DOMNode)
           ? $targetNode->nextSibling : NULL;
+        $hasContext = $beforeNode instanceof \DOMNode;
         foreach ($contentNodes as $contentNode) {
           /** @var \DOMNode $contentNode */
-          $result[] = $targetNode->parentNode->insertBefore(
-            $contentNode->cloneNode(TRUE), $beforeNode
-          );
+          if ($hasContext) {
+            $result[] = $targetNode->parentNode->insertBefore(
+              $contentNode->cloneNode(TRUE), $beforeNode
+            );
+          } else {
+            $result[] = $targetNode->parentNode->appendChild(
+              $contentNode->cloneNode(TRUE)
+            );
+          }
         }
       }
       return $result;
@@ -1832,11 +1846,18 @@ namespace FluentDOM {
                 !empty($contentNodes)
               ) {
                 $beforeNode = $targetNode->nextSibling;
+                $hasContext = $beforeNode instanceof \DOMNode;
                 foreach ($contentNodes as $contentNode) {
                   /** @var \DOMNode $contentNode */
-                  $result[] = $targetNode->parentNode->insertBefore(
-                    $contentNode->cloneNode(TRUE), $beforeNode
-                  );
+                  if ($hasContext) {
+                    $result[] = $targetNode->parentNode->insertBefore(
+                      $contentNode->cloneNode(TRUE), $beforeNode
+                    );
+                  } else {
+                    $result[] = $targetNode->parentNode->appendChild(
+                      $contentNode->cloneNode(TRUE)
+                    );
+                  }
                 }
               }
               return $result;

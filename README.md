@@ -48,9 +48,9 @@ additional extensions might be needed, like ext/json to load JSON strings.
 
 ### HHVM
 
- * HHVM >= 3.1
+ * HHVM >= 3.0
 
-FluentDOM works with HHVM 3.1. Here is an [issue](https://github.com/facebook/hhvm/issues/1848)
+FluentDOM works with HHVM 3.0. Here is an [issue](https://github.com/facebook/hhvm/issues/1848)
 with DOMDocument::registerNodeClass() and DOMDocument::createElement() at the moment,
 but FluentDOM\Document includes a workaround.
 

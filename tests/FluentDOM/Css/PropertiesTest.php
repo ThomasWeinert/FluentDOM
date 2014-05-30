@@ -213,7 +213,7 @@ class FluentDOMCssPropertiesTest extends FluentDOMTestCase {
   }
 
   public function callbackForCompileValue($node, $index, $value) {
-    $this->assertType('DOMElement', $node);
+    $this->assertInstanceOf('DOMElement', $node);
     $this->assertEquals(23, $index);
     return $value;
   }

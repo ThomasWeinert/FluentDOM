@@ -43,7 +43,7 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
   */
   public function testConstructor() {
     $fd = new FluentDOMCore();
-    $this->assertAttributeType(
+    $this->assertAttributeInstanceOf(
       'DOMDocument', '_document', $fd
     );
   }
@@ -1252,8 +1252,8 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
     $fragment = '<sample/>sample';
     $fd = new FluentDOMCoreProxy();
     $nodes = $fd->_getContentFragment($fragment);
-    $this->assertType('DOMElement', $nodes[0]);
-    $this->assertType('DOMText', $nodes[1]);
+    $this->assertInstanceOf('DOMElement', $nodes[0]);
+    $this->assertInstanceOf('DOMText', $nodes[1]);
   }
 
   /**
@@ -1264,7 +1264,7 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
     $fragment = '<sample/>sample';
     $fd = new FluentDOMCoreProxy();
     $nodes = $fd->_getContentFragment($fragment, TRUE, 1);
-    $this->assertType('DOMElement', $nodes[0]);
+    $this->assertInstanceOf('DOMElement', $nodes[0]);
     $this->assertEquals(1, count($nodes));
   }
 
@@ -1276,7 +1276,7 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
     $fragment = '<sample/>sample';
     $fd = new FluentDOMCoreProxy();
     $nodes = $fd->_getContentFragment($fragment, FALSE);
-    $this->assertType('DOMElement', $nodes[0]);
+    $this->assertInstanceOf('DOMElement', $nodes[0]);
     $this->assertEquals(1, count($nodes));
   }
   /**
@@ -1287,7 +1287,7 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
     $fragment = 'sample';
     $fd = new FluentDOMCoreProxy();
     $nodes = $fd->_getContentFragment($fragment);
-    $this->assertType('DOMText', $nodes[0]);
+    $this->assertInstanceOf('DOMText', $nodes[0]);
   }
 
   /**
@@ -1351,7 +1351,7 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
   public function testGetContentNodesWithString() {
     $fd = new FluentDOMCoreProxy();
     $nodes = $fd->_getContentNodes('sample');
-    $this->assertType(
+    $this->assertInstanceOf(
       'DOMText', $nodes[0]
     );
   }
@@ -1637,7 +1637,7 @@ class FluentDOMCoreTest extends PHPUnit_Framework_TestCase {
   }
 
   public function callbackEasySetterForApplyContentToNodes($node, $index, $value) {
-    $this->assertType('DOMElement', $node);
+    $this->assertInstanceOf('DOMElement', $node);
     $this->assertEquals(0, $index);
     $this->assertEquals('Hello World!', $value);
     return ' Hi Earth!';

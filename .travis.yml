@@ -9,7 +9,3 @@ php:
 install: composer install
 
 script: phpunit --configuration phpunit.xml.dist
-
-matrix:
-  allow_failures:
-    - php: hhvm

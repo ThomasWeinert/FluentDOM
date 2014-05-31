@@ -6,3 +6,4 @@ docs/
 .settings
 /.idea
 /vendor
+/build

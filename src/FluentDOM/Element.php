@@ -15,7 +15,7 @@ namespace FluentDOM {
    *
    * @property Document $ownerElement
    */
-  class Element extends \DOMElement {
+  class Element extends \DOMElement implements \ArrayAccess {
 
     /**
      * Set an attribute on an element
@@ -38,6 +38,31 @@ namespace FluentDOM {
         return parent::setAttributeNS($namespace, $name, $value);
       } else {
         return parent::setAttribute($name, $value);
+      }
+    }
+
+    /**
+     * Validate if an attribute exists
+     *
+     * @param string $name
+     * @return bool
+     */
+    public function hasAttribute($name) {
+      $namespace = '';
+      $localName = $name;
+      if (
+        $this->ownerDocument instanceOf Document &&
+        FALSE !== ($position = strpos($name, ':'))
+      ) {
+        $prefix = substr($name, 0, $position);
+        $namespace = $this->ownerDocument->getNamespace($prefix);
+        $localName = substr($name, $position + 1);
+      }
+      if ($namespace != '') {
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
+        return parent::hasAttributeNS($namespace, $localName);
+      } else {
+        return parent::hasAttribute($name);
       }
     }
 
@@ -119,6 +144,65 @@ namespace FluentDOM {
     public function evaluate($expression, \DOMNode $context = NULL) {
       return $this->ownerDocument->xpath()->evaluate(
         $expression, isset($context) ? $context : $this
+      );
+    }
+
+    /***************************
+     * Array Access Interface
+     ***************************/
+
+    /**
+     * Validate if an offset exists. If a integer is provided
+     * it will check for a child node, if a string is provided for an attribute.
+     *
+     * @param mixed $offset
+     * @return bool
+     * @throws \InvalidArgumentException
+     */
+    public function offsetExists($offset) {
+      if ($this->isNodeOffset($offset)) {
+        return $this->hasChildNodes() && $this->childNodes->length > $offset;
+      } elseif ($this->isAttributeOffset($offset)) {
+        return $this->hasAttribute($offset);
+      }
+      throw $this->createInvalidOffsetException();
+    }
+
+    /**
+     * Get a child node by its numeric index, or an attribute by its name.
+     *
+     * @param mixed $offset
+     * @return \DOMNode|mixed|string
+     * @throws \InvalidArgumentException
+     */
+    public function offsetGet($offset) {
+      if ($this->isNodeOffset($offset)) {
+        return $this->childNodes->item((int)$offset);
+      } elseif ($this->isAttributeOffset($offset)) {
+        return $this->getAttribute($offset);
+      }
+      throw $this->createInvalidOffsetException();
+    }
+
+    public function offsetSet($offset, $value) {
+      throw new \LogicException('Write access not implemented yet.');
+    }
+
+    public function offsetUnset($offset) {
+      throw new \LogicException('Write access not implemented yet.');
+    }
+
+    private function isNodeOffset($offset) {
+      return (is_int($offset) || ctype_digit((string)$offset));
+    }
+
+    private function isAttributeOffset($offset) {
+      return (is_string($offset) && !ctype_digit((string)$offset));
+    }
+
+    private function createInvalidOffsetException() {
+      return new \InvalidArgumentException(
+        'Invalid offset. Use integer for child nodes and strings for attributes.'
       );
     }
   }

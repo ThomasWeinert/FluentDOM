@@ -61,6 +61,52 @@ namespace FluentDOM {
     }
 
     /**
+     * @covers FluentDOM\Element::hasAttribute
+     */
+    public function testHasAttributeExpectingTrue() {
+      $dom = new Document();
+      $dom->loadXml('<root attribute="value"/>');
+      $this->assertTrue(
+        $dom->documentElement->hasAttribute('attribute')
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::hasAttribute
+     */
+    public function testHasAttributeExpectingFalse() {
+      $dom = new Document();
+      $dom->loadXml('<root/>');
+      $this->assertFalse(
+        $dom->documentElement->hasAttribute('attribute')
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::hasAttribute
+     */
+    public function testHasAttributeWithNamespaceExpectingTrue() {
+      $dom = new Document();
+      $dom->loadXml('<root xmlns:foo="urn:foo" foo:attribute="value"/>');
+      $dom->registerNamespace('foo', 'urn:foo');
+      $this->assertTrue(
+        $dom->documentElement->hasAttribute('foo:attribute')
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::hasAttribute
+     */
+    public function testHasAttributeWithNamespaceExpectingFalse() {
+      $dom = new Document();
+      $dom->loadXml('<root xmlns:foo="urn:foo" foo:attribute="value"/>');
+      $dom->registerNamespace('foo', 'urn:BAR');
+      $this->assertFalse(
+        $dom->documentElement->hasAttribute('foo:attribute')
+      );
+    }
+
+    /**
      * @covers FluentDOM\Element::append
      */
     public function testAppend() {
@@ -169,6 +215,77 @@ namespace FluentDOM {
       $this->assertEquals(
         'success',
         $dom->documentElement->evaluate('string(.)')
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element
+     * @dataProvider provideExistingOffsets
+     */
+    public function testArrayAccessOffsetExistsExpectingTrue($offset) {
+      $dom = new Document();
+      $dom->loadXML(self::XML);
+      $this->assertTrue(isset($dom->documentElement[$offset]));
+    }
+
+    public static function provideExistingOffsets() {
+      return array(
+        array(0),
+        array(1),
+        array('version')
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element
+     * @dataProvider provideMissingOffsets
+     */
+    public function testArrayAccessOffsetExistsExpectingFalse($offset) {
+      $dom = new Document();
+      $dom->loadXML(self::XML);
+      $this->assertFalse(isset($dom->documentElement[$offset]));
+    }
+
+    /**
+     * @covers FluentDOM\Element
+     */
+    public function testArrayAccessOffsetGetWithItem() {
+      $dom = new Document();
+      $dom->loadXML('<foo><bar/><foobar/></foo>');
+      $this->assertEquals(
+        '<foobar/>',
+        $dom->saveXML($dom->documentElement[1])
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element
+     */
+    public function testArrayAccessOffsetGetWithAttribute() {
+      $dom = new Document();
+      $dom->loadXML('<foo attribute="success"/>');
+      $this->assertEquals(
+        'success',
+        $dom->documentElement['attribute']
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element
+     */
+    public function testArrayAccessOffsetGetWithChaining() {
+      $dom = new Document();
+      $dom->loadXML('<foo><bar attribute="success"/></foo>');
+      $this->assertEquals(
+        'success',
+        $dom->documentElement[0]['attribute']
+      );
+    }
+
+    public static function provideMissingOffsets() {
+      return array(
+        array(99),
+        array('NON_EXISTING')
       );
     }
   }

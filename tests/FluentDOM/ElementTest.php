@@ -219,6 +219,20 @@ namespace FluentDOM {
     }
 
     /**
+     * @cover FluentDOM\Element:find
+     */
+    public function testFind() {
+      $dom = new Document();
+      $dom->loadXML('<foo><bar/></foo>');
+      $fd = $dom->documentElement->find('bar');
+      $this->assertInstanceOf('FluentDOM\Query', $fd);
+      $this->assertSame(
+        $dom->documentElement->firstChild,
+        $fd[0]
+      );
+    }
+
+    /**
      * @covers FluentDOM\Element
      * @dataProvider provideExistingOffsets
      */

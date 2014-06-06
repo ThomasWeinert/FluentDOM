@@ -267,5 +267,19 @@ namespace FluentDOM {
         $dom->evaluate('string(.)', $dom->documentElement)
       );
     }
+
+    /**
+     * @cover FluentDOM\Document:find
+     */
+    public function testFind() {
+      $dom = new Document();
+      $dom->loadXML('<foo><bar/></foo>');
+      $fd = $dom->find('/foo/bar');
+      $this->assertInstanceOf('FluentDOM\Query', $fd);
+      $this->assertSame(
+        $dom->documentElement->firstChild,
+        $fd[0]
+      );
+    }
   }
 }

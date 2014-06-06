@@ -229,6 +229,17 @@ namespace FluentDOM {
     }
 
     /**
+     * Put the document node into a FluentDOM\Query
+     * and call find() on it.
+     *
+     * @param string $expression
+     * @return Query
+     */
+    public function find($expression) {
+      return \FluentDOM::Query($this)->find($expression);
+    }
+
+    /**
      * This is workaround for issue
      *
      * @param \DOMNode|Element $node

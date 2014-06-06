@@ -147,6 +147,17 @@ namespace FluentDOM {
       );
     }
 
+    /**
+     * Put the current node into a FluentDOM\Query
+     * and call find() on it.
+     *
+     * @param string $expression
+     * @return Query
+     */
+    public function find($expression) {
+      return \FluentDOM::Query($this)->find($expression);
+    }
+
     /***************************
      * Array Access Interface
      ***************************/

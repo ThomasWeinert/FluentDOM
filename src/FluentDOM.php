@@ -1,5 +1,7 @@
 <?php
 
+use Symfony\Component\CssSelector;
+
 abstract class FluentDOM {
 
   private static $_load = TRUE;
@@ -33,13 +35,37 @@ abstract class FluentDOM {
    * @return \FluentDOM\Query
    */
   public static function QueryCss($source = NULL, $contentType = 'text/xml') {
-    if (!class_exists('PhpCss')) {
-      throw new \LogicException('Install "carica/phpcss" to support css selectors.');
+    $hasPhpCss = class_exists('PhpCss');
+    $hasCssSelector = class_exists('Symfony\Component\CssSelector\CssSelector');
+    if (!($hasPhpCss || $hasCssSelector)) {
+      throw new \LogicException(
+        'Install "carica/phpcss" or "symfony/css-selector" to support css selectors.'
+      );
     }
     $query = self::Query($source, $contentType);
-    $query->onPrepareSelector = function($selector) {
-      return \PhpCss::toXpath($selector);
-    };
+    $isHtml = ($query->contentType == 'text/html');
+    if ($hasPhpCss) {
+      $query->onPrepareSelector = function($selector) {
+        return \PhpCss::toXpath($selector);
+      };
+    } else {
+      $query->onPrepareSelector = function($selector) use ($isHtml) {
+        $translator = new CssSelector\Xpath\Translator();
+        if ($isHtml) {
+          $translator->registerExtension(
+            new CssSelector\Xpath\Extension\HtmlExtension($translator)
+          );
+        }
+        $translator
+          ->registerParserShortcut(new CssSelector\Parser\Shortcut\EmptyStringParser())
+          ->registerParserShortcut(new CssSelector\Parser\Shortcut\ElementParser())
+          ->registerParserShortcut(new CssSelector\Parser\Shortcut\ClassParser())
+          ->registerParserShortcut(new CssSelector\Parser\Shortcut\HashParser())
+        ;
+        $result = $translator->cssToXPath($selector);
+        return $result;
+      };
+    }
     return $query;
   }
 }

@@ -376,10 +376,15 @@ namespace FluentDOM {
      */
     public function testGetIterator() {
       $dom = new Document();
-      $dom->loadXML('<foo><bar/></foo>');
+      $dom->loadXML('<foo><bar/><bar/></foo>');
       $this->assertEquals(
-        array($dom->documentElement->firstChild),
-        iterator_to_array($dom->documentElement)
+        array(
+          $dom->documentElement->firstChild,
+          $dom->documentElement->firstChild
+        ),
+        iterator_to_array(
+          $dom->documentElement, FALSE
+        )
       );
     }
 

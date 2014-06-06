@@ -370,5 +370,28 @@ namespace FluentDOM {
         $dom->saveXML($dom->documentElement)
       );
     }
+
+    /**
+     * @covers FluentDOM\Element::getIterator
+     */
+    public function testGetIterator() {
+      $dom = new Document();
+      $dom->loadXML('<foo><bar/></foo>');
+      $this->assertEquals(
+        array($dom->documentElement->firstChild),
+        iterator_to_array($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::count
+     */
+    public function testCountable() {
+      $dom = new Document();
+      $dom->loadXML('<foo><bar/></foo>');
+      $this->assertCount(
+        1, $dom->documentElement
+      );
+    }
   }
 }

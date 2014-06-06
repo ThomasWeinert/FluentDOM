@@ -15,7 +15,9 @@ namespace FluentDOM {
    *
    * @property Document $ownerElement
    */
-  class Element extends \DOMElement implements \ArrayAccess {
+  class Element
+    extends \DOMElement
+    implements \ArrayAccess, \Countable, \IteratorAggregate  {
 
     /**
      * Set an attribute on an element
@@ -243,6 +245,26 @@ namespace FluentDOM {
       return new \InvalidArgumentException(
         'Invalid offset. Use integer for child nodes and strings for attributes.'
       );
+    }
+
+    /*************************
+     * Iterator
+     ************************/
+
+    public function getIterator() {
+      if ($this->hasChildNodes()) {
+        return $this->childNodes;
+      } else {
+        return new \EmptyIterator();
+      }
+    }
+
+    /*************************
+     * Countable
+     ************************/
+
+    public function count() {
+      return $this->hasChildNodes() ? $this->childNodes->length : 0;
     }
   }
 }

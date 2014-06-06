@@ -155,7 +155,7 @@ namespace FluentDOM {
      * Validate if an offset exists. If a integer is provided
      * it will check for a child node, if a string is provided for an attribute.
      *
-     * @param mixed $offset
+     * @param int|string $offset
      * @return bool
      * @throws \InvalidArgumentException
      */
@@ -171,7 +171,7 @@ namespace FluentDOM {
     /**
      * Get a child node by its numeric index, or an attribute by its name.
      *
-     * @param mixed $offset
+     * @param int|string $offset
      * @return \DOMNode|mixed|string
      * @throws \InvalidArgumentException
      */
@@ -184,12 +184,40 @@ namespace FluentDOM {
       throw $this->createInvalidOffsetException();
     }
 
+    /**
+     * @param int|string $offset
+     * @param \DOMNode|string $value
+     * @return \DOMAttr|\DOMNode|void
+     * @throws \LogicException
+     */
     public function offsetSet($offset, $value) {
-      throw new \LogicException('Write access not implemented yet.');
+      if (NULL === $offset) {
+        return $this->appendChild($value);
+      } elseif ($this->isNodeOffset($offset)) {
+        return $this->replaceChild(
+          $value, $this->childNodes->item((int)$offset)
+        );
+      } elseif ($this->isAttributeOffset($offset)) {
+        return $this->setAttribute($offset, $value);
+      }
+      throw $this->createInvalidOffsetException();
     }
 
+    /**
+     * Remove a child node using its index or an attribute node using its name.
+     *
+     * @param int|string $offset
+     * @throws \InvalidArgumentException
+     */
     public function offsetUnset($offset) {
-      throw new \LogicException('Write access not implemented yet.');
+      if ($this->isNodeOffset($offset)) {
+        $this->removeChild($this->childNodes->item((int)$offset));
+        return;
+      } elseif ($this->isAttributeOffset($offset)) {
+        $this->removeAttribute($offset);
+        return;
+      }
+      throw $this->createInvalidOffsetException();
     }
 
     private function isNodeOffset($offset) {

@@ -246,6 +246,13 @@ namespace FluentDOM {
       $this->assertFalse(isset($dom->documentElement[$offset]));
     }
 
+    public static function provideMissingOffsets() {
+      return array(
+        array(99),
+        array('NON_EXISTING')
+      );
+    }
+
     /**
      * @covers FluentDOM\Element
      */
@@ -282,10 +289,71 @@ namespace FluentDOM {
       );
     }
 
-    public static function provideMissingOffsets() {
-      return array(
-        array(99),
-        array('NON_EXISTING')
+    /**
+     * @covers FluentDOM\Element
+     */
+    public function testArrayAccessOffsetSetAppendChild() {
+      $dom = new Document();
+      $dom->appendChild($dom->createElement('root'));
+      $dom->documentElement[] = $dom->createElement('success');
+      $this->assertEquals(
+        '<root><success/></root>',
+        $dom->saveXML($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element
+     */
+    public function testArrayAccessOffsetSetReplaceChild() {
+      $dom = new Document();
+      $dom
+        ->appendChild($dom->createElement('root'))
+        ->appendChild($dom->createElement('fail'));
+      $dom->documentElement[0] = $dom->createElement('success');
+      $this->assertEquals(
+        '<root><success/></root>',
+        $dom->saveXML($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element
+     */
+    public function testArrayAccessOffsetSetWriteAttribute() {
+      $dom = new Document();
+      $dom
+        ->appendChild($dom->createElement('root'));
+      $dom->documentElement['result'] = 'success';
+      $this->assertEquals(
+        '<root result="success"/>',
+        $dom->saveXML($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element
+     */
+    public function testArrayAccessOffsetUnsetRemoveChild() {
+      $dom = new Document();
+      $dom->loadXML('<root><fail/></root>');
+      unset($dom->documentElement[0]);
+      $this->assertEquals(
+        '<root/>',
+        $dom->saveXML($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element
+     */
+    public function testArrayAccessOffsetUnsetRemoveAttribute() {
+      $dom = new Document();
+      $dom->loadXML('<root result="fail"/>');
+      unset($dom->documentElement['result']);
+      $this->assertEquals(
+        '<root/>',
+        $dom->saveXML($dom->documentElement)
       );
     }
   }

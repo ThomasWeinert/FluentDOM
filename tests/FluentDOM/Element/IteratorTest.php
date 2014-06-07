@@ -15,7 +15,7 @@ namespace FluentDOM\Element {
     public function testIterator() {
       $dom = new Document();
       $dom->loadXML('<items>ONE<two><three/></two></items>');
-      $this->assertEquals(
+      $this->assertSame(
         array(
           $dom->documentElement->firstChild,
           $dom->documentElement->lastChild,
@@ -33,10 +33,10 @@ namespace FluentDOM\Element {
       $iterator = new \RecursiveIteratorIterator(
         $dom->documentElement, \RecursiveIteratorIterator::SELF_FIRST
       );
-      $this->assertEquals(
+      $this->assertSame(
         array(
           $dom->documentElement->firstChild,
-          $dom->documentElement->lastChild->firstChild,
+          $dom->documentElement->lastChild,
           $dom->documentElement->lastChild->lastChild
         ),
         iterator_to_array($iterator, FALSE)

@@ -107,6 +107,8 @@ By default every method that supports a selector uses XPath not CSS selectors.
 Since XPath is supported by the ext/dom extension, no extra parsing need to be
 done. This should be faster processing the selectors and btw it was easier to implement.
 
+But FluentDOM 5 can use CSS selectors with the help of a converter library.
+
 ### 2) Text nodes
 
 With a few exceptions FluentDOM handles text nodes just like element nodes.
@@ -163,7 +165,7 @@ having the same arguments like DOMXpath::registerNamespace().
 
 ## CSS 3 Selectors
 
-If you install [PhpCss](https://github.com/ThomasWeinert/PhpCss) into a project,
+If you install a CSS selector to Xpath translation library into a project,
 you can use the FluentDOM::QueryCss() function. It returns a FluentDOM instance
 supporting CSS 3 selectors.
 
@@ -174,3 +176,9 @@ $fd = FluentDOM::QueryCss('sample.xml')
   ->text('Hello World!');
 ?>
 ```
+
+Two libraries are supported:
+
+  1. [Carica/PhpCss](https://github.com/ThomasWeinert/PhpCss)
+  2. [Symfony/CssSelector](https://github.com/symfony/CssSelector)
+

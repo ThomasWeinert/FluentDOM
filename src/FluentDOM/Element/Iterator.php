@@ -98,9 +98,9 @@ namespace FluentDOM\Element {
      */
     public function valid() {
       return
-        $this->_owner->hasChildNodes() &&
-        $this->_owner->childNodes->length &&
-        is_object($this->_owner->childNodes->item($this->_position));
+        NULL !== $this->_owner->childNodes &&
+        $this->_owner->childNodes->length > $this->_position &&
+        $this->_owner->childNodes->item($this->_position);
     }
 
     /**
@@ -121,7 +121,7 @@ namespace FluentDOM\Element {
       return
         $this->valid() &&
         $this->current() instanceof Element &&
-        $this->current()->hasChildNodes();
+        NULL !== $this->current()->childNodes;
     }
   }
 }

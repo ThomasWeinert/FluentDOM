@@ -99,8 +99,7 @@ namespace FluentDOM\Element {
     public function valid() {
       return
         NULL !== $this->_owner->childNodes &&
-        $this->_owner->childNodes->length > $this->_position &&
-        $this->_owner->childNodes->item($this->_position);
+        NULL !== $this->_owner->childNodes->item($this->_position);
     }
 
     /**

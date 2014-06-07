@@ -383,7 +383,7 @@ namespace FluentDOM {
           $dom->documentElement->firstChild
         ),
         iterator_to_array(
-          $dom->documentElement, FALSE
+          $dom->documentElement
         )
       );
     }

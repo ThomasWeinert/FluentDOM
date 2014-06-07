@@ -252,11 +252,7 @@ namespace FluentDOM {
      ************************/
 
     public function getIterator() {
-      if ($this->hasChildNodes()) {
-        return $this->childNodes;
-      } else {
-        return new \EmptyIterator();
-      }
+      return new Element\Iterator($this);
     }
 
     /*************************

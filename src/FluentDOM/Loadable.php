@@ -20,7 +20,7 @@ namespace FluentDOM {
     /**
      * Validate if the loader supports the given content type
      *
-     * @param $contentType
+     * @param string $contentType
      * @return boolean
      */
     function supports($contentType);

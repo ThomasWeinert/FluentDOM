@@ -51,7 +51,7 @@ namespace FluentDOM\Query {
     /**
      * IteratorAggregate Interface: allow to iterate the data attributes
      *
-     * @return Iterator
+     * @return \Iterator
      */
     public function getIterator() {
       return new \ArrayIterator($this->toArray());

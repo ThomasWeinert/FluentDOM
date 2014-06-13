@@ -17,7 +17,7 @@ namespace FluentDOM {
      * Validate if the loader supports the given content type
      *
      * @param Element $parentNode
-     * @return boolean
+     * @return Element|boolean|NULL
      */
     function appendTo(Element $parentNode);
   }

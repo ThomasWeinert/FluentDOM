@@ -214,7 +214,7 @@ namespace FluentDOM\Query\Css {
     /**
      * Decodes the css property name into an comparable array.
      *
-     * @param $propertyName
+     * @param string $propertyName
      * @return array
      */
     private function _decodeName($propertyName) {

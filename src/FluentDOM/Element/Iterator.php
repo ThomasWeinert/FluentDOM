@@ -43,7 +43,7 @@ namespace FluentDOM\Element {
     /**
      * Get current iterator element
      *
-     * @return object DOMNode
+     * @return \DOMNode
      */
     public function current() {
       return $this->_owner->childNodes->item($this->_position);
@@ -60,8 +60,6 @@ namespace FluentDOM\Element {
 
     /**
      * Move iterator pointer to next element
-     *
-     * @return void
      */
     public function next() {
       ++$this->_position;
@@ -69,8 +67,6 @@ namespace FluentDOM\Element {
 
     /**
      * Reset iterator pointer
-     *
-     * @return void
      */
     public function rewind() {
       $this->_position = 0;
@@ -81,7 +77,6 @@ namespace FluentDOM\Element {
      *
      * @param integer $position
      * @throws \InvalidArgumentException
-     * @return void
      */
     public function seek($position) {
       if (count($this->_owner) > $position) {
@@ -105,7 +100,7 @@ namespace FluentDOM\Element {
     /**
      * Get child nodes of the current iterator element
      *
-     * @return object Element
+     * @return \DOMNode
      */
     public function getChildren() {
       return new self($this->current());
@@ -114,7 +109,7 @@ namespace FluentDOM\Element {
     /**
      * Check if the current iterator element has children
      *
-     * @return object Element
+     * @return boolean
      */
     public function hasChildren() {
       return

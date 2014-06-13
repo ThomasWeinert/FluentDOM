@@ -356,9 +356,11 @@ namespace FluentDOM {
      */
     public function getIterator() {
       return new Query\Iterator($this);
-    }/*
-  * Interface - ArrayAccess
-  */
+    }
+
+    /*
+     * Interface - ArrayAccess
+     */
 
     /**
      * Check if index exists in internal array
@@ -539,7 +541,7 @@ namespace FluentDOM {
      * @param string $name
      * @param array $arguments
      * @throws \BadMethodCallException
-     * @return mixed
+     * @return Query
      */
     public function __call($name, $arguments) {
       switch (strtolower($name)) {
@@ -1206,7 +1208,7 @@ namespace FluentDOM {
     /**
      * Return the parent FluentDOM\Query object.
      *
-     * @return Query|NULL
+     * @return Query
      */
     public function end() {
       if ($this->_parent instanceof Query) {

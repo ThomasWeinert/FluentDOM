@@ -83,7 +83,7 @@ namespace FluentDOM\Loader {
      * @param mixed $source
      * @param string $contentType
      * @throws \UnexpectedValueException
-     * @return \DOMDocument|NULL|void
+     * @return \DOMDocument|NULL
      */
     public function load($source, $contentType) {
       if (is_string($source)) {

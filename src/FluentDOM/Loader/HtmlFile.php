@@ -34,7 +34,7 @@ namespace FluentDOM\Loader {
      * @see Loadable::load
      * @param string $source
      * @param string $contentType
-     * @return bool
+     * @return Document|NULL
      */
     public function load($source, $contentType) {
       if ($this->supports($contentType) &&

@@ -84,7 +84,7 @@ namespace FluentDOM {
      *
      * @param string $prefix
      * @throws \LogicException
-     * @return null
+     * @return string
      */
     public function getNamespace($prefix) {
       $prefix = $this->validatePrefix($prefix);
@@ -102,6 +102,10 @@ namespace FluentDOM {
       );
     }
 
+    /**
+     * @param string $prefix
+     * @return string
+     */
     private function validatePrefix($prefix) {
       return empty($prefix) ? '#default' : $prefix;
     }
@@ -164,7 +168,7 @@ namespace FluentDOM {
     /**
      * @param string $namespaceURI
      * @param string $qualifiedName
-     * @param null $value
+     * @param string|null $value
      * @return \DOMElement|\DOMNode
      */
     public function createElementNS($namespaceURI, $qualifiedName, $value = null) {

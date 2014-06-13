@@ -125,7 +125,7 @@ namespace FluentDOM\Query {
      * Get an iterator for the properties
      *
      * @see IteratorAggregate::getIterator()
-     * @return Iterator
+     * @return \Iterator
      */
     public function getIterator() {
       if ($properties = $this->getStyleProperties()) {

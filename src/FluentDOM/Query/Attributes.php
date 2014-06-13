@@ -109,7 +109,7 @@ namespace FluentDOM\Query {
      * Get an iterator for the attributes of the first node
      *
      * @see IteratorAggregate::getIterator()
-     * @return Iterator
+     * @return \Iterator
      */
     public function getIterator() {
       return new \ArrayIterator($this->toArray());

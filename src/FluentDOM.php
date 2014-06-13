@@ -74,7 +74,7 @@ abstract class FluentDOM {
  * FluentDOM function, is an Alias for the FluentDOM::Query()
  * factory class function.
  *
- * @param null $source
+ * @param mixed $source
  * @param string $contentType
  */
 function FluentDOM($source = NULL, $contentType = 'text/xml') {

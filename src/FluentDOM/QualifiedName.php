@@ -29,7 +29,6 @@ namespace FluentDOM {
      *
      * @param string $name
      * @throws \UnexpectedValueException
-     * @return boolean
      */
     private function setQName($name) {
       if (empty($name)) {

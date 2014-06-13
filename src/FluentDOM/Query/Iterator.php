@@ -100,7 +100,7 @@ namespace FluentDOM\Query {
     /**
      * Get children of the current iterator element
      *
-     * @return Query
+     * @return \RecursiveIterator
      */
     public function getChildren() {
       $query = $this->_owner->spawn();

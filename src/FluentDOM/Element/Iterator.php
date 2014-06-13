@@ -100,7 +100,7 @@ namespace FluentDOM\Element {
     /**
      * Get child nodes of the current iterator element
      *
-     * @return \DOMNode
+     * @return \RecursiveIterator
      */
     public function getChildren() {
       return new self($this->current());

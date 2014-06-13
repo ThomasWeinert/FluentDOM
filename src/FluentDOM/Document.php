@@ -207,7 +207,7 @@ namespace FluentDOM {
     /**
      * Overload appendElement to add a text content and attributes directly.
      *
-     * @param $name
+     * @param string $name
      * @param string $content
      * @param array $attributes
      * @return Element

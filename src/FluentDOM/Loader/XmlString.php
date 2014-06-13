@@ -18,7 +18,7 @@ namespace FluentDOM\Loader {
 
     /**
      * @see Loadable::supports
-     * @param string $source
+     * @param string $contentType
      * @return bool
      */
     public function supports($contentType) {

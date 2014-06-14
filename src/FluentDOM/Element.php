@@ -72,7 +72,7 @@ namespace FluentDOM {
      */
     public function appendElement($name, $content = '', array $attributes = NULL) {
       $this->appendChild(
-        $node = $this->ownerDocument->createElement($name, $content, $attributes)
+        $node = $this->getDocument()->createElement($name, $content, $attributes)
       );
       return $node;
     }
@@ -83,7 +83,7 @@ namespace FluentDOM {
      * @param string $xmlFragment
      */
     public function appendXml($xmlFragment) {
-      $fragment = $this->ownerDocument->createDocumentFragment();
+      $fragment = $this->getDocument()->createDocumentFragment();
       $fragment->appendXML($xmlFragment);
       $this->appendChild($fragment);
     }
@@ -94,7 +94,7 @@ namespace FluentDOM {
      * @return string
      */
     public function saveXml() {
-      return $this->ownerDocument->saveXML($this);
+      return $this->getDocument()->saveXML($this);
     }
 
     /**
@@ -105,7 +105,7 @@ namespace FluentDOM {
     public function saveXmlFragment() {
       $result = '';
       foreach ($this->childNodes as $child) {
-        $result .= $this->ownerDocument->saveXML($child);
+        $result .= $this->getDocument()->saveXML($child);
       }
       return $result;
     }
@@ -116,7 +116,7 @@ namespace FluentDOM {
      * @return string
      */
     public function saveHtml() {
-      return $this->ownerDocument->saveHTML($this);
+      return $this->getDocument()->saveHTML($this);
     }
 
     /**
@@ -128,7 +128,7 @@ namespace FluentDOM {
      * @return mixed
      */
     public function evaluate($expression, \DOMNode $context = NULL) {
-      return $this->ownerDocument->xpath()->evaluate(
+      return $this->getDocument()->xpath()->evaluate(
         $expression, isset($context) ? $context : $this
       );
     }
@@ -256,11 +256,20 @@ namespace FluentDOM {
     private function resolveTagName($name) {
       $namespace = '';
       list($prefix, $localName) = QualifiedName::split($name);
-      if ($this->ownerDocument instanceOf Document && $prefix) {
-        $namespace = $this->ownerDocument->getNamespace($prefix);
+      if ($prefix) {
+        $namespace = $this->getDocument()->getNamespace($prefix);
         return array($namespace, $localName);
       }
       return array($namespace, $localName);
+    }
+
+    /**
+     * A getter for the owner document
+     *
+     * @return Document
+     */
+    private function getDocument() {
+      return $this->ownerDocument;
     }
   }
 }

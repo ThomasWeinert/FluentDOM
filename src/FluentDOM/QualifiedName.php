@@ -159,5 +159,25 @@ namespace FluentDOM {
         sprintf('%s is immutable.', get_class($this))
       );
     }
+
+    /**
+     * Split an qualified name into its two parts.
+     *
+     * @param string $name
+     * @return array
+     */
+    public static function split($name) {
+      if (FALSE !== ($position = strpos($name, ':'))) {
+        $prefix = substr($name, 0, $position);
+        $localName = substr($name, $position + 1);
+      } else {
+        $prefix = FALSE;
+        $localName = $name;
+      }
+      return array(
+        $prefix,
+        $localName
+      );
+    }
   }
 }

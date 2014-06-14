@@ -126,23 +126,23 @@ namespace FluentDOM {
      * @return Element
      */
     public function createElement($name, $content = NULL, array $attributes = NULL) {
-      $namespace = '';
       if (is_array($content)) {
         $attributes = NULL === $attributes
           ? $content : array_merge($content, $attributes);
         $content = NULL;
       }
-      if (FALSE !== ($position = strpos($name, ':'))) {
-        $prefix = substr($name, 0, $position);
-        if ($prefix != '') {
+      list($prefix, $localName) = QualifiedName::split($name);
+      $namespace = '';
+      if ($prefix !== FALSE) {
+        if (empty($prefix)) {
+          $name = $localName;
+        } else {
           if (isset($this->_reserved[$prefix])) {
             throw new \LogicException(
               sprintf('Can not use reserved namespace prefix "%s" in element name.', $prefix)
             );
           }
           $namespace = $this->getNamespace($prefix);
-        } else {
-          $name = substr($name, 1);
         }
       } else {
         $namespace = $this->getNamespace('#default');
@@ -188,13 +188,9 @@ namespace FluentDOM {
      * @return \DOMAttr
      */
     public function createAttribute($name, $value = NULL) {
-      $namespace = '';
-      if (FALSE !== ($position = strpos($name, ':'))) {
-        $prefix = substr($name, 0, $position);
-        $namespace = $this->getNamespace($prefix);
-      }
-      if ($namespace != '') {
-        $node = parent::createAttributeNS($namespace, $name);
+      list($prefix) = QualifiedName::split($name);
+      if ($prefix != '') {
+        $node = parent::createAttributeNS($this->getNamespace($prefix), $name);
       } else {
         $node = parent::createAttribute($name);
       }

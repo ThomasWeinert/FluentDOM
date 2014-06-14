@@ -28,11 +28,8 @@ namespace FluentDOM {
      */
     public function setAttribute($name, $value) {
       $namespace = '';
-      if (
-        $this->ownerDocument instanceOf Document &&
-        FALSE !== ($position = strpos($name, ':'))
-      ) {
-        $prefix = substr($name, 0, $position);
+      list($prefix, $localName) = QualifiedName::split($name);
+      if ($this->ownerDocument instanceOf Document && $prefix) {
         $namespace = $this->ownerDocument->getNamespace($prefix);
       }
       if ($namespace != '') {
@@ -51,14 +48,9 @@ namespace FluentDOM {
      */
     public function hasAttribute($name) {
       $namespace = '';
-      $localName = $name;
-      if (
-        $this->ownerDocument instanceOf Document &&
-        FALSE !== ($position = strpos($name, ':'))
-      ) {
-        $prefix = substr($name, 0, $position);
+      list($prefix, $localName) = QualifiedName::split($name);
+      if ($this->ownerDocument instanceOf Document && $prefix) {
         $namespace = $this->ownerDocument->getNamespace($prefix);
-        $localName = substr($name, $position + 1);
       }
       if ($namespace != '') {
         /** @noinspection PhpVoidFunctionResultUsedInspection */

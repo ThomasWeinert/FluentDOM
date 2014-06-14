@@ -576,7 +576,7 @@ namespace FluentDOM {
     /**
      * Check if the DOMNode is DOMElement or DOMText with content
      *
-     * @param \DOMNode $node
+     * @param mixed $node
      * @param boolean $ignoreTextNodes
      * @return boolean
      */
@@ -597,7 +597,7 @@ namespace FluentDOM {
     /**
      * Check if $elements is a traversable node list
      *
-     * @param array|\Traversable $elements
+     * @param mixed $elements
      * @return boolean
      */
     public function isNodeList($elements) {
@@ -611,7 +611,7 @@ namespace FluentDOM {
     /**
      * check if parameter is a valid callback function
      *
-     * @param callback $callback
+     * @param mixed $callback
      * @param boolean $allowGlobalFunctions
      * @param boolean $silent (no InvalidArgumentException)
      * @throws \InvalidArgumentException

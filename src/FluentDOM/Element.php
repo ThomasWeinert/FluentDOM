@@ -250,8 +250,8 @@ namespace FluentDOM {
     /**
      * Resolves a provided tag name into namespace and local name
      *
-     * @param $name
-     * @return array
+     * @param string $name
+     * @return array:string
      */
     private function resolveTagName($name) {
       $namespace = '';

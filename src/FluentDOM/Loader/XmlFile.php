@@ -16,20 +16,14 @@ namespace FluentDOM\Loader {
    */
   class XmlFile implements Loadable {
 
+    use Supports;
+
     /**
-     * @see Loadable::supports
-     * @param string $contentType
-     * @return bool
+     * @var array
      */
-    public function supports($contentType) {
-      switch ($contentType) {
-      case 'xml' :
-      case 'application/xml' :
-      case 'text/xml' :
-        return TRUE;
-      }
-      return FALSE;
-    }
+    protected $_supportedTypes = array(
+      'xml', 'application/xml', 'text/xml'
+    );
 
     /**
      * @see Loadable::load

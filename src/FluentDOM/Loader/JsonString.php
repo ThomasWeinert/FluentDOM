@@ -16,6 +16,15 @@ namespace FluentDOM\Loader {
    */
   class JsonString implements Loadable {
 
+    use Supports;
+
+    /**
+     * @var array
+     */
+    protected $_supportedTypes = array(
+      'json', 'application/json', 'text/json'
+    );
+
     const XMLNS = 'urn:carica-json-dom.2013';
     const DEFAULT_QNAME = '_';
 
@@ -60,21 +69,6 @@ namespace FluentDOM\Loader {
     public function __construct($options = 0, $depth = 100) {
       $this->_recursions = (int)$depth;
       $this->_verbose = ($options & self::OPTION_VERBOSE) == self::OPTION_VERBOSE;
-    }
-
-    /**
-     * @see Loadable::supports
-     * @param $contentType
-     * @return bool
-     */
-    public function supports($contentType) {
-      switch ($contentType) {
-      case 'json' :
-      case 'application/json' :
-      case 'text/json' :
-        return TRUE;
-      }
-      return FALSE;
     }
 
     /**

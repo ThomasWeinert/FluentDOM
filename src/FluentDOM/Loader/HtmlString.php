@@ -16,19 +16,14 @@ namespace FluentDOM\Loader {
    */
   class HtmlString implements Loadable {
 
+    use Supports;
+
     /**
-     * @see Loadable::supports
-     * @param string $contentType
-     * @return bool
+     * @var array
      */
-    public function supports($contentType) {
-      switch ($contentType) {
-      case 'html' :
-      case 'text/html' :
-        return TRUE;
-      }
-      return FALSE;
-    }
+    protected $_supportedTypes = array(
+      'html', 'text/html'
+    );
 
     /**
      * @see Loadable::load

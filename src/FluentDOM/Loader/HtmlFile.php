@@ -14,16 +14,7 @@ namespace FluentDOM\Loader {
   /**
    * Load a DOM document from a xml file
    */
-  class HtmlFile implements Loadable {
-
-    use Supports;
-
-    /**
-     * @var array
-     */
-    protected $_supportedTypes = array(
-      'html', 'text/html'
-    );
+  class HtmlFile extends HtmlString implements Loadable {
 
     /**
      * @see Loadable::load
@@ -34,16 +25,13 @@ namespace FluentDOM\Loader {
     public function load($source, $contentType) {
       if ($this->supports($contentType) &&
           0 !== strpos($source, '<')) {
-        $dom = new Document();
-        $errorSetting = libxml_use_internal_errors(TRUE);
-        libxml_clear_errors();
-        $dom->loadHTMLFile($source);
-        libxml_clear_errors();
-        libxml_use_internal_errors($errorSetting);
-        return $dom;
+        return $this->createDocument(
+          function(Document $dom) use ($source) {
+            $dom->loadHTMLFile($source);
+          }
+        );
       }
       return NULL;
     }
-
   }
 }

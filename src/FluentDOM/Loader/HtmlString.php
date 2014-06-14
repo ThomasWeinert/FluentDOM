@@ -34,16 +34,29 @@ namespace FluentDOM\Loader {
     public function load($source, $contentType) {
       if ($this->supports($contentType) &&
           0 === strpos($source, '<')) {
-        $dom = new Document();
-        $errorSetting = libxml_use_internal_errors(TRUE);
-        libxml_clear_errors();
-        $dom->loadHTML($source);
-        libxml_clear_errors();
-        libxml_use_internal_errors($errorSetting);
-        return $dom;
+        return $this->createDocument(
+          function(Document $dom) use ($source) {
+            $dom->loadHTML($source);
+          }
+        );
       }
       return NULL;
     }
 
+
+    /**
+     * Create the dom and apply the callback on it, ignore libxml errors
+     *
+     * @param callable $source
+     * @return Document
+     */
+    protected function createDocument(callable $callback) {
+      $dom = new Document();
+      $errorSetting = libxml_use_internal_errors(TRUE);
+      $callback($dom);
+      libxml_clear_errors();
+      libxml_use_internal_errors($errorSetting);
+      return $dom;
+    }
   }
 }

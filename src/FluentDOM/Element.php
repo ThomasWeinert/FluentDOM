@@ -27,11 +27,7 @@ namespace FluentDOM {
      * @return \DOMAttr
      */
     public function setAttribute($name, $value) {
-      $namespace = '';
-      list($prefix, $localName) = QualifiedName::split($name);
-      if ($this->ownerDocument instanceOf Document && $prefix) {
-        $namespace = $this->ownerDocument->getNamespace($prefix);
-      }
+      list($namespace) = $this->resolveTagName($name);
       if ($namespace != '') {
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         return parent::setAttributeNS($namespace, $name, $value);
@@ -47,11 +43,7 @@ namespace FluentDOM {
      * @return bool
      */
     public function hasAttribute($name) {
-      $namespace = '';
-      list($prefix, $localName) = QualifiedName::split($name);
-      if ($this->ownerDocument instanceOf Document && $prefix) {
-        $namespace = $this->ownerDocument->getNamespace($prefix);
-      }
+      list($namespace, $localName) = $this->resolveTagName($name);
       if ($namespace != '') {
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         return parent::hasAttributeNS($namespace, $localName);
@@ -253,6 +245,22 @@ namespace FluentDOM {
 
     public function count() {
       return $this->hasChildNodes() ? $this->childNodes->length : 0;
+    }
+
+    /**
+     * Resolves a provided tag name into namespace and local name
+     *
+     * @param $name
+     * @return array
+     */
+    private function resolveTagName($name) {
+      $namespace = '';
+      list($prefix, $localName) = QualifiedName::split($name);
+      if ($this->ownerDocument instanceOf Document && $prefix) {
+        $namespace = $this->ownerDocument->getNamespace($prefix);
+        return array($namespace, $localName);
+      }
+      return array($namespace, $localName);
     }
   }
 }

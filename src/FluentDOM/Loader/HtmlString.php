@@ -47,7 +47,7 @@ namespace FluentDOM\Loader {
     /**
      * Create the dom and apply the callback on it, ignore libxml errors
      *
-     * @param callable $source
+     * @param callable $callback
      * @return Document
      */
     protected function createDocument(callable $callback) {

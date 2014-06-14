@@ -32,6 +32,7 @@ abstract class FluentDOM {
    *
    * @param mixed $source
    * @param string $contentType
+   * @throws \LogicException
    * @return \FluentDOM\Query
    */
   public static function QueryCss($source = NULL, $contentType = 'text/xml') {
@@ -76,6 +77,7 @@ abstract class FluentDOM {
  *
  * @param mixed $source
  * @param string $contentType
+ * @return FluentDOM::Query
  */
 function FluentDOM($source = NULL, $contentType = 'text/xml') {
   return FluentDOM::Query($source, $contentType);

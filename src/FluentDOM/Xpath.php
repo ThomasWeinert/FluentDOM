@@ -58,7 +58,7 @@ namespace FluentDOM {
      * @param string $expression
      * @param \DOMNode $contextNode
      * @param NULL|boolean $registerNodeNS
-     * @return string|float|\Traversable
+     * @return string|float|\DOMNodeList
      */
     public function evaluate($expression, \DOMNode $contextNode = NULL, $registerNodeNS = NULL) {
       $registerNodeNS = $registerNodeNS ?: $this->_registerNodeNamespaces;

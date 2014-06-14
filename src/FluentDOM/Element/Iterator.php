@@ -100,12 +100,13 @@ namespace FluentDOM\Element {
     /**
      * Get child nodes of the current iterator element
      *
-     * @throw \UnexpectedValueException
+     * @throws \UnexpectedValueException
      * @return \RecursiveIterator
      */
     public function getChildren() {
-      if ($this->current() instanceof Element) {
-        return new self($this->current());
+      $element = $this->current();
+      if ($element instanceof Element) {
+        return new self($element);
       }
       throw new \UnexpectedValueException(
         'Called '.__METHOD__.' with invalid current element.'

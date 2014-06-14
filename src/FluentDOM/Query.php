@@ -810,7 +810,7 @@ namespace FluentDOM {
     /**
      * Get the inner xml of a given node or in other words the xml of all children.
      *
-     * @param \DOMElement $node
+     * @param \DOMNode $node
      * @return string
      */
     private function getInnerXml($node) {
@@ -858,10 +858,12 @@ namespace FluentDOM {
         if ($wrapperTemplate instanceof \DOMElement) {
           $wrapper = $wrapperTemplate->cloneNode(TRUE);
           $targets = NULL;
+          $targetCount = 0;
           if (!$simple) {
             $targets = $this->xpath()->evaluate('.//*[count(*) = 0]', $wrapper);
+            $targetCount = $targets->length;
           }
-          if ($simple || $targets->length == 0) {
+          if ($targetCount == 0) {
             $target = $wrapper;
             $simple = TRUE;
           } else {

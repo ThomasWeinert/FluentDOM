@@ -76,6 +76,7 @@ namespace FluentDOM\Query {
      * Validate if the attached node has the data attribute.
      *
      * @param string $name
+     * @return bool
      */
     public function __isset($name) {
       return $this->_node->hasAttribute($this->encodeName($name));
@@ -118,6 +119,7 @@ namespace FluentDOM\Query {
      * Validate if the given attribute name is a data property name
      *
      * @param string $name
+     * @return bool
      */
     private function isDataProperty($name) {
       return (0 === strpos($name, 'data-') && $name == strtolower($name));
@@ -127,6 +129,7 @@ namespace FluentDOM\Query {
      * Normalize a property name from camel case to lowercase with hyphens.
      *
      * @param string $name
+     * @return string
      */
     private function encodeName($name) {
       if (preg_match('(^[a-z][a-z\d]*([A-Z]+[a-z\d]*)+$)DS', $name)) {
@@ -142,6 +145,7 @@ namespace FluentDOM\Query {
      * Convert the given attribute name with hyphens to camel case.
      *
      * @param string $name
+     * @return string
      */
     private function decodeName($name) {
       $parts = explode('-', strToLower(substr($name, 5)));

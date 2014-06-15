@@ -2402,7 +2402,7 @@ namespace FluentDOM {
      * all attributes will be deleted.
      *
      * @example removeAttr.php Usage Example: FluentDOM\Query::removeAttr()
-     * @param string $name
+     * @param string|array $name
      * @throws \InvalidArgumentException
      * @return Query
      */

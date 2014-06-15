@@ -45,8 +45,8 @@ namespace FluentDOM\Query {
      */
     public function toArray() {
       $result = array();
-      if (isset($this->_fd[0]) && $this->_fd[0] instanceof \DOMElement) {
-        foreach ($this->_fd[0]->attributes as $attribute) {
+      if ($node = $this->getFirstElement()) {
+        foreach ($node->attributes as $attribute) {
           $result[$attribute->name] = $attribute->value;
         }
       }
@@ -61,8 +61,8 @@ namespace FluentDOM\Query {
      * @return boolean
      */
     public function offsetExists($name) {
-      if (isset($this->_fd[0]) && $this->_fd[0] instanceof \DOMElement) {
-        return $this->_fd[0]->hasAttribute($name);
+      if ($node = $this->getFirstElement()) {
+        return $node->hasAttribute($name);
       }
       return FALSE;
     }
@@ -122,11 +122,20 @@ namespace FluentDOM\Query {
      * @return integer
      */
     public function count() {
-      if (isset($this->_fd[0]) &&
-        $this->_fd[0] instanceof \DOMElement) {
-        return $this->_fd[0]->attributes->length;
+      if ($node = $this->getFirstElement()) {
+        return $node->attributes->length;
       }
       return 0;
+    }
+
+    /**
+     * @return \DOMElement|NULL
+     */
+    private function getFirstElement() {
+      if (isset($this->_fd[0]) && $this->_fd[0] instanceof \DOMElement) {
+        return $this->_fd[0];
+      }
+      return NULL;
     }
   }
 }

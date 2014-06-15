@@ -17,17 +17,20 @@ namespace FluentDOM\Loader {
   class HtmlFile extends HtmlString implements Loadable {
 
     /**
-     * @see Loadable::load
+     * Load the source as an HTML file.
+     *
      * @param string $source
      * @param string $contentType
      * @return Document|NULL
      */
     public function load($source, $contentType) {
-      if ($this->supports($contentType) &&
-          0 !== strpos($source, '<')) {
+      if ($this->supports($contentType)) {
         return $this->createDocument(
           function(Document $dom) use ($source) {
             $dom->loadHTMLFile($source);
+          },
+          function () use ($source) {
+            return 0 !== strpos($source, '<');
           }
         );
       }

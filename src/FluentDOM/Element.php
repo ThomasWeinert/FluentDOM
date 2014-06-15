@@ -158,7 +158,7 @@ namespace FluentDOM {
      */
     public function offsetExists($offset) {
       if ($this->isNodeOffset($offset)) {
-        return $this->hasChildNodes() && $this->childNodes->length > $offset;
+        return $this->count() > $offset;
       } elseif ($this->isAttributeOffset($offset)) {
         return $this->hasAttribute($offset);
       }
@@ -188,14 +188,21 @@ namespace FluentDOM {
      * @throws \LogicException
      */
     public function offsetSet($offset, $value) {
-      if (NULL === $offset) {
-        return $this->appendChild($value);
-      } elseif ($this->isNodeOffset($offset)) {
-        return $this->replaceChild(
-          $value, $this->childNodes->item((int)$offset)
-        );
+      if (NULL === $offset || $this->isNodeOffset($offset)) {
+        if (!($value instanceOf \DOMNode)) {
+          throw new \InvalidArgumentException(
+            '$value is not a valid \\DOMNode'
+          );
+        }
+        if (NULL === $offset) {
+          return $this->appendChild($value);
+        } else {
+          return $this->replaceChild(
+            $value, $this->childNodes->item((int)$offset)
+          );
+        }
       } elseif ($this->isAttributeOffset($offset)) {
-        return $this->setAttribute($offset, $value);
+        return $this->setAttribute($offset, (string)$value);
       }
       throw $this->createInvalidOffsetException();
     }
@@ -217,14 +224,31 @@ namespace FluentDOM {
       throw $this->createInvalidOffsetException();
     }
 
+    /**
+     * Node offsets are integers, or strings containing only digits.
+     *
+     * @param $offset
+     * @return bool
+     */
     private function isNodeOffset($offset) {
       return (is_int($offset) || ctype_digit((string)$offset));
     }
 
+    /**
+     * Attribute offsets are strings that can not only contains digits.
+     *
+     * @param $offset
+     * @return bool
+     */
     private function isAttributeOffset($offset) {
       return (is_string($offset) && !ctype_digit((string)$offset));
     }
 
+    /**
+     * Create an offset for invalid offsets.
+     *
+     * @return \InvalidArgumentException
+     */
     private function createInvalidOffsetException() {
       return new \InvalidArgumentException(
         'Invalid offset. Use integer for child nodes and strings for attributes.'
@@ -235,6 +259,11 @@ namespace FluentDOM {
      * Iterator
      ************************/
 
+    /**
+     * Return Iterator for child nodes.
+     *
+     * @return \Iterator
+     */
     public function getIterator() {
       return new Element\Iterator($this);
     }
@@ -243,6 +272,11 @@ namespace FluentDOM {
      * Countable
      ************************/
 
+    /**
+     * Return child node count
+     *
+     * @return int
+     */
     public function count() {
       return $this->hasChildNodes() ? $this->childNodes->length : 0;
     }

@@ -1,0 +1,7 @@
+imports:
+    - php
+filter:
+    paths: [src/*]
+tools:
+    external_code_coverage:
+        runs: 4

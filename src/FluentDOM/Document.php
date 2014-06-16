@@ -126,11 +126,6 @@ namespace FluentDOM {
      * @return Element
      */
     public function createElement($name, $content = NULL, array $attributes = NULL) {
-      if (is_array($content)) {
-        $attributes = NULL === $attributes
-          ? $content : array_merge($content, $attributes);
-        $content = NULL;
-      }
       list($prefix, $localName) = QualifiedName::split($name);
       $namespace = '';
       if ($prefix !== FALSE) {
@@ -154,27 +149,24 @@ namespace FluentDOM {
       } else {
         $node = parent::createElement($name);
       }
-      if (!empty($attributes)) {
-        foreach ($attributes as $attributeName => $attributeValue) {
-          $node->setAttribute($attributeName, $attributeValue);
-        }
-      }
-      if (!empty($content)) {
-        $node->appendChild($this->createTextNode($content));
-      }
-      return $this->ensureNodeClass($node);
+      $node = $this->ensureElement($node);
+      $this->appendAttributes($node, $content, $attributes);
+      $this->appendContent($node, $content);
+      return $node;
     }
 
     /**
      * @param string $namespaceURI
      * @param string $qualifiedName
-     * @param string|null $value
-     * @return \DOMElement|\DOMNode
+     * @param string|null $content
+     * @return Element
      */
-    public function createElementNS($namespaceURI, $qualifiedName, $value = null) {
-      return $this->ensureNodeClass(
-        parent::createElementNS($namespaceURI, $qualifiedName, $value)
+    public function createElementNS($namespaceURI, $qualifiedName, $content = null) {
+      $node = $this->ensureElement(
+        parent::createElementNS($namespaceURI, $qualifiedName)
       );
+      $this->appendContent($node, $content);
+      return $node;
     }
 
     /**
@@ -242,16 +234,42 @@ namespace FluentDOM {
     /**
      * This is workaround for issue
      *
-     * @param \DOMNode|Element $node
-     * @return \DOMNode
+     * @param \DOMElement $node
+     * @return Element
      */
-    private function ensureNodeClass(\DOMNode $node) {
-      if (
-        !($node instanceof Element) &&
-        ($node instanceof \DOMElement)) {
+    private function ensureElement(\DOMElement $node) {
+      if (!($node instanceof Element)) {
         return $node->ownerDocument->importNode($node, TRUE);
       }
       return $node;
+    }
+
+    /**
+     * @param \DOMElement $node
+     * @param string|array|NULL $content
+     * @param array|NULL $attributes
+     */
+    private function appendAttributes($node, $content = NULL, array $attributes = NULL) {
+      if (is_array($content)) {
+        $attributes = NULL === $attributes
+          ? $content : array_merge($content, $attributes);
+        $content = NULL;
+      }
+      if (!empty($attributes)) {
+        foreach ($attributes as $attributeName => $attributeValue) {
+          $node->setAttribute($attributeName, $attributeValue);
+        }
+      }
+    }
+
+    /**
+     * @param \DOMElement $node
+     * @param string|array|NULL $content
+     */
+    private function appendContent($node, $content = NULL) {
+      if (!(empty($content) || is_array($content))) {
+        $node->appendChild($this->createTextNode($content));
+      }
     }
   }
 }

@@ -4,3 +4,5 @@ filter:
     paths: [src/*]
 tools:
     php_code_coverage: true
+before_commands:
+    - "composer install --prefer-source"

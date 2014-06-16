@@ -38,7 +38,11 @@ namespace FluentDOM {
      */
     public function __construct($version = '1.0', $encoding = 'UTF-8') {
       parent::__construct($version, $encoding);
+      $this->registerNodeClass('DOMAttr', __NAMESPACE__.'\\Attribute');
+      $this->registerNodeClass('DOMCdataSection', __NAMESPACE__.'\\CdataSection');
+      $this->registerNodeClass('DOMComment', __NAMESPACE__.'\\Comment');
       $this->registerNodeClass('DOMElement', __NAMESPACE__.'\\Element');
+      $this->registerNodeClass('DOMText', __NAMESPACE__.'\\Text');
     }
 
     /**

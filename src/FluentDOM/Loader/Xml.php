@@ -1,6 +1,6 @@
 <?php
 /**
- * Load a DOM document from a xml string
+ * Load a DOM document from a xml file or string
  *
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
@@ -12,9 +12,9 @@ namespace FluentDOM\Loader {
   use FluentDOM\Loadable;
 
   /**
-   * Load a DOM document from a xml string
+   * Load a DOM document from a xml file or string
    */
-  class XmlString implements Loadable {
+  class Xml implements Loadable {
 
     use Supports;
 
@@ -25,7 +25,6 @@ namespace FluentDOM\Loader {
       'xml', 'application/xml', 'text/xml'
     );
 
-
     /**
      * @see Loadable::load
      * @param string $source
@@ -33,10 +32,13 @@ namespace FluentDOM\Loader {
      * @return Document|NULL
      */
     public function load($source, $contentType) {
-      if ($this->supports($contentType) &&
-          0 === strpos($source, '<')) {
+      if ($this->supports($contentType)) {
         $dom = new Document();
-        $dom->loadXML($source);
+        if ($this->startsWith($source, '<')) {
+          $dom->loadXml($source);
+        } else {
+          $dom->load($source);
+        }
         return $dom;
       }
       return NULL;

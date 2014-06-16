@@ -5,29 +5,29 @@ namespace FluentDOM\Loader {
 
   require_once(__DIR__.'/../TestCase.php');
 
-  class LoaderXmlStringTest extends TestCase {
+  class LoaderXmlTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Loader\XmlString
+     * @covers FluentDOM\Loader\Xml
      */
     public function testSupportsExpectingTrue() {
-      $loader = new XmlString();
+      $loader = new Xml();
       $this->assertTrue($loader->supports('text/xml'));
     }
 
     /**
-     * @covers FluentDOM\Loader\XmlString
+     * @covers FluentDOM\Loader\Xml
      */
     public function testSupportsExpectingFalse() {
-      $loader = new XmlString();
+      $loader = new Xml();
       $this->assertFalse($loader->supports('text/html'));
     }
 
     /**
-     * @covers FluentDOM\Loader\XmlString
+     * @covers FluentDOM\Loader\Xml
      */
     public function testLoadWithValidXml() {
-      $loader = new XmlString();
+      $loader = new Xml();
       $this->assertInstanceOf(
         'DOMDocument',
         $loader->load(
@@ -38,13 +38,14 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @covers FluentDOM\Loader\XmlString
+     * @covers FluentDOM\Loader\Xml
      */
-    public function testLoadWithInvalidXml() {
-      $loader = new XmlString();
-      $this->assertNull(
+    public function testLoadWithValidXmlFile() {
+      $loader = new Xml();
+      $this->assertInstanceOf(
+        'DOMDocument',
         $loader->load(
-          'no xml',
+          __DIR__.'/TestData/loader.xml',
           'text/xml'
         )
       );

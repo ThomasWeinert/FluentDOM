@@ -1,6 +1,6 @@
 <?php
 /**
- * Load a DOM document from a xml string
+ * Load a DOM document from a json string or file
  *
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
@@ -12,9 +12,9 @@ namespace FluentDOM\Loader {
   use FluentDOM\Loadable;
 
   /**
-   * Load a DOM document from a json structure
+   * Load a DOM document from a json string or file
    */
-  class JsonString implements Loadable {
+  class Json implements Loadable {
 
     use Supports;
 
@@ -81,21 +81,26 @@ namespace FluentDOM\Loader {
      */
     public function load($source, $contentType) {
       if (is_string($source)) {
-        $firstChar = substr(trim($source), 0, 1);
-        if (in_array($firstChar, array('{', '['))) {
+        if (!$this->startsWith($source, '{[')) {
+          $source = file_get_contents($source);
+        }
+        if ($this->startsWith($source, '{[')) {
           $json = json_decode($source);
-          if ($json || is_array($json)) {
-            $dom = new Document('1.0', 'UTF-8');
-            $dom->appendChild(
-              $root = $dom->createElementNS(self::XMLNS, 'json:json')
-            );
-            $this->transferTo($root, $json, $this->_recursions);
-            return $dom;
-          } else {
+          if (!($json || is_array($json))) {
             $code = is_callable('json_last_error') ? json_last_error() : -1;
             throw new \UnexpectedValueException($this->_jsonErrors[$code]);
           }
         }
+      } else {
+        $json = $source;
+      }
+      if ($json || is_array($json)) {
+        $dom = new Document('1.0', 'UTF-8');
+        $dom->appendChild(
+          $root = $dom->createElementNS(self::XMLNS, 'json:json')
+        );
+        $this->transferTo($root, $json, $this->_recursions);
+        return $dom;
       }
       return NULL;
     }

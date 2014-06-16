@@ -82,16 +82,7 @@ namespace FluentDOM\Loader {
     public function load($source, $contentType) {
       $json = $source;
       if (is_string($source)) {
-        if (!$this->startsWith($source, '{[')) {
-          $source = file_get_contents($source);
-        }
-        if ($this->startsWith($source, '{[')) {
-          $json = json_decode($source);
-          if (!($json || is_array($json))) {
-            $code = is_callable('json_last_error') ? json_last_error() : -1;
-            throw new \UnexpectedValueException($this->_jsonErrors[$code]);
-          }
-        }
+        $json = $this->parseString($source);
       }
       if ($json || is_array($json)) {
         $dom = new Document('1.0', 'UTF-8');
@@ -102,6 +93,26 @@ namespace FluentDOM\Loader {
         return $dom;
       }
       return NULL;
+    }
+
+    /**
+     * @param string $source
+     * @throws \UnexpectedValueException
+     * @return mixed
+     */
+    private function parseString($source)  {
+      $json = FALSE;
+      if (!$this->startsWith($source, '{[')) {
+        $source = file_get_contents($source);
+      }
+      if ($this->startsWith($source, '{[')) {
+        $json = json_decode($source);
+        if (!($json || is_array($json))) {
+          $code = is_callable('json_last_error') ? json_last_error() : -1;
+          throw new \UnexpectedValueException($this->_jsonErrors[$code]);
+        }
+      }
+      return $json;
     }
 
     /**

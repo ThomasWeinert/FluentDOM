@@ -20,6 +20,15 @@ namespace FluentDOM {
     implements \ArrayAccess, \Countable, \IteratorAggregate  {
 
     /**
+     * Casting the element node to string will returns its nodeValue
+     *
+     * @return string
+     */
+    public function __toString() {
+      return $this->nodeValue;
+    }
+
+    /**
      * Set an attribute on an element
      *
      * @param string $name

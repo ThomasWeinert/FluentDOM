@@ -80,6 +80,7 @@ namespace FluentDOM\Loader {
      * @return Document|NULL
      */
     public function load($source, $contentType) {
+      $json = $source;
       if (is_string($source)) {
         if (!$this->startsWith($source, '{[')) {
           $source = file_get_contents($source);
@@ -91,8 +92,6 @@ namespace FluentDOM\Loader {
             throw new \UnexpectedValueException($this->_jsonErrors[$code]);
           }
         }
-      } else {
-        $json = $source;
       }
       if ($json || is_array($json)) {
         $dom = new Document('1.0', 'UTF-8');

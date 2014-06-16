@@ -3,5 +3,4 @@ imports:
 filter:
     paths: [src/*]
 tools:
-    external_code_coverage:
-        runs: 3
+    php_code_coverage: true

@@ -14,6 +14,7 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationInside
      * @covers FluentDOM\Query::appendTo
+     * @covers FluentDOM\Query::applyToSpawn
      * @covers FluentDOM\Query::apply
      * @covers FluentDOM\Query::appendChildren
      */

@@ -785,9 +785,10 @@ namespace FluentDOM {
         throw new \UnexpectedValueException('No element found');
       } else {
         //if a node is not in the current document import it
+        $document = $this->getDocument();
         foreach ($result as $index => $node) {
-          if ($node->ownerDocument !== $this->_document) {
-            $result[$index] = $this->_document->importNode($node, TRUE);
+          if ($node->ownerDocument !== $document) {
+            $result[$index] = $document->importNode($node, TRUE);
           }
         }
       }
@@ -1009,6 +1010,26 @@ namespace FluentDOM {
             $result = array_merge($result, $resultNodes);
           }
         }
+      }
+      return $result;
+    }
+
+    /**
+     * Apply the content to the target nodes using the handler callback
+     * and push them into a spawned Query object.
+     *
+     * @param array|\DOMNodeList $targetNodes
+     * @param string|array|\DOMNode|\DOMNodeList|\Traversable|callable $content
+     * @param callable $handler
+     * @param bool $remove Call remove() on $this, remove the current selection from the DOM
+     * @return Query
+     */
+    private function applyToSpawn($targetNodes, $content, $handler, $remove = FALSE) {
+      $result = $this->spawn(
+        $this->apply($targetNodes, $content, $handler)
+      );
+      if ($remove) {
+        $this->remove();
       }
       return $result;
     }
@@ -1693,17 +1714,13 @@ namespace FluentDOM {
      * @return Query
      */
     public function after($content) {
-      $result = $this->spawn();
-      $result->push(
-        $this->apply(
-          $this->_nodes,
-          $content,
-          function ($targetNode, $contentNodes) {
-            return $this->insertNodesAfter($targetNode, $contentNodes);
-          }
-        )
+      return $this->applyToSpawn(
+        $this->_nodes,
+        $content,
+        function ($targetNode, $contentNodes) {
+          return $this->insertNodesAfter($targetNode, $contentNodes);
+        }
       );
-      return $result;
     }
 
    /**
@@ -1714,7 +1731,6 @@ namespace FluentDOM {
    * @return Query
    */
     public function append($content) {
-      $result = $this->spawn();
       if (empty($this->_nodes) &&
         $this->_useDocumentContext &&
         !isset($this->_document->documentElement)) {
@@ -1723,19 +1739,16 @@ namespace FluentDOM {
         } else {
           $contentNode = $this->getContentElement($content);
         }
-        $result->push($this->_document->appendChild($contentNode));
+        return $this->spawn($this->_document->appendChild($contentNode));
       } else {
-        $result->push(
-          $this->apply(
-            $this->_nodes,
-            $content,
-            function($targetNode, $contentNodes) {
-              return $this->appendChildren($targetNode, $contentNodes);
-            }
-          )
+        return $this->applyToSpawn(
+          $this->_nodes,
+          $content,
+          function($targetNode, $contentNodes) {
+            return $this->appendChildren($targetNode, $contentNodes);
+          }
         );
       }
-      return $result;
     }
 
     /**
@@ -1747,21 +1760,14 @@ namespace FluentDOM {
      * @return Query
      */
     public function appendTo($selector) {
-      $result = $this->spawn();
-      $targetNodes = $this->getNodes($selector);
-      if (!empty($targetNodes)) {
-        $result->push(
-          $this->apply(
-            $targetNodes,
-            $this->_nodes,
-            function ($targetNode, $contentNodes) {
-              return $this->appendChildren($targetNode, $contentNodes);
-            }
-          )
-        );
-        $this->remove();
-      }
-      return $result;
+      return $this->applyToSpawn(
+        $targetNodes = $this->getNodes($selector),
+        $this->_nodes,
+        function ($targetNode, $contentNodes) {
+          return $this->appendChildren($targetNode, $contentNodes);
+        },
+        TRUE
+      );
     }
 
     /**
@@ -1772,17 +1778,13 @@ namespace FluentDOM {
      * @return Query
      */
     public function before($content) {
-      $result = $this->spawn();
-      $result->push(
-        $this->apply(
-          $this->_nodes,
-          $content,
-          function($targetNode, $contentNodes) {
-            return $this->insertNodesBefore($targetNode, $contentNodes);
-          }
-        )
+      return $this->applyToSpawn(
+        $this->_nodes,
+        $content,
+        function($targetNode, $contentNodes) {
+          return $this->insertNodesBefore($targetNode, $contentNodes);
+        }
       );
-      return $result;
     }
 
     /**
@@ -1834,41 +1836,34 @@ namespace FluentDOM {
      * @return Query
      */
     public function insertAfter($selector) {
-      $result = $this->spawn();
-      $targetNodes = $this->getNodes($selector);
-      if (!empty($targetNodes)) {
-        $result->push(
-          $this->apply(
-            $targetNodes,
-            $this->_nodes,
-            function ($targetNode, $contentNodes) {
-              $result = array();
-              if (
-                $targetNode->parentNode instanceof \DOMNode &&
-                !empty($contentNodes)
-              ) {
-                $beforeNode = $targetNode->nextSibling;
-                $hasContext = $beforeNode instanceof \DOMNode;
-                foreach ($contentNodes as $contentNode) {
-                  /** @var \DOMNode $contentNode */
-                  if ($hasContext) {
-                    $result[] = $targetNode->parentNode->insertBefore(
-                      $contentNode->cloneNode(TRUE), $beforeNode
-                    );
-                  } else {
-                    $result[] = $targetNode->parentNode->appendChild(
-                      $contentNode->cloneNode(TRUE)
-                    );
-                  }
-                }
+      return $this->applyToSpawn(
+        $this->getNodes($selector),
+        $this->_nodes,
+        function ($targetNode, $contentNodes) {
+          $result = array();
+          if (
+            $targetNode->parentNode instanceof \DOMNode &&
+            !empty($contentNodes)
+          ) {
+            $beforeNode = $targetNode->nextSibling;
+            $hasContext = $beforeNode instanceof \DOMNode;
+            foreach ($contentNodes as $contentNode) {
+              /** @var \DOMNode $contentNode */
+              if ($hasContext) {
+                $result[] = $targetNode->parentNode->insertBefore(
+                  $contentNode->cloneNode(TRUE), $beforeNode
+                );
+              } else {
+                $result[] = $targetNode->parentNode->appendChild(
+                  $contentNode->cloneNode(TRUE)
+                );
               }
-              return $result;
             }
-          )
-        );
-        $this->remove();
-      }
-      return $result;
+          }
+          return $result;
+        },
+        TRUE
+      );
     }
 
     /**
@@ -1879,33 +1874,26 @@ namespace FluentDOM {
      * @return Query
      */
     public function insertBefore($selector) {
-      $result = $this->spawn();
-      $targetNodes = $this->getNodes($selector);
-      if (!empty($targetNodes)) {
-        $result->push(
-          $this->apply(
-            $targetNodes,
-            $this->_nodes,
-            function ($targetNode, $contentNodes) {
-              $result = array();
-              if (
-                $targetNode->parentNode instanceof \DOMNode &&
-                !empty($contentNodes)
-              ) {
-                foreach ($contentNodes as $contentNode) {
-                  /** @var \DOMNode $contentNode */
-                  $result[] = $targetNode->parentNode->insertBefore(
-                    $contentNode->cloneNode(TRUE), $targetNode
-                  );
-                }
-              }
-              return $result;
+      return $this->applyToSpawn(
+        $this->getNodes($selector),
+        $this->_nodes,
+        function ($targetNode, $contentNodes) {
+          $result = array();
+          if (
+            $targetNode->parentNode instanceof \DOMNode &&
+            !empty($contentNodes)
+          ) {
+            foreach ($contentNodes as $contentNode) {
+              /** @var \DOMNode $contentNode */
+              $result[] = $targetNode->parentNode->insertBefore(
+                $contentNode->cloneNode(TRUE), $targetNode
+              );
             }
-          )
-        );
-        $this->remove();
-      }
-      return $result;
+          }
+          return $result;
+        },
+        TRUE
+      );
     }
 
     /**
@@ -1916,17 +1904,13 @@ namespace FluentDOM {
      * @return Query
      */
     public function prepend($content) {
-      $result = $this->spawn();
-      $result->push(
-        $this->apply(
-          $this->_nodes,
-          $content,
-          function ($targetNode, $contentNodes) {
-            return $this->insertChildrenBefore($targetNode, $contentNodes);
-          }
-        )
+      return $this->applyToSpawn(
+        $this->_nodes,
+        $content,
+        function ($targetNode, $contentNodes) {
+          return $this->insertChildrenBefore($targetNode, $contentNodes);
+        }
       );
-      return $result;
     }
 
     /**
@@ -1938,21 +1922,14 @@ namespace FluentDOM {
      * @return Query list of all new elements
      */
     public function prependTo($selector) {
-      $result = $this->spawn();
-      $targetNodes = $this->getNodes($selector);
-      if (!empty($targetNodes)) {
-        $result->push(
-          $this->apply(
-            $targetNodes,
-            $this->_nodes,
-            function($targetNode, $contentNodes) {
-              return $this->insertChildrenBefore($targetNode, $contentNodes);
-            }
-          )
-        );
-        $this->remove();
-      }
-      return $result;
+      return $this->applyToSpawn(
+        $this->getNodes($selector),
+        $this->_nodes,
+        function($targetNode, $contentNodes) {
+          return $this->insertChildrenBefore($targetNode, $contentNodes);
+        },
+        TRUE
+      );
     }
 
     /**
@@ -1963,21 +1940,16 @@ namespace FluentDOM {
      * @return Query
      */
     public function replaceAll($selector) {
-      $result = $this->spawn();
-      $targetNodes = $this->getNodes($selector);
-      if (!empty($targetNodes)) {
-        $this->apply(
-          $targetNodes,
-          $this->_nodes,
-          function($targetNode, $contentNodes) {
-            return $this->insertNodesBefore($targetNode, $contentNodes);
-          }
-        );
-        $target = $this->spawn();
-        $target->push($targetNodes);
-        $target->remove();
-      }
-      $this->remove();
+      $result = $this->applyToSpawn(
+        $targetNodes = $this->getNodes($selector),
+        $this->_nodes,
+        function($targetNode, $contentNodes) {
+          return $this->insertNodesBefore($targetNode, $contentNodes);
+        },
+        TRUE
+      );
+      $target = $this->spawn($targetNodes);
+      $target->remove();
       return $result;
     }
 
@@ -2059,8 +2031,7 @@ namespace FluentDOM {
      * @return Query
      */
     public function wrap($content) {
-      $result = $this->spawn();
-      $result->push($this->wrapNodes($this->_nodes, $content));
+      $result = $this->spawn($this->wrapNodes($this->_nodes, $content));
       return $result;
     }
 
@@ -2129,7 +2100,6 @@ namespace FluentDOM {
      * @return Query
      */
     public function wrapInner($content) {
-      $result = $this->spawn();
       $elements = array();
       foreach ($this->_nodes as $node) {
         foreach ($node->childNodes as $childNode) {
@@ -2138,8 +2108,7 @@ namespace FluentDOM {
           }
         }
       }
-      $result->push($this->wrapNodes($elements, $content));
-      return $result;
+      return $this->spawn($this->wrapNodes($elements, $content));
     }
 
     /**

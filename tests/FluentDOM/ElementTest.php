@@ -74,6 +74,7 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Element::hasAttribute
+     * @covers FluentDOM\Element::resolveTagName
      */
     public function testHasAttributeExpectingTrue() {
       $dom = new Document();
@@ -85,6 +86,7 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Element::hasAttribute
+     * @covers FluentDOM\Element::resolveTagName
      */
     public function testHasAttributeExpectingFalse() {
       $dom = new Document();
@@ -96,6 +98,7 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Element::hasAttribute
+     * @covers FluentDOM\Element::resolveTagName
      */
     public function testHasAttributeWithNamespaceExpectingTrue() {
       $dom = new Document();
@@ -108,6 +111,7 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Element::hasAttribute
+     * @covers FluentDOM\Element::resolveTagName
      */
     public function testHasAttributeWithNamespaceExpectingFalse() {
       $dom = new Document();
@@ -282,6 +286,19 @@ namespace FluentDOM {
     /**
      * @covers FluentDOM\Element
      */
+    public function testArrayAccessOffsetExistsExpectingException() {
+      $dom = new Document();
+      $dom->loadXML(self::XML);
+      $this->setExpectedException(
+        'InvalidArgumentException',
+        'Invalid offset. Use integer for child nodes and strings for attributes.'
+      );
+      $dom->documentElement[NULL];
+    }
+
+    /**
+     * @covers FluentDOM\Element
+     */
     public function testArrayAccessOffsetGetWithItem() {
       $dom = new Document();
       $dom->loadXML('<foo><bar/><foobar/></foo>');
@@ -341,6 +358,19 @@ namespace FluentDOM {
         '<root><success/></root>',
         $dom->saveXML($dom->documentElement)
       );
+    }
+
+    /**
+     * @covers FluentDOM\Element
+     */
+    public function testArrayAccessOffsetSetWithInvalidChildExpectingException() {
+      $dom = new Document();
+      $dom->appendChild($dom->createElement('root'));
+      $this->setExpectedException(
+        'InvalidArgumentException',
+        '$value is not a valid \DOMNode'
+      );
+      $dom->documentElement[0] = NULL;
     }
 
     /**

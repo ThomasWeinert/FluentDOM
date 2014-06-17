@@ -223,7 +223,8 @@ namespace FluentDOM {
     /**
      * Node offsets are integers, or strings containing only digits.
      *
-     * @param $offset
+     * @param mixed $offset
+     * @throws \InvalidArgumentException
      * @return bool
      */
     private function isNodeOffset($offset) {
@@ -240,7 +241,7 @@ namespace FluentDOM {
     /**
      * Attribute offsets are strings that can not only contains digits.
      *
-     * @param $offset
+     * @param mixed $offset
      * @return bool
      */
     private function isAttributeOffset($offset) {

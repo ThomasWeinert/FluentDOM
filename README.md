@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/FluentDOM/FluentDOM.svg?branch=master)](https://travis-ci.org/FluentDOM/FluentDOM)
 [![HHVM Status](http://hhvm.h4cc.de/badge/fluentdom/fluentdom.png)](http://hhvm.h4cc.de/package/fluentdom/fluentdom)
+[![Code Coverage](https://scrutinizer-ci.com/g/FluentDOM/FluentDOM/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/FluentDOM/FluentDOM/?branch=master)
 [![License](https://poser.pugx.org/fluentdom/fluentdom/license.svg)](https://packagist.org/packages/fluentdom/fluentdom)
 [![Total Downloads](https://poser.pugx.org/fluentdom/fluentdom/downloads.svg)](https://packagist.org/packages/fluentdom/fluentdom)
 [![Latest Stable Version](https://poser.pugx.org/fluentdom/fluentdom/v/stable.svg)](https://packagist.org/packages/fluentdom/fluentdom)

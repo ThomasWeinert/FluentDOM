@@ -98,6 +98,30 @@ namespace FluentDOM {
     }
 
     /**
+     * @covers FluentDOM\Document::registerNamespace
+     * @covers FluentDOM\Document::getNamespace
+     */
+    public function testRegisterReservedNamespaceExpectingException() {
+      $dom = new Document();
+      $this->setExpectedException(
+        'LogicException',
+        'Can not register reserved namespace prefix "xml".'
+      );
+      $dom->registerNamespace('xml', 'urn:fail');
+    }
+
+    /**
+     * @covers FluentDOM\Document::getNamespace
+     */
+    public function testGetReservedNamespace() {
+      $dom = new Document();
+      $this->assertEquals(
+        'http://www.w3.org/XML/1998/namespace',
+        $dom->getNamespace('xml')
+      );
+    }
+
+    /**
      * @covers FluentDOM\Document::getNamespace
      */
     public function testGetNamespaceWithoutRegisterExpectingException() {
@@ -111,6 +135,25 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Document::createElement
+     * @covers FluentDOM\Document::ensureElement
+     * @covers FluentDOM\Document::appendContent
+     * @covers FluentDOM\Document::appendAttributes
+     */
+    public function testCreateElementWithoutNamespace() {
+      $dom = new Document();
+      $dom->registerNamespace('#default', 'urn:default');
+      $dom->appendChild($dom->createElement(':example'));
+      $this->assertEquals(
+        '<example xmlns=""/>',
+        $dom->saveXml($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Document::createElement
+     * @covers FluentDOM\Document::ensureElement
+     * @covers FluentDOM\Document::appendContent
+     * @covers FluentDOM\Document::appendAttributes
      */
     public function testCreateElementWithContent() {
       $dom = new Document();
@@ -123,6 +166,9 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Document::createElement
+     * @covers FluentDOM\Document::ensureElement
+     * @covers FluentDOM\Document::appendContent
+     * @covers FluentDOM\Document::appendAttributes
      */
     public function testCreateElementWithContentAndAttribute() {
       $dom = new Document();
@@ -137,6 +183,9 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Document::createElement
+     * @covers FluentDOM\Document::ensureElement
+     * @covers FluentDOM\Document::appendContent
+     * @covers FluentDOM\Document::appendAttributes
      */
     public function testCreateElementWithAttributeAsSecondArgument() {
       $dom = new Document();
@@ -151,6 +200,9 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Document::createElement
+     * @covers FluentDOM\Document::ensureElement
+     * @covers FluentDOM\Document::appendContent
+     * @covers FluentDOM\Document::appendAttributes
      */
     public function testCreateElementWithAttributeAsSecondAndThirdArgument() {
       $dom = new Document();
@@ -165,6 +217,9 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Document::createElement
+     * @covers FluentDOM\Document::ensureElement
+     * @covers FluentDOM\Document::appendContent
+     * @covers FluentDOM\Document::appendAttributes
      */
     public function testCreateElementWithNamespace() {
       $dom = new Document();
@@ -178,6 +233,9 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Document::createElement
+     * @covers FluentDOM\Document::ensureElement
+     * @covers FluentDOM\Document::appendContent
+     * @covers FluentDOM\Document::appendAttributes
      */
     public function testCreateElementWithXmlNamespacePrefixExpectingException() {
       $dom = new Document();
@@ -189,7 +247,23 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Document::createElement
+     * @covers FluentDOM\Document::createElementNs
+     * @covers FluentDOM\Document::ensureElement
+     * @covers FluentDOM\Document::appendContent
+     */
+    public function testCreateElementNsWithContent() {
+      $dom = new Document();
+      $dom->appendChild(
+        $dom->createElementNs('urn:default', 'example', 'Content & More')
+      );
+      $this->assertEquals(
+        '<example xmlns="urn:default">Content &amp; More</example>',
+        $dom->saveXml($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Document::createAttribute
      */
     public function testCreateAttribute() {
       $dom = new Document();
@@ -202,7 +276,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Document::createElement
+     * @covers FluentDOM\Document::createAttribute
      */
     public function testCreateAttributeWithNamespace() {
       $dom = new Document();

@@ -19,6 +19,8 @@ namespace FluentDOM {
     extends \DOMElement
     implements \ArrayAccess, \Countable, \IteratorAggregate  {
 
+    use Node\StringCast;
+
     /**
      * Set an attribute on an element
      *

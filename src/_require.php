@@ -5,16 +5,19 @@ require(__DIR__.'/FluentDOM/Loadable.php');
 require(__DIR__.'/FluentDOM/XmlSerializable.php');
 
 require(__DIR__.'/FluentDOM/XmlSerialize.php');
+require(__DIR__.'/FluentDOM/Node/StringCast.php');
 
 require(__DIR__.'/FluentDOM/Document.php');
+require(__DIR__.'/FluentDOM/Attribute.php');
+require(__DIR__.'/FluentDOM/CdataSection.php');
+require(__DIR__.'/FluentDOM/Comment.php');
 require(__DIR__.'/FluentDOM/Element.php');
+require(__DIR__.'/FluentDOM/Text.php');
 require(__DIR__.'/FluentDOM/Xpath.php');
 
-require(__DIR__.'/FluentDOM/Loader/JsonString.php');
-require(__DIR__.'/FluentDOM/Loader/HtmlFile.php');
-require(__DIR__.'/FluentDOM/Loader/HtmlString.php');
-require(__DIR__.'/FluentDOM/Loader/XmlFile.php');
-require(__DIR__.'/FluentDOM/Loader/XmlString.php');
+require(__DIR__.'/FluentDOM/Loader/Json.php');
+require(__DIR__.'/FluentDOM/Loader/Html.php');
+require(__DIR__.'/FluentDOM/Loader/Xml.php');
 require(__DIR__.'/FluentDOM/Loaders.php');
 
 require(__DIR__.'/FluentDOM/Query.php');

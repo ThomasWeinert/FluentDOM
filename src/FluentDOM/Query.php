@@ -144,11 +144,9 @@ namespace FluentDOM {
       } elseif (NULL === $this->_loaders) {
         $this->_loaders = new Loaders(
           [
-            new Loader\XmlFile(),
-            new Loader\XmlString(),
-            new Loader\HtmlFile(),
-            new Loader\HtmlString(),
-            new Loader\JsonString()
+            new Loader\Xml(),
+            new Loader\Html(),
+            new Loader\Json()
           ]
         );
       }

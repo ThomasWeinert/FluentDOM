@@ -7,6 +7,18 @@ namespace FluentDOM {
   class ElementTest extends TestCase {
 
     /**
+     * @covers FluentDOM\Element::__toString
+     */
+    public function testMagicMethodToString() {
+      $dom = new Document();
+      $dom->appendElement('test', 'success');
+      $this->assertEquals(
+        'success',
+        (string)$dom->documentElement
+      );
+    }
+
+    /**
      * @covers FluentDOM\Element::setAttribute
      */
     public function testSetAttribute() {

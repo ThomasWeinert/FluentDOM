@@ -161,10 +161,9 @@ namespace FluentDOM {
     public function offsetExists($offset) {
       if ($this->isNodeOffset($offset)) {
         return $this->count() > $offset;
-      } elseif ($this->isAttributeOffset($offset)) {
+      } else {
         return $this->hasAttribute($offset);
       }
-      throw $this->createInvalidOffsetException();
     }
 
     /**
@@ -177,10 +176,9 @@ namespace FluentDOM {
     public function offsetGet($offset) {
       if ($this->isNodeOffset($offset)) {
         return $this->childNodes->item((int)$offset);
-      } elseif ($this->isAttributeOffset($offset)) {
+      } else {
         return $this->getAttribute($offset);
       }
-      throw $this->createInvalidOffsetException();
     }
 
     /**
@@ -203,10 +201,9 @@ namespace FluentDOM {
             $value, $this->childNodes->item((int)$offset)
           );
         }
-      } elseif ($this->isAttributeOffset($offset)) {
+      } else {
         return $this->setAttribute($offset, (string)$value);
       }
-      throw $this->createInvalidOffsetException();
     }
 
     /**
@@ -218,12 +215,9 @@ namespace FluentDOM {
     public function offsetUnset($offset) {
       if ($this->isNodeOffset($offset)) {
         $this->removeChild($this->childNodes->item((int)$offset));
-        return;
-      } elseif ($this->isAttributeOffset($offset)) {
+      } else {
         $this->removeAttribute($offset);
-        return;
       }
-      throw $this->createInvalidOffsetException();
     }
 
     /**
@@ -233,7 +227,14 @@ namespace FluentDOM {
      * @return bool
      */
     private function isNodeOffset($offset) {
-      return (is_int($offset) || ctype_digit((string)$offset));
+      if (is_int($offset) || ctype_digit((string)$offset)) {
+        return TRUE;
+      } elseif ($this->isAttributeOffset($offset)) {
+        return FALSE;
+      }
+      throw new \InvalidArgumentException(
+        'Invalid offset. Use integer for child nodes and strings for attributes.'
+      );
     }
 
     /**
@@ -244,17 +245,6 @@ namespace FluentDOM {
      */
     private function isAttributeOffset($offset) {
       return (is_string($offset) && !ctype_digit((string)$offset));
-    }
-
-    /**
-     * Create an offset for invalid offsets.
-     *
-     * @return \InvalidArgumentException
-     */
-    private function createInvalidOffsetException() {
-      return new \InvalidArgumentException(
-        'Invalid offset. Use integer for child nodes and strings for attributes.'
-      );
     }
 
     /*************************

@@ -1,6 +1,6 @@
 <?php
 /**
- * FluentDOMCssProperties provides an array access to a css style string. It is used to
+ * Provides an array access to a css style string. It is used to
  * modify the attribute values of style attributes.
  *
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
@@ -12,7 +12,7 @@ namespace FluentDOM\Query\Css {
   use FluentDOM\Query\Css as Css;
 
   /**
-   * FluentDOMCssProperties provides an array access to a css style string. It is used to
+   * Provides an array access to a css style string. It is used to
    * modify the attribute values of style attributes.
    */
   class Properties implements \ArrayAccess, \IteratorAggregate, \Countable {
@@ -67,7 +67,7 @@ namespace FluentDOM\Query\Css {
     public function getStyleString() {
       $result = '';
       if (is_array($this->_properties) && count($this->_properties) > 0) {
-        uksort($this->_properties, array($this, '_compare'));
+        uksort($this->_properties, new PropertyCompare());
         foreach ($this->_properties as $name => $value) {
           if (trim($value) !== '') {
             $result .= ' '.$name.': '.$value.';';
@@ -174,59 +174,6 @@ namespace FluentDOM\Query\Css {
         );
       }
       return (string)$value;
-    }
-
-    /**
-     * Compare to css property names by name, browser-prefix and level.
-     *
-     * @param string $propertyNameOne
-     * @param string $propertyNameTwo
-     * @return integer
-     */
-    private function _compare($propertyNameOne, $propertyNameTwo) {
-      $propertyOne = $this->_decodeName($propertyNameOne);
-      $propertyTwo = $this->_decodeName($propertyNameTwo);
-      $propertyOneLevels = count($propertyOne);
-      $propertyTwoLevels = count($propertyTwo);
-      $maxLevels = ($propertyOneLevels > $propertyTwoLevels)
-        ? $propertyOneLevels : $propertyTwoLevels;
-      for ($i = 0; $i < $maxLevels; ++$i) {
-        if (isset($propertyOne[$i]) &&
-          isset($propertyTwo[$i])) {
-          $compare = strnatcasecmp(
-            $propertyOne[$i],
-            $propertyTwo[$i]
-          );
-          if ($compare != 0) {
-            return $compare;
-          }
-        } else {
-          break;
-        }
-      }
-      if ($propertyOneLevels > $propertyTwoLevels) {
-        return 1;
-      } else {
-        return -1;
-      }
-    }
-
-    /**
-     * Decodes the css property name into an comparable array.
-     *
-     * @param string $propertyName
-     * @return array
-     */
-    private function _decodeName($propertyName) {
-      if (substr($propertyName, 0, 1) == '-') {
-        $pos = strpos($propertyName, '-', 1);
-        $items = explode('-', substr($propertyName, $pos + 1));
-        $items[] = substr($propertyName, 1, $pos);
-        return $items;
-      } else {
-        $items = explode('-', $propertyName);
-        return $items;
-      }
     }
 
     /**

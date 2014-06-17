@@ -57,7 +57,6 @@ namespace FluentDOM\Query\Css {
 
     /**
      * @covers FluentDOM\Query\Css\Properties::offsetSet
-     * @covers FluentDOM\Query\Css\Properties::_decodeName
      * @covers FluentDOM\Query\Css\Properties::_isCssProperty
      */
     public function testOffsetSet() {
@@ -121,8 +120,6 @@ namespace FluentDOM\Query\Css {
 
     /**
      * @covers FluentDOM\Query\Css\Properties::getStyleString
-     * @covers FluentDOM\Query\Css\Properties::_compare
-     * @covers FluentDOM\Query\Css\Properties::_decodeName
      * @dataProvider providePropertyArrays
      */
     public function testGetStyleString($expected, $propertyArray) {

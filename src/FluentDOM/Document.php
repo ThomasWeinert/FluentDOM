@@ -185,7 +185,7 @@ namespace FluentDOM {
      */
     public function createAttribute($name, $value = NULL) {
       list($prefix) = QualifiedName::split($name);
-      if ($prefix != '') {
+      if ($prefix) {
         $node = parent::createAttributeNS($this->getNamespace($prefix), $name);
       } else {
         $node = parent::createAttribute($name);
@@ -257,7 +257,6 @@ namespace FluentDOM {
       if (is_array($content)) {
         $attributes = NULL === $attributes
           ? $content : array_merge($content, $attributes);
-        $content = NULL;
       }
       if (!empty($attributes)) {
         foreach ($attributes as $attributeName => $attributeValue) {

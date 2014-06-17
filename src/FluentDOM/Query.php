@@ -229,7 +229,7 @@ namespace FluentDOM {
     /**
      * Create a new instance of the same class with $this as the parent. This is used for the chaining.
      *
-     * @param \Traversable|\DOMNode|Query $elements
+     * @param array|\Traversable|\DOMNode|Query $elements
      * @return Query
      */
     public function spawn($elements = NULL) {

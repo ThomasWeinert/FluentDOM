@@ -271,7 +271,8 @@ namespace FluentDOM {
      * @return int
      */
     public function count() {
-      return ($this->childNodes instanceOf \DOMNodeList) ? $this->childNodes->length : 0;
+      $nodes = $this->childNodes;
+      return ($nodes instanceOf \DOMNodeList) ? $nodes->length : 0;
     }
 
     /**

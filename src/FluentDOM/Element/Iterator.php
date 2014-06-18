@@ -79,10 +79,15 @@ namespace FluentDOM\Element {
      * @throws \InvalidArgumentException
      */
     public function seek($position) {
-      if (count($this->_owner) > $position) {
+      if ($this->_owner->count() > $position) {
         $this->_position = $position;
       } else {
-        throw new \InvalidArgumentException('Unknown position');
+        throw new \InvalidArgumentException(
+          sprintf(
+            'Unknown position %d, only %d children',
+            $position, $this->_owner->count()
+          )
+        );
       }
     }
 

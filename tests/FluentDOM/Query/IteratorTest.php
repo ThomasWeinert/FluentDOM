@@ -52,16 +52,16 @@ namespace FluentDOM\Query {
     }
 
     public function testIteratorSeekToInvalidPosition() {
-      try {
-        $fd = $this->getMock('FluentDOM\\Query');
-        $fd->expects($this->once())
-          ->method('count')
-          ->will($this->returnValue(1));
-        $fdi = new Iterator($fd);
-        $fdi->seek(1);
-        $this->fail('An expected exception has not been raised.');
-      } catch (\InvalidArgumentException $expected) {
-      }
+      $fd = $this->getMock('FluentDOM\\Query');
+      $fd->expects($this->exactly(2))
+        ->method('count')
+        ->will($this->returnValue(1));
+      $fdi = new Iterator($fd);
+      $this->setExpectedException(
+        'InvalidArgumentException',
+        'Unknown position 1, only 1 items'
+      );
+      $fdi->seek(1);
     }
 
     public function testIteratorValid() {

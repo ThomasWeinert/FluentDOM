@@ -15,6 +15,8 @@ namespace FluentDOM\Element {
    */
   class Iterator implements \RecursiveIterator, \SeekableIterator {
 
+    use \FluentDOM\IteratorSeek;
+
     /**
      * internal position pointer variable
      * @var integer
@@ -70,25 +72,6 @@ namespace FluentDOM\Element {
      */
     public function rewind() {
       $this->_position = 0;
-    }
-
-    /**
-     * Move iterator pointer to specified element
-     *
-     * @param integer $position
-     * @throws \InvalidArgumentException
-     */
-    public function seek($position) {
-      if ($this->_owner->count() > $position) {
-        $this->_position = $position;
-      } else {
-        throw new \InvalidArgumentException(
-          sprintf(
-            'Unknown position %d, only %d children',
-            $position, $this->_owner->count()
-          )
-        );
-      }
     }
 
     /**

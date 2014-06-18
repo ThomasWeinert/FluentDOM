@@ -15,6 +15,8 @@ namespace FluentDOM\Query {
    */
   class Iterator implements \RecursiveIterator, \SeekableIterator {
 
+    use \FluentDOM\IteratorSeek;
+
     /**
      * internal position pointer variable
      * @var integer
@@ -72,20 +74,6 @@ namespace FluentDOM\Query {
      */
     public function rewind() {
       $this->_position = 0;
-    }
-
-    /**
-     * Move iterator pointer to specified element
-     *
-     * @param integer $position
-     * @throws \InvalidArgumentException
-     */
-    public function seek($position) {
-      if (count($this->_owner) > $position) {
-        $this->_position = $position;
-      } else {
-        throw new \InvalidArgumentException('Unknown position');
-      }
     }
 
     /**

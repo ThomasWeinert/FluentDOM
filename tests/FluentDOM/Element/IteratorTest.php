@@ -41,14 +41,14 @@ namespace FluentDOM\Element {
     /**
      * @covers FluentDOM\Element\Iterator
      */
-    public function testSeekWithInvlaidPositionExpectingException() {
+    public function testSeekWithInvalidPositionExpectingException() {
       $dom = new Document();
       $dom->loadXML('<items>ONE<two><three/></two></items>');
       /** @var Iterator $iterator */
       $iterator = $dom->documentElement->getIterator();
       $this->setExpectedException(
         'InvalidArgumentException',
-        'Unknown position 99, only 2 children'
+        'Unknown position 99, only 2 items'
       );
       $iterator->seek(99);
     }

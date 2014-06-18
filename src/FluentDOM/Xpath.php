@@ -27,9 +27,11 @@ namespace FluentDOM {
      */
     public function __construct(\DOMDocument $dom) {
       parent::__construct($dom);
+      // @codeCoverageIgnoreStart
       if (!isset($this->document)) {
         $this->document = $dom;
       }
+      // @codeCoverageIgnoreEnd
     }
 
     /**
@@ -64,11 +66,13 @@ namespace FluentDOM {
       $registerNodeNS = $registerNodeNS ?: $this->_registerNodeNamespaces;
       if ($this->canDisableNamespaceRegistration()) {
         return parent::evaluate($expression, $contextNode, (bool)$registerNodeNS);
+        // @codeCoverageIgnoreStart
       } elseif (isset($contextNode)) {
         return parent::evaluate($expression, $contextNode);
       } else {
         return parent::evaluate($expression);
       }
+      // @codeCoverageIgnoreEnd
     }
 
     /**
@@ -88,11 +92,13 @@ namespace FluentDOM {
       $registerNodeNS = $registerNodeNS ?: $this->_registerNodeNamespaces;
       if ($this->canDisableNamespaceRegistration()) {
         return parent::query($expression, $contextNode, (bool)$registerNodeNS);
+        // @codeCoverageIgnoreStart
       } elseif (isset($contextNode)) {
         return parent::query($expression, $contextNode);
       } else {
         return parent::query($expression);
       }
+      // @codeCoverageIgnoreEnd
     }
 
     /**

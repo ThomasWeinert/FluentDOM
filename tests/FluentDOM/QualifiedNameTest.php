@@ -137,6 +137,16 @@ namespace FluentDOM {
       unset($qualifiedName->name);
     }
 
+    /**
+     * @covers FluentDOM\QualifiedName
+     * @dataProvider provideQualifiedNamesForSplit
+     */
+    public function testSplit($expected, $name) {
+      $this->assertSame(
+        $expected, QualifiedName::split($name)
+      );
+    }
+
     /*************************
      * Data Provider
      ************************/
@@ -150,6 +160,17 @@ namespace FluentDOM {
         ['prefix'],
         ['localName'],
       ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function provideQualifiedNamesForSplit() {
+      return array(
+        array(array('foo', 'bar'), 'foo:bar'),
+        array(array(FALSE, 'bar'), 'bar'),
+        array(array('', 'bar'), ':bar'),
+      );
     }
   }
 }

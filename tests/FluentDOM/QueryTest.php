@@ -410,7 +410,7 @@ namespace FluentDOM {
      */
     public function testIterator() {
       $query = $this->getQueryFixtureFromString(self::XML, '//item');
-      $this->assertInstanceOf('FluentDOM\Query\Iterator', $query->getIterator());
+      $this->assertInstanceOf('FluentDOM\Iterators\QueryIterator', $query->getIterator());
       $this->assertcount(3, iterator_to_array($query));
     }
 

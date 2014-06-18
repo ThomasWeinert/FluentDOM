@@ -1,12 +1,12 @@
 <?php
-namespace FluentDOM\Query {
+namespace FluentDOM\Iterators {
 
   use FluentDOM\Query;
   use FluentDOM\TestCase;
 
   require_once(__DIR__.'/../TestCase.php');
 
-  class IteratorTest extends TestCase {
+  class QueryIteratorTest extends TestCase {
 
     public function testIteratorCurrent() {
       $fd = $this->getMock('FluentDOM\\Query');
@@ -14,19 +14,19 @@ namespace FluentDOM\Query {
         ->method('item')
         ->with($this->equalTo(0))
         ->will($this->returnValue(TRUE));
-      $fdi = new Iterator($fd);
+      $fdi = new QueryIterator($fd);
       $this->assertTrue($fdi->current());
     }
 
     public function testIteratorKey() {
       $fd = $this->getMock('FluentDOM\\Query');
-      $fdi = new Iterator($fd);
+      $fdi = new QueryIterator($fd);
       $this->assertEquals(0, $fdi->key());
     }
 
     public function testIteratorNext() {
       $fd = $this->getMock('FluentDOM\\Query');
-      $fdi = new Iterator($fd);
+      $fdi = new QueryIterator($fd);
       $this->assertEquals(0, $this->readAttribute($fdi, '_position'));
       $fdi->next();
       $this->assertEquals(1, $this->readAttribute($fdi, '_position'));
@@ -34,7 +34,7 @@ namespace FluentDOM\Query {
 
     public function testIteratorRewind() {
       $fd = $this->getMock('FluentDOM\\Query');
-      $fdi = new Iterator($fd);
+      $fdi = new QueryIterator($fd);
       $fdi->next();
       $this->assertEquals(1, $this->readAttribute($fdi, '_position'));
       $fdi->rewind();
@@ -46,7 +46,7 @@ namespace FluentDOM\Query {
       $fd->expects($this->once())
         ->method('count')
         ->will($this->returnValue(2));
-      $fdi = new Iterator($fd);
+      $fdi = new QueryIterator($fd);
       $fdi->seek(1);
       $this->assertEquals(1, $this->readAttribute($fdi, '_position'));
     }
@@ -56,7 +56,7 @@ namespace FluentDOM\Query {
       $fd->expects($this->exactly(2))
         ->method('count')
         ->will($this->returnValue(1));
-      $fdi = new Iterator($fd);
+      $fdi = new QueryIterator($fd);
       $this->setExpectedException(
         'InvalidArgumentException',
         'Unknown position 1, only 1 items'
@@ -69,7 +69,7 @@ namespace FluentDOM\Query {
       $fd->expects($this->once())
         ->method('item')
         ->will($this->returnValue(new \stdClass));
-      $fdi = new Iterator($fd);
+      $fdi = new QueryIterator($fd);
       $this->assertTrue($fdi->valid());
     }
 
@@ -92,9 +92,9 @@ namespace FluentDOM\Query {
         ->expects($this->once())
         ->method('push')
         ->with($this->isInstanceOf('DOMNodeList'));
-      $fdi = new Iterator($fdSource);
+      $fdi = new QueryIterator($fdSource);
       $this->assertInstanceOf(
-        'FluentDOM\\Query\\Iterator',
+        'FluentDOM\\Iterators\\QueryIterator',
         $fdi->getChildren()
       );
     }
@@ -111,7 +111,7 @@ namespace FluentDOM\Query {
         ->expects($this->once())
         ->method('hasChildNodes')
         ->will($this->returnValue(TRUE));
-      $fdi = new Iterator($fd);
+      $fdi = new QueryIterator($fd);
       $this->assertTrue($fdi->hasChildren());
     }
   }

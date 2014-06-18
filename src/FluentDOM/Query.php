@@ -350,10 +350,10 @@ namespace FluentDOM {
     /**
      * IteratorAggregate interface
      *
-     * @return Query\Iterator|\Traversable
+     * @return Iterators\QueryIterator
      */
     public function getIterator() {
-      return new Query\Iterator($this);
+      return new Iterators\QueryIterator($this);
     }
 
     /*

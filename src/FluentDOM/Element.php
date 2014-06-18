@@ -255,10 +255,10 @@ namespace FluentDOM {
     /**
      * Return Iterator for child nodes.
      *
-     * @return \Iterator
+     * @return Iterators\ElementIterator
      */
     public function getIterator() {
-      return new Element\Iterator($this);
+      return new Iterators\ElementIterator($this);
     }
 
     /*************************

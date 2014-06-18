@@ -10,7 +10,7 @@ namespace FluentDOM\Element {
   class IteratorTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Element\Iterator
+     * @covers FluentDOM\Iterators\ElementIterator
      */
     public function testIterator() {
       $dom = new Document();
@@ -25,7 +25,7 @@ namespace FluentDOM\Element {
     }
 
     /**
-     * @covers FluentDOM\Element\Iterator
+     * @covers FluentDOM\Iterators\ElementIterator
      */
     public function testSeek() {
       $dom = new Document();
@@ -39,7 +39,7 @@ namespace FluentDOM\Element {
     }
 
     /**
-     * @covers FluentDOM\Element\Iterator
+     * @covers FluentDOM\Iterators\ElementIterator
      */
     public function testSeekWithInvalidPositionExpectingException() {
       $dom = new Document();
@@ -54,7 +54,7 @@ namespace FluentDOM\Element {
     }
 
     /**
-     * @covers FluentDOM\Element\Iterator
+     * @covers FluentDOM\Iterators\ElementIterator
      */
     public function testRecursiveIterator() {
       $dom = new Document();
@@ -73,7 +73,7 @@ namespace FluentDOM\Element {
     }
 
     /**
-     * @covers FluentDOM\Element\Iterator
+     * @covers FluentDOM\Iterators\ElementIterator
      */
     public function testGetChildrenOnTextNodeExpectingException() {
       $dom = new Document();
@@ -81,7 +81,7 @@ namespace FluentDOM\Element {
       $iterator = $dom->documentElement->getIterator();
       $this->setExpectedException(
         'UnexpectedValueException',
-        'Called FluentDOM\Element\Iterator::getChildren with invalid current element.'
+        'Called FluentDOM\Iterators\ElementIterator::getChildren with invalid current element.'
       );
       $iterator->getChildren();
     }

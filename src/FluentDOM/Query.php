@@ -737,7 +737,7 @@ namespace FluentDOM {
       } elseif ($nodes = $this->isNodeList($selector)) {
         return is_array($nodes) ? $nodes : iterator_to_array($nodes);
       } elseif ($callback = $this->isCallable($selector)) {
-        if ($nodes = $selector($context)) {
+        if ($nodes = $callback($context)) {
           return is_array($nodes) ? $nodes : iterator_to_array($nodes);
         }
         return array();
@@ -783,7 +783,7 @@ namespace FluentDOM {
     /**
      * Convert a given content into and array of nodes
      *
-     * @param string|array|\DOMNode|\Traversable $content
+     * @param mixed $content
      * @param boolean $includeTextNodes
      * @param integer $limit
      * @throws \UnexpectedValueException

@@ -13,6 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Attributes
      * @covers FluentDOM\Query::attr
+     * @covers FluentDOM\Query::getElement
      */
     public function testAttrRead() {
       $fd = $this->getQueryFixtureFromString(self::XML)
@@ -24,6 +25,7 @@ namespace FluentDOM\Query {
     /**
      * @group Attributes
      * @covers FluentDOM\Query::attr
+     * @covers FluentDOM\Query::getElement
      */
     public function testAttrReadFromRoot() {
       $fd = $this->getQueryFixtureFromString(self::XML);
@@ -35,6 +37,7 @@ namespace FluentDOM\Query {
     /**
      * @group Attributes
      * @covers FluentDOM\Query::attr
+     * @covers FluentDOM\Query::getElement
      */
     public function testAttrReadInvalid() {
       $this->setExpectedException('UnexpectedValueException');
@@ -55,6 +58,7 @@ namespace FluentDOM\Query {
     /**
      * @group Attributes
      * @covers FluentDOM\Query::attr
+     * @covers FluentDOM\Query::getElement
      */
     public function testAttrReadNoAttribute() {
       $fd = $this
@@ -67,6 +71,7 @@ namespace FluentDOM\Query {
     /**
      * @group Attributes
      * @covers FluentDOM\Query::attr
+     * @covers FluentDOM\Query::getElement
      */
     public function testAttrReadOnDomtext() {
       $fd = $this->getQueryFixtureFromString(self::XML)

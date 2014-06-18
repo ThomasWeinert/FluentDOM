@@ -14,6 +14,7 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationReplace
      * @covers FluentDOM\Query::outerXml
+     * @covers FluentDOM\Query::getContentFragment
      */
     public function testOuterXmlRead() {
       $expect = '<group id="1st">'.
@@ -32,6 +33,7 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationReplace
      * @covers FluentDOM\Query::outerXml
+     * @covers FluentDOM\Query::getContentFragment
      */
     public function testOuterXmlReadWithTextNodes() {
       $expect = 'text1';
@@ -46,6 +48,7 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationReplace
      * @covers FluentDOM\Query::outerXml
+     * @covers FluentDOM\Query::getContentFragment
      */
     public function testOuterXmlReadEmpty() {
       $xml = $this
@@ -59,6 +62,7 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationReplace
      * @covers FluentDOM\Query::outerXml
+     * @covers FluentDOM\Query::getContentFragment
      */
     public function testOuterXmlWrite() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -73,6 +77,7 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationReplace
      * @covers FluentDOM\Query::outerXml
+     * @covers FluentDOM\Query::getContentFragment
      */
     public function testOuterXmlWriteEmpty() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -87,6 +92,7 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationReplace
      * @covers FluentDOM\Query::outerXml
+     * @covers FluentDOM\Query::getContentFragment
      */
     public function testOuterXmlWriteWithCallback() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -109,6 +115,7 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationReplace
      * @covers FluentDOM\Query::outerXml
+     * @covers FluentDOM\Query::getContentFragment
      */
     public function testOuterXmlWriteWithInvalidDataExpectingException() {
       $fd = new Query();

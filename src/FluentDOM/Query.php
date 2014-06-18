@@ -729,25 +729,27 @@ namespace FluentDOM {
     private function getContentFragment($content, $includeTextNodes = TRUE, $limit = 0) {
       $result = array();
       $fragment = $this->getDocument()->createDocumentFragment();
-      if (
-        (is_string($content) || method_exists($content, '__toString')) &&
-        $fragment->appendXML($content)
-      ) {
-        for ($i = $fragment->childNodes->length - 1; $i >= 0; $i--) {
-          $element = $fragment->childNodes->item($i);
-          if ($element instanceof \DOMElement ||
-            ($includeTextNodes && $this->isNode($element))) {
-            array_unshift($result, $element);
-            $element->parentNode->removeChild($element);
+      if (is_string($content) || method_exists($content, '__toString')) {
+        $content = (string)$content;
+        if (empty($content)) {
+          return array();
+        }
+        if ($fragment->appendXML($content)) {
+          for ($i = $fragment->childNodes->length - 1; $i >= 0; $i--) {
+            $element = $fragment->childNodes->item($i);
+            if ($element instanceof \DOMElement ||
+              ($includeTextNodes && $this->isNode($element))) {
+              array_unshift($result, $element);
+              $element->parentNode->removeChild($element);
+            }
           }
+          if ($limit > 0 && count($result) >= $limit) {
+            return array_slice($result, 0, $limit);
+          }
+          return $result;
         }
-        if ($limit > 0 && count($result) >= $limit) {
-          return array_slice($result, 0, $limit);
-        }
-        return $result;
-      } else {
-        throw new \UnexpectedValueException('Invalid document fragment');
       }
+      throw new \UnexpectedValueException('Invalid document fragment');
     }
 
     /**
@@ -2199,6 +2201,9 @@ namespace FluentDOM {
      * @return array
      */
     private function getHtmlFragment($html) {
+      if (empty($html)) {
+        return array();
+      }
       $dom = new Document();
       $status = libxml_use_internal_errors(TRUE);
       $dom->loadHtml('<html-fragment>'.$html.'</html-fragment>');
@@ -2227,35 +2232,21 @@ namespace FluentDOM {
         if ($isCallback) {
           foreach ($this->_nodes as $index => $node) {
             $contentString = call_user_func(
-              $content,
-              $node,
-              $index,
-              $export($node)
+              $content, $node, $index, $export($node)
             );
-            if (!empty($contentString)) {
-              $fragment = $import($contentString);
-            } else {
-              $fragment = array();
-            }
-            $insert($node, $fragment);
+            $insert($node, $import($contentString));
           }
         } else {
-          if (!empty($content)) {
-            $fragment = $import($content);
-          } else {
-            $fragment = array();
-          }
+          $fragment = $import($content);
           foreach ($this->_nodes as $node) {
             $insert($node, $fragment);
           }
         }
         return $this;
-      } else {
-        if (isset($this->_nodes[0])) {
-          return $export($this->_nodes[0]);
-        }
-        return '';
+      } elseif (isset($this->_nodes[0])) {
+        return $export($this->_nodes[0]);
       }
+      return '';
     }
 
     /****************************

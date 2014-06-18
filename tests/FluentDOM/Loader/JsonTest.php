@@ -5,7 +5,7 @@ namespace FluentDOM\Loader {
 
   require_once(__DIR__.'/../TestCase.php');
 
-  class LoaderJsonTest extends TestCase {
+  class JsonTest extends TestCase {
 
     /**
      * @covers FluentDOM\Loader\Json

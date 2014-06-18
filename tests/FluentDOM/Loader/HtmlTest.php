@@ -5,7 +5,7 @@ namespace FluentDOM\Loader {
 
   require_once(__DIR__.'/../TestCase.php');
 
-  class LoaderHtmlTest extends TestCase {
+  class HtmlTest extends TestCase {
 
     /**
      * @covers FluentDOM\Loader\Html
@@ -17,6 +17,7 @@ namespace FluentDOM\Loader {
 
     /**
      * @covers FluentDOM\Loader\Html
+     * @covers FluentDOM\Loader\Supports
      */
     public function testSupportsExpectingFalse() {
       $loader = new Html();
@@ -25,6 +26,7 @@ namespace FluentDOM\Loader {
 
     /**
      * @covers FluentDOM\Loader\Html
+     * @covers FluentDOM\Loader\Supports
      */
     public function testLoadWithValidXml() {
       $loader = new Html();

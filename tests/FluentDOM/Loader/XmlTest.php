@@ -5,7 +5,7 @@ namespace FluentDOM\Loader {
 
   require_once(__DIR__.'/../TestCase.php');
 
-  class LoaderXmlTest extends TestCase {
+  class XmlTest extends TestCase {
 
     /**
      * @covers FluentDOM\Loader\Xml
@@ -25,6 +25,7 @@ namespace FluentDOM\Loader {
 
     /**
      * @covers FluentDOM\Loader\Xml
+     * @covers FluentDOM\Loader\Supports
      */
     public function testLoadWithValidXml() {
       $loader = new Xml();
@@ -39,6 +40,7 @@ namespace FluentDOM\Loader {
 
     /**
      * @covers FluentDOM\Loader\Xml
+     * @covers FluentDOM\Loader\Supports
      */
     public function testLoadWithValidXmlFile() {
       $loader = new Xml();

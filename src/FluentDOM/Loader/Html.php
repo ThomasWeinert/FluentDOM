@@ -19,11 +19,11 @@ namespace FluentDOM\Loader {
     use Supports;
 
     /**
-     * @var array
+     * @return array
      */
-    protected $_supportedTypes = array(
-      'html', 'text/html'
-    );
+    public function getSupported() {
+      return array('html', 'text/html');
+    }
 
     /**
      * @see Loadable::load

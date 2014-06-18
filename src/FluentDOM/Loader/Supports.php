@@ -17,7 +17,7 @@ namespace FluentDOM\Loader {
      * @return array
      */
     public function getSupported() {
-      return isset($this->_supportedTypes) ? $this->_supportedTypes : array();
+      return array();
     }
 
     /**

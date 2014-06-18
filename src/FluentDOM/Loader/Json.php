@@ -18,13 +18,6 @@ namespace FluentDOM\Loader {
 
     use Supports;
 
-    /**
-     * @var array
-     */
-    protected $_supportedTypes = array(
-      'json', 'application/json', 'text/json'
-    );
-
     const XMLNS = 'urn:carica-json-dom.2013';
     const DEFAULT_QNAME = '_';
 
@@ -70,6 +63,14 @@ namespace FluentDOM\Loader {
       $this->_recursions = (int)$depth;
       $this->_verbose = ($options & self::OPTION_VERBOSE) == self::OPTION_VERBOSE;
     }
+
+    /**
+     * @return array
+     */
+    public function getSupported() {
+      return array('json', 'application/json', 'text/json');
+    }
+
 
     /**
      * Load the json string into an DOMDocument

@@ -9,8 +9,17 @@ namespace FluentDOM {
 
   }
 
+  abstract class XmlSerialize_TestProxyInvalid  {
+
+    use XmlSerialize;
+
+  }
+
   class XmlSerializeTest extends TestCase {
 
+    /**
+     * @covers FluentDOM\XmlSerialize
+     */
     public function testGetXmlWithOneElement() {
       $object = $this->getMockForAbstractClass('FluentDOM\\XmlSerialize_TestProxy');
       $object
@@ -24,6 +33,15 @@ namespace FluentDOM {
           )
         );
       $this->assertEquals('<test/>', $object->getXml());
+    }
+
+    /**
+     * @covers FluentDOM\XmlSerialize
+     */
+    public function testGetXmlWithoutInterfaceExpectingException() {
+      $object = $this->getMockForAbstractClass('FluentDOM\\XmlSerialize_TestProxyInvalid');
+      $this->setExpectedException('LogicException');
+      $object->getXml();
     }
   }
 }

@@ -65,7 +65,7 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getSupported() {
       return array('json', 'application/json', 'text/json');

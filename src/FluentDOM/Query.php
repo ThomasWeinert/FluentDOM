@@ -623,7 +623,7 @@ namespace FluentDOM {
      * check if parameter is a valid callback function. It returns
      * the callable or NULL.
      *
-     * If $silent is disabled, an exception is thrown for incalid callbacks
+     * If $silent is disabled, an exception is thrown for invalid callbacks
      *
      * @param mixed $callback
      * @param boolean $allowGlobalFunctions

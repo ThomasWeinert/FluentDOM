@@ -438,7 +438,7 @@ namespace FluentDOM {
       case 'attr' :
         return new Query\Attributes($this);
       case 'css' :
-        return new Query\Css($this, $this->attr('style'));
+        return new Query\Css($this);
       case 'data' :
         if ($node = $this->getElement()) {
           return new Query\Data($node);
@@ -662,33 +662,27 @@ namespace FluentDOM {
      * @throws \UnexpectedValueException
      */
     private function setContentType($value, $silentFallback = FALSE) {
-      try {
-        switch (strtolower($value)) {
-        case 'xml' :
-        case 'application/xml' :
-        case 'text/xml' :
-          $newContentType = 'text/xml';
-          break;
-        case 'html' :
-        case 'text/html' :
-          $newContentType = 'text/html';
-          break;
-        default :
-          throw new \UnexpectedValueException('Invalid content type value');
-        }
-      } catch (\UnexpectedValueException $e) {
+      switch (strtolower($value)) {
+      case 'xml' :
+      case 'application/xml' :
+      case 'text/xml' :
+        $newContentType = 'text/xml';
+        break;
+      case 'html' :
+      case 'text/html' :
+        $newContentType = 'text/html';
+        break;
+      default :
         if ($silentFallback) {
           $newContentType = 'text/xml';
         } else {
-          throw $e;
+          throw new \UnexpectedValueException('Invalid content type value');
         }
       }
-      if ($this->_contentType != $newContentType) {
-        $this->_contentType = $newContentType;
-        if (isset($this->_parent)) {
-          $this->_parent->contentType = $newContentType;
-        }
+      if (isset($this->_parent) && $this->_contentType != $newContentType) {
+        $this->_parent->contentType = $newContentType;
       }
+      $this->_contentType = $newContentType;
     }
 
     /**

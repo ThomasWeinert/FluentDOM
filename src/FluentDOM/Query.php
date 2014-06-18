@@ -1574,8 +1574,8 @@ namespace FluentDOM {
      */
     public function not($selector) {
       if (is_string($selector)) {
-        $callback = function($node, $index) use ($selector) {
-          return $this->matches($selector, $node, $index);
+        $callback = function($node) use ($selector) {
+          return $this->matches($selector, $node);
         };
       } else {
         $callback = $this->isCallable($selector, TRUE, FALSE);

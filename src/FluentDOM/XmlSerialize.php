@@ -1,17 +1,19 @@
 <?php
 /**
- * A trait that used the serializes an XmlAppendable into a string.
+ * Standard implementation for FluentDOM\XmlSerializable
  *
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
  */
+
 namespace FluentDOM {
 
   /**
-   * FluentDOM\Loadable describes an interface for objects that can be serialized to
-   * and XML fragment (without document element and declaration).
+   * Standard implementation for FluentDOM\XmlSerializable
    */
   trait XmlSerialize {
+
+    abstract public function appendTo(Element $parentNode);
 
     /**
      * Return the object as an XML fragment.
@@ -24,7 +26,7 @@ namespace FluentDOM {
         throw new \LogicException(
           sprintf(
             'Class %s does not implement the FluentDOM\Appendable interface.',
-            get_class($this)
+            isset($this) ? get_class($this) : ''
           )
         );
       }

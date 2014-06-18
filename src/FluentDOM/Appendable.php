@@ -1,6 +1,6 @@
 <?php
 /**
- * FluentDOM\Loadable describes an interface for objects that can be appended to a FluentDOM element node.
+ * Allow an object to be appendable to a FluentDOM\Element
  *
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
@@ -9,12 +9,12 @@
 namespace FluentDOM {
 
   /**
-   * FluentDOM\Loadable describes an interface for objects that can be appended to a FluentDOM element node.
+   * Allow an object to be appendable to a FluentDOM\Element
    */
   interface Appendable {
 
     /**
-     * Validate if the loader supports the given content type
+     * Append the object to a FluentDOM\Element
      *
      * @param Element $parentNode
      * @return Element|boolean|NULL

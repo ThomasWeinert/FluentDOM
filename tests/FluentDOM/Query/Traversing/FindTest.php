@@ -30,6 +30,42 @@ namespace FluentDOM\Query {
      * @covers FluentDOM\Query::find
      * @covers FluentDOM\Query::getNodes
      */
+    public function testFindWithCallableSelector() {
+      $fd = $this->getQueryFixtureFromString(self::XML)->find('/*');
+      $this->assertEquals(1, $fd->length);
+      $findFd = $fd->find(
+        function ($context) use ($fd) {
+          return $fd->xpath()->evaluate('group/item', $context);
+        }
+      );
+      $this->assertEquals(3, $findFd->length);
+      $this->assertTrue($findFd !== $fd);
+    }
+
+    /**
+     * @group Traversing
+     * @group TraversingFind
+     * @covers FluentDOM\Query::find
+     * @covers FluentDOM\Query::getNodes
+     */
+    public function testFindWithCallableSelectorRetuningFalse() {
+      $fd = $this->getQueryFixtureFromString(self::XML)->find('/*');
+      $this->assertEquals(1, $fd->length);
+      $findFd = $fd->find(
+        function ($context) use ($fd) {
+          return FALSE;
+        }
+      );
+      $this->assertEquals(0, $findFd->length);
+      $this->assertTrue($findFd !== $fd);
+    }
+
+    /**
+     * @group Traversing
+     * @group TraversingFind
+     * @covers FluentDOM\Query::find
+     * @covers FluentDOM\Query::getNodes
+     */
     public function testFindWithSelectorCallback() {
       $fd = $this->getQueryFixtureFromString(self::XML);
       $fd->onPrepareSelector = function() {return '//item'; };

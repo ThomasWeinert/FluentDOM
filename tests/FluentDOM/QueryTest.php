@@ -800,6 +800,39 @@ namespace FluentDOM {
       $this->assertInstanceOf('DOMNode', $query->isNode($node));
     }
 
+    /**
+     * @group Utility
+     * @group Constraints
+     * @covers FluentDOM\Query::isNode
+     */
+    public function testIsNodeMatchingSelector() {
+      $query = new Query();
+      $this->assertInstanceOf(
+        'DOMNode',
+        $query->isNode(
+          $query->document->createElement('element'),
+          FALSE,
+          'self::element'
+        )
+      );
+    }
+
+    /**
+     * @group Utility
+     * @group Constraints
+     * @covers FluentDOM\Query::isNode
+     */
+    public function testIsNodeNotMatchingSelector() {
+      $query = new Query();
+      $this->assertNull(
+        $query->isNode(
+          $query->document->createElement('element'),
+          FALSE,
+          'self::no-match'
+        )
+      );
+    }
+
     public static function provideValidNodes() {
       $dom = new \DOMDocument();
       return array(

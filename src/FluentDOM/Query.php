@@ -577,18 +577,30 @@ namespace FluentDOM {
      *
      * @param mixed $node
      * @param boolean $ignoreTextNodes
+     * @param string|NULL $selector
      * @return \DOMElement|\DOMText|\DOMCdataSection
      */
-    public function isNode($node, $ignoreTextNodes = FALSE) {
-      if ($node instanceof \DOMElement) {
+    public function isNode($node, $ignoreTextNodes = FALSE, $selector = NULL) {
+      if (
+        (
+          $node instanceof \DOMElement ||
+          (
+            !$ignoreTextNodes &&
+            (
+              $node instanceof \DOMCdataSection ||
+              (
+                $node instanceof \DOMText &&
+                !$node->isWhitespaceInElementContent()
+              )
+            )
+          )
+        ) &&
+        (
+          empty($selector) ||
+          $this->matches($selector, $node)
+        )
+      ) {
         return $node;
-      } elseif (!$ignoreTextNodes) {
-        if ($node instanceof \DOMCdataSection) {
-          return $node;
-        } elseif ($node instanceof \DOMText &&
-                  !$node->isWhitespaceInElementContent()) {
-          return $node;
-        }
       }
       return NULL;
     }
@@ -714,6 +726,11 @@ namespace FluentDOM {
         return iterator_to_array($result);
       } elseif ($nodes = $this->isNodeList($selector)) {
         return is_array($nodes) ? $nodes : iterator_to_array($nodes);
+      } elseif ($callback = $this->isCallable($selector)) {
+        if ($nodes = $selector($context)) {
+          return is_array($nodes) ? $nodes : iterator_to_array($nodes);
+        }
+        return array();
       }
       throw new \InvalidArgumentException('Invalid selector');
     }
@@ -1494,10 +1511,8 @@ namespace FluentDOM {
       foreach ($this->_nodes as $node) {
         $next = $node->nextSibling;
         while ($next instanceof \DOMNode) {
-          if ($this->isNode($next)) {
-            if (empty($selector) || $this->matches($selector, $next)) {
-              $result->push($next);
-            }
+          if ($this->isNode($next, FALSE, $selector)) {
+            $result->push($next);
           }
           $next = $next->nextSibling;
         }
@@ -1520,9 +1535,8 @@ namespace FluentDOM {
           if ($this->isNode($next)) {
             if (isset($selector) && $this->matches($selector, $next)) {
               break;
-            } else {
-              $result->push($next);
             }
+            $result->push($next);
           }
           $next = $next->nextSibling;
         }
@@ -1560,8 +1574,7 @@ namespace FluentDOM {
       foreach ($this->_nodes as $node) {
         $parents = $this->xpath()->evaluate('ancestor::*', $node);
         for ($i = $parents->length - 1; $i >= 0; --$i) {
-          $parentNode = $parents->item($i);
-          if (empty($selector) || $this->matches($selector, $parentNode)) {
+          if ($parentNode = $this->isNode($parents->item($i), TRUE, $selector)) {
             $result->push($parentNode);
           }
         }
@@ -1582,7 +1595,7 @@ namespace FluentDOM {
         $parents = $this->xpath()->evaluate('ancestor::*', $node);
         for ($i = $parents->length - 1; $i >= 0; --$i) {
           $parentNode = $parents->item($i);
-          if (!empty($selector) && $this->matches($selector, $parentNode)) {
+          if (isset($selector) && $this->matches($selector, $parentNode)) {
             break;
           }
           $result->push($parentNode);
@@ -1627,10 +1640,8 @@ namespace FluentDOM {
       foreach ($this->_nodes as $node) {
         $previous = $node->previousSibling;
         while ($previous instanceof \DOMNode) {
-          if ($this->isNode($previous)) {
-            if (empty($selector) || $this->matches($selector, $previous)) {
-              $result->push($previous);
-            }
+          if ($this->isNode($previous, FALSE, $selector)) {
+            $result->push($previous);
           }
           $previous = $previous->previousSibling;
         }
@@ -1688,11 +1699,11 @@ namespace FluentDOM {
       foreach ($this->_nodes as $node) {
         if ($node->parentNode instanceof \DOMNode) {
           foreach ($node->parentNode->childNodes as $childNode) {
-            if ($this->isNode($childNode) &&
-              $childNode !== $node) {
-              if (empty($selector) || $this->matches($selector, $childNode)) {
-                $result->push($childNode);
-              }
+            if (
+              $childNode !== $node &&
+              $this->isNode($childNode, FALSE, $selector)
+            ) {
+              $result->push($childNode);
             }
           }
         }

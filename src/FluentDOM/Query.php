@@ -2662,7 +2662,7 @@ namespace FluentDOM {
     public function removeData($name = NULL) {
       if (is_null($name) || $name === '*') {
         $names = NULL;
-      } elseif (is_string($name) && trim($name != '')) {
+      } elseif (is_string($name) && trim($name) != '') {
         $names = array($name);
       } elseif (is_array($name)) {
         $names = $name;

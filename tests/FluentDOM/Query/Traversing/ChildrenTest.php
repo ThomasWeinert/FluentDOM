@@ -14,6 +14,7 @@ namespace FluentDOM\Query {
      * @group Traversing
      * @group TraversingFind
      * @covers FluentDOM\Query::children
+     * @covers FluentDOM\Query::expand
      */
     public function testChildren() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__)
@@ -26,6 +27,7 @@ namespace FluentDOM\Query {
      * @group Traversing
      * @group TraversingFind
      * @covers FluentDOM\Query::children
+     * @covers FluentDOM\Query::expand
      */
     public function testChildrenExpression() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__)

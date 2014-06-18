@@ -14,6 +14,7 @@ namespace FluentDOM\Query {
      * @group Traversing
      * @group TraversingFind
      * @covers FluentDOM\Query::prevAll
+     * @covers FluentDOM\Query::expandAll
      */
     public function testPrevAll() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);

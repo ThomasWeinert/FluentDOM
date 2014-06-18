@@ -1062,6 +1062,65 @@ namespace FluentDOM {
     }
 
     /**
+     * Calls the $traverse for each selected node, until it return FALSE.
+     * Each node from $traverse is pushed into a spawned Query if
+     * it matches the selector (or the selector is empty)
+     *
+     * @param callable $traverse
+     * @param string|NULL $selector
+     * @param bool $unique
+     * @param bool $ignoreTextNodes
+     * @return Query
+     */
+    private function expandAll(
+      $traverse, $selector = NULL, $unique = FALSE, $ignoreTextNodes = FALSE
+    ) {
+      return $this->expand(
+        function(\DOMNode $node) use ($selector, $traverse) {
+          $result = array();
+          $next = $traverse($node);
+          while ($next instanceof \DOMNode) {
+            if ($this->isNode($next, FALSE, $selector)) {
+              $result[] = $next;
+            }
+            $next = $traverse($next);
+          }
+          return $result;
+        },
+        $unique,
+        $ignoreTextNodes
+      );
+    }
+
+    /**
+     * Calls the $traverse for each selected node, until it return FALSE.
+     * Each node from $traverse is pushed into a spawned Query until
+     * it matches the selector (
+     *
+     * @param callable $traverse
+     * @param string|NULL $selector
+     * @param bool $unique
+     * @param bool $ignoreTextNodes
+     * @return Query
+     */
+    private function expandUntil(
+      $traverse, $selector = NULL, $unique = FALSE, $ignoreTextNodes = FALSE
+    ) {
+      return $this->expandAll(
+        function(\DOMNode $node) use ($traverse, $selector) {
+          $next = $traverse($node);
+          if ($next && isset($selector) && $this->matches($selector, $next)) {
+            return NULL;
+          }
+          return $next;
+        },
+        NULL,
+        $unique,
+        $ignoreTextNodes
+      );
+    }
+
+    /**
      * Apply the content to the target nodes using the handler callback
      * and push them into a spawned Query object.
      *
@@ -1269,7 +1328,7 @@ namespace FluentDOM {
      */
     public function contents() {
       return $this->expand(
-        function ($node) {
+        function($node) {
           return $node->childNodes;
         },
         TRUE
@@ -1331,7 +1390,7 @@ namespace FluentDOM {
      */
     public function filter($selector) {
       return $this->expand(
-        function (\DOMNode $node, $index) use ($selector) {
+        function(\DOMNode $node, $index) use ($selector) {
           $check = TRUE;
           if (is_string($selector)) {
             $check = $this->matches($selector, $node, $index);
@@ -1360,7 +1419,7 @@ namespace FluentDOM {
         return $this->spawn($this->getNodes($selector));
       } else {
         return $this->expand(
-          function (\DOMNode $node) use ($selector) {
+          function(\DOMNode $node) use ($selector) {
             return $this->getNodes($selector, $node);
           }
         );
@@ -1405,7 +1464,7 @@ namespace FluentDOM {
      */
     public function has($selector) {
       return $this->expand(
-        function (\DOMNode $node) use ($selector) {
+        function(\DOMNode $node) use ($selector) {
           if (
             $node instanceof \DOMElement &&
             $node->hasChildNodes()
@@ -1497,10 +1556,11 @@ namespace FluentDOM {
         $callback = $this->isCallable($selector, TRUE, FALSE);
       }
       return $this->expand(
-        function (\DOMNode $node, $index) use ($callback) {
+        function(\DOMNode $node, $index) use ($callback) {
           if (!$callback($node, $index)) {
             return $node;
           }
+          return NULL;
         }
       );
     }
@@ -1515,21 +1575,21 @@ namespace FluentDOM {
      */
     public function next($selector = NULL) {
       return $this->expand(
-        function (\DOMNode $node) use ($selector) {
+        function(\DOMNode $node) use ($selector) {
           $next = $node->nextSibling;
           while ($next instanceof \DOMNode && !$this->isNode($next)) {
             $next = $next->nextSibling;
           }
-          if (!empty($next)) {
-            if (empty($selector) || $this->matches($selector, $next)) {
-              return $next;
-            }
+          if (
+            !empty($next) &&
+            (empty($selector) || $this->matches($selector, $next))
+          ) {
+            return $next;
           }
           return NULL;
         },
         TRUE
       );
-      return $result;
     }
 
     /**
@@ -1540,18 +1600,11 @@ namespace FluentDOM {
      * @return Query
      */
     public function nextAll($selector = NULL) {
-      return $this->expand(
-        function (\DOMNode $node) use ($selector) {
-          $result = array();
-          $next = $node->nextSibling;
-          while ($next instanceof \DOMNode) {
-            if ($this->isNode($next, FALSE, $selector)) {
-              $result[] = $next;
-            }
-            $next = $next->nextSibling;
-          }
-          return $result;
-        }
+      return $this->expandAll(
+        function(\DOMNode $node) {
+          return $node->nextSibling;
+        },
+        $selector
       );
     }
 
@@ -1563,21 +1616,11 @@ namespace FluentDOM {
      * @return Query
      */
     public function nextUntil($selector = NULL) {
-      return $this->expand(
-        function (\DOMNode $node) use ($selector) {
-          $nodes = array();
-          $next = $node->nextSibling;
-          while ($next instanceof \DOMNode) {
-            if ($this->isNode($next)) {
-              if (isset($selector) && $this->matches($selector, $next)) {
-                break;
-              }
-              $nodes[] = $next;
-            }
-            $next = $next->nextSibling;
-          }
-          return $nodes;
-        }
+      return $this->expandUntil(
+        function(\DOMNode $node) {
+          return $node->nextSibling;
+        },
+        $selector
       );
     }
 
@@ -1589,7 +1632,7 @@ namespace FluentDOM {
      */
     public function parent() {
       return $this->expand(
-        function (\DOMNode $node) {
+        function(\DOMNode $node) {
           if ($node->parentNode instanceof \DOMNode) {
             return $node->parentNode;
           }
@@ -1608,17 +1651,11 @@ namespace FluentDOM {
      * @return Query
      */
     public function parents($selector = NULL) {
-      return $this->expand(
-        function (\DOMNode $node) use ($selector) {
-          $nodes = array();
-          $parents = $this->xpath()->evaluate('ancestor::*', $node);
-          for ($i = $parents->length - 1; $i >= 0; --$i) {
-            if ($parentNode = $this->isNode($parents->item($i), TRUE, $selector)) {
-              $nodes[] = $parentNode;
-            }
-          }
-          return $nodes;
-        }
+      return $this->expandAll(
+        function(\DOMNode $node) {
+          return $node->parentNode;
+        },
+        $selector
       );
     }
 
@@ -1630,21 +1667,14 @@ namespace FluentDOM {
      * @return Query
      */
     public function parentsUntil($selector = NULL) {
-      return $this->expand(
-        function (\DOMNode $node) use ($selector) {
-          $nodes = array();
-          $parents = $this->xpath()->evaluate('ancestor::*', $node);
-          for ($i = $parents->length - 1; $i >= 0; --$i) {
-            $parentNode = $parents->item($i);
-            if (isset($selector) && $this->matches($selector, $parentNode)) {
-              break;
-            }
-            $nodes[] = $parentNode;
-          }
-          return $nodes;
-        }
+      return $this->expandUntil(
+        function(\DOMNode $node) {
+          return $node->parentNode;
+        },
+        $selector
       );
     }
+
     /**
      * Get a set of elements containing the unique previous siblings of each of the
      * matched set of elements.
@@ -1655,7 +1685,7 @@ namespace FluentDOM {
      */
     public function prev($selector = NULL) {
       return $this->expand(
-        function (\DOMNode $node) use ($selector) {
+        function(\DOMNode $node) use ($selector) {
           $previous = $node->previousSibling;
           while ($previous instanceof \DOMNode && !$this->isNode($previous)) {
             $previous = $previous->previousSibling;
@@ -1666,6 +1696,7 @@ namespace FluentDOM {
           ) {
             return $previous;
           }
+          return NULL;
         },
         TRUE
       );
@@ -1679,18 +1710,11 @@ namespace FluentDOM {
      * @return Query
      */
     public function prevAll($selector = NULL) {
-      return $this->expand(
-        function (\DOMNode $node) use ($selector) {
-          $nodes = array();
-          $previous = $node->previousSibling;
-          while ($previous instanceof \DOMNode) {
-            if ($this->isNode($previous, FALSE, $selector)) {
-              $nodes[] = $previous;
-            }
-            $previous = $previous->previousSibling;
-          }
-          return $nodes;
-        }
+      return $this->expandAll(
+        function(\DOMNode $node) {
+          return $node->previousSibling;
+        },
+        $selector
       );
     }
 
@@ -1702,22 +1726,11 @@ namespace FluentDOM {
      * @return Query
      */
     public function prevUntil($selector = NULL) {
-      return $this->expand(
-        function (\DOMNode $node) use ($selector) {
-          $nodes = array();
-          $previous = $node->previousSibling;
-          while ($previous instanceof \DOMNode) {
-            if (isset($selector) && $this->isNode($previous)) {
-              if ($this->matches($selector, $previous)) {
-                break;
-              } else {
-                $nodes[] = $previous;
-              }
-            }
-            $previous = $previous->previousSibling;
-          }
-          return $nodes;
-        }
+      return $this->expandUntil(
+        function(\DOMNode $node) use ($selector) {
+          return $node->previousSibling;
+        },
+        $selector
       );
     }
 
@@ -1743,7 +1756,7 @@ namespace FluentDOM {
      */
     public function siblings($selector = NULL) {
       return $this->expand(
-        function (\DOMNode $node) use ($selector) {
+        function(\DOMNode $node) use ($selector) {
           $nodes = array();
           if ($node->parentNode instanceof \DOMNode) {
             foreach ($node->parentNode->childNodes as $childNode) {
@@ -1798,7 +1811,7 @@ namespace FluentDOM {
       return $this->applyToSpawn(
         $this->_nodes,
         $content,
-        function ($targetNode, $contentNodes) {
+        function($targetNode, $contentNodes) {
           return $this->insertNodesAfter($targetNode, $contentNodes);
         }
       );
@@ -1844,7 +1857,7 @@ namespace FluentDOM {
       return $this->applyToSpawn(
         $targetNodes = $this->getNodes($selector),
         $this->_nodes,
-        function ($targetNode, $contentNodes) {
+        function($targetNode, $contentNodes) {
           return $this->appendChildren($targetNode, $contentNodes);
         },
         TRUE
@@ -1920,7 +1933,7 @@ namespace FluentDOM {
       return $this->applyToSpawn(
         $this->getNodes($selector),
         $this->_nodes,
-        function ($targetNode, $contentNodes) {
+        function($targetNode, $contentNodes) {
           $result = array();
           if (
             $targetNode->parentNode instanceof \DOMNode &&
@@ -1958,7 +1971,7 @@ namespace FluentDOM {
       return $this->applyToSpawn(
         $this->getNodes($selector),
         $this->_nodes,
-        function ($targetNode, $contentNodes) {
+        function($targetNode, $contentNodes) {
           $result = array();
           if (
             $targetNode->parentNode instanceof \DOMNode &&
@@ -1988,7 +2001,7 @@ namespace FluentDOM {
       return $this->applyToSpawn(
         $this->_nodes,
         $content,
-        function ($targetNode, $contentNodes) {
+        function($targetNode, $contentNodes) {
           return $this->insertChildrenBefore($targetNode, $contentNodes);
         }
       );

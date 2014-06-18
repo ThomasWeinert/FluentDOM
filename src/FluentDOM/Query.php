@@ -256,9 +256,9 @@ namespace FluentDOM {
       if ($this->isNode($elements, $ignoreTextNodes)) {
         $elements = array($elements);
       }
-      if ($this->isNodeList($elements)) {
+      if ($nodes = $this->isNodeList($elements)) {
         $this->_useDocumentContext = FALSE;
-        foreach ($elements as $index => $node) {
+        foreach ($nodes as $index => $node) {
           if ($this->isNode($node, $ignoreTextNodes)) {
             if ($node->ownerDocument === $this->_document) {
               $this->_nodes[] = $node;
@@ -486,8 +486,8 @@ namespace FluentDOM {
         $this->css($value);
         break;
       case 'onPrepareSelector' :
-        if ($this->isCallable($value, TRUE, FALSE)) {
-          $this->_onPrepareSelector = $value;
+        if ($callback = $this->isCallable($value, TRUE, FALSE)) {
+          $this->_onPrepareSelector = $callback;
         }
         break;
       case 'data' :
@@ -572,66 +572,70 @@ namespace FluentDOM {
      *****************/
 
     /**
-     * Check if the DOMNode is DOMElement or DOMText with content
+     * Check if the DOMNode is DOMElement or DOMText with content.
+     * It returns the node or NULL.
      *
      * @param mixed $node
      * @param boolean $ignoreTextNodes
-     * @return boolean
+     * @return \DOMElement|\DOMText|\DOMCdataSection
      */
     public function isNode($node, $ignoreTextNodes = FALSE) {
       if ($node instanceof \DOMElement) {
-        return TRUE;
+        return $node;
       } elseif (!$ignoreTextNodes) {
         if ($node instanceof \DOMCdataSection) {
-          return TRUE;
+          return $node;
         } elseif ($node instanceof \DOMText &&
                   !$node->isWhitespaceInElementContent()) {
-          return TRUE;
+          return $node;
         }
       }
-      return FALSE;
+      return NULL;
     }
 
     /**
-     * Check if $elements is a traversable node list
+     * Check if $elements is a traversable node list. It returns
+     * the $elements or NULL
      *
      * @param mixed $elements
-     * @return boolean
+     * @return \Traversable|array
      */
     public function isNodeList($elements) {
       if ($elements instanceof \Traversable ||
           is_array($elements)) {
-        return TRUE;
+        return empty($elements) ? new \ArrayIterator(array()) : $elements;
       }
-      return FALSE;
+      return NULL;
     }
 
     /**
-     * check if parameter is a valid callback function
+     * check if parameter is a valid callback function. It returns
+     * the callable or NULL.
+     *
+     * If $silent is disabled, an exception is thrown for incalid callbacks
      *
      * @param mixed $callback
      * @param boolean $allowGlobalFunctions
      * @param boolean $silent (no InvalidArgumentException)
      * @throws \InvalidArgumentException
-     * @return boolean
+     * @return callable|NULL
      */
     public function isCallable($callback, $allowGlobalFunctions = FALSE, $silent = TRUE) {
       if ($callback instanceof \Closure) {
-        return TRUE;
+        return $callback;
       } elseif (is_string($callback) &&
         $allowGlobalFunctions &&
         function_exists($callback)) {
-        return is_callable($callback);
+        return is_callable($callback) ? $callback : NULL;
       } elseif (is_array($callback) &&
         count($callback) == 2 &&
         (is_object($callback[0]) || is_string($callback[0])) &&
         is_string($callback[1])) {
-        return is_callable($callback);
+        return is_callable($callback) ? $callback : NULL;
       } elseif ($silent) {
-        return FALSE;
-      } else {
-        throw new \InvalidArgumentException('Invalid callback argument');
+        return NULL;
       }
+      throw new \InvalidArgumentException('Invalid callback argument');
     }
 
     /******************
@@ -695,26 +699,23 @@ namespace FluentDOM {
      * @param string|\DOMNode|\DOMNodeList $selector
      * @param \DOMNode $context optional, default value NULL
      * @throws \InvalidArgumentException
-     * @return \DOMNodeList
+     * @return array
      */
     private function getNodes($selector, \DOMNode $context = NULL) {
       if ($this->isNode($selector)) {
-        $result = array($selector);
+        return array($selector);
       } elseif (is_string($selector)) {
-        if (isset($this->_onPrepareSelector)) {
-          $selector = call_user_func($this->_onPrepareSelector, $selector);
-        }
-        $result = $this->xpath()->evaluate($selector, $context, FALSE);
+        $result = $this->xpath()->evaluate(
+          $this->prepareSelector($selector), $context, FALSE
+        );
         if (!($result instanceof \Traversable)) {
           throw new \InvalidArgumentException('Given selector did not return an node list.');
         }
-        $result = iterator_to_array($result);
-      } elseif ($this->isNodeList($selector)) {
-        $result = is_array($selector) ? $selector : iterator_to_array($selector);
-      } else {
-        throw new \InvalidArgumentException('Invalid selector');
+        return iterator_to_array($result);
+      } elseif ($nodes = $this->isNodeList($selector)) {
+        return is_array($nodes) ? $nodes : iterator_to_array($nodes);
       }
-      return $result;
+      throw new \InvalidArgumentException('Invalid selector');
     }
 
     /**
@@ -770,8 +771,8 @@ namespace FluentDOM {
         $result = array($content);
       } elseif (is_string($content)) {
         $result = $this->getContentFragment($content, $includeTextNodes, $limit);
-      } elseif ($this->isNodeList($content)) {
-        foreach ($content as $element) {
+      } elseif ($nodes = $this->isNodeList($content)) {
+        foreach ($nodes as $element) {
           if ($element instanceof \DOMElement ||
             ($includeTextNodes && $this->isNode($element))) {
             $result[] = $element;
@@ -843,15 +844,15 @@ namespace FluentDOM {
     private function wrapNodes($elements, $content) {
       $result = array();
       $wrapperTemplate = NULL;
-      $isCallback = $this->isCallable($content, FALSE, TRUE);
-      if (!$isCallback) {
+      $callback = $this->isCallable($content, FALSE, TRUE);
+      if (!$callback) {
         $wrapperTemplate = $this->getContentElement($content);
       }
       $simple = FALSE;
       foreach ($elements as $index => $node) {
-        if ($isCallback) {
+        if ($callback) {
           $wrapperTemplate = NULL;
-          $wrapContent = call_user_func($content, $node, $index);
+          $wrapContent = $callback($node, $index);
           if (!empty($wrapContent)) {
             $wrapperTemplate = $this->getContentElement($wrapContent);
           }
@@ -999,14 +1000,14 @@ namespace FluentDOM {
     public function apply($targetNodes, $content, $handler) {
       $result = array();
       $isSetterFunction = FALSE;
-      if ($this->isCallable($content)) {
+      if ($callback = $this->isCallable($content)) {
         $isSetterFunction = TRUE;
       } else {
         $contentNodes = $this->getContentNodes($content);
       }
       foreach ($targetNodes as $index => $node) {
         if ($isSetterFunction) {
-          $contentData = call_user_func($content, $node, $index, $this->getInnerXml($node));
+          $contentData = $callback($node, $index, $this->getInnerXml($node));
           if (!empty($contentData)) {
             $contentNodes = $this->getContentNodes($contentData);
           }
@@ -1095,15 +1096,27 @@ namespace FluentDOM {
      * @return boolean
      */
     public function matches($selector, \DOMNode $context = NULL) {
-      if (isset($this->_onPrepareSelector)) {
-        $selector = call_user_func($this->_onPrepareSelector, $selector);
-      }
-      $check = $this->xpath->evaluate($selector, $context);
+      $check = $this->xpath->evaluate(
+        $this->prepareSelector($selector), $context
+      );
       if ($check instanceof \DOMNodeList) {
         return $check->length > 0;
       } else {
         return (bool)$check;
       }
+    }
+
+    /**
+     * Use callback to convert selector if it is set.
+     *
+     * @param string $selector
+     * @return string
+     */
+    private function prepareSelector($selector) {
+      if (isset($this->_onPrepareSelector)) {
+        return call_user_func($this->_onPrepareSelector, $selector);
+      }
+      return $selector;
     }
 
     /*********************
@@ -1429,14 +1442,15 @@ namespace FluentDOM {
      */
     public function not($selector) {
       $result = $this->spawn();
+      if (is_string($selector)) {
+        $callback = function($node, $index) use ($selector) {
+          return $this->matches($selector, $node, $index);
+        };
+      } else {
+        $callback = $this->isCallable($selector, TRUE, FALSE);
+      }
       foreach ($this->_nodes as $index => $node) {
-        $check = FALSE;
-        if (is_string($selector)) {
-          $check = $this->matches($selector, $node, $index);
-        } elseif ($this->isCallable($selector, TRUE, FALSE)) {
-          $check = call_user_func($selector, $node, $index);
-        }
-        if (!$check) {
+        if (!$callback($node, $index)) {
           $result->push($node);
         }
       }
@@ -1741,8 +1755,8 @@ namespace FluentDOM {
       if (empty($this->_nodes) &&
         $this->_useDocumentContext &&
         !isset($this->_document->documentElement)) {
-        if ($this->isCallable($content)) {
-          $contentNode = $this->getContentElement($content(NULL, 0, ''));
+        if ($callback = $this->isCallable($content)) {
+          $contentNode = $this->getContentElement($callback(NULL, 0, ''));
         } else {
           $contentNode = $this->getContentElement($content);
         }
@@ -2010,10 +2024,10 @@ namespace FluentDOM {
      */
     public function text($text = NULL) {
       if (isset($text)) {
-        $isCallback = $this->isCallable($text, FALSE, TRUE);
+        $callback = $this->isCallable($text, FALSE, TRUE);
         foreach ($this->_nodes as $index => $node) {
-          if ($isCallback) {
-            $node->nodeValue = call_user_func($text, $node, $index, $node->nodeValue);
+          if ($callback) {
+            $node->nodeValue = $callback($node, $index, $node->nodeValue);
           } else {
             $node->nodeValue = $text;
           }
@@ -2228,12 +2242,10 @@ namespace FluentDOM {
      */
     private function content($content, $export, $import, $insert) {
       if (isset($content)) {
-        $isCallback = $this->isCallable($content, FALSE, TRUE);
-        if ($isCallback) {
+        $callback = $this->isCallable($content, FALSE, TRUE);
+        if ($callback) {
           foreach ($this->_nodes as $index => $node) {
-            $contentString = call_user_func(
-              $content, $node, $index, $export($node)
-            );
+            $contentString = $callback($node, $index, $export($node));
             $insert($node, $import($contentString));
           }
         } else {
@@ -2282,14 +2294,14 @@ namespace FluentDOM {
           }
         }
         return NULL;
-      } elseif ($this->isCallable($value)) {
+      } elseif ($callback = $this->isCallable($value)) {
         //value is function callback - execute it and set result on each element
         $attribute = (new QualifiedName($attribute))->name;
         foreach ($this->_nodes as $index => $node) {
           if ($node instanceof \DOMElement) {
             $node->setAttribute(
               $attribute,
-              call_user_func($value, $node, $index, $node->getAttribute($attribute))
+              $callback($node, $index, $node->getAttribute($attribute))
             );
           }
         }
@@ -2413,13 +2425,11 @@ namespace FluentDOM {
      * @return Query
      */
     public function toggleClass($class, $switch = NULL) {
-      $isCallback = $this->isCallable($class);
+      $callback = $this->isCallable($class);
       foreach ($this->_nodes as $index => $node) {
         if ($node instanceof \DOMElement) {
-          if ($isCallback) {
-            $classString = call_user_func(
-              $class, $node, $index, $node->getAttribute('class')
-            );
+          if ($callback) {
+            $classString = $callback($node, $index, $node->getAttribute('class'));
           } else {
             $classString = $class;
           }

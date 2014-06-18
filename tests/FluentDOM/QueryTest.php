@@ -795,9 +795,9 @@ namespace FluentDOM {
      * @dataProvider provideValidNodes
      * @covers FluentDOM\Query::isNode
      */
-    public function testIsNodeExpectingTrue($node) {
+    public function testIsNodeExpectingNode($node) {
       $query = new Query();
-      $this->assertTrue($query->isNode($node));
+      $this->assertInstanceOf('DOMNode', $query->isNode($node));
     }
 
     public static function provideValidNodes() {
@@ -815,9 +815,9 @@ namespace FluentDOM {
      * @covers FluentDOM\Query::isNode
      * @dataProvider provideInvalidNodes
      */
-    public function testIsNodeExpectingFalse($node, $ignoreTextNodes = FALSE) {
+    public function testIsNodeExpectingNull($node, $ignoreTextNodes = FALSE) {
       $query = new Query();
-      $this->assertFalse($query->isNode($node, $ignoreTextNodes));
+      $this->assertNull($query->isNode($node, $ignoreTextNodes));
     }
 
     public static function provideInvalidNodes() {
@@ -835,9 +835,15 @@ namespace FluentDOM {
      * @dataProvider provideNodeLists
      * @covers FluentDOM\Query::isNodeList
      */
-    public function testIsNodeListExpectingTrue($list) {
+    public function testIsNodeListExpectingList($list) {
       $query = new Query();
-      $this->assertTrue($query->isNodeList($list));
+      $this->assertThat(
+        $query->isNodeList($list),
+        $this->logicalOr(
+          $this->isType('array'),
+          $this->isInstanceOf('Traversable')
+        )
+      );
     }
 
     public static function provideNodeLists() {
@@ -853,9 +859,9 @@ namespace FluentDOM {
      * @group Constraints
      * @covers FluentDOM\Query::isNodeList
      */
-    public function testIsNodeListExpectingFalse() {
+    public function testIsNodeListExpectingNull() {
       $query = new Query();
-      $this->assertFalse($query->isNodeList('string'));
+      $this->assertNull($query->isNodeList('string'));
     }
 
     /**
@@ -866,7 +872,9 @@ namespace FluentDOM {
      */
     public function testIsCallable($callable) {
       $query = new Query();
-      $this->assertTrue($query->isCallable($callable));
+      $this->assertInternalType(
+        'callable', $query->isCallable($callable)
+      );
     }
 
     public function provideCallables() {
@@ -881,9 +889,11 @@ namespace FluentDOM {
      * @group Constraints
      * @covers FluentDOM\Query::isCallable
      */
-    public function testIsCallableWithGlobalFunctionExpectingTrue() {
+    public function testIsCallableWithGlobalFunctionExpectingCallable() {
       $query = new Query();
-      $this->assertTrue($query->isCallable('strpos', TRUE));
+      $this->assertInternalType(
+        'callable', $query->isCallable('strpos', TRUE)
+      );
     }
 
     /**
@@ -891,9 +901,9 @@ namespace FluentDOM {
      * @group Constraints
      * @covers FluentDOM\Query::isCallable
      */
-    public function testIsCallableWithGlobalFunctionExpectingFalse() {
+    public function testIsCallableWithGlobalFunctionExpectingNull() {
       $query = new Query();
-      $this->assertFalse($query->isCallable('strpos', FALSE));
+      $this->assertNull($query->isCallable('strpos', FALSE));
     }
 
     /**
@@ -901,9 +911,9 @@ namespace FluentDOM {
      * @group Constraints
      * @covers FluentDOM\Query::isCallable
      */
-    public function testIsCallableExpectingFalse() {
+    public function testIsCallableExpectingNull() {
       $query = new Query();
-      $this->assertFalse($query->isCallable(NULL));
+      $this->assertNull($query->isCallable(NULL));
     }
 
     /**

@@ -224,6 +224,7 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Element::evaluate
+     * @covers FluentDOM\Element::getDocument
      */
     public function testEvaluate() {
       $dom = new Document();

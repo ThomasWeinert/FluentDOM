@@ -87,6 +87,7 @@ namespace FluentDOM {
     /**
      * @covers FluentDOM\Document::registerNamespace
      * @covers FluentDOM\Document::getNamespace
+     * @covers FluentDOM\Document::validatePrefix
      */
     public function testGetNamespaceAfterRegister() {
       $dom = new Document();
@@ -100,6 +101,34 @@ namespace FluentDOM {
     /**
      * @covers FluentDOM\Document::registerNamespace
      * @covers FluentDOM\Document::getNamespace
+     * @covers FluentDOM\Document::validatePrefix
+     */
+    public function testGetDefaultNamespaceAfterRegister() {
+      $dom = new Document();
+      $dom->registerNamespace('#default', 'urn:success');
+      $this->assertEquals(
+        'urn:success',
+        $dom->getNamespace('')
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Document::registerNamespace
+     * @covers FluentDOM\Document::getNamespace
+     * @covers FluentDOM\Document::validatePrefix
+     */
+    public function testGetDefaultNamespaceWithoutRegister() {
+      $dom = new Document();
+      $this->assertEquals(
+        '',
+        $dom->getNamespace('#default')
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Document::registerNamespace
+     * @covers FluentDOM\Document::getNamespace
+     * @covers FluentDOM\Document::validatePrefix
      */
     public function testRegisterReservedNamespaceExpectingException() {
       $dom = new Document();
@@ -112,6 +141,7 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Document::getNamespace
+     * @covers FluentDOM\Document::validatePrefix
      */
     public function testGetReservedNamespace() {
       $dom = new Document();
@@ -123,6 +153,7 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Document::getNamespace
+     * @covers FluentDOM\Document::validatePrefix
      */
     public function testGetNamespaceWithoutRegisterExpectingException() {
       $dom = new Document();

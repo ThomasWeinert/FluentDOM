@@ -242,9 +242,11 @@ namespace FluentDOM {
      * @return Element
      */
     private function ensureElement(\DOMElement $node) {
+      // @codeCoverageIgnoreStart
       if (!($node instanceof Element)) {
         return $node->ownerDocument->importNode($node, TRUE);
       }
+      // @codeCoverageIgnoreEnd
       return $node;
     }
 

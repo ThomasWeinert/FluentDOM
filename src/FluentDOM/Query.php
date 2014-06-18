@@ -2205,16 +2205,20 @@ namespace FluentDOM {
       libxml_clear_errors();
       libxml_use_internal_errors($status);
       $result = array();
-      foreach ($dom->xpath()->evaluate('//html-fragment[1]/node()') as $node) {
-        $result[] = $this->getDocument()->importNode($node, TRUE);
+      $nodes = $dom->xpath()->evaluate('//html-fragment[1]/node()');
+      if ($nodes instanceof \Traversable) {
+        foreach ($nodes as $node) {
+          $result[] = $this->getDocument()->importNode($node, TRUE);
+        }
       }
       return $result;
     }
 
     /**
-     * @param string|callable $content
+     * @param string|callable|NULL $content
      * @param callable $export
      * @param callable $import
+     * @param callable $insert
      * @return $this|string
      */
     private function content($content, $export, $import, $insert) {

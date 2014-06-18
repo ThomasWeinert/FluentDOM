@@ -50,5 +50,18 @@ namespace FluentDOM\Loader {
         )
       );
     }
+
+    /**
+     * @covers FluentDOM\Loader\Xml
+     */
+    public function testLoadWithUnsupportType() {
+      $loader = new Xml();
+      $this->assertNull(
+        $loader->load(
+          __DIR__.'/TestData/loader.html',
+          'text/html'
+        )
+      );
+    }
   }
 }

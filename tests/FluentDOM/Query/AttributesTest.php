@@ -113,6 +113,7 @@ namespace FluentDOM\Query {
 
     /**
      * @covers FluentDOM\Query\Attributes::count
+     * @covers FluentDOM\Query\Attributes::getFirstElement
      */
     public function testCountExpectingTwo() {
       $fd = $this->getFluentDOMWithNodeFixture(
@@ -126,6 +127,7 @@ namespace FluentDOM\Query {
 
     /**
      * @covers FluentDOM\Query\Attributes::count
+     * @covers FluentDOM\Query\Attributes::getFirstElement
      */
     public function testCountExpectingZero() {
       $fd = $this->getMock('FluentDOM\Query');

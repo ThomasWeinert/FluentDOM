@@ -247,7 +247,7 @@ namespace FluentDOM {
     /**
      * Push new element(s) an the internal element list
      *
-     * @param \DOMNode|\Traversable|array $elements
+     * @param \DOMNode|\Traversable|array|NULL $elements
      * @param boolean $ignoreTextNodes ignore text nodes
      * @throws \OutOfBoundsException
      * @throws \InvalidArgumentException

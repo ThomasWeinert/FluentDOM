@@ -440,9 +440,8 @@ namespace FluentDOM {
       case 'css' :
         return new Query\Css($this, $this->attr('style'));
       case 'data' :
-        if (count($this->_nodes) > 0 &&
-          $this->_nodes[0] instanceof \DOMElement) {
-          return new Query\Data($this->_nodes[0]);
+        if ($node = $this->getElement()) {
+          return new Query\Data($node);
         } else {
           throw new \UnexpectedValueException(
             'UnexpectedValueException: first selected node is no element.'
@@ -703,6 +702,23 @@ namespace FluentDOM {
         $this->applyNamespaces();
       }
       return $this->_document;
+    }
+
+    /**
+     * Returns the item from the internal array if
+     * if the index exists and is an DOMElement
+     *
+     * @param int $index
+     * @return NULL|\DOMElement
+     */
+    private function getElement($index = 0) {
+      if (
+        isset($this->_nodes[$index]) &&
+        $this->_nodes[$index] instanceof \DOMElement
+      ) {
+        return $this->_nodes[$index];
+      }
+      return NULL;
     }
 
     /**
@@ -1338,12 +1354,27 @@ namespace FluentDOM {
     /**
      * Execute a function within the context of every matched element.
      *
+     * If $elementsOnly is set to TRUE, only element nodes are used.
+     *
+     * If $elementsOnly is a callable the return value defines if
+     * it is called for that node.
+     *
      * @param callable $function
+     * @param bool|callable $elementsOnly
      * @return Query
      */
-    public function each(callable $function) {
+    public function each(callable $function, $elementsOnly = FALSE) {
+      if (TRUE === $elementsOnly) {
+        $filter = function($node) {
+          return $node instanceof \DOMElement;
+        };
+      } else {
+        $filter = $this->isCallable($elementsOnly);
+      }
       foreach ($this->_nodes as $index => $node) {
-        call_user_func($function, $node, $index);
+        if (NULL === $filter || $filter($node, $index)) {
+          call_user_func($function, $node, $index);
+        }
       }
       return $this;
     }
@@ -1911,13 +1942,11 @@ namespace FluentDOM {
      * @return Query
      */
     private function emptyNodes() {
-      foreach ($this->_nodes as $node) {
-        if ($node instanceof \DOMElement ||
-            $node instanceof \DOMText ||
-            $node instanceof \DOMCdataSection) {
+      $this->each(
+        function (\DOMNode $node) {
           $node->nodeValue = '';
         }
-      }
+      );
       $this->_useDocumentContext = TRUE;
       return $this;
     }
@@ -2347,45 +2376,38 @@ namespace FluentDOM {
      * @return string|Query attribute value or $this
      */
     public function attr($attribute, $value = NULL) {
-      if (is_array($attribute) && count($attribute) > 0) {
+      if (is_null($value) && !is_array(($attribute))) {
+        //empty value - read attribute from first element in list
+        $attribute = (new QualifiedName($attribute))->name;
+        $node = $this->getElement();
+        if ($node && $node->hasAttribute($attribute)) {
+          return $node->getAttribute($attribute);
+        }
+        return NULL;
+      } elseif (is_array($attribute) && count($attribute) > 0) {
         //expr is an array of attributes and values - set on each element
         foreach ($attribute as $key => $value) {
           $name = (new QualifiedName($key))->name;
-          foreach ($this->_nodes as $node) {
-            if ($node instanceof \DOMElement) {
+          $this->each(
+            function(\DOMElement $node) use ($name, $value) {
               $node->setAttribute($name, $value);
-            }
-          }
-        }
-      } elseif (is_null($value)) {
-        //empty value - read attribute from first element in list
-        $attribute = (new QualifiedName($attribute))->name;
-        if (count($this->_nodes) > 0) {
-          $node = $this->_nodes[0];
-          if ($node instanceof \DOMElement && $node->hasAttribute($attribute)) {
-            return $node->getAttribute($attribute);
-          }
-        }
-        return NULL;
-      } elseif ($callback = $this->isCallable($value)) {
-        //value is function callback - execute it and set result on each element
-        $attribute = (new QualifiedName($attribute))->name;
-        foreach ($this->_nodes as $index => $node) {
-          if ($node instanceof \DOMElement) {
-            $node->setAttribute(
-              $attribute,
-              $callback($node, $index, $node->getAttribute($attribute))
-            );
-          }
+            },
+            TRUE
+          );
         }
       } else {
         // set attribute value of each element
+        $callback = $this->isCallable($value);
         $attribute = (new QualifiedName($attribute))->name;
-        foreach ($this->_nodes as $node) {
-          if ($node instanceof \DOMElement) {
+        $this->each(
+          function(\DOMElement $node, $index) use ($attribute, $value, $callback) {
+            if ($callback) {
+              $value = $callback($node, $index, $node->getAttribute($attribute));
+            }
             $node->setAttribute($attribute, (string)$value);
-          }
-        }
+          },
+          TRUE
+        );
       }
       return $this;
     }
@@ -2399,8 +2421,7 @@ namespace FluentDOM {
      */
     public function hasAttr($name) {
       foreach ($this->_nodes as $node) {
-        if ($node instanceof \DOMElement &&
-          $node->hasAttribute($name)) {
+        if ($node instanceof \DOMElement && $node->hasAttribute($name)) {
           return TRUE;
         }
       }
@@ -2425,8 +2446,8 @@ namespace FluentDOM {
       } elseif ($name !== '*') {
         throw new \InvalidArgumentException();
       }
-      foreach ($this->_nodes as $node) {
-        if ($node instanceof \DOMElement) {
+      $this->each(
+        function(\DOMElement $node) use ($attributes) {
           if (is_null($attributes)) {
             for ($i = $node->attributes->length - 1; $i >= 0; $i--) {
               /** @noinspection PhpUndefinedFieldInspection */
@@ -2439,8 +2460,9 @@ namespace FluentDOM {
               }
             }
           }
-        }
-      }
+        },
+        TRUE
+      );
       return $this;
     }
 
@@ -2466,8 +2488,7 @@ namespace FluentDOM {
      */
     public function hasClass($class) {
       foreach ($this->_nodes as $node) {
-        if ($node instanceof \DOMElement &&
-          $node->hasAttribute('class')) {
+        if ($node instanceof \DOMElement && $node->hasAttribute('class')) {
           $classes = preg_split('(\s+)', trim($node->getAttribute('class')));
           if (in_array($class, $classes)) {
             return TRUE;
@@ -2499,8 +2520,8 @@ namespace FluentDOM {
      */
     public function toggleClass($class, $switch = NULL) {
       $callback = $this->isCallable($class);
-      foreach ($this->_nodes as $index => $node) {
-        if ($node instanceof \DOMElement) {
+      $this->each(
+        function(\DOMElement $node, $index) use ($class, $switch, $callback) {
           if ($callback) {
             $classString = $callback($node, $index, $node->getAttribute('class'));
           } else {
@@ -2541,8 +2562,9 @@ namespace FluentDOM {
               }
             }
           }
-        }
-      }
+        },
+        TRUE
+      );
       return $this;
     }
 
@@ -2578,8 +2600,8 @@ namespace FluentDOM {
         throw new \InvalidArgumentException('Invalid css property name argument type.');
       }
       //set list of properties to all elements
-      foreach ($this->_nodes as $index => $node) {
-        if ($node instanceof \DOMElement) {
+      $this->each(
+        function(\DOMElement $node, $index) use ($propertyList) {
           $properties = new Query\Css\Properties($node->getAttribute('style'));
           foreach ($propertyList as $name => $value) {
             $properties[$name] = $properties->compileValue(
@@ -2591,8 +2613,9 @@ namespace FluentDOM {
           } elseif ($node->hasAttribute('style')) {
             $node->removeAttribute('style');
           }
-        }
-      }
+        },
+        TRUE
+      );
       return $this;
     }
 
@@ -2611,9 +2634,8 @@ namespace FluentDOM {
     public function data($name, $value = NULL) {
       if (!is_array($name) && is_null($value)) {
         //reading
-        if (isset($this->_nodes[0]) &&
-          $this->_nodes[0] instanceof \DOMElement) {
-          $data = new Query\Data($this->_nodes[0]);
+        if ($node = $this->getElement()) {
+          $data = new Query\Data($node);
           return $data->$name;
         }
         return NULL;
@@ -2622,15 +2644,16 @@ namespace FluentDOM {
       } else {
         $values = array((string)$name => $value);
       }
-      foreach ($this->_nodes as $node) {
-        if ($node instanceof \DOMElement) {
+      $this->each(
+        function(\DOMElement $node) use ($values) {
           $data = new Query\Data($node);
           foreach ($values as $dataName => $dataValue) {
             $data->$dataName = $dataValue;
           }
-        }
-      }
-      return NULL;
+        },
+        TRUE
+      );
+      return $this;
     }
 
     /**
@@ -2652,8 +2675,8 @@ namespace FluentDOM {
       } else {
         throw new \InvalidArgumentException();
       }
-      foreach ($this->_nodes as $node) {
-        if ($node instanceof \DOMElement) {
+      $this->each(
+        function ($node) use ($names) {
           $data = new Query\Data($node);
           if (is_array($names)) {
             foreach ($names as $dataName) {
@@ -2664,8 +2687,9 @@ namespace FluentDOM {
               unset($data->$dataName);
             }
           }
-        }
-      }
+        },
+        TRUE
+      );
     }
 
     /**
@@ -2676,13 +2700,8 @@ namespace FluentDOM {
      * @return boolean
      */
     public function hasData(\DOMElement $element = NULL) {
-      if (isset($element)) {
+      if ($element || ($element = $this->getElement())) {
         $data = new Query\Data($element);
-        return count($data) > 0;
-      }
-      if (isset($this->_nodes[0]) &&
-        $this->_nodes[0] instanceof \DOMElement) {
-        $data = new Query\Data($this->_nodes[0]);
         return count($data) > 0;
       }
       return FALSE;

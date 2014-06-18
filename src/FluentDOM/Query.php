@@ -898,6 +898,11 @@ namespace FluentDOM {
       return $result;
     }
 
+    private function replaceChildren($targetNode, $contentNodes) {
+      $targetNode->nodeValue = '';
+      $this->appendChildren($targetNode, $contentNodes);
+    }
+
     /**
      * Insert nodes into target as first childs.
      *
@@ -2120,110 +2125,47 @@ namespace FluentDOM {
      * @return string|self
      */
     public function xml($xml = NULL) {
-      if (isset($xml)) {
-        $isCallback = $this->isCallable($xml, FALSE, TRUE);
-        if ($isCallback) {
-          foreach ($this->_nodes as $index => $node) {
-            $xmlString = call_user_func(
-              $xml,
-              $node,
-              $index,
-              $this->getInnerXml($node)
-            );
-            $node->nodeValue = '';
-            if (!empty($xmlString)) {
-              $fragment = $this->getContentFragment($xmlString, TRUE);
-              foreach ($fragment as $contentNode) {
-                /**
-                 * @var \DOMNode $node
-                 * @var \DOMNode $contentNode
-                 */
-                $node->appendChild($contentNode->cloneNode(TRUE));
-              }
-            }
-          }
-        } else {
-          if (!empty($xml)) {
-            $fragment = $this->getContentFragment($xml, TRUE);
-          } else {
-            $fragment = array();
-          }
-          foreach ($this->_nodes as $node) {
-            $node->nodeValue = '';
-            foreach ($fragment as $contentNode) {
-              /**
-               * @var \DOMNode $node
-               * @var \DOMNode $contentNode
-               */
-              $node->appendChild($contentNode->cloneNode(TRUE));
-            }
-          }
+      return $this->content(
+        $xml,
+        function($node) {
+          return $this->getInnerXml($node);
+        },
+        function($node) {
+          return $this->getContentFragment($node, TRUE);
+        },
+        function($node, $fragment) {
+          $this->replaceChildren($node, $fragment);
         }
-        return $this;
-      } else {
-        if (isset($this->_nodes[0])) {
-          return $this->getInnerXml($this->_nodes[0]);
-        }
-        return '';
-      }
+      );
     }
 
     /**
-     * Get the first matched node as XML or replace all
+     * Get the first matched node as XML or replace each
      * matched nodes with the provided fragment.
      *
      * @param string|callable|NULL $xml
      * @return string|self
      */
     function outerXml($xml = NULL) {
-      if (isset($xml)) {
-        $isCallback = $this->isCallable($xml, FALSE, TRUE);
-        if ($isCallback) {
-          /** @var \DOMNode $node */
-          foreach ($this->_nodes as $index => $node) {
-            $xmlString = call_user_func(
-              $xml,
-              $node,
-              $index,
-              $this->getDocument()->saveXML($node)
+      return $this->content(
+        $xml,
+        function($node) {
+          return $this->getDocument()->saveXML($node);
+        },
+        function($xml) {
+          return $this->getContentFragment($xml, TRUE);
+        },
+        function($node, $fragment) {
+          /** @var \DOMNode $contentNode */
+          foreach ($fragment as $contentNode) {
+            $node->parentNode->insertBefore(
+              $contentNode->cloneNode(TRUE),
+              $node
             );
-            if (!empty($xmlString)) {
-              $fragment = $this->getContentFragment($xmlString, TRUE);
-              /** @var \DOMNode $contentNode */
-              foreach ($fragment as $contentNode) {
-                $node->parentNode->insertBefore(
-                  $contentNode->cloneNode(TRUE),
-                  $node
-                );
-              }
-            }
-            $node->parentNode->removeChild($node);
           }
-        } else {
-          if (!empty($xml)) {
-            $fragment = $this->getContentFragment($xml, TRUE);
-          } else {
-            $fragment = array();
-          }
-          /** @var \DOMNode $node */
-          foreach ($this->_nodes as $node) {
-            /** @var \DOMNode $contentNode */
-            foreach ($fragment as $contentNode) {
-              $node->parentNode->insertBefore(
-                $contentNode->cloneNode(TRUE),
-                $node
-              );
-            }
-            $node->parentNode->removeChild($node);
-          }
+          $node->parentNode->removeChild($node);
         }
-        return $this;
-      } else {
-        if (isset($this->_nodes[0]) && $this->isNode($this->_nodes[0])) {
-          return $this->getDocument()->saveXml($this->_nodes[0]);
-        }
-        return '';
-      }
+      );
     }
 
     /**
@@ -2234,61 +2176,82 @@ namespace FluentDOM {
      * @return string|self
      */
     public function html($html = NULL) {
-      if (isset($html)) {
-        $isCallback = $this->isCallable($html, FALSE, TRUE);
-        if ($isCallback) {
-          /** @var \DOMNode $node */
-          foreach ($this->_nodes as $index => $node) {
-            $htmlString = call_user_func(
-              $html,
-              $node,
-              $index,
-              $this->getInnerXml($node)
-            );
-            $node->nodeValue = '';
-            if (!empty($htmlString)) {
-              $fragment = $this->getHtmlFragment($htmlString, TRUE);
-              /** @var \DOMNode $contentNode */
-              foreach ($fragment as $contentNode) {
-                $node->appendChild(
-                  $this->getDocument()->importNode($contentNode, TRUE)
-                );
-              }
-            }
+      return $this->content(
+        $html,
+        function($node) {
+          $result = '';
+          foreach ($node->childNodes as $node) {
+            $result .= $this->getDocument()->saveHTML($node);
           }
-        } else {
-          $fragment = $this->getHtmlFragment($html);
-          /** @var \DOMNode $node */
-          foreach ($this->_nodes as $node) {
-            $node->nodeValue = '';
-            /** @var \DOMNode $contentNode */
-            foreach ($fragment as $contentNode) {
-              $node->appendChild(
-                $this->getDocument()->importNode($contentNode, TRUE)
-              );
-            }
-          }
+          return $result;
+        },
+        function($html) {
+          return $this->getHtmlFragment($html);
+        },
+        function($node, $fragment) {
+          $this->replaceChildren($node, $fragment);
         }
-        return $this;
-      }
-      if (isset($this->_nodes[0]) &&
-          $this->isNode($this->_nodes[0], TRUE)) {
-        $result = '';
-        foreach ($this->_nodes[0]->childNodes as $node) {
-          $result .= $this->getDocument()->saveHTML($node);
-        }
-        return $result;
-      }
-      return '';
+      );
     }
 
+    /**
+     * @param string $html
+     * @return array
+     */
     private function getHtmlFragment($html) {
       $dom = new Document();
       $status = libxml_use_internal_errors(TRUE);
       $dom->loadHtml('<html-fragment>'.$html.'</html-fragment>');
       libxml_clear_errors();
       libxml_use_internal_errors($status);
-      return iterator_to_array($dom->xpath()->evaluate('//html-fragment[1]/node()'));
+      $result = array();
+      foreach ($dom->xpath()->evaluate('//html-fragment[1]/node()') as $node) {
+        $result[] = $this->getDocument()->importNode($node, TRUE);
+      }
+      return $result;
+    }
+
+    /**
+     * @param string|callable $content
+     * @param callable $export
+     * @param callable $import
+     * @return $this|string
+     */
+    private function content($content, $export, $import, $insert) {
+      if (isset($content)) {
+        $isCallback = $this->isCallable($content, FALSE, TRUE);
+        if ($isCallback) {
+          foreach ($this->_nodes as $index => $node) {
+            $contentString = call_user_func(
+              $content,
+              $node,
+              $index,
+              $export($node)
+            );
+            if (!empty($contentString)) {
+              $fragment = $import($contentString);
+            } else {
+              $fragment = array();
+            }
+            $insert($node, $fragment);
+          }
+        } else {
+          if (!empty($content)) {
+            $fragment = $import($content);
+          } else {
+            $fragment = array();
+          }
+          foreach ($this->_nodes as $node) {
+            $insert($node, $fragment);
+          }
+        }
+        return $this;
+      } else {
+        if (isset($this->_nodes[0])) {
+          return $export($this->_nodes[0]);
+        }
+        return '';
+      }
     }
 
     /****************************

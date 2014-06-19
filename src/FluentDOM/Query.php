@@ -2383,10 +2383,12 @@ namespace FluentDOM {
         $attribute = (new QualifiedName($attribute))->name;
         $this->each(
           function(\DOMElement $node, $index) use ($attribute, $value, $callback) {
-            if ($callback) {
-              $value = $callback($node, $index, $node->getAttribute($attribute));
-            }
-            $node->setAttribute($attribute, (string)$value);
+            $node->setAttribute(
+              $attribute,
+              $callback
+                ? (string)$callback($node, $index, $node->getAttribute($attribute))
+                : (string)$value
+            );
           },
           TRUE
         );

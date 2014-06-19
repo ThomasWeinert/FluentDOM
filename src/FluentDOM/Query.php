@@ -1758,9 +1758,9 @@ namespace FluentDOM {
     }
 
     /**
-     * Adds the specified class if the switch is TRUE,
-     * removes the specified class if the switch is FALSE,
-     * toggles the specified class if the switch is NULL.
+     * Adds the specified classes if the switch is TRUE,
+     * removes the specified classes if the switch is FALSE,
+     * toggles the specified classes if the switch is NULL.
      *
      * @example toggleClass.php Usage Example: FluentDOM\Query::toggleClass()
      * @param string|callable $class
@@ -1781,33 +1781,16 @@ namespace FluentDOM {
               $node->removeAttribute('class');
             }
           } else {
-            if ($node->hasAttribute('class')) {
-              $currentClasses = array_flip(
-                preg_split('(\s+)', trim($node->getAttribute('class')))
-              );
-            } else {
-              $currentClasses = array();
-            }
-            $toggledClasses = array_unique(preg_split('(\s+)', trim($classString)));
-            $modified = FALSE;
-            foreach ($toggledClasses as $toggledClass) {
-              if (isset($currentClasses[$toggledClass])) {
-                if ($switch === FALSE || is_null($switch)) {
-                  unset($currentClasses[$toggledClass]);
-                  $modified = TRUE;
-                }
-              } else {
-                if ($switch === TRUE || is_null($switch)) {
-                  $currentClasses[$toggledClass] = TRUE;
-                  $modified = TRUE;
-                }
-              }
-            }
-            if ($modified) {
-              if (empty($currentClasses)) {
+            $modified = $this->changeClassString(
+              $node->getAttribute('class'),
+              $classString,
+              $switch
+            );
+            if (FALSE !== $modified) {
+              if (empty($modified)) {
                 $node->removeAttribute('class');
               } else {
-                $node->setAttribute('class', implode(' ', array_keys($currentClasses)));
+                $node->setAttribute('class', $modified);
               }
             }
           }
@@ -1815,6 +1798,43 @@ namespace FluentDOM {
         TRUE
       );
       return $this;
+    }
+
+    /**
+     * Change a class string
+     *
+     * Adds the specified classes if the switch is TRUE,
+     * removes the specified classes if the switch is FALSE,
+     * toggles the specified classes if the switch is NULL.
+     *
+     * @param string $current
+     * @param string $toggled
+     * @param bool|NULL $switch
+     * @return FALSE|string
+     */
+    private function changeClassString($current, $toggle, $switch) {
+      $currentClasses = array_flip(
+        preg_split('(\s+)', trim($current), 0, PREG_SPLIT_NO_EMPTY)
+      );
+      $toggleClasses = array_unique(
+        preg_split('(\s+)', trim($toggle), 0, PREG_SPLIT_NO_EMPTY)
+      );
+      $modified = FALSE;
+      foreach ($toggleClasses as $class) {
+        if (
+          isset($currentClasses[$class]) &&
+          ($switch === FALSE || is_null($switch))
+        ) {
+          unset($currentClasses[$class]);
+          $modified = TRUE;
+        } elseif ($switch === TRUE || is_null($switch)) {
+          $currentClasses[$class] = TRUE;
+          $modified = TRUE;
+        }
+      }
+      return $modified
+        ? implode(' ', array_keys($currentClasses))
+        : FALSE;
     }
 
     /*************************************

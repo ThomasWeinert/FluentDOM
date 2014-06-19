@@ -1630,7 +1630,7 @@ namespace FluentDOM {
     /**
      * Access a property on the first matched element or set the attribute(s) of all matched elements
      *
-     * @example attr.php Usage Example: FluentDOM:attr() Read an attribute value.
+     * @example attr.php Usage Example: FluentDOM\Query::attr() Read an attribute value.
      * @param string|array $attribute attribute name or attribute list
      * @param string|callable $value function callback($index, $value) or value
      * @return string|Query attribute value or $this
@@ -1644,32 +1644,26 @@ namespace FluentDOM {
           return $node->getAttribute($attribute);
         }
         return NULL;
-      } elseif (is_array($attribute) && count($attribute) > 0) {
-        //expr is an array of attributes and values - set on each element
+      } else {
+        if (!is_array($attribute)) {
+          $attribute = array((string)$attribute => $value);
+        }
+        // set attributes on each element
         foreach ($attribute as $key => $value) {
           $name = (new QualifiedName($key))->name;
+          $callback = $this->isCallable($value);
           $this->each(
-            function(\DOMElement $node) use ($name, $value) {
-              $node->setAttribute($name, $value);
+            function(\DOMElement $node, $index) use ($name, $value, $callback) {
+              $node->setAttribute(
+                $name,
+                $callback
+                  ? (string)$callback($node, $index, $node->getAttribute($name))
+                  : (string)$value
+              );
             },
             TRUE
           );
         }
-      } else {
-        // set attribute value of each element
-        $callback = $this->isCallable($value);
-        $attribute = (new QualifiedName($attribute))->name;
-        $this->each(
-          function(\DOMElement $node, $index) use ($attribute, $value, $callback) {
-            $node->setAttribute(
-              $attribute,
-              $callback
-                ? (string)$callback($node, $index, $node->getAttribute($attribute))
-                : (string)$value
-            );
-          },
-          TRUE
-        );
       }
       return $this;
     }

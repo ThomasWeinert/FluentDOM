@@ -28,7 +28,7 @@ namespace FluentDOM {
 
     /**
      * @group Properties
-     * @covers FluentDOM\Query::__isset
+     * @covers FluentDOM\Query::__unset
      * @dataProvider providePropertyNames
      */
     public function testUnsetPropertyContentType($propertyName) {

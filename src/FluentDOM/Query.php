@@ -495,7 +495,7 @@ namespace FluentDOM {
     /**
      * Calls the $traverse for each selected node, until it return FALSE.
      * Each node from $traverse is pushed into a spawned Query until
-     * it matches the selector (
+     * it matches the selector.
      *
      * @param callable $traverse
      * @param string|NULL $selector
@@ -520,6 +520,19 @@ namespace FluentDOM {
       );
     }
 
+    /**
+     * Calls the $traverse for each selected node, until it returns
+     * a \DOMNode or FALSE.
+     *
+     * The node from $traverse is pushed into a spawned Query if
+     * it matches the selector.
+     *
+     * @param callable $traverse
+     * @param string|NULL $selector
+     * @param bool $unique
+     * @param bool $ignoreTextNodes
+     * @return Query
+     */
     private function expandTo($traverse, $selector = NULL, $unique = FALSE) {
       return $this->expand(
         function(\DOMNode $node) use ($traverse, $selector) {
@@ -527,13 +540,7 @@ namespace FluentDOM {
           while ($next instanceof \DOMNode && !$this->isNode($next)) {
             $next = $traverse($next);
           }
-          if (
-            !empty($next) &&
-            (empty($selector) || $this->matches($selector, $next))
-          ) {
-            return $next;
-          }
-          return NULL;
+          return $this->isNode($next, FALSE, $selector);
         },
         $unique
       );

@@ -43,5 +43,22 @@ namespace FluentDOM\Query {
         );
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
+
+    /**
+     * @group Manipulation
+     * @group ManipulationInside
+     * @covers FluentDOM\Query::prepend
+     * @covers FluentDOM\Query::apply
+     * @covers FluentDOM\Query::insertChildrenBefore
+     */
+    public function testPrependOnEmptyElement() {
+      $fd = new Query();
+      $fd->document->appendElement('test');
+      $fd->find('/test')->prepend('success');
+      $this->assertXmlStringEqualsXmlString(
+        '<test>success</test>',
+        (string)$fd
+      );
+    }
   }
 }

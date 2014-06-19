@@ -345,22 +345,10 @@ namespace FluentDOM {
     private function insertChildrenBefore($targetNode, $contentNodes) {
       $result = array();
       if ($targetNode instanceof \DOMElement) {
-        $firstChild = $targetNode->hasChildNodes() ? $targetNode->childNodes->item(0) : NULL;
-        $hasContext = $firstChild instanceof \DOMNode;
-        foreach ($contentNodes as $contentNode) {
-          /** @var \DOMNode $contentNode */
-          if ($this->isNode($contentNode)) {
-            if ($hasContext) {
-              $result[] = $targetNode->insertBefore(
-                $contentNode->cloneNode(TRUE),
-                $firstChild
-              );
-            } else {
-              $result[] = $targetNode->appendChild(
-                $contentNode->cloneNode(TRUE)
-              );
-            }
-          }
+        if ($targetNode->firstChild instanceof \DOMNode) {
+          $result = $this->insertNodesBefore($targetNode->firstChild, $contentNodes);
+        } else {
+          $result = $this->appendChildren($targetNode, $contentNodes);
         }
       }
       return $result;

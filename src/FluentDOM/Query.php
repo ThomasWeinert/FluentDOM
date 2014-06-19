@@ -828,7 +828,7 @@ namespace FluentDOM {
     /**
      * Convert $content to a DOMElement. If $content contains several elements use the first.
      *
-     * @param string|array|\DOMElement|\DOMNodeList|\Traversable $content
+     * @param mixed $content
      * @return \DOMElement
      */
     private function getContentElement($content) {
@@ -1177,26 +1177,27 @@ namespace FluentDOM {
     public function index($selector = NULL) {
       if (count($this->_nodes) > 0) {
         if (is_null($selector)) {
-          $counter = -1;
-          $targetNode = $this->_nodes[0];
-          $nodeList = $this->getNodes('preceding-sibling::node()', $targetNode);
-          foreach ($nodeList as $node) {
-            if ($this->isNode($node)) {
-              $counter++;
-            }
-          }
-          return $counter + 1;
-        } elseif (is_string($selector)) {
-          foreach ($this->_nodes as $index => $node) {
-            if ($this->matches($selector, $node)) {
-              return $index;
-            }
-          }
+          return $this->xpath()->evaluate(
+            'count(
+              preceding-sibling::node()[
+                self::* or (self::text() and normalize-space(.) != "")
+              ]
+            )',
+            $this->_nodes[0]
+          );
         } else {
-          $targetNode = $this->getContentElement($selector);
+          if (is_string($selector)) {
+            $callback = function(\DOMNode $node) use ($selector) {
+              return $this->matches($selector, $node);
+            };
+          } else {
+            $targetNode = $this->getContentElement($selector);
+            $callback = function(\DOMNode $node) use ($targetNode) {
+              return $node->isSameNode($targetNode);
+            };
+          }
           foreach ($this->_nodes as $index => $node) {
-            /** @var \DOMNode $node */
-            if ($node->isSameNode($targetNode)) {
+            if ($callback($node)) {
               return $index;
             }
           }

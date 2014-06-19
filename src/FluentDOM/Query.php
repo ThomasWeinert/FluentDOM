@@ -1151,6 +1151,24 @@ namespace FluentDOM {
     }
 
     /**
+     * Apply the handler the $handler to nodes defined by selector, using
+     * the currently selected nodes as context.
+     *
+     * @param string|array|\DOMNode|\Traversable $selector
+     * @param callable $handler
+     * @param bool $remove Call remove() on $this, remove the current selection from the DOM
+     * @return Query
+     */
+    private function applyToSelector($selector, $handler, $remove = FALSE) {
+      return $this->applyToSpawn(
+        $this->getNodes($selector),
+        $this->_nodes,
+        $handler,
+        $remove
+      );
+    }
+
+    /**
      * Search for a given element from among the matched elements.
      *
      * @param NULL|string|\DOMNode|\Traversable $selector
@@ -1879,9 +1897,8 @@ namespace FluentDOM {
      * @return Query
      */
     public function appendTo($selector) {
-      return $this->applyToSpawn(
-        $targetNodes = $this->getNodes($selector),
-        $this->_nodes,
+      return $this->applyToSelector(
+        $selector,
         function($targetNode, $contentNodes) {
           return $this->appendChildren($targetNode, $contentNodes);
         },
@@ -1991,9 +2008,8 @@ namespace FluentDOM {
      * @return Query
      */
     public function insertBefore($selector) {
-      return $this->applyToSpawn(
-        $this->getNodes($selector),
-        $this->_nodes,
+      return $this->applyToSelector(
+        $selector,
         function($targetNode, $contentNodes) {
           return $this->insertNodesBefore($targetNode, $contentNodes);
         },
@@ -2027,9 +2043,8 @@ namespace FluentDOM {
      * @return Query list of all new elements
      */
     public function prependTo($selector) {
-      return $this->applyToSpawn(
-        $this->getNodes($selector),
-        $this->_nodes,
+      return $this->applyToSelector(
+        $selector,
         function($targetNode, $contentNodes) {
           return $this->insertChildrenBefore($targetNode, $contentNodes);
         },

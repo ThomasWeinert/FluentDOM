@@ -1653,6 +1653,21 @@ namespace FluentDOM {
     }
 
     /**
+     * @param string|array|NULL $names
+     */
+    private function getNamesList($names) {
+      $attributes = NULL;
+      if (is_array($names)) {
+        $attributes = $names;
+      } elseif (is_string($names) && $names !== '*' && $names !== '') {
+        $attributes = array($names);
+      } elseif (isset($names) && $names !== '*') {
+        throw new \InvalidArgumentException();
+      }
+      return $attributes;
+    }
+
+    /**
      * Remove an attribute from each of the matched elements. If $name is NULL or *,
      * all attributes will be deleted.
      *
@@ -1662,26 +1677,15 @@ namespace FluentDOM {
      * @return Query
      */
     public function removeAttr($name) {
-      $attributes = NULL;
-      if (is_string($name) && $name !== '*') {
-        $attributes = array($name);
-      } elseif (is_array($name)) {
-        $attributes = $name;
-      } elseif ($name !== '*') {
-        throw new \InvalidArgumentException();
-      }
+      $attributes = $this->getNamesList($name);
       $this->each(
         function(\DOMElement $node) use ($attributes) {
           if (is_null($attributes)) {
-            for ($i = $node->attributes->length - 1; $i >= 0; $i--) {
-              /** @noinspection PhpUndefinedFieldInspection */
-              $node->removeAttribute($node->attributes->item($i)->name);
-            }
-          } else {
-            foreach ($attributes as $attribute) {
-              if ($node->hasAttribute($attribute)) {
-                $node->removeAttribute($attribute);
-              }
+            $attributes = array_keys(iterator_to_array($node->attributes));
+          }
+          foreach ($attributes as $attribute) {
+            if ($node->hasAttribute($attribute)) {
+              $node->removeAttribute($attribute);
             }
           }
         },
@@ -1806,7 +1810,7 @@ namespace FluentDOM {
      */
     public function css($property, $value = NULL) {
       if (is_string($property) && is_null($value)) {
-        $properties = new Query\Css\Properties($this->attr('style'));
+        $properties = new Query\Css\Properties((string)$this->attr('style'));
         if (isset($properties[$property])) {
           return $properties[$property];
         }
@@ -1881,20 +1885,12 @@ namespace FluentDOM {
      * all data attributes will be deleted.
      *
      * @example removeData.php Usage Example: FluentDOM\Query::removeData()
-     * @param string $name
+     * @param string|array|NULL $name
      * @throws \InvalidArgumentException
      * @return Query
      */
     public function removeData($name = NULL) {
-      if (is_null($name) || $name === '*') {
-        $names = NULL;
-      } elseif (is_string($name) && trim($name) != '') {
-        $names = array($name);
-      } elseif (is_array($name)) {
-        $names = $name;
-      } else {
-        throw new \InvalidArgumentException();
-      }
+      $names = $this->getNamesList($name);
       $this->each(
         function ($node) use ($names) {
           $data = new Query\Data($node);

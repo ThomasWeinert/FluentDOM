@@ -14,6 +14,7 @@ namespace FluentDOM\Query {
      * @group Traversing
      * @group TraversingFind
      * @covers FluentDOM\Query::prev
+     * @covers FluentDOM\Query::expandTo
      */
     public function testPrev() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -27,6 +28,7 @@ namespace FluentDOM\Query {
      * @group Traversing
      * @group TraversingFind
      * @covers FluentDOM\Query::prev
+     * @covers FluentDOM\Query::expandTo
      */
     public function testPrevExpression() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);

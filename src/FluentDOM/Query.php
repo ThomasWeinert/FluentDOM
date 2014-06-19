@@ -520,6 +520,25 @@ namespace FluentDOM {
       );
     }
 
+    private function expandTo($traverse, $selector = NULL, $unique = FALSE) {
+      return $this->expand(
+        function(\DOMNode $node) use ($traverse, $selector) {
+          $next = $traverse($node);
+          while ($next instanceof \DOMNode && !$this->isNode($next)) {
+            $next = $traverse($next);
+          }
+          if (
+            !empty($next) &&
+            (empty($selector) || $this->matches($selector, $next))
+          ) {
+            return $next;
+          }
+          return NULL;
+        },
+        $unique
+      );
+    }
+
     /**
      * Apply the content to the target nodes using the handler callback
      * and push them into a spawned Query object.
@@ -868,20 +887,11 @@ namespace FluentDOM {
      * @return Query
      */
     public function next($selector = NULL) {
-      return $this->expand(
-        function(\DOMNode $node) use ($selector) {
-          $next = $node->nextSibling;
-          while ($next instanceof \DOMNode && !$this->isNode($next)) {
-            $next = $next->nextSibling;
-          }
-          if (
-            !empty($next) &&
-            (empty($selector) || $this->matches($selector, $next))
-          ) {
-            return $next;
-          }
-          return NULL;
+      return $this->expandTo(
+        function(\DOMNode $node) {
+          return $node->nextSibling;
         },
+        $selector,
         TRUE
       );
     }
@@ -978,20 +988,11 @@ namespace FluentDOM {
      * @return Query
      */
     public function prev($selector = NULL) {
-      return $this->expand(
-        function(\DOMNode $node) use ($selector) {
-          $previous = $node->previousSibling;
-          while ($previous instanceof \DOMNode && !$this->isNode($previous)) {
-            $previous = $previous->previousSibling;
-          }
-          if (
-            !empty($previous) &&
-            (empty($selector) || $this->matches($selector, $previous))
-          ) {
-            return $previous;
-          }
-          return NULL;
+      return $this->expandTo(
+        function(\DOMNode $node) {
+          return $node->previousSibling;
         },
+        $selector,
         TRUE
       );
     }

@@ -14,6 +14,7 @@ namespace FluentDOM\Query {
      * @group Traversing
      * @group TraversingFind
      * @covers FluentDOM\Query::next
+     * @covers FluentDOM\Query::expandTo
      */
     public function testNext() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);

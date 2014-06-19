@@ -54,7 +54,7 @@ namespace FluentDOM {
       case 'css' :
         return new Query\Css($this);
       case 'data' :
-        if ($node = $this->getElement()) {
+        if ($node = $this->getFirstElement()) {
           return new Query\Data($node);
         } else {
           throw new \UnexpectedValueException(
@@ -140,13 +140,13 @@ namespace FluentDOM {
      * Returns the item from the internal array if
      * if the index exists and is an DOMElement
      *
-     * @param int $index
      * @return NULL|\DOMElement
      */
-    private function getElement($index = 0) {
-      $node = $this->item($index);
-      if ($node instanceOf \DOMElement) {
-        return $node;
+    private function getFirstElement() {
+      foreach ($this->_nodes as $node) {
+        if ($node instanceof \DOMElement) {
+          return $node;
+        }
       }
       return NULL;
     }
@@ -1607,7 +1607,7 @@ namespace FluentDOM {
       if (is_null($value) && !is_array(($attribute))) {
         //empty value - read attribute from first element in list
         $attribute = (new QualifiedName($attribute))->name;
-        $node = $this->getElement();
+        $node = $this->getFirstElement();
         if ($node && $node->hasAttribute($attribute)) {
           return $node->getAttribute($attribute);
         }
@@ -1806,13 +1806,9 @@ namespace FluentDOM {
      */
     public function css($property, $value = NULL) {
       if (is_string($property) && is_null($value)) {
-        try {
-          $firstNode = $this->getContentElement($this->_nodes);
-          $properties = new Query\Css\Properties($firstNode->getAttribute('style'));
-          if (isset($properties[$property])) {
-            return $properties[$property];
-          }
-        } catch (\UnexpectedValueException $e) {
+        $properties = new Query\Css\Properties($this->attr('style'));
+        if (isset($properties[$property])) {
+          return $properties[$property];
         }
         return NULL;
       } elseif (is_string($property)) {
@@ -1858,7 +1854,7 @@ namespace FluentDOM {
     public function data($name, $value = NULL) {
       if (!is_array($name) && is_null($value)) {
         //reading
-        if ($node = $this->getElement()) {
+        if ($node = $this->getFirstElement()) {
           $data = new Query\Data($node);
           return $data->$name;
         }
@@ -1924,7 +1920,7 @@ namespace FluentDOM {
      * @return boolean
      */
     public function hasData(\DOMElement $element = NULL) {
-      if ($element || ($element = $this->getElement())) {
+      if ($element || ($element = $this->getFirstElement())) {
         $data = new Query\Data($element);
         return count($data) > 0;
       }

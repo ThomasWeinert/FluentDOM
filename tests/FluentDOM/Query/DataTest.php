@@ -245,6 +245,7 @@ namespace FluentDOM\Query {
     /**
      * @group AttributesData
      * @covers FluentDOM\Query::data
+     * @covers FluentDOM\Query::getSetterValues
      */
     public function testDataWrite() {
       $fd = $this->getQueryFixtureFromString('<sample/>')->find('//sample');
@@ -257,6 +258,7 @@ namespace FluentDOM\Query {
     /**
      * @group AttributesData
      * @covers FluentDOM\Query::data
+     * @covers FluentDOM\Query::getSetterValues
      */
     public function testDataWriteUsingArray() {
       $fd = $this->getQueryFixtureFromString('<sample/>')->find('//sample');

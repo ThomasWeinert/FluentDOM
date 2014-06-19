@@ -279,6 +279,7 @@ namespace FluentDOM\Query {
     /**
      * @group ManipulationCSS
      * @covers FluentDOM\Query::css
+     * @covers FluentDOM\Query::getSetterValues
      */
     public function testCssWriteWithArray() {
       $fd = $this->getQueryFixtureFromString(self::HTML, '//div');
@@ -295,6 +296,7 @@ namespace FluentDOM\Query {
     /**
      * @group ManipulationCSS
      * @covers FluentDOM\Query::css
+     * @covers FluentDOM\Query::getSetterValues
      */
     public function testCssWriteWithCallback() {
       $fd = $this->getQueryFixtureFromString(self::HTML, '//div');
@@ -318,6 +320,7 @@ namespace FluentDOM\Query {
     /**
      * @group ManipulationCSS
      * @covers FluentDOM\Query::css
+     * @covers FluentDOM\Query::getSetterValues
      */
     public function testCssWriteWithInvalidPropertySyntax() {
       $this->setExpectedException('InvalidArgumentException');
@@ -327,6 +330,7 @@ namespace FluentDOM\Query {
     /**
      * @group ManipulationCSS
      * @covers FluentDOM\Query::css
+     * @covers FluentDOM\Query::getSetterValues
      */
     public function testCssWriteWithInvalidPropertyType() {
       $this->setExpectedException('InvalidArgumentException');
@@ -336,6 +340,7 @@ namespace FluentDOM\Query {
     /**
      * @group ManipulationCSS
      * @covers FluentDOM\Query::css
+     * @covers FluentDOM\Query::getSetterValues
      */
     public function testCssWriteWithInvalidPropertyInArray() {
       $this->setExpectedException('InvalidArgumentException');

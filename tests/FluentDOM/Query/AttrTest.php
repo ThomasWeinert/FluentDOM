@@ -83,6 +83,7 @@ namespace FluentDOM\Query {
     /**
      * @group Attributes
      * @covers FluentDOM\Query::attr
+     * @covers FluentDOM\Query::getSetterValues
      */
     public function testAttrWrite() {
       $fd = $this->getQueryFixtureFromString(self::XML)
@@ -96,6 +97,7 @@ namespace FluentDOM\Query {
      * @group Attributes
      * @dataProvider dataProviderInvalidAttributeNames
      * @covers FluentDOM\Query::attr
+     * @covers FluentDOM\Query::getSetterValues
      */
     public function testAttrWriteWithInvalidNames($attrName) {
       try {
@@ -122,6 +124,7 @@ namespace FluentDOM\Query {
      * @group Attributes
      * @dataProvider dataProviderValidAttributeNames
      * @covers FluentDOM\Query::attr
+     * @covers FluentDOM\Query::getSetterValues
      */
     public function testAttrWriteWithValidNames($attrName) {
       $fd = $this->getQueryFixtureFromString(self::XML)
@@ -141,6 +144,7 @@ namespace FluentDOM\Query {
     /**
      * @group Attributes
      * @covers FluentDOM\Query::attr
+     * @covers FluentDOM\Query::getSetterValues
      */
     public function testAttrWriteWithArray() {
       $fd = $this->getQueryFixtureFromString(self::XML)
@@ -154,6 +158,7 @@ namespace FluentDOM\Query {
     /**
      * @group Attributes
      * @covers FluentDOM\Query::attr
+     * @covers FluentDOM\Query::getSetterValues
      */
     public function testAttrWriteWithCallback() {
       $fd = $this->getQueryFixtureFromString(self::XML)

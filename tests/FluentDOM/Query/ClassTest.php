@@ -31,6 +31,7 @@ namespace FluentDOM\Query {
      * @group Attributes
      * @group AttributesClasses
      * @covers FluentDOM\Query::toggleClass
+     * @covers FluentDOM\Query::changeClassString
      * @covers FluentDOM\Query::addClass
      */
     public function testAddClass() {
@@ -43,6 +44,7 @@ namespace FluentDOM\Query {
      * @group Attributes
      * @group AttributesClasses
      * @covers FluentDOM\Query::toggleClass
+     * @covers FluentDOM\Query::changeClassString
      * @covers FluentDOM\Query::removeClass
      */
     public function testRemoveClass() {
@@ -56,6 +58,7 @@ namespace FluentDOM\Query {
      * @group Attributes
      * @group AttributesClasses
      * @covers FluentDOM\Query::toggleClass
+     * @covers FluentDOM\Query::changeClassString
      * @covers FluentDOM\Query::removeClass
      */
     public function testRemoveClassWithEmptyString() {
@@ -70,6 +73,7 @@ namespace FluentDOM\Query {
      * @group AttributesClasses
      * @dataProvider dataProviderToggleClass
      * @covers FluentDOM\Query::toggleClass
+     * @covers FluentDOM\Query::changeClassString
      */
     public function testToggleClass($toggle, $expectedOne, $expectedTwo) {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//html/div');
@@ -90,6 +94,7 @@ namespace FluentDOM\Query {
      * @group Attributes
      * @group AttributesClasses
      * @covers FluentDOM\Query::toggleClass
+     * @covers FluentDOM\Query::changeClassString
      */
     public function testToogleClassWithCallback() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//html/div');

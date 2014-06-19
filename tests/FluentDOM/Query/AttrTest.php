@@ -213,6 +213,7 @@ namespace FluentDOM\Query {
     /**
      * @group Attributes
      * @covers FluentDOM\Query::removeAttr
+     * @covers FluentDOM\Query::getNamesList
      */
     public function testRemoveAttr() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -225,6 +226,7 @@ namespace FluentDOM\Query {
     /**
      * @group Attributes
      * @covers FluentDOM\Query::removeAttr
+     * @covers FluentDOM\Query::getNamesList
      */
     public function testRemoveAttrWithInvalidParameter() {
       $fd = new Query();
@@ -235,6 +237,7 @@ namespace FluentDOM\Query {
     /**
      * @group Attributes
      * @covers FluentDOM\Query::removeAttr
+     * @covers FluentDOM\Query::getNamesList
      */
     public function testRemoveAttrWithListParameter() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -247,6 +250,7 @@ namespace FluentDOM\Query {
     /**
      * @group Attributes
      * @covers FluentDOM\Query::removeAttr
+     * @covers FluentDOM\Query::getNamesList
      */
     public function testRemoveAttrWithAsteriskParameter() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);

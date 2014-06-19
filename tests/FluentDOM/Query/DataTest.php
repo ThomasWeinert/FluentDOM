@@ -272,6 +272,7 @@ namespace FluentDOM\Query {
     /**
      * @group AttributesData
      * @covers FluentDOM\Query::removeData
+     * @covers FluentDOM\Query::getNamesList
      */
     public function testRemoveData() {
       $fd = $this->getQueryFixtureFromString(
@@ -287,6 +288,7 @@ namespace FluentDOM\Query {
     /**
      * @group AttributesData
      * @covers FluentDOM\Query::removeData
+     * @covers FluentDOM\Query::getNamesList
      */
     public function testRemoveDataWithList() {
       $fd = $this->getQueryFixtureFromString(
@@ -302,6 +304,7 @@ namespace FluentDOM\Query {
     /**
      * @group AttributesData
      * @covers FluentDOM\Query::removeData
+     * @covers FluentDOM\Query::getNamesList
      */
     public function testRemoveDataWithoutNamesRemovingAll() {
       $fd = $this->getQueryFixtureFromString(
@@ -317,6 +320,7 @@ namespace FluentDOM\Query {
     /**
      * @group AttributesData
      * @covers FluentDOM\Query::removeData
+     * @covers FluentDOM\Query::getNamesList
      */
     public function testRemoveDataWithInvalidName() {
       $fd = $this->getQueryFixtureFromString(

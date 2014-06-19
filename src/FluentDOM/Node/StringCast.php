@@ -19,7 +19,7 @@ namespace FluentDOM\Node {
      * @return string
      */
     public function __toString() {
-      return $this->nodeValue;
+      return ($this instanceof \DOMNode) ? $this->nodeValue : '';
     }
   }
 }

@@ -20,6 +20,7 @@ require(__DIR__.'/FluentDOM/Loader/Html.php');
 require(__DIR__.'/FluentDOM/Loader/Xml.php');
 require(__DIR__.'/FluentDOM/Loaders.php');
 
+require(__DIR__.'/FluentDOM/Nodes.php');
 require(__DIR__.'/FluentDOM/Query.php');
 require(__DIR__.'/FluentDOM/Query/Attributes.php');
 require(__DIR__.'/FluentDOM/Query/Css.php');
@@ -28,7 +29,7 @@ require(__DIR__.'/FluentDOM/Query/Data.php');
 
 require(__DIR__.'/FluentDOM/Iterators/IndexIterator.php');
 require(__DIR__.'/FluentDOM/Iterators/ElementIterator.php');
-require(__DIR__.'/FluentDOM/Iterators/QueryIterator.php');
+require(__DIR__.'/FluentDOM/Iterators/NodesIterator.php');
 
 require(__DIR__.'/FluentDOM/QualifiedName.php');
 // @codeCoverageIgnoreEnd

@@ -14,6 +14,7 @@ namespace FluentDOM\Query {
      * @group ManipulationAround
      * @covers FluentDOM\Query::wrapNodes
      * @covers FluentDOM\Query::wrap
+     * @covers FluentDOM\Query::getWrapperNodes
      */
     public function testWrap() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -28,6 +29,7 @@ namespace FluentDOM\Query {
      * @group ManipulationAround
      * @covers FluentDOM\Query::wrapNodes
      * @covers FluentDOM\Query::wrap
+     * @covers FluentDOM\Query::getWrapperNodes
      */
     public function testWrapWithDomelement() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -43,6 +45,7 @@ namespace FluentDOM\Query {
      * @group ManipulationAround
      * @covers FluentDOM\Query::wrapNodes
      * @covers FluentDOM\Query::wrap
+     * @covers FluentDOM\Query::getWrapperNodes
      */
     public function testWrapWithNodeList() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -69,6 +72,7 @@ namespace FluentDOM\Query {
      * @group ManipulationAround
      * @covers FluentDOM\Query::wrapNodes
      * @covers FluentDOM\Query::wrap
+     * @covers FluentDOM\Query::getWrapperNodes
      */
     public function testWrapWithArray() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -85,6 +89,7 @@ namespace FluentDOM\Query {
      * @group ManipulationAround
      * @covers FluentDOM\Query::wrapNodes
      * @covers FluentDOM\Query::wrap
+     * @covers FluentDOM\Query::getWrapperNodes
      */
     public function testWrapWithCallback() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);

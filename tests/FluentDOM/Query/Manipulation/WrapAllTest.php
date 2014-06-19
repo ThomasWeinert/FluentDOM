@@ -14,6 +14,7 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationAround
      * @covers FluentDOM\Query::wrapAll
+     * @covers FluentDOM\Query::getWrapperNodes
      */
     public function testWrapAllSingle() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -27,6 +28,7 @@ namespace FluentDOM\Query {
      * @group Manipulation
      * @group ManipulationAround
      * @covers FluentDOM\Query::wrapAll
+     * @covers FluentDOM\Query::getWrapperNodes
      */
     public function testWrapAllComplex() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);

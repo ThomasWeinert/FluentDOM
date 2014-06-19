@@ -530,7 +530,6 @@ namespace FluentDOM {
      * @param callable $traverse
      * @param string|NULL $selector
      * @param bool $unique
-     * @param bool $ignoreTextNodes
      * @return Query
      */
     private function expandTo($traverse, $selector = NULL, $unique = FALSE) {
@@ -1808,7 +1807,7 @@ namespace FluentDOM {
      * toggles the specified classes if the switch is NULL.
      *
      * @param string $current
-     * @param string $toggled
+     * @param string $toggle
      * @param bool|NULL $switch
      * @return FALSE|string
      */

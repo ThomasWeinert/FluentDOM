@@ -368,7 +368,7 @@ namespace FluentDOM {
     /**
      * Retrieve the matched DOM nodes in an array.
      *
-     * @return array
+     * @return \DOMNode[]
      */
     public function toArray() {
       return $this->_nodes;
@@ -656,16 +656,16 @@ namespace FluentDOM {
      * it is called for that node.
      *
      * @param callable $function
-     * @param bool|callable $elementsOnly
+     * @param bool|callable $elementsFilter
      * @return $this
      */
-    public function each(callable $function, $elementsOnly = FALSE) {
-      if (TRUE === $elementsOnly) {
+    public function each(callable $function, $elementsFilter = FALSE) {
+      if (TRUE === $elementsFilter) {
         $filter = function($node) {
           return $node instanceof \DOMElement;
         };
       } else {
-        $filter = $this->isCallable($elementsOnly);
+        $filter = $this->isCallable($elementsFilter);
       }
       foreach ($this->_nodes as $index => $node) {
         if (NULL === $filter || $filter($node, $index)) {
@@ -751,7 +751,7 @@ namespace FluentDOM {
      * Sorts an array of DOM nodes based on document position, in place, with the duplicates removed.
      * Note that this only works on arrays of DOM nodes, not strings or numbers.
      *
-     * @param array $array array of DOM nodes
+     * @param \DOMNode[] $array array of DOM nodes
      * @throws \InvalidArgumentException
      * @return array
      */

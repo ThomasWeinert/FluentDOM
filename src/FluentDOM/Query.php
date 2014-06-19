@@ -1596,6 +1596,36 @@ namespace FluentDOM {
      ***************************/
 
     /**
+     * @param string|array|NULL $names
+     */
+    private function getNamesList($names) {
+      $attributes = NULL;
+      if (is_array($names)) {
+        $attributes = $names;
+      } elseif (is_string($names) && $names !== '*' && $names !== '') {
+        $attributes = array($names);
+      } elseif (isset($names) && $names !== '*') {
+        throw new \InvalidArgumentException();
+      }
+      return $attributes;
+    }
+
+    /**
+     * @param string|array|\Traversable $name
+     * @param string|float|int|NULL $value
+     * @return array|\Traversable
+     * @throws \InvalidArgumentException
+     */
+    private function getSetterValues($name, $value) {
+      if (is_string($name)) {
+        return array((string)$name => $value);
+      } elseif (is_array($name) || $name instanceOf \Traversable) {
+        return $name;
+      }
+      throw new \InvalidArgumentException('Invalid css property name argument type.');
+    }
+
+    /**
      * Access a property on the first matched element or set the attribute(s) of all matched elements
      *
      * @example attr.php Usage Example: FluentDOM\Query::attr() Read an attribute value.
@@ -1613,11 +1643,9 @@ namespace FluentDOM {
         }
         return NULL;
       } else {
-        if (!is_array($attribute)) {
-          $attribute = array((string)$attribute => $value);
-        }
+        $attributes = $this->getSetterValues($attribute, $value);
         // set attributes on each element
-        foreach ($attribute as $key => $value) {
+        foreach ($attributes as $key => $value) {
           $name = (new QualifiedName($key))->name;
           $callback = $this->isCallable($value);
           $this->each(
@@ -1650,21 +1678,6 @@ namespace FluentDOM {
         }
       }
       return FALSE;
-    }
-
-    /**
-     * @param string|array|NULL $names
-     */
-    private function getNamesList($names) {
-      $attributes = NULL;
-      if (is_array($names)) {
-        $attributes = $names;
-      } elseif (is_string($names) && $names !== '*' && $names !== '') {
-        $attributes = array($names);
-      } elseif (isset($names) && $names !== '*') {
-        throw new \InvalidArgumentException();
-      }
-      return $attributes;
     }
 
     /**
@@ -1806,7 +1819,7 @@ namespace FluentDOM {
      * @param string|array $property
      * @param NULL|string|object|callable $value
      * @throws \InvalidArgumentException
-     * @return string|object|Query
+     * @return string|NULL|$this
      */
     public function css($property, $value = NULL) {
       if (is_string($property) && is_null($value)) {
@@ -1815,19 +1828,13 @@ namespace FluentDOM {
           return $properties[$property];
         }
         return NULL;
-      } elseif (is_string($property)) {
-        $propertyList = array($property => $value);
-      } elseif (is_array($property) ||
-        $property instanceOf \Traversable) {
-        $propertyList = $property;
-      } else {
-        throw new \InvalidArgumentException('Invalid css property name argument type.');
       }
+      $values = $this->getSetterValues($property, $value);
       //set list of properties to all elements
       $this->each(
-        function(\DOMElement $node, $index) use ($propertyList) {
+        function(\DOMElement $node, $index) use ($values) {
           $properties = new Query\Css\Properties($node->getAttribute('style'));
-          foreach ($propertyList as $name => $value) {
+          foreach ($values as $name => $value) {
             $properties[$name] = $properties->compileValue(
               $value, $node, $index, isset($properties[$name]) ? $properties[$name] : NULL
             );
@@ -1863,11 +1870,8 @@ namespace FluentDOM {
           return $data->$name;
         }
         return NULL;
-      } elseif (is_array($name)) {
-        $values = $name;
-      } else {
-        $values = array((string)$name => $value);
       }
+      $values = $this->getSetterValues($name, $value);
       $this->each(
         function(\DOMElement $node) use ($values) {
           $data = new Query\Data($node);

@@ -734,7 +734,7 @@ namespace FluentDOM {
         function(\DOMNode $node, $index) use ($selector) {
           $check = TRUE;
           if (is_string($selector)) {
-            $check = $this->matches($selector, $node, $index);
+            $check = $this->matches($selector, $node);
           } elseif (is_callable($selector)) {
             $check = call_user_func($selector, $node, $index);
           }

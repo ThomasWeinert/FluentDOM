@@ -1,18 +1,18 @@
 <?php
-namespace FluentDOM\Query {
+namespace FluentDOM {
 
   use FluentDOM\Query;
   use FluentDOM\TestCase;
 
-  require_once(__DIR__.'/../../TestCase.php');
+  require_once(__DIR__.'/../TestCase.php');
 
-  class CoreToArrayTest extends TestCase {
+  class NodesToArrayTest extends TestCase {
 
     protected $_directory = __DIR__;
 
     /**
-     * @group Core
-     * @covers FluentDOM\Query::toArray
+     * @group Nodes
+     * @covers FluentDOM\Nodes::toArray
      */
     public function testToArray() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('/items/*');

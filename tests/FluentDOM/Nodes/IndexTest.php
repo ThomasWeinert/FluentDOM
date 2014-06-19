@@ -1,20 +1,18 @@
 <?php
-namespace FluentDOM\Query {
+namespace FluentDOM {
 
   use FluentDOM\Query;
   use FluentDOM\TestCase;
 
-  require_once(__DIR__.'/../../TestCase.php');
+  require_once(__DIR__.'/../TestCase.php');
 
-  class CoreIndexTest extends TestCase {
+  class NodesIndexTest extends TestCase {
 
     protected $_directory = __DIR__;
 
     /**
-     * @group Core
-     * @covers FluentDOM\Query::index
-     * @covers FluentDOM\Query::getNodes
-     * @covers FluentDOM\Query::getContentElement
+     * @group Nodes
+     * @covers FluentDOM\Nodes::index
      */
     public function testIndex() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//item[@index >= 1]');
@@ -25,10 +23,8 @@ namespace FluentDOM\Query {
     }
 
     /**
-     * @group Core
-     * @covers FluentDOM\Query::index
-     * @covers FluentDOM\Query::getNodes
-     * @covers FluentDOM\Query::getContentElement
+     * @group Nodes
+     * @covers FluentDOM\Nodes::index
      */
     public function testIndexWithExpression() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//item');
@@ -39,10 +35,8 @@ namespace FluentDOM\Query {
     }
 
     /**
-     * @group Core
-     * @covers FluentDOM\Query::index
-     * @covers FluentDOM\Query::getNodes
-     * @covers FluentDOM\Query::getContentElement
+     * @group Nodes
+     * @covers FluentDOM\Nodes::index
      */
     public function testIndexWithNonMatchingExpression() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//item');
@@ -53,10 +47,8 @@ namespace FluentDOM\Query {
     }
 
     /**
-     * @group Core
-     * @covers FluentDOM\Query::index
-     * @covers FluentDOM\Query::getNodes
-     * @covers FluentDOM\Query::getContentElement
+     * @group Nodes
+     * @covers FluentDOM\Nodes::index
      */
     public function testIndexWithNode() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//item');
@@ -68,10 +60,8 @@ namespace FluentDOM\Query {
     }
 
     /**
-     * @group Core
-     * @covers FluentDOM\Query::index
-     * @covers FluentDOM\Query::getNodes
-     * @covers FluentDOM\Query::getContentElement
+     * @group Nodes
+     * @covers FluentDOM\Nodes::index
      */
     public function testIndexOnEmptyList() {
       $fd = new Query();

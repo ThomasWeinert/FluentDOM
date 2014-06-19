@@ -8,14 +8,14 @@
 
 namespace FluentDOM\Iterators {
 
-  use FluentDOM\Query as Query;
+  use FluentDOM\Nodes as Nodes;
 
   /**
    * FluentDOM\Query\Iterator is the Iterator class for FluentDOM\Query objects
    *
-   * @method Query getOwner()
+   * @method Nodes getOwner()
    */
-  class QueryIterator extends IndexIterator implements \RecursiveIterator {
+  class NodesIterator extends IndexIterator implements \RecursiveIterator {
 
     /**
      * Check if current iterator pointer contains a valid element

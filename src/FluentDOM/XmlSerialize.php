@@ -26,7 +26,7 @@ namespace FluentDOM {
         throw new \LogicException(
           sprintf(
             'Class %s does not implement the FluentDOM\Appendable interface.',
-            isset($this) ? get_class($this) : ''
+            is_object($this) ? get_class($this) : ''
           )
         );
       }

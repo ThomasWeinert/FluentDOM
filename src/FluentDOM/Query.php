@@ -18,8 +18,8 @@ namespace FluentDOM {
    * @method Query clone() Clone matched nodes and select the clones.
    * @method bool empty() Remove all child nodes from the set of matched elements.
    *
-   * @method Query spawn()
-   * @method Query find()
+   * @method Query spawn($elements = NULL)
+   * @method Query find($selector, $useDocumentContext = FALSE)
    * @method Query end()
    */
   class Query extends Nodes {

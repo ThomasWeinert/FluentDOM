@@ -287,19 +287,10 @@ namespace FluentDOM {
           }
         }
         if ($wrapperTemplate instanceof \DOMElement) {
-          $wrapper = $wrapperTemplate->cloneNode(TRUE);
-          $targets = NULL;
-          $targetCount = 0;
-          if (!$simple) {
-            $targets = $this->xpath()->evaluate('.//*[count(*) = 0]', $wrapper);
-            $targetCount = $targets->length;
-          }
-          if ($targetCount == 0) {
-            $target = $wrapper;
-            $simple = TRUE;
-          } else {
-            $target = $targets->item(0);
-          }
+          list($target, $wrapper) = $this->getWrapperNodes(
+            $wrapperTemplate,
+            $simple
+          );
           if ($node->parentNode instanceof \DOMNode) {
             $node->parentNode->insertBefore($wrapper, $node);
           }
@@ -1425,17 +1416,10 @@ namespace FluentDOM {
         foreach ($groups as $group) {
           if (isset($group[0])) {
             $node = $group[0];
-            $wrapper = $wrapperTemplate->cloneNode(TRUE);
-            $targets = NULL;
-            if (!$simple) {
-              $targets = $this->xpath()->evaluate('.//*[count(*) = 0]', $wrapper);
-            }
-            if ($simple || $targets->length == 0) {
-              $target = $wrapper;
-              $simple = TRUE;
-            } else {
-              $target = $targets->item(0);
-            }
+            list($target, $wrapper) = $this->getWrapperNodes(
+              $wrapperTemplate,
+              $simple
+            );
             if ($node->parentNode instanceof \DOMNode) {
               $node->parentNode->insertBefore($wrapper, $node);
             }
@@ -1447,6 +1431,30 @@ namespace FluentDOM {
         }
       }
       return $result;
+    }
+
+    /**
+     * Get the inner and outer wrapper nodes. Simple meeans that they are the
+     * same nodes.
+     *
+     * @param \DOMElement $template
+     * @param bool $simple
+     * @return \DOMElement[]
+     */
+    private function getWrapperNodes($template, &$simple) {
+      $wrapper = $template->cloneNode(TRUE);
+      $targets = NULL;
+      if (!$simple) {
+        // get the first element without child elements.
+        $targets = $this->xpath()->evaluate('.//*[count(*) = 0]', $wrapper);
+      }
+      if ($simple || $targets->length == 0) {
+        $target = $wrapper;
+        $simple = TRUE;
+      } else {
+        $target = $targets->item(0);
+      }
+      return array($target, $wrapper);
     }
 
     /**

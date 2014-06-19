@@ -548,19 +548,7 @@ namespace FluentDOM {
      */
     public function isNode($node, $ignoreTextNodes = FALSE, $selector = NULL) {
       if (
-        (
-          $node instanceof \DOMElement ||
-          (
-            !$ignoreTextNodes &&
-            (
-              $node instanceof \DOMCdataSection ||
-              (
-                $node instanceof \DOMText &&
-                !$node->isWhitespaceInElementContent()
-              )
-            )
-          )
-        ) &&
+        Constraints::isNode($node, $ignoreTextNodes) &&
         (
           empty($selector) ||
           $this->matches($selector, $node)
@@ -579,11 +567,7 @@ namespace FluentDOM {
      * @return \Traversable|array
      */
     public function isNodeList($elements) {
-      if ($elements instanceof \Traversable ||
-          is_array($elements)) {
-        return empty($elements) ? new \ArrayIterator(array()) : $elements;
-      }
-      return NULL;
+      return Constraints::isNodeList($elements);
     }
 
     /**
@@ -599,21 +583,7 @@ namespace FluentDOM {
      * @return callable|NULL
      */
     public function isCallable($callback, $allowGlobalFunctions = FALSE, $silent = TRUE) {
-      if ($callback instanceof \Closure) {
-        return $callback;
-      } elseif (is_string($callback) &&
-        $allowGlobalFunctions &&
-        function_exists($callback)) {
-        return is_callable($callback) ? $callback : NULL;
-      } elseif (is_array($callback) &&
-        count($callback) == 2 &&
-        (is_object($callback[0]) || is_string($callback[0])) &&
-        is_string($callback[1])) {
-        return is_callable($callback) ? $callback : NULL;
-      } elseif ($silent) {
-        return NULL;
-      }
-      throw new \InvalidArgumentException('Invalid callback argument');
+      return Constraints::isCallable($callback, $allowGlobalFunctions, $silent);
     }
 
     /**

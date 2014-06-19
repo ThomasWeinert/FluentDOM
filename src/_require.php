@@ -32,4 +32,5 @@ require(__DIR__.'/FluentDOM/Iterators/ElementIterator.php');
 require(__DIR__.'/FluentDOM/Iterators/NodesIterator.php');
 
 require(__DIR__.'/FluentDOM/QualifiedName.php');
+require(__DIR__.'/FluentDOM/Constraints.php');
 // @codeCoverageIgnoreEnd

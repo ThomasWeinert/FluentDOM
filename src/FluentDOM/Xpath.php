@@ -78,7 +78,8 @@ namespace FluentDOM {
     /**
      * Fetch nodes defined by the xpath expression and return the node list.
      *
-     * This method is deprecated and only implemented for BC. Plase use evaluate()
+     * This method is deprecated and only implemented for BC. So this method
+     * calls evaluate().
      *
      * @param string $expression
      * @param \DOMNode $contextNode
@@ -89,16 +90,8 @@ namespace FluentDOM {
       trigger_error(
         'Please use XPath::evaluate() not XPath::query().', E_USER_DEPRECATED
       );
-      $registerNodeNS = $registerNodeNS ?: $this->_registerNodeNamespaces;
-      if ($this->canDisableNamespaceRegistration()) {
-        return parent::query($expression, $contextNode, (bool)$registerNodeNS);
-        // @codeCoverageIgnoreStart
-      } elseif (isset($contextNode)) {
-        return parent::query($expression, $contextNode);
-      } else {
-        return parent::query($expression);
-      }
-      // @codeCoverageIgnoreEnd
+      $result = $this->evaluate($expression, $contextNode, $registerNodeNS);
+      return $result instanceof \DOMNodeList ? $result : NULL;
     }
 
     /**

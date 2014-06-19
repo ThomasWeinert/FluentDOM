@@ -1677,12 +1677,12 @@ namespace FluentDOM {
      * @return Query
      */
     public function removeAttr($name) {
-      $attributes = $this->getNamesList($name);
+      $names = $this->getNamesList($name);
       $this->each(
-        function(\DOMElement $node) use ($attributes) {
-          if (is_null($attributes)) {
-            $attributes = array_keys(iterator_to_array($node->attributes));
-          }
+        function(\DOMElement $node) use ($names) {
+          $attributes = is_null($names)
+            ? array_keys(iterator_to_array($node->attributes))
+            : $names;
           foreach ($attributes as $attribute) {
             if ($node->hasAttribute($attribute)) {
               $node->removeAttribute($attribute);

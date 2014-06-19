@@ -1612,7 +1612,7 @@ namespace FluentDOM {
 
     /**
      * @param string|array|\Traversable $name
-     * @param string|float|int|NULL $value
+     * @param string|float|int|NULL|callable $value
      * @return array|\Traversable
      * @throws \InvalidArgumentException
      */

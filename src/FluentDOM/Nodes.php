@@ -620,7 +620,7 @@ namespace FluentDOM {
     /**
      * Match selector against context and return matched elements.
      *
-     * @param string|\DOMNode|\DOMNodeList $selector
+     * @param string|\DOMNode|array|\Traversable $selector
      * @param \DOMNode $context optional, default value NULL
      * @throws \InvalidArgumentException
      * @return array

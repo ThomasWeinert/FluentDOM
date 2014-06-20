@@ -13,8 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationRemove
-     * @covers FluentDOM\Query::__call
-     * @covers FluentDOM\Query::emptyNodes
+     * @covers FluentDOM\Query
      */
     public function testEmpty() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -27,8 +26,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationRemove
-     * @covers FluentDOM\Query::__call
-     * @covers FluentDOM\Query::emptyNodes
+     * @covers FluentDOM\Query
      */
     public function testEmptyWithTextNode() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);

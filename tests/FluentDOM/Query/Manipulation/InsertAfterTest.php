@@ -13,7 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationOutside
-     * @covers FluentDOM\Query::insertAfter
+     * @covers FluentDOM\Query
      */
     public function testInsertAfter() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);

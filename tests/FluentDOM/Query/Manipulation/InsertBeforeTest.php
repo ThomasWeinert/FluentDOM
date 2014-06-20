@@ -13,7 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationOutside
-     * @covers FluentDOM\Query::insertBefore
+     * @covers FluentDOM\Query
      */
     public function testInsertBefore() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);

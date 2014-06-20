@@ -1,23 +1,22 @@
 <?php
-namespace FluentDOM\Query {
+namespace FluentDOM {
 
-  use FluentDOM\Query;
   use FluentDOM\TestCase;
 
-  require_once(__DIR__.'/../../TestCase.php');
+  require_once(__DIR__ . '/../TestCase.php');
 
-  class TraversingFindTest extends TestCase {
+  class NodesFindTest extends TestCase {
 
     protected $_directory = __DIR__;
 
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Query::find
-     * @covers FluentDOM\Query::getNodes
+     * @covers FluentDOM\Nodes::find
+     * @covers FluentDOM\Nodes::fetch
      */
     public function testFind() {
-      $fd = $this->getQueryFixtureFromString(self::XML)->find('/*');
+      $fd = (new Nodes(self::XML))->find('/*');
       $this->assertEquals(1, $fd->length);
       $findFd = $fd->find('group/item');
       $this->assertEquals(3, $findFd->length);
@@ -27,15 +26,15 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Query::find
-     * @covers FluentDOM\Query::getNodes
+     * @covers FluentDOM\Nodes::find
+     * @covers FluentDOM\Nodes::fetch
      */
     public function testFindWithCallableSelector() {
-      $fd = $this->getQueryFixtureFromString(self::XML)->find('/*');
+      $fd = (new Nodes(self::XML))->find('/*');
       $this->assertEquals(1, $fd->length);
       $findFd = $fd->find(
         function ($context) use ($fd) {
-          return $fd->xpath()->evaluate('group/item', $context);
+          return $fd->xpath()->evaluate('name() = "item"', $context);
         }
       );
       $this->assertEquals(3, $findFd->length);
@@ -45,11 +44,11 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Query::find
-     * @covers FluentDOM\Query::getNodes
+     * @covers FluentDOM\Nodes::find
+     * @covers FluentDOM\Nodes::fetch
      */
-    public function testFindWithCallableSelectorRetuningFalse() {
-      $fd = $this->getQueryFixtureFromString(self::XML)->find('/*');
+    public function testFindWithCallableSelectorReturningFalse() {
+      $fd = (new Nodes(self::XML))->find('/*');
       $this->assertEquals(1, $fd->length);
       $findFd = $fd->find(
         function ($context) use ($fd) {
@@ -63,11 +62,11 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Query::find
-     * @covers FluentDOM\Query::getNodes
+     * @covers FluentDOM\Nodes::find
+     * @covers FluentDOM\Nodes::fetch
      */
     public function testFindWithSelectorCallback() {
-      $fd = $this->getQueryFixtureFromString(self::XML);
+      $fd = new Nodes(self::XML);
       $fd->onPrepareSelector = function() {return '//item'; };
       $fd = $fd->find('/*');
       $this->assertEquals(3, $fd->length);
@@ -76,13 +75,13 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Query::find
-     * @covers FluentDOM\Query::getNodes
+     * @covers FluentDOM\Nodes::find
+     * @covers FluentDOM\Nodes::fetch
      */
     public function testFindFromRootNode() {
-      $fd = $this->getQueryFixtureFromString(self::XML)->find('/*');
+      $fd = (new Nodes(self::XML))->find('/*');
       $this->assertEquals(1, $fd->length);
-      $findFd = $this->getQueryFixtureFromString(self::XML)->find('/items');
+      $findFd = (new Nodes(self::XML))->find('/items');
       $this->assertEquals(1, $findFd->length);
       $this->assertTrue($findFd !== $fd);
     }
@@ -90,11 +89,11 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Query::find
-     * @covers FluentDOM\Query::getNodes
+     * @covers FluentDOM\Nodes::find
+     * @covers FluentDOM\Nodes::fetch
      */
     public function testFindWithNode() {
-      $fd = $this->getQueryFixtureFromString(self::XML);
+      $fd = new Nodes(self::XML);
       $fd = $fd->find($fd->document->documentElement);
       $this->assertEquals('items', $fd->item(0)->nodeName);
     }
@@ -102,11 +101,11 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Query::find
-     * @covers FluentDOM\Query::getNodes
+     * @covers FluentDOM\Nodes::find
+     * @covers FluentDOM\Nodes::fetch
      */
     public function testFindWithNodeList() {
-      $fd = $this->getQueryFixtureFromString(self::XML);
+      $fd = new Nodes(self::XML);
       $fd = $fd->find([$fd->document->documentElement]);
       $this->assertEquals('items', $fd->item(0)->nodeName);
     }
@@ -114,14 +113,14 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Query::find
-     * @covers FluentDOM\Query::getNodes
+     * @covers FluentDOM\Nodes::find
+     * @covers FluentDOM\Nodes::fetch
      */
     public function testFindWithExpressionThatReturnsScalarExpectingException() {
-      $fd = $this->getQueryFixtureFromString(self::XML);
+      $fd = new Nodes(self::XML);
       $this->setExpectedException(
         'InvalidArgumentException',
-        'Given selector did not return an node list.'
+        'Given selector/expression did not return a node list.'
       );
       $fd->find('count(*)');
     }
@@ -129,12 +128,15 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Query::find
-     * @covers FluentDOM\Query::getNodes
+     * @covers FluentDOM\Nodes::find
+     * @covers FluentDOM\Nodes::fetch
      */
     public function testFindWithInvalidSelectorExpectingException() {
-      $fd = $this->getQueryFixtureFromString(self::XML);
-      $this->setExpectedException('InvalidArgumentException', 'Invalid selector');
+      $fd = new Nodes(self::XML);
+      $this->setExpectedException(
+        'InvalidArgumentException',
+        'Invalid selector/expression.'
+      );
       $fd->find(NULL);
     }
   }

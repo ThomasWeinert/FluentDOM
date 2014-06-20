@@ -13,8 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationReplace
-     * @covers FluentDOM\Query::outerXml
-     * @covers FluentDOM\Query::getContentFragment
+     * @covers FluentDOM\Query
      */
     public function testOuterXmlRead() {
       $expect = '<group id="1st">'.
@@ -32,8 +31,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationReplace
-     * @covers FluentDOM\Query::outerXml
-     * @covers FluentDOM\Query::getContentFragment
+     * @covers FluentDOM\Query
      */
     public function testOuterXmlReadWithTextNodes() {
       $expect = 'text1';
@@ -47,8 +45,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationReplace
-     * @covers FluentDOM\Query::outerXml
-     * @covers FluentDOM\Query::getContentFragment
+     * @covers FluentDOM\Query
      */
     public function testOuterXmlReadEmpty() {
       $xml = $this
@@ -61,8 +58,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationReplace
-     * @covers FluentDOM\Query::outerXml
-     * @covers FluentDOM\Query::getContentFragment
+     * @covers FluentDOM\Query
      */
     public function testOuterXmlWrite() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -76,8 +72,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationReplace
-     * @covers FluentDOM\Query::outerXml
-     * @covers FluentDOM\Query::getContentFragment
+     * @covers FluentDOM\Query
      */
     public function testOuterXmlWriteEmpty() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -91,8 +86,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationReplace
-     * @covers FluentDOM\Query::outerXml
-     * @covers FluentDOM\Query::getContentFragment
+     * @covers FluentDOM\Query
      */
     public function testOuterXmlWriteWithCallback() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -114,8 +108,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationReplace
-     * @covers FluentDOM\Query::outerXml
-     * @covers FluentDOM\Query::getContentFragment
+     * @covers FluentDOM\Query
      */
     public function testOuterXmlWriteWithInvalidDataExpectingException() {
       $fd = new Query();

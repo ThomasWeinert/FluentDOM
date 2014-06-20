@@ -13,8 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationAround
-     * @covers FluentDOM\Query::wrapAll
-     * @covers FluentDOM\Query::getWrapperNodes
+     * @covers FluentDOM\Query
      */
     public function testWrapAllSingle() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -27,8 +26,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationAround
-     * @covers FluentDOM\Query::wrapAll
-     * @covers FluentDOM\Query::getWrapperNodes
+     * @covers FluentDOM\Query
      */
     public function testWrapAllComplex() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);

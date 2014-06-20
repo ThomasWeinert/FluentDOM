@@ -7,6 +7,7 @@
  */
 
 namespace FluentDOM {
+  use FluentDOM\Nodes\Fetcher;
 
   /**
    * FluentDOM\Query implements a jQuery like replacement for DOMNodeList
@@ -70,22 +71,22 @@ namespace FluentDOM {
      *
      * @param string $name
      * @param mixed $value
-     * @throws \BadMethodCallException
      */
     public function __set($name, $value) {
       switch ($name) {
       case 'attr' :
-        if ($value instanceOf Query\Attributes) {
-          $this->attr($value->toArray());
-        } else {
-          $this->attr($value);
-        }
+        $this->attr(
+          $value instanceOf Query\Attributes ? $value->toArray() : $value
+        );
         break;
       case 'css' :
         $this->css($value);
         break;
       case 'data' :
-        throw new \BadMethodCallException('Can not set readonly value.');
+        $this->data(
+          $value instanceOf Query\Data ? $value->toArray() : $value
+        );
+        break;
       }
       parent::__set($name, $value);
     }
@@ -140,6 +141,7 @@ namespace FluentDOM {
      * Returns the item from the internal array if
      * if the index exists and is an DOMElement
      *
+     * @param array|\Traversable
      * @return NULL|\DOMElement
      */
     private function getFirstElement() {
@@ -149,6 +151,95 @@ namespace FluentDOM {
         }
       }
       return NULL;
+    }
+
+    /**
+     * Match selector against context and return matched elements.
+     *
+     * @param mixed $selector
+     * @param \DOMNode $context optional, default value NULL
+     * @throws \InvalidArgumentException
+     * @return array
+     */
+    private function getNodes($selector, \DOMNode $context = NULL) {
+      if ($nodes = $this->getNodeList($selector)) {
+        return is_array($nodes) ? $nodes : iterator_to_array($nodes);
+      } elseif (is_string($selector)) {
+        $result = $this->xpath()->evaluate(
+          $this->prepareSelector($selector, self::CONTEXT_SELF), $context, FALSE
+        );
+        if (!($result instanceof \Traversable)) {
+          throw new \InvalidArgumentException('Given selector did not return an node list.');
+        }
+        return iterator_to_array($result);
+      }
+      throw new \InvalidArgumentException('Invalid selector');
+    }
+
+    /**
+     * @param mixed $content
+     * @param bool $includeTextNodes
+     * @param int $limit
+     * @return array|\Traversable null
+     */
+    private function getNodeList(
+      $content,
+      $includeTextNodes = TRUE,
+      $limit = -1
+    ) {
+      if ($callback = $this->isCallable($content)) {
+        $content = $callback($content);
+      }
+      if ($content instanceof \DOMElement) {
+        return array($content);
+      } elseif ($includeTextNodes && $this->isNode($content)) {
+        return array($content);
+      } elseif ($this->isNodeList($content)) {
+        if ($limit > 0) {
+          if (is_array($content)) {
+            return array_slice($content, 0, $limit);
+          } else {
+            return new \LimitIterator(
+              new \IteratorIterator($content), 0, $limit
+            );
+          }
+        }
+        return $content;
+      }
+      return NULL;
+    }
+
+    /**
+     * Convert a given content into and array of nodes
+     *
+     * @param mixed $content
+     * @param boolean $includeTextNodes
+     * @param integer $limit
+     * @throws \UnexpectedValueException
+     * @throws \InvalidArgumentException
+     * @return array
+     */
+    private function getContentNodes($content, $includeTextNodes = TRUE, $limit = -1) {
+      if ($nodes = $this->getNodeList($content, $includeTextNodes, $limit)) {
+        $result = $nodes;
+      } elseif (is_string($content)) {
+        $result = $this->getContentFragment($content, $includeTextNodes, $limit);
+      } else {
+        throw new \InvalidArgumentException('Invalid/empty content parameter.');
+      }
+      $result = is_array($result) ? $result : iterator_to_array($result, FALSE);
+      if (empty($result)) {
+        throw new \InvalidArgumentException('No nodes found.');
+      } else {
+        //if a node is not in the current document import it
+        $document = $this->getDocument();
+        foreach ($result as $index => $node) {
+          if ($node->ownerDocument !== $document) {
+            $result[$index] = $document->importNode($node, TRUE);
+          }
+        }
+      }
+      return $result;
     }
 
     /**
@@ -187,51 +278,6 @@ namespace FluentDOM {
     }
 
     /**
-     * Convert a given content into and array of nodes
-     *
-     * @param mixed $content
-     * @param boolean $includeTextNodes
-     * @param integer $limit
-     * @throws \UnexpectedValueException
-     * @throws \InvalidArgumentException
-     * @return array
-     */
-    private function getContentNodes($content, $includeTextNodes = TRUE, $limit = 0) {
-      $result = array();
-      if ($content instanceof \DOMElement) {
-        $result = array($content);
-      } elseif ($includeTextNodes && $this->isNode($content)) {
-        $result = array($content);
-      } elseif (is_string($content)) {
-        $result = $this->getContentFragment($content, $includeTextNodes, $limit);
-      } elseif ($nodes = $this->isNodeList($content)) {
-        foreach ($nodes as $element) {
-          if ($element instanceof \DOMElement ||
-            ($includeTextNodes && $this->isNode($element))) {
-            $result[] = $element;
-            if ($limit > 0 && count($result) >= $limit) {
-              break;
-            }
-          }
-        }
-      } else {
-        throw new \InvalidArgumentException('Invalid content parameter');
-      }
-      if (empty($result)) {
-        throw new \UnexpectedValueException('No element found');
-      } else {
-        //if a node is not in the current document import it
-        $document = $this->getDocument();
-        foreach ($result as $index => $node) {
-          if ($node->ownerDocument !== $document) {
-            $result[$index] = $document->importNode($node, TRUE);
-          }
-        }
-      }
-      return $result;
-    }
-
-    /**
      * Convert $content to a DOMElement. If $content contains several elements use the first.
      *
      * @param mixed $content
@@ -245,20 +291,17 @@ namespace FluentDOM {
     /**
      * Get the inner xml of a given node or in other words the xml of all children.
      *
-     * @param \DOMNode $node
+     * @param \DOMNode $context
      * @return string
      */
-    private function getInnerXml($node) {
+    private function getInnerXml($context) {
       $result = '';
-      if ($node instanceof \DOMElement) {
-        $dom = $this->getDocument();
-        foreach ($node->childNodes as $childNode) {
-          if ($this->isNode($childNode)) {
-            $result .= $dom->saveXML($childNode);
-          }
-        }
-      } elseif ($node instanceof \DOMText || $node instanceOf \DOMCdataSection) {
-        return $node->textContent;
+      $dom = $this->getDocument();
+      $nodes = $this->xpath()->evaluate(
+        '*|text()[normalize-space(.) != ""]|self::text()[normalize-space(.) != ""]', $context
+      );
+      foreach ($nodes as $child) {
+        $result .= $dom->saveXML($child);
       }
       return $result;
     }
@@ -287,6 +330,10 @@ namespace FluentDOM {
           }
         }
         if ($wrapperTemplate instanceof \DOMElement) {
+          /**
+           * @var \DOMElement $target
+           * @var \DOMElement $wrapper
+           */
           list($target, $wrapper) = $this->getWrapperNodes(
             $wrapperTemplate,
             $simple
@@ -304,16 +351,16 @@ namespace FluentDOM {
     /**
      * Append to content nodes to the target nodes.
      *
-     * @param $targetNode
-     * @param $contentNodes
+     * @param \DOMNode $targetNode
+     * @param array|\Traversable $contentNodes
      * @return array new nodes
      */
-    private function appendChildren($targetNode, $contentNodes) {
+    private static function appendChildren($targetNode, $contentNodes) {
       $result = array();
       if ($targetNode instanceof \DOMElement) {
         foreach ($contentNodes as $contentNode) {
           /** @var \DOMNode $contentNode */
-          if ($this->isNode($contentNode)) {
+          if (Constraints::isNode($contentNode)) {
             $result[] = $targetNode->appendChild($contentNode->cloneNode(TRUE));
           }
         }
@@ -321,25 +368,30 @@ namespace FluentDOM {
       return $result;
     }
 
-    private function replaceChildren($targetNode, $contentNodes) {
+    /**
+     * Replace the target node children with the content nodes
+     * @param \DOMNode $targetNode
+     * @param array|\Traversable $contentNodes
+     */
+    private static function replaceChildren($targetNode, $contentNodes) {
       $targetNode->nodeValue = '';
-      $this->appendChildren($targetNode, $contentNodes);
+      self::appendChildren($targetNode, $contentNodes);
     }
 
     /**
      * Insert nodes into target as first childs.
      *
      * @param \DOMNode $targetNode
-     * @param array|\DOMNodeList|Query $contentNodes
+     * @param array|\Traversable $contentNodes
      * @return array
      */
-    private function insertChildrenBefore($targetNode, $contentNodes) {
+    private static function insertChildrenBefore($targetNode, $contentNodes) {
       $result = array();
       if ($targetNode instanceof \DOMElement) {
         if ($targetNode->firstChild instanceof \DOMNode) {
-          $result = $this->insertNodesBefore($targetNode->firstChild, $contentNodes);
+          $result = self::insertNodesBefore($targetNode->firstChild, $contentNodes);
         } else {
-          $result = $this->appendChildren($targetNode, $contentNodes);
+          $result = self::appendChildren($targetNode, $contentNodes);
         }
       }
       return $result;
@@ -348,10 +400,10 @@ namespace FluentDOM {
     /**
      * Insert nodes after the target node.
      * @param \DOMNode $targetNode
-     * @param array|\DOMNodeList|Query $contentNodes
+     * @param array|\Traversable $contentNodes
      * @return array
      */
-    public static function insertNodesAfter($targetNode, $contentNodes) {
+    private static function insertNodesAfter($targetNode, $contentNodes) {
       $result = array();
       if ($targetNode instanceof \DOMNode && !empty($contentNodes)) {
         $beforeNode = ($targetNode->nextSibling instanceof \DOMNode)
@@ -375,11 +427,12 @@ namespace FluentDOM {
 
     /**
      * Insert nodes before the target node.
+     *
      * @param \DOMNode $targetNode
-     * @param array|\DOMNodeList|Query $contentNodes
+     * @param array|\Traversable $contentNodes
      * @return array
      */
-    private function insertNodesBefore($targetNode, $contentNodes) {
+    private static function insertNodesBefore($targetNode, $contentNodes) {
       $result = array();
       if ($targetNode instanceof \DOMNode && !empty($contentNodes)) {
         foreach ($contentNodes as $contentNode) {
@@ -405,7 +458,7 @@ namespace FluentDOM {
      * @param callable $handler
      * @return array
      */
-    public function apply($targetNodes, $content, $handler) {
+    private function apply($targetNodes, $content, $handler) {
       $result = array();
       $isSetterFunction = FALSE;
       if ($callback = $this->isCallable($content)) {
@@ -428,112 +481,6 @@ namespace FluentDOM {
         }
       }
       return $result;
-    }
-
-    /**
-     * Calls the provided $callback for each selected node and
-     * pushed the results into a new Query spawn
-     *
-     * @param callable $callback
-     * @param bool $unique
-     * @param bool $ignoreTextNodes
-     * @return Query
-     */
-    private function expand($callback, $unique = FALSE, $ignoreTextNodes = FALSE) {
-      $result = $this->spawn();
-      foreach ($this->_nodes as $index => $node) {
-        if ($nodes = $callback($node, $index)) {
-          $result->push($nodes, $ignoreTextNodes);
-        }
-      }
-      if ($unique) {
-        $result->uniqueSortNodes();
-      }
-      return $result;
-    }
-
-    /**
-     * Calls the $traverse for each selected node, until it return FALSE.
-     * Each node from $traverse is pushed into a spawned Query if
-     * it matches the selector (or the selector is empty)
-     *
-     * @param callable $traverse
-     * @param string|NULL $selector
-     * @param bool $unique
-     * @param bool $ignoreTextNodes
-     * @return Query
-     */
-    private function expandAll(
-      $traverse, $selector = NULL, $unique = FALSE, $ignoreTextNodes = FALSE
-    ) {
-      return $this->expand(
-        function(\DOMNode $node) use ($selector, $traverse) {
-          $result = array();
-          $next = $traverse($node);
-          while ($next instanceof \DOMNode) {
-            if ($this->isNode($next, FALSE, $selector)) {
-              $result[] = $next;
-            }
-            $next = $traverse($next);
-          }
-          return $result;
-        },
-        $unique,
-        $ignoreTextNodes
-      );
-    }
-
-    /**
-     * Calls the $traverse for each selected node, until it return FALSE.
-     * Each node from $traverse is pushed into a spawned Query until
-     * it matches the selector.
-     *
-     * @param callable $traverse
-     * @param string|NULL $selector
-     * @param bool $unique
-     * @param bool $ignoreTextNodes
-     * @return Query
-     */
-    private function expandUntil(
-      $traverse, $selector = NULL, $unique = FALSE, $ignoreTextNodes = FALSE
-    ) {
-      return $this->expandAll(
-        function(\DOMNode $node) use ($traverse, $selector) {
-          $next = $traverse($node);
-          if ($next && isset($selector) && $this->matches($selector, $next)) {
-            return NULL;
-          }
-          return $next;
-        },
-        NULL,
-        $unique,
-        $ignoreTextNodes
-      );
-    }
-
-    /**
-     * Calls the $traverse for each selected node, until it returns
-     * a \DOMNode or FALSE.
-     *
-     * The node from $traverse is pushed into a spawned Query if
-     * it matches the selector.
-     *
-     * @param callable $traverse
-     * @param string|NULL $selector
-     * @param bool $unique
-     * @return Query
-     */
-    private function expandTo($traverse, $selector = NULL, $unique = FALSE) {
-      return $this->expand(
-        function(\DOMNode $node) use ($traverse, $selector) {
-          $next = $traverse($node);
-          while ($next instanceof \DOMNode && !$this->isNode($next)) {
-            $next = $traverse($next);
-          }
-          return $this->isNode($next, FALSE, $selector);
-        },
-        $unique
-      );
     }
 
     /**
@@ -587,22 +534,16 @@ namespace FluentDOM {
      * @return Query
      */
     public function add($selector, $context = NULL) {
-      $result = $this->spawn();
-      $result->push($this->_nodes);
+      $result = $this->spawn($this);
       if (isset($context)) {
-        $targetNodes = $this->getNodes($context);
-        if (!empty($targetNodes)) {
-          foreach ($targetNodes as $node) {
-            $result->push($this->getNodes($selector, $node));
-          }
-        }
+        $result->push($this->spawn($context)->find($selector));
       } elseif (is_object($selector) ||
                 (is_string($selector) && substr(ltrim($selector), 0, 1) == '<')) {
         $result->push($this->getContentNodes($selector));
       } else {
         $result->push($this->find($selector));
       }
-      $this->uniqueSortNodes();
+      $result->_nodes = $result->unique($result->_nodes);
       return $result;
     }
 
@@ -628,24 +569,11 @@ namespace FluentDOM {
      * @return Query
      */
     public function children($selector = NULL) {
-      return $this->expand(
-        function(\DOMNode $node) use ($selector) {
-          if ($node->childNodes) {
-            if (empty($selector)) {
-              return iterator_to_array($node->childNodes);
-            }
-            $nodes = array();
-            foreach ($node->childNodes as $childNode) {
-              if ($this->isNode($childNode, TRUE, $selector)) {
-                $nodes[] = $childNode;
-              }
-            }
-            return $nodes;
-          }
-          return NULL;
-        },
-        TRUE,
-        TRUE
+      return $this->fetch(
+        '*',
+        $selector,
+        NULL,
+        Nodes\Fetcher::UNIQUE
       );
     }
 
@@ -659,22 +587,13 @@ namespace FluentDOM {
      * @return Query
      */
     public function closest($selector, $context = NULL) {
-      $result = $this->spawn();
-      if (is_null($context)) {
-        $context = $this->_nodes;
-      } else {
-        $context = $this->getNodes($context);
-      }
-      foreach ($context as $node) {
-        while (isset($node)) {
-          if ($this->matches($selector, $node)) {
-            $result->push($node);
-            break;
-          }
-          $node = $node->parentNode;
-        }
-      }
-      return $result;
+      $context = $context ? $this->spawn($context) : $this;
+      return $context->fetch(
+        'ancestor-or-self::*',
+        $selector,
+        $selector,
+        Fetcher::REVERSE |Fetcher::INCLUDE_STOP
+      );
     }
 
     /**
@@ -684,11 +603,11 @@ namespace FluentDOM {
      * @return Query
      */
     public function contents() {
-      return $this->expand(
-        function($node) {
-          return $node->childNodes;
-        },
-        TRUE
+      return $this->fetch(
+        '*|text()[normalize-space(.) != ""]',
+        NULL,
+        NULL,
+        Fetcher::UNIQUE
       );
     }
 
@@ -720,20 +639,14 @@ namespace FluentDOM {
      * @return Query
      */
     public function filter($selector) {
-      return $this->expand(
-        function(\DOMNode $node, $index) use ($selector) {
-          $check = TRUE;
-          if (is_string($selector)) {
-            $check = $this->matches($selector, $node);
-          } elseif (is_callable($selector)) {
-            $check = call_user_func($selector, $node, $index);
-          }
-          if ($check) {
-            return $node;
-          }
-          return NULL;
+      $callback = $this->getSelectorCallback($selector);
+      $result = $this->spawn();
+      foreach ($this->_nodes as $index => $node) {
+        if ($callback($node, $index)) {
+          $result->push($node);
         }
-      );
+      }
+      return $result;
     }
 
     /**
@@ -773,25 +686,22 @@ namespace FluentDOM {
      * @return Query
      */
     public function has($selector) {
-      return $this->expand(
-        function(\DOMNode $node) use ($selector) {
-          if (
-            $node instanceof \DOMElement &&
-            $node->hasChildNodes()
-          ) {
-            foreach ($node->childNodes as $childNode) {
-              if ($selector instanceof \DOMNode) {
-                if ($selector === $childNode) {
-                  return $node;
-                }
-              } elseif ($this->matches($selector, $childNode)) {
-                return $node;
-              }
-            }
-          }
-          return NULL;
+      $callback = $this->getSelectorCallback($selector);
+      $result = $this->spawn();
+      foreach ($this->_nodes as $node) {
+        if ($selector instanceof \DOMElement) {
+          $expression = './/*';
+        } else {
+          $expression = './/node()';
         }
-      );
+        foreach ($this->xpath()->evaluate($expression, $node) as $has) {
+          if ($callback($has)) {
+            $result->push($node);
+            break;
+          }
+        }
+      }
+      return $result;
     }
 
     /**
@@ -858,19 +768,10 @@ namespace FluentDOM {
      * @return Query
      */
     public function not($selector) {
-      if (is_string($selector)) {
-        $callback = function($node) use ($selector) {
-          return $this->matches($selector, $node);
-        };
-      } else {
-        $callback = $this->isCallable($selector, TRUE, FALSE);
-      }
-      return $this->expand(
-        function(\DOMNode $node, $index) use ($callback) {
-          if (!$callback($node, $index)) {
-            return $node;
-          }
-          return NULL;
+      $callback = $this->getSelectorCallback($selector);
+      return $this->filter(
+        function (\DOMNode $node, $index) use ($callback) {
+          return !$callback($node, $index);
         }
       );
     }
@@ -884,12 +785,13 @@ namespace FluentDOM {
      * @return Query
      */
     public function next($selector = NULL) {
-      return $this->expandTo(
-        function(\DOMNode $node) {
-          return $node->nextSibling;
-        },
+      return $this->fetch(
+        'following-sibling::node()[
+          self::* or (self::text() and normalize-space(.) != "")
+        ][1]',
         $selector,
-        TRUE
+        NULL,
+        Nodes\Fetcher::UNIQUE
       );
     }
 
@@ -901,10 +803,8 @@ namespace FluentDOM {
      * @return Query
      */
     public function nextAll($selector = NULL) {
-      return $this->expandAll(
-        function(\DOMNode $node) {
-          return $node->nextSibling;
-        },
+      return $this->fetch(
+        'following-sibling::*|following-sibling::text()[normalize-space(.) != ""]',
         $selector
       );
     }
@@ -914,13 +814,13 @@ namespace FluentDOM {
      * not including the element matched by the selector.
      *
      * @param string $selector selector
+     * @param string $filter selector
      * @return Query
      */
-    public function nextUntil($selector = NULL) {
-      return $this->expandUntil(
-        function(\DOMNode $node) {
-          return $node->nextSibling;
-        },
+    public function nextUntil($selector = NULL, $filter = NULL) {
+      return $this->fetch(
+        'following-sibling::*|following-sibling::text()[normalize-space(.) != ""]',
+        $filter,
         $selector
       );
     }
@@ -932,14 +832,11 @@ namespace FluentDOM {
      * @return Query
      */
     public function parent() {
-      return $this->expand(
-        function(\DOMNode $node) {
-          if ($node->parentNode instanceof \DOMNode) {
-            return $node->parentNode;
-          }
-          return NULL;
-        },
-        TRUE
+      return $this->fetch(
+        'parent::*',
+        NULL,
+        NULL,
+        Fetcher::UNIQUE
       );
     }
 
@@ -952,11 +849,11 @@ namespace FluentDOM {
      * @return Query
      */
     public function parents($selector = NULL) {
-      return $this->expandAll(
-        function(\DOMNode $node) {
-          return $node->parentNode;
-        },
-        $selector
+      return $this->fetch(
+        'ancestor::*',
+        $selector,
+        NULL,
+        Fetcher::REVERSE
       );
     }
 
@@ -964,15 +861,16 @@ namespace FluentDOM {
      * Get the ancestors of each element in the current set of matched elements,
      * up to but not including the element matched by the selector.
      *
-     * @param string $selector selector
+     * @param string $stopAt selector
+     * @param string $filter selector
      * @return Query
      */
-    public function parentsUntil($selector = NULL) {
-      return $this->expandUntil(
-        function(\DOMNode $node) {
-          return $node->parentNode;
-        },
-        $selector
+    public function parentsUntil($stopAt = NULL, $filter = NULL) {
+      return $this->fetch(
+        'ancestor::*',
+        $filter,
+        $stopAt,
+        Nodes\Fetcher::REVERSE
       );
     }
 
@@ -985,12 +883,13 @@ namespace FluentDOM {
      * @return Query
      */
     public function prev($selector = NULL) {
-      return $this->expandTo(
-        function(\DOMNode $node) {
-          return $node->previousSibling;
-        },
+      return $this->fetch(
+        'preceding-sibling::node()[
+          self::* or (self::text() and normalize-space(.) != "")
+        ][1]',
         $selector,
-        TRUE
+        NULL,
+        Nodes\Fetcher::UNIQUE
       );
     }
 
@@ -1002,11 +901,11 @@ namespace FluentDOM {
      * @return Query
      */
     public function prevAll($selector = NULL) {
-      return $this->expandAll(
-        function(\DOMNode $node) {
-          return $node->previousSibling;
-        },
-        $selector
+      return $this->fetch(
+        'preceding-sibling::*|preceding-sibling::text()[normalize-space(.) != ""]',
+        $selector,
+        NULL,
+        Nodes\Fetcher::REVERSE
       );
     }
 
@@ -1015,14 +914,15 @@ namespace FluentDOM {
      * the element matched by the selector.
      *
      * @param string $selector selector
+     * @param string $filter selector
      * @return Query
      */
-    public function prevUntil($selector = NULL) {
-      return $this->expandUntil(
-        function(\DOMNode $node) use ($selector) {
-          return $node->previousSibling;
-        },
-        $selector
+    public function prevUntil($selector = NULL, $filter = NULL) {
+      return $this->fetch(
+        'preceding-sibling::*|preceding-sibling::text()[normalize-space(.) != ""]',
+        $filter,
+        $selector,
+        Nodes\Fetcher::REVERSE
       );
     }
 
@@ -1047,22 +947,14 @@ namespace FluentDOM {
      * @return Query
      */
     public function siblings($selector = NULL) {
-      return $this->expand(
-        function(\DOMNode $node) use ($selector) {
-          $nodes = array();
-          if ($node->parentNode instanceof \DOMNode) {
-            foreach ($node->parentNode->childNodes as $childNode) {
-              if (
-                $childNode !== $node &&
-                $this->isNode($childNode, FALSE, $selector)
-              ) {
-                $nodes[] = $childNode;
-              }
-            }
-          }
-          return $nodes;
-        },
-        TRUE
+      return $this->fetch(
+        'preceding-sibling::*|
+         preceding-sibling::text()[normalize-space(.) != ""]|
+         following-sibling::*|
+         following-sibling::text()[normalize-space(.) != ""]',
+        $selector,
+        NULL,
+        Nodes\Fetcher::REVERSE
       );
     }
 
@@ -1104,7 +996,7 @@ namespace FluentDOM {
         $this->_nodes,
         $content,
         function($targetNode, $contentNodes) {
-          return $this->insertNodesAfter($targetNode, $contentNodes);
+          return self::insertNodesAfter($targetNode, $contentNodes);
         }
       );
     }
@@ -1131,7 +1023,7 @@ namespace FluentDOM {
           $this->_nodes,
           $content,
           function($targetNode, $contentNodes) {
-            return $this->appendChildren($targetNode, $contentNodes);
+            return self::appendChildren($targetNode, $contentNodes);
           }
         );
       }
@@ -1149,7 +1041,7 @@ namespace FluentDOM {
       return $this->applyToSelector(
         $selector,
         function($targetNode, $contentNodes) {
-          return $this->appendChildren($targetNode, $contentNodes);
+          return self::appendChildren($targetNode, $contentNodes);
         },
         TRUE
       );
@@ -1167,7 +1059,7 @@ namespace FluentDOM {
         $this->_nodes,
         $content,
         function($targetNode, $contentNodes) {
-          return $this->insertNodesBefore($targetNode, $contentNodes);
+          return self::insertNodesBefore($targetNode, $contentNodes);
         }
       );
     }
@@ -1223,7 +1115,7 @@ namespace FluentDOM {
         $this->getNodes($selector),
         $this->_nodes,
         function($targetNode, $contentNodes) {
-          return $this->insertNodesAfter($targetNode, $contentNodes);
+          return self::insertNodesAfter($targetNode, $contentNodes);
         },
         TRUE
       );
@@ -1240,7 +1132,7 @@ namespace FluentDOM {
       return $this->applyToSelector(
         $selector,
         function($targetNode, $contentNodes) {
-          return $this->insertNodesBefore($targetNode, $contentNodes);
+          return self::insertNodesBefore($targetNode, $contentNodes);
         },
         TRUE
       );
@@ -1258,7 +1150,7 @@ namespace FluentDOM {
         $this->_nodes,
         $content,
         function($targetNode, $contentNodes) {
-          return $this->insertChildrenBefore($targetNode, $contentNodes);
+          return self::insertChildrenBefore($targetNode, $contentNodes);
         }
       );
     }
@@ -1275,7 +1167,7 @@ namespace FluentDOM {
       return $this->applyToSelector(
         $selector,
         function($targetNode, $contentNodes) {
-          return $this->insertChildrenBefore($targetNode, $contentNodes);
+          return self::insertChildrenBefore($targetNode, $contentNodes);
         },
         TRUE
       );
@@ -1293,7 +1185,7 @@ namespace FluentDOM {
         $targetNodes = $this->getNodes($selector),
         $this->_nodes,
         function($targetNode, $contentNodes) {
-          return $this->insertNodesBefore($targetNode, $contentNodes);
+          return self::insertNodesBefore($targetNode, $contentNodes);
         },
         TRUE
       );
@@ -1316,7 +1208,7 @@ namespace FluentDOM {
         $this->_nodes,
         $content,
         function($targetNode, $contentNodes) {
-          return $this->insertNodesBefore($targetNode, $contentNodes);
+          return self::insertNodesBefore($targetNode, $contentNodes);
         }
       );
       $this->remove();
@@ -1416,6 +1308,10 @@ namespace FluentDOM {
         foreach ($groups as $group) {
           if (isset($group[0])) {
             $node = $group[0];
+            /**
+             * @var \DOMElement $target
+             * @var \DOMElement $wrapper
+             */
             list($target, $wrapper) = $this->getWrapperNodes(
               $wrapperTemplate,
               $simple
@@ -1495,7 +1391,7 @@ namespace FluentDOM {
           return $this->getContentFragment($node, TRUE);
         },
         function($node, $fragment) {
-          $this->replaceChildren($node, $fragment);
+          self::replaceChildren($node, $fragment);
         }
       );
     }
@@ -1550,7 +1446,7 @@ namespace FluentDOM {
           return $this->getHtmlFragment($html);
         },
         function($node, $fragment) {
-          $this->replaceChildren($node, $fragment);
+          self::replaceChildren($node, $fragment);
         }
       );
     }
@@ -1612,6 +1508,8 @@ namespace FluentDOM {
 
     /**
      * @param string|array|NULL $names
+     * @throws \InvalidArgumentException
+     * @return array
      */
     private function getNamesList($names) {
       $attributes = NULL;
@@ -1708,6 +1606,7 @@ namespace FluentDOM {
       $names = $this->getNamesList($name);
       $this->each(
         function(\DOMElement $node) use ($names) {
+          /** @noinspection PhpParamsInspection */
           $attributes = is_null($names)
             ? array_keys(iterator_to_array($node->attributes))
             : $names;

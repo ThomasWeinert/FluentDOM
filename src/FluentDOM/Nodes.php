@@ -19,6 +19,10 @@ namespace FluentDOM {
    */
   class Nodes implements \ArrayAccess, \Countable, \IteratorAggregate {
 
+    const CONTEXT_DOCUMENT = 0;
+    const CONTEXT_SELF = 1;
+    const CONTEXT_CHILDREN = 2;
+
     /**
      * @var Xpath
      */
@@ -135,13 +139,7 @@ namespace FluentDOM {
           );
         }
       } elseif (NULL === $this->_loaders) {
-        $this->_loaders = new Loaders(
-          [
-            new Loader\Xml(),
-            new Loader\Html(),
-            new Loader\Json()
-          ]
-        );
+        $this->_loaders = new Loader\Standard();
       }
       return $this->_loaders;
     }
@@ -178,10 +176,7 @@ namespace FluentDOM {
      * @return \DOMElement|\DOMNode
      */
     public function item($position) {
-      if (isset($this->_nodes[$position])) {
-        return $this->_nodes[$position];
-      }
-      return NULL;
+      return isset($this->_nodes[$position]) ? $this->_nodes[$position] : NULL;
     }
 
     /**
@@ -269,6 +264,7 @@ namespace FluentDOM {
      * @param boolean $ignoreTextNodes ignore text nodes
      * @throws \OutOfBoundsException
      * @throws \InvalidArgumentException
+     * @return $this
      */
     public function push($elements, $ignoreTextNodes = FALSE) {
       if ($this->isNode($elements, $ignoreTextNodes)) {
@@ -292,10 +288,29 @@ namespace FluentDOM {
       } elseif (!is_null($elements)) {
         throw new \InvalidArgumentException('Invalid elements variable.');
       }
+      return $this;
     }
 
-    protected function uniqueSortNodes() {
-      $this->_nodes = $this->unique($this->_nodes);
+    /**
+     * Fetch spawns and fills a Nodes instance.
+     *
+     * @param string $expression Xpath expression
+     * @param NULL|string|callable|\DOMNode|array|\Traversable $filter
+     * @param NULL|string|callable|\DOMNode|array|\Traversable $stopAt
+     * @param int $options
+     * @return Nodes
+     */
+    protected function fetch(
+      $expression, $filter = NULL, $stopAt = NULL, $options = 0
+    ) {
+      return $this->spawn(
+        (new Nodes\Fetcher($this))->fetch(
+          $expression,
+          $this->getSelectorCallback($filter),
+          $this->getSelectorCallback($stopAt),
+          $options
+        )
+      );
     }
 
     /**
@@ -550,8 +565,7 @@ namespace FluentDOM {
       if (
         Constraints::isNode($node, $ignoreTextNodes) &&
         (
-          empty($selector) ||
-          $this->matches($selector, $node)
+          empty($selector) || $this->matches($selector, $node)
         )
       ) {
         return $node;
@@ -590,11 +604,12 @@ namespace FluentDOM {
      * Use callback to convert selector if it is set.
      *
      * @param string $selector
+     * @param int $contextMode
      * @return string
      */
-    private function prepareSelector($selector) {
+    protected function prepareSelector($selector, $contextMode) {
       if (isset($this->_onPrepareSelector)) {
-        return call_user_func($this->_onPrepareSelector, $selector);
+        return call_user_func($this->_onPrepareSelector, $selector, $contextMode);
       }
       return $selector;
     }
@@ -608,7 +623,7 @@ namespace FluentDOM {
      */
     public function matches($selector, \DOMNode $context = NULL) {
       $check = $this->xpath->evaluate(
-        $this->prepareSelector($selector), $context
+        $this->prepareSelector($selector, self::CONTEXT_SELF), $context
       );
       if ($check instanceof \DOMNodeList) {
         return $check->length > 0;
@@ -618,48 +633,18 @@ namespace FluentDOM {
     }
 
     /**
-     * Match selector against context and return matched elements.
-     *
-     * @param string|\DOMNode|array|\Traversable $selector
-     * @param \DOMNode $context optional, default value NULL
-     * @throws \InvalidArgumentException
-     * @return array
-     */
-    protected function getNodes($selector, \DOMNode $context = NULL) {
-      if ($this->isNode($selector)) {
-        return array($selector);
-      } elseif (is_string($selector)) {
-        $result = $this->xpath()->evaluate(
-          $this->prepareSelector($selector), $context, FALSE
-        );
-        if (!($result instanceof \Traversable)) {
-          throw new \InvalidArgumentException('Given selector did not return an node list.');
-        }
-        return iterator_to_array($result);
-      } elseif ($nodes = $this->isNodeList($selector)) {
-        return is_array($nodes) ? $nodes : iterator_to_array($nodes);
-      } elseif ($callback = $this->isCallable($selector)) {
-        if ($nodes = $callback($context)) {
-          return is_array($nodes) ? $nodes : iterator_to_array($nodes);
-        }
-        return array();
-      }
-      throw new \InvalidArgumentException('Invalid selector');
-    }
-
-    /**
      * Execute a function within the context of every matched element.
-     *
-     * If $elementsOnly is set to TRUE, only element nodes are used.
      *
      * If $elementsOnly is a callable the return value defines if
      * it is called for that node.
      *
+     * If $elementsOnly is set to TRUE, only element nodes are used.
+     *
      * @param callable $function
-     * @param bool|callable $elementsFilter
+     * @param callable|bool|NULL $elementsFilter
      * @return $this
      */
-    public function each(callable $function, $elementsFilter = FALSE) {
+    public function each(callable $function, $elementsFilter = NULL) {
       if (TRUE === $elementsFilter) {
         $filter = function($node) {
           return $node instanceof \DOMElement;
@@ -678,21 +663,37 @@ namespace FluentDOM {
     /**
      * Searches for descendant elements that match the specified expression.
      *
+     * If the $selector is an node or a list of nodes all descendants that
+     * match that node/node list are returned.
+     *
      * @example find.php Usage Example: FluentDOM::find()
      * @param string $selector selector
      * @param boolean $useDocumentContext ignore current node list
      * @return Nodes
      */
     public function find($selector, $useDocumentContext = FALSE) {
-      if ($useDocumentContext ||
-        $this->_useDocumentContext) {
-        return $this->spawn($this->getNodes($selector));
+      $useDocumentContext = ($useDocumentContext || $this->_useDocumentContext);
+      $options = (
+        Nodes\Fetcher::UNIQUE |
+        ($useDocumentContext ? Nodes\Fetcher::IGNORE_CONTEXT : 0)
+      );
+      if (is_scalar($selector) || is_null($selector)) {
+        return $this->fetch(
+          $this->prepareSelector(
+            $selector,
+            $useDocumentContext ? self::CONTEXT_DOCUMENT : self::CONTEXT_CHILDREN
+          ),
+          NULL,
+          NULL,
+          $options
+        );
       } else {
-        $result = $this->spawn();
-        foreach ($this->_nodes as $context) {
-          $result->push($this->getNodes($selector, $context));
-        }
-        return $result;
+        return $this->fetch(
+          $useDocumentContext ? '//*|//text()' : './/*|.//text()',
+          $selector,
+          NULL,
+          $options
+        );
       }
     }
 
@@ -714,29 +715,7 @@ namespace FluentDOM {
             $this->_nodes[0]
           );
         } else {
-          if (is_string($selector)) {
-            $callback = function(\DOMNode $node) use ($selector) {
-              return $this->matches($selector, $node);
-            };
-          } else {
-            if (
-              ($selector instanceof \DOMNodeList || $selector instanceof Nodes) &&
-              $selector->length > 0
-            ) {
-              /** @var \DOMNodeList|Nodes $selector */
-              $targetNode = $selector->item(0);
-            } elseif (is_array($selector)) {
-              $targetNode = reset($selector);
-            } else {
-              $targetNode = $selector;
-            }
-            if (!($targetNode instanceof \DOMNode)) {
-              return -1;
-            }
-            $callback = function(\DOMNode $node) use ($targetNode) {
-              return $node->isSameNode($targetNode);
-            };
-          }
+          $callback = $this->getSelectorCallback($selector);
           foreach ($this->_nodes as $index => $node) {
             if ($callback($node)) {
               return $index;
@@ -787,6 +766,45 @@ namespace FluentDOM {
       $result = array_values($sortable);
       array_splice($result, count($result), 0, array_values($unsortable));
       return $result;
+    }
+
+    /**
+     * Returns a callback that can be used to validate if an node
+     * matches the selector.
+     *
+     * @throws \InvalidArgumentException
+     * @param NULL|callable|string|array|\DOMNode|\Traversable $selector
+     * @return callable|null
+     */
+    public function getSelectorCallback($selector) {
+      if (is_null($selector)) {
+        return NULL;
+      } elseif (Constraints::isCallable($selector)) {
+        return $selector;
+      } elseif ($selector instanceof \DOMNode) {
+        return function(\DOMNode $node) use ($selector) {
+          return $node->isSameNode($selector);
+        };
+      } elseif (is_string($selector) && $selector !== '') {
+        return function(\DOMNode $node) use ($selector) {
+          return $this->matches($selector, $node);
+        };
+      } elseif (
+        $selector instanceof \Traversable || is_array($selector)
+      ) {
+        return function(\DOMNode $node) use ($selector) {
+          foreach ($selector as $compareWith) {
+            if (
+              $compareWith instanceof \DOMNode &&
+              $node->isSameNode($compareWith)
+            ){
+              return TRUE;
+            }
+          }
+          return FALSE;
+        };
+      }
+      throw new \InvalidArgumentException('Invalid selector argument.');
     }
   }
 }

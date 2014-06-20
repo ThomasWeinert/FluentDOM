@@ -398,5 +398,18 @@ namespace FluentDOM\Query {
       $this->setExpectedException('UnexpectedValueException');
       $fd->data;
     }
+
+    /**
+     * @group AttributesData
+     * @covers FluentDOM\Query::__set
+     */
+    public function testDataPropertyWrite() {
+      $fd = $this->getQueryFixtureFromString('<sample/>')->find('//sample');
+      $fd->data = ['foo' => 'bar'];
+      $this->assertXmlStringEqualsXmlString(
+        '<sample data-foo="bar"/>',
+        (string)$fd
+      );
+    }
   }
 }

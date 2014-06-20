@@ -10,6 +10,8 @@ namespace FluentDOM\Node {
 
   /**
    * Cast a DOMNode into a string
+   *
+   * @property string $nodeValue
    */
   trait StringCast {
 

@@ -12,7 +12,7 @@ $xml = <<<XML
   </head>
   <body>
     <p><span>Hello</span>, how are you?</p>
-    <p>Me? I'm <span>good</span>.</p>
+    <p>Me? I'm <span class="mark">good</span>.</p>
   </body>
 </html>
 XML;
@@ -22,4 +22,5 @@ $loader = require_once('../../vendor/autoload.php');
 echo FluentDOM::QueryCss($xml)
   ->find('p')
   ->find('span')
+  ->filter('.mark')
   ->addClass('red');

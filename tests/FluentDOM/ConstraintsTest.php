@@ -81,6 +81,7 @@ namespace FluentDOM {
      * @group Constraints
      * @dataProvider provideCallables
      * @covers FluentDOM\Constraints::isCallable
+     * @covers FluentDOM\Constraints::isCallableArray
      */
     public function testIsCallable($callable) {
       $this->assertInternalType(
@@ -118,16 +119,26 @@ namespace FluentDOM {
     /**
      * @group Utility
      * @group Constraints
+     * @dataProvider provideInvalidCallables
      * @covers FluentDOM\Constraints::isCallable
+     * @covers FluentDOM\Constraints::isCallableArray
      */
-    public function testIsCallableExpectingNull() {
+    public function testIsCallableExpectingNull($callable) {
       $this->assertNull(Constraints::isCallable(NULL));
+    }
+
+    public function provideInvalidCallables() {
+      return array(
+        array(NULL),
+        array(array()),
+        array(array(1, 2, 3))
+      );
     }
 
     /**
      * @group Utility
      * @group Constraints
-     * @covers FluentDOM\Nodes::isCallable
+     * @covers FluentDOM\Constraints::isCallable
      */
     public function testIsCallableExpectingException() {
       $this->setExpectedException('InvalidArgumentException');

@@ -12,9 +12,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationAround
-     * @covers FluentDOM\Query::wrapNodes
-     * @covers FluentDOM\Query::wrap
-     * @covers FluentDOM\Query::getWrapperNodes
+     * @covers FluentDOM\Query
      */
     public function testWrap() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -27,9 +25,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationAround
-     * @covers FluentDOM\Query::wrapNodes
-     * @covers FluentDOM\Query::wrap
-     * @covers FluentDOM\Query::getWrapperNodes
+     * @covers FluentDOM\Query
      */
     public function testWrapWithDomelement() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -43,9 +39,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationAround
-     * @covers FluentDOM\Query::wrapNodes
-     * @covers FluentDOM\Query::wrap
-     * @covers FluentDOM\Query::getWrapperNodes
+     * @covers FluentDOM\Query
      */
     public function testWrapWithNodeList() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -57,8 +51,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationAround
-     * @covers FluentDOM\Query::wrapNodes
-     * @covers FluentDOM\Query::wrap
+     * @covers FluentDOM\Query
      */
     public function testWrapWithInvalidArgument() {
       $this->setExpectedException('InvalidArgumentException');
@@ -70,9 +63,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationAround
-     * @covers FluentDOM\Query::wrapNodes
-     * @covers FluentDOM\Query::wrap
-     * @covers FluentDOM\Query::getWrapperNodes
+     * @covers FluentDOM\Query
      */
     public function testWrapWithArray() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -87,9 +78,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationAround
-     * @covers FluentDOM\Query::wrapNodes
-     * @covers FluentDOM\Query::wrap
-     * @covers FluentDOM\Query::getWrapperNodes
+     * @covers FluentDOM\Query
      */
     public function testWrapWithCallback() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);

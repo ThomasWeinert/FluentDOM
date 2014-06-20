@@ -14,7 +14,6 @@ namespace FluentDOM\Query {
      * @group Traversing
      * @group TraversingFind
      * @covers FluentDOM\Query::add
-     * @covers FluentDOM\Query::uniqueSortNodes
      */
     public function testAddElements() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -31,7 +30,6 @@ namespace FluentDOM\Query {
      * @group Traversing
      * @group TraversingFind
      * @covers FluentDOM\Query::add
-     * @covers FluentDOM\Query::uniqueSortNodes
      */
     public function testAddFromExpression() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -46,7 +44,6 @@ namespace FluentDOM\Query {
      * @group Traversing
      * @group TraversingFind
      * @covers FluentDOM\Query::add
-     * @covers FluentDOM\Query::uniqueSortNodes
      */
     public function testAddInContext() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);

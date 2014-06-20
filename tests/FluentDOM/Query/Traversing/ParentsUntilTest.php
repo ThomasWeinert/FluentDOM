@@ -14,7 +14,6 @@ namespace FluentDOM\Query {
      * @group Traversing
      * @group TraversingFind
      * @covers FluentDOM\Query::parentsUntil
-     * @covers FluentDOM\Query::expandUntil
      */
     public function testParentsUntil() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);

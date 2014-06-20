@@ -787,5 +787,36 @@ namespace FluentDOM {
       $fd->registerNamespace('f', 'urn:foo');
       $this->assertEquals(1, $fd->xpath()->evaluate('count(/f:foo)'));
     }
+
+    /**
+     * @covers FluentDOM\Nodes::isNode
+     */
+    public function testIsNodeExpectingNode() {
+      $fd = new Nodes(self::XML);
+      $this->assertInstanceOf(
+        'DOMNode', $fd->isNode($fd->document->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Nodes::isNode
+     */
+    public function testIsNodeWithSelectorExpectingNode() {
+      $fd = new Nodes(self::XML);
+      $this->assertInstanceOf(
+        'DOMNode',
+        $fd->isNode($fd->document->documentElement, FALSE, 'name() = "items"')
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Nodes::isNode
+     */
+    public function testIsNodeWithSelectorExpectingNull() {
+      $fd = new Nodes(self::XML);
+      $this->assertNull(
+        $fd->isNode($fd->document->documentElement, FALSE, 'name() = "fail"')
+      );
+    }
   }
 }

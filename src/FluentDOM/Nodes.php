@@ -547,8 +547,7 @@ namespace FluentDOM {
       if (
         Constraints::isNode($node, $ignoreTextNodes) &&
         (
-          empty($selector) ||
-          $this->matches($selector, $node)
+          empty($selector) || $this->matches($selector, $node)
         )
       ) {
         return $node;

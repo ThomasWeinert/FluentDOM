@@ -673,6 +673,10 @@ namespace FluentDOM {
      */
     public function find($selector, $useDocumentContext = FALSE) {
       $useDocumentContext = ($useDocumentContext || $this->_useDocumentContext);
+      $options = (
+        Nodes\Fetcher::UNIQUE |
+        ($useDocumentContext ? Nodes\Fetcher::IGNORE_CONTEXT : 0)
+      );
       if (is_scalar($selector) || is_null($selector)) {
         return $this->fetch(
           $this->prepareSelector(
@@ -681,20 +685,14 @@ namespace FluentDOM {
           ),
           NULL,
           NULL,
-          (
-            Nodes\Fetcher::UNIQUE |
-            ($useDocumentContext ? Nodes\Fetcher::IGNORE_CONTEXT : 0)
-          )
+          $options
         );
       } else {
         return $this->fetch(
           $useDocumentContext ? '//*|//text()' : './/*|.//text()',
           $selector,
           NULL,
-          (
-            Nodes\Fetcher::UNIQUE |
-            ($useDocumentContext ? Nodes\Fetcher::IGNORE_CONTEXT : 0)
-          )
+          $options
         );
       }
     }

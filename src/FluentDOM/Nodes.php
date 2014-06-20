@@ -7,7 +7,6 @@
  */
 
 namespace FluentDOM {
-  use FluentDOM\Nodes\Fetcher;
 
   /**
    * Implements an extended replacement for DOMNodeList.
@@ -136,13 +135,7 @@ namespace FluentDOM {
           );
         }
       } elseif (NULL === $this->_loaders) {
-        $this->_loaders = new Loaders(
-          [
-            new Loader\Xml(),
-            new Loader\Html(),
-            new Loader\Json()
-          ]
-        );
+        $this->_loaders = new Loader\Standard();
       }
       return $this->_loaders;
     }
@@ -267,6 +260,7 @@ namespace FluentDOM {
      * @param boolean $ignoreTextNodes ignore text nodes
      * @throws \OutOfBoundsException
      * @throws \InvalidArgumentException
+     * @return $this
      */
     public function push($elements, $ignoreTextNodes = FALSE) {
       if ($this->isNode($elements, $ignoreTextNodes)) {
@@ -290,12 +284,18 @@ namespace FluentDOM {
       } elseif (!is_null($elements)) {
         throw new \InvalidArgumentException('Invalid elements variable.');
       }
+      return $this;
     }
 
-    protected function uniqueSortNodes() {
-      $this->_nodes = $this->unique($this->_nodes);
-    }
-
+    /**
+     * Fetch spawns and fills a Nodes instance.
+     *
+     * @param string $expression Xpath expression
+     * @param NULL|string|callable|\DOMNode|array|\Traversable $filter
+     * @param NULL|string|callable|\DOMNode|array|\Traversable $stopAt
+     * @param int $options
+     * @return Nodes
+     */
     protected function fetch(
       $expression, $filter = NULL, $stopAt = NULL, $options = 0
     ) {
@@ -671,8 +671,8 @@ namespace FluentDOM {
           NULL,
           NULL,
           (
-            Fetcher::UNIQUE |
-            ($useDocumentContext ? Fetcher::IGNORE_CONTEXT : 0)
+            Nodes\Fetcher::UNIQUE |
+            ($useDocumentContext ? Nodes\Fetcher::IGNORE_CONTEXT : 0)
           )
         );
       } else {
@@ -681,8 +681,8 @@ namespace FluentDOM {
           $selector,
           NULL,
           (
-            Fetcher::UNIQUE |
-            ($useDocumentContext ? Fetcher::IGNORE_CONTEXT : 0)
+            Nodes\Fetcher::UNIQUE |
+            ($useDocumentContext ? Nodes\Fetcher::IGNORE_CONTEXT : 0)
           )
         );
       }

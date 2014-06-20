@@ -516,19 +516,16 @@ namespace FluentDOM {
      * @return Query
      */
     public function add($selector, $context = NULL) {
-      $result = $this->spawn();
-      $result->push($this->_nodes);
+      $result = $this->spawn($this);
       if (isset($context)) {
-        $result->push(
-          $this->spawn($context)->find($selector)
-        );
+        $result->push($this->spawn($context)->find($selector));
       } elseif (is_object($selector) ||
                 (is_string($selector) && substr(ltrim($selector), 0, 1) == '<')) {
         $result->push($this->getContentNodes($selector));
       } else {
         $result->push($this->find($selector));
       }
-      $this->uniqueSortNodes();
+      $result->_nodes = $result->unique($result->_nodes);
       return $result;
     }
 

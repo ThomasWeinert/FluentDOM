@@ -47,28 +47,61 @@ abstract class FluentDOM {
     $query = self::Query($source, $contentType);
     $isHtml = ($query->contentType == 'text/html');
     if ($hasPhpCss) {
-      $query->onPrepareSelector = function($selector) {
-        return \PhpCss::toXpath($selector);
+      $query->onPrepareSelector = function($selector, $mode) {
+        return self::prepareWithPhpCss($selector, $mode);
       };
     } else {
-      $query->onPrepareSelector = function($selector) use ($isHtml) {
-        $translator = new CssSelector\Xpath\Translator();
-        if ($isHtml) {
-          $translator->registerExtension(
-            new CssSelector\Xpath\Extension\HtmlExtension($translator)
-          );
-        }
-        $translator
-          ->registerParserShortcut(new CssSelector\Parser\Shortcut\EmptyStringParser())
-          ->registerParserShortcut(new CssSelector\Parser\Shortcut\ElementParser())
-          ->registerParserShortcut(new CssSelector\Parser\Shortcut\ClassParser())
-          ->registerParserShortcut(new CssSelector\Parser\Shortcut\HashParser())
-        ;
-        $result = $translator->cssToXPath($selector);
-        return $result;
+      $query->onPrepareSelector = function($selector, $mode) use ($isHtml) {
+        return self::prepareWithCssSelector($selector, $mode, $isHtml);
       };
     }
     return $query;
+  }
+
+  /**
+   * Convert css seelctor to xpath with Carica/PhpCss
+   *
+   * @param string $selector
+   * @param int $mode
+   * @return string
+   * @codeCoverageIgnore
+   */
+  private static function prepareWithPhpCss($selector, $mode) {
+    $options = 0;
+    switch ($mode) {
+    case FluentDOM\Nodes::CONTEXT_SELF :
+      $options = PhpCss\Ast\Visitor\Xpath::OPTION_USE_CONTEXT_SELF;
+      break;
+    case FluentDOM\Nodes::CONTEXT_DOCUMENT :
+      $options = PhpCss\Ast\Visitor\Xpath::OPTION_USE_CONTEXT_DOCUMENT;
+      break;
+    }
+    return \PhpCss::toXpath($selector, $options);
+  }
+
+  /**
+   * Convert css seelctor to xpath with Symfony/CssSelector
+   *
+   * @param string $selector
+   * @param int $mode
+   * @param bool $isHtml
+   * @return string
+   * @codeCoverageIgnore
+   */
+  private static function prepareWithCssSelector($selector, $mode, $isHtml) {
+    if ($isHtml) {
+      CssSelector::enableHtmlExtension();
+    } else {
+      CssSelector::disableHtmlExtension();
+    }
+    $result = CssSelector::toXpath($selector);
+    switch ($mode) {
+    case FluentDOM\Nodes::CONTEXT_CHILDREN :
+      return './'.$result;
+    case FluentDOM\Nodes::CONTEXT_DOCUMENT :
+      return '/'.$result;
+    }
+    return $result;
   }
 }
 

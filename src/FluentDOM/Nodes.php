@@ -19,6 +19,10 @@ namespace FluentDOM {
    */
   class Nodes implements \ArrayAccess, \Countable, \IteratorAggregate {
 
+    const CONTEXT_DOCUMENT = 0;
+    const CONTEXT_SELF = 1;
+    const CONTEXT_CHILDREN = 2;
+
     /**
      * @var Xpath
      */
@@ -600,11 +604,12 @@ namespace FluentDOM {
      * Use callback to convert selector if it is set.
      *
      * @param string $selector
+     * @param int $selector
      * @return string
      */
-    protected function prepareSelector($selector) {
+    protected function prepareSelector($selector, $contextMode) {
       if (isset($this->_onPrepareSelector)) {
-        return call_user_func($this->_onPrepareSelector, $selector);
+        return call_user_func($this->_onPrepareSelector, $selector, $contextMode);
       }
       return $selector;
     }
@@ -618,7 +623,7 @@ namespace FluentDOM {
      */
     public function matches($selector, \DOMNode $context = NULL) {
       $check = $this->xpath->evaluate(
-        $this->prepareSelector($selector), $context
+        $this->prepareSelector($selector, self::CONTEXT_SELF), $context
       );
       if ($check instanceof \DOMNodeList) {
         return $check->length > 0;
@@ -670,7 +675,10 @@ namespace FluentDOM {
       $useDocumentContext = ($useDocumentContext || $this->_useDocumentContext);
       if (is_scalar($selector) || is_null($selector)) {
         return $this->fetch(
-          $this->prepareSelector($selector),
+          $this->prepareSelector(
+            $selector,
+            $useDocumentContext ? self::CONTEXT_DOCUMENT : self::CONTEXT_CHILDREN
+          ),
           NULL,
           NULL,
           (

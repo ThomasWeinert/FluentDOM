@@ -200,7 +200,7 @@ namespace FluentDOM {
         return array($selector);
       } elseif (is_string($selector)) {
         $result = $this->xpath()->evaluate(
-          $this->prepareSelector($selector), $context, FALSE
+          $this->prepareSelector($selector, self::CONTEXT_SELF), $context, FALSE
         );
         if (!($result instanceof \Traversable)) {
           throw new \InvalidArgumentException('Given selector did not return an node list.');

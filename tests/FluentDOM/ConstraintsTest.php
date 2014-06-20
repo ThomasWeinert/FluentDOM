@@ -138,7 +138,7 @@ namespace FluentDOM {
     /**
      * @group Utility
      * @group Constraints
-     * @covers FluentDOM\Nodes::isCallable
+     * @covers FluentDOM\Constraints::isCallable
      */
     public function testIsCallableExpectingException() {
       $this->setExpectedException('InvalidArgumentException');

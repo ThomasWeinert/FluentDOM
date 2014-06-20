@@ -5,6 +5,8 @@ namespace FluentDOM {
 
   class NodesTest extends TestCase {
 
+    public static $_fd;
+
     /**
      * @covers FluentDOM\Nodes::__construct
      */
@@ -854,5 +856,106 @@ namespace FluentDOM {
         $fd->isNode($fd->document->documentElement, FALSE, 'name() = "fail"')
       );
     }
+
+    /**
+     * @covers FluentDOM\Nodes::getSelectorCallback
+     */
+    public function testGetSelectorCallbackWithNullExpectingNull() {
+      $fd = new Nodes(self::XML);
+      $this->assertNull(
+        $callback = $fd->getSelectorCallback(NULL)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Nodes::getSelectorCallback
+     */
+    public function testGetSelectorCallbackWithStringExpectingTrue() {
+      $fd = new Nodes(self::XML);
+      $this->assertInstanceOf(
+        'Closure',
+        $callback = $fd->getSelectorCallback('name() = "items"')
+      );
+      $this->assertTrue(
+        $callback($fd->document->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Nodes::getSelectorCallback
+     */
+    public function testGetSelectorCallbackWithNodeExpectingTrue() {
+      $fd = new Nodes(self::XML);
+      $this->assertInstanceOf(
+        'Closure',
+        $callback = $fd->getSelectorCallback($fd->document->documentElement)
+      );
+      $this->assertTrue(
+        $callback($fd->document->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Nodes::getSelectorCallback
+     */
+    public function testGetSelectorCallbackWithNodeArrayExpectingTrue() {
+      $fd = new Nodes(self::XML);
+      $this->assertInstanceOf(
+        'Closure',
+        $callback = $fd->getSelectorCallback(
+          array($fd->document->documentElement)
+        )
+      );
+      $this->assertTrue(
+        $callback($fd->document->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Nodes::getSelectorCallback
+     */
+    public function testGetSelectorCallbackWithCallableExpectingTrue() {
+      $fd = new Nodes(self::XML);
+      $this->assertInstanceOf(
+        'Closure',
+        $callback = $fd->getSelectorCallback(
+          function (\DOMNode $node) {
+            return $node instanceof \DOMElement;
+          }
+        )
+      );
+      $this->assertTrue(
+        $callback($fd->document->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Nodes::getSelectorCallback
+     */
+    public function testGetSelectorCallbackWithEmptyArrayExpectingFalse() {
+      $fd = new Nodes(self::XML);
+      $this->assertInstanceOf(
+        'Closure',
+        $callback = $fd->getSelectorCallback(
+          array()
+        )
+      );
+      $this->assertFalse(
+        $callback($fd->document->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Nodes::getSelectorCallback
+     */
+    public function testGetSelectorCallbackWithInvalidSelectorExpectingException() {
+      $fd = new Nodes(self::XML);
+      $this->setExpectedException(
+        'InvalidArgumentException',
+        'Invalid selector argument.'
+      );
+      $fd->getSelectorCallback('');
+    }
+
   }
 }

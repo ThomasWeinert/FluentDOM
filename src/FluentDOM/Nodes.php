@@ -7,6 +7,7 @@
  */
 
 namespace FluentDOM {
+  use FluentDOM\Nodes\Fetcher;
 
   /**
    * Implements an extended replacement for DOMNodeList.
@@ -293,6 +294,16 @@ namespace FluentDOM {
 
     protected function uniqueSortNodes() {
       $this->_nodes = $this->unique($this->_nodes);
+    }
+
+    protected function fetch(
+      $expression, $filter = NULL, $stopAt = NULL, $options = 0
+    ) {
+      return $this->spawn(
+        (new Nodes\Fetcher($this))->fetch(
+          $expression, $filter, $stopAt, $options
+        )
+      );
     }
 
     /**
@@ -588,7 +599,7 @@ namespace FluentDOM {
      * @param string $selector
      * @return string
      */
-    private function prepareSelector($selector) {
+    protected function prepareSelector($selector) {
       if (isset($this->_onPrepareSelector)) {
         return call_user_func($this->_onPrepareSelector, $selector);
       }
@@ -611,36 +622,6 @@ namespace FluentDOM {
       } else {
         return (bool)$check;
       }
-    }
-
-    /**
-     * Match selector against context and return matched elements.
-     *
-     * @param string|\DOMNode|array|\Traversable $selector
-     * @param \DOMNode $context optional, default value NULL
-     * @throws \InvalidArgumentException
-     * @return array
-     */
-    protected function getNodes($selector, \DOMNode $context = NULL) {
-      if ($this->isNode($selector)) {
-        return array($selector);
-      } elseif (is_string($selector)) {
-        $result = $this->xpath()->evaluate(
-          $this->prepareSelector($selector), $context, FALSE
-        );
-        if (!($result instanceof \Traversable)) {
-          throw new \InvalidArgumentException('Given selector did not return an node list.');
-        }
-        return iterator_to_array($result);
-      } elseif ($nodes = $this->isNodeList($selector)) {
-        return is_array($nodes) ? $nodes : iterator_to_array($nodes);
-      } elseif ($callback = $this->isCallable($selector)) {
-        if ($nodes = $callback($context)) {
-          return is_array($nodes) ? $nodes : iterator_to_array($nodes);
-        }
-        return array();
-      }
-      throw new \InvalidArgumentException('Invalid selector');
     }
 
     /**
@@ -674,21 +655,36 @@ namespace FluentDOM {
     /**
      * Searches for descendant elements that match the specified expression.
      *
+     * If the $selector is an node or a list of nodes all descendants that
+     * match that node/node list are returned.
+     *
      * @example find.php Usage Example: FluentDOM::find()
      * @param string $selector selector
      * @param boolean $useDocumentContext ignore current node list
      * @return Nodes
      */
     public function find($selector, $useDocumentContext = FALSE) {
-      if ($useDocumentContext ||
-        $this->_useDocumentContext) {
-        return $this->spawn($this->getNodes($selector));
+      $useDocumentContext = ($useDocumentContext || $this->_useDocumentContext);
+      if (is_scalar($selector) || is_null($selector)) {
+        return $this->fetch(
+          $this->prepareSelector($selector),
+          NULL,
+          NULL,
+          (
+            Fetcher::UNIQUE |
+            ($useDocumentContext ? Fetcher::IGNORE_CONTEXT : 0)
+          )
+        );
       } else {
-        $result = $this->spawn();
-        foreach ($this->_nodes as $context) {
-          $result->push($this->getNodes($selector, $context));
-        }
-        return $result;
+        return $this->fetch(
+          $useDocumentContext ? '//*|//text()' : './/*|.//text()',
+          $selector,
+          NULL,
+          (
+            Fetcher::UNIQUE |
+            ($useDocumentContext ? Fetcher::IGNORE_CONTEXT : 0)
+          )
+        );
       }
     }
 
@@ -710,29 +706,7 @@ namespace FluentDOM {
             $this->_nodes[0]
           );
         } else {
-          if (is_string($selector)) {
-            $callback = function(\DOMNode $node) use ($selector) {
-              return $this->matches($selector, $node);
-            };
-          } else {
-            if (
-              ($selector instanceof \DOMNodeList || $selector instanceof Nodes) &&
-              $selector->length > 0
-            ) {
-              /** @var \DOMNodeList|Nodes $selector */
-              $targetNode = $selector->item(0);
-            } elseif (is_array($selector)) {
-              $targetNode = reset($selector);
-            } else {
-              $targetNode = $selector;
-            }
-            if (!($targetNode instanceof \DOMNode)) {
-              return -1;
-            }
-            $callback = function(\DOMNode $node) use ($targetNode) {
-              return $node->isSameNode($targetNode);
-            };
-          }
+          $callback = $this->getSelectorCallback($selector);
           foreach ($this->_nodes as $index => $node) {
             if ($callback($node)) {
               return $index;
@@ -783,6 +757,45 @@ namespace FluentDOM {
       $result = array_values($sortable);
       array_splice($result, count($result), 0, array_values($unsortable));
       return $result;
+    }
+
+    /**
+     * Returns a callback that can be used to validate if an node
+     * matches the selector.
+     *
+     * @throws \InvalidArgumentException
+     * @param NULL|callable|string|array|\DOMNode|\Traversable $selector
+     * @return callable|null
+     */
+    public function getSelectorCallback($selector) {
+      if (is_null($selector)) {
+        return NULL;
+      } elseif (Constraints::isCallable($selector)) {
+        return $selector;
+      } elseif ($selector instanceof \DOMNode) {
+        return function(\DOMNode $node) use ($selector) {
+          return $node->isSameNode($selector);
+        };
+      } elseif (is_string($selector) && $selector !== '') {
+        return function(\DOMNode $node) use ($selector) {
+          return $this->matches($selector, $node);
+        };
+      } elseif (
+        $selector instanceof \Traversable || is_array($selector)
+      ) {
+        return function(\DOMNode $node) use ($selector) {
+          foreach ($selector as $compareWith) {
+            if (
+              $compareWith instanceof \DOMNode &&
+              $node->isSameNode($compareWith)
+            ){
+              return TRUE;
+            }
+          }
+          return FALSE;
+        };
+      }
+      throw new \InvalidArgumentException('Invalid selector argument.');
     }
   }
 }

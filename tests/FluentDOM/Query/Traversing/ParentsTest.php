@@ -13,7 +13,6 @@ namespace FluentDOM\Query {
      * @group Traversing
      * @group TraversingFind
      * @covers FluentDOM\Query::parents
-     * @covers FluentDOM\Query::expandAll
      */
     public function testParents() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);

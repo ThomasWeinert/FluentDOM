@@ -52,18 +52,18 @@ namespace FluentDOM\Nodes {
         );
       }
       $nodes = array();
-      $filter = $this->_nodes->getSelectorCallback($filter);
-      $stopAt = $this->_nodes->getSelectorCallback($stopAt);
+      $filterFunction = $this->_nodes->getSelectorCallback($filter);
+      $stopAtFunction = $this->_nodes->getSelectorCallback($stopAt);
       if (($options & self::IGNORE_CONTEXT) == self::IGNORE_CONTEXT) {
         $nodes = $this->fetchFor(
-          $expression, NULL, $filter, $stopAt, $options
+          $expression, NULL, $filterFunction, $stopAtFunction, $options
         );
       } else {
         foreach ($this->_nodes->toArray() as $context) {
           $nodes = array_merge(
             $nodes,
             $this->fetchFor(
-              $expression, $context, $filter, $stopAt, $options
+              $expression, $context, $filterFunction, $stopAtFunction, $options
             )
           );
         }

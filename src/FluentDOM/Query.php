@@ -71,22 +71,22 @@ namespace FluentDOM {
      *
      * @param string $name
      * @param mixed $value
-     * @throws \BadMethodCallException
      */
     public function __set($name, $value) {
       switch ($name) {
       case 'attr' :
-        if ($value instanceOf Query\Attributes) {
-          $this->attr($value->toArray());
-        } else {
-          $this->attr($value);
-        }
+        $this->attr(
+          $value instanceOf Query\Attributes ? $value->toArray() : $value
+        );
         break;
       case 'css' :
         $this->css($value);
         break;
       case 'data' :
-        throw new \BadMethodCallException('Can not set readonly value.');
+        $this->data(
+          $value instanceOf Query\Data ? $value->toArray() : $value
+        );
+        break;
       }
       parent::__set($name, $value);
     }

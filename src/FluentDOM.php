@@ -70,10 +70,10 @@ abstract class FluentDOM {
     $options = 0;
     switch ($mode) {
     case FluentDOM\Nodes::CONTEXT_SELF :
-      $options = PhpCss\Ast\Visitor\Xpath::OPTION_USE_CONTEXT_SELF;
+      $options = \PhpCss\Ast\Visitor\Xpath::OPTION_USE_CONTEXT_SELF;
       break;
     case FluentDOM\Nodes::CONTEXT_DOCUMENT :
-      $options = PhpCss\Ast\Visitor\Xpath::OPTION_USE_CONTEXT_DOCUMENT;
+      $options = \PhpCss\Ast\Visitor\Xpath::OPTION_USE_CONTEXT_DOCUMENT;
       break;
     }
     return \PhpCss::toXpath($selector, $options);

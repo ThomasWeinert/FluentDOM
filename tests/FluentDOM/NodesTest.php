@@ -319,6 +319,7 @@ namespace FluentDOM {
     /**
      * @group CoreFunctions
      * @covers FluentDOM\Nodes::matches
+     * @covers FluentDOM\Nodes::prepareSelector
      */
     public function testMatchesWithNodeListExpectingTrue() {
       $fd = new Nodes(self::XML);
@@ -328,6 +329,7 @@ namespace FluentDOM {
     /**
      * @group CoreFunctions
      * @covers FluentDOM\Nodes::matches
+     * @covers FluentDOM\Nodes::prepareSelector
      */
     public function testMatchesWithSelectorCallbackExpectingTrue() {
       $fd = new Nodes(self::XML);
@@ -338,6 +340,7 @@ namespace FluentDOM {
     /**
      * @group CoreFunctions
      * @covers FluentDOM\Nodes::matches
+     * @covers FluentDOM\Nodes::prepareSelector
      */
     public function testMatchesWithNodeListExpectingFalse() {
       $fd = new Nodes(self::XML);;
@@ -347,6 +350,7 @@ namespace FluentDOM {
     /**
      * @group CoreFunctions
      * @covers FluentDOM\Nodes::matches
+     * @covers FluentDOM\Nodes::prepareSelector
      */
     public function testMatchesWithScalarExpectingTrue() {
       $fd = new Nodes(self::XML);;
@@ -358,9 +362,10 @@ namespace FluentDOM {
     /**
      * @group CoreFunctions
      * @covers FluentDOM\Nodes::matches
+     * @covers FluentDOM\Nodes::prepareSelector
      */
     public function testMatchesWithScalarAndContextExpectingTrue() {
-      $fd = new Nodes(self::XML);;
+      $fd = new Nodes(self::XML);
       $this->assertTrue(
         $fd->matches(
           'count(item)',
@@ -372,11 +377,42 @@ namespace FluentDOM {
     /**
      * @group CoreFunctions
      * @covers FluentDOM\Nodes::matches
+     * @covers FluentDOM\Nodes::prepareSelector
      */
     public function testMatchesWithScalarExpectingFalse() {
-      $fd = new Nodes(self::XML);;
+      $fd = new Nodes(self::XML);
       $this->assertFalse(
         $fd->matches('count(item)')
+      );
+    }
+
+    /**
+     * @group CoreFunctions
+     * @covers FluentDOM\Nodes::matches
+     * @covers FluentDOM\Nodes::prepareSelector
+     */
+    public function testMatchesWithPreparedSelectorExpectingTrue() {
+      $fd = new Nodes(self::XML);
+      $fd->onPrepareSelector = function($selector) {
+        return 'count(//group[1]'.$selector.')';
+      };
+      $this->assertTrue(
+        $fd->matches('/item')
+      );
+    }
+
+    /**
+     * @group CoreFunctions
+     * @covers FluentDOM\Nodes::matches
+     * @covers FluentDOM\Nodes::prepareSelector
+     */
+    public function testMatchesWithPreparedSelectorExpectingFalse() {
+      $fd = new Nodes(self::XML);
+      $fd->onPrepareSelector = function($selector) {
+        return 'count('.$selector.')';
+      };
+      $this->assertFalse(
+        $fd->matches('/item')
       );
     }
 

@@ -34,6 +34,7 @@ abstract class FluentDOM {
    * @param string $contentType
    * @throws \LogicException
    * @return \FluentDOM\Query
+   * @codeCoverageIgnore
    */
   public static function QueryCss($source = NULL, $contentType = 'text/xml') {
     $hasPhpCss = class_exists('PhpCss');
@@ -72,12 +73,12 @@ abstract class FluentDOM {
 }
 
 /**
- * FluentDOM function, is an Alias for the FluentDOM::Query()
+ * FluentDOM function, is an Alias for the \FluentDOM\FluentDOM::Query()
  * factory class function.
  *
  * @param mixed $source
  * @param string $contentType
- * @return FluentDOM::Query
+ * @return \FluentDOM\Query
  */
 function FluentDOM($source = NULL, $contentType = 'text/xml') {
   return FluentDOM::Query($source, $contentType);

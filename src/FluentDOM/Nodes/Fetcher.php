@@ -8,7 +8,6 @@
 
 namespace FluentDOM\Nodes {
 
-  use FluentDOM\Constraints;
   use FluentDOM\Nodes;
 
   /*

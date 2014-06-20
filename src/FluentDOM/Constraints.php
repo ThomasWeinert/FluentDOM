@@ -73,19 +73,30 @@ namespace FluentDOM {
     public static function isCallable($callback, $allowGlobalFunctions = FALSE, $silent = TRUE) {
       if ($callback instanceof \Closure) {
         return $callback;
-      } elseif (is_string($callback) &&
-        $allowGlobalFunctions &&
-        function_exists($callback)) {
-        return is_callable($callback) ? $callback : NULL;
-      } elseif (is_array($callback) &&
-        count($callback) == 2 &&
-        (is_object($callback[0]) || is_string($callback[0])) &&
-        is_string($callback[1])) {
+      } elseif (
+        (is_string($callback) && $allowGlobalFunctions) ||
+        self::isCallableArray($callback)
+      ) {
         return is_callable($callback) ? $callback : NULL;
       } elseif ($silent) {
         return NULL;
       }
       throw new \InvalidArgumentException('Invalid callback argument');
+    }
+
+    /**
+     * Return TRUE if the $callback is an array that can be an
+     *
+     * @param mixed $callback
+     * @return bool
+     */
+    private static function isCallableArray($callback) {
+      return (
+       is_array($callback) &&
+       count($callback) == 2 &&
+       (is_object($callback[0]) || is_string($callback[0])) &&
+       is_string($callback[1])
+      );
     }
   }
 }

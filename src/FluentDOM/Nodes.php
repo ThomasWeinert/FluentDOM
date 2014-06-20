@@ -650,16 +650,16 @@ namespace FluentDOM {
     /**
      * Execute a function within the context of every matched element.
      *
-     * If $elementsOnly is set to TRUE, only element nodes are used.
-     *
      * If $elementsOnly is a callable the return value defines if
      * it is called for that node.
      *
+     * If $elementsOnly is set to TRUE, only element nodes are used.
+     *
      * @param callable $function
-     * @param bool|callable $elementsFilter
+     * @param callable|bool|NULL $elementsFilter
      * @return $this
      */
-    public function each(callable $function, $elementsFilter = FALSE) {
+    public function each(callable $function, $elementsFilter = NULL) {
       if (TRUE === $elementsFilter) {
         $filter = function($node) {
           return $node instanceof \DOMElement;

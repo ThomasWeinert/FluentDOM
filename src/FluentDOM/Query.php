@@ -153,41 +153,6 @@ namespace FluentDOM {
     }
 
     /**
-     * Convert a given content xml string into and array of nodes
-     *
-     * @param string $content
-     * @param boolean $includeTextNodes
-     * @param integer $limit
-     * @throws \UnexpectedValueException
-     * @return array
-     */
-    private function getContentFragment($content, $includeTextNodes = TRUE, $limit = 0) {
-      $result = array();
-      $fragment = $this->getDocument()->createDocumentFragment();
-      if (is_string($content) || method_exists($content, '__toString')) {
-        $content = (string)$content;
-        if (empty($content)) {
-          return array();
-        }
-        if ($fragment->appendXML($content)) {
-          for ($i = $fragment->childNodes->length - 1; $i >= 0; $i--) {
-            $element = $fragment->childNodes->item($i);
-            if ($element instanceof \DOMElement ||
-              ($includeTextNodes && $this->isNode($element))) {
-              array_unshift($result, $element);
-              $element->parentNode->removeChild($element);
-            }
-          }
-          if ($limit > 0 && count($result) >= $limit) {
-            return array_slice($result, 0, $limit);
-          }
-          return $result;
-        }
-      }
-      throw new \UnexpectedValueException('Invalid document fragment');
-    }
-
-    /**
      * Match selector against context and return matched elements.
      *
      * @param string|\DOMNode|array|\Traversable $selector
@@ -263,6 +228,41 @@ namespace FluentDOM {
     }
 
     /**
+     * Convert a given content xml string into and array of nodes
+     *
+     * @param string $content
+     * @param boolean $includeTextNodes
+     * @param integer $limit
+     * @throws \UnexpectedValueException
+     * @return array
+     */
+    private function getContentFragment($content, $includeTextNodes = TRUE, $limit = 0) {
+      $result = array();
+      $fragment = $this->getDocument()->createDocumentFragment();
+      if (is_string($content) || method_exists($content, '__toString')) {
+        $content = (string)$content;
+        if (empty($content)) {
+          return array();
+        }
+        if ($fragment->appendXML($content)) {
+          for ($i = $fragment->childNodes->length - 1; $i >= 0; $i--) {
+            $element = $fragment->childNodes->item($i);
+            if ($element instanceof \DOMElement ||
+              ($includeTextNodes && $this->isNode($element))) {
+              array_unshift($result, $element);
+              $element->parentNode->removeChild($element);
+            }
+          }
+          if ($limit > 0 && count($result) >= $limit) {
+            return array_slice($result, 0, $limit);
+          }
+          return $result;
+        }
+      }
+      throw new \UnexpectedValueException('Invalid document fragment');
+    }
+
+    /**
      * Convert $content to a DOMElement. If $content contains several elements use the first.
      *
      * @param mixed $content
@@ -276,20 +276,17 @@ namespace FluentDOM {
     /**
      * Get the inner xml of a given node or in other words the xml of all children.
      *
-     * @param \DOMNode $node
+     * @param \DOMNode $context
      * @return string
      */
-    private function getInnerXml($node) {
+    private function getInnerXml($context) {
       $result = '';
-      if ($node instanceof \DOMElement) {
-        $dom = $this->getDocument();
-        foreach ($node->childNodes as $childNode) {
-          if ($this->isNode($childNode)) {
-            $result .= $dom->saveXML($childNode);
-          }
-        }
-      } elseif ($node instanceof \DOMText || $node instanceOf \DOMCdataSection) {
-        return $node->textContent;
+      $dom = $this->getDocument();
+      $nodes = $this->xpath()->evaluate(
+        '*|text()[normalize-space(.) != ""]|self::text()[normalize-space(.) != ""]', $context
+      );
+      foreach ($nodes as $child) {
+        $result .= $dom->saveXML($child);
       }
       return $result;
     }
@@ -440,7 +437,7 @@ namespace FluentDOM {
      * @param callable $handler
      * @return array
      */
-    public function apply($targetNodes, $content, $handler) {
+    private function apply($targetNodes, $content, $handler) {
       $result = array();
       $isSetterFunction = FALSE;
       if ($callback = $this->isCallable($content)) {

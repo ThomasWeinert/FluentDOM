@@ -15,6 +15,7 @@ namespace FluentDOM\Query {
      * @group ManipulationOutside
      * @covers FluentDOM\Query::before
      * @covers FluentDOM\Query::apply
+     * @covers FluentDOM\Query::getNodes
      * @covers FluentDOM\Query::insertNodesBefore
      */
     public function testBefore() {
@@ -32,6 +33,7 @@ namespace FluentDOM\Query {
      * @group ManipulationOutside
      * @covers FluentDOM\Query::before
      * @covers FluentDOM\Query::apply
+     * @covers FluentDOM\Query::getNodes
      * @covers FluentDOM\Query::insertNodesBefore
      */
     public function testBeforeWithFunction() {

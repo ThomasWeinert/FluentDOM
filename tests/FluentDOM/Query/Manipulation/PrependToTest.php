@@ -15,6 +15,7 @@ namespace FluentDOM\Query {
      * @group ManipulationInside
      * @covers FluentDOM\Query::prependTo
      * @covers FluentDOM\Query::apply
+     * @covers FluentDOM\Query::getNodes
      * @covers FluentDOM\Query::insertChildrenBefore
      */
     public function testPrependTo() {

@@ -15,6 +15,7 @@ namespace FluentDOM\Query {
      * @group ManipulationReplace
      * @covers FluentDOM\Query::replaceWith
      * @covers FluentDOM\Query::apply
+     * @covers FluentDOM\Query::getNodes
      * @covers FluentDOM\Query::insertNodesBefore
      */
     public function testReplaceWith() {
@@ -30,6 +31,7 @@ namespace FluentDOM\Query {
      * @group ManipulationReplace
      * @covers FluentDOM\Query::replaceWith
      * @covers FluentDOM\Query::apply
+     * @covers FluentDOM\Query::getNodes
      * @covers FluentDOM\Query::insertNodesBefore
      */
     public function testReplaceWithWithFunction() {

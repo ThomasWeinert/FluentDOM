@@ -17,6 +17,7 @@ namespace FluentDOM\Query {
      * @covers FluentDOM\Query::applyToSelector
      * @covers FluentDOM\Query::applyToSpawn
      * @covers FluentDOM\Query::apply
+     * @covers FluentDOM\Query::getNodes
      * @covers FluentDOM\Query::appendChildren
      */
     public function testAppendTo() {

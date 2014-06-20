@@ -14,6 +14,7 @@ namespace FluentDOM\Query {
      * @group ManipulationReplace
      * @covers FluentDOM\Query::replaceAll
      * @covers FluentDOM\Query::apply
+     * @covers FluentDOM\Query::getNodes
      * @covers FluentDOM\Query::insertNodesBefore
      */
     public function testReplaceAll() {
@@ -45,6 +46,7 @@ namespace FluentDOM\Query {
      * @group ManipulationReplace
      * @covers FluentDOM\Query::replaceAll
      * @covers FluentDOM\Query::apply
+     * @covers FluentDOM\Query::getNodes
      * @covers FluentDOM\Query::insertNodesBefore
      */
     public function testReplaceAllWithInvalidArgument() {

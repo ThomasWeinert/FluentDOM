@@ -15,6 +15,7 @@ namespace FluentDOM\Query {
      * @group ManipulationInside
      * @covers FluentDOM\Query::prepend
      * @covers FluentDOM\Query::apply
+     * @covers FluentDOM\Query::getNodes
      * @covers FluentDOM\Query::insertChildrenBefore
      */
     public function testPrepend() {
@@ -30,6 +31,7 @@ namespace FluentDOM\Query {
      * @group ManipulationInside
      * @covers FluentDOM\Query::prepend
      * @covers FluentDOM\Query::apply
+     * @covers FluentDOM\Query::getNodes
      * @covers FluentDOM\Query::insertChildrenBefore
      */
     public function testPrependWithCallback() {
@@ -49,6 +51,7 @@ namespace FluentDOM\Query {
      * @group ManipulationInside
      * @covers FluentDOM\Query::prepend
      * @covers FluentDOM\Query::apply
+     * @covers FluentDOM\Query::getNodes
      * @covers FluentDOM\Query::insertChildrenBefore
      */
     public function testPrependOnEmptyElement() {

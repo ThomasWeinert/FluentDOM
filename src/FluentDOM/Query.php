@@ -195,7 +195,7 @@ namespace FluentDOM {
      * @throws \InvalidArgumentException
      * @return array
      */
-    protected function getNodes($selector, \DOMNode $context = NULL) {
+    private function getNodes($selector, \DOMNode $context = NULL) {
       if ($this->isNode($selector)) {
         return array($selector);
       } elseif (is_string($selector)) {

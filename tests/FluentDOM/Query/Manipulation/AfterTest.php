@@ -15,6 +15,7 @@ namespace FluentDOM\Query {
      * @group ManipulationOutside
      * @covers FluentDOM\Query::after
      * @covers FluentDOM\Query::apply
+     * @covers FluentDOM\Query::getNodes
      * @covers FluentDOM\Query::insertNodesAfter
      */
     public function testAfter() {
@@ -31,6 +32,7 @@ namespace FluentDOM\Query {
      * @group ManipulationOutside
      * @covers FluentDOM\Query::after
      * @covers FluentDOM\Query::apply
+     * @covers FluentDOM\Query::getNodes
      * @covers FluentDOM\Query::insertNodesAfter
      */
     public function testAfterWithFunction() {

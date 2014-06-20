@@ -41,7 +41,7 @@ namespace FluentDOM\Nodes {
         ),
         $fetcher->fetch(
           'item',
-          '@index = 1',
+          $fd->getSelectorCallback('@index = 1'),
           NULL
         )
       );
@@ -81,7 +81,7 @@ namespace FluentDOM\Nodes {
         $fetcher->fetch(
           'item',
           NULL,
-          '@index = 1'
+          $fd->getSelectorCallback('@index = 1')
         )
       );
     }
@@ -100,7 +100,7 @@ namespace FluentDOM\Nodes {
         $fetcher->fetch(
           'item',
           NULL,
-          '@index = 1',
+          $fd->getSelectorCallback('@index = 1'),
           Fetcher::INCLUDE_STOP
         )
       );
@@ -118,8 +118,8 @@ namespace FluentDOM\Nodes {
         ),
         $fetcher->fetch(
           'item',
-          '@index = 1',
-          '@index = 2',
+          $fd->getSelectorCallback('@index = 1'),
+          $fd->getSelectorCallback('@index = 2'),
           Fetcher::INCLUDE_STOP
         )
       );

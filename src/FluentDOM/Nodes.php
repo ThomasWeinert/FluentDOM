@@ -301,7 +301,10 @@ namespace FluentDOM {
     ) {
       return $this->spawn(
         (new Nodes\Fetcher($this))->fetch(
-          $expression, $filter, $stopAt, $options
+          $expression,
+          $this->getSelectorCallback($filter),
+          $this->getSelectorCallback($stopAt),
+          $options
         )
       );
     }

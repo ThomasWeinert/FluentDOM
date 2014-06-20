@@ -39,8 +39,8 @@ namespace FluentDOM\Nodes {
 
     /**
      * @param string $expression
-     * @param string|callable|array|\DOMNode|\Taversable $filter
-     * @param string|callable|array|\DOMNode|\Taversable $stopAt
+     * @param callable $filter
+     * @param callable $stopAt
      * @param int $options
      * @throws \InvalidArgumentException
      * @return array
@@ -52,18 +52,16 @@ namespace FluentDOM\Nodes {
         );
       }
       $nodes = array();
-      $filterFunction = $this->_nodes->getSelectorCallback($filter);
-      $stopAtFunction = $this->_nodes->getSelectorCallback($stopAt);
       if (($options & self::IGNORE_CONTEXT) == self::IGNORE_CONTEXT) {
         $nodes = $this->fetchFor(
-          $expression, NULL, $filterFunction, $stopAtFunction, $options
+          $expression, NULL, $filter, $stopAt, $options
         );
       } else {
         foreach ($this->_nodes->toArray() as $context) {
           $nodes = array_merge(
             $nodes,
             $this->fetchFor(
-              $expression, $context, $filterFunction, $stopAtFunction, $options
+              $expression, $context, $filter, $stopAt, $options
             )
           );
         }

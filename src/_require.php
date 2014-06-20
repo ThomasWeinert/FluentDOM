@@ -18,9 +18,12 @@ require(__DIR__.'/FluentDOM/Xpath.php');
 require(__DIR__.'/FluentDOM/Loader/Json.php');
 require(__DIR__.'/FluentDOM/Loader/Html.php');
 require(__DIR__.'/FluentDOM/Loader/Xml.php');
+require(__DIR__.'/FluentDOM/Loader/Standard.php');
 require(__DIR__.'/FluentDOM/Loaders.php');
 
 require(__DIR__.'/FluentDOM/Nodes.php');
+require(__DIR__.'/FluentDOM/Nodes/Fetcher.php');
+
 require(__DIR__.'/FluentDOM/Query.php');
 require(__DIR__.'/FluentDOM/Query/Attributes.php');
 require(__DIR__.'/FluentDOM/Query/Css.php');

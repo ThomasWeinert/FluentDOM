@@ -604,7 +604,7 @@ namespace FluentDOM {
      * Use callback to convert selector if it is set.
      *
      * @param string $selector
-     * @param int $selector
+     * @param int $contextMode
      * @return string
      */
     protected function prepareSelector($selector, $contextMode) {

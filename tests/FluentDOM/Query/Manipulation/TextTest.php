@@ -13,7 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query::text
+     * @covers FluentDOM\Query
      */
     public function testTextRead() {
       $expect = 'text1text2text3';
@@ -24,7 +24,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query::text
+     * @covers FluentDOM\Query
      */
     public function testTextWrite() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//item');
@@ -37,7 +37,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query::text
+     * @covers FluentDOM\Query
      */
     public function testTextWriteWithCallback() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//item');

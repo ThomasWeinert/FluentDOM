@@ -13,10 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query::html
-     * @covers FluentDOM\Query::getHtmlFragment
-     * @covers FluentDOM\Query::content
-     * @covers FluentDOM\Query::replaceChildren
+     * @covers FluentDOM\Query
      */
     public function testHtmlRead() {
       $query = $this
@@ -33,10 +30,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query::html
-     * @covers FluentDOM\Query::getHtmlFragment
-     * @covers FluentDOM\Query::content
-     * @covers FluentDOM\Query::replaceChildren
+     * @covers FluentDOM\Query
      */
     public function testHtmlReadEmpty() {
       $query = $this
@@ -48,10 +42,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query::html
-     * @covers FluentDOM\Query::getHtmlFragment
-     * @covers FluentDOM\Query::content
-     * @covers FluentDOM\Query::replaceChildren
+     * @covers FluentDOM\Query
      */
     public function testHtmlWrite() {
       $query = $this
@@ -70,10 +61,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query::html
-     * @covers FluentDOM\Query::getHtmlFragment
-     * @covers FluentDOM\Query::content
-     * @covers FluentDOM\Query::replaceChildren
+     * @covers FluentDOM\Query
      */
     public function testHtmlWriteUsingCallback() {
       $query = $this

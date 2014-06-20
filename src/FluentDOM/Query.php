@@ -141,6 +141,7 @@ namespace FluentDOM {
      * Returns the item from the internal array if
      * if the index exists and is an DOMElement
      *
+     * @param array|\Traversable
      * @return NULL|\DOMElement
      */
     private function getFirstElement() {
@@ -161,8 +162,8 @@ namespace FluentDOM {
      * @return array
      */
     private function getNodes($selector, \DOMNode $context = NULL) {
-      if ($this->isNode($selector)) {
-        return array($selector);
+      if ($nodes = $this->buildNodeList($selector)) {
+        return is_array($nodes) ? $nodes : iterator_to_array($nodes);
       } elseif (is_string($selector)) {
         $result = $this->xpath()->evaluate(
           $this->prepareSelector($selector, self::CONTEXT_SELF), $context, FALSE
@@ -171,15 +172,35 @@ namespace FluentDOM {
           throw new \InvalidArgumentException('Given selector did not return an node list.');
         }
         return iterator_to_array($result);
-      } elseif ($nodes = $this->isNodeList($selector)) {
-        return is_array($nodes) ? $nodes : iterator_to_array($nodes);
-      } elseif ($callback = $this->isCallable($selector)) {
-        if ($nodes = $callback($context)) {
-          return is_array($nodes) ? $nodes : iterator_to_array($nodes);
-        }
-        return array();
       }
       throw new \InvalidArgumentException('Invalid selector');
+    }
+
+    private function buildNodeList(
+      $content,
+      $includeTextNodes = TRUE,
+      $limit = -1
+    ) {
+      if ($callback = $this->isCallable($content)) {
+        $content = $callback($content);
+      }
+      if ($content instanceof \DOMElement) {
+        return array($content);
+      } elseif ($includeTextNodes && $this->isNode($content)) {
+        return array($content);
+      } elseif ($this->isNodeList($content)) {
+        if ($limit > 0) {
+          if (is_array($content)) {
+            return array_slice($content, 0, $limit);
+          } else {
+            new \LimitIterator(
+              new \IteratorIterator($content), 0, $limit
+            );
+          }
+        }
+        return $content;
+      }
+      return NULL;
     }
 
     /**
@@ -192,29 +213,17 @@ namespace FluentDOM {
      * @throws \InvalidArgumentException
      * @return array
      */
-    private function getContentNodes($content, $includeTextNodes = TRUE, $limit = 0) {
-      $result = array();
-      if ($content instanceof \DOMElement) {
-        $result = array($content);
-      } elseif ($includeTextNodes && $this->isNode($content)) {
-        $result = array($content);
+    private function getContentNodes($content, $includeTextNodes = TRUE, $limit = -1) {
+      if ($nodes = $this->buildNodeList($content, $includeTextNodes, $limit)) {
+        $result = $nodes;
       } elseif (is_string($content)) {
         $result = $this->getContentFragment($content, $includeTextNodes, $limit);
-      } elseif ($nodes = $this->isNodeList($content)) {
-        foreach ($nodes as $element) {
-          if ($element instanceof \DOMElement ||
-            ($includeTextNodes && $this->isNode($element))) {
-            $result[] = $element;
-            if ($limit > 0 && count($result) >= $limit) {
-              break;
-            }
-          }
-        }
       } else {
-        throw new \InvalidArgumentException('Invalid content parameter');
+        throw new \InvalidArgumentException('Invalid/empty content parameter.');
       }
+      $result = is_array($result) ? $result : iterator_to_array($result);
       if (empty($result)) {
-        throw new \UnexpectedValueException('No element found');
+        throw new \InvalidArgumentException('No nodes found.');
       } else {
         //if a node is not in the current document import it
         $document = $this->getDocument();
@@ -340,12 +349,12 @@ namespace FluentDOM {
      * @param $contentNodes
      * @return array new nodes
      */
-    private function appendChildren($targetNode, $contentNodes) {
+    private static function appendChildren($targetNode, $contentNodes) {
       $result = array();
       if ($targetNode instanceof \DOMElement) {
         foreach ($contentNodes as $contentNode) {
           /** @var \DOMNode $contentNode */
-          if ($this->isNode($contentNode)) {
+          if (Constraints::isNode($contentNode)) {
             $result[] = $targetNode->appendChild($contentNode->cloneNode(TRUE));
           }
         }
@@ -353,9 +362,9 @@ namespace FluentDOM {
       return $result;
     }
 
-    private function replaceChildren($targetNode, $contentNodes) {
+    private static function replaceChildren($targetNode, $contentNodes) {
       $targetNode->nodeValue = '';
-      $this->appendChildren($targetNode, $contentNodes);
+      self::appendChildren($targetNode, $contentNodes);
     }
 
     /**
@@ -365,13 +374,13 @@ namespace FluentDOM {
      * @param array|\DOMNodeList|Query $contentNodes
      * @return array
      */
-    private function insertChildrenBefore($targetNode, $contentNodes) {
+    private static function insertChildrenBefore($targetNode, $contentNodes) {
       $result = array();
       if ($targetNode instanceof \DOMElement) {
         if ($targetNode->firstChild instanceof \DOMNode) {
-          $result = $this->insertNodesBefore($targetNode->firstChild, $contentNodes);
+          $result = self::insertNodesBefore($targetNode->firstChild, $contentNodes);
         } else {
-          $result = $this->appendChildren($targetNode, $contentNodes);
+          $result = self::appendChildren($targetNode, $contentNodes);
         }
       }
       return $result;
@@ -383,7 +392,7 @@ namespace FluentDOM {
      * @param array|\DOMNodeList|Query $contentNodes
      * @return array
      */
-    public static function insertNodesAfter($targetNode, $contentNodes) {
+    private static function insertNodesAfter($targetNode, $contentNodes) {
       $result = array();
       if ($targetNode instanceof \DOMNode && !empty($contentNodes)) {
         $beforeNode = ($targetNode->nextSibling instanceof \DOMNode)
@@ -411,7 +420,7 @@ namespace FluentDOM {
      * @param array|\DOMNodeList|Query $contentNodes
      * @return array
      */
-    private function insertNodesBefore($targetNode, $contentNodes) {
+    private static function insertNodesBefore($targetNode, $contentNodes) {
       $result = array();
       if ($targetNode instanceof \DOMNode && !empty($contentNodes)) {
         foreach ($contentNodes as $contentNode) {

@@ -13,10 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query::append
-     * @covers FluentDOM\Query::getContentElement
-     * @covers FluentDOM\Query::getContentNodes
-     * @covers FluentDOM\Query::getContentFragment
+     * @covers FluentDOM\Query
      */
     public function testAppend() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -30,10 +27,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query::append
-     * @covers FluentDOM\Query::getContentElement
-     * @covers FluentDOM\Query::getContentNodes
-     * @covers FluentDOM\Query::getContentFragment
+     * @covers FluentDOM\Query
      */
     public function testAppendXmlString() {
       $fd = new Query();
@@ -44,9 +38,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query::append
-     * @covers FluentDOM\Query::getContentElement
-     * @covers FluentDOM\Query::getContentNodes
+     * @covers FluentDOM\Query
      */
     public function testAppendDomElement() {
       $fd = new Query();
@@ -57,9 +49,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query::append
-     * @covers FluentDOM\Query::getContentElement
-     * @covers FluentDOM\Query::getContentNodes
+     * @covers FluentDOM\Query
      */
     public function testAppendDomnodelist() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -75,9 +65,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query::append
-     * @covers FluentDOM\Query::getContentElement
-     * @covers FluentDOM\Query::getContentNodes
+     * @covers FluentDOM\Query
      */
     public function testAppendWithCallback() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -94,10 +82,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query::append
-     * @covers FluentDOM\Query::getContentElement
-     * @covers FluentDOM\Query::getContentNodes
-     * @covers FluentDOM\Query::getContentFragment
+     * @covers FluentDOM\Query
      */
     public function testAppendOnEmptyDocumentWithCallback() {
       $fd = new Query();
@@ -115,10 +100,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query::append
-     * @covers FluentDOM\Query::getContentElement
-     * @covers FluentDOM\Query::getContentNodes
-     * @covers FluentDOM\Query::getContentFragment
+     * @covers FluentDOM\Query
      */
     public function testAppendFragmentWithMultipleNodesToDocument() {
       $fd = new Query();
@@ -132,9 +114,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query::append
-     * @covers FluentDOM\Query::getContentElement
-     * @covers FluentDOM\Query::getContentNodes
+     * @covers FluentDOM\Query
      */
     public function testAppendWithMultipleNodesFromOtherDomToDocument() {
       $dom = new \DOMDocument();
@@ -154,9 +134,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query::append
-     * @covers FluentDOM\Query::getContentElement
-     * @covers FluentDOM\Query::getContentNodes
+     * @covers FluentDOM\Query
      */
     public function testAppendWithElementFromOtherDocument() {
       $dom = new \DOMDocument();
@@ -171,9 +149,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query::append
-     * @covers FluentDOM\Query::getContentElement
-     * @covers FluentDOM\Query::getContentNodes
+     * @covers FluentDOM\Query
      */
     public function testAppendWithTextNodeFromOtherDocument() {
       $dom = new \DOMDocument();
@@ -190,9 +166,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query::append
-     * @covers FluentDOM\Query::getContentElement
-     * @covers FluentDOM\Query::getContentNodes
+     * @covers FluentDOM\Query
      */
     public function testAppendWithInvalidArgumentExpectingException() {
       $fd = new Query();
@@ -203,13 +177,11 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query::append
-     * @covers FluentDOM\Query::getContentElement
-     * @covers FluentDOM\Query::getContentNodes
+     * @covers FluentDOM\Query
      */
     public function testAppendWithEmptyArgumentExpectingException() {
       $fd = new Query();
-      $this->setExpectedException('UnexpectedValueException');
+      $this->setExpectedException('InvalidArgumentException');
       $fd->append([]);
     }
   }

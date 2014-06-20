@@ -178,10 +178,7 @@ namespace FluentDOM {
      * @return \DOMElement|\DOMNode
      */
     public function item($position) {
-      if (isset($this->_nodes[$position])) {
-        return $this->_nodes[$position];
-      }
-      return NULL;
+      return isset($this->_nodes[$position]) ? $this->_nodes[$position] : NULL;
     }
 
     /**

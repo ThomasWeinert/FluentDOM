@@ -102,6 +102,25 @@ namespace FluentDOM\Query {
      * @group ManipulationInside
      * @covers FluentDOM\Query
      */
+    public function testAppendNodeWithCallback() {
+      $fd = (new Query('<sample/>'))
+        ->find('/*')
+        ->append(
+          function () {
+            return 'Hello World';
+          }
+        );
+      $this->assertXmlStringEqualsXmlString(
+        '<?xml version="1.0"?>'."\n".'<sample>Hello World</sample>',
+        (string)$fd
+      );
+    }
+
+    /**
+     * @group Manipulation
+     * @group ManipulationInside
+     * @covers FluentDOM\Query
+     */
     public function testAppendFragmentWithMultipleNodesToDocument() {
       $fd = new Query();
       $fd->append('<first/><second/>');

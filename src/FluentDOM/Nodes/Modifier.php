@@ -134,5 +134,10 @@ namespace FluentDOM\Nodes {
       }
       return $result;
     }
+
+    public function replaceNode($contentNodes) {
+      $this->insertNodesBefore($contentNodes);
+      return $this->getParentNode()->removeChild($this->getNode());
+    }
   }
 }

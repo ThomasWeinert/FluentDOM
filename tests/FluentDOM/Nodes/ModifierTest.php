@@ -122,8 +122,6 @@ namespace FluentDOM\Nodes {
       );
     }
 
-
-
     /**
      * @covers FluentDOM\Nodes\Modifier
      */
@@ -156,6 +154,24 @@ namespace FluentDOM\Nodes {
       );
       $this->assertXmlStringEqualsXmlString(
         '<test><two/><one/><three/></test>',
+        $dom->saveXml()
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Nodes\Modifier
+     */
+    public function testReplaceNode() {
+      $dom = new \DOMDocument();
+      $dom->appendChild($dom->createElement('test'));
+      $dom->documentElement->appendChild($dom->createElement('one'));
+      $dom->documentElement->appendChild($dom->createElement('three'));
+      $modifier = new Modifier($dom->documentElement->firstChild);
+      $modifier->replaceNode(
+        [$dom->createElement('two'), $dom->createTextNode('four')]
+      );
+      $this->assertXmlStringEqualsXmlString(
+        '<test><two/>four<three/></test>',
         $dom->saveXml()
       );
     }

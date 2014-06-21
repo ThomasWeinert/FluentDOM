@@ -144,21 +144,21 @@ namespace FluentDOM\Nodes {
     /**
      * Convert a given content xml string into and array of nodes
      *
-     * @param string $content
+     * @param string $xml
      * @param boolean $includeTextNodes
      * @param integer $limit
      * @throws \UnexpectedValueException
      * @return array
      */
-    public function getXmlFragment($content, $includeTextNodes = TRUE, $limit = 0) {
+    public function getXmlFragment($xml, $includeTextNodes = TRUE, $limit = 0) {
       $result = array();
       $fragment = $this->getOwner()->getDocument()->createDocumentFragment();
-      if (is_string($content) || method_exists($content, '__toString')) {
-        $content = (string)$content;
-        if (empty($content)) {
+      if (is_string($xml) || method_exists($xml, '__toString')) {
+        $xml = (string)$xml;
+        if (empty($xml)) {
           return array();
         }
-        if ($fragment->appendXML($content)) {
+        if ($fragment->appendXML($xml)) {
           for ($i = $fragment->childNodes->length - 1; $i >= 0; $i--) {
             $element = $fragment->childNodes->item($i);
             if ($element instanceof \DOMElement ||
@@ -181,23 +181,27 @@ namespace FluentDOM\Nodes {
      * @return array
      */
     public function getHtmlFragment($html) {
-      if (empty($html)) {
-        return array();
-      }
-      $htmlDom = new Document();
-      $status = libxml_use_internal_errors(TRUE);
-      $htmlDom->loadHtml('<html-fragment>'.$html.'</html-fragment>');
-      libxml_clear_errors();
-      libxml_use_internal_errors($status);
-      $result = array();
-      $nodes = $htmlDom->xpath()->evaluate('//html-fragment[1]/node()');
-      $document = $this->getOwner()->getDocument();
-      if ($nodes instanceof \Traversable) {
-        foreach ($nodes as $node) {
-          $result[] = $document->importNode($node, TRUE);
+      if (is_string($html) || method_exists($html, '__toString')) {
+        $html = (string)$html;
+        if (empty($html)) {
+          return array();
         }
+        $htmlDom = new Document();
+        $status = libxml_use_internal_errors(TRUE);
+        $htmlDom->loadHtml('<html-fragment>'.$html.'</html-fragment>');
+        libxml_clear_errors();
+        libxml_use_internal_errors($status);
+        $result = array();
+        $nodes = $htmlDom->xpath()->evaluate('//html-fragment[1]/node()');
+        $document = $this->getOwner()->getDocument();
+        if ($nodes instanceof \Traversable) {
+          foreach ($nodes as $node) {
+            $result[] = $document->importNode($node, TRUE);
+          }
+        }
+        return $result;
       }
-      return $result;
+      throw new \UnexpectedValueException('Invalid document fragment');
     }
 
     /**

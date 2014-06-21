@@ -1164,14 +1164,29 @@ namespace FluentDOM {
           return $this->build()->getXmlFragment($xml, TRUE);
         },
         function($node, $fragment) {
-          /** @var \DOMNode $contentNode */
-          foreach ($fragment as $contentNode) {
-            $node->parentNode->insertBefore(
-              $contentNode->cloneNode(TRUE),
-              $node
-            );
-          }
-          $node->parentNode->removeChild($node);
+          $this->modify($node)->replaceNode($fragment);
+        }
+      );
+    }
+
+    /**
+     * Get the first matched node as HTML or replace each
+     * matched nodes with the provided fragment.
+     *
+     * @param string|callable|NULL $html
+     * @return string|self
+     */
+    function outerHtml($html = NULL) {
+      return $this->content(
+        $html,
+        function($node) {
+          return $this->getDocument()->saveHTML($node);
+        },
+        function($html) {
+          return $this->build()->getHtmlFragment($html);
+        },
+        function($node, $fragment) {
+          $this->modify($node)->replaceNode($fragment);
         }
       );
     }

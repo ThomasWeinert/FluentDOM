@@ -190,7 +190,6 @@ namespace FluentDOM\Loader {
         return NULL;
       case self::TYPE_BOOLEAN :
         return $value ? 'true' : 'false';
-        break;
       default :
         return (string)$value;
       }

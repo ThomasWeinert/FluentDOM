@@ -23,6 +23,13 @@ namespace FluentDOM\Loader {
 
     const OPTION_VERBOSE = 1;
 
+    const TYPE_NULL = 'null';
+    const TYPE_BOOLEAN = 'boolean';
+    const TYPE_NUMBER = 'number';
+    const TYPE_STRING = 'string';
+    const TYPE_OBJECT = 'object';
+    const TYPE_ARRAY = 'array';
+
     /**
      * JSON errors
      * @var array $_jsonErrors
@@ -131,25 +138,61 @@ namespace FluentDOM\Loader {
       if ($recursions < 1) {
         return;
       }
-      if (is_array($value)) {
+      $type = $this->getTypeFromValue($value);
+      switch ($type) {
+      case self::TYPE_ARRAY :
         $this->transferArrayTo($target, $value, $this->_recursions - 1);
-      } elseif (is_object($value)) {
+        break;
+      case self::TYPE_OBJECT :
         $this->transferObjectTo($target, $value, $this->_recursions - 1);
-      } elseif (is_null($value)) {
-        $target->setAttributeNS(self::XMLNS, 'json:type', 'null');
-      } elseif (is_bool($value)) {
-        $target->setAttributeNS(self::XMLNS, 'json:type', 'boolean');
-        $target->appendChild(
-          $target->ownerDocument->createTextNode($value ? 'true' : 'false')
-        );
-      } elseif (is_int($value) || is_float($value)) {
-        $target->setAttributeNS(self::XMLNS, 'json:type', 'number');
-        $target->appendChild($target->ownerDocument->createTextNode((string)$value));
-      } else {
-        if ($this->_verbose) {
-          $target->setAttributeNS(self::XMLNS, 'json:type', 'string');
+        break;
+      default :
+        if ($this->_verbose || $type != self::TYPE_STRING) {
+          $target->setAttributeNS(self::XMLNS, 'json:type', $type);
         }
-        $target->appendChild($target->ownerDocument->createTextNode((string)$value));
+        $string = $this->getValueAsString($type, $value);
+        if (is_string($string)) {
+          $target->appendChild($target->ownerDocument->createTextNode($string));
+        }
+      }
+    }
+
+    /**
+     * Get the type from a variable value.
+     *
+     * @param mixed $value
+     * @return string
+     */
+    public function getTypeFromValue($value) {
+      if (is_array($value)) {
+        return self::TYPE_ARRAY;
+      } elseif (is_object($value)) {
+        return self::TYPE_OBJECT;
+      } elseif (is_null($value)) {
+        return self::TYPE_NULL;
+      } elseif (is_bool($value)) {
+        return self::TYPE_BOOLEAN;
+      } elseif (is_int($value) || is_float($value)) {
+        return self::TYPE_NUMBER;
+      } else {
+        return self::TYPE_STRING;
+      }
+    }
+
+    /**
+     * @param string $type
+     * @param mixed $value
+     * @return null|string
+     */
+    public function getValueAsString($type, $value) {
+      switch ($type) {
+      case self::TYPE_NULL :
+        return NULL;
+      case self::TYPE_BOOLEAN :
+        return $value ? 'true' : 'false';
+        break;
+      default :
+        return (string)$value;
       }
     }
 

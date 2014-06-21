@@ -1155,16 +1155,13 @@ namespace FluentDOM {
      * @return string|self
      */
     function outerXml($xml = NULL) {
-      return $this->content(
+      return $this->outerContent(
         $xml,
         function($node) {
           return $this->getDocument()->saveXML($node);
         },
         function($xml) {
           return $this->build()->getXmlFragment($xml, TRUE);
-        },
-        function($node, $fragment) {
-          $this->modify($node)->replaceNode($fragment);
         }
       );
     }
@@ -1177,16 +1174,13 @@ namespace FluentDOM {
      * @return string|self
      */
     function outerHtml($html = NULL) {
-      return $this->content(
+      return $this->outerContent(
         $html,
         function($node) {
           return $this->getDocument()->saveHTML($node);
         },
         function($html) {
           return $this->build()->getHtmlFragment($html);
-        },
-        function($node, $fragment) {
-          $this->modify($node)->replaceNode($fragment);
         }
       );
     }
@@ -1224,7 +1218,7 @@ namespace FluentDOM {
      * @param callable $insert
      * @return $this|string
      */
-    private function content($content, $export, $import, $insert) {
+    private function content($content, callable $export, callable $import, callable $insert) {
       if (isset($content)) {
         $callback = $this->isCallable($content, FALSE, TRUE);
         if ($callback) {
@@ -1243,6 +1237,23 @@ namespace FluentDOM {
         return $export($this->_nodes[0]);
       }
       return '';
+    }
+
+    /**
+     * @param string|callable|NULL $content
+     * @param callable $export
+     * @param callable $import
+     * @return $this|string
+     */
+    private function outerContent($content, callable $export, callable $import) {
+      return $this->content(
+        $content,
+        $export,
+        $import,
+        function($node, $fragment) {
+          $this->modify($node)->replaceNode($fragment);
+        }
+      );
     }
 
     /****************************

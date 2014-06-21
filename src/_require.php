@@ -23,6 +23,7 @@ require(__DIR__.'/FluentDOM/Loaders.php');
 
 require(__DIR__.'/FluentDOM/Nodes.php');
 require(__DIR__.'/FluentDOM/Nodes/Fetcher.php');
+require(__DIR__.'/FluentDOM/Nodes/Modifier.php');
 
 require(__DIR__.'/FluentDOM/Query.php');
 require(__DIR__.'/FluentDOM/Query/Attributes.php');

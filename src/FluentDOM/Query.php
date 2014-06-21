@@ -348,106 +348,17 @@ namespace FluentDOM {
       return $result;
     }
 
-    /**
-     * Append to content nodes to the target nodes.
-     *
-     * @param \DOMNode $targetNode
-     * @param array|\Traversable $contentNodes
-     * @return array new nodes
-     */
-    private static function appendChildren($targetNode, $contentNodes) {
-      $result = array();
-      if ($targetNode instanceof \DOMElement) {
-        foreach ($contentNodes as $contentNode) {
-          /** @var \DOMNode $contentNode */
-          if (Constraints::isNode($contentNode)) {
-            $result[] = $targetNode->appendChild($contentNode->cloneNode(TRUE));
-          }
-        }
-      }
-      return $result;
-    }
-
-    /**
-     * Replace the target node children with the content nodes
-     * @param \DOMNode $targetNode
-     * @param array|\Traversable $contentNodes
-     */
-    private static function replaceChildren($targetNode, $contentNodes) {
-      $targetNode->nodeValue = '';
-      self::appendChildren($targetNode, $contentNodes);
-    }
-
-    /**
-     * Insert nodes into target as first childs.
-     *
-     * @param \DOMNode $targetNode
-     * @param array|\Traversable $contentNodes
-     * @return array
-     */
-    private static function insertChildrenBefore($targetNode, $contentNodes) {
-      $result = array();
-      if ($targetNode instanceof \DOMElement) {
-        if ($targetNode->firstChild instanceof \DOMNode) {
-          $result = self::insertNodesBefore($targetNode->firstChild, $contentNodes);
-        } else {
-          $result = self::appendChildren($targetNode, $contentNodes);
-        }
-      }
-      return $result;
-    }
-
-    /**
-     * Insert nodes after the target node.
-     * @param \DOMNode $targetNode
-     * @param array|\Traversable $contentNodes
-     * @return array
-     */
-    private static function insertNodesAfter($targetNode, $contentNodes) {
-      $result = array();
-      if ($targetNode instanceof \DOMNode && !empty($contentNodes)) {
-        $beforeNode = ($targetNode->nextSibling instanceof \DOMNode)
-          ? $targetNode->nextSibling : NULL;
-        $hasContext = $beforeNode instanceof \DOMNode;
-        foreach ($contentNodes as $contentNode) {
-          /** @var \DOMNode $contentNode */
-          if ($hasContext) {
-            $result[] = $targetNode->parentNode->insertBefore(
-              $contentNode->cloneNode(TRUE), $beforeNode
-            );
-          } else {
-            $result[] = $targetNode->parentNode->appendChild(
-              $contentNode->cloneNode(TRUE)
-            );
-          }
-        }
-      }
-      return $result;
-    }
-
-    /**
-     * Insert nodes before the target node.
-     *
-     * @param \DOMNode $targetNode
-     * @param array|\Traversable $contentNodes
-     * @return array
-     */
-    private static function insertNodesBefore($targetNode, $contentNodes) {
-      $result = array();
-      if ($targetNode instanceof \DOMNode && !empty($contentNodes)) {
-        foreach ($contentNodes as $contentNode) {
-          /** @var \DOMNode $contentNode */
-          $result[] = $targetNode->parentNode->insertBefore(
-            $contentNode->cloneNode(TRUE), $targetNode
-          );
-        }
-      }
-      return $result;
-    }
-
     /*********************
      * Core
      ********************/
+
+    /**
+     * @param \DOMNode $node
+     * @return Nodes\Modifier
+     */
+    private function modify(\DOMNode $node) {
+      return new Nodes\Modifier($node);
+    }
 
     /**
      * Use a handler callback to apply a content argument to each node $targetNodes. The content
@@ -996,7 +907,7 @@ namespace FluentDOM {
         $this->_nodes,
         $content,
         function($targetNode, $contentNodes) {
-          return self::insertNodesAfter($targetNode, $contentNodes);
+          return $this->modify($targetNode)->insertNodesAfter($contentNodes);
         }
       );
     }
@@ -1023,7 +934,7 @@ namespace FluentDOM {
           $this->_nodes,
           $content,
           function($targetNode, $contentNodes) {
-            return self::appendChildren($targetNode, $contentNodes);
+            return $this->modify($targetNode)->appendChildren($contentNodes);
           }
         );
       }
@@ -1041,7 +952,7 @@ namespace FluentDOM {
       return $this->applyToSelector(
         $selector,
         function($targetNode, $contentNodes) {
-          return self::appendChildren($targetNode, $contentNodes);
+          return $this->modify($targetNode)->appendChildren($contentNodes);
         },
         TRUE
       );
@@ -1059,7 +970,7 @@ namespace FluentDOM {
         $this->_nodes,
         $content,
         function($targetNode, $contentNodes) {
-          return self::insertNodesBefore($targetNode, $contentNodes);
+          return $this->modify($targetNode)->insertNodesBefore($contentNodes);
         }
       );
     }
@@ -1115,7 +1026,7 @@ namespace FluentDOM {
         $this->getNodes($selector),
         $this->_nodes,
         function($targetNode, $contentNodes) {
-          return self::insertNodesAfter($targetNode, $contentNodes);
+          return $this->modify($targetNode)->insertNodesAfter($contentNodes);
         },
         TRUE
       );
@@ -1132,7 +1043,7 @@ namespace FluentDOM {
       return $this->applyToSelector(
         $selector,
         function($targetNode, $contentNodes) {
-          return self::insertNodesBefore($targetNode, $contentNodes);
+          return $this->modify($targetNode)->insertNodesBefore($contentNodes);
         },
         TRUE
       );
@@ -1150,7 +1061,7 @@ namespace FluentDOM {
         $this->_nodes,
         $content,
         function($targetNode, $contentNodes) {
-          return self::insertChildrenBefore($targetNode, $contentNodes);
+          return $this->modify($targetNode)->insertChildrenBefore($contentNodes);
         }
       );
     }
@@ -1167,7 +1078,7 @@ namespace FluentDOM {
       return $this->applyToSelector(
         $selector,
         function($targetNode, $contentNodes) {
-          return self::insertChildrenBefore($targetNode, $contentNodes);
+          return $this->modify($targetNode)->insertChildrenBefore($contentNodes);
         },
         TRUE
       );
@@ -1185,7 +1096,7 @@ namespace FluentDOM {
         $targetNodes = $this->getNodes($selector),
         $this->_nodes,
         function($targetNode, $contentNodes) {
-          return self::insertNodesBefore($targetNode, $contentNodes);
+          return $this->modify($targetNode)->insertNodesBefore($contentNodes);
         },
         TRUE
       );
@@ -1208,7 +1119,7 @@ namespace FluentDOM {
         $this->_nodes,
         $content,
         function($targetNode, $contentNodes) {
-          return self::insertNodesBefore($targetNode, $contentNodes);
+          return $this->modify($targetNode)->insertNodesBefore($contentNodes);
         }
       );
       $this->remove();
@@ -1391,7 +1302,7 @@ namespace FluentDOM {
           return $this->getContentFragment($node, TRUE);
         },
         function($node, $fragment) {
-          self::replaceChildren($node, $fragment);
+          $this->modify($node)->replaceChildren($fragment);
         }
       );
     }
@@ -1446,7 +1357,7 @@ namespace FluentDOM {
           return $this->getHtmlFragment($html);
         },
         function($node, $fragment) {
-          self::replaceChildren($node, $fragment);
+          $this->modify($node)->replaceChildren($fragment);
         }
       );
     }

@@ -1062,10 +1062,25 @@ namespace FluentDOM {
      */
     public function wrapAll($content) {
       $result = $this->spawn();
+      if ($groups = $this->getGroupedNodes()) {
+        $result->push(
+          $this->wrapGroupedNodes(
+            $groups, $this->build()->getContentElement($content)
+          )
+        );
+      }
+      return $result;
+    }
+
+    /**
+     * group selected elements by previous node - ignore whitespace text nodes
+     *
+     * @return array|bool
+     */
+    private function getGroupedNodes() {
       $current = NULL;
       $counter = 0;
       $groups = array();
-      //group elements by previous node - ignore whitespace text nodes
       foreach ($this->_nodes as $node) {
         $previous = $node->previousSibling;
         while ($previous instanceof \DOMText && $previous->isWhitespaceInElementContent()) {
@@ -1077,28 +1092,37 @@ namespace FluentDOM {
         $groups[$counter][] = $node;
         $current = $node;
       }
-      if (count($groups) > 0) {
-        $wrapperTemplate = $this->build()->getContentElement($content);
-        $simple = FALSE;
-        foreach ($groups as $group) {
-          if (isset($group[0])) {
-            $node = $group[0];
-            /**
-             * @var \DOMElement $target
-             * @var \DOMElement $wrapper
-             */
-            list($target, $wrapper) = $this->build()->getWrapperNodes(
-              $wrapperTemplate,
-              $simple
-            );
-            if ($node->parentNode instanceof \DOMNode) {
-              $node->parentNode->insertBefore($wrapper, $node);
-            }
-            foreach ($group as $node) {
-              $target->appendChild($node);
-            }
-            $result->push($node);
+      return count($groups) > 0 ? $groups : FALSE;
+    }
+
+    /**
+     * Wrap grouped nodes
+     *
+     * @param array $groups
+     * @param \DOMElement $template
+     * @return array
+     */
+    private function wrapGroupedNodes(array $groups, \DOMElement $template) {
+      $result = [];
+      $simple = FALSE;
+      foreach ($groups as $group) {
+        if (isset($group[0])) {
+          $node = $group[0];
+          /**
+           * @var \DOMElement $target
+           * @var \DOMElement $wrapper
+           */
+          list($target, $wrapper) = $this->build()->getWrapperNodes(
+            $template,
+            $simple
+          );
+          if ($node->parentNode instanceof \DOMNode) {
+            $node->parentNode->insertBefore($wrapper, $node);
           }
+          foreach ($group as $node) {
+            $target->appendChild($node);
+          }
+          $result[] = $node;
         }
       }
       return $result;

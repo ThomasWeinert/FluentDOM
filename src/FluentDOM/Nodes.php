@@ -607,7 +607,7 @@ namespace FluentDOM {
      * @param int $contextMode
      * @return string
      */
-    protected function prepareSelector($selector, $contextMode) {
+    public function prepareSelector($selector, $contextMode) {
       if (isset($this->_onPrepareSelector)) {
         return call_user_func($this->_onPrepareSelector, $selector, $contextMode);
       }

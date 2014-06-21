@@ -26,6 +26,11 @@ namespace FluentDOM {
   class Query extends Nodes {
 
     /**
+     * @var Nodes\Builder
+     */
+    private $_builder;
+
+    /**
      * Virtual properties, validate existence
      *
      * @param string $name
@@ -154,159 +159,6 @@ namespace FluentDOM {
     }
 
     /**
-     * Match selector against context and return matched elements.
-     *
-     * @param mixed $selector
-     * @param \DOMNode $context optional, default value NULL
-     * @throws \InvalidArgumentException
-     * @return array
-     */
-    private function getNodes($selector, \DOMNode $context = NULL) {
-      if ($nodes = $this->getNodeList($selector)) {
-        return is_array($nodes) ? $nodes : iterator_to_array($nodes);
-      } elseif (is_string($selector)) {
-        $result = $this->xpath()->evaluate(
-          $this->prepareSelector($selector, self::CONTEXT_SELF), $context, FALSE
-        );
-        if (!($result instanceof \Traversable)) {
-          throw new \InvalidArgumentException('Given selector did not return an node list.');
-        }
-        return iterator_to_array($result);
-      }
-      throw new \InvalidArgumentException('Invalid selector');
-    }
-
-    /**
-     * @param mixed $content
-     * @param bool $includeTextNodes
-     * @param int $limit
-     * @return array|\Traversable null
-     */
-    private function getNodeList(
-      $content,
-      $includeTextNodes = TRUE,
-      $limit = -1
-    ) {
-      if ($callback = $this->isCallable($content)) {
-        $content = $callback($content);
-      }
-      if ($content instanceof \DOMElement) {
-        return array($content);
-      } elseif ($includeTextNodes && $this->isNode($content)) {
-        return array($content);
-      } elseif ($this->isNodeList($content)) {
-        if ($limit > 0) {
-          if (is_array($content)) {
-            return array_slice($content, 0, $limit);
-          } else {
-            return new \LimitIterator(
-              new \IteratorIterator($content), 0, $limit
-            );
-          }
-        }
-        return $content;
-      }
-      return NULL;
-    }
-
-    /**
-     * Convert a given content into and array of nodes
-     *
-     * @param mixed $content
-     * @param boolean $includeTextNodes
-     * @param integer $limit
-     * @throws \UnexpectedValueException
-     * @throws \InvalidArgumentException
-     * @return array
-     */
-    private function getContentNodes($content, $includeTextNodes = TRUE, $limit = -1) {
-      if ($nodes = $this->getNodeList($content, $includeTextNodes, $limit)) {
-        $result = $nodes;
-      } elseif (is_string($content)) {
-        $result = $this->getContentFragment($content, $includeTextNodes, $limit);
-      } else {
-        throw new \InvalidArgumentException('Invalid/empty content parameter.');
-      }
-      $result = is_array($result) ? $result : iterator_to_array($result, FALSE);
-      if (empty($result)) {
-        throw new \InvalidArgumentException('No nodes found.');
-      } else {
-        //if a node is not in the current document import it
-        $document = $this->getDocument();
-        foreach ($result as $index => $node) {
-          if ($node->ownerDocument !== $document) {
-            $result[$index] = $document->importNode($node, TRUE);
-          }
-        }
-      }
-      return $result;
-    }
-
-    /**
-     * Convert a given content xml string into and array of nodes
-     *
-     * @param string $content
-     * @param boolean $includeTextNodes
-     * @param integer $limit
-     * @throws \UnexpectedValueException
-     * @return array
-     */
-    private function getContentFragment($content, $includeTextNodes = TRUE, $limit = 0) {
-      $result = array();
-      $fragment = $this->getDocument()->createDocumentFragment();
-      if (is_string($content) || method_exists($content, '__toString')) {
-        $content = (string)$content;
-        if (empty($content)) {
-          return array();
-        }
-        if ($fragment->appendXML($content)) {
-          for ($i = $fragment->childNodes->length - 1; $i >= 0; $i--) {
-            $element = $fragment->childNodes->item($i);
-            if ($element instanceof \DOMElement ||
-              ($includeTextNodes && $this->isNode($element))) {
-              array_unshift($result, $element);
-              $element->parentNode->removeChild($element);
-            }
-          }
-          if ($limit > 0 && count($result) >= $limit) {
-            return array_slice($result, 0, $limit);
-          }
-          return $result;
-        }
-      }
-      throw new \UnexpectedValueException('Invalid document fragment');
-    }
-
-    /**
-     * Convert $content to a DOMElement. If $content contains several elements use the first.
-     *
-     * @param mixed $content
-     * @return \DOMElement
-     */
-    private function getContentElement($content) {
-      $contentNodes = $this->getContentNodes($content, FALSE, 1);
-      return $contentNodes[0];
-    }
-
-    /**
-     * Get the inner xml of a given node or in other words the xml of all children.
-     *
-     * @param \DOMNode $context
-     * @return string
-     */
-    private function getInnerXml($context) {
-      $result = '';
-      $dom = $this->getDocument();
-      $nodes = $this->xpath()->evaluate(
-        '*|text()[normalize-space(.) != ""]|self::text()[normalize-space(.) != ""]', $context
-      );
-      foreach ($nodes as $child) {
-        $result .= $dom->saveXML($child);
-      }
-      return $result;
-    }
-
-    /**
      * Wrap $content around a set of elements
      *
      * @param array $elements
@@ -318,7 +170,7 @@ namespace FluentDOM {
       $wrapperTemplate = NULL;
       $callback = $this->isCallable($content, FALSE, TRUE);
       if (!$callback) {
-        $wrapperTemplate = $this->getContentElement($content);
+        $wrapperTemplate = $this->build()->getContentElement($content);
       }
       $simple = FALSE;
       foreach ($elements as $index => $node) {
@@ -326,7 +178,7 @@ namespace FluentDOM {
           $wrapperTemplate = NULL;
           $wrapContent = $callback($node, $index);
           if (!empty($wrapContent)) {
-            $wrapperTemplate = $this->getContentElement($wrapContent);
+            $wrapperTemplate = $this->build()->getContentElement($wrapContent);
           }
         }
         if ($wrapperTemplate instanceof \DOMElement) {
@@ -334,7 +186,7 @@ namespace FluentDOM {
            * @var \DOMElement $target
            * @var \DOMElement $wrapper
            */
-          list($target, $wrapper) = $this->getWrapperNodes(
+          list($target, $wrapper) = $this->build()->getWrapperNodes(
             $wrapperTemplate,
             $simple
           );
@@ -361,6 +213,16 @@ namespace FluentDOM {
     }
 
     /**
+     * @return Nodes\Builder
+     */
+    private function build() {
+      if (NULL === $this->_builder) {
+        $this->_builder = new Nodes\Builder($this);
+      }
+      return $this->_builder;
+    }
+
+    /**
      * Use a handler callback to apply a content argument to each node $targetNodes. The content
      * argument can be an easy setter function
      *
@@ -375,13 +237,13 @@ namespace FluentDOM {
       if ($callback = $this->isCallable($content)) {
         $isSetterFunction = TRUE;
       } else {
-        $contentNodes = $this->getContentNodes($content);
+        $contentNodes = $this->build()->getContentNodes($content);
       }
       foreach ($targetNodes as $index => $node) {
         if ($isSetterFunction) {
-          $contentData = $callback($node, $index, $this->getInnerXml($node));
+          $contentData = $callback($node, $index, $this->build()->getInnerXml($node));
           if (!empty($contentData)) {
-            $contentNodes = $this->getContentNodes($contentData);
+            $contentNodes = $this->build()->getContentNodes($contentData);
           }
         }
         if (!empty($contentNodes)) {
@@ -425,7 +287,7 @@ namespace FluentDOM {
      */
     private function applyToSelector($selector, $handler, $remove = FALSE) {
       return $this->applyToSpawn(
-        $this->getNodes($selector),
+        $this->build()->getTargetNodes($selector),
         $this->_nodes,
         $handler,
         $remove
@@ -448,9 +310,11 @@ namespace FluentDOM {
       $result = $this->spawn($this);
       if (isset($context)) {
         $result->push($this->spawn($context)->find($selector));
-      } elseif (is_object($selector) ||
-                (is_string($selector) && substr(ltrim($selector), 0, 1) == '<')) {
-        $result->push($this->getContentNodes($selector));
+      } elseif (
+        is_object($selector) ||
+        (is_string($selector) && substr(ltrim($selector), 0, 1) == '<')
+      ) {
+        $result->push($this->build()->getContentNodes($selector));
       } else {
         $result->push($this->find($selector));
       }
@@ -924,9 +788,9 @@ namespace FluentDOM {
         $this->_useDocumentContext &&
         !isset($this->getDocument()->documentElement)) {
         if ($callback = $this->isCallable($content)) {
-          $contentNode = $this->getContentElement($callback(NULL, 0, ''));
+          $contentNode = $this->build()->getContentElement($callback(NULL, 0, ''));
         } else {
-          $contentNode = $this->getContentElement($content);
+          $contentNode = $this->build()->getContentElement($content);
         }
         return $this->spawn($this->getDocument()->appendChild($contentNode));
       } else {
@@ -1023,7 +887,7 @@ namespace FluentDOM {
      */
     public function insertAfter($selector) {
       return $this->applyToSpawn(
-        $this->getNodes($selector),
+        $this->build()->getTargetNodes($selector),
         $this->_nodes,
         function($targetNode, $contentNodes) {
           return $this->modify($targetNode)->insertNodesAfter($contentNodes);
@@ -1093,7 +957,7 @@ namespace FluentDOM {
      */
     public function replaceAll($selector) {
       $result = $this->applyToSpawn(
-        $targetNodes = $this->getNodes($selector),
+        $targetNodes = $this->build()->getTargetNodes($selector),
         $this->_nodes,
         function($targetNode, $contentNodes) {
           return $this->modify($targetNode)->insertNodesBefore($contentNodes);
@@ -1214,7 +1078,7 @@ namespace FluentDOM {
         $current = $node;
       }
       if (count($groups) > 0) {
-        $wrapperTemplate = $this->getContentElement($content);
+        $wrapperTemplate = $this->build()->getContentElement($content);
         $simple = FALSE;
         foreach ($groups as $group) {
           if (isset($group[0])) {
@@ -1223,7 +1087,7 @@ namespace FluentDOM {
              * @var \DOMElement $target
              * @var \DOMElement $wrapper
              */
-            list($target, $wrapper) = $this->getWrapperNodes(
+            list($target, $wrapper) = $this->build()->getWrapperNodes(
               $wrapperTemplate,
               $simple
             );
@@ -1238,30 +1102,6 @@ namespace FluentDOM {
         }
       }
       return $result;
-    }
-
-    /**
-     * Get the inner and outer wrapper nodes. Simple meeans that they are the
-     * same nodes.
-     *
-     * @param \DOMElement $template
-     * @param bool $simple
-     * @return \DOMElement[]
-     */
-    private function getWrapperNodes($template, &$simple) {
-      $wrapper = $template->cloneNode(TRUE);
-      $targets = NULL;
-      if (!$simple) {
-        // get the first element without child elements.
-        $targets = $this->xpath()->evaluate('.//*[count(*) = 0]', $wrapper);
-      }
-      if ($simple || $targets->length == 0) {
-        $target = $wrapper;
-        $simple = TRUE;
-      } else {
-        $target = $targets->item(0);
-      }
-      return array($target, $wrapper);
     }
 
     /**
@@ -1296,10 +1136,10 @@ namespace FluentDOM {
       return $this->content(
         $xml,
         function($node) {
-          return $this->getInnerXml($node);
+          return $this->build()->getInnerXml($node);
         },
         function($node) {
-          return $this->getContentFragment($node, TRUE);
+          return $this->build()->getXmlFragment($node, TRUE);
         },
         function($node, $fragment) {
           $this->modify($node)->replaceChildren($fragment);
@@ -1321,7 +1161,7 @@ namespace FluentDOM {
           return $this->getDocument()->saveXML($node);
         },
         function($xml) {
-          return $this->getContentFragment($xml, TRUE);
+          return $this->build()->getXmlFragment($xml, TRUE);
         },
         function($node, $fragment) {
           /** @var \DOMNode $contentNode */
@@ -1354,35 +1194,12 @@ namespace FluentDOM {
           return $result;
         },
         function($html) {
-          return $this->getHtmlFragment($html);
+          return $this->build()->getHtmlFragment($html);
         },
         function($node, $fragment) {
           $this->modify($node)->replaceChildren($fragment);
         }
       );
-    }
-
-    /**
-     * @param string $html
-     * @return array
-     */
-    private function getHtmlFragment($html) {
-      if (empty($html)) {
-        return array();
-      }
-      $dom = new Document();
-      $status = libxml_use_internal_errors(TRUE);
-      $dom->loadHtml('<html-fragment>'.$html.'</html-fragment>');
-      libxml_clear_errors();
-      libxml_use_internal_errors($status);
-      $result = array();
-      $nodes = $dom->xpath()->evaluate('//html-fragment[1]/node()');
-      if ($nodes instanceof \Traversable) {
-        foreach ($nodes as $node) {
-          $result[] = $this->getDocument()->importNode($node, TRUE);
-        }
-      }
-      return $result;
     }
 
     /**

@@ -48,7 +48,7 @@ namespace FluentDOM\Nodes {
       $limit = -1
     ) {
       if ($callback = Constraints::isCallable($content)) {
-        $content = $callback($content);
+        $content = $callback();
       }
       if ($content instanceof \DOMElement) {
         return array($content);

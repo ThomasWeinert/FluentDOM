@@ -293,6 +293,18 @@ namespace FluentDOM\Nodes {
     /**
      * @covers FluentDOM\Nodes\Builder
      */
+    public function testGetXmlFragmentWithInvalidFragmentBlockingErrors() {
+      $nodes = new Nodes();
+      $builder = new Builder($nodes);
+      $this->assertEquals(
+        [],
+        @$builder->getXmlFragment('')
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Nodes\Builder
+     */
     public function testGetHtmlFragment() {
       $nodes = new Nodes();
       $builder = new Builder($nodes);
@@ -323,6 +335,38 @@ namespace FluentDOM\Nodes {
         '<item index="0">text1</item><item index="1">text2</item><item index="2">text3</item>',
         $builder->getInnerXml($nodes->xpath()->evaluate('//group')->item(0))
       );
+    }
+
+    /**
+     * @covers FluentDOM\Nodes\Builder
+     */
+    public function testGetWrapperNodesSimple() {
+      $nodes = new Nodes();
+      $builder = new Builder($nodes);
+      $template = $builder->getContentElement('<simple/>');
+      $simple = FALSE;
+      $this->assertXmlNodesArrayEqualsXmlStrings(
+        ['<simple/>', '<simple/>'],
+        $builder->getWrapperNodes($template, $simple)
+      );
+      $this->assertTrue($simple);
+    }
+
+    /**
+     * @covers FluentDOM\Nodes\Builder
+     */
+    public function testGetWrapperNodesComplex() {
+      $nodes = new Nodes();
+      $builder = new Builder($nodes);
+      $template = $builder->getContentElement(
+        '<outer><between><inner/></between></outer>'
+      );
+      $simple = FALSE;
+      $this->assertXmlNodesArrayEqualsXmlStrings(
+        ['<inner/>', '<outer><between><inner/></between></outer>'],
+        $builder->getWrapperNodes($template, $simple)
+      );
+      $this->assertFalse($simple);
     }
 
     public function assertXmlNodesArrayEqualsXmlStrings($expected, $nodes) {

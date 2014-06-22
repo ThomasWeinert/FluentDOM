@@ -243,6 +243,20 @@ namespace FluentDOM\Nodes {
     /**
      * @covers FluentDOM\Nodes\Builder
      */
+    public function testGetContentNodesFromEmptyStringExpectingException() {
+      $dom = new Document();
+      $nodes = new Nodes();
+      $builder = new Builder($nodes);
+      $this->setExpectedException(
+        'InvalidArgumentException',
+        'Invalid/empty content parameter.'
+      );
+      $builder->getContentNodes('');
+    }
+
+    /**
+     * @covers FluentDOM\Nodes\Builder
+     */
     public function testGetContentElement() {
       $nodes = new Nodes();
       $builder = new Builder($nodes);

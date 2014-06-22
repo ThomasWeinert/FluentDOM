@@ -99,16 +99,14 @@ namespace FluentDOM\Nodes {
      * @return array
      */
     public function getContentNodes($content, $includeTextNodes = TRUE, $limit = -1) {
+      $result = FALSE;
       if ($nodes = $this->getNodeList($content, $includeTextNodes, $limit)) {
         $result = $nodes;
       } elseif (is_string($content)) {
         $result = $this->getXmlFragment($content, $includeTextNodes, $limit);
-      } else {
-        throw new \InvalidArgumentException('Invalid/empty content parameter.');
       }
-      $result = is_array($result) ? $result : iterator_to_array($result, FALSE);
-      if (empty($result)) {
-        throw new \InvalidArgumentException('No nodes found.');
+      if (!is_array($result) || empty($result)) {
+        throw new \InvalidArgumentException('Invalid/empty content parameter.');
       } else {
         //if a node is not in the current document import it
         $document = $this->getOwner()->getDocument();

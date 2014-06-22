@@ -96,42 +96,9 @@ namespace FluentDOM\Nodes {
     ) {
       $nodes = $this->fetchNodes($expression, $context, $options);
       if ($filter || $stopAt) {
-        $result = array();
-        foreach ($nodes as $index => $node) {
-          list($isFilter, $isStopAt) = $this->getNodeStatus(
-            $node, $index, $filter, $stopAt
-          );
-          if ($isStopAt) {
-            if (
-              $isFilter &&
-              Constraints::hasOption($options, self::INCLUDE_STOP)
-            ) {
-              $result[] = $node;
-            }
-            return $result;
-          } elseif ($isFilter) {
-            $result[] = $node;
-          }
-        }
-        return $result;
+        return $this->filterNodes($nodes, $filter, $stopAt, $options);
       }
       return $nodes;
-    }
-
-    /**
-     * @param \DOMNode $node
-     * @param int $index
-     * @param callable $filter
-     * @param callable $stopAt
-     * @return boolean[]
-     */
-    private function getNodeStatus(
-      \DOMNode $node, $index, callable $filter = NULL, callable $stopAt = NULL
-    ) {
-      return [
-        empty($filter) || $filter($node, $index),
-        !empty($stopAt) && $stopAt($node, $index)
-      ];
     }
 
     /**
@@ -156,6 +123,52 @@ namespace FluentDOM\Nodes {
         return array_reverse($nodes, FALSE);
       }
       return $nodes;
+    }
+
+    /**
+     * @param array $nodes
+     * @param callable $filter
+     * @param callable $stopAt
+     * @param int $options
+     * @return array
+     */
+    private function filterNodes(
+      array $nodes, callable $filter = NULL, callable $stopAt = NULL, $options = 0
+    ) {
+      $result = array();
+      foreach ($nodes as $index => $node) {
+        list($isFilter, $isStopAt) = $this->getNodeStatus(
+          $node, $index, $filter, $stopAt
+        );
+        if ($isStopAt) {
+          if (
+            $isFilter &&
+            Constraints::hasOption($options, self::INCLUDE_STOP)
+          ) {
+            $result[] = $node;
+          }
+          return $result;
+        } elseif ($isFilter) {
+          $result[] = $node;
+        }
+      }
+      return $result;
+    }
+
+    /**
+     * @param \DOMNode $node
+     * @param int $index
+     * @param callable $filter
+     * @param callable $stopAt
+     * @return boolean[]
+     */
+    private function getNodeStatus(
+      \DOMNode $node, $index, callable $filter = NULL, callable $stopAt = NULL
+    ) {
+      return [
+        empty($filter) || $filter($node, $index),
+        !empty($stopAt) && $stopAt($node, $index)
+      ];
     }
   }
 }

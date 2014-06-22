@@ -98,8 +98,9 @@ namespace FluentDOM\Nodes {
       if ($filter || $stopAt) {
         $result = array();
         foreach ($nodes as $index => $node) {
-          $isFilter = (empty($filter) || $filter($node, $index));
-          $isStopAt = (!empty($stopAt) && $stopAt($node, $index));
+          list($isFilter, $isStopAt) = $this->getNodeStatus(
+            $node, $index, $filter, $stopAt
+          );
           if ($isStopAt) {
             if (
               $isFilter &&
@@ -108,14 +109,29 @@ namespace FluentDOM\Nodes {
               $result[] = $node;
             }
             return $result;
-          }
-          if ($isFilter) {
+          } elseif ($isFilter) {
             $result[] = $node;
           }
         }
         return $result;
       }
       return $nodes;
+    }
+
+    /**
+     * @param \DOMNode $node
+     * @param int $index
+     * @param callable $filter
+     * @param callable $stopAt
+     * @return bool
+     */
+    private function getNodeStatus(
+      \DOMNode $node, $index, callable $filter = NULL, callable $stopAt = NULL
+    ) {
+      return [
+        empty($filter) || $filter($node, $index),
+        !empty($stopAt) && $stopAt($node, $index)
+      ];
     }
 
     /**

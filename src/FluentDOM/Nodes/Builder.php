@@ -205,7 +205,7 @@ namespace FluentDOM\Nodes {
      * @return bool
      * @throws \UnexpectedValueException
      */
-    public function getContentAsString($content) {
+    private function getContentAsString($content) {
       if (is_string($content) || method_exists($content, '__toString')) {
         $content = (string)$content;
         return empty($content) ? FALSE : $content;

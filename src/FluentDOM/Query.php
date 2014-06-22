@@ -168,7 +168,7 @@ namespace FluentDOM {
     private function wrapNodes($elements, $content) {
       $result = array();
       $wrapperTemplate = NULL;
-      $callback = $this->isCallable($content, FALSE, TRUE);
+      $callback = Constraints::isCallable($content, FALSE, TRUE);
       if (!$callback) {
         $wrapperTemplate = $this->build()->getContentElement($content);
       }
@@ -234,7 +234,7 @@ namespace FluentDOM {
     private function apply($targetNodes, $content, $handler) {
       $result = array();
       $isSetterFunction = FALSE;
-      if ($callback = $this->isCallable($content)) {
+      if ($callback = Constraints::isCallable($content)) {
         $isSetterFunction = TRUE;
       } else {
         $contentNodes = $this->build()->getContentNodes($content);
@@ -787,7 +787,7 @@ namespace FluentDOM {
       if (empty($this->_nodes) &&
         $this->_useDocumentContext &&
         !isset($this->getDocument()->documentElement)) {
-        if ($callback = $this->isCallable($content)) {
+        if ($callback = Constraints::isCallable($content)) {
           $contentNode = $this->build()->getContentElement($callback(NULL, 0, ''));
         } else {
           $contentNode = $this->build()->getContentElement($content);
@@ -1019,7 +1019,7 @@ namespace FluentDOM {
      */
     public function text($text = NULL) {
       if (isset($text)) {
-        $callback = $this->isCallable($text, FALSE, TRUE);
+        $callback = Constraints::isCallable($text, FALSE, TRUE);
         foreach ($this->_nodes as $index => $node) {
           if ($callback) {
             $node->nodeValue = $callback($node, $index, $node->nodeValue);
@@ -1140,7 +1140,7 @@ namespace FluentDOM {
       $elements = array();
       foreach ($this->_nodes as $node) {
         foreach ($node->childNodes as $childNode) {
-          if ($this->isNode($childNode)) {
+          if (Constraints::isNode($childNode)) {
             $elements[] = $childNode;
           }
         }
@@ -1244,7 +1244,7 @@ namespace FluentDOM {
      */
     private function content($content, callable $export, callable $import, callable $insert) {
       if (isset($content)) {
-        $callback = $this->isCallable($content, FALSE, TRUE);
+        $callback = Constraints::isCallable($content, FALSE, TRUE);
         if ($callback) {
           foreach ($this->_nodes as $index => $node) {
             $contentString = $callback($node, $index, $export($node));
@@ -1338,7 +1338,7 @@ namespace FluentDOM {
         // set attributes on each element
         foreach ($attributes as $key => $value) {
           $name = (new QualifiedName($key))->name;
-          $callback = $this->isCallable($value);
+          $callback = Constraints::isCallable($value);
           $this->each(
             function(\DOMElement $node, $index) use ($name, $value, $callback) {
               $node->setAttribute(
@@ -1452,7 +1452,7 @@ namespace FluentDOM {
      * @return Query
      */
     public function toggleClass($class, $switch = NULL) {
-      $callback = $this->isCallable($class);
+      $callback = Constraints::isCallable($class);
       $this->each(
         function(\DOMElement $node, $index) use ($class, $switch, $callback) {
           if ($callback) {

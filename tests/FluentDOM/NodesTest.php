@@ -3,6 +3,12 @@ namespace FluentDOM {
 
   require_once(__DIR__.'/TestCase.php');
 
+  class Nodes_TestProxy extends Nodes {
+    public function matches($selector, $context = NULL) {
+      return parent::matches($selector, $context);
+    }
+  }
+
   class NodesTest extends TestCase {
 
     public static $_fd;
@@ -324,7 +330,7 @@ namespace FluentDOM {
      * @covers FluentDOM\Nodes::prepareSelector
      */
     public function testMatchesWithNodeListExpectingTrue() {
-      $fd = new Nodes(self::XML);
+      $fd = new Nodes_TestProxy(self::XML);
       $this->assertTrue($fd->matches('/*'));
     }
 
@@ -334,7 +340,7 @@ namespace FluentDOM {
      * @covers FluentDOM\Nodes::prepareSelector
      */
     public function testMatchesWithSelectorCallbackExpectingTrue() {
-      $fd = new Nodes(self::XML);
+      $fd = new Nodes_TestProxy(self::XML);
       $fd->onPrepareSelector = function($selector) { return '/'.$selector; };
       $this->assertTrue($fd->matches('*'));
     }
@@ -345,7 +351,7 @@ namespace FluentDOM {
      * @covers FluentDOM\Nodes::prepareSelector
      */
     public function testMatchesWithNodeListExpectingFalse() {
-      $fd = new Nodes(self::XML);;
+      $fd = new Nodes_TestProxy(self::XML);
       $this->assertFalse($fd->matches('invalid'));
     }
 
@@ -355,7 +361,7 @@ namespace FluentDOM {
      * @covers FluentDOM\Nodes::prepareSelector
      */
     public function testMatchesWithScalarExpectingTrue() {
-      $fd = new Nodes(self::XML);;
+      $fd = new Nodes_TestProxy(self::XML);
       $this->assertTrue(
         $fd->matches('count(/items)')
       );
@@ -367,7 +373,7 @@ namespace FluentDOM {
      * @covers FluentDOM\Nodes::prepareSelector
      */
     public function testMatchesWithScalarAndContextExpectingTrue() {
-      $fd = new Nodes(self::XML);
+      $fd = new Nodes_TestProxy(self::XML);
       $this->assertTrue(
         $fd->matches(
           'count(item)',
@@ -382,7 +388,7 @@ namespace FluentDOM {
      * @covers FluentDOM\Nodes::prepareSelector
      */
     public function testMatchesWithScalarExpectingFalse() {
-      $fd = new Nodes(self::XML);
+      $fd = new Nodes_TestProxy(self::XML);
       $this->assertFalse(
         $fd->matches('count(item)')
       );
@@ -394,7 +400,7 @@ namespace FluentDOM {
      * @covers FluentDOM\Nodes::prepareSelector
      */
     public function testMatchesWithPreparedSelectorExpectingTrue() {
-      $fd = new Nodes(self::XML);
+      $fd = new Nodes_TestProxy(self::XML);
       $fd->onPrepareSelector = function($selector) {
         return 'count(//group[1]'.$selector.')';
       };
@@ -409,7 +415,7 @@ namespace FluentDOM {
      * @covers FluentDOM\Nodes::prepareSelector
      */
     public function testMatchesWithPreparedSelectorExpectingFalse() {
-      $fd = new Nodes(self::XML);
+      $fd = new Nodes_TestProxy(self::XML);
       $fd->onPrepareSelector = function($selector) {
         return 'count('.$selector.')';
       };
@@ -824,37 +830,6 @@ namespace FluentDOM {
       $fd->xpath();
       $fd->registerNamespace('f', 'urn:foo');
       $this->assertEquals(1, $fd->xpath()->evaluate('count(/f:foo)'));
-    }
-
-    /**
-     * @covers FluentDOM\Nodes::isNode
-     */
-    public function testIsNodeExpectingNode() {
-      $fd = new Nodes(self::XML);
-      $this->assertInstanceOf(
-        'DOMNode', $fd->isNode($fd->document->documentElement)
-      );
-    }
-
-    /**
-     * @covers FluentDOM\Nodes::isNode
-     */
-    public function testIsNodeWithSelectorExpectingNode() {
-      $fd = new Nodes(self::XML);
-      $this->assertInstanceOf(
-        'DOMNode',
-        $fd->isNode($fd->document->documentElement, FALSE, 'name() = "items"')
-      );
-    }
-
-    /**
-     * @covers FluentDOM\Nodes::isNode
-     */
-    public function testIsNodeWithSelectorExpectingNull() {
-      $fd = new Nodes(self::XML);
-      $this->assertNull(
-        $fd->isNode($fd->document->documentElement, FALSE, 'name() = "fail"')
-      );
     }
 
     /**

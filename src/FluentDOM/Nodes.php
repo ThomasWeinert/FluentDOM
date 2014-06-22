@@ -145,30 +145,6 @@ namespace FluentDOM {
     }
 
     /**
-     * Formats the current document, resets internal node array and other properties.
-     *
-     * The document is saved and reloaded, all variables with DOMNodes
-     * of this document will get invalid.
-     *
-     * @param string $contentType
-     * @return Nodes
-     */
-    public function formatOutput($contentType = NULL) {
-      if (isset($contentType)) {
-        $this->setContentType($contentType);
-      }
-      $this->_nodes = array();
-      $this->_useDocumentContext = TRUE;
-      $this->_parent = NULL;
-      $this->_document->preserveWhiteSpace = FALSE;
-      $this->_document->formatOutput = TRUE;
-      if (!empty($this->_document->documentElement)) {
-        $this->_document->loadXML($this->_document->saveXML());
-      }
-      return $this;
-    }
-
-    /**
      * The item() method is used to access elements in the node list,
      * like in a DOMNodelist.
      *
@@ -227,66 +203,25 @@ namespace FluentDOM {
     }
 
     /**
-     * Create a new instance of the same class with $this as the parent. This is used for the chaining.
+     * Formats the current document, resets internal node array and other properties.
      *
-     * @param array|\Traversable|\DOMNode|Nodes $elements
+     * The document is saved and reloaded, all variables with DOMNodes
+     * of this document will get invalid.
+     *
+     * @param string $contentType
      * @return Nodes
      */
-    public function spawn($elements = NULL) {
-      $result = clone $this;
-      $result->_parent = $this;
-      $result->_document = $this->getDocument();
-      $result->_xpath = $this->xpath();
-      $result->_nodes = array();
-      if (isset($elements)) {
-        $result->push($elements);
+    public function formatOutput($contentType = NULL) {
+      if (isset($contentType)) {
+        $this->setContentType($contentType);
       }
-      return $result;
-    }
-
-    /**
-     * Return the parent FluentDOM\Nodes object.
-     *
-     * @return Nodes
-     */
-    public function end() {
-      if ($this->_parent instanceof Nodes) {
-        return $this->_parent;
-      } else {
-        return $this;
-      }
-    }
-
-    /**
-     * Push new element(s) an the internal element list
-     *
-     * @param \DOMNode|\Traversable|array|NULL $elements
-     * @param boolean $ignoreTextNodes ignore text nodes
-     * @throws \OutOfBoundsException
-     * @throws \InvalidArgumentException
-     * @return $this
-     */
-    public function push($elements, $ignoreTextNodes = FALSE) {
-      if ($this->isNode($elements, $ignoreTextNodes)) {
-        $elements = array($elements);
-      }
-      if ($nodes = $this->isNodeList($elements)) {
-        $this->_useDocumentContext = FALSE;
-        foreach ($nodes as $index => $node) {
-          if ($this->isNode($node, $ignoreTextNodes)) {
-            if ($node->ownerDocument === $this->_document) {
-              $this->_nodes[] = $node;
-            } else {
-              throw new \OutOfBoundsException(
-                sprintf(
-                  'Node #%d is not a part of this document', $index
-                )
-              );
-            }
-          }
-        }
-      } elseif (!is_null($elements)) {
-        throw new \InvalidArgumentException('Invalid elements variable.');
+      $this->_nodes = array();
+      $this->_useDocumentContext = TRUE;
+      $this->_parent = NULL;
+      $this->_document->preserveWhiteSpace = FALSE;
+      $this->_document->formatOutput = TRUE;
+      if (!empty($this->_document->documentElement)) {
+        $this->_document->loadXML($this->_document->saveXML());
       }
       return $this;
     }
@@ -356,6 +291,76 @@ namespace FluentDOM {
         $this->applyNamespaces();
       }
       return $this->_document;
+    }
+    /**
+     * Use callback to convert selector if it is set.
+     *
+     * @param string $selector
+     * @param int $contextMode
+     * @return string
+     */
+    public function prepareSelector($selector, $contextMode) {
+      if (isset($this->_onPrepareSelector)) {
+        return call_user_func($this->_onPrepareSelector, $selector, $contextMode);
+      }
+      return $selector;
+    }
+
+    /**
+     * Returns a callback that can be used to validate if an node
+     * matches the selector.
+     *
+     * @throws \InvalidArgumentException
+     * @param NULL|callable|string|array|\DOMNode|\Traversable $selector
+     * @return callable|null
+     */
+    public function getSelectorCallback($selector) {
+      if (is_null($selector)) {
+        return NULL;
+      } elseif (Constraints::isCallable($selector)) {
+        return $selector;
+      } elseif ($selector instanceof \DOMNode) {
+        return function(\DOMNode $node) use ($selector) {
+          return $node->isSameNode($selector);
+        };
+      } elseif (is_string($selector) && $selector !== '') {
+        return function(\DOMNode $node) use ($selector) {
+          return $this->matches($selector, $node);
+        };
+      } elseif (
+        $selector instanceof \Traversable || is_array($selector)
+      ) {
+        return function(\DOMNode $node) use ($selector) {
+          foreach ($selector as $compareWith) {
+            if (
+              $compareWith instanceof \DOMNode &&
+              $node->isSameNode($compareWith)
+            ){
+              return TRUE;
+            }
+          }
+          return FALSE;
+        };
+      }
+      throw new \InvalidArgumentException('Invalid selector argument.');
+    }
+
+    /**
+     * Test that selector matches context and return true/false
+     *
+     * @param string $selector
+     * @param \DOMNode $context optional, default value NULL
+     * @return boolean
+     */
+    protected function matches($selector, \DOMNode $context = NULL) {
+      $check = $this->xpath->evaluate(
+        $this->prepareSelector($selector, self::CONTEXT_SELF), $context
+      );
+      if ($check instanceof \DOMNodeList) {
+        return $check->length > 0;
+      } else {
+        return (bool)$check;
+      }
     }
 
     /**************
@@ -493,7 +498,7 @@ namespace FluentDOM {
         $this->setContentType($value);
         break;
       case 'onPrepareSelector' :
-        if ($callback = $this->isCallable($value, TRUE, FALSE)) {
+        if ($callback = Constraints::isCallable($value, TRUE, FALSE)) {
           $this->_onPrepareSelector = $callback;
         }
         break;
@@ -552,84 +557,74 @@ namespace FluentDOM {
       }
     }
 
+    /***************************
+     * API
+     ***************************/
+
+
     /**
-     * Check if the DOMNode is DOMElement or DOMText with content.
-     * It returns the node or NULL.
+     * Create a new instance of the same class with $this as the parent. This is used for the chaining.
      *
-     * @param mixed $node
-     * @param boolean $ignoreTextNodes
-     * @param string|NULL $selector
-     * @return \DOMElement|\DOMText|\DOMCdataSection
+     * @param array|\Traversable|\DOMNode|Nodes $elements
+     * @return Nodes
      */
-    public function isNode($node, $ignoreTextNodes = FALSE, $selector = NULL) {
-      if (
-        Constraints::isNode($node, $ignoreTextNodes) &&
-        (
-          empty($selector) || $this->matches($selector, $node)
-        )
-      ) {
-        return $node;
+    public function spawn($elements = NULL) {
+      $result = clone $this;
+      $result->_parent = $this;
+      $result->_document = $this->getDocument();
+      $result->_xpath = $this->xpath();
+      $result->_nodes = array();
+      if (isset($elements)) {
+        $result->push($elements);
       }
-      return NULL;
+      return $result;
     }
 
     /**
-     * Check if $elements is a traversable node list. It returns
-     * the $elements or NULL
+     * Return the parent FluentDOM\Nodes object.
      *
-     * @param mixed $elements
-     * @return \Traversable|array
+     * @return Nodes
      */
-    public function isNodeList($elements) {
-      return Constraints::isNodeList($elements);
-    }
-
-    /**
-     * check if parameter is a valid callback function. It returns
-     * the callable or NULL.
-     *
-     * If $silent is disabled, an exception is thrown for invalid callbacks
-     *
-     * @param mixed $callback
-     * @param boolean $allowGlobalFunctions
-     * @param boolean $silent (no InvalidArgumentException)
-     * @throws \InvalidArgumentException
-     * @return callable|NULL
-     */
-    public function isCallable($callback, $allowGlobalFunctions = FALSE, $silent = TRUE) {
-      return Constraints::isCallable($callback, $allowGlobalFunctions, $silent);
-    }
-
-    /**
-     * Use callback to convert selector if it is set.
-     *
-     * @param string $selector
-     * @param int $contextMode
-     * @return string
-     */
-    public function prepareSelector($selector, $contextMode) {
-      if (isset($this->_onPrepareSelector)) {
-        return call_user_func($this->_onPrepareSelector, $selector, $contextMode);
-      }
-      return $selector;
-    }
-
-    /**
-     * Test that selector matches context and return true/false
-     *
-     * @param string $selector
-     * @param \DOMNode $context optional, default value NULL
-     * @return boolean
-     */
-    public function matches($selector, \DOMNode $context = NULL) {
-      $check = $this->xpath->evaluate(
-        $this->prepareSelector($selector, self::CONTEXT_SELF), $context
-      );
-      if ($check instanceof \DOMNodeList) {
-        return $check->length > 0;
+    public function end() {
+      if ($this->_parent instanceof Nodes) {
+        return $this->_parent;
       } else {
-        return (bool)$check;
+        return $this;
       }
+    }
+
+    /**
+     * Push new element(s) an the internal element list
+     *
+     * @param \DOMNode|\Traversable|array|NULL $elements
+     * @param boolean $ignoreTextNodes ignore text nodes
+     * @throws \OutOfBoundsException
+     * @throws \InvalidArgumentException
+     * @return $this
+     */
+    public function push($elements, $ignoreTextNodes = FALSE) {
+      if (Constraints::isNode($elements, $ignoreTextNodes)) {
+        $elements = array($elements);
+      }
+      if ($nodes = Constraints::isNodeList($elements)) {
+        $this->_useDocumentContext = FALSE;
+        foreach ($nodes as $index => $node) {
+          if (Constraints::isNode($node, $ignoreTextNodes)) {
+            if ($node->ownerDocument === $this->_document) {
+              $this->_nodes[] = $node;
+            } else {
+              throw new \OutOfBoundsException(
+                sprintf(
+                  'Node #%d is not a part of this document', $index
+                )
+              );
+            }
+          }
+        }
+      } elseif (!is_null($elements)) {
+        throw new \InvalidArgumentException('Invalid elements variable.');
+      }
+      return $this;
     }
 
     /**
@@ -650,7 +645,7 @@ namespace FluentDOM {
           return $node instanceof \DOMElement;
         };
       } else {
-        $filter = $this->isCallable($elementsFilter);
+        $filter = Constraints::isCallable($elementsFilter);
       }
       foreach ($this->_nodes as $index => $node) {
         if (NULL === $filter || $filter($node, $index)) {
@@ -762,45 +757,6 @@ namespace FluentDOM {
       $result = array_values($sortable);
       array_splice($result, count($result), 0, array_values($unsortable));
       return $result;
-    }
-
-    /**
-     * Returns a callback that can be used to validate if an node
-     * matches the selector.
-     *
-     * @throws \InvalidArgumentException
-     * @param NULL|callable|string|array|\DOMNode|\Traversable $selector
-     * @return callable|null
-     */
-    public function getSelectorCallback($selector) {
-      if (is_null($selector)) {
-        return NULL;
-      } elseif (Constraints::isCallable($selector)) {
-        return $selector;
-      } elseif ($selector instanceof \DOMNode) {
-        return function(\DOMNode $node) use ($selector) {
-          return $node->isSameNode($selector);
-        };
-      } elseif (is_string($selector) && $selector !== '') {
-        return function(\DOMNode $node) use ($selector) {
-          return $this->matches($selector, $node);
-        };
-      } elseif (
-        $selector instanceof \Traversable || is_array($selector)
-      ) {
-        return function(\DOMNode $node) use ($selector) {
-          foreach ($selector as $compareWith) {
-            if (
-              $compareWith instanceof \DOMNode &&
-              $node->isSameNode($compareWith)
-            ){
-              return TRUE;
-            }
-          }
-          return FALSE;
-        };
-      }
-      throw new \InvalidArgumentException('Invalid selector argument.');
     }
   }
 }

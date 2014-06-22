@@ -315,9 +315,7 @@ namespace FluentDOM {
      * @return callable|null
      */
     public function getSelectorCallback($selector) {
-      if (is_null($selector)) {
-        return NULL;
-      } elseif (Constraints::isCallable($selector)) {
+      if (is_null($selector) || Constraints::isCallable($selector)) {
         return $selector;
       } elseif ($selector instanceof \DOMNode) {
         return function(\DOMNode $node) use ($selector) {

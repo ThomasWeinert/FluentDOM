@@ -328,6 +328,19 @@ namespace FluentDOM\Nodes {
     /**
      * @covers FluentDOM\Nodes\Builder
      */
+    public function testGetHtmlFragmentWithInvalidFragment() {
+      $nodes = new Nodes();
+      $builder = new Builder($nodes);
+      $this->setExpectedException(
+        'UnexpectedValueException',
+        'Invalid document fragment'
+      );
+      $builder->getHtmlFragment(NULL);
+    }
+
+    /**
+     * @covers FluentDOM\Nodes\Builder
+     */
     public function testGetInnerXml() {
       $nodes = new Nodes(self::XML);
       $builder = new Builder($nodes);

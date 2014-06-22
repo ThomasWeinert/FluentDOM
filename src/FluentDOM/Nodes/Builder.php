@@ -144,9 +144,9 @@ namespace FluentDOM\Nodes {
       if (!$xml) {
         return array();
       }
+      $result = array();
       $fragment = $this->getOwner()->getDocument()->createDocumentFragment();
       if ($fragment->appendXML($xml)) {
-        $result = array();
         for ($i = $fragment->childNodes->length - 1; $i >= 0; $i--) {
           $element = $fragment->childNodes->item($i);
           if ($element instanceof \DOMElement ||
@@ -155,9 +155,8 @@ namespace FluentDOM\Nodes {
             $element->parentNode->removeChild($element);
           }
         }
-        return $this->getLimitedArray($result, $limit);
       }
-      throw new \UnexpectedValueException('Invalid document fragment');
+      return $this->getLimitedArray($result, $limit);
     }
 
     /**

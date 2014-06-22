@@ -73,7 +73,8 @@ namespace FluentDOM\Nodes {
 
     /**
      * Fetch the nodes for the provided context node. If $context
-     * ist NULL the document context is used.
+     * ist NULL the document context is used. Use $filter and
+     * $stopAt to reduce the returned nodes.
      *
      * @throws \InvalidArgumentException
      * @param string $expression
@@ -90,16 +91,7 @@ namespace FluentDOM\Nodes {
       callable $stopAt = NULL,
       $options = 0
     ) {
-      $nodes = $this->_nodes->xpath()->evaluate($expression, $context);
-      if (!$nodes instanceof \DOMNodeList) {
-        throw new \InvalidArgumentException(
-          'Given selector/expression did not return a node list.'
-        );
-      }
-      $nodes = iterator_to_array($nodes);
-      if (($options & self::REVERSE) == self::REVERSE) {
-        $nodes = array_reverse($nodes, FALSE);
-      }
+      $nodes = $this->fetchNodes($expression, $context, $options);
       if ($filter || $stopAt) {
         $result = array();
         foreach ($nodes as $index => $node) {
@@ -120,6 +112,30 @@ namespace FluentDOM\Nodes {
       } else {
         return $nodes;
       }
+    }
+
+    /**
+     * Fetch the nodes for the provided context node. If $context
+     * ist NULL the document context is used.
+     *
+     * @throws \InvalidArgumentException
+     * @param string $expression
+     * @param \DOMNode $context
+     * @param int $options
+     * @return array|bool|\DOMNodeList|float|string
+     */
+    private function fetchNodes($expression, $context, $options) {
+      $nodes = $this->_nodes->xpath()->evaluate($expression, $context);
+      if (!$nodes instanceof \DOMNodeList) {
+        throw new \InvalidArgumentException(
+          'Given selector/expression did not return a node list.'
+        );
+      }
+      $nodes = iterator_to_array($nodes);
+      if (($options & self::REVERSE) == self::REVERSE) {
+        return array_reverse($nodes, FALSE);
+      }
+      return $nodes;
     }
   }
 }

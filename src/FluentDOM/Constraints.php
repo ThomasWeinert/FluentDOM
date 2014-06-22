@@ -106,7 +106,7 @@ namespace FluentDOM {
      * @param int $option
      * @return bool
      */
-    public function hasOption($options, $option) {
+    public static function hasOption($options, $option) {
       return ($options & $option) == $option;
     }
   }

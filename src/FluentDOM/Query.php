@@ -231,7 +231,7 @@ namespace FluentDOM {
      * @param callable $handler
      * @return array
      */
-    private function apply($targetNodes, $content, $handler) {
+    private function apply($targetNodes, $content, callable $handler) {
       $result = array();
       $isSetterFunction = FALSE;
       if ($callback = Constraints::isCallable($content)) {
@@ -266,7 +266,7 @@ namespace FluentDOM {
      * @param bool $remove Call remove() on $this, remove the current selection from the DOM
      * @return Query
      */
-    private function applyToSpawn($targetNodes, $content, $handler, $remove = FALSE) {
+    private function applyToSpawn($targetNodes, $content, callable $handler, $remove = FALSE) {
       $result = $this->spawn(
         $this->apply($targetNodes, $content, $handler)
       );
@@ -285,7 +285,7 @@ namespace FluentDOM {
      * @param bool $remove Call remove() on $this, remove the current selection from the DOM
      * @return Query
      */
-    private function applyToSelector($selector, $handler, $remove = FALSE) {
+    private function applyToSelector($selector, callable $handler, $remove = FALSE) {
       return $this->applyToSpawn(
         $this->build()->getTargetNodes($selector),
         $this->_nodes,
@@ -516,10 +516,10 @@ namespace FluentDOM {
      * @param callable $function
      * @return array
      */
-    public function map(Callable $function) {
+    public function map(callable $function) {
       $result = array();
       foreach ($this->_nodes as $index => $node) {
-        $mapped = call_user_func($function, $node, $index);
+        $mapped = $function($node, $index);
         if ($mapped === NULL) {
           continue;
         } elseif ($mapped instanceof \Traversable || is_array($mapped)) {

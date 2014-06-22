@@ -98,5 +98,16 @@ namespace FluentDOM {
        is_string($callback[1])
       );
     }
+
+    /**
+     * Check options bitmask for an option
+     *
+     * @param int $options
+     * @param int $option
+     * @return bool
+     */
+    public function hasOption($options, $option) {
+      return ($options & $option) == $option;
+    }
   }
 }

@@ -8,6 +8,7 @@
 
 namespace FluentDOM\Nodes {
 
+  use FluentDOM\Constraints;
   use FluentDOM\Nodes;
 
   /*
@@ -53,7 +54,7 @@ namespace FluentDOM\Nodes {
         );
       }
       $nodes = array();
-      if (($options & self::IGNORE_CONTEXT) == self::IGNORE_CONTEXT) {
+      if (Constraints::hasOption($options, self::IGNORE_CONTEXT)) {
         $nodes = $this->fetchFor(
           $expression, NULL, $filter, $stopAt, $options
         );
@@ -67,7 +68,7 @@ namespace FluentDOM\Nodes {
           );
         }
       }
-      if (($options & self::UNIQUE) == self::UNIQUE) {
+      if (Constraints::hasOption($options, self::UNIQUE)) {
         $nodes = $this->_nodes->unique($nodes);
       }
       return $nodes;
@@ -97,23 +98,24 @@ namespace FluentDOM\Nodes {
       if ($filter || $stopAt) {
         $result = array();
         foreach ($nodes as $index => $node) {
-          if (isset($stopAt) && $stopAt($node, $index)) {
+          $isFilter = (empty($filter) || $filter($node, $index));
+          $isStopAt = (!empty($stopAt) && $stopAt($node, $index));
+          if ($isStopAt) {
             if (
-              ($options & self::INCLUDE_STOP) == self::INCLUDE_STOP &&
-              (empty($filter) || $filter($node, $index))
+              $isFilter &&
+              Constraints::hasOption($options, self::INCLUDE_STOP)
             ) {
               $result[] = $node;
             }
-            break;
+            return $result;
           }
-          if (empty($filter) || $filter($node, $index)) {
+          if ($isFilter) {
             $result[] = $node;
           }
         }
         return $result;
-      } else {
-        return $nodes;
       }
+      return $nodes;
     }
 
     /**
@@ -134,7 +136,7 @@ namespace FluentDOM\Nodes {
         );
       }
       $nodes = iterator_to_array($nodes);
-      if (($options & self::REVERSE) == self::REVERSE) {
+      if (Constraints::hasOption($options, self::REVERSE)) {
         return array_reverse($nodes, FALSE);
       }
       return $nodes;

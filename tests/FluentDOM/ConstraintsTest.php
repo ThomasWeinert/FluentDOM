@@ -144,5 +144,27 @@ namespace FluentDOM {
       $this->setExpectedException('InvalidArgumentException');
       Constraints::isCallable(NULL, FALSE, FALSE);
     }
+
+    /**
+     * @group Utility
+     * @group Constraints
+     * @covers FluentDOM\Constraints::hasOption
+     */
+    public function testHasOptionExpectingTrue() {
+      $this->assertTrue(
+        Constraints::hasOption(3, 2)
+      );
+    }
+
+    /**
+     * @group Utility
+     * @group Constraints
+     * @covers FluentDOM\Constraints::hasOption
+     */
+    public function testHasOptionExpectingFalse() {
+      $this->assertFalse(
+        Constraints::hasOption(3, 4)
+      );
+    }
   }
 }

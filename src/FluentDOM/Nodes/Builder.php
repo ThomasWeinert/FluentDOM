@@ -150,56 +150,65 @@ namespace FluentDOM\Nodes {
      * @throws \UnexpectedValueException
      * @return array
      */
-    public function getXmlFragment($xml, $includeTextNodes = TRUE, $limit = 0) {
-      $result = array();
+    public function getXmlFragment($xml, $includeTextNodes = TRUE, $limit = -1) {
+      $xml = $this->getContentAsString($xml);
+      if (!$xml) {
+        return array();
+      }
       $fragment = $this->getOwner()->getDocument()->createDocumentFragment();
-      if (is_string($xml) || method_exists($xml, '__toString')) {
-        $xml = (string)$xml;
-        if (empty($xml)) {
-          return array();
-        }
-        if ($fragment->appendXML($xml)) {
-          for ($i = $fragment->childNodes->length - 1; $i >= 0; $i--) {
-            $element = $fragment->childNodes->item($i);
-            if ($element instanceof \DOMElement ||
-              ($includeTextNodes && Constraints::isNode($element))) {
-              array_unshift($result, $element);
-              $element->parentNode->removeChild($element);
-            }
+      if ($fragment->appendXML($xml)) {
+        $result = array();
+        for ($i = $fragment->childNodes->length - 1; $i >= 0; $i--) {
+          $element = $fragment->childNodes->item($i);
+          if ($element instanceof \DOMElement ||
+            ($includeTextNodes && Constraints::isNode($element))) {
+            array_unshift($result, $element);
+            $element->parentNode->removeChild($element);
           }
-          if ($limit > 0 && count($result) >= $limit) {
-            return array_slice($result, 0, $limit);
-          }
-          return $result;
         }
+        if ($limit > 0 && count($result) >= $limit) {
+          return array_slice($result, 0, $limit);
+        }
+        return $result;
       }
       throw new \UnexpectedValueException('Invalid document fragment');
     }
 
     /**
      * @param string $html
+     * @throws \UnexpectedValueException
      * @return array
      */
     public function getHtmlFragment($html) {
-      if (is_string($html) || method_exists($html, '__toString')) {
-        $html = (string)$html;
-        if (empty($html)) {
-          return array();
+      $html = $this->getContentAsString($html);
+      if (!$html) {
+        return array();
+      }
+      $htmlDom = new Document();
+      $status = libxml_use_internal_errors(TRUE);
+      $htmlDom->loadHtml('<html-fragment>'.$html.'</html-fragment>');
+      libxml_clear_errors();
+      libxml_use_internal_errors($status);
+      $result = array();
+      $nodes = $htmlDom->xpath()->evaluate('//html-fragment[1]/node()');
+      $document = $this->getOwner()->getDocument();
+      if ($nodes instanceof \Traversable) {
+        foreach ($nodes as $node) {
+          $result[] = $document->importNode($node, TRUE);
         }
-        $htmlDom = new Document();
-        $status = libxml_use_internal_errors(TRUE);
-        $htmlDom->loadHtml('<html-fragment>'.$html.'</html-fragment>');
-        libxml_clear_errors();
-        libxml_use_internal_errors($status);
-        $result = array();
-        $nodes = $htmlDom->xpath()->evaluate('//html-fragment[1]/node()');
-        $document = $this->getOwner()->getDocument();
-        if ($nodes instanceof \Traversable) {
-          foreach ($nodes as $node) {
-            $result[] = $document->importNode($node, TRUE);
-          }
-        }
-        return $result;
+      }
+      return $result;
+    }
+
+    /**
+     * @param mixed $content
+     * @return bool
+     * @throws \UnexpectedValueException
+     */
+    public function getContentAsString($content) {
+      if (is_string($content) || method_exists($content, '__toString')) {
+        $content = (string)$content;
+        return empty($content) ? FALSE : $content;
       }
       throw new \UnexpectedValueException('Invalid document fragment');
     }

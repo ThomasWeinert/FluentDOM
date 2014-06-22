@@ -55,16 +55,7 @@ namespace FluentDOM\Nodes {
       } elseif ($includeTextNodes && Constraints::isNode($content)) {
         return array($content);
       } elseif (Constraints::isNodeList($content)) {
-        if ($limit > 0) {
-          if (is_array($content)) {
-            return array_slice($content, 0, $limit);
-          } else {
-            return new \LimitIterator(
-              new \IteratorIterator($content), 0, $limit
-            );
-          }
-        }
-        return $content;
+        return $this->getLimitedArray($content, $limit);
       }
       return NULL;
     }
@@ -79,7 +70,7 @@ namespace FluentDOM\Nodes {
      */
     public function getTargetNodes($selector, \DOMNode $context = NULL) {
       if ($nodes = $this->getNodeList($selector)) {
-        return is_array($nodes) ? $nodes : iterator_to_array($nodes);
+        return $nodes;
       } elseif (is_string($selector)) {
         $result = $this->getOwner()->xpath()->evaluate(
           $this->getOwner()->prepareSelector(
@@ -166,10 +157,7 @@ namespace FluentDOM\Nodes {
             $element->parentNode->removeChild($element);
           }
         }
-        if ($limit > 0 && count($result) >= $limit) {
-          return array_slice($result, 0, $limit);
-        }
-        return $result;
+        return $this->getLimitedArray($result, $limit);
       }
       throw new \UnexpectedValueException('Invalid document fragment');
     }
@@ -254,6 +242,27 @@ namespace FluentDOM\Nodes {
         $target = $targets->item(0);
       }
       return array($target, $wrapper);
+    }
+
+    /**
+     * @param array|\Traversable $nodes
+     * @param int $limit
+     * @return array
+     */
+    private function getLimitedArray($nodes, $limit = -1) {
+      if ($limit > 0) {
+        if (is_array($nodes)) {
+          return array_slice($nodes, 0, $limit);
+        } else {
+          return iterator_to_array(
+            new \LimitIterator(
+              new \IteratorIterator($nodes), 0, $limit
+            ),
+            FALSE
+          );
+        }
+      }
+      return is_array($nodes) ? $nodes : iterator_to_array($nodes, FALSE);
     }
   }
 }

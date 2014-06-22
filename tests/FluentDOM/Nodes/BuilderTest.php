@@ -235,7 +235,7 @@ namespace FluentDOM\Nodes {
       $builder = new Builder($nodes);
       $this->setExpectedException(
         'InvalidArgumentException',
-        'No nodes found.'
+        'Invalid/empty content parameter.'
       );
       $builder->getContentNodes($dom->xpath()->evaluate('//item'));
     }

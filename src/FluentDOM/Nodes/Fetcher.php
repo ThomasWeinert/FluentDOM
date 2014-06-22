@@ -44,7 +44,9 @@ namespace FluentDOM\Nodes {
      * @throws \InvalidArgumentException
      * @return array
      */
-    public function fetch($expression, $filter = NULL, $stopAt = NULL, $options = 0) {
+    public function fetch(
+      $expression, callable $filter = NULL, callable $stopAt = NULL, $options = 0
+    ) {
       if (!is_string($expression) || empty($expression)) {
         throw new \InvalidArgumentException(
           'Invalid selector/expression.'
@@ -124,7 +126,7 @@ namespace FluentDOM\Nodes {
      * @param int $options
      * @return array|bool|\DOMNodeList|float|string
      */
-    private function fetchNodes($expression, $context, $options) {
+    private function fetchNodes($expression, \DOMNode $context = NULL, $options = 0) {
       $nodes = $this->_nodes->xpath()->evaluate($expression, $context);
       if (!$nodes instanceof \DOMNodeList) {
         throw new \InvalidArgumentException(

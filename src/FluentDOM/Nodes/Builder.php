@@ -201,8 +201,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @param mixed $content
-     * @return bool
+     * @param string $content
+     * @return string bool
      * @throws \UnexpectedValueException
      */
     private function getContentAsString($content) {

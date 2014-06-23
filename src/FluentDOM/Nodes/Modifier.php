@@ -135,6 +135,10 @@ namespace FluentDOM\Nodes {
       return $result;
     }
 
+    /**
+     * @param array||Traversable $contentNodes
+     * @return \DOMNode
+     */
     public function replaceNode($contentNodes) {
       $this->insertNodesBefore($contentNodes);
       return $this->getParentNode()->removeChild($this->getNode());

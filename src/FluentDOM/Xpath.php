@@ -51,11 +51,11 @@ namespace FluentDOM {
     }
 
     /**
-     * Fetch nodes or scalar valeus from the DOM using Xpath expression.
+     * Fetch nodes or scalar values from the DOM using Xpath expression.
      *
-     * The main difference to DOMXpath::evaluate() is the handlign of the third
+     * The main difference to DOMXpath::evaluate() is the handling of the third
      * argument. Namespace registration can be changed using the property and
-     * ist disabled by default.
+     * is disabled by default.
      *
      * @param string $expression
      * @param \DOMNode $contextNode
@@ -81,6 +81,7 @@ namespace FluentDOM {
      * This method is deprecated and only implemented for BC. So this method
      * calls evaluate().
      *
+     * @deprecated
      * @param string $expression
      * @param \DOMNode $contextNode
      * @param NULL|boolean $registerNodeNS
@@ -144,7 +145,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @return bool
      */
     public function __isset($name) {
@@ -156,7 +157,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @return mixed
      */
     public function __get($name) {

@@ -325,13 +325,23 @@ namespace FluentDOM {
     /**
      * Add the previous selection to the current selection.
      *
+     * @deprecated
      * @return Query
      */
-    public function andSelf() {
+    public function addBack() {
       $result = $this->spawn();
       $result->push($this->_nodes);
       $result->push($this->_parent);
       return $result;
+    }
+
+    /**
+     * Alias for addBack()
+     *
+     * @return Query
+     */
+    public function andSelf() {
+      return $this->addBack();
     }
 
     /**

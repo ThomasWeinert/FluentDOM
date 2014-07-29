@@ -483,7 +483,9 @@ class FluentDOMCore implements IteratorAggregate, Countable, ArrayAccess {
       }
       if ($node->parentNode instanceof DOMNode ||
           $node === $node->ownerDocument->documentElement) {
-        $position = (integer)$this->_xpath()->evaluate('count(preceding::node())', $node);
+        $position = (integer)$this->_xpath()->evaluate(
+          'count(ancestor-or-self::node()/preceding::node()) + count(ancestor::node())', $node
+        );
         /* use the document position as index, ignore duplicates */
         if (!isset($sortable[$position])) {
           $sortable[$position] = $node;

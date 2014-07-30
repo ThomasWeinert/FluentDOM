@@ -4,7 +4,7 @@ header('Content-type: text/plain');
 $xml = <<<XML
 <html>
   <head>
-    <title>Examples: FluentDOM\Query IteratorAggregate interface</title>
+    <title>Examples: FluentDOM\Query Iterator interface</title>
   </head>
 <body>
   <p>Hello</p>
@@ -17,5 +17,5 @@ XML;
 require_once('../../vendor/autoload.php');
 
 foreach (FluentDOM($xml)->find('//p') as $key => $value) {
-  echo $key, ': ', $value->nodeName, "\n";
+  echo $key, ': ', $value, "\n";
 }

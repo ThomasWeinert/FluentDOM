@@ -325,7 +325,6 @@ namespace FluentDOM {
     /**
      * Add the previous selection to the current selection.
      *
-     * @deprecated
      * @return Query
      */
     public function addBack() {
@@ -338,6 +337,7 @@ namespace FluentDOM {
     /**
      * Alias for addBack()
      *
+     * @deprecated
      * @return Query
      */
     public function andSelf() {

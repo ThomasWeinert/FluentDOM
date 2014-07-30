@@ -10,8 +10,9 @@
 * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
 */
 header('Content-type: text/plain');
+require_once('../vendor/autoload.php');
 
-$xml = <<<XML
+$xml = <<<HTML
 <html>
   <head>
     <title>Examples: FluentDOM\Query::closest()</title>
@@ -28,9 +29,8 @@ $xml = <<<XML
     </p>
   </body>
 </html>
-XML;
+HTML;
 
-require_once('../vendor/autoload.php');
 $dom = FluentDOM($xml, 'text/html');
 echo $dom
   ->find('//u')

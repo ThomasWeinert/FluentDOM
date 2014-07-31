@@ -8,14 +8,23 @@ Complete Rewrite!
 - FluentDOM\Query allows to register a selector callback,
   allowing for CSS selectors using PhpCss
 - Several classes that extend the default DOM classes, fixing bugs
-  and provide convinience
+  and provide convenience
 
 - Changed: FluentDOM\Query::spawn() now clones the current object
+- Changed: FluentDOM\Query::andSelf() renamed to addBack(), mark andSelf()
+  as deprecated
 - Added: FluentDOM\Query::html()
 - Added: FluentDOM\Query::outerXml()
+- Added: FluentDOM\Query::outerHtml()
 - Added: FluentDOM\Document - extends DOMDocument
 - Added: FluentDOM\Element - extends DOMElement
+- Added: FluentDOM\Attribute - extends DOMAttr
+- Added: FluentDOM\Comment - extends DOMComment
+- Added: FluentDOM\CdataSection - extends DOMCdataSection
+- Added: FluentDOM\Text - extends DOMText
 - Added: FluentDOM\Xpath - extends DOMXpath
+- Added: FluentDOM\Appendable - define objects appendable to a FluentDOM\Element
+- Added: FluentDOM\XmlSerializable - define objects serializable to xml fragments
 
 Version 4.1:
 

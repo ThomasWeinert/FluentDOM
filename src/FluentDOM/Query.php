@@ -17,7 +17,7 @@ namespace FluentDOM {
    * @property Query\Css $css
    *
    * @method Query clone() Clone matched nodes and select the clones.
-   * @method bool empty() Remove all child nodes from the set of matched elements.
+   * @method Query empty() Remove all child nodes from the set of matched elements.
    *
    * @method Query spawn($elements = NULL)
    * @method Query find($selector, $useDocumentContext = FALSE)
@@ -1426,7 +1426,7 @@ namespace FluentDOM {
     /**
      * Returns true if the specified class is present on at least one of the set of matched elements.
      *
-     * @param string|callable $class
+     * @param string $class
      * @return boolean
      */
     public function hasClass($class) {
@@ -1577,7 +1577,7 @@ namespace FluentDOM {
      ********************************/
 
     /**
-     * Read a data attribute from the first node or set data attributes n all selected nodes.
+     * Read a data attribute from the first node or set data attributes on all selected nodes.
      *
      * @example data.php Usage Example: FluentDOM\Query::data()
      * @param string|array $name data attribute identifier or array of data attributes to set

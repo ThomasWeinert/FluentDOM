@@ -4,8 +4,9 @@
 * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
 */
 header('Content-type: text/plain');
+require_once('../vendor/autoload.php');
 
-$xml = <<<XML
+$html = <<<HTML
 <html>
   <head>
     <title>Examples: FluentDOM\Query::filter() with expression</title>
@@ -19,10 +20,9 @@ $xml = <<<XML
     <div/>
   </body>
 </html>
-XML;
+HTML;
 
-require_once('../vendor/autoload.php');
-echo FluentDOM($xml, 'text/html')
+echo FluentDOM($html, 'text/html')
   ->find('//div')
   ->attr('border', 1)
   ->filter('@class = "middle"')

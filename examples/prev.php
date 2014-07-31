@@ -4,8 +4,9 @@
 * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
 */
 header('Content-type: text/plain');
+require_once('../vendor/autoload.php');
 
-$xml = <<<XML
+$html = <<<HTML
 <html>
   <head>
     <title>Examples: FluentDOM\Query::prev()</title>
@@ -22,17 +23,16 @@ $xml = <<<XML
     <p><button>Go to Prev</button></p>
   </body>
 </html>
-XML;
+HTML;
 
-require_once('../vendor/autoload.php');
-echo FluentDOM($xml)
+echo FluentDOM($html)
   ->find('//div[@id = "start"]')
   ->prev()
   ->addClass('before');
 
 echo "\n\n";
 
-echo FluentDOM($xml)
+echo FluentDOM($html)
   ->find('//div[@class= "here"]')
   ->prev('.//span')
   ->addClass('nextTest');

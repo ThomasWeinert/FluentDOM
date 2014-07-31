@@ -4,8 +4,9 @@
 * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
 */
 header('Content-type: text/plain');
+require_once('../vendor/autoload.php');
 
-$xml = <<<XML
+$html = <<<HTML
 <html>
   <head>
     <title>Examples: FluentDOM\Query::appendTo()</title>
@@ -15,9 +16,8 @@ $xml = <<<XML
     <div id="foo">FOO! </div>
   </body>
 </html>
-XML;
+HTML;
 
-require_once('../vendor/autoload.php');
-echo FluentDOM($xml)
+echo FluentDOM($html)
   ->find('//span')
   ->appendTo('//div[@id = "foo"]');

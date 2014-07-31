@@ -6,6 +6,7 @@
 * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
 */
 header('Content-type: text/plain');
+require('../vendor/autoload.php');
 
 $xml = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
@@ -24,7 +25,6 @@ XML;
 
 
 echo "Example for function 'attr' using XML namespaces:\n\n";
-require('../vendor/autoload.php');
 $dom = FluentDOM($xml);
 $dom->registerNamespace('h', 'http://www.w3.org/1999/xhtml');
 echo $dom

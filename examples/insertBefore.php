@@ -4,8 +4,9 @@
 * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
 */
 header('Content-type: text/plain');
+require_once('../vendor/autoload.php');
 
-$xml = <<<XML
+$html = <<<HTML
 <html>
   <head>
     <title>Examples: FluentDOM\Query::insertBefore()</title>
@@ -14,9 +15,8 @@ $xml = <<<XML
     <div id="foo">FOO!</div><p>I would like to say: </p>
   </body>
 </html>
-XML;
+HTML;
 
-require_once('../vendor/autoload.php');
-echo FluentDOM($xml)
+echo FluentDOM($html)
   ->find('//p')
   ->insertBefore('//div[@id = "foo"]');

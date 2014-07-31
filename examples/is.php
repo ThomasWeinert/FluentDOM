@@ -4,8 +4,9 @@
 * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
 */
 header('Content-type: text/plain');
+require_once('../vendor/autoload.php');
 
-$xml = <<<XML
+$html = <<<HTML
 <html>
   <head>
     <title>Examples: FluentDOM\Query::is()</title>
@@ -15,16 +16,12 @@ $xml = <<<XML
     <div> </div>
   </body>
 </html>
-XML;
+HTML;
 
-require_once('../vendor/autoload.php');
-$dom = FluentDOM($xml);
-$isFormParent = $dom
-  ->find('//input[@type = "checkbox"]')
-  ->parent()
-  ->is('name() = "form"');
-$dom
-  ->find('//div')
-  ->text('$isFormParent = '.($isFormParent ? 'TRUE' : 'FALSE'));
-
-echo $dom;
+$dom = FluentDOM($html, 'text/html');
+var_dump(
+  $dom
+    ->find('//input[@type = "checkbox"]')
+    ->parent()
+    ->is('name() = "form"')
+);

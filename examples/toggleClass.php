@@ -4,8 +4,9 @@
 * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
 */
 header('Content-type: text/plain');
+require_once('../vendor/autoload.php');
 
-$xml = <<<XML
+$html = <<<HTML
 <html>
   <head>
     <title>Examples: FluentDOM\Query::toggleClass()</title>
@@ -15,10 +16,8 @@ $xml = <<<XML
     <p class="blue highlight">bar</p>
   </body>
 </html>
+HTML;
 
-XML;
-
-require_once('../vendor/autoload.php');
-echo FluentDOM($xml)
+echo FluentDOM($html)
   ->find('//p')
   ->toggleClass('highlight');

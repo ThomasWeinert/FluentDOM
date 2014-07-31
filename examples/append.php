@@ -4,8 +4,9 @@
 * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
 */
 header('Content-type: text/plain');
+require_once('../vendor/autoload.php');
 
-$xml = <<<XML
+$html = <<<HTML
 <html>
   <head>
     <title>Examples: FluentDOM\Query::append()</title>
@@ -25,17 +26,16 @@ $xml = <<<XML
     </items>
   </body>
 </html>
-XML;
+HTML;
 
-require_once('../vendor/autoload.php');
-FluentDOM($xml)
+echo FluentDOM($html)
   ->find('//p')
   ->append('<strong>Hello</strong>')
   ->formatOutput();
 
 echo "\n\n";
 
-$dom = FluentDOM($xml);
+$dom = FluentDOM($html);
 $items = $dom->find('//group/item');
 echo $dom
   ->find('//html/div')

@@ -4,8 +4,9 @@
 * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
 */
 header('Content-type: text/plain');
+require_once('../vendor/autoload.php');
 
-$xml = <<<XML
+$html = <<<HTML
 <html>
   <head>
     <title>Examples: FluentDOM\Query::slice()</title>
@@ -21,28 +22,23 @@ $xml = <<<XML
     </div>
   </body>
 </html>
-XML;
+HTML;
 
-require_once('../vendor/autoload.php');
-
-/*
- * get first 3 paragraphs of the document and replace every <div> element with them
- */
-echo FluentDOM($xml)
+echo FluentDOM($html)
   ->find('//p')
   ->slice(0, 3)
   ->replaceAll('//div');
 
 echo "\n\n";
 
-echo FluentDOM($xml)
+echo FluentDOM($html)
   ->find('//p')
   ->slice(5, 2)
   ->replaceAll('//div');
 
 echo "\n\n";
 
-echo FluentDOM($xml)
+echo FluentDOM($html)
   ->find('//p')
   ->slice(1, -2)
   ->replaceAll('//div');
@@ -52,7 +48,7 @@ echo "\n\n";
 /*
  * get all paragraphs after the first 3 of the document and replace every <div> element with them
  */
-echo FluentDOM($xml)
+echo FluentDOM($html)
   ->find('//p')
   ->slice(3)
   ->replaceAll('//div');

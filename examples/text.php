@@ -4,8 +4,9 @@
 * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
 */
 header('Content-type: text/plain');
+require_once('../vendor/autoload.php');
 
-$xml = <<<XML
+$html = <<<HTML
 <html>
   <head>
     <title>Examples: FluentDOM\Query::text()</title>
@@ -18,14 +19,12 @@ $xml = <<<XML
     </div>
   </body>
 </html>
-XML;
-
-require_once('../vendor/autoload.php');
+HTML;
 
 /*
  * replace text content of 2nd paragraph
  */
-echo FluentDOM($xml)
+echo FluentDOM($html)
   ->find('//p[position() = 2]')
   ->text('nice');
 
@@ -34,19 +33,8 @@ echo "\n\n";
 /*
  * replace text content of every paragraph
  */
-echo FluentDOM($xml)
+echo FluentDOM($html)
   ->find('//p')
   ->text('nice');
 
 echo "\n\n";
-
-/*
- * This explict example is to verify a PHP 'malloc' error thrown on MacOsX 10.5.7
- * when running test with PHPUnit3.3 - unfortunately it won't appear here
- *
- * replace text content of 2nd paragraph
- */
-echo FluentDOM($xml)
-  ->find('//p[position() = 1]')
-  ->next()
-  ->text('nice');

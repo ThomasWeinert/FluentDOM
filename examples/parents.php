@@ -4,8 +4,9 @@
 * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
 */
 header('Content-type: text/plain');
+require_once('../vendor/autoload.php');
 
-$xml = <<<XML
+$html = <<<HTML
 <html>
   <head>
     <title>Examples: FluentDOM\Query::parents()</title>
@@ -20,10 +21,9 @@ $xml = <<<XML
     </div>
   </body>
 </html>
-XML;
+HTML;
 
-require_once('../vendor/autoload.php');
-$dom = FluentDOM($xml);
+$dom = FluentDOM($html);
 $parents = implode(
   ', ',
   $dom

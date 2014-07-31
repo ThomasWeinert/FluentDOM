@@ -6,14 +6,13 @@
 * @copyright Copyright (c) 2011-2014 Bastian Feder, Thomas Weinert
 */
 header('Content-type: text/plain');
+require_once('../vendor/autoload.php');
 
 $xml = <<<XML
 <div data-role="page" data-hidden="true" data-options='{"name":"John"}'> </div>
 XML;
 
-
 echo "Example for function 'data':\n\n";
-require_once('../vendor/autoload.php');
 $fd = FluentDOM($xml)->find('//div');
 
 var_dump($fd->data('role'));

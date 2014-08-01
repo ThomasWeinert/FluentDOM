@@ -70,7 +70,7 @@ namespace FluentDOM {
      * @param string $name
      * @param string $content
      * @param array $attributes
-     * @return \DOMElement
+     * @return Element
      */
     public function appendElement($name, $content = '', array $attributes = NULL) {
       $this->appendChild(

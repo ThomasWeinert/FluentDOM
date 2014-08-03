@@ -13,7 +13,7 @@ namespace FluentDOM {
    * FluentDOM\Element extends PHPs DOMDocument class. It adds some generic namespace handling on
    * the document level and registers extended Node classes for convenience.
    *
-   * @property Document $ownerElement
+   * @property Document $ownerDocument
    */
   class Element
     extends \DOMElement
@@ -298,6 +298,19 @@ namespace FluentDOM {
      */
     private function getDocument() {
       return $this->ownerDocument;
+    }
+
+    /**
+     * Sets all namespaces registered on the document as xmlns attributes on the element.
+     */
+    public function applyNamespaces() {
+      foreach ($this->getDocument()->getNamespaces() as $prefix => $namespace) {
+        $this->setAttributeNS(
+          'http://www.w3.org/2000/xmlns/',
+          ($prefix == '#default') ? 'xmlns' : 'xmlns:'.$prefix,
+          $namespace
+        );
+      }
     }
   }
 }

@@ -107,6 +107,13 @@ namespace FluentDOM {
     }
 
     /**
+     * @return array
+     */
+    public function getNamespaces() {
+      return $this->_namespaces;
+    }
+
+    /**
      * @param string $prefix
      * @return string
      */

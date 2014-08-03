@@ -123,6 +123,20 @@ namespace FluentDOM {
     }
 
     /**
+     * @covers FluentDOM\Element::applyNamespaces
+     */
+    public function testApplyNamespaces() {
+      $dom = new Document();
+      $dom->registerNamespace('#default', 'urn:default');
+      $dom->registerNamespace('foo', 'urn:foo');
+      $node = $dom->appendElement('bar');
+      $node->applyNamespaces();
+      $this->assertEquals(
+        '<bar xmlns="urn:default" xmlns:foo="urn:foo"/>', $node->saveXml()
+      );
+    }
+
+    /**
      * @covers FluentDOM\Element::append
      */
     public function testAppend() {

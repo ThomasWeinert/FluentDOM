@@ -305,11 +305,13 @@ namespace FluentDOM {
      */
     public function applyNamespaces() {
       foreach ($this->getDocument()->getNamespaces() as $prefix => $namespace) {
-        $this->setAttributeNS(
-          'http://www.w3.org/2000/xmlns/',
-          ($prefix == '#default') ? 'xmlns' : 'xmlns:'.$prefix,
-          $namespace
-        );
+        if ($prefix != '#default') {
+          $this->setAttributeNS(
+            'http://www.w3.org/2000/xmlns/',
+            'xmlns:'.$prefix,
+            $namespace
+          );
+        }
       }
     }
   }

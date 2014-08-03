@@ -27,10 +27,11 @@ Version 5 is a complete rewrite. It is updated to the new PHP 5.4 syntax. It
 now provides classes that extend PHPs DOMDocument. Another focus was
 XML namespace support for document creation.
 
-## Table Of Contents:
+## Table Of Contents
 * Requirements
 * Usage
 * Packagist
+* Support
 * Similarities With jQuery
 * Differences To jQuery
 * Extensions to PHPs DOM classes
@@ -85,6 +86,14 @@ FluentDOM is available on [Packagist.org](https://packagist.org/packages/fluentd
   }
 }
 ```
+
+## Support
+
+The [wiki](https://github.com/FluentDOM/FluentDOM/wiki) provides information and usage examples.
+
+If you find a bug or have a feature request please report it in the [issue tracker](https://github.com/FluentDOM/FluentDOM/issues).
+
+You can check out the [Gitter chatroom](https://gitter.im/FluentDOM/FluentDOM), too.
 
 ## Similarities With jQuery
 

@@ -6,6 +6,18 @@ php:
   - 5.6
   - hhvm
 
+matrix:
+  allow_failures:
+    - php: hhvm
+
 install: composer install
 
 script: phpunit --configuration phpunit.xml.dist
+
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/f0abd75c9ea61d414afa
+    on_success: always
+    on_failure: always
+    on_start: false

@@ -302,10 +302,18 @@ namespace FluentDOM {
 
     /**
      * Sets all namespaces registered on the document as xmlns attributes on the element.
+     *
+     * @param NULL|string|array $prefixes
      */
-    public function applyNamespaces() {
+    public function applyNamespaces($prefixes = NULL) {
+      if (isset($prefixes) && !is_array($prefixes)) {
+        $prefixes = array($prefixes);
+      }
       foreach ($this->getDocument()->getNamespaces() as $prefix => $namespace) {
-        if ($prefix != '#default') {
+        if (
+          $prefix != '#default' &&
+          (is_null($prefixes) || in_array($prefix, $prefixes))
+        ) {
           $this->setAttributeNS(
             'http://www.w3.org/2000/xmlns/',
             'xmlns:'.$prefix,

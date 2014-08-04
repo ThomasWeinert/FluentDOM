@@ -137,6 +137,49 @@ namespace FluentDOM {
     }
 
     /**
+     * @covers FluentDOM\Element::applyNamespaces
+     */
+    public function testApplyNamespacesWithTwoNamespaces() {
+      $dom = new Document();
+      $dom->registerNamespace('foo', 'urn:foo');
+      $dom->registerNamespace('bar', 'urn:bar');
+      $node = $dom->appendElement('bar');
+      $node->applyNamespaces();
+      $this->assertEquals(
+        '<bar xmlns:foo="urn:foo" xmlns:bar="urn:bar"/>', $node->saveXml()
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::applyNamespaces
+     */
+    public function testApplyNamespacesWithOneOfTwoNamespaces() {
+      $dom = new Document();
+      $dom->registerNamespace('foo', 'urn:foo');
+      $dom->registerNamespace('bar', 'urn:bar');
+      $node = $dom->appendElement('bar');
+      $node->applyNamespaces('bar');
+      $this->assertEquals(
+        '<bar xmlns:bar="urn:bar"/>', $node->saveXml()
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::applyNamespaces
+     */
+    public function testApplyNamespacesWithTwoOfThreeNamespaces() {
+      $dom = new Document();
+      $dom->registerNamespace('foo', 'urn:foo');
+      $dom->registerNamespace('bar', 'urn:bar');
+      $dom->registerNamespace('foobar', 'urn:foobar');
+      $node = $dom->appendElement('bar');
+      $node->applyNamespaces(['foo', 'bar']);
+      $this->assertEquals(
+        '<bar xmlns:foo="urn:foo" xmlns:bar="urn:bar"/>', $node->saveXml()
+      );
+    }
+
+    /**
      * @covers FluentDOM\Element::append
      */
     public function testAppend() {

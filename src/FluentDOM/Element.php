@@ -309,16 +309,25 @@ namespace FluentDOM {
       if (isset($prefixes) && !is_array($prefixes)) {
         $prefixes = array($prefixes);
       }
+      $currentNamespace = $this->namespaceURI;
+      $currentPrefix = $this->prefix ?: '#default';
       foreach ($this->getDocument()->getNamespaces() as $prefix => $namespace) {
         if (
-          $prefix != '#default' &&
+          ($currentNamespace != $namespace && $prefix != $currentPrefix) &&
           (is_null($prefixes) || in_array($prefix, $prefixes))
         ) {
-          $this->setAttributeNS(
-            'http://www.w3.org/2000/xmlns/',
-            'xmlns:'.$prefix,
-            $namespace
-          );
+          if ($prefix == '#default') {
+            $this->setAttribute(
+              'xmlns',
+              $namespace
+            );
+          } else {
+            $this->setAttributeNS(
+              'http://www.w3.org/2000/xmlns/',
+              'xmlns:'.$prefix,
+              $namespace
+            );
+          }
         }
       }
     }

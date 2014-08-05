@@ -306,30 +306,34 @@ namespace FluentDOM {
      * @param NULL|string|array $prefixes
      */
     public function applyNamespaces($prefixes = NULL) {
-      if (isset($prefixes) && !is_array($prefixes)) {
+      if ($prefixes !== NULL && !is_array($prefixes)) {
         $prefixes = array($prefixes);
       }
-      $currentNamespace = $this->namespaceURI;
-      $currentPrefix = $this->prefix ?: '#default';
       foreach ($this->getDocument()->getNamespaces() as $prefix => $namespace) {
         if (
-          ($currentNamespace != $namespace && $prefix != $currentPrefix) &&
-          (is_null($prefixes) || in_array($prefix, $prefixes))
+          !$this->isCurrentNamespace($prefix, $namespace) &&
+          ($prefixes === NULL || in_array($prefix, $prefixes))
         ) {
-          if ($prefix == '#default') {
-            $this->setAttribute(
-              'xmlns',
-              $namespace
-            );
-          } else {
-            $this->setAttributeNS(
-              'http://www.w3.org/2000/xmlns/',
-              'xmlns:'.$prefix,
-              $namespace
-            );
-          }
+          $this->setAttribute(
+            ($prefix == '#default') ? 'xmlns' : 'xmlns:'.$prefix,
+            $namespace
+          );
         }
       }
+    }
+
+    /**
+     * Return true if the provided namespace is the same as the one on the element
+     *
+     * @param string $prefix
+     * @param string $namespace
+     * @return bool
+     */
+    private function isCurrentNamespace($prefix, $namespace) {
+      return (
+        $namespace == $this->namespaceURI &&
+        $prefix == ($this->prefix ?: '#default')
+      );
     }
   }
 }

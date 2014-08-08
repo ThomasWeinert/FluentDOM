@@ -302,17 +302,38 @@ namespace FluentDOM {
 
     /**
      * Sets all namespaces registered on the document as xmlns attributes on the element.
+     *
+     * @param NULL|string|array $prefixes
      */
-    public function applyNamespaces() {
+    public function applyNamespaces($prefixes = NULL) {
+      if ($prefixes !== NULL && !is_array($prefixes)) {
+        $prefixes = array($prefixes);
+      }
       foreach ($this->getDocument()->getNamespaces() as $prefix => $namespace) {
-        if ($prefix != '#default') {
-          $this->setAttributeNS(
-            'http://www.w3.org/2000/xmlns/',
-            'xmlns:'.$prefix,
+        if (
+          !$this->isCurrentNamespace($prefix, $namespace) &&
+          ($prefixes === NULL || in_array($prefix, $prefixes))
+        ) {
+          $this->setAttribute(
+            ($prefix == '#default') ? 'xmlns' : 'xmlns:'.$prefix,
             $namespace
           );
         }
       }
+    }
+
+    /**
+     * Return true if the provided namespace is the same as the one on the element
+     *
+     * @param string $prefix
+     * @param string $namespace
+     * @return bool
+     */
+    private function isCurrentNamespace($prefix, $namespace) {
+      return (
+        $namespace == $this->namespaceURI &&
+        $prefix == ($this->prefix ?: '#default')
+      );
     }
   }
 }

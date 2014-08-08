@@ -66,6 +66,8 @@ namespace FluentDOM\Query {
      * the first matched node.
      *
      * @see \ArrayAccess::offsetExists()
+     * @param string $name
+     * @return bool
      */
     public function offsetExists($name) {
       if ($properties = $this->getStyleProperties()) {

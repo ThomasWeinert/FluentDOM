@@ -102,6 +102,8 @@ namespace FluentDOM\Query\Css {
      * the first matched node.
      *
      * @see ArrayAccess::offsetExists()
+     * @param string $name
+     * @return bool
      */
     public function offsetExists($name) {
       return isset($this->_properties[$name]);

@@ -1,4 +1,9 @@
-Version 5:
+Version 5.0.1:
+
+- Fixed: Disable automatic namespace registration using the third
+  argument to evaluate(), if activated using the property
+
+Version 5.0.0:
 
 Complete Rewrite!
 - PHP Namespaces, PSR-4 comatible, Composer support

@@ -63,7 +63,8 @@ namespace FluentDOM {
      * @return string|float|bool|\DOMNodeList
      */
     public function evaluate($expression, \DOMNode $contextNode = NULL, $registerNodeNS = NULL) {
-      $registerNodeNS = $registerNodeNS ?: $this->_registerNodeNamespaces;
+      $registerNodeNS = (NULL === $registerNodeNS)
+        ? $this->_registerNodeNamespaces : $registerNodeNS;
       if ($this->canDisableNamespaceRegistration()) {
         return parent::evaluate($expression, $contextNode, (bool)$registerNodeNS);
         // @codeCoverageIgnoreStart

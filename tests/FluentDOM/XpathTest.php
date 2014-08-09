@@ -5,6 +5,14 @@ namespace FluentDOM {
 
   class XpathTest extends TestCase {
 
+    private function skipIfHHVM() {
+      if (defined('HHVM_VERSION')) {
+        $this->markTestSkipped(
+          'Can not disable automatic namespace registration in HHVM: https://github.com/facebook/hhvm/issues/2810'
+        );
+      }
+    }
+
     /**
      * @covers FluentDOM\Xpath
      */
@@ -22,11 +30,7 @@ namespace FluentDOM {
      * @covers FluentDOM\Xpath
      */
     public function testEvaluateDoesNotRegisterNodeNamespaces() {
-      if (defined('HHVM_VERSION')) {
-        $this->markTestSkipped(
-          'Can not disable automatic namespace registration in HHVM'
-        );
-      }
+      $this->skipIfHHVM();
       $dom = new \DOMDocument();
       $dom->loadXml(
         '<foo:root xmlns:foo="urn:foo">
@@ -66,12 +70,29 @@ namespace FluentDOM {
     /**
      * @covers FluentDOM\Xpath
      */
+    public function testEvaluateDisableRegisterNodeNamespacesWithArgument() {
+      $this->skipIfHHVM();
+      $dom = new \DOMDocument();
+      $dom->loadXml(
+        '<foo:root xmlns:foo="urn:foo">
+          <foo:child>found urn:foo</foo:child>
+          <bar:child xmlns:bar="urn:bar">found urn:bar</bar:child>
+        </foo:root>'
+      );
+      $xpath = new Xpath($dom);
+      $xpath->registerNodeNamespaces = TRUE;
+      $xpath->registerNamespace('foo', 'urn:bar');
+      $this->assertEquals(
+        'found urn:bar',
+        $xpath->evaluate('string(//foo:child)', NULL, FALSE)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Xpath
+     */
     public function testQueryDoesNotRegisterNodeNamespaces() {
-      if (defined('HHVM_VERSION')) {
-        $this->markTestSkipped(
-          'Can not disable automatic namespace registration in HHVM'
-        );
-      }
+      $this->skipIfHHVM();
       $dom = new \DOMDocument();
       $dom->loadXml(
         '<foo:root xmlns:foo="urn:foo">

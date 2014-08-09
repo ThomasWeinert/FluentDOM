@@ -35,7 +35,7 @@ namespace FluentDOM {
     }
 
     /**
-     * If the owner document is a FluentDOM\Document register the namesspace on the
+     * If the owner document is a FluentDOM\Document register the namespace on the
      * document object, too.
      *
      * @param string $prefix
@@ -195,7 +195,7 @@ namespace FluentDOM {
 
     /**
      * HHVM is missing the third argument for evaluate()/query()
-     * and can not disable the autmatic namespace registration
+     * and can not disable the automatic namespace registration
      *
      * @return bool
      */

@@ -59,7 +59,7 @@ abstract class FluentDOM {
   }
 
   /**
-   * Convert css seelctor to xpath with Carica/PhpCss
+   * Convert css selector to xpath with Carica/PhpCss
    *
    * @param string $selector
    * @param int $mode
@@ -80,7 +80,7 @@ abstract class FluentDOM {
   }
 
   /**
-   * Convert css seelctor to xpath with Symfony/CssSelector
+   * Convert css selector to xpath with Symfony/CssSelector
    *
    * @param string $selector
    * @param int $mode

@@ -218,7 +218,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * Get the inner and outer wrapper nodes. Simple meeans that they are the
+     * Get the inner and outer wrapper nodes. Simple means that they are the
      * same nodes.
      *
      * @param \DOMElement $template

@@ -126,6 +126,7 @@ namespace FluentDOM {
      * @return string
      */
     public function quote($string) {
+      $string = str_replace("\x00", '', $string);
       $hasSingleQuote = FALSE !== strpos($string, "'");
       if ($hasSingleQuote) {
         $hasDoubleQuote = FALSE !== strpos($string, '"');

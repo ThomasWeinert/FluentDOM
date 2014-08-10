@@ -264,7 +264,8 @@ namespace FluentDOM {
         'single quote' => ['"\'"', "'"],
         'double quote' => ["'\"'", '"'],
         'quotes' => ['concat("\'", \'"\')', '\'"'],
-        'complex quotes' => ['concat("O\'Haras ", \'"Hello World!"\')', 'O\'Haras "Hello World!"']
+        'complex quotes' => ['concat("O\'Haras ", \'"Hello World!"\')', 'O\'Haras "Hello World!"'],
+        'null byte' => ["''", "\x00"]
       ];
     }
   }

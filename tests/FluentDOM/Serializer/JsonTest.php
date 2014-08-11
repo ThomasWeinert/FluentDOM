@@ -38,9 +38,10 @@ namespace FluentDOM\Serializer {
     ) {
       $serializer = new Json_TestProxy(new \DOMDocument());
       $serializer->jsonData = $data;
-      $this->assertEquals(
-        $expected, json_encode($serializer, $options, $depth)
-      );
+      $json = version_compare(PHP_VERSION, '5.5.0', '>=')
+        ? json_encode($serializer, $options, $depth)
+        : json_encode($serializer, $options);
+      $this->assertEquals($expected, $json);
     }
 
     public static function provideExamples() {

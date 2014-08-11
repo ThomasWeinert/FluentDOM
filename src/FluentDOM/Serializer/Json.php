@@ -31,10 +31,10 @@ namespace FluentDOM\Serializer {
     }
 
     public function __toString() {
-      if ($string = json_encode($this, $this->_options, $this->_depth)) {
-        return $string;
-      }
-      return '';
+      $json = version_compare(PHP_VERSION, '5.5.0', '>=')
+        ? json_encode($this, $this->_options, $this->_depth)
+        : json_encode($this, $this->_options);
+      return ($json)  ? $json : '';
     }
   }
 }

@@ -31,7 +31,10 @@ namespace FluentDOM\Serializer {
     }
 
     public function __toString() {
-      return json_encode($this, $this->_options, $this->_depth);
+      if ($string = json_encode($this, $this->_options, $this->_depth)) {
+        return $string;
+      }
+      return '';
     }
   }
 }

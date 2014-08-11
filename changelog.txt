@@ -3,6 +3,11 @@ Version 5.1.0:
 - Added: FluentDOM\Element::applyNamespaces(), adds xmlns
   attributes depending on the current namespace registration.
 
+Version 5.0.2:
+
+- Fixed: Remove null bytes in FluentDOM\Xpath::quote()
+- Fixed: Namespace definition for Symfony CSS Selector
+
 Version 5.0.1:
 
 - Fixed: Disable automatic namespace registration using the third

@@ -27,6 +27,28 @@ namespace FluentDOM\Serializer {
 
     /**
      * @covers FluentDOM\Serializer\Json
+     */
+    public function testToStringWithLimitedDepthExpectingEmptyString() {
+      if (version_compare(PHP_VERSION, '5.5.0', '<')) {
+        $this->markTestSkipped('Minimum version for $depth argument is PHP 5.5');
+      }
+      $serializer = new Json_TestProxy(new \DOMDocument(), 0, 1);
+      $serializer->jsonData = self::getArrayAsStdClass(
+        [
+          'alice' => 'bob',
+          'depth' => self::getArrayAsStdClass(
+            [
+              'charlie' => 'david'
+            ]
+          )
+        ]
+      );
+      $this->assertEquals('', (string)$serializer);
+    }
+
+
+    /**
+     * @covers FluentDOM\Serializer\Json
      * @dataProvider provideExamples
      * @param string $expected
      * @param string $data
@@ -44,6 +66,29 @@ namespace FluentDOM\Serializer {
       $this->assertEquals($expected, $json);
     }
 
+    /**
+     * @covers FluentDOM\Serializer\Json
+     */
+    public function testJsonSerializableWithLimitedDepthExpectingFalse() {
+      if (version_compare(PHP_VERSION, '5.5.0', '<')) {
+        $this->markTestSkipped('Minimum version for $depth argument is PHP 5.5');
+      }
+      $serializer = new Json_TestProxy(new \DOMDocument());
+      $serializer->jsonData = self::getArrayAsStdClass(
+        [
+          'alice' => 'bob',
+          'depth' => self::getArrayAsStdClass(
+            [
+              'charlie' => 'david'
+            ]
+          )
+        ]
+      );
+      $this->assertFalse(
+        json_encode($serializer, 0, 1)
+      );
+    }
+
     public static function provideExamples() {
       return [
         [
@@ -54,21 +99,6 @@ namespace FluentDOM\Serializer {
           "{\n    \"alice\": \"bob\"\n}",
           self::getArrayAsStdClass(['alice' => 'bob']),
           JSON_PRETTY_PRINT
-        ],
-        [
-          FALSE,
-          self::getArrayAsStdClass(
-            [
-              'alice' => 'bob',
-              'depth' => self::getArrayAsStdClass(
-                [
-                  'charlie' => 'david'
-                ]
-              )
-            ]
-          ),
-          0,
-          1
         ]
       ];
     }

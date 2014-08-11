@@ -10,4 +10,4 @@ phpdox.xml export-ignore
 /tests export-ignore
 /examples export-ignore
 
-	
+* text eol=lf

@@ -14,7 +14,7 @@ $entry = $feed->appendElement('atom:entry');
 $entry->appendElement('atom:title', 'Atom-Powered Robots Run Amok');
 $entry->appendElement('atom:id', 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a');
 $entry->appendElement('atom:updated', '2003-12-13T18:30:02Z');
-$entry->appendElement('atom:summary')->appendElement('p', 'Some text.');
+$entry->appendElement('atom:summary', ['type' => 'text/xhtml'])->appendElement('p', 'Some text.');
 
 $dom->formatOutput = TRUE;
 echo $dom->saveXml();

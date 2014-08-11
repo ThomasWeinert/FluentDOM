@@ -1,6 +1,6 @@
 <?php
 
-use Symfony\Component\CssSelector;
+use Symfony\Component\CssSelector\CssSelector;
 
 abstract class FluentDOM {
 

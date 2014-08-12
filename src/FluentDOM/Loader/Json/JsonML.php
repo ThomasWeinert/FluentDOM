@@ -96,7 +96,7 @@ namespace FluentDOM\Loader\Json {
       $xmlns = empty($prefix) ? 'xmlns' : 'xmlns:'.$prefix;
       return isset($properties->{$xmlns})
         ? $properties->{$xmlns}
-        : $node->lookupNamespaceUri($prefix);
+        : $node->lookupNamespaceUri(empty($prefix) ? NULL : $prefix);
     }
 
     /**

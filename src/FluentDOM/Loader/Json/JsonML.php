@@ -99,9 +99,11 @@ namespace FluentDOM\Loader\Json {
         : $node->lookupNamespaceUri($prefix);
     }
 
+    /**
+     * @param \DOMElement $node
+     * @param \stdClass $properties
+     */
     private function addNamespaceAttributes(\DOMElement $node, $properties) {
-      /** @var Document $dom */
-      $dom = $node->ownerDocument ?: $node;
       foreach ($properties as $name => $value) {
         if ($name == 'xmlns' || substr($name, 0, 6) == 'xmlns:') {
           if ($node instanceof \DOMElement) {
@@ -112,9 +114,12 @@ namespace FluentDOM\Loader\Json {
           }
         }
       }
-
     }
 
+    /**
+     * @param \DOMElement $node
+     * @param \stdClass $properties
+     */
     private function addAttributes(\DOMElement $node, $properties) {
       /** @var Document $dom */
       $dom = $node->ownerDocument ?: $node;

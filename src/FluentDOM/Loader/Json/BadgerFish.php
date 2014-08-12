@@ -71,7 +71,7 @@ namespace FluentDOM\Loader\Json {
           } elseif ($name === '$') {
             // text content
             $node->appendChild(
-              $dom->createTextNode((string)$data)
+              $dom->createTextNode($this->getValueAsString($data))
             );
           } elseif (substr($name, 0, 1) === '@') {
             // attributes
@@ -80,7 +80,7 @@ namespace FluentDOM\Loader\Json {
             $attribute = empty($namespace)
               ? $dom->createAttribute($name)
               : $dom->createAttributeNS($namespace, $name);
-            $attribute->value = (string)$data;
+            $attribute->value = $this->getValueAsString($data);
             $node->setAttributeNode($attribute);
           } else {
             // child node

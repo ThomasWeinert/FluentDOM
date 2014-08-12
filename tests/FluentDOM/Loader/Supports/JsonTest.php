@@ -14,6 +14,10 @@ namespace FluentDOM\Loader\Supports {
     public function getSource($source) {
       return $this->getJson($source);
     }
+
+    public function getValue($json) {
+      return $this->getValueAsString($json);
+    }
   }
 
   class JsonTest extends TestCase {
@@ -53,6 +57,29 @@ namespace FluentDOM\Loader\Supports {
       $loader = new Json_TestProxy();
       $this->setExpectedException('FluentDOM\Exceptions\JsonError');
       $loader->getSource('{invalid');
+    }
+
+    /**
+     * @covers FluentDOM\Loader\Supports\Json
+     * @dataProvider provideJsonValues
+     */
+    public function testGetValueAsJson($expected, $value) {
+      $loader = new Json_TestProxy();
+      $this->assertSame(
+        $expected,
+        $loader->getValue($value)
+      );
+    }
+
+    public static function provideJsonValues() {
+      return [
+        ['true', TRUE],
+        ['false', FALSE],
+        ['', ''],
+        ['foo', 'foo'],
+        ['42', 42],
+        ['42.21', 42.21]
+      ];
     }
   }
 }

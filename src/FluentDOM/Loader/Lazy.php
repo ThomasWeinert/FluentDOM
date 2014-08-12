@@ -27,6 +27,7 @@ namespace FluentDOM\Loader {
      *
      * @param string $contentType
      * @param Loadable|\callable $loader
+     * @throws \UnexpectedValueException
      */
     public function add($contentType, $loader) {
       $contentType = $this->normalizeContentType($contentType);

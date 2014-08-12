@@ -16,6 +16,9 @@ namespace FluentDOM\Exceptions {
       4 => 'Syntax error',
     );
 
+    /**
+     * @param int $code
+     */
     public function __construct($code) {
       parent::__construct(
         isset($this->_jsonErrors[$code]) ? $this->_jsonErrors[$code] : $this->_jsonErrors[-1],

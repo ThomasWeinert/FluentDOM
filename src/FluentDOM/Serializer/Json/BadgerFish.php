@@ -20,7 +20,7 @@ namespace FluentDOM\Serializer\Json {
   class BadgerFish extends Json {
 
     /**
-     * @return array|NULL
+     * @return \stdClass|NULL
      */
     public function jsonSerialize() {
       $result = new \stdClass();
@@ -34,7 +34,7 @@ namespace FluentDOM\Serializer\Json {
 
     /**
      * @param \DOMElement $node
-     * @return array
+     * @return \stdClass
      */
     private function getNodes(\DOMElement $node) {
       $result = new \stdClass();

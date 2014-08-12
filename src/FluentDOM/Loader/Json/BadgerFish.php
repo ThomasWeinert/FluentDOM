@@ -89,12 +89,17 @@ namespace FluentDOM\Loader\Json {
               isset($data->{'@xmlns'}) ? $data->{'@xmlns'} : new \stdClass(),
               $dom
             );
-            $node->appendChild(
-              $child = empty($namespace)
-                ? $dom->createElement($name)
-                : $dom->createElementNS($namespace, $name)
-            );
-            $this->transferTo($child, $data);
+            if (!is_array($data)) {
+              $data = [$data];
+            }
+            foreach ($data as $dataChild) {
+              $node->appendChild(
+                $child = empty($namespace)
+                  ? $dom->createElement($name)
+                  : $dom->createElementNS($namespace, $name)
+              );
+              $this->transferTo($child, $dataChild);
+            }
           }
         }
       }

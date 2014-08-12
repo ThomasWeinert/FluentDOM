@@ -29,5 +29,13 @@ namespace FluentDOM\Loader\Supports {
       }
       return $json;
     }
+
+    private function getValueAsString($value) {
+      if (is_bool($value)) {
+        return $value ? 'true' : 'false';
+      } else {
+        return (string)$value;
+      }
+    }
   }
 }

@@ -66,28 +66,15 @@ namespace FluentDOM\Loader\Json {
             ? $dom->createElement($nodeName)
             : $dom->createElementNS($namespace, $nodeName)
         );
-        foreach ($properties as $name => $value) {
-          if ($name == 'xmlns' || substr($name, 0, 6) == 'xmlns:') {
-            $prefix = $name == 'xmlns' ? NULL : substr($name, 6);
-            if ($node->lookupNamespaceUri($prefix) != $value) {
-              $node->setAttribute($name, $value);
-            }
-            continue;
-          }
-          $namespace = $this->getNamespace($name, $properties, $element);
-          $attribute = empty($namespace)
-            ? $dom->createAttribute($name)
-            : $dom->createAttributeNS($namespace, $name);
-          $attribute->value = $value;
-          $element->setAttributeNode($attribute);
-        }
+        $this->addNamespaceAttributes($element, $properties);
+        $this->addAttributes($element, $properties);
         $childOffset = $hasProperties ? 2 : 1;
         for ($i = $childOffset; $i < $length; $i++) {
           $this->transferTo($element, $json[$i]);
         }
       } elseif (is_scalar($json)) {
         $node->appendChild(
-          $dom->createTextNode((string)$json)
+          $dom->createTextNode($this->getValueAsString($json))
         );
       }
     }
@@ -110,6 +97,37 @@ namespace FluentDOM\Loader\Json {
       return isset($properties->{$xmlns})
         ? $properties->{$xmlns}
         : $node->lookupNamespaceUri($prefix);
+    }
+
+    private function addNamespaceAttributes(\DOMElement $node, $properties) {
+      /** @var Document $dom */
+      $dom = $node->ownerDocument ?: $node;
+      foreach ($properties as $name => $value) {
+        if ($name == 'xmlns' || substr($name, 0, 6) == 'xmlns:') {
+          if ($node instanceof \DOMElement) {
+            $prefix = $name == 'xmlns' ? NULL : substr($name, 6);
+            if ($node->lookupNamespaceUri($prefix) != $value) {
+              $node->setAttribute($name, $value);
+            }
+          }
+        }
+      }
+
+    }
+
+    private function addAttributes(\DOMElement $node, $properties) {
+      /** @var Document $dom */
+      $dom = $node->ownerDocument ?: $node;
+      foreach ($properties as $name => $value) {
+        if (!($name == 'xmlns' || substr($name, 0, 6) == 'xmlns:')) {
+          $namespace = $this->getNamespace($name, $properties, $node);
+          $attribute = empty($namespace)
+            ? $dom->createAttribute($name)
+            : $dom->createAttributeNS($namespace, $name);
+          $attribute->value = $this->getValueAsString($value);
+          $node->setAttributeNode($attribute);
+        }
+      }
     }
   }
 }

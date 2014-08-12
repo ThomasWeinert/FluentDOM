@@ -115,7 +115,11 @@ namespace FluentDOM {
         return $this;
       } else {
         throw new \InvalidArgumentException(
-          "Can not load: ".(is_object($source) ? get_class($source) : gettype($source))
+          sprintf(
+            'Can not load %s as "%s".',
+            (is_object($source) ? get_class($source) : gettype($source)),
+            $contentType
+          )
         );
       }
     }

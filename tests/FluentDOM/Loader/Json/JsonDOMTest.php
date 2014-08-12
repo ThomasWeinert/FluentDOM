@@ -1,33 +1,33 @@
 <?php
-namespace FluentDOM\Loader {
+namespace FluentDOM\Loader\Json {
 
   use FluentDOM\TestCase;
 
-  require_once(__DIR__.'/../TestCase.php');
+  require_once(__DIR__ . '/../../TestCase.php');
 
-  class JsonTest extends TestCase {
+  class JsonDOMTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Loader\Json
+     * @covers FluentDOM\Loader\JsonDOM
      */
     public function testSupportsExpectingTrue() {
-      $loader = new Json();
+      $loader = new JsonDOM();
       $this->assertTrue($loader->supports('json'));
     }
 
     /**
-     * @covers FluentDOM\Loader\Json
+     * @covers FluentDOM\Loader\JsonDOM
      */
     public function testSupportsExpectingFalse() {
-      $loader = new Json();
+      $loader = new JsonDOM();
       $this->assertFalse($loader->supports('text/xml'));
     }
 
     /**
-     * @covers FluentDOM\Loader\Json
+     * @covers FluentDOM\Loader\JsonDOM
      */
-    public function testLoadWithValidJson() {
-      $loader = new Json();
+    public function testLoadWithValidJsonDOM() {
+      $loader = new JsonDOM();
       $this->assertInstanceOf(
         'DOMDocument',
         $dom = $loader->load(
@@ -45,10 +45,10 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @covers FluentDOM\Loader\Json
+     * @covers FluentDOM\Loader\JsonDOM
      */
     public function testLoadWithValidFile() {
-      $loader = new Json();
+      $loader = new JsonDOM();
       $this->assertInstanceOf(
         'DOMDocument',
         $dom = $loader->load(
@@ -66,10 +66,10 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @covers FluentDOM\Loader\Json
+     * @covers FluentDOM\Loader\JsonDOM
      */
     public function testLoadWithValidStructure() {
-      $loader = new Json();
+      $loader = new JsonDOM();
       $json = new \stdClass();
       $json->foo = 'bar';
       $this->assertInstanceOf(
@@ -88,10 +88,10 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @covers FluentDOM\Loader\Json
+     * @covers FluentDOM\Loader\JsonDOM
      */
     public function testLoadWithValidJsonVerbose() {
-      $loader = new Json(Json::OPTION_VERBOSE);
+      $loader = new JsonDOM(JsonDOM::OPTION_VERBOSE);
       $this->assertInstanceOf(
         'DOMDocument',
         $dom = $loader->load(
@@ -110,10 +110,10 @@ namespace FluentDOM\Loader {
       );
     }
     /**
-     * @covers FluentDOM\Loader\Json
+     * @covers FluentDOM\Loader\JsonDOM
      */
     public function testLoadWithDifferentDataTypes() {
-      $loader = new Json();
+      $loader = new JsonDOM();
       $dom = $loader->load(
         json_encode(
           array(
@@ -144,10 +144,10 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @covers FluentDOM\Loader\Json
+     * @covers FluentDOM\Loader\JsonDOM
      */
     public function testLoadWithInvalidSourceExpectingNull() {
-      $loader = new Json();
+      $loader = new JsonDOM();
       $this->assertNull(
         $loader->load(
           NULL,
@@ -157,10 +157,10 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @covers FluentDOM\Loader\Json
+     * @covers FluentDOM\Loader\JsonDOM
      */
     public function testLoadWithInvalidJsonStringExpectingException() {
-      $loader = new Json();
+      $loader = new JsonDOM();
       $this->setExpectedException('UnexpectedValueException');
       $loader->load(
         '{foo}}',
@@ -169,10 +169,10 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @covers FluentDOM\Loader\Json
+     * @covers FluentDOM\Loader\JsonDOM
      */
     public function testLoadStoppingAtMaxDepth() {
-      $loader = new Json(0, 1);
+      $loader = new JsonDOM(0, 1);
       $this->assertXmlStringEqualsXmlString(
         '<?xml version="1.0" encoding="UTF-8"?>
          <json:json xmlns:json="urn:carica-json-dom.2013"><foo/></json:json>',
@@ -183,10 +183,10 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @covers FluentDOM\Loader\Json
+     * @covers FluentDOM\Loader\JsonDOM
      */
     public function testLoadWithEmptyArray() {
-      $loader = new Json(0, 1);
+      $loader = new JsonDOM(0, 1);
       $this->assertXmlStringEqualsXmlString(
         '<?xml version="1.0" encoding="UTF-8"?>
          <json:json xmlns:json="urn:carica-json-dom.2013" json:type="array"/>',

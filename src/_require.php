@@ -16,11 +16,20 @@ require(__DIR__.'/FluentDOM/Text.php');
 require(__DIR__.'/FluentDOM/Xpath.php');
 
 require(__DIR__.'/FluentDOM/Loaders.php');
+require(__DIR__.'/FluentDOM/Loader/Lazy.php');
 require(__DIR__.'/FluentDOM/Loader/Supports.php');
+require(__DIR__.'/FluentDOM/Loader/Supports/Json.php');
 require(__DIR__.'/FluentDOM/Loader/Json.php');
+require(__DIR__.'/FluentDOM/Loader/Json/BadgerFish.php');
+require(__DIR__.'/FluentDOM/Loader/Json/JsonDOM.php');
+require(__DIR__.'/FluentDOM/Loader/Json/JsonML.php');
 require(__DIR__.'/FluentDOM/Loader/Html.php');
 require(__DIR__.'/FluentDOM/Loader/Xml.php');
 require(__DIR__.'/FluentDOM/Loader/Standard.php');
+
+require(__DIR__.'/FluentDOM/Serializer/Json.php');
+require(__DIR__.'/FluentDOM/Serializer/Json/JsonML.php');
+require(__DIR__.'/FluentDOM/Serializer/Json/BadgerFish.php');
 
 require(__DIR__.'/FluentDOM/Nodes.php');
 require(__DIR__.'/FluentDOM/Nodes/Builder.php');

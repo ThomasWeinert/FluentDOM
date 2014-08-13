@@ -23,6 +23,16 @@ namespace FluentDOM\Serializer\Json {
       );
     }
 
+    /**
+     * @covers FluentDOM\Serializer\Json\JsonML
+     */
+    public function testIntegerationWithEmptyDocumentExpectingStringNull() {
+      $serializer = new JsonML(new \DOMDocument());
+      $this->assertEquals(
+        'null', (string)$serializer
+      );
+    }
+
     public  static function provideExamples() {
       return [
         'Simple element' => [

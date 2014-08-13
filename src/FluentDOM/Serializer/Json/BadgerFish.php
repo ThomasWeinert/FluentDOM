@@ -108,11 +108,10 @@ namespace FluentDOM\Serializer\Json {
      */
     private function addText(\stdClass $target, \DOMNode $node) {
       if (!$node->isWhitespaceInElementContent()) {
-        if (isset($target->{'$'})) {
-          $target->{'$'} .= $node->textContent;
-        } else {
-          $target->{'$'} = $node->textContent;
+        if (!isset($target->{'$'})) {
+          $target->{'$'} = '';
         }
+        $target->{'$'} .= $node->textContent;
       }
     }
   }

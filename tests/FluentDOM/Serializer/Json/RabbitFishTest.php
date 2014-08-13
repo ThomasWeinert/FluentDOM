@@ -23,6 +23,16 @@ namespace FluentDOM\Serializer\Json {
       );
     }
 
+    /**
+     * @covers FluentDOM\Serializer\Json\RabbitFish
+     */
+    public function testIntegerationWithEmptyDocumentExpectingStringNull() {
+      $serializer = new RabbitFish(new \DOMDocument());
+      $this->assertEquals(
+        'null', (string)$serializer
+      );
+    }
+
     public  static function provideExamples() {
       return [
         'Text content of elements' => [

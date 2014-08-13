@@ -26,6 +26,16 @@ namespace FluentDOM\Serializer\Json {
       );
     }
 
+    /**
+     * @covers FluentDOM\Serializer\Json\BadgerFish
+     */
+    public function testIntegerationWithEmptyDocumentExpectingStringNull() {
+      $serializer = new BadgerFish(new \DOMDocument());
+      $this->assertEquals(
+        'null', (string)$serializer
+      );
+    }
+
     public  static function provideExamples() {
       return [
         'Text content of elements goes in the $ property of an object.' => [

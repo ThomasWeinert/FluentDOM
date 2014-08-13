@@ -36,17 +36,17 @@ namespace FluentDOM\Serializer\Json {
      * @param \DOMElement $node
      * @return \stdClass
      */
-    private function getNodes(\DOMElement $node) {
+    protected function getNodes(\DOMElement $node) {
       $result = new \stdClass();
       $xpath = new XPath($node->ownerDocument);
+      $this->addNamespaces($result, $node, $xpath);
+      $this->addAttributes($result, $node, $xpath);
       foreach ($xpath->evaluate('*', $node) as $childNode) {
         $this->addElement($result, $childNode);
       }
       foreach ($xpath->evaluate('text()', $node) as $childNode) {
         $this->addText($result, $childNode);
       }
-      $this->addAttributes($result, $node, $xpath);
-      $this->addNamespaces($result, $node, $xpath);
       return $result;
     }
 
@@ -55,7 +55,7 @@ namespace FluentDOM\Serializer\Json {
      * @param \DOMElement $node
      * @param XPath $xpath
      */
-    private function addAttributes(\stdClass $target, \DOMElement $node, Xpath $xpath) {
+    protected function addAttributes(\stdClass $target, \DOMElement $node, Xpath $xpath) {
       foreach ($xpath->evaluate('@*', $node) as $attribute) {
         $target->{'@'.$attribute->name} = $attribute->value;
       }
@@ -66,7 +66,7 @@ namespace FluentDOM\Serializer\Json {
      * @param \DOMElement $node
      * @param XPath $xpath
      */
-    private function addNamespaces(\stdClass $target, \DOMElement $node, Xpath $xpath) {
+    protected function addNamespaces(\stdClass $target, \DOMElement $node, Xpath $xpath) {
       if ($node->namespaceURI != '' && $node->prefix == '') {
         if (!isset($target->{'@xmlns'})) {
           $target->{'@xmlns'} = new \stdClass();

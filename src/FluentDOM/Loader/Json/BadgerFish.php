@@ -36,10 +36,7 @@ namespace FluentDOM\Loader\Json {
      * @return Document|NULL
      */
     public function load($source, $contentType) {
-      $json = $source;
-      if (is_string($source)) {
-        $json = $this->getJson($source);
-      }
+      $json = $this->getJson($source, $contentType);
       if ($json || is_object($json)) {
         $dom = new Document('1.0', 'UTF-8');
         $this->transferTo($dom, $json);
@@ -83,11 +80,7 @@ namespace FluentDOM\Loader\Json {
     private function getNamespace(
       $nodeName, \stdClass $namespaces, \DOMNode $node
     ) {
-      if (strpos($nodeName, ':') >= 0) {
-        $prefix = substr($nodeName, 0, strpos($nodeName, ':'));
-      } else {
-        $prefix = '';
-      }
+      $prefix = substr($nodeName, 0, strpos($nodeName, ':'));
       $xmlns = empty($prefix) ? '$' : $prefix;
       return isset($namespaces->{$xmlns})
         ? $namespaces->{$xmlns}

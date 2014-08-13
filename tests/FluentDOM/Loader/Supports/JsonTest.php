@@ -11,8 +11,12 @@ namespace FluentDOM\Loader\Supports {
 
     use Json;
 
-    public function getSource($source) {
-      return $this->getJson($source);
+    public function getSupported() {
+      return ['json'];
+    }
+
+    public function getSource($source, $type = 'json') {
+      return $this->getJson($source, $type);
     }
 
     public function getValue($json) {
@@ -25,9 +29,19 @@ namespace FluentDOM\Loader\Supports {
     /**
      * @covers FluentDOM\Loader\Supports\Json
      */
-    public function testGetSourceWithArray() {
+    public function testGetSourceWithArrayAsString() {
       $loader = new Json_TestProxy();
       $this->assertEquals(['foo'], $loader->getSource(json_encode(['foo'])));
+    }
+
+    /**
+     * @covers FluentDOM\Loader\Supports\Json
+     */
+    public function testGetSourceWithObjectAsString() {
+      $json = new \stdClass();
+      $json->foo = 'bar';
+      $loader = new Json_TestProxy();
+      $this->assertEquals($json, $loader->getSource(json_encode($json)));
     }
 
     /**
@@ -37,7 +51,7 @@ namespace FluentDOM\Loader\Supports {
       $json = new \stdClass();
       $json->foo = 'bar';
       $loader = new Json_TestProxy();
-      $this->assertEquals($json, $loader->getSource(json_encode($json)));
+      $this->assertEquals($json, $loader->getSource($json));
     }
 
     /**
@@ -48,6 +62,16 @@ namespace FluentDOM\Loader\Supports {
       $json->foo = 'bar';
       $loader = new Json_TestProxy();
       $this->assertEquals($json, $loader->getSource(__DIR__.'/TestData/loader.json'));
+    }
+
+    /**
+     * @covers FluentDOM\Loader\Supports\Json
+     */
+    public function testGetSourceWithUnsupportedTypeExpectingFalse() {
+      $json = new \stdClass();
+      $json->foo = 'bar';
+      $loader = new Json_TestProxy();
+      $this->assertFalse($loader->getSource($json, 'invalid'));
     }
 
     /**

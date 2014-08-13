@@ -10,24 +10,31 @@ namespace FluentDOM\Loader\Supports {
     use Supports;
 
     /**
-     * @param string $source
+     * @param mixed $source
+     * @param string $contentType
      * @throws JsonError
      * @return mixed
      */
-    private function getJson($source)  {
-      $json = FALSE;
-      if (!$this->startsWith($source, '{[')) {
-        $source = file_get_contents($source);
-      }
-      if ($this->startsWith($source, '{[')) {
-        $json = json_decode($source);
-        if (!($json || is_array($json))) {
-          throw new JsonError(
-            is_callable('json_last_error') ? json_last_error() : -1
-          );
+    private function getJson($source, $contentType)  {
+      if ($this->supports($contentType)) {
+        if (is_string($source)) {
+          $json = FALSE;
+          if (!$this->startsWith($source, '{[')) {
+            $source = file_get_contents($source);
+          }
+          if ($this->startsWith($source, '{[')) {
+            $json = json_decode($source);
+            if (!($json || is_array($json))) {
+              throw new JsonError(
+                is_callable('json_last_error') ? json_last_error() : -1
+              );
+            }
+          }
+          return $json;
         }
+        return $source;
       }
-      return $json;
+      return FALSE;
     }
 
     private function getValueAsString($value) {

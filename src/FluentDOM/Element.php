@@ -61,7 +61,10 @@ namespace FluentDOM {
      * @return NULL|Element
      */
     public function append(Appendable $object) {
-      return $object->appendTo($this);
+      $namespaces = $this->ownerDocument->namespaces();
+      $result = $object->appendTo($this);
+      $this->ownerDocument->namespaces($namespaces);
+      return $result;
     }
 
     /**
@@ -309,7 +312,7 @@ namespace FluentDOM {
       if ($prefixes !== NULL && !is_array($prefixes)) {
         $prefixes = array($prefixes);
       }
-      foreach ($this->getDocument()->getNamespaces() as $prefix => $namespace) {
+      foreach ($this->getDocument()->namespaces() as $prefix => $namespace) {
         if (
           !$this->isCurrentNamespace($prefix, $namespace) &&
           ($prefixes === NULL || in_array($prefix, $prefixes))

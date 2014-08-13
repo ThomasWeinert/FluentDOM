@@ -58,6 +58,10 @@ abstract class FluentDOM {
     return $query;
   }
 
+  public static function create() {
+    return new \FluentDOM\Nodes\Creator();
+  }
+
   /**
    * Convert css selector to xpath with Carica/PhpCss
    *

@@ -37,6 +37,7 @@ require(__DIR__.'/FluentDOM/Serializer/Json/RabbitFish.php');
 
 require(__DIR__.'/FluentDOM/Nodes.php');
 require(__DIR__.'/FluentDOM/Nodes/Builder.php');
+require(__DIR__.'/FluentDOM/Nodes/Creator.php');
 require(__DIR__.'/FluentDOM/Nodes/Fetcher.php');
 require(__DIR__.'/FluentDOM/Nodes/Modifier.php');
 

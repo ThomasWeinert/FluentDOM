@@ -165,9 +165,9 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Document::getNamespaces
+     * @covers FluentDOM\Document::namespaces
      */
-    public function testGetNamespaces() {
+    public function testNamespacesGet() {
       $dom = new Document();
       $dom->registerNamespace('#default', 'urn:default');
       $dom->registerNamespace('foo', 'urn:foo');
@@ -176,7 +176,7 @@ namespace FluentDOM {
           '#default' => 'urn:default',
           'foo' => 'urn:foo'
         ],
-        $dom->getNamespaces()
+        $dom->namespaces()
       );
     }
 

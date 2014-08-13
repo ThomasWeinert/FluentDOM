@@ -107,9 +107,16 @@ namespace FluentDOM {
     }
 
     /**
+     * @param array $namespaces
      * @return array
      */
-    public function getNamespaces() {
+    public function namespaces(array $namespaces = NULL) {
+      if (isset($namespaces)) {
+        $this->_namespaces = '';
+        foreach($namespaces as $prefix => $namespaceUri) {
+          $this->registerNamespace($prefix, $namespaceUri);
+        }
+      }
       return $this->_namespaces;
     }
 

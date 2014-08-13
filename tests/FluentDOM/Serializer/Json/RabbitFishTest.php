@@ -60,6 +60,10 @@ namespace FluentDOM\Serializer\Json {
         'Mixed content (element and text nodes) at the same level become array elements.' => [
           '{"alice":["bob",{"charlie":"david"},"edgar"]}',
           '<alice>bob<charlie>david</charlie>edgar</alice>'
+        ],
+        'Mixed content (element and text nodes) at the same level become array elements.' => [
+          '{"alice":[{"@attribute":"yes"},"bob",{"charlie":"david"},"edgar"]}',
+          '<alice attribute="yes">bob<charlie>david</charlie>edgar</alice>'
         ]
       ];
     }

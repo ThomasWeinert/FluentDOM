@@ -21,15 +21,7 @@ namespace FluentDOM\Loader {
     ];
 
     public function __construct() {
-      foreach ($this->_loaders as $loader => $types) {
-        $class = __NAMESPACE__.$loader;
-        $callback = function() use ($class) {
-          return new $class;
-        };
-        foreach ($types as $type) {
-          $this->add($type, $callback);
-        }
-      }
+      $this->addClasses($this->_loaders, __NAMESPACE__);
     }
   }
 }

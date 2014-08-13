@@ -44,6 +44,30 @@ namespace FluentDOM\Loader {
     }
 
     /**
+     * Add loader classes for different types
+     *
+     * @param array[] $classes ['class' => ['type/one', 'type/two'], ...]
+     * @param string $namespace
+     */
+    public function addClasses($classes, $namespace = '') {
+      $namespace = substr($namespace, -1) == '\\' ? substr($namespace, 0, -1) : $namespace;
+      foreach ($classes as $loader => $types) {
+        $loader = substr($loader, 0, 1) == '\\' ? $loader : '\\'.$loader;
+        $class = $namespace.$loader;
+        $callback = function() use ($class) {
+          return new $class;
+        };
+        if (is_array($types)) {
+          foreach ($types as $type) {
+            $this->add($type, $callback);
+          }
+        } else {
+          $this->add($types, $callback);
+        }
+      }
+    }
+
+    /**
      * @throws \UnexpectedValueException
      * @param string $contentType
      * @return bool|Loadable

@@ -56,6 +56,34 @@ namespace FluentDOM\Loader {
     /**
      * @covers FluentDOM\Loader\Lazy
      */
+    public function testAddClassesWithSingleType() {
+      $loader = new Lazy();
+      $loader->addClasses(
+        [
+          'Xml' => ['test/unittest']
+        ],
+        __NAMESPACE__
+      );
+      $this->assertInstanceOf('FluentDOM\Loader\Xml', $loader->get('test/unittest'));
+    }
+
+    /**
+     * @covers FluentDOM\Loader\Lazy
+     */
+    public function testAddClassesWithSeveralTypes() {
+      $loader = new Lazy();
+      $loader->addClasses(
+        [
+          'Xml' => ['test/unittest', 'test']
+        ],
+        __NAMESPACE__
+      );
+      $this->assertInstanceOf('FluentDOM\Loader\Xml', $loader->get('test'));
+    }
+
+    /**
+     * @covers FluentDOM\Loader\Lazy
+     */
     public function testGetWithLoader() {
       $loader = $this->getLoaderFixture();
       $this->assertInstanceOf('FluentDOM\Loadable', $loader->get('loader'));
@@ -66,7 +94,7 @@ namespace FluentDOM\Loader {
      */
     public function testAddWithInvalidLoaderExpectingException() {
       $this->setExpectedException('UnexpectedValueException');
-      $loader = new Lazy(
+      new Lazy(
         [
           'type' => new \stdClass()
         ]

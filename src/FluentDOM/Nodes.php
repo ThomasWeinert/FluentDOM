@@ -113,15 +113,8 @@ namespace FluentDOM {
         unset($this->_xpath);
         $this->applyNamespaces();
         return $this;
-      } else {
-        throw new \InvalidArgumentException(
-          sprintf(
-            'Can not load %s as "%s".',
-            (is_object($source) ? get_class($source) : gettype($source)),
-            $contentType
-          )
-        );
       }
+      throw new Exceptions\InvalidSource($source, $contentType);
     }
 
     /**
@@ -138,8 +131,8 @@ namespace FluentDOM {
         } elseif (is_array($loaders) || $loaders instanceOf \Traversable) {
           $this->_loaders = new Loaders($loaders);
         } else {
-          throw new \InvalidArgumentException(
-            "Invalid loader(s) argument."
+          throw new Exceptions\InvalidArgument(
+            'loaders', ['FluentDOM\Loadable', 'array', '\Traversable']
           );
         }
       } elseif (NULL === $this->_loaders) {

@@ -1,0 +1,19 @@
+<?php
+
+namespace FluentDOM\Exceptions {
+
+  use FluentDOM\Exception;
+
+  class InvalidArgument extends \InvalidArgumentException implements Exception {
+
+    public function __construct($argumentName, $expectedTypes = NULL) {
+      $message = sprintf('Invalid $%s argument.', $argumentName);
+      if (is_array($expectedTypes) && count($expectedTypes) > 0) {
+        $message .= ' Expected: '.implode(', ', $expectedTypes);
+      } elseif (NULL !== $expectedTypes) {
+        $message .= ' Expected: '.$expectedTypes;
+      }
+      parent::__construct($message);
+    }
+  }
+}

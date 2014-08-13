@@ -50,6 +50,11 @@ require(__DIR__.'/FluentDOM/Iterators/IndexIterator.php');
 require(__DIR__.'/FluentDOM/Iterators/ElementIterator.php');
 require(__DIR__.'/FluentDOM/Iterators/NodesIterator.php');
 
+require(__DIR__.'/FluentDOM/Exception.php');
+require(__DIR__.'/FluentDOM/Exceptions/InvalidArgument.php');
+require(__DIR__.'/FluentDOM/Exceptions/InvalidSource.php');
+require(__DIR__.'/FluentDOM/Exceptions/JsonError.php');
+
 require(__DIR__.'/FluentDOM/QualifiedName.php');
 require(__DIR__.'/FluentDOM/Constraints.php');
 // @codeCoverageIgnoreEnd

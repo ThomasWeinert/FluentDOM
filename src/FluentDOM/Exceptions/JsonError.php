@@ -2,7 +2,9 @@
 
 namespace FluentDOM\Exceptions {
 
-  class JsonError extends \UnexpectedValueException {
+  use FluentDOM\Exception;
+
+  class JsonError extends \UnexpectedValueException implements Exception {
 
     /**
      * JSON errors

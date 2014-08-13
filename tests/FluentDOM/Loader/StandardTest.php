@@ -25,7 +25,8 @@ namespace FluentDOM\Loader {
         ['text/html'],
         ['json'],
         ['text/json'],
-        ['application/json']
+        ['application/json'],
+        ['php/simplexml']
       ];
     }
   }

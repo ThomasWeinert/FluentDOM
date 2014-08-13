@@ -103,7 +103,7 @@ namespace FluentDOM\Loader\Json {
      * @param $value
      * @param int $recursions
      */
-    private function transferTo(\DOMElement $target, $value, $recursions = 100) {
+    protected  function transferTo(\DOMElement $target, $value, $recursions = 100) {
       if ($recursions < 1) {
         return;
       }

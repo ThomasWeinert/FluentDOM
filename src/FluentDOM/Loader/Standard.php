@@ -21,7 +21,8 @@ namespace FluentDOM\Loader {
         [
           new Loader\Xml(),
           new Loader\Html(),
-          new Loader\Json()
+          new Loader\Json(),
+          new Loader\PHP()
         ]
       );
     }

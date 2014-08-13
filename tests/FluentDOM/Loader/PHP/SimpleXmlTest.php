@@ -53,5 +53,15 @@ namespace FluentDOM\Loader\PHP {
         '<child/>', $dom->saveXML()
       );
     }
+
+    /**
+     * @covers FluentDOM\Loader\PHP\SimpleXml
+     */
+    public function testLoadWithInvalidSourceExpectingNull() {
+      $loader = new SimpleXml();
+      $this->assertNull(
+        $loader->load('', 'php/simplexml')
+      );
+    }
   }
 }

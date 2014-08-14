@@ -576,6 +576,18 @@ namespace FluentDOM {
     }
 
     /**
+     * @group CoreFunctions
+     * @covers FluentDOM\Nodes::xpath
+     */
+    public function testUseXpathToCallEvaluate() {
+      $fd = new Nodes_TestProxy(self::XML);
+      $this->assertEquals(
+        0,
+        $fd->xpath('count(//item)')
+      );
+    }
+
+    /**
      * @group Properties
      * @covers FluentDOM\Nodes::__isset
      */

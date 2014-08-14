@@ -310,7 +310,6 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Creator
      * @covers FluentDOM\Nodes\Creator\Node
      */
     public function testCreateFetchingUnknownPropertyExpectingNull() {
@@ -321,7 +320,6 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Creator
      * @covers FluentDOM\Nodes\Creator\Node
      */
     public function testCreateSetPropertyOnResultExpectingException() {
@@ -332,7 +330,6 @@ namespace FluentDOM\Nodes {
 
     /**
      * @covers FluentDOM\Nodes\Creator
-     * @covers FluentDOM\Nodes\Creator\Node
      */
     public function testCreatorGetFormatOutputAfterSet() {
       $_ = new Creator();
@@ -343,7 +340,6 @@ namespace FluentDOM\Nodes {
 
     /**
      * @covers FluentDOM\Nodes\Creator
-     * @covers FluentDOM\Nodes\Creator\Node
      */
     public function testCreatorGetUnknownPropertyExpectingNull() {
       $_ = new Creator();
@@ -353,7 +349,6 @@ namespace FluentDOM\Nodes {
 
     /**
      * @covers FluentDOM\Nodes\Creator
-     * @covers FluentDOM\Nodes\Creator\Node
      */
     public function testCreatorGetUnknownPropertyAfterSet() {
       $_ = new Creator();

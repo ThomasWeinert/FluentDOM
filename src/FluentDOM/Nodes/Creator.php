@@ -57,6 +57,7 @@ namespace FluentDOM\Nodes {
       switch ($name) {
       case 'formatOutput' :
         $this->_document->{$name} = $value;
+        return;
       }
       $this->{$name} = $value;
     }

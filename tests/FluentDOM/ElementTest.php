@@ -125,6 +125,7 @@ namespace FluentDOM {
     /**
      * @covers FluentDOM\Element::applyNamespaces
      * @covers FluentDOM\Element::isCurrentNamespace
+     * @covers FluentDOM\Element::getDocument
      */
     public function testApplyNamespaces() {
       $dom = new Document();
@@ -140,6 +141,7 @@ namespace FluentDOM {
     /**
      * @covers FluentDOM\Element::applyNamespaces
      * @covers FluentDOM\Element::isCurrentNamespace
+     * @covers FluentDOM\Element::getDocument
      */
     public function testApplyNamespacesWithTwoNamespaces() {
       $dom = new Document();
@@ -155,6 +157,7 @@ namespace FluentDOM {
     /**
      * @covers FluentDOM\Element::applyNamespaces
      * @covers FluentDOM\Element::isCurrentNamespace
+     * @covers FluentDOM\Element::getDocument
      */
     public function testApplyNamespacesWithOneOfTwoNamespaces() {
       $dom = new Document();
@@ -170,6 +173,7 @@ namespace FluentDOM {
     /**
      * @covers FluentDOM\Element::applyNamespaces
      * @covers FluentDOM\Element::isCurrentNamespace
+     * @covers FluentDOM\Element::getDocument
      */
     public function testApplyNamespacesWithTwoOfThreeNamespaces() {
       $dom = new Document();

@@ -107,12 +107,16 @@ namespace FluentDOM {
     }
 
     /**
+     * Get set the namespaces registered for the document object.
+     *
+     * If the argument is provided ALL namespaces will be replaced.
+     *
      * @param array $namespaces
      * @return array
      */
     public function namespaces(array $namespaces = NULL) {
       if (isset($namespaces)) {
-        $this->_namespaces = '';
+        $this->_namespaces = [];
         foreach($namespaces as $prefix => $namespaceUri) {
           $this->registerNamespace($prefix, $namespaceUri);
         }

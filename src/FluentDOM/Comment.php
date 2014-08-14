@@ -17,5 +17,6 @@ namespace FluentDOM {
     extends \DOMComment  {
 
     use Node\StringCast;
+    use Node\Xpath;
   }
 }

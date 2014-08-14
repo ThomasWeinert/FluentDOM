@@ -91,6 +91,26 @@ namespace FluentDOM {
     /**
      * @covers FluentDOM\Xpath
      */
+    public function testMagicMethodInvoke() {
+      $dom = new \DOMDocument();
+      $dom->loadXml(self::XML);
+      $xpath = new Xpath($dom);
+      $this->assertEquals('1st', $xpath('string(//group/@id)'));
+    }
+
+    /**
+     * @covers FluentDOM\Xpath
+     */
+    public function testMagicMethodInvokeWithContext() {
+      $dom = new \DOMDocument();
+      $dom->loadXml(self::XML);
+      $xpath = new Xpath($dom);
+      $this->assertEquals('items', $xpath('name()', $dom->documentElement));
+    }
+
+    /**
+     * @covers FluentDOM\Xpath
+     */
     public function testQueryDoesNotRegisterNodeNamespaces() {
       $this->skipIfHHVM();
       $dom = new \DOMDocument();

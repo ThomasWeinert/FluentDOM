@@ -16,6 +16,8 @@ namespace FluentDOM {
   class Attribute
     extends \DOMAttr  {
 
+    use Node\Xpath;
+
     /**
      * Casting the element node to string will returns its value
      *

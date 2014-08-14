@@ -15,7 +15,7 @@ namespace FluentDOM {
    * @property callable $onPrepareSelector A callback to convert the selector into xpath
    * @property-read integer $length The amount of elements found by selector.
    * @property-read Document|\DOMDocument $document Internal DOMDocument object
-   * @property-read \DOMXPath $xpath Internal XPath object
+   * @property-read XPath $xpath Internal XPath object
    */
   class Nodes implements \ArrayAccess, \Countable, \IteratorAggregate {
 
@@ -153,10 +153,14 @@ namespace FluentDOM {
     }
 
     /**
+     * @param string $expression
+     * @param \DOMNode $contextNode
      * @return Xpath
      */
-    public function xpath() {
-      if ($this->_document instanceof Document) {
+    public function xpath($expression = NULL, $contextNode = NULL) {
+      if (isset($expression)) {
+        $this->xpath()->evaluate($expression = NULL, $contextNode);
+      } elseif ($this->_document instanceof Document) {
         return $this->_document->xpath();
       } elseif (isset($this->_xpath) && $this->_xpath->document === $this->_document) {
         return $this->_xpath;

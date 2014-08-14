@@ -20,6 +20,7 @@ namespace FluentDOM {
     implements \ArrayAccess, \Countable, \IteratorAggregate  {
 
     use Node\StringCast;
+    use Node\Xpath;
 
     /**
      * Set an attribute on an element
@@ -122,20 +123,6 @@ namespace FluentDOM {
      */
     public function saveHtml() {
       return $this->getDocument()->saveHTML($this);
-    }
-
-    /**
-     * Evaluate an xpath expression in the context of this
-     * element.
-     *
-     * @param string $expression
-     * @param \DOMNode $context
-     * @return mixed
-     */
-    public function evaluate($expression, \DOMNode $context = NULL) {
-      return $this->getDocument()->xpath()->evaluate(
-        $expression, isset($context) ? $context : $this
-      );
     }
 
     /**

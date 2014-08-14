@@ -58,8 +58,13 @@ abstract class FluentDOM {
     return $query;
   }
 
-  public static function create() {
-    return new \FluentDOM\Nodes\Creator();
+  /**
+   * @param string $version
+   * @param string $encoding
+   * @return \FluentDOM\Nodes\Creator
+   */
+  public static function create($version = '1.0', $encoding = 'UTF-8') {
+    return new \FluentDOM\Nodes\Creator($version, $encoding);
   }
 
   /**

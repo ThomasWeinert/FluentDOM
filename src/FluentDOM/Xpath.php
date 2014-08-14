@@ -17,7 +17,15 @@ namespace FluentDOM {
    */
   class Xpath extends \DOMXPath {
 
+    /**
+     * @var bool
+     */
     private $_registerNodeNamespaces = FALSE;
+
+    /**
+     * @var \DOMDocument|null
+     */
+    private $_documentReference = NULL;
 
     /**
      * HHVM and some old PHP versions do have a $document property by default
@@ -27,6 +35,8 @@ namespace FluentDOM {
      */
     public function __construct(\DOMDocument $dom) {
       parent::__construct($dom);
+      // store the document reference to avoid optimization to DOMDocument
+      $this->_documentReference = $dom;
       // @codeCoverageIgnoreStart
       if (!isset($this->document)) {
         $this->document = $dom;
@@ -74,6 +84,17 @@ namespace FluentDOM {
         return parent::evaluate($expression);
       }
       // @codeCoverageIgnoreEnd
+    }
+
+    /**
+     * Fetch nodes or scalar values from the DOM using Xpath expression.
+     *
+     * @param string $expression
+     * @param \DOMNode $contextNode
+     * @return string|float|bool|\DOMNodeList
+     */
+    public function __invoke($expression, $contextNode = NULL) {
+      return $this->evaluate($expression, $contextNode);
     }
 
     /**

@@ -284,8 +284,8 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::evaluate
-     * @covers FluentDOM\Element::getDocument
+     * @covers FluentDOM\Element
+     * @covers FluentDOM\Node\Xpath
      */
     public function testEvaluate() {
       $dom = new Document();
@@ -293,6 +293,19 @@ namespace FluentDOM {
       $this->assertEquals(
         'success',
         $dom->documentElement->evaluate('string(.)')
+      );
+    }
+    /**
+     * @covers FluentDOM\Element
+     * @covers FluentDOM\Node\Xpath
+     */
+    public function testMagicMethodInvoke() {
+      $dom = new Document();
+      $dom->loadXml('<foo>success</foo>');
+      $node = $dom->documentElement;
+      $this->assertEquals(
+        'success',
+        $node('string(.)')
       );
     }
 

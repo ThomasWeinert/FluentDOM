@@ -14,6 +14,8 @@ namespace FluentDOM {
    */
   class Document extends \DOMDocument {
 
+    use Node\Xpath;
+
     /**
      * @var Xpath
      */
@@ -42,6 +44,7 @@ namespace FluentDOM {
       $this->registerNodeClass('DOMCdataSection', __NAMESPACE__.'\\CdataSection');
       $this->registerNodeClass('DOMComment', __NAMESPACE__.'\\Comment');
       $this->registerNodeClass('DOMElement', __NAMESPACE__.'\\Element');
+      $this->registerNodeClass('DOMProcessingInstruction', __NAMESPACE__.'\\ProcessingInstruction');
       $this->registerNodeClass('DOMText', __NAMESPACE__.'\\Text');
     }
 
@@ -227,19 +230,6 @@ namespace FluentDOM {
         $node = $this->createElement($name, $content, $attributes)
       );
       return $node;
-    }
-
-    /**
-     * Evaluate an xpath expression on the document.
-     *
-     * @param string $expression
-     * @param \DOMNode $context
-     * @return mixed
-     */
-    public function evaluate($expression, \DOMNode $context = NULL) {
-      return $this->xpath()->evaluate(
-        $expression, isset($context) ? $context : NULL
-      );
     }
 
     /**

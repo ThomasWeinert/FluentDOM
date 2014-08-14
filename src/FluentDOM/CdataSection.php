@@ -17,5 +17,6 @@ namespace FluentDOM {
     extends \DOMCdataSection  {
 
     use Node\StringCast;
+    use Node\Xpath;
   }
 }

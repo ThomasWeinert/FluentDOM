@@ -3,6 +3,7 @@
 namespace FluentDOM\Nodes {
 
   use FluentDOM\Appendable;
+  use FluentDOM\CdataSection;
   use FluentDOM\Document;
 
   /**
@@ -92,6 +93,31 @@ namespace FluentDOM\Nodes {
         }
       }
       return new Creator\Node($this->_document, $node);
+    }
+
+    /**
+     * @param string $content
+     * @return \DOMCdataSection
+     */
+    public function cdata($content) {
+      return $this->_document->createCDATASection($content);
+    }
+
+    /**
+     * @param string $content
+     * @return \DOMComment
+     */
+    public function comment($content) {
+      return $this->_document->createComment($content);
+    }
+
+    /**
+     * @param string $target
+     * @param string $content
+     * @return \DOMProcessingInstruction
+     */
+    public function pi($target, $content) {
+      return $this->_document->createProcessingInstruction($target, $content);
     }
   }
 }

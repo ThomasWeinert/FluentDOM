@@ -18,6 +18,7 @@ echo $_(
   $_('atom:id', 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6'),
   $_(
     'atom:entry',
+    $_->comment('Demo Entry'),
     $_('atom:title', 'Atom-Powered Robots Run Amok'),
     $_('atom:link', ['href' => 'http://example.org/2003/12/13/atom03']),
     $_('atom:id', 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a'),

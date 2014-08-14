@@ -25,6 +25,19 @@ namespace FluentDOM\Loader\Json {
       );
     }
 
+    /**
+     * @covers FluentDOM\Loader\Json\BadgerFish
+     */
+    public function testLoadWithInvalidSourceExpectingNull() {
+      $loader = new BadgerFish();
+      $this->assertNull(
+        $loader->load(
+          NULL,
+          'badgerfish'
+        )
+      );
+    }
+
     public  static function provideExamples() {
       return [
         'Text content of elements goes in the $ property of an object.' => [

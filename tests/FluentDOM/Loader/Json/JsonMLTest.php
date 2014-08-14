@@ -22,6 +22,19 @@ namespace FluentDOM\Loader\Json {
       );
     }
 
+    /**
+     * @covers FluentDOM\Loader\Json\JsonML
+     */
+    public function testLoadWithInvalidSourceExpectingNull() {
+      $loader = new JsonML();
+      $this->assertNull(
+        $loader->load(
+          NULL,
+          'jsonml'
+        )
+      );
+    }
+
     public  static function provideExamples() {
       return [
         'Simple element' => [

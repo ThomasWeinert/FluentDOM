@@ -39,11 +39,10 @@ namespace FluentDOM\Node {
      * Allow to call evaluate() by using the node as object
      *
      * @param string $expression
-     * @param \DOMNode $context
      * @return mixed
      */
-    public function __invoke($expression, \DOMNode $context = NULL) {
-      return $this->evaluate($expression, $context);
+    public function __invoke($expression) {
+      return $this->evaluate($expression, $this);
     }
   }
 }

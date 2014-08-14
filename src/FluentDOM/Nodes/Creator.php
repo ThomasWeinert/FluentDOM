@@ -5,6 +5,7 @@ namespace FluentDOM\Nodes {
   use FluentDOM\Appendable;
   use FluentDOM\CdataSection;
   use FluentDOM\Document;
+  use FluentDOM\Nodes\Creator\Nodes;
 
   /**
    * @property bool $formatOutput
@@ -16,8 +17,12 @@ namespace FluentDOM\Nodes {
      */
     private $_document = NULL;
 
-    public function __construct() {
-      $this->_document = new Document();
+    /**
+     * @param string $version
+     * @param string $encoding
+     */
+    public function __construct($version = '1.0', $encoding = 'UTF-8') {
+      $this->_document = new Document($version, $encoding);
     }
 
     /**
@@ -98,25 +103,39 @@ namespace FluentDOM\Nodes {
       $arguments = func_get_args();
       array_shift($arguments);
       foreach ($arguments as $parameter) {
-        if (is_array($parameter)) {
-          foreach ($parameter as $name => $value) {
-            $node->setAttribute($name, $value);
-          }
-        } elseif ($parameter instanceof Appendable) {
-          $node->append($parameter);
-        } elseif ($parameter instanceof \DOMAttr) {
-          $node->setAttributeNode($this->_document->importNode($parameter));
-        } elseif ($parameter instanceof \DOMNode) {
-          $node->appendChild($this->_document->importNode($parameter));
-        } elseif ($parameter instanceof Creator\Node) {
-          $node->appendChild($parameter->node);
-        } elseif (is_string($parameter) || method_exists($parameter, '__toString')) {
-          $node->appendChild(
-            $this->_document->createTextNode($parameter)
-          );
-        }
+        $this->addToNode($node, $parameter);
       }
       return $node;
+    }
+
+    /**
+     * @param \FluentDOM\Element $node
+     * @param mixed $item
+     */
+    private function addToNode($node, $item) {
+      if (is_array($item)) {
+        foreach ($item as $name => $value) {
+          if (is_scalar($value)) {
+            $node->setAttribute($name, $value);
+          }
+        }
+      } elseif ($item instanceof Appendable) {
+        $node->append($item);
+      } elseif ($item instanceof \DOMAttr) {
+        $node->setAttributeNode($this->_document->importNode($item));
+      } elseif ($item instanceof \DOMNode) {
+        $node->appendChild($this->_document->importNode($item));
+      } elseif ($item instanceof Creator\Node) {
+        $node->appendChild($item->node);
+      } elseif ($item instanceof Creator\Nodes) {
+        foreach ($item as $childItem) {
+          $this->addToNode($node, $childItem);
+        }
+      } elseif (is_string($item) || method_exists($item, '__toString')) {
+        $node->appendChild(
+          $this->_document->createTextNode($item)
+        );
+      }
     }
 
     /**
@@ -142,6 +161,15 @@ namespace FluentDOM\Nodes {
      */
     public function pi($target, $content) {
       return $this->_document->createProcessingInstruction($target, $content);
+    }
+
+    /**
+     * @param array|\Traversable $traversable
+     * @param callable $map
+     * @return \Traversable
+     */
+    public function any($traversable, callable $map = NULL) {
+      return new Nodes($traversable, $map);
     }
   }
 }
@@ -216,6 +244,87 @@ namespace FluentDOM\Nodes\Creator {
      */
     public function __toString() {
       return $this->getDocument()->saveXml() ?: '';
+    }
+  }
+
+  class Nodes implements \OuterIterator {
+
+    /**
+     * @var array|\Traversable
+     */
+    private $_traversable = NULL;
+
+    /**
+     * @var callable|null
+     */
+    private $_map = NULL;
+
+    /**
+     * @var null|\Iterator
+     */
+    private $_iterator = NULL;
+
+    /**
+     * @param array|\Traversable $traversable
+     * @param callable $map
+     */
+    public function __construct($traversable, callable $map = NULL) {
+      $this->_traversable = $traversable;
+      $this->_map = $map;
+    }
+
+    /**
+     * @return \Iterator
+     */
+    public function getInnerIterator() {
+      if (NULL === $this->_iterator) {
+        if ($this->_traversable instanceof \Iterator) {
+          $this->_iterator = $this->_traversable;
+        } elseif (is_array($this->_traversable)) {
+          $this->_iterator = new \ArrayIterator($this->_traversable);
+        } else {
+          $this->_iterator = ($this->_traversable instanceof \Traversable)
+            ? new \IteratorIterator($this->_traversable)
+            : new \EmptyIterator();
+        }
+      }
+      return $this->_iterator;
+    }
+
+    public function rewind() {
+      $this->getInnerIterator()->rewind();
+    }
+
+    public function next() {
+      $this->getInnerIterator()->next();
+    }
+
+    /**
+     * @return string|int|float
+     */
+    public function key() {
+      return $this->getInnerIterator()->key();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function current() {
+      if (isset($this->_map)) {
+        return call_user_func(
+          $this->_map,
+          $this->getInnerIterator()->current(),
+          $this->getInnerIterator()->key()
+        );
+      }
+      return $this->getInnerIterator()->current();
+    }
+
+    /**
+     * @return bool
+     */
+    public function valid() {
+      return $this->getInnerIterator()->valid();
     }
   }
 }

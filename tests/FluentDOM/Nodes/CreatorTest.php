@@ -170,6 +170,99 @@ namespace FluentDOM\Nodes {
 
     /**
      * @covers FluentDOM\Nodes\Creator
+     * @covers FluentDOM\Nodes\Creator\Nodes
+     */
+    public function testAny() {
+      $_ = new Creator();
+      $this->assertXmlStringEqualsXmlString(
+        '<xml><one/><two/></xml>',
+        $_->element(
+          'xml',
+          $_->any(
+            [$_('one'), $_('two')]
+          )
+        )->saveXml()
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Nodes\Creator
+     * @covers FluentDOM\Nodes\Creator\Nodes
+     */
+    public function testAnyWithIterator() {
+      $_ = new Creator();
+      $this->assertXmlStringEqualsXmlString(
+        '<xml><one/><two/></xml>',
+        $_->element(
+          'xml',
+          $_->any(
+            new \ArrayIterator([$_('one'), $_('two')])
+          )
+        )->saveXml()
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Nodes\Creator
+     * @covers FluentDOM\Nodes\Creator\Nodes
+     */
+    public function testAnyWithIteratorAggregate() {
+      $_ = new Creator();
+      $mock = $this->getMock('IteratorAggregate');
+      $mock
+        ->expects($this->once())
+        ->method('getIterator')
+        ->will(
+          $this->returnValue(
+            new \ArrayIterator([$_('one'), $_('two')])
+          )
+        );
+      $this->assertXmlStringEqualsXmlString(
+        '<xml><one/><two/></xml>',
+        $_->element(
+          'xml',
+          $_->any($mock)
+        )->saveXml()
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Nodes\Creator
+     * @covers FluentDOM\Nodes\Creator\Nodes
+     */
+    public function testAnyWithMapping() {
+      $_ = new Creator();
+      $this->assertXmlStringEqualsXmlString(
+        '<xml><one/><two/></xml>',
+        $_->element(
+          'xml',
+          $_->any(
+            ['one', 'two'],
+            function ($name) use ($_) {
+              return $_($name);
+            }
+          )
+        )->saveXml()
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Nodes\Creator
+     * @covers FluentDOM\Nodes\Creator\Nodes
+     */
+    public function testAnyReturnsIterator() {
+      $_ = new Creator();
+      $any = $_->any(['one', 'two']);
+      $this->assertInstanceOf(
+        'FluentDOM\Nodes\Creator\Nodes', $any
+      );
+      $this->assertEquals(
+        ['one', 'two'], iterator_to_array($any)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Nodes\Creator
      * @covers FluentDOM\Nodes\Creator\Node
      */
     public function testCreateWithDOMNode() {

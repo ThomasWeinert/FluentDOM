@@ -6,12 +6,14 @@ require(__DIR__.'/FluentDOM/XmlSerializable.php');
 
 require(__DIR__.'/FluentDOM/XmlSerialize.php');
 require(__DIR__.'/FluentDOM/Node/StringCast.php');
+require(__DIR__.'/FluentDOM/Node/Xpath.php');
 
 require(__DIR__.'/FluentDOM/Document.php');
 require(__DIR__.'/FluentDOM/Attribute.php');
 require(__DIR__.'/FluentDOM/CdataSection.php');
 require(__DIR__.'/FluentDOM/Comment.php');
 require(__DIR__.'/FluentDOM/Element.php');
+require(__DIR__.'/FluentDOM/ProcessingInstruction.php');
 require(__DIR__.'/FluentDOM/Text.php');
 require(__DIR__.'/FluentDOM/Xpath.php');
 

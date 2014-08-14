@@ -60,7 +60,7 @@ namespace FluentDOM\Loader {
       $loader = new Lazy();
       $loader->addClasses(
         [
-          'Xml' => ['test/unittest']
+          'Xml' => 'test/unittest'
         ],
         __NAMESPACE__
       );

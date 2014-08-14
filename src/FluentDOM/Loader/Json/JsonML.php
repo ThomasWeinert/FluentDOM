@@ -121,11 +121,10 @@ namespace FluentDOM\Loader\Json {
       $hasProperties = $length > 1 && is_object($json[1]);
       $properties = $hasProperties ? $json[1] : new \stdClass;
       $namespace = $this->getNamespace($nodeName, $properties, $node);
-      $node->appendChild(
-        $element = empty($namespace)
-          ? $dom->createElement($nodeName)
-          : $dom->createElementNS($namespace, $nodeName)
-      );
+      $element = empty($namespace)
+        ? $dom->createElement($nodeName)
+        : $dom->createElementNS($namespace, $nodeName);
+      $node->appendChild($element);
       $this->addNamespaceAttributes($element, $properties);
       $this->addAttributes($element, $properties);
       $childOffset = $hasProperties ? 2 : 1;

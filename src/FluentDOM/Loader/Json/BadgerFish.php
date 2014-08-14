@@ -62,7 +62,7 @@ namespace FluentDOM\Loader\Json {
               $dom->createTextNode($this->getValueAsString($data))
             );
           } elseif (substr($name, 0, 1) === '@') {
-            list($name, $namespace) = $this->transferAttributeTo($node, $name, $data, $dom);
+            list($name, $namespace) = $this->transferAttributeTo($node, $name, $data);
           } else {
             $this->transferChildTo($node, $name, $data);
           }
@@ -141,9 +141,7 @@ namespace FluentDOM\Loader\Json {
       }
       foreach ($data as $dataChild) {
         $child = $node->appendChild(
-          empty($namespace)
-            ? $dom->createElement($name)
-            : $dom->createElementNS($namespace, $name)
+          empty($namespace) ? $dom->createElement($name) : $dom->createElementNS($namespace, $name)
         );
         $this->transferTo($child, $dataChild);
       }

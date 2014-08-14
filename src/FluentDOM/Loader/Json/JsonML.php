@@ -26,7 +26,6 @@ namespace FluentDOM\Loader\Json {
       return ['jsonml', 'application/jsonml', 'application/jsonml+json'];
     }
 
-
     /**
      * Load the json string into an DOMDocument
      *
@@ -50,26 +49,10 @@ namespace FluentDOM\Loader\Json {
      * @param mixed $json
      */
     public function transferTo(\DOMNode $node, $json) {
-      /** @var Document $dom */
-      $dom = $node->ownerDocument ?: $node;
-      $length = count($json);
-      if (is_array($json) && $length > 0) {
-        $nodeName = $json[0];
-        $hasProperties = $length > 1 && is_object($json[1]);
-        $properties = $hasProperties ? $json[1] : new \stdClass;
-        $namespace = $this->getNamespace($nodeName, $properties, $node);
-        $node->appendChild(
-          $element = empty($namespace)
-            ? $dom->createElement($nodeName)
-            : $dom->createElementNS($namespace, $nodeName)
-        );
-        $this->addNamespaceAttributes($element, $properties);
-        $this->addAttributes($element, $properties);
-        $childOffset = $hasProperties ? 2 : 1;
-        for ($i = $childOffset; $i < $length; $i++) {
-          $this->transferTo($element, $json[$i]);
-        }
+      if (is_array($json) && count($json) > 0) {
+        $this->transferToElement($node, $json);
       } elseif (is_scalar($json)) {
+        $dom = $node instanceof \DOMDocument ? $node : $node->ownerDocument;
         $node->appendChild(
           $dom->createTextNode($this->getValueAsString($json))
         );
@@ -114,8 +97,7 @@ namespace FluentDOM\Loader\Json {
      * @param \stdClass $properties
      */
     private function addAttributes(\DOMElement $node, $properties) {
-      /** @var Document $dom */
-      $dom = $node->ownerDocument ?: $node;
+      $dom = $node instanceof \DOMDocument ? $node : $node->ownerDocument;
       foreach ($properties as $name => $value) {
         if (!($name == 'xmlns' || substr($name, 0, 6) == 'xmlns:')) {
           $namespace = $this->getNamespace($name, $properties, $node);
@@ -125,6 +107,30 @@ namespace FluentDOM\Loader\Json {
           $attribute->value = $this->getValueAsString($value);
           $node->setAttributeNode($attribute);
         }
+      }
+    }
+
+    /**
+     * @param \DOMNode $node
+     * @param $json
+     */
+    private function transferToElement(\DOMNode $node, $json) {
+      $dom = $node instanceof \DOMDocument ? $node : $node->ownerDocument;
+      $nodeName = $json[0];
+      $length = count($json);
+      $hasProperties = $length > 1 && is_object($json[1]);
+      $properties = $hasProperties ? $json[1] : new \stdClass;
+      $namespace = $this->getNamespace($nodeName, $properties, $node);
+      $node->appendChild(
+        $element = empty($namespace)
+          ? $dom->createElement($nodeName)
+          : $dom->createElementNS($namespace, $nodeName)
+      );
+      $this->addNamespaceAttributes($element, $properties);
+      $this->addAttributes($element, $properties);
+      $childOffset = $hasProperties ? 2 : 1;
+      for ($i = $childOffset; $i < $length; $i++) {
+        $this->transferTo($element, $json[$i]);
       }
     }
   }

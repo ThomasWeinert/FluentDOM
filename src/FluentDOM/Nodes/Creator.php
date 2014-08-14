@@ -45,14 +45,15 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @param $name
-     * @param $value
+     * @param string $name
+     * @param mixed $value
      */
     public function __set($name, $value) {
       switch ($name) {
       case 'formatOutput' :
         $this->_document->{$name} = $value;
       }
+      $this->{$name} = $value;
     }
 
     /**
@@ -69,6 +70,30 @@ namespace FluentDOM\Nodes {
      * @return Creator\Node
      */
     public function __invoke($name) {
+      return new Creator\Node(
+        $this->_document,
+        call_user_func_array(
+          array($this, 'element'), func_get_args()
+        )
+      );
+    }
+
+    /**
+     * Create an Element node and configure it.
+     *
+     * The first argument is the node name. All other arguments are flexible.
+     *
+     * - Arrays are set as attributes
+     * - Attribute and Namesspace nodes are set as attributes
+     * - Nodes are appended as child nodes
+     * - FluentDOM\Appendable instances are appended
+     * - Strings or objects castable to string are appended as text nodes
+     *
+     * @param string $name
+     * @param mixed ...$parameter
+     * @return \FluentDOM\Element
+     */
+    public function element($name) {
       $node = $this->_document->createElement($name);
       $arguments = func_get_args();
       array_shift($arguments);
@@ -79,6 +104,8 @@ namespace FluentDOM\Nodes {
           }
         } elseif ($parameter instanceof Appendable) {
           $node->append($parameter);
+        } elseif ($parameter instanceof \DOMAttr) {
+          $node->setAttributeNode($this->_document->importNode($parameter));
         } elseif ($parameter instanceof \DOMNode) {
           $node->appendChild($this->_document->importNode($parameter));
         } elseif ($parameter instanceof Creator\Node) {
@@ -89,12 +116,12 @@ namespace FluentDOM\Nodes {
           );
         }
       }
-      return new Creator\Node($this->_document, $node);
+      return $node;
     }
 
     /**
      * @param string $content
-     * @return \DOMCdataSection
+     * @return \FluentDOM\CdataSection
      */
     public function cdata($content) {
       return $this->_document->createCDATASection($content);
@@ -102,7 +129,7 @@ namespace FluentDOM\Nodes {
 
     /**
      * @param string $content
-     * @return \DOMComment
+     * @return \FluentDOM\Comment
      */
     public function comment($content) {
       return $this->_document->createComment($content);
@@ -167,6 +194,7 @@ namespace FluentDOM\Nodes\Creator {
     /**
      * @param string $name
      * @param mixed $value
+     * @throws \LogicException
      */
     public function __set($name, $value) {
       throw new \LogicException(

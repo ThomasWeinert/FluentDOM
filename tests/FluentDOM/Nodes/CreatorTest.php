@@ -12,7 +12,7 @@ namespace FluentDOM\Nodes {
      * @covers FluentDOM\Nodes\Creator
      * @covers FluentDOM\Nodes\Creator\Node
      */
-    public function testCreateElement() {
+    public function testCreate() {
       $_ = new Creator();
       $this->assertXmlStringEqualsXmlString(
         '<xml/>',
@@ -24,7 +24,20 @@ namespace FluentDOM\Nodes {
      * @covers FluentDOM\Nodes\Creator
      * @covers FluentDOM\Nodes\Creator\Node
      */
-    public function testCreateElementFetchingDocument() {
+    public function testWithNamespace() {
+      $_ = new Creator();
+      $_->registerNamespace('#default', 'urn:foo');
+      $this->assertXmlStringEqualsXmlString(
+        '<xml xmlns="urn:foo"/>',
+        (string)$_('xml')
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Nodes\Creator
+     * @covers FluentDOM\Nodes\Creator\Node
+     */
+    public function testCreateFetchingDocument() {
       $_ = new Creator();
       $dom = $_('xml', $_('child'))->document;
       $this->assertInstanceOf('FluentDOM\Document', $dom);
@@ -37,7 +50,20 @@ namespace FluentDOM\Nodes {
      * @covers FluentDOM\Nodes\Creator
      * @covers FluentDOM\Nodes\Creator\Node
      */
-    public function testCreateElementFetchingNode() {
+    public function testCreateFetchingDom() {
+      $_ = new Creator();
+      $dom = $_('xml', $_('child'))->document;
+      $this->assertInstanceOf('FluentDOM\Document', $dom);
+      $this->assertXmlStringEqualsXmlString(
+        '<xml><child/></xml>', $dom->saveXml()
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Nodes\Creator
+     * @covers FluentDOM\Nodes\Creator\Node
+     */
+    public function testCreateFetchingNode() {
       $_ = new Creator();
       $node = $_('xml', $_('child'))->node;
       $this->assertInstanceOf('FluentDOM\Element', $node);
@@ -50,11 +76,11 @@ namespace FluentDOM\Nodes {
      * @covers FluentDOM\Nodes\Creator
      * @covers FluentDOM\Nodes\Creator\Node
      */
-    public function testCreateElementWithAttributes() {
+    public function testElement() {
       $_ = new Creator();
       $this->assertXmlStringEqualsXmlString(
         '<xml attr="value"/>',
-        (string)$_('xml', ['attr' => 'value'])
+        $_->element('xml', ['attr' => 'value'])->saveXml()
       );
     }
 
@@ -62,11 +88,23 @@ namespace FluentDOM\Nodes {
      * @covers FluentDOM\Nodes\Creator
      * @covers FluentDOM\Nodes\Creator\Node
      */
-    public function testCreateElementWithTextNode() {
+    public function testElementWithAttributes() {
+      $_ = new Creator();
+      $this->assertXmlStringEqualsXmlString(
+        '<xml attr="value"/>',
+        $_->element('xml', ['attr' => 'value'])->saveXml()
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Nodes\Creator
+     * @covers FluentDOM\Nodes\Creator\Node
+     */
+    public function testCreateWithTextNode() {
       $_ = new Creator();
       $this->assertXmlStringEqualsXmlString(
         '<xml>text</xml>',
-        (string)$_('xml', 'text')
+        $_->element('xml', 'text')->saveXml()
       );
     }
 
@@ -74,11 +112,11 @@ namespace FluentDOM\Nodes {
      * @covers FluentDOM\Nodes\Creator
      * @covers FluentDOM\Nodes\Creator\Node
      */
-    public function testCreateElementWithSeveralTextNodes() {
+    public function testCreateWithSeveralTextNodes() {
       $_ = new Creator();
       $this->assertXmlStringEqualsXmlString(
         '<xml>onetwo</xml>',
-        (string)$_('xml', 'one', 'two')
+        $_->element('xml', 'one', 'two')->saveXml()
       );
     }
 
@@ -86,11 +124,11 @@ namespace FluentDOM\Nodes {
      * @covers FluentDOM\Nodes\Creator
      * @covers FluentDOM\Nodes\Creator\Node
      */
-    public function testCreateElementWithChildNodes() {
+    public function testCreateWithChildNodes() {
       $_ = new Creator();
       $this->assertXmlStringEqualsXmlString(
         '<xml><child-one/><child-two/></xml>',
-        (string)$_('xml', $_('child-one'), $_('child-two'))
+        $_->element('xml', $_('child-one'), $_('child-two'))->saveXml()
       );
     }
 
@@ -98,11 +136,11 @@ namespace FluentDOM\Nodes {
      * @covers FluentDOM\Nodes\Creator
      * @covers FluentDOM\Nodes\Creator\Node
      */
-    public function testCreateElementWithCdata() {
+    public function testCreateWithCdata() {
       $_ = new Creator();
       $this->assertXmlStringEqualsXmlString(
         '<xml><![CDATA[ cdata-text ]]></xml>',
-        (string)$_('xml', $_->cdata(' cdata-text '))
+        $_->element('xml', $_->cdata(' cdata-text '))->saveXml()
       );
     }
 
@@ -110,11 +148,11 @@ namespace FluentDOM\Nodes {
      * @covers FluentDOM\Nodes\Creator
      * @covers FluentDOM\Nodes\Creator\Node
      */
-    public function testCreateElementWithComment() {
+    public function testCreateWithComment() {
       $_ = new Creator();
       $this->assertXmlStringEqualsXmlString(
         '<xml><!--comment-text--></xml>',
-        (string)$_('xml', $_->comment('comment-text'))
+        $_->element('xml', $_->comment('comment-text'))->saveXml()
       );
     }
 
@@ -122,11 +160,11 @@ namespace FluentDOM\Nodes {
      * @covers FluentDOM\Nodes\Creator
      * @covers FluentDOM\Nodes\Creator\Node
      */
-    public function testCreateElementWithProcessingInstruction() {
+    public function testCreateWithProcessingInstruction() {
       $_ = new Creator();
       $this->assertXmlStringEqualsXmlString(
         '<xml><?pi content?></xml>',
-        (string)$_('xml', $_->pi('pi', 'content'))
+        $_->element('xml', $_->pi('pi', 'content'))->saveXml()
       );
     }
 
@@ -134,13 +172,100 @@ namespace FluentDOM\Nodes {
      * @covers FluentDOM\Nodes\Creator
      * @covers FluentDOM\Nodes\Creator\Node
      */
-    public function testCreateElementWithDOMNode() {
+    public function testCreateWithDOMNode() {
       $dom = new \DOMDocument();
       $_ = new Creator();
       $this->assertXmlStringEqualsXmlString(
         '<xml><child/></xml>',
-        (string)$_('xml', $dom->createElement('child'))
+        $_->element('xml', $dom->createElement('child'))->saveXml()
       );
+    }
+
+    /**
+     * @covers FluentDOM\Nodes\Creator
+     * @covers FluentDOM\Nodes\Creator\Node
+     */
+    public function testCreateWithAttributeNode() {
+      $dom = new \DOMDocument();
+      $attribute = $dom->createAttribute('attr');
+      $attribute->value = 'value';
+      $_ = new Creator();
+      $this->assertXmlStringEqualsXmlString(
+        '<xml attr="value"/>',
+        $_->element('xml', $attribute)->saveXml()
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Nodes\Creator
+     * @covers FluentDOM\Nodes\Creator\Node
+     */
+    public function testCreateWithAttributeAppendable() {
+      $appendable = $this->getMock('FluentDOM\Appendable');
+      $appendable
+        ->expects($this->once())
+        ->method('appendTo')
+        ->with($this->isInstanceOf('FluentDOM\Element'));
+      $dom = new \DOMDocument();
+      $attribute = $dom->createAttribute('attr');
+      $attribute->value = 'value';
+      $_ = new Creator();
+      $this->assertXmlStringEqualsXmlString(
+        '<xml/>',
+        $_->element('xml', $appendable)->saveXml()
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Nodes\Creator
+     * @covers FluentDOM\Nodes\Creator\Node
+     */
+    public function testCreateFetchingUnknownPropertyExpectingNull() {
+      $_ = new Creator();
+      $this->assertNull(
+        $_('foo')->unknown
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Nodes\Creator
+     * @covers FluentDOM\Nodes\Creator\Node
+     */
+    public function testCreateSetPropertyOnResultExpectingException() {
+      $_ = new Creator();
+      $this->setExpectedException('LogicException');
+      $_('foo')->document = 'bar';
+    }
+
+    /**
+     * @covers FluentDOM\Nodes\Creator
+     * @covers FluentDOM\Nodes\Creator\Node
+     */
+    public function testCreatorGetFormatOutputAfterSet() {
+      $_ = new Creator();
+      $_->formatOutput = TRUE;
+      $this->assertTrue(isset($_->formatOutput));
+      $this->assertTrue($_->formatOutput);
+    }
+
+    /**
+     * @covers FluentDOM\Nodes\Creator
+     * @covers FluentDOM\Nodes\Creator\Node
+     */
+    public function testCreatorGetUnknownPropertyExpectingNull() {
+      $_ = new Creator();
+      $this->assertFalse(isset($_->unkown));
+      $this->assertNull($_->unkown);
+    }
+
+    /**
+     * @covers FluentDOM\Nodes\Creator
+     * @covers FluentDOM\Nodes\Creator\Node
+     */
+    public function testCreatorGetUnknownPropertyAfterSet() {
+      $_ = new Creator();
+      $_->unkown = TRUE;
+      $this->assertTrue($_->unkown);
     }
   }
 }

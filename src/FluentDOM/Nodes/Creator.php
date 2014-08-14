@@ -16,11 +16,8 @@ namespace FluentDOM\Nodes {
      */
     private $_document = NULL;
 
-    /**
-     * @param Document $document
-     */
-    public function __construct(Document $document = NULL) {
-      $this->_document = $document ?: new Document();
+    public function __construct() {
+      $this->_document = new Document();
     }
 
     /**

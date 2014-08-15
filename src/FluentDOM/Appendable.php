@@ -17,7 +17,7 @@ namespace FluentDOM {
      * Append the object to a FluentDOM\Element
      *
      * @param Element $parentNode
-     * @return Element|boolean|NULL
+     * @return Element
      */
     function appendTo(Element $parentNode);
   }

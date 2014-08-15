@@ -220,7 +220,7 @@ namespace FluentDOM\Nodes\Creator {
 
     /**
      * @param Element $parent
-     * @return bool|Element|NULL|void
+     * @return Element
      */
     public function appendTo(Element $parent) {
       $parent->appendChild(
@@ -312,7 +312,7 @@ namespace FluentDOM\Nodes\Creator {
 
     /**
      * @param Element $parent
-     * @return bool|Element|NULL|void
+     * @return Element
      */
     public function appendTo(Element $parent) {
       foreach ($this as $item) {

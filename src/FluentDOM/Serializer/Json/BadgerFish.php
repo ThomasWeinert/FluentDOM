@@ -53,7 +53,7 @@ namespace FluentDOM\Serializer\Json {
     /**
      * @param \stdClass $target
      * @param \DOMElement $node
-     * @param XPath $xpath
+     * @param Xpath $xpath
      */
     protected function addAttributes(\stdClass $target, \DOMElement $node, Xpath $xpath) {
       foreach ($xpath->evaluate('@*', $node) as $attribute) {
@@ -64,7 +64,7 @@ namespace FluentDOM\Serializer\Json {
     /**
      * @param \stdClass $target
      * @param \DOMElement $node
-     * @param XPath $xpath
+     * @param Xpath $xpath
      */
     protected function addNamespaces(\stdClass $target, \DOMElement $node, Xpath $xpath) {
       if ($node->namespaceURI != '' && $node->prefix == '') {

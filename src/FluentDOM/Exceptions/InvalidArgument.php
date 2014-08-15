@@ -6,6 +6,10 @@ namespace FluentDOM\Exceptions {
 
   class InvalidArgument extends \InvalidArgumentException implements Exception {
 
+    /**
+     * @param string $argumentName
+     * @param string|string[] $expectedTypes
+     */
     public function __construct($argumentName, $expectedTypes = NULL) {
       $message = sprintf('Invalid $%s argument.', $argumentName);
       if (is_array($expectedTypes) && count($expectedTypes) > 0) {

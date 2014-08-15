@@ -111,6 +111,9 @@ abstract class FluentDOM {
   /**
    * Try autoloading. If is not available, use the _require.php
    *
+   * Try only once, if the source it not here it will
+   * not exists in the second call.
+   *
    * @codeCoverageIgnore
    */
   private static function _require() {
@@ -118,7 +121,7 @@ abstract class FluentDOM {
     if ($load && !interface_exists('FluentDOM\Appendable')) {
       include(__DIR__.'/_require.php');
     }
-    $loaded = FALSE;
+    $load = FALSE;
   }
 }
 

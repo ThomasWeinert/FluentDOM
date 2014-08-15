@@ -8,7 +8,7 @@
 
 namespace FluentDOM\Serializer\Json {
 
-  use FluentDOM\XPath;
+  use FluentDOM\Xpath;
 
   /**
    * Serialize a DOM to RabbitFish Json: http://www.bramstein.com/projects/xsltjson/
@@ -23,7 +23,7 @@ namespace FluentDOM\Serializer\Json {
      * @return \stdClass
      */
     protected function getNodes(\DOMElement $node) {
-      $xpath = new XPath($node->ownerDocument);
+      $xpath = new Xpath($node->ownerDocument);
       $hasText = $xpath->evaluate('count(text()[normalize-space(.) != ""]) > 0', $node);
       $hasElements = $xpath->evaluate('count(*) > 0', $node);
       $attributes = new \stdClass();
@@ -31,28 +31,38 @@ namespace FluentDOM\Serializer\Json {
       $this->addNamespaces($attributes, $node, $xpath);
       $attributes = (array)$attributes;
       if ($hasText && $hasElements) {
-        $result = [];
-        foreach ($attributes as $name => $value) {
-          $child = new \stdClass();
-          $child->{$name} = $value;
-          $result[] = $child;
-        }
-        foreach ($xpath->evaluate('*|text()[normalize-space(.) != ""]', $node) as $childNode) {
-          /** @var \DOMElement|\DOMText|\DOMCdataSection $childNode */
-          if ($childNode instanceof \DOMElement) {
-            $child = new \stdClass();
-            $child->{$childNode->nodeName} = $this->getNodes($childNode);
-            $result[] = $child;
-          } elseif (!$childNode->isWhitespaceInElementContent()) {
-            $result[] = $childNode->nodeValue;
-          }
-        }
-        return $result;
+        return $this->getNodesArray($node, $attributes, $xpath);
       } elseif ($hasText && count($attributes) == 0) {
         return $node->nodeValue;
       } else {
         return parent::getNodes($node);
       }
+    }
+
+    /**
+     * @param \DOMElement $node
+     * @param \stdClass $attributes
+     * @param Xpath $xpath
+     * @return array
+     */
+    private function getNodesArray(\DOMElement $node, $attributes, $xpath) {
+      $result = [];
+      foreach ($attributes as $name => $value) {
+        $child = new \stdClass();
+        $child->{$name} = $value;
+        $result[] = $child;
+      }
+      foreach ($xpath->evaluate('*|text()[normalize-space(.) != ""]', $node) as $childNode) {
+        /** @var \DOMElement|\DOMText|\DOMCdataSection $childNode */
+        if ($childNode instanceof \DOMElement) {
+          $child = new \stdClass();
+          $child->{$childNode->nodeName} = $this->getNodes($childNode);
+          $result[] = $child;
+        } elseif (!$childNode->isWhitespaceInElementContent()) {
+          $result[] = $childNode->nodeValue;
+        }
+      }
+      return $result;
     }
   }
 }

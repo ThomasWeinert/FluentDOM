@@ -9,7 +9,7 @@
 namespace FluentDOM\Serializer\Json {
 
   use FluentDOM\Serializer\Json;
-  use FluentDOM\XPath;
+  use FluentDOM\Xpath;
 
   /**
    * Serialize a DOM to BadgerFish Json: http://badgerfish.ning.com/
@@ -38,7 +38,7 @@ namespace FluentDOM\Serializer\Json {
      */
     protected function getNodes(\DOMElement $node) {
       $result = new \stdClass();
-      $xpath = new XPath($node->ownerDocument);
+      $xpath = new Xpath($node->ownerDocument);
       $this->addNamespaces($result, $node, $xpath);
       $this->addAttributes($result, $node, $xpath);
       foreach ($xpath->evaluate('*', $node) as $childNode) {

@@ -43,7 +43,9 @@ namespace FluentDOM\Node {
      * @return mixed
      */
     public function __invoke($expression) {
-      return $this->evaluate($expression, $this);
+      return $this->evaluate(
+        $expression, $this instanceof \DOMNode ? $this : NULL
+      );
     }
   }
 }

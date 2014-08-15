@@ -97,7 +97,7 @@ namespace FluentDOM\Nodes {
      * The first argument is the node name. All other arguments are flexible.
      *
      * - Arrays are set as attributes
-     * - Attribute and Namesspace nodes are set as attributes
+     * - Attribute and Namespace nodes are set as attributes
      * - Nodes are appended as child nodes
      * - FluentDOM\Appendable instances are appended
      * - Strings or objects castable to string are appended as text nodes

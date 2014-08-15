@@ -41,7 +41,7 @@ namespace FluentDOM\Serializer\Json {
 
     /**
      * @param \DOMElement $node
-     * @param \stdClass $attributes
+     * @param \stdClass|array $attributes
      * @param Xpath $xpath
      * @return array
      */

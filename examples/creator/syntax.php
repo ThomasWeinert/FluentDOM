@@ -7,7 +7,7 @@ $_->formatOutput = TRUE;
 
 echo $_(
   'root',
-  $_('child', 'text', ['attr' => 'value']),
+  $_('element', 'text', ['attr' => 'value']),
   $_(
     'traversable-mapping',
     $_->any(

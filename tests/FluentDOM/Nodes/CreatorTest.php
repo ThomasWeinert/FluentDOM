@@ -10,6 +10,18 @@ namespace FluentDOM\Nodes {
 
     /**
      * @covers FluentDOM\Nodes\Creator
+     */
+    public function testClone() {
+      $creator = new Creator();
+      $clone = clone $creator;
+      $this->assertNotSame(
+        $this->readAttribute($creator, '_document'),
+        $this->readAttribute($clone, '_document')
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Nodes\Creator
      * @covers FluentDOM\Nodes\Creator\Node
      */
     public function testCreate() {

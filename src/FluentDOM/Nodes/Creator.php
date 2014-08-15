@@ -62,6 +62,14 @@ namespace FluentDOM\Nodes {
     }
 
     /**
+     * If the creator is cloned, a clone of the dom document is needed, too.
+     *
+     */
+    public function __clone() {
+      $this->_document = clone $this->_document;
+    }
+
+    /**
      * @param string $prefix
      * @param string $namespaceUri
      */

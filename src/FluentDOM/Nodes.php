@@ -155,12 +155,21 @@ namespace FluentDOM {
     /**
      * @param string $expression
      * @param \DOMNode $contextNode
-     * @return Xpath
+     * @return Xpath|\DOMNodeList|float|string
      */
     public function xpath($expression = NULL, $contextNode = NULL) {
       if (isset($expression)) {
-        return $this->xpath()->evaluate($expression, $contextNode);
-      } elseif ($this->_document instanceof Document) {
+        return $this->getXpath()->evaluate($expression, $contextNode);
+      } else {
+        return $this->getXpath();
+      }
+    }
+
+    /**
+     * @return Xpath
+     */
+    private function getXpath() {
+      if ($this->_document instanceof Document) {
         return $this->_document->xpath();
       } elseif (isset($this->_xpath) && $this->_xpath->document === $this->_document) {
         return $this->_xpath;
@@ -476,7 +485,7 @@ namespace FluentDOM {
       case 'length' :
         return count($this->_nodes);
       case 'xpath' :
-        return $this->xpath();
+        return $this->getXpath();
       case 'onPrepareSelector' :
         return $this->_onPrepareSelector;
       default :
@@ -571,7 +580,7 @@ namespace FluentDOM {
       $result = clone $this;
       $result->_parent = $this;
       $result->_document = $this->getDocument();
-      $result->_xpath = $this->xpath();
+      $result->_xpath = $this->getXpath();
       $result->_nodes = array();
       if (isset($elements)) {
         $result->push($elements);
@@ -696,7 +705,7 @@ namespace FluentDOM {
     public function index($selector = NULL) {
       if (count($this->_nodes) > 0) {
         if (is_null($selector)) {
-          return $this->xpath()->evaluate(
+          return $this->xpath(
             'count(
               preceding-sibling::node()[
                 self::* or (self::text() and normalize-space(.) != "")
@@ -739,7 +748,7 @@ namespace FluentDOM {
         if (
           ($node->parentNode instanceof \DOMNode) ||
           $node === $node->ownerDocument->documentElement) {
-          $position = (integer)$this->xpath()->evaluate(
+          $position = (integer)$this->xpath(
             'count(ancestor-or-self::node()/preceding::node()) + count(ancestor::node())', $node
           );
           /* use the document position as index, ignore duplicates */

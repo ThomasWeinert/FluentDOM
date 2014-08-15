@@ -764,6 +764,7 @@ namespace FluentDOM {
     /**
      * @group Core
      * @covers FluentDOM\Nodes::xpath()
+     * @covers FluentDOM\Nodes::getXpath()
      */
     public function testXpathGetFromDocument() {
       $dom = new Document();
@@ -777,6 +778,7 @@ namespace FluentDOM {
     /**
      * @group Core
      * @covers FluentDOM\Nodes::xpath()
+     * @covers FluentDOM\Nodes::getXpath()
      */
     public function testXpathGetImplicitCreate() {
       $dom = new \DOMDocument();
@@ -791,6 +793,7 @@ namespace FluentDOM {
     /**
      * @group Core
      * @covers FluentDOM\Nodes::xpath()
+     * @covers FluentDOM\Nodes::getXpath()
      * @covers FluentDOM\Nodes::registerNamespace()
      * @covers FluentDOM\Nodes::applyNamespaces
      */

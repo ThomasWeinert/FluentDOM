@@ -14,6 +14,7 @@ namespace FluentDOM\Node {
    * Cast a DOMNode into a string
    *
    * @property string $nodeValue
+   * @property Document $ownerDocument
    */
   trait Xpath {
 

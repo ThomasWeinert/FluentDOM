@@ -77,8 +77,7 @@ namespace FluentDOM\Nodes {
             $selector,
             Nodes::CONTEXT_SELF
           ),
-          $context,
-          FALSE
+          $context
         );
         if (!($result instanceof \Traversable)) {
           throw new \InvalidArgumentException('Given selector did not return an node list.');
@@ -228,6 +227,7 @@ namespace FluentDOM\Nodes {
     public function getWrapperNodes($template, &$simple) {
       $wrapper = $template->cloneNode(TRUE);
       $targets = NULL;
+      $target = NULL;
       if (!$simple) {
         // get the first element without child elements.
         $targets = $this->getOwner()->xpath('.//*[count(*) = 0]', $wrapper);
@@ -235,7 +235,7 @@ namespace FluentDOM\Nodes {
       if ($simple || $targets->length == 0) {
         $target = $wrapper;
         $simple = TRUE;
-      } else {
+      } elseif ($targets instanceof \DOMNodeList) {
         $target = $targets->item(0);
       }
       return array($target, $wrapper);

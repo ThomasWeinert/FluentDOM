@@ -30,9 +30,10 @@ namespace FluentDOM\Loader\Supports {
               );
             }
           }
-          return $json;
+        } else {
+          $json = $source;
         }
-        return $source;
+        return ($json || is_array($json)) ? $json : FALSE;
       }
       return FALSE;
     }

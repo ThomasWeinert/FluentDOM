@@ -77,8 +77,7 @@ namespace FluentDOM\Loader\Json {
      * @return Document|NULL
      */
     public function load($source, $contentType) {
-      $json = $this->getJson($source, $contentType);
-      if ($json || is_array($json)) {
+      if (FALSE !== ($json = $this->getJson($source, $contentType))) {
         $dom = new Document('1.0', 'UTF-8');
         $dom->appendChild(
           $root = $dom->createElementNS(self::XMLNS, 'json:json')

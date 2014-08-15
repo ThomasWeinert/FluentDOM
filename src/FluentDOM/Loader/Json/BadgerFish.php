@@ -37,7 +37,7 @@ namespace FluentDOM\Loader\Json {
      */
     public function load($source, $contentType) {
       $json = $this->getJson($source, $contentType);
-      if ($json || is_object($json)) {
+      if (is_object($json)) {
         $dom = new Document('1.0', 'UTF-8');
         $this->transferTo($dom, $json);
         return $dom;
@@ -62,7 +62,7 @@ namespace FluentDOM\Loader\Json {
               $dom->createTextNode($this->getValueAsString($data))
             );
           } elseif (substr($name, 0, 1) === '@') {
-            list($name, $namespace) = $this->transferAttributeTo($node, $name, $data);
+            $this->transferAttributeTo($node, $name, $data);
           } else {
             $this->transferChildTo($node, $name, $data);
           }

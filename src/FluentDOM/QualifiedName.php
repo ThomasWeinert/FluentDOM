@@ -179,5 +179,20 @@ namespace FluentDOM {
         $localName
       );
     }
+
+    /**
+     * Validate a string to be an valid QName
+     *
+     * @param string $name
+     * @return bool
+     */
+    public static function validate($name) {
+      try {
+        new QualifiedName($name);
+      } catch (\UnexpectedValueException $e) {
+        return FALSE;
+      }
+      return TRUE;
+    }
   }
 }

@@ -189,6 +189,7 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Element::append
+     * @covers FluentDOM\Element::appendNode
      */
     public function testAppend() {
       $object = $this->getMock('FluentDOM\\Appendable');
@@ -212,6 +213,137 @@ namespace FluentDOM {
       );
       $this->assertEquals(
         "success", $node->tagName
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::append
+     * @covers FluentDOM\Element::appendNode
+     */
+    public function testAppendWithText() {
+      $dom = new Document();
+      $dom->appendElement('root');
+      $node = $dom->documentElement->append('success');
+      $this->assertEquals(
+        '<root>success</root>',
+        $dom->saveXML($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::append
+     * @covers FluentDOM\Element::appendNode
+     */
+    public function testAppendWithArraySetsAttributes() {
+      $dom = new Document();
+      $dom->appendElement('root');
+      $node = $dom->documentElement->append(['result' => 'success']);
+      $this->assertEquals(
+        '<root result="success"/>',
+        $dom->saveXML($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::append
+     * @covers FluentDOM\Element::appendNode
+     */
+    public function testAppendWithNode() {
+      $dom = new Document();
+      $dom->appendElement('root');
+      $node = $dom->documentElement->append(
+        $dom->createElement('success')
+      );
+      $this->assertEquals(
+        '<root><success/></root>',
+        $dom->saveXML($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::append
+     * @covers FluentDOM\Element::appendNode
+     */
+    public function testAppendWithAttributeNode() {
+      $dom = new Document();
+      $dom->appendElement('root');
+      $node = $dom->documentElement->append(
+         $dom->createAttribute('result', 'success')
+      );
+      $this->assertEquals(
+        '<root result="success"/>',
+        $dom->saveXML($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::append
+     * @covers FluentDOM\Element::appendNode
+     */
+    public function testAppendWithDocument() {
+      $import = new \DOMDocument();
+      $import->loadXml('<success/>');
+      $dom = new Document();
+      $dom->appendElement('root');
+      $node = $dom->documentElement->append(
+        $import
+      );
+      $this->assertEquals(
+        '<root><success/></root>',
+        $dom->saveXML($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::append
+     * @covers FluentDOM\Element::appendNode
+     */
+    public function testAppendWithEmptyDocument() {
+      $import = new \DOMDocument();
+      $dom = new Document();
+      $dom->appendElement('root');
+      $node = $dom->documentElement->append(
+        $import
+      );
+      $this->assertEquals(
+        '<root/>',
+        $dom->saveXML($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::append
+     * @covers FluentDOM\Element::appendNode
+     */
+    public function testAppendWithNodeFromOtherDocument() {
+      $import = new \DOMDocument();
+      $import->loadXml('<success/>');
+      $dom = new Document();
+      $dom->appendElement('root');
+      $node = $dom->documentElement->append(
+        $import->documentElement
+      );
+      $this->assertEquals(
+        '<root><success/></root>',
+        $dom->saveXML($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::append
+     * @covers FluentDOM\Element::appendNode
+     */
+    public function testAppendWithAttributeNodeFromOtherDocument() {
+      $import = new \DOMDocument();
+      $import->loadXml('<root result="success"/>');
+      $dom = new Document();
+      $dom->appendElement('root');
+      $node = $dom->documentElement->append(
+        $import->documentElement->getAttributeNode('result')
+      );
+      $this->assertEquals(
+        '<root result="success"/>',
+        $dom->saveXML($dom->documentElement)
       );
     }
 

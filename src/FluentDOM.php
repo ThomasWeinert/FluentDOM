@@ -4,8 +4,6 @@ use Symfony\Component\CssSelector\CssSelector;
 
 abstract class FluentDOM {
 
-  private static $_load = TRUE;
-
   /**
    * Create an FluentDOM::Query instance and load the source into it.
    *
@@ -14,11 +12,7 @@ abstract class FluentDOM {
    * @return \FluentDOM\Query
    */
   public static function Query($source = NULL, $contentType = 'text/xml') {
-    if (self::$_load && !class_exists('FluentDOM\Query')) {
-      // @codeCoverageIgnoreStart
-      include(__DIR__.'/_require.php');
-    }
-    // @codeCoverageIgnoreEnd
+    self::_require();
     $query = new FluentDOM\Query();
     if (isset($source)) {
       $query->load($source, $contentType);
@@ -64,6 +58,7 @@ abstract class FluentDOM {
    * @return \FluentDOM\Nodes\Creator
    */
   public static function create($version = '1.0', $encoding = 'UTF-8') {
+    self::_require();
     return new \FluentDOM\Nodes\Creator($version, $encoding);
   }
 
@@ -111,6 +106,19 @@ abstract class FluentDOM {
       return '/'.$result;
     }
     return $result;
+  }
+
+  /**
+   * Try autoloading. If is not available, use the _require.php
+   *
+   * @codeCoverageIgnore
+   */
+  private static function _require() {
+    static $load = TRUE;
+    if ($load && !interface_exists('FluentDOM\Appendable')) {
+      include(__DIR__.'/_require.php');
+    }
+    $loaded = FALSE;
   }
 }
 

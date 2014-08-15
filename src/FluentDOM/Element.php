@@ -56,16 +56,61 @@ namespace FluentDOM {
     }
 
     /**
-     * Call an object to append itself to the element.
+     * Append a value to the element node
      *
-     * @param Appendable $object
-     * @return NULL|Element
+     * The value can be:
+     *
+     * - a node (automatically imported and cloned)
+     * - an object implementing FluentDOM\Appendable (calles appendTo())
+     * - a scalar or object castable to string (adds a text node)
+     * - an array (sets attributes)
+     *
+     * @param mixed $value
+     * @return $this|Element new element or self
      */
-    public function append(Appendable $object) {
-      $namespaces = $this->ownerDocument->namespaces();
-      $result = $object->appendTo($this);
-      $this->ownerDocument->namespaces($namespaces);
-      return $result;
+    public function append($value) {
+      $result = NULL;
+      if ($value instanceof \DOMNode) {
+        $result = $this->appendNode($value);
+      } elseif ($value instanceof Appendable) {
+        $namespaces = $this->ownerDocument->namespaces();
+        $result = $value->appendTo($this);
+        $this->ownerDocument->namespaces($namespaces);
+      } elseif (is_array($value)) {
+        foreach ($value as $name => $data) {
+          if (QualifiedName::validate($name)) {
+            $this->setAttribute($name, (string)$data);
+          }
+        }
+      } elseif (is_scalar($value) || method_exists($value, '__toString')) {
+        $result = $this->appendChild(
+          $this->ownerDocument->createTextNode((string)$value)
+        );
+      }
+      return ($result instanceof Element) ? $result : $this;
+    }
+
+    /**
+     * @param \DOMNode $node
+     * @return \DOMAttr|\DOMNode
+     */
+    private function appendNode(\DOMNode $node) {
+      if ($node instanceof \DOMDocument) {
+        if ($node->documentElement instanceof \DOMElement) {
+          return $this->appendChild(
+            $this->getDocument()->importNode($node->documentElement)
+          );
+        }
+        return NULL;
+      } elseif ($node->ownerDocument !== $this->getDocument()) {
+        $node = $this->getDocument()->importNode($node, TRUE);
+      } elseif ($node->parentNode instanceOf \DOMNode) {
+        $node = $this->getDocument()->cloneNode($node, TRUE);
+      }
+      if ($node instanceof \DOMAttr) {
+        return $this->setAttributeNode($node);
+      }
+      return $this->appendChild($node);
     }
 
     /**

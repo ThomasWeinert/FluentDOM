@@ -3,7 +3,6 @@
 namespace FluentDOM\Nodes {
 
   use FluentDOM\Appendable;
-  use FluentDOM\CdataSection;
   use FluentDOM\Document;
   use FluentDOM\Nodes\Creator\Nodes;
 
@@ -104,39 +103,9 @@ namespace FluentDOM\Nodes {
       $arguments = func_get_args();
       array_shift($arguments);
       foreach ($arguments as $parameter) {
-        $this->addToNode($node, $parameter);
+        $node->append($parameter);
       }
       return $node;
-    }
-
-    /**
-     * @param \FluentDOM\Element $node
-     * @param mixed $item
-     */
-    private function addToNode($node, $item) {
-      if (is_array($item)) {
-        foreach ($item as $name => $value) {
-          if (is_scalar($value)) {
-            $node->setAttribute($name, $value);
-          }
-        }
-      } elseif ($item instanceof Appendable) {
-        $node->append($item);
-      } elseif ($item instanceof \DOMAttr) {
-        $node->setAttributeNode($this->_document->importNode($item));
-      } elseif ($item instanceof \DOMNode) {
-        $node->appendChild($this->_document->importNode($item));
-      } elseif ($item instanceof Creator\Node) {
-        $node->appendChild($item->node);
-      } elseif ($item instanceof Creator\Nodes) {
-        foreach ($item as $childItem) {
-          $this->addToNode($node, $childItem);
-        }
-      } elseif (is_string($item) || method_exists($item, '__toString')) {
-        $node->appendChild(
-          $this->_document->createTextNode($item)
-        );
-      }
     }
 
     /**
@@ -167,7 +136,7 @@ namespace FluentDOM\Nodes {
     /**
      * @param array|\Traversable $traversable
      * @param callable $map
-     * @return \Traversable
+     * @return Appendable
      */
     public function any($traversable, callable $map = NULL) {
       return new Nodes($traversable, $map);
@@ -177,14 +146,16 @@ namespace FluentDOM\Nodes {
 
 namespace FluentDOM\Nodes\Creator {
 
+  use FluentDOM\Appendable;
   use FluentDOM\Document;
+  use FluentDOM\Element;
 
   /**
    * @property-read Document $document
    * @property-read Document $dom
    * @property-read \DOMElement $node
    */
-  class Node {
+  class Node implements Appendable {
 
     /**
      * @var Document
@@ -246,9 +217,20 @@ namespace FluentDOM\Nodes\Creator {
     public function __toString() {
       return $this->getDocument()->saveXml() ?: '';
     }
+
+    /**
+     * @param Element $parent
+     * @return bool|Element|NULL|void
+     */
+    public function appendTo(Element $parent) {
+      $parent->appendChild(
+        $parent->ownerDocument->importNode($this->_node, TRUE)
+      );
+      return $parent;
+    }
   }
 
-  class Nodes implements \OuterIterator {
+  class Nodes implements Appendable, \OuterIterator {
 
     /**
      * @var array|\Traversable
@@ -326,6 +308,17 @@ namespace FluentDOM\Nodes\Creator {
      */
     public function valid() {
       return $this->getInnerIterator()->valid();
+    }
+
+    /**
+     * @param Element $parent
+     * @return bool|Element|NULL|void
+     */
+    public function appendTo(Element $parent) {
+      foreach ($this as $item) {
+        $parent->append($item);
+      }
+      return $parent;
     }
   }
 }

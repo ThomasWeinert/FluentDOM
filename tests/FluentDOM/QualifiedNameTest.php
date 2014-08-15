@@ -147,6 +147,24 @@ namespace FluentDOM {
       );
     }
 
+    /**
+     * @covers FluentDOM\QualifiedName
+     */
+    public function testValidateExceptionTrue() {
+      $this->assertTrue(
+        QualifiedName::validate('foo')
+      );
+    }
+
+    /**
+     * @covers FluentDOM\QualifiedName
+     */
+    public function testValidateExceptionFalse() {
+      $this->assertFalse(
+        QualifiedName::validate('123')
+      );
+    }
+
     /*************************
      * Data Provider
      ************************/

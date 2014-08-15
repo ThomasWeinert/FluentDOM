@@ -72,7 +72,7 @@ namespace FluentDOM\Nodes {
       if ($nodes = $this->getNodeList($selector)) {
         return $nodes;
       } elseif (is_string($selector)) {
-        $result = $this->getOwner()->xpath()->evaluate(
+        $result = $this->getOwner()->xpath(
           $this->getOwner()->prepareSelector(
             $selector,
             Nodes::CONTEXT_SELF
@@ -175,7 +175,7 @@ namespace FluentDOM\Nodes {
       libxml_clear_errors();
       libxml_use_internal_errors($status);
       $result = array();
-      $nodes = $htmlDom->xpath()->evaluate('//html-fragment[1]/node()');
+      $nodes = $htmlDom->evaluate('//html-fragment[1]/node()');
       $document = $this->getOwner()->getDocument();
       if ($nodes instanceof \Traversable) {
         foreach ($nodes as $node) {
@@ -207,7 +207,7 @@ namespace FluentDOM\Nodes {
     public function getInnerXml($context) {
       $result = '';
       $dom = $this->getOwner()->getDocument();
-      $nodes = $this->getOwner()->xpath()->evaluate(
+      $nodes = $this->getOwner()->xpath(
         '*|text()[normalize-space(.) != ""]|self::text()[normalize-space(.) != ""]',
         $context
       );
@@ -230,7 +230,7 @@ namespace FluentDOM\Nodes {
       $targets = NULL;
       if (!$simple) {
         // get the first element without child elements.
-        $targets = $this->getOwner()->xpath()->evaluate('.//*[count(*) = 0]', $wrapper);
+        $targets = $this->getOwner()->xpath('.//*[count(*) = 0]', $wrapper);
       }
       if ($simple || $targets->length == 0) {
         $target = $wrapper;

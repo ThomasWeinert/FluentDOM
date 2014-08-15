@@ -112,7 +112,7 @@ namespace FluentDOM\Nodes {
      * @return array|bool|\DOMNodeList|float|string
      */
     private function fetchNodes($expression, \DOMNode $context = NULL, $options = 0) {
-      $nodes = $this->_nodes->xpath()->evaluate($expression, $context);
+      $nodes = $this->_nodes->xpath($expression, $context);
       if (!$nodes instanceof \DOMNodeList) {
         throw new \InvalidArgumentException(
           'Given selector/expression did not return a node list.'

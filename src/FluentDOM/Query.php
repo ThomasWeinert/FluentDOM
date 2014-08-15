@@ -479,7 +479,7 @@ namespace FluentDOM {
         } else {
           $expression = './/node()';
         }
-        foreach ($this->xpath()->evaluate($expression, $node) as $has) {
+        foreach ($this->xpath($expression, $node) as $has) {
           if ($callback($has)) {
             $result->push($node);
             break;

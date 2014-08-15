@@ -264,6 +264,22 @@ namespace FluentDOM {
      * @covers FluentDOM\Element::append
      * @covers FluentDOM\Element::appendNode
      */
+    public function testAppendWithNodeAppendsClone() {
+      $dom = new Document();
+      $dom->appendElement('root');
+      $node = $dom->documentElement->append(
+        $dom->documentElement
+      );
+      $this->assertEquals(
+        '<root><root/></root>',
+        $dom->saveXML($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::append
+     * @covers FluentDOM\Element::appendNode
+     */
     public function testAppendWithAttributeNode() {
       $dom = new Document();
       $dom->appendElement('root');

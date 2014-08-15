@@ -105,7 +105,7 @@ namespace FluentDOM {
       } elseif ($node->ownerDocument !== $this->getDocument()) {
         $node = $this->getDocument()->importNode($node, TRUE);
       } elseif ($node->parentNode instanceOf \DOMNode) {
-        $node = $this->getDocument()->cloneNode($node, TRUE);
+        $node = $node->cloneNode(TRUE);
       }
       if ($node instanceof \DOMAttr) {
         return $this->setAttributeNode($node);

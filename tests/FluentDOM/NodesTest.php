@@ -582,7 +582,7 @@ namespace FluentDOM {
     public function testUseXpathToCallEvaluate() {
       $fd = new Nodes_TestProxy(self::XML);
       $this->assertEquals(
-        0,
+        3,
         $fd->xpath('count(//item)')
       );
     }

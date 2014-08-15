@@ -159,7 +159,7 @@ namespace FluentDOM {
      */
     public function xpath($expression = NULL, $contextNode = NULL) {
       if (isset($expression)) {
-        $this->xpath()->evaluate($expression, $contextNode);
+        return $this->xpath()->evaluate($expression, $contextNode);
       } elseif ($this->_document instanceof Document) {
         return $this->_document->xpath();
       } elseif (isset($this->_xpath) && $this->_xpath->document === $this->_document) {

@@ -76,6 +76,10 @@ namespace FluentDOM {
         $namespaces = $this->ownerDocument->namespaces();
         $result = $value->appendTo($this);
         $this->ownerDocument->namespaces($namespaces);
+      } elseif ($value instanceof \Traversable) {
+        foreach ($value as $node) {
+          $this->append($node);
+        }
       } elseif (is_array($value)) {
         foreach ($value as $name => $data) {
           if (QualifiedName::validate($name)) {

@@ -223,7 +223,7 @@ namespace FluentDOM {
     public function testAppendWithText() {
       $dom = new Document();
       $dom->appendElement('root');
-      $node = $dom->documentElement->append('success');
+      $dom->documentElement->append('success');
       $this->assertEquals(
         '<root>success</root>',
         $dom->saveXML($dom->documentElement)
@@ -237,7 +237,7 @@ namespace FluentDOM {
     public function testAppendWithArraySetsAttributes() {
       $dom = new Document();
       $dom->appendElement('root');
-      $node = $dom->documentElement->append(['result' => 'success']);
+      $dom->documentElement->append(['result' => 'success']);
       $this->assertEquals(
         '<root result="success"/>',
         $dom->saveXML($dom->documentElement)
@@ -251,7 +251,7 @@ namespace FluentDOM {
     public function testAppendWithNode() {
       $dom = new Document();
       $dom->appendElement('root');
-      $node = $dom->documentElement->append(
+      $dom->documentElement->append(
         $dom->createElement('success')
       );
       $this->assertEquals(
@@ -267,7 +267,7 @@ namespace FluentDOM {
     public function testAppendWithNodeAppendsClone() {
       $dom = new Document();
       $dom->appendElement('root');
-      $node = $dom->documentElement->append(
+      $dom->documentElement->append(
         $dom->documentElement
       );
       $this->assertEquals(
@@ -283,7 +283,7 @@ namespace FluentDOM {
     public function testAppendWithAttributeNode() {
       $dom = new Document();
       $dom->appendElement('root');
-      $node = $dom->documentElement->append(
+      $dom->documentElement->append(
          $dom->createAttribute('result', 'success')
       );
       $this->assertEquals(
@@ -301,7 +301,7 @@ namespace FluentDOM {
       $import->loadXml('<success/>');
       $dom = new Document();
       $dom->appendElement('root');
-      $node = $dom->documentElement->append(
+      $dom->documentElement->append(
         $import
       );
       $this->assertEquals(
@@ -318,7 +318,7 @@ namespace FluentDOM {
       $import = new \DOMDocument();
       $dom = new Document();
       $dom->appendElement('root');
-      $node = $dom->documentElement->append(
+      $dom->documentElement->append(
         $import
       );
       $this->assertEquals(
@@ -336,8 +336,26 @@ namespace FluentDOM {
       $import->loadXml('<success/>');
       $dom = new Document();
       $dom->appendElement('root');
-      $node = $dom->documentElement->append(
+      $dom->documentElement->append(
         $import->documentElement
+      );
+      $this->assertEquals(
+        '<root><success/></root>',
+        $dom->saveXML($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::append
+     * @covers FluentDOM\Element::appendNode
+     */
+    public function testAppendWithNodeListFromOtherDocument() {
+      $import = new Document();
+      $import->loadXml('<success/>');
+      $dom = new Document();
+      $dom->appendElement('root');
+      $dom->documentElement->append(
+        $import->evaluate('/*')
       );
       $this->assertEquals(
         '<root><success/></root>',
@@ -354,7 +372,7 @@ namespace FluentDOM {
       $import->loadXml('<root result="success"/>');
       $dom = new Document();
       $dom->appendElement('root');
-      $node = $dom->documentElement->append(
+      $dom->documentElement->append(
         $import->documentElement->getAttributeNode('result')
       );
       $this->assertEquals(

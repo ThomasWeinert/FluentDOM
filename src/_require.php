@@ -36,6 +36,7 @@ require(__DIR__.'/FluentDOM/Serializer/Json.php');
 require(__DIR__.'/FluentDOM/Serializer/Json/JsonML.php');
 require(__DIR__.'/FluentDOM/Serializer/Json/BadgerFish.php');
 require(__DIR__.'/FluentDOM/Serializer/Json/RabbitFish.php');
+require(__DIR__.'/FluentDOM/Serializer/Json/Rayfish.php');
 
 require(__DIR__.'/FluentDOM/Nodes.php');
 require(__DIR__.'/FluentDOM/Nodes/Builder.php');

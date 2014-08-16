@@ -1,7 +1,24 @@
 Version 5.1.0:
 
+- Changed: All DOMNode descendants (FluentDOM\Document, FluentDOM\Element,
+  FluentDOM\Text, ...) are now functors, allowing to evaluate an
+  Xpath expression relative to them
+- Changed: FluentDOM\Xpath is now a functor.
+- Changed: FluentDOM\Element::apppend() is now longer restricted to
+  FluentDOM\Appendable, but allows all kind of arguments
+- Added: FluentDOM\ProcessingInstruction extends DOMProcessingInstruction
 - Added: FluentDOM\Element::applyNamespaces(), adds xmlns
   attributes depending on the current namespace registration.
+- Added: New FluentDOM\Nodes\Creator allows for compact node creation
+- Added: FluentDOM\Loader\PHP\SimpleXml, load SimpleXmlElement
+- Added: FluentDOM\Loader\PHP\PDO, load PDP statements
+- Added: FluentDOM\Loader\Json\BadgerFish, load BadgerFish Json
+- Added: FluentDOM\Loader\Json\JsonML, load JsonML
+- Added: FluentDOM\Loader\Lazy - Lazy load other loaders
+- Added: FluentDOM\Serializer\Json\BadgerFish - generate BadgerFish Json
+- Added: FluentDOM\Serializer\Json\JsonML - generate JsonML
+- Added: FluentDOM\Serializer\Json\RabbitFish - generate RabbitFish Json
+- Added: FluentDOM\Serializer\Json\Rayfish - generate Rayfish Json
 
 Version 5.0.2:
 

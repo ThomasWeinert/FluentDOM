@@ -31,7 +31,7 @@ $write->formatOutput = TRUE;
 
 echo $write(
   'numbers',
-  $write->any(
+  $write->each(
     $read('//phoneNumbers/*/number'),
     function (FluentDOM\Element $node) use ($write) {
       return $write(

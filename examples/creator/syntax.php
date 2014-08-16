@@ -10,7 +10,7 @@ echo $_(
   $_('element', 'text', ['attr' => 'value']),
   $_(
     'traversable-mapping',
-    $_->any(
+    $_->each(
       ['one', 'two'],
       function($text, $index) use ($_) {
         return $_('item', $text, ['index' => $index]);

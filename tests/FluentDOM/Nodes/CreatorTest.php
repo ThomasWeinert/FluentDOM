@@ -184,13 +184,13 @@ namespace FluentDOM\Nodes {
      * @covers FluentDOM\Nodes\Creator
      * @covers FluentDOM\Nodes\Creator\Nodes
      */
-    public function testAny() {
+    public function testEach() {
       $_ = new Creator();
       $this->assertXmlStringEqualsXmlString(
         '<xml><one/><two/></xml>',
         $_->element(
           'xml',
-          $_->any(
+          $_->each(
             [$_('one'), $_('two')]
           )
         )->saveXml()
@@ -201,13 +201,13 @@ namespace FluentDOM\Nodes {
      * @covers FluentDOM\Nodes\Creator
      * @covers FluentDOM\Nodes\Creator\Nodes
      */
-    public function testAnyWithIterator() {
+    public function testEachWithIterator() {
       $_ = new Creator();
       $this->assertXmlStringEqualsXmlString(
         '<xml><one/><two/></xml>',
         $_->element(
           'xml',
-          $_->any(
+          $_->each(
             new \ArrayIterator([$_('one'), $_('two')])
           )
         )->saveXml()
@@ -218,7 +218,7 @@ namespace FluentDOM\Nodes {
      * @covers FluentDOM\Nodes\Creator
      * @covers FluentDOM\Nodes\Creator\Nodes
      */
-    public function testAnyWithIteratorAggregate() {
+    public function testEachWithIteratorAggregate() {
       $_ = new Creator();
       $mock = $this->getMock('IteratorAggregate');
       $mock
@@ -233,7 +233,7 @@ namespace FluentDOM\Nodes {
         '<xml><one/><two/></xml>',
         $_->element(
           'xml',
-          $_->any($mock)
+          $_->each($mock)
         )->saveXml()
       );
     }
@@ -242,13 +242,13 @@ namespace FluentDOM\Nodes {
      * @covers FluentDOM\Nodes\Creator
      * @covers FluentDOM\Nodes\Creator\Nodes
      */
-    public function testAnyWithMapping() {
+    public function testEachWithMapping() {
       $_ = new Creator();
       $this->assertXmlStringEqualsXmlString(
         '<xml><one/><two/></xml>',
         $_->element(
           'xml',
-          $_->any(
+          $_->each(
             ['one', 'two'],
             function ($name) use ($_) {
               return $_($name);
@@ -262,14 +262,14 @@ namespace FluentDOM\Nodes {
      * @covers FluentDOM\Nodes\Creator
      * @covers FluentDOM\Nodes\Creator\Nodes
      */
-    public function testAnyReturnsIterator() {
+    public function testEachReturnsIterator() {
       $_ = new Creator();
-      $any = $_->any(['one', 'two']);
+      $iterator = $_->each(['one', 'two']);
       $this->assertInstanceOf(
-        'FluentDOM\Nodes\Creator\Nodes', $any
+        'FluentDOM\Nodes\Creator\Nodes', $iterator
       );
       $this->assertEquals(
-        ['one', 'two'], iterator_to_array($any)
+        ['one', 'two'], iterator_to_array($iterator)
       );
     }
 

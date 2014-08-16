@@ -13,7 +13,7 @@ $dom
     $_('element', ['attr' => 'value'])
   )
   ->append(
-    $_->any(['text', ['abc' => 'bar']])
+    $_->each(['text', ['abc' => 'bar']])
   );
 
 echo $dom->saveXML();

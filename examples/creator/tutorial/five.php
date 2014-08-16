@@ -13,7 +13,7 @@ $links = [
 echo $_(
   'ul',
   ['class' => 'navigation'],
-  $_->any(
+  $_->each(
     $links,
     function($text, $href) use($_) {
       return $_('li', $_('a', ['href' => $href], $text));

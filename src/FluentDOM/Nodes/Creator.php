@@ -146,7 +146,7 @@ namespace FluentDOM\Nodes {
      * @param callable $map
      * @return Appendable
      */
-    public function any($traversable, callable $map = NULL) {
+    public function each($traversable, callable $map = NULL) {
       return new Nodes($traversable, $map);
     }
   }

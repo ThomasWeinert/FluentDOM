@@ -13,7 +13,7 @@ namespace FluentDOM\Serializer\Json {
      * @param string $expected
      * @param string $xml
      */
-    public function testIntegeration($expected, $xml) {
+    public function testIntegration($expected, $xml) {
       $dom = new \DOMDocument();
       $dom->loadXML($xml);
       $serializer = new JsonML($dom);
@@ -26,10 +26,10 @@ namespace FluentDOM\Serializer\Json {
     /**
      * @covers FluentDOM\Serializer\Json\JsonML
      */
-    public function testIntegerationWithEmptyDocumentExpectingStringNull() {
+    public function testIntegrationWithEmptyDocument() {
       $serializer = new JsonML(new \DOMDocument());
       $this->assertEquals(
-        'null', (string)$serializer
+        '[]', (string)$serializer
       );
     }
 

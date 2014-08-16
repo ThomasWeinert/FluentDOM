@@ -22,14 +22,10 @@ namespace FluentDOM\Serializer\Json {
     /**
      * @return \stdClass|NULL
      */
-    public function jsonSerialize() {
+    protected function getNode(\DOMElement $node) {
       $result = new \stdClass();
-      if (isset($this->_document->documentElement)) {
-        $result->{$this->_document->documentElement->nodeName} =
-          $this->getNodes($this->_document->documentElement);
-        return $result;
-      }
-      return NULL;
+      $result->{$node->nodeName} = $this->getNodes($node);
+      return $result;
     }
 
     /**

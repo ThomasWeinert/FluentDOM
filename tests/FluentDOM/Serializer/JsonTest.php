@@ -1,6 +1,7 @@
 <?php
 namespace FluentDOM\Serializer {
 
+  use FluentDOM\Document;
   use FluentDOM\TestCase;
 
   require_once(__DIR__ . '/../TestCase.php');
@@ -89,6 +90,28 @@ namespace FluentDOM\Serializer {
       );
     }
 
+    /**
+     * @covers FluentDOM\Serializer\Json
+     */
+    public function testJsonSerializeCallingGetNode() {
+      $dom = new Document();
+      $dom->appendElement('success');
+      $serializer = new Json_TestProxy($dom);
+      $this->assertEquals(
+        '["success"]', json_encode($serializer)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Serializer\Json
+     */
+    public function testJsonSerializeCallingGetEmpty() {
+      $serializer = new Json_TestProxy(new \DOMDocument());
+      $this->assertEquals(
+        '{}', json_encode($serializer)
+      );
+    }
+
     public static function provideExamples() {
       return [
         [
@@ -113,10 +136,14 @@ namespace FluentDOM\Serializer {
   }
 
   class Json_TestProxy extends Json {
-    public $jsonData = [];
+    public $jsonData = NULL;
 
     public function jsonSerialize() {
-      return $this->jsonData;
+      return $this->jsonData ?: parent::jsonSerialize();
+    }
+
+    public function getNode(\DOMElement $node) {
+      return [ $node->nodeName ];
     }
   }
 }

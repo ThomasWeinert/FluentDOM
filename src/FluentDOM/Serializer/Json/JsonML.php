@@ -20,20 +20,17 @@ namespace FluentDOM\Serializer\Json {
   class JsonML extends Json {
 
     /**
-     * @return array|NULL
+     * @return mixed
      */
-    public function jsonSerialize() {
-      if (isset($this->_document->documentElement)) {
-        return $this->getNode($this->_document->documentElement);
-      }
-      return NULL;
+    protected function getEmpty() {
+      return [];
     }
 
     /**
      * @param \DOMElement $node
      * @return array
      */
-    private function getNode(\DOMElement $node) {
+    protected function getNode(\DOMElement $node) {
       $result = [
         $node->nodeName
       ];

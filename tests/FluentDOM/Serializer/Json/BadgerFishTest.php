@@ -16,7 +16,7 @@ namespace FluentDOM\Serializer\Json {
      * @param string $expected
      * @param string $xml
      */
-    public function testIntegeration($expected, $xml) {
+    public function testIntegration($expected, $xml) {
       $dom = new \DOMDocument();
       $dom->loadXML($xml);
       $serializer = new BadgerFish($dom);
@@ -29,10 +29,10 @@ namespace FluentDOM\Serializer\Json {
     /**
      * @covers FluentDOM\Serializer\Json\BadgerFish
      */
-    public function testIntegerationWithEmptyDocumentExpectingStringNull() {
+    public function testIntegrationWithEmptyDocument() {
       $serializer = new BadgerFish(new \DOMDocument());
       $this->assertEquals(
-        'null', (string)$serializer
+        '{}', (string)$serializer
       );
     }
 

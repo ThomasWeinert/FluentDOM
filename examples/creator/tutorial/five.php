@@ -1,0 +1,22 @@
+
+<?php
+require(dirname(__FILE__).'/../../../vendor/autoload.php');
+
+$_ = FluentDOM::create();
+$_->formatOutput = TRUE;
+
+$links = [
+  'http://www.fluentdom.org' => 'FluentDOM',
+  'http://www.php.net' => 'PHP'
+];
+
+echo $_(
+  'ul',
+  ['class' => 'navigation'],
+  $_->any(
+    $links,
+    function($text, $href) use($_) {
+      return $_('li', $_('a', ['href' => $href], $text));
+    }
+  )
+)->document->saveHtml();

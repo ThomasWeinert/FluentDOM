@@ -79,6 +79,11 @@ namespace FluentDOM\Serializer {
     }
 
     /**
+     * Get the namespace definitions needed for this node.
+     *
+     * If compares the namespaces of the current node with the ones from
+     * the parent node. Only definitions that are different are returned.
+     *
      * @param \DOMElement $node
      * @return array
      */

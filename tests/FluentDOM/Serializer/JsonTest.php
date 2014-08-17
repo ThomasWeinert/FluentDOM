@@ -112,6 +112,27 @@ namespace FluentDOM\Serializer {
       );
     }
 
+    /**
+     * @covers FluentDOM\Serializer\Json
+     */
+    public function testGetNamespaces() {
+      $dom = new Document();
+      $dom->loadXml(
+        '<xml xmlns="urn:1" xmlns:foo="urn:bar">'.
+        '<xml xmlns="urn:2" xmlns:foo="urn:foo" xmlns:bar="urn:bar"/>'.
+        '</xml>'
+      );
+      $serializer = new Json_TestProxy($dom);
+      $this->assertEquals(
+        [
+          'xmlns:bar' => 'urn:bar',
+          'xmlns:foo' => 'urn:foo',
+          'xmlns' => 'urn:2'
+        ],
+        $serializer->getNamespaces($dom->documentElement->firstChild)
+      );
+    }
+
     public static function provideExamples() {
       return [
         [
@@ -144,6 +165,10 @@ namespace FluentDOM\Serializer {
 
     public function getNode(\DOMElement $node) {
       return [ $node->nodeName ];
+    }
+
+    public function getNamespaces(\DOMElement $node) {
+      return parent::getNamespaces($node);
     }
   }
 }

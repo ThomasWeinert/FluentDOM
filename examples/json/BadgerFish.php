@@ -25,7 +25,7 @@ $json = json_encode(
 );
 echo $json;
 
-echo "\n\BadgerFish -> XML\n\n";
+echo "\n\n BadgerFish -> XML\n\n";
 
 echo FluentDOM($json, 'application/badgerfish+json')->formatOutput();
 

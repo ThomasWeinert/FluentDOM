@@ -66,24 +66,6 @@ namespace FluentDOM\Serializer\Json {
       return $result;
     }
 
-    /**
-     * @param \DOMElement $node
-     * @return array
-     */
-    private function getNamespaces(\DOMElement $node) {
-      $result = [];
-      $xpath = new Xpath($node->ownerDocument);
-      if (($uri = $node->getAttribute('xmlns')) !== '') {
-        $result['xmlns'] = $uri;
-      }
-      foreach ($xpath->evaluate('namespace::*', $node) as $namespace) {
-        if (($uri = $node->getAttribute($namespace->nodeName)) !== '') {
-          $result[$namespace->nodeName] = $uri;
-        }
-      }
-      return $result;
-    }
-
     private function getValue($value) {
       if ($this->isBoolean($value)) {
         return (strtolower($value) === 'true');

@@ -7,6 +7,7 @@
  */
 
 namespace FluentDOM\Serializer {
+  use FluentDOM\Xpath;
 
   /**
    * Abstract superclass for json serializers (serialize a DOM into a Json structure).
@@ -66,6 +67,11 @@ namespace FluentDOM\Serializer {
     }
 
     /**
+     * @return array|\stdClass|NULL
+     */
+    abstract protected function getNode(\DOMElement $node);
+
+    /**
      * @return mixed
      */
     protected function getEmpty() {
@@ -73,8 +79,34 @@ namespace FluentDOM\Serializer {
     }
 
     /**
-     * @return array|\stdClass|NULL
+     * @param \DOMElement $node
+     * @return array
      */
-    abstract protected function getNode(\DOMElement $node);
+    protected function getNamespaces(\DOMElement $node) {
+      $result = $this->getAllNamespaces($node);
+      $inherited = [];
+      if ($node->parentNode instanceOf \DOMElement) {
+        $inherited = $this->getAllNamespaces($node->parentNode);
+      }
+      return array_diff_assoc($result,$inherited);
+    }
+
+    /**
+     * @param \DOMElement $node
+     * @return array
+     */
+    private function getAllNamespaces(\DOMElement $node) {
+      $xpath = new Xpath($node->ownerDocument);
+      $result = [];
+      foreach ($xpath->evaluate('namespace::*', $node) as $namespace) {
+        if (
+          ($namespace->nodeName !== 'xmlns:xml') &&
+          ($namespace->nodeName !== 'xmlns:xmlns')
+        ) {
+          $result[$namespace->nodeName] = $namespace->namespaceURI;
+        }
+      };
+      return $result;
+    }
   }
 }

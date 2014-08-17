@@ -2,7 +2,7 @@
 require_once(dirname(__FILE__).'/../../vendor/autoload.php');
 
 $xml = <<<'XML'
-<person created="2006-11-11T19:23" modified="2006-12-31T23:59">
+<person xmlns="urn:data" created="2006-11-11T19:23" modified="2006-12-31T23:59">
     <firstName>Robert</firstName>
     <lastName>Smith</lastName>
     <address type="home">

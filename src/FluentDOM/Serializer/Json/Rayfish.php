@@ -28,6 +28,7 @@ namespace FluentDOM\Serializer\Json {
         $result->{'#name'} = $node->nodeName;
         $result->{'#text'} = '';
         $result->{'#children'} = array_merge(
+          $this->getNamespaces($node),
           $this->getAttributes($node)
         );
         foreach ($node->childNodes as $childNode) {
@@ -61,6 +62,18 @@ namespace FluentDOM\Serializer\Json {
         $attribute = new \stdClass();
         $attribute->{'#name'} = '@'.$attributeNode->name;
         $attribute->{'#text'} = $attributeNode->value;
+        $attribute->{'#children'} = [];
+        $result[] = $attribute;
+      }
+      return $result;
+    }
+
+    protected function getNamespaces(\DOMElement $node) {
+      $result = [];
+      foreach (parent::getNamespaces($node) as $prefix => $uri) {
+        $attribute = new \stdClass();
+        $attribute->{'#name'} = '@'.$prefix;
+        $attribute->{'#text'} = $uri;
         $attribute->{'#children'} = [];
         $result[] = $attribute;
       }

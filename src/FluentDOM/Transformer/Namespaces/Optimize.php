@@ -102,13 +102,7 @@ namespace FluentDOM\Transformer\Namespaces {
      * @param Element $source
      */
     private function addElement(\DOMNode $target, Element $source) {
-      $prefix = $source->prefix == 'default' ? NULL : $source->prefix;
-      $name = $source->localName;
-      $uri = $source->namespaceURI;
-      if (isset($this->_namespaceUris[$uri])) {
-        $prefix = $this->_namespaceUris[$uri] == '#default'
-          ? NULL : $this->_namespaceUris[$uri];
-      }
+      list($prefix, $name, $uri) = $this->getNodeDefinition($source);
       if ($target instanceof Element) {
         $this->addNamespaceAttribute($target, $prefix, $uri);
       }
@@ -134,25 +128,44 @@ namespace FluentDOM\Transformer\Namespaces {
      * Add an attribute to the target element node.
      *
      * @param Element $target
-     * @param Attribute $node
+     * @param Attribute $source
      */
-    private function addAttribute(Element $target, Attribute $node) {
-      $prefix = $node->prefix;
+    private function addAttribute(Element $target, Attribute $source) {
+      list($prefix, $name, $uri) = $this->getNodeDefinition($source);
+      if (empty($prefix)) {
+        $target->setAttribute($name, $source->value);
+      } else {
+        $target->setAttributeNS(
+          $uri, $prefix.':'.$name, $source->value
+        );
+      }
+    }
+
+    /**
+     * Get the node name definition (prefix, namespace, local name) for
+     * the target node
+     *
+     * @param \DOMNode $node
+     * @return array
+     */
+    private function getNodeDefinition(\DOMNode $node) {
+      $isElement = $node instanceof Element;
+      $prefix = $isElement && $node->prefix == 'default'
+        ? NULL : $node->prefix;
       $name = $node->localName;
       $uri = $node->namespaceURI;
       if (
-        !empty($this->_namespaceUris[$uri]) &&
+        (
+          ($isElement && isset($this->_namespaceUris[$uri])) ||
+          !empty($this->_namespaceUris[$uri])
+        ) &&
         $this->_namespaceUris[$uri] !== '#default'
       ) {
         $prefix = $this->_namespaceUris[$uri];
       }
-      if (empty($prefix)) {
-        $target->setAttribute($name, $node->value);
-      } else {
-        $target->setAttributeNS(
-          $uri, $prefix.':'.$name, $node->value
-        );
-      }
+      return [
+        $prefix, $name, $uri
+      ];
     }
 
     /**

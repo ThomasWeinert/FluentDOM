@@ -54,7 +54,19 @@ namespace FluentDOM\Serializer\Json {
             }
           ]}',
           '<alice charlie="david">bob</alice>'
-        ]
+        ],
+        'Default Namespace' => [
+          '{ "#name": "alice", "#text": null, "#children": [
+            { "#name": "@xmlns", "#text": "urn:bob", "#children": [ ]}
+           ]}',
+          '<alice xmlns="urn:bob"/>'
+        ],
+        'Namespace' => [
+          '{ "#name": "charlie:alice", "#text": null, "#children": [
+            { "#name": "@xmlns:charlie", "#text": "urn:bob", "#children": [ ]}
+           ]}',
+          '<charlie:alice xmlns:charlie="urn:bob"/>'
+        ],
       ];
     }
   }

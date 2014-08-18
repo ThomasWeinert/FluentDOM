@@ -23,33 +23,30 @@ namespace FluentDOM\Serializer\Json {
      * @return array
      */
     protected function getNode(\DOMElement $node) {
-      if ($node instanceof \DOMElement) {
-        $result = new \stdClass();
-        $result->{'#name'} = $node->nodeName;
-        $result->{'#text'} = '';
-        $result->{'#children'} = array_merge(
-          $this->getNamespaces($node),
-          $this->getAttributes($node)
-        );
-        foreach ($node->childNodes as $childNode) {
-          if ($childNode instanceof \DOMElement) {
-            $result->{'#children'}[] = $this->getNode($childNode);
-          } elseif (
-            (
-              $childNode instanceof \DOMText ||
-              $childNode instanceof \DOMCdataSection
-            ) &&
-            !$childNode->isWhitespaceInElementContent()
-          ) {
-            $result->{'#text'} .= $childNode->textContent;
-          }
+      $result = new \stdClass();
+      $result->{'#name'} = $node->nodeName;
+      $result->{'#text'} = '';
+      $result->{'#children'} = array_merge(
+        $this->getNamespaces($node),
+        $this->getAttributes($node)
+      );
+      foreach ($node->childNodes as $childNode) {
+        if ($childNode instanceof \DOMElement) {
+          $result->{'#children'}[] = $this->getNode($childNode);
+        } elseif (
+          (
+            $childNode instanceof \DOMText ||
+            $childNode instanceof \DOMCdataSection
+          ) &&
+          !$childNode->isWhitespaceInElementContent()
+        ) {
+          $result->{'#text'} .= $childNode->textContent;
         }
-        if (empty($result->{'#text'})) {
-          $result->{'#text'} = NULL;
-        }
-        return $result;
       }
-      return NULL;
+      if (empty($result->{'#text'})) {
+        $result->{'#text'} = NULL;
+      }
+      return $result;
     }
 
     /**

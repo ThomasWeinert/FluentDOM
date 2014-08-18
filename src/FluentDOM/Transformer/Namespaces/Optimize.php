@@ -191,25 +191,5 @@ namespace FluentDOM\Transformer\Namespaces {
         }
       }
     }
-
-    /**
-     * Get the namespaces for the specified node
-     *
-     * @param \DOMNode $node
-     * @return array
-     */
-    private function getNamespaces(\DOMNode $node) {
-      $xpath = new Xpath($node->ownerDocument);
-      $result = [];
-      foreach ($xpath->evaluate('namespace::*', $node) as $namespace) {
-        if (
-          ($namespace->nodeName !== 'xmlns:xml') &&
-          ($namespace->nodeName !== 'xmlns:xmlns')
-        ) {
-          $result[$namespace->nodeName] = $namespace->namespaceURI;
-        }
-      };
-      return $result;
-    }
   }
 }

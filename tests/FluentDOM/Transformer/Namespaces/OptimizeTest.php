@@ -58,9 +58,17 @@ namespace FluentDOM\Transformer\Namespaces {
           '<foo:root xmlns:foo="urn:foo" xmlns:bar="urn:bar"><bar:child /></foo:root>',
           '<foo:root xmlns:foo="urn:foo"><bar:child xmlns:bar="urn:bar"/></foo:root>'
         ],
+        'Move namespace definition to ancestor' => [
+          '<foo:root xmlns:foo="urn:foo" xmlns:bar="urn:bar"><foo:child><bar:child/></foo:child></foo:root>',
+          '<foo:root xmlns:foo="urn:foo"><foo:child><bar:child xmlns:bar="urn:bar"/></foo:child></foo:root>'
+        ],
         'Copy text nodes' => [
           '<root xmlns="urn:foo">bar</root>',
           '<root xmlns="urn:foo">bar</root>'
+        ],
+        'Without a namespace' => [
+          '<root attr="value">bar</root>',
+          '<root attr="value">bar</root>'
         ],
       ];
     }

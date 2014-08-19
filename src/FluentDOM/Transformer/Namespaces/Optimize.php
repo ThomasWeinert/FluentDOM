@@ -201,7 +201,7 @@ namespace FluentDOM\Transformer\Namespaces {
       if ($hasNoNamespace && empty($prefix)) {
         return FALSE;
       } elseif (empty($currentUri)) {
-        return TRUE;
+        return ($currentUri !== $uri);
       }
       return FALSE;
     }

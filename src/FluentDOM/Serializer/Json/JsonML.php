@@ -9,7 +9,6 @@
 namespace FluentDOM\Serializer\Json {
 
   use FluentDOM\Serializer\Json;
-  use FluentDOM\Xpath;
 
   /**
    * Serialize a DOM to JsonML: http://www.jsonml.org/

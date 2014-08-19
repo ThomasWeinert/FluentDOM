@@ -11,7 +11,6 @@ namespace FluentDOM\Transformer\Namespaces {
   use FluentDOM\Attribute;
   use FluentDOM\Document;
   use FluentDOM\Element;
-  use FluentDOM\Xpath;
 
   class Optimize {
 

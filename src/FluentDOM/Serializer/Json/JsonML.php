@@ -65,6 +65,12 @@ namespace FluentDOM\Serializer\Json {
       return $result;
     }
 
+    /**
+     * Get value prepared for Json data structure
+     *
+     * @param mixed $value
+     * @return mixed
+     */
     private function getValue($value) {
       if ($this->isBoolean($value)) {
         return (strtolower($value) === 'true');
@@ -76,14 +82,26 @@ namespace FluentDOM\Serializer\Json {
       return $value;
     }
 
+    /**
+     * @param mixed $value
+     * @return bool
+     */
     private function isInteger($value) {
       return (bool)preg_match('(^[1-9]\d*$)D', $value);
     }
 
+    /**
+     * @param mixed $value
+     * @return bool
+     */
     private function isNumber($value) {
       return (bool)preg_match('(^(?:\\d+\\.\\d+|[1-9]\d*)$)D', $value);
     }
 
+    /**
+     * @param mixed $value
+     * @return bool
+     */
     private function isBoolean($value) {
       return (bool)preg_match('(^(?:true|false)$)Di', $value);
     }

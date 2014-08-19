@@ -76,6 +76,14 @@ namespace FluentDOM\Transformer\Namespaces {
           [
             'urn:foo' => ''
           ]
+        ],
+        "Remove all namespace prefix of child node while parent has no namespace" => [
+          '<root><child xmlns="urn:bar"/></root>',
+          '<root><bar:child xmlns:bar="urn:bar"/></root>',
+          [
+            'urn:foo' => '',
+            'urn:bar' => ''
+          ]
         ]
       ];
     }

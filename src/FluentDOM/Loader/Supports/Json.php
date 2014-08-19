@@ -2,12 +2,30 @@
 
 namespace FluentDOM\Loader\Supports {
 
+  use FluentDOM\Document;
   use FluentDOM\Exceptions\JsonError;
   use FluentDOM\Loader\Supports;
 
   trait Json {
 
     use Supports;
+
+    /**
+     * Load the json string into an DOMDocument
+     *
+     * @param mixed $source
+     * @param string $contentType
+     * @throws \UnexpectedValueException
+     * @return Document|NULL
+     */
+    public function load($source, $contentType) {
+      if (FALSE !== ($json = $this->getJson($source, $contentType))) {
+        $dom = new Document('1.0', 'UTF-8');
+        $this->transferTo($dom, $json);
+        return $dom;
+      }
+      return NULL;
+    }
 
     /**
      * @param mixed $source
@@ -38,6 +56,10 @@ namespace FluentDOM\Loader\Supports {
       return FALSE;
     }
 
+    /**
+     * @param mixed $value
+     * @return string
+     */
     private function getValueAsString($value) {
       if (is_bool($value)) {
         return $value ? 'true' : 'false';

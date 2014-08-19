@@ -22,6 +22,10 @@ namespace FluentDOM\Loader\Supports {
     public function getValue($json) {
       return $this->getValueAsString($json);
     }
+
+    private function transferTo(\DOMNode $node, $json) {
+      $node->appendChild($node->createElement('success'));
+    }
   }
 
   class JsonTest extends TestCase {
@@ -81,6 +85,31 @@ namespace FluentDOM\Loader\Supports {
       $loader = new Json_TestProxy();
       $this->setExpectedException('FluentDOM\Exceptions\JsonError');
       $loader->getSource('{invalid');
+    }
+
+    /**
+     * @covers FluentDOM\Loader\Supports\Json
+     */
+    public function testLoad() {
+      $json = new \stdClass();
+      $json->foo = 'bar';
+      $loader = new Json_TestProxy();
+      $dom = $loader->load($json, 'json');
+      $this->assertXmlStringEqualsXmlString(
+        '<success/>', $dom->saveXml()
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Loader\Supports\Json
+     */
+    public function testLoadExpectingNull() {
+      $json = new \stdClass();
+      $json->foo = 'bar';
+      $loader = new Json_TestProxy();
+      $this->assertNull(
+        $loader->load(NULL, 'json')
+      );
     }
 
     /**

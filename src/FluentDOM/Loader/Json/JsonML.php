@@ -27,23 +27,6 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * Load the json string into an DOMDocument
-     *
-     * @param mixed $source
-     * @param string $contentType
-     * @throws \UnexpectedValueException
-     * @return Document|NULL
-     */
-    public function load($source, $contentType) {
-      if (FALSE !== ($json = $this->getJson($source, $contentType))) {
-        $dom = new Document('1.0', 'UTF-8');
-        $this->transferTo($dom, $json);
-        return $dom;
-      }
-      return NULL;
-    }
-
-    /**
      * @param \DOMNode|\DOMElement $node
      * @param mixed $json
      */

@@ -57,6 +57,12 @@ namespace FluentDOM\Loader\Supports {
     }
 
     /**
+     * @param \DOMNode|\DOMElement $node
+     * @param mixed $json
+     */
+    protected abstract function transferTo(\DOMNode $node, $json);
+
+    /**
      * @param mixed $value
      * @return string
      */

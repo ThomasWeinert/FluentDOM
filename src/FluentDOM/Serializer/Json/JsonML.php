@@ -19,7 +19,7 @@ namespace FluentDOM\Serializer\Json {
   class JsonML extends Json {
 
     /**
-     * @return mixed
+     * @return array
      */
     protected function getEmpty() {
       return [];

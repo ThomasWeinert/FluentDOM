@@ -53,21 +53,14 @@ namespace FluentDOM\Loader\Json {
       }
     }
 
-
     /**
-     * @param string $nodeName
-     * @param \stdClass $namespaces
-     * @param \DOMNode $node
+     * Get the property name for a namespce prefix
+     *
+     * @param $prefix
      * @return string
      */
-    private function getNamespace(
-      $nodeName, \stdClass $namespaces, \DOMNode $node
-    ) {
-      $prefix = substr($nodeName, 0, strpos($nodeName, ':'));
-      $xmlns = empty($prefix) ? '$' : $prefix;
-      return isset($namespaces->{$xmlns})
-        ? $namespaces->{$xmlns}
-        : $node->lookupNamespaceUri(empty($prefix) ? NULL : $prefix);
+    private function getNamespacePropertyName($prefix) {
+      return empty($prefix) ? '$' : $prefix;
     }
 
     /**
@@ -97,7 +90,7 @@ namespace FluentDOM\Loader\Json {
       /** @var Document $dom */
       $dom = $node->ownerDocument ?: $node;
       $name = substr($name, 1);
-      $namespace = $this->getNamespace($name, new \stdClass(), $node);
+      $namespace = $this->getNamespaceForNode($name, new \stdClass(), $node);
       $attribute = empty($namespace)
         ? $dom->createAttribute($name)
         : $dom->createAttributeNS($namespace, $name);
@@ -114,7 +107,7 @@ namespace FluentDOM\Loader\Json {
     protected function transferChildTo(\DOMNode $node, $name, $data) {
       /** @var Document $dom */
       $dom = $node->ownerDocument ?: $node;
-      $namespace = $this->getNamespace(
+      $namespace = $this->getNamespaceForNode(
         $name,
         isset($data->{'@xmlns'}) ? $data->{'@xmlns'} : new \stdClass(),
         $dom

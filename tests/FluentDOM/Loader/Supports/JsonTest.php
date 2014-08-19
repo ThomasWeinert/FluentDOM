@@ -23,9 +23,14 @@ namespace FluentDOM\Loader\Supports {
       return $this->getValueAsString($json);
     }
 
-    private function transferTo(\DOMNode $node, $json) {
+    protected function transferTo(\DOMNode $node, $json) {
       $node->appendChild($node->createElement('success'));
     }
+
+    public function getNamespace($nodeName, $namespaces, $parent) {
+      return $this->getNamespaceForNode($nodeName, $namespaces, $parent);
+    }
+
   }
 
   class JsonTest extends TestCase {
@@ -109,6 +114,38 @@ namespace FluentDOM\Loader\Supports {
       $loader = new Json_TestProxy();
       $this->assertNull(
         $loader->load(NULL, 'json')
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Loader\Supports\Json
+     */
+    public function testGetNamespaceForNodeFromNode() {
+      $dom = new \DOMDocument();
+      $dom->loadXml('<foo:foo xmlns:foo="urn:foo"/>');
+      $loader = new Json_TestProxy();
+      $this->assertEquals(
+        'urn:foo',
+        $loader->getNamespace(
+          'foo:bar', new \stdClass(), $dom->documentElement
+        )
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Loader\Supports\Json
+     */
+    public function testGetNamespaceForNodeFromJsonProperties() {
+      $dom = new \DOMDocument();
+      $dom->loadXml('<foo:foo xmlns:foo="urn:foo"/>');
+      $properties = new \stdClass();
+      $properties->{'xmlns:foo'} = 'urn:bar';
+      $loader = new Json_TestProxy();
+      $this->assertEquals(
+        'urn:bar',
+        $loader->getNamespace(
+          'foo:bar', $properties, $dom->documentElement
+        )
       );
     }
 

@@ -73,5 +73,31 @@ namespace FluentDOM\Loader\Supports {
         return (string)$value;
       }
     }
+
+    /**
+     * @param string $nodeName
+     * @param \stdClass $properties
+     * @param \DOMNode $parent
+     * @return string
+     */
+    private function getNamespaceForNode(
+      $nodeName, \stdClass $properties, \DOMNode $parent
+    ) {
+      $prefix = substr($nodeName, 0, strpos($nodeName, ':'));
+      $xmlns = $this->getNamespacePropertyName($prefix);
+      return isset($properties->{$xmlns})
+        ? $properties->{$xmlns}
+        : $parent->lookupNamespaceUri(empty($prefix) ? NULL : $prefix);
+    }
+
+    /**
+     * Get the property name for a namespce prefix
+     *
+     * @param $prefix
+     * @return string
+     */
+    private function getNamespacePropertyName($prefix) {
+      return empty($prefix) ? 'xmlns' : 'xmlns:'.$prefix;
+    }
   }
 }

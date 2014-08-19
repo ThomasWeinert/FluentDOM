@@ -20,7 +20,7 @@ namespace FluentDOM\Serializer\Json {
 
     /**
      * @param \DOMElement $node
-     * @return array
+     * @return \stdClass
      */
     protected function getNode(\DOMElement $node) {
       $result = new \stdClass();

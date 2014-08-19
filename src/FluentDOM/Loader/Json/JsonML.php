@@ -27,23 +27,6 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * Load the json string into an DOMDocument
-     *
-     * @param mixed $source
-     * @param string $contentType
-     * @throws \UnexpectedValueException
-     * @return Document|NULL
-     */
-    public function load($source, $contentType) {
-      if (FALSE !== ($json = $this->getJson($source, $contentType))) {
-        $dom = new Document('1.0', 'UTF-8');
-        $this->transferTo($dom, $json);
-        return $dom;
-      }
-      return NULL;
-    }
-
-    /**
      * @param \DOMNode|\DOMElement $node
      * @param mixed $json
      */
@@ -56,22 +39,6 @@ namespace FluentDOM\Loader\Json {
           $dom->createTextNode($this->getValueAsString($json))
         );
       }
-    }
-
-    /**
-     * @param string $nodeName
-     * @param \stdClass $properties
-     * @param \DOMNode $node
-     * @return string
-     */
-    private function getNamespace(
-      $nodeName, \stdClass $properties, \DOMNode $node
-    ) {
-      $prefix = substr($nodeName, 0, strpos($nodeName, ':'));
-      $xmlns = empty($prefix) ? 'xmlns' : 'xmlns:'.$prefix;
-      return isset($properties->{$xmlns})
-        ? $properties->{$xmlns}
-        : $node->lookupNamespaceUri(empty($prefix) ? NULL : $prefix);
     }
 
     /**
@@ -99,7 +66,7 @@ namespace FluentDOM\Loader\Json {
       $dom = $node instanceof \DOMDocument ? $node : $node->ownerDocument;
       foreach ($properties as $name => $value) {
         if (!($name == 'xmlns' || substr($name, 0, 6) == 'xmlns:')) {
-          $namespace = $this->getNamespace($name, $properties, $node);
+          $namespace = $this->getNamespaceForNode($name, $properties, $node);
           $attribute = empty($namespace)
             ? $dom->createAttribute($name)
             : $dom->createAttributeNS($namespace, $name);
@@ -119,7 +86,7 @@ namespace FluentDOM\Loader\Json {
       $length = count($json);
       $hasProperties = $length > 1 && is_object($json[1]);
       $properties = $hasProperties ? $json[1] : new \stdClass;
-      $namespace = $this->getNamespace($nodeName, $properties, $node);
+      $namespace = $this->getNamespaceForNode($nodeName, $properties, $node);
       $element = empty($namespace)
         ? $dom->createElement($nodeName)
         : $dom->createElementNS($namespace, $nodeName);

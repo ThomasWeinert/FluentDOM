@@ -126,10 +126,10 @@ namespace FluentDOM\Transformer\Namespaces {
     /**
      * Add an attribute to the target element node.
      *
-     * @param Element $target
+     * @param \DOMElement $target
      * @param Attribute $source
      */
-    private function addAttribute(Element $target, Attribute $source) {
+    private function addAttribute(\DOMElement $target, Attribute $source) {
       list($prefix, $name, $uri) = $this->getNodeDefinition($source);
       if (empty($prefix)) {
         $target->setAttribute($name, $source->value);

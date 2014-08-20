@@ -70,6 +70,21 @@ namespace FluentDOM\Transformer\Namespaces {
           '<root attr="value">bar</root>',
           '<root attr="value">bar</root>'
         ],
+        "Reset default namespace to empty" => [
+          '<root xmlns="urn:foo"><div xmlns=""/></root>',
+          '<foo:root xmlns:foo="urn:foo"><div/></foo:root>',
+          [
+            'urn:foo' => ''
+          ]
+        ],
+        "Remove all namespace prefix of child node while parent has no namespace" => [
+          '<root><child xmlns="urn:bar"/></root>',
+          '<root><bar:child xmlns:bar="urn:bar"/></root>',
+          [
+            'urn:foo' => '',
+            'urn:bar' => ''
+          ]
+        ]
       ];
     }
 

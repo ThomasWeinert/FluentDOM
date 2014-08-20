@@ -174,22 +174,37 @@ namespace FluentDOM\Transformer\Namespaces {
      * @param string $uri
      */
     private function addNamespaceAttribute(Element $node, $prefix, $uri) {
-      if ($node->parentNode instanceof Element) {
+      $prefix = empty($prefix) ? NULL : $prefix;
+      if (
+        ($node->parentNode instanceof Element) &&
+        ($this->canAddNamespaceToNode($node->parentNode, $prefix, $uri))
+      ) {
         $this->addNamespaceAttribute($node->parentNode, $prefix, $uri);
       }
-      $currentUri = $node->lookupNamespaceUri(
-        empty($prefix) ? NULL : $prefix
-      );
-      if ($currentUri != $uri) {
-        if (empty($prefix) && empty($currentUri)) {
-          $node->setAttribute('xmlns', $uri);
-        } elseif (!empty($prefix)) {
-          $attributeName = 'xmlns:'.$prefix;
-          if (!$node->hasAttribute($attributeName)) {
-            $node->setAttribute($attributeName, $uri);
-          }
+      if ($this->canAddNamespaceToNode($node, $prefix, $uri)) {
+        $attributeName = empty($prefix) ? 'xmlns' : 'xmlns:'.$prefix;
+        if (!$node->hasAttribute($attributeName)) {
+          $node->setAttribute($attributeName, $uri);
         }
       }
+    }
+
+    /**
+     * @param Element $node
+     * @param string|NULL $prefix
+     * @param string $uri
+     * @return bool
+     */
+    private function canAddNamespaceToNode(\DOMNode $node, $prefix, $uri) {
+      $prefix = empty($prefix) ? NULL : $prefix;
+      $currentUri = $node->lookupNamespaceUri($prefix);
+      $hasNoNamespace = empty($node->namespaceUri);
+      if ($hasNoNamespace && empty($prefix)) {
+        return FALSE;
+      } elseif (empty($currentUri)) {
+        return ($currentUri !== $uri);
+      }
+      return FALSE;
     }
   }
 }

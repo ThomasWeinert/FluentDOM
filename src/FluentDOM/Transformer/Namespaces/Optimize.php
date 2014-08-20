@@ -1,6 +1,7 @@
 <?php
 /**
- * Allow an object to be appendable to a FluentDOM\Element
+ * Create a namepsace optimizer for the provided document. This allows
+ * to change namespace prefixes and optimize the namespace attributes.
  *
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert

@@ -102,22 +102,23 @@ namespace FluentDOM\Loader\Json {
     protected  function transferTo(\DOMNode $target, $value, $recursions = 100) {
       if ($recursions < 1) {
         return;
-      }
-      $type = $this->getTypeFromValue($value);
-      switch ($type) {
-      case self::TYPE_ARRAY :
-        $this->transferArrayTo($target, $value, $this->_recursions - 1);
-        break;
-      case self::TYPE_OBJECT :
-        $this->transferObjectTo($target, $value, $this->_recursions - 1);
-        break;
-      default :
-        if ($this->_verbose || $type != self::TYPE_STRING) {
-          $target->setAttributeNS(self::XMLNS, 'json:type', $type);
-        }
-        $string = $this->getValueAsString($type, $value);
-        if (is_string($string)) {
-          $target->appendChild($target->ownerDocument->createTextNode($string));
+      } elseif ($target instanceof \DOMElement) {
+        $type = $this->getTypeFromValue($value);
+        switch ($type) {
+        case self::TYPE_ARRAY :
+          $this->transferArrayTo($target, $value, $this->_recursions - 1);
+          break;
+        case self::TYPE_OBJECT :
+          $this->transferObjectTo($target, $value, $this->_recursions - 1);
+          break;
+        default :
+          if ($this->_verbose || $type != self::TYPE_STRING) {
+            $target->setAttributeNS(self::XMLNS, 'json:type', $type);
+          }
+          $string = $this->getValueAsString($type, $value);
+          if (is_string($string)) {
+            $target->appendChild($target->ownerDocument->createTextNode($string));
+          }
         }
       }
     }

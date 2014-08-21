@@ -19,9 +19,10 @@ namespace FluentDOM\Serializer\Json {
    */
   class BadgerFish extends Json {
 
-    /**
-     * @return \stdClass
-     */
+      /**
+       * @param \DOMElement $node
+       * @return \stdClass
+       */
     protected function getNode(\DOMElement $node) {
       $result = new \stdClass();
       $result->{$node->nodeName} = $this->getNodes($node);
@@ -100,7 +101,7 @@ namespace FluentDOM\Serializer\Json {
 
     /**
      * @param \stdClass $target
-     * @param \DOMNode $node
+     * @param \DOMNode|\DOMText|\DOMCdataSection $node
      */
     private function addText(\stdClass $target, \DOMNode $node) {
       if (!$node->isWhitespaceInElementContent()) {

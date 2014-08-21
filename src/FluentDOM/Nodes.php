@@ -143,7 +143,7 @@ namespace FluentDOM {
 
     /**
      * The item() method is used to access elements in the node list,
-     * like in a DOMNodelist.
+     * like in a DOMNodeList.
      *
      * @param integer $position
      * @return \DOMElement|\DOMNode

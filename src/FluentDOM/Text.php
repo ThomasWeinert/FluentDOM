@@ -11,7 +11,7 @@ namespace FluentDOM {
   /**
    * FluentDOM\Text extends PHPs DOMText class.
    *
-   * @property Document $ownerElement
+   * @property Document $ownerDocument
    */
   class Text
     extends \DOMText  {

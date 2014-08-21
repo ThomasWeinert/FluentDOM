@@ -1,6 +1,6 @@
 <?php
 /**
- * Create a namepsace optimizer for the provided document. This allows
+ * Create a namespace optimizer for the provided document. This allows
  * to change namespace prefixes and optimize the namespace attributes.
  *
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
@@ -26,7 +26,7 @@ namespace FluentDOM\Transformer\Namespaces {
     private $_namespaceUris = [];
 
     /**
-     * Create a namepsace optimizer for the provided document. The provided
+     * Create a namespace optimizer for the provided document. The provided
      * document will be copied.
      *
      * The second argument allows to provide namespaces and prefixes. The
@@ -34,10 +34,10 @@ namespace FluentDOM\Transformer\Namespaces {
      *
      * If a namespace is not provided it is read from the source node.
      *
-     * You can use the same prefix for muiltiple namespace uris. Empty prefixes
+     * You can use the same prefix for multiple namespace uris. Empty prefixes
      * are possible (default namespace for an element).
      *
-     * It is highly recommed that you always use a non-empty prefix if the
+     * It is highly recommend that you always use a non-empty prefix if the
      * here are attributes in that namespace. Attributes always need a prefix
      * to make use of the namespace.
      *
@@ -55,7 +55,7 @@ namespace FluentDOM\Transformer\Namespaces {
     }
 
     /**
-     * Create a document with opimized namespaces and return it as xml string
+     * Create a document with optimized namespaces and return it as xml string
      *
      * @return string
      */
@@ -190,7 +190,7 @@ namespace FluentDOM\Transformer\Namespaces {
     }
 
     /**
-     * @param Element $node
+     * @param \DOMNode $node
      * @param string|NULL $prefix
      * @param string $uri
      * @return bool
@@ -198,7 +198,7 @@ namespace FluentDOM\Transformer\Namespaces {
     private function canAddNamespaceToNode(\DOMNode $node, $prefix, $uri) {
       $prefix = empty($prefix) ? NULL : $prefix;
       $currentUri = $node->lookupNamespaceUri($prefix);
-      $hasNoNamespace = empty($node->namespaceUri);
+      $hasNoNamespace = empty($node->namespaceURI);
       if ($hasNoNamespace && empty($prefix)) {
         return FALSE;
       } elseif (empty($currentUri)) {

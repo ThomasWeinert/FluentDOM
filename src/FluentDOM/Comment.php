@@ -11,7 +11,7 @@ namespace FluentDOM {
   /**
    * FluentDOM\Comment extends PHPs DOMComment class.
    *
-   * @property Document $ownerElement
+   * @property Document $ownerDocument
    */
   class Comment
     extends \DOMComment  {

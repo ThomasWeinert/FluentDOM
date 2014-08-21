@@ -11,7 +11,7 @@ namespace FluentDOM {
   /**
    * FluentDOM\ProcessingInstruction extends PHPs DOMProcessingInstruction class.
    *
-   * @property Document $ownerElement
+   * @property Document $ownerDocument
    */
   class ProcessingInstruction
     extends \DOMProcessingInstruction  {

@@ -61,7 +61,7 @@ namespace FluentDOM {
      * The value can be:
      *
      * - a node (automatically imported and cloned)
-     * - an object implementing FluentDOM\Appendable (calles appendTo())
+     * - an object implementing FluentDOM\Appendable (method appendTo())
      * - a scalar or object castable to string (adds a text node)
      * - an array (sets attributes)
      *

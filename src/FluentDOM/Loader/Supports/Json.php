@@ -91,7 +91,7 @@ namespace FluentDOM\Loader\Supports {
     }
 
     /**
-     * Get the property name for a namespce prefix
+     * Get the property name for a namespace prefix
      *
      * @param $prefix
      * @return string

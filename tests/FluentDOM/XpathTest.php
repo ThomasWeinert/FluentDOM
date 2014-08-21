@@ -265,10 +265,12 @@ namespace FluentDOM {
      * @covers FluentDOM\Xpath
      */
     public function testPropertyGetWithUnknownPropertyExpectingPHPError() {
+      $errors = error_reporting(E_ALL);
       $dom = new \DOMDocument();
       $xpath = new Xpath($dom);
       $this->setExpectedException('PHPUnit_Framework_Error_Notice');
       $xpath->someUnknownProperty;
+      error_reporting($errors);
     }
 
     /***************************

@@ -54,9 +54,9 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * Get the property name for a namespce prefix
+     * Get the property name for a namespace prefix
      *
-     * @param $prefix
+     * @param string|NULL $prefix
      * @return string
      */
     private function getNamespacePropertyName($prefix) {
@@ -68,7 +68,6 @@ namespace FluentDOM\Loader\Json {
      * @param \stdClass $data
      */
     protected function transferNamespacesTo(\DOMElement $node, $data) {
-      //namespaces
       foreach ($data as $key => $namespace) {
         $prefix = $key == '$' ? NULL : $key;
         if ($node->lookupNamespaceUri($prefix) != $namespace) {

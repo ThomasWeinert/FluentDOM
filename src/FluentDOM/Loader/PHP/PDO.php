@@ -9,7 +9,6 @@
 namespace FluentDOM\Loader\PHP {
 
   use FluentDOM\Document;
-  use FluentDOM\Loadable;
   use FluentDOM\Loader\Json\JsonDOM;
 
   /**

@@ -5,7 +5,7 @@ docs/
 vendor
 
 # Ignore IDE specific files
-## phpStrom
+## PHPStorm
 .idea
 
 ## Eclipse

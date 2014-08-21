@@ -11,7 +11,7 @@ namespace FluentDOM {
   /**
    * FluentDOM\CdataSection extends PHPs DOMCdataSection class.
    *
-   * @property Document $ownerElement
+   * @property Document $ownerDocument
    */
   class CdataSection
     extends \DOMCdataSection  {

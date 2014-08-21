@@ -11,7 +11,7 @@ namespace FluentDOM {
   /**
    * FluentDOM\Attribute extends PHPs DOMAttr class.
    *
-   * @property Document $ownerElement
+   * @property Document $ownerDocument
    */
   class Attribute
     extends \DOMAttr  {

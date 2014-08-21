@@ -95,11 +95,11 @@ namespace FluentDOM\Loader\Json {
      * If the current element is an object or array the method is called recursive.
      * The $recursions parameter is used to limit the recursion depth of this function.
      *
-     * @param \DOMElement $target
+     * @param \DOMElement|\DOMNode $target
      * @param $value
      * @param int $recursions
      */
-    protected  function transferTo(\DOMElement $target, $value, $recursions = 100) {
+    protected  function transferTo(\DOMNode $target, $value, $recursions = 100) {
       if ($recursions < 1) {
         return;
       }

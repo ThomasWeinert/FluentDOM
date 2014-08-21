@@ -93,7 +93,7 @@ namespace FluentDOM\Loader\Supports {
     /**
      * Get the property name for a namespace prefix
      *
-     * @param $prefix
+     * @param string $prefix
      * @return string
      */
     private function getNamespacePropertyName($prefix) {

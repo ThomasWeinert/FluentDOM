@@ -80,10 +80,14 @@ namespace FluentDOM {
         foreach ($value as $node) {
           $this->append($node);
         }
+      } elseif (is_callable($value)) {
+        $result = $this->append($value());
       } elseif (is_array($value)) {
         foreach ($value as $name => $data) {
-          if (QualifiedName::validate($name)) {
+          if (is_scalar($data) && QualifiedName::validate($name)) {
             $this->setAttribute($name, (string)$data);
+          } elseif (!is_scalar($data)) {
+            $this->append($data);
           }
         }
       } elseif (is_scalar($value) || method_exists($value, '__toString')) {

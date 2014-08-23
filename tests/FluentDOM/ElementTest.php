@@ -367,6 +367,27 @@ namespace FluentDOM {
      * @covers FluentDOM\Element::append
      * @covers FluentDOM\Element::appendNode
      */
+    public function testAppendWithArrayContainingNodes() {
+      $dom = new Document();
+      $dom
+        ->appendElement('root')
+        ->append(
+          [
+            'attr' => 42,
+            $dom->createComment('success'),
+            $dom->createCDATASection('success')
+          ]
+        );
+      $this->assertEquals(
+        '<root attr="42"><!--success--><![CDATA[success]]></root>',
+        $dom->saveXML($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::append
+     * @covers FluentDOM\Element::appendNode
+     */
     public function testAppendWithAttributeNodeFromOtherDocument() {
       $import = new \DOMDocument();
       $import->loadXml('<root result="success"/>');
@@ -377,6 +398,25 @@ namespace FluentDOM {
       );
       $this->assertEquals(
         '<root result="success"/>',
+        $dom->saveXML($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::append
+     * @covers FluentDOM\Element::appendNode
+     */
+    public function testAppendWithClosure() {
+      $dom = new Document();
+      $dom
+        ->appendElement('root')
+        ->append(
+          function () use ($dom) {
+            return $dom->createCDATASection('success');
+          }
+        );
+      $this->assertEquals(
+        '<root><![CDATA[success]]></root>',
         $dom->saveXML($dom->documentElement)
       );
     }

@@ -36,5 +36,5 @@ $transformer = new FluentDOM\Transformer\Namespaces\Replace(
 );
 $target = $transformer->getDocument();
 $target->formatOutput = TRUE;
-echo "\nRemove the xhtml namespace:\n\n";
+echo "\nReplace namespaces:\n\n";
 echo $target->saveXML();

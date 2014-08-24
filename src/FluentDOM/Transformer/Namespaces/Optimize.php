@@ -9,9 +9,7 @@
 
 namespace FluentDOM\Transformer\Namespaces {
 
-  use FluentDOM\Attribute;
   use FluentDOM\Document;
-  use FluentDOM\Element;
 
   class Optimize {
 
@@ -85,10 +83,10 @@ namespace FluentDOM\Transformer\Namespaces {
      * @param \DOMNode $source
      */
     private function addNode(\DOMNode $target, \DOMNode $source) {
-      if ($source instanceof Element) {
+      if ($source instanceof \DOMElement) {
         $this->addElement($target, $source);
       } else {
-        $document = $target instanceof Document ? $target : $target->ownerDocument;
+        $document = $target instanceof \DOMDocument ? $target : $target->ownerDocument;
         $target->appendChild($document->importNode($source));
       }
     }
@@ -99,22 +97,15 @@ namespace FluentDOM\Transformer\Namespaces {
      * Namespaces are mapped and added to the mote remote ancestor possible.
      *
      * @param \DOMNode $target
-     * @param Element $source
+     * @param \DOMElement $source
      */
-    private function addElement(\DOMNode $target, Element $source) {
+    private function addElement(\DOMNode $target, \DOMElement $source) {
       list($prefix, $name, $uri) = $this->getNodeDefinition($source);
-      if ($target instanceof Element) {
+      if ($target instanceof \DOMElement) {
         $this->addNamespaceAttribute($target, $prefix, $uri);
       }
-      $document = $target instanceof Document ? $target : $target->ownerDocument;
-      $newNodeName = empty($prefix) ? $name : $prefix.':'.$name;
-      if (empty($uri) && NULL == $target->lookupNamespaceUri(NULL)) {
-        $newNode = $document->createElement($newNodeName);
-      } else {
-        $newNode = $document->createElementNS((string)$uri, $newNodeName);
-      }
-      $target->appendChild($newNode);
-      if ($source instanceof Element) {
+      $newNode = $this->createElement($target, $prefix, $name, $uri);
+      if ($source instanceof \DOMElement) {
         foreach ($source->attributes as $attribute) {
           $this->addAttribute($newNode, $attribute);
         }
@@ -125,12 +116,31 @@ namespace FluentDOM\Transformer\Namespaces {
     }
 
     /**
+     * @param \DOMNode $target
+     * @param string $prefix
+     * @param string $name
+     * @param string $uri
+     * @return \DOMElement
+     */
+    private function createElement(\DOMNode $target, $prefix, $name, $uri) {
+      $document = $target instanceof \DOMDocument ? $target : $target->ownerDocument;
+      $newNodeName = empty($prefix) ? $name : $prefix.':'.$name;
+      if (empty($uri) && NULL == $target->lookupNamespaceUri(NULL)) {
+        $newNode = $document->createElement($newNodeName);
+      } else {
+        $newNode = $document->createElementNS((string)$uri, $newNodeName);
+      }
+      $target->appendChild($newNode);
+      return $newNode;
+    }
+
+    /**
      * Add an attribute to the target element node.
      *
      * @param \DOMElement $target
-     * @param Attribute $source
+     * @param \DOMAttr $source
      */
-    private function addAttribute(\DOMElement $target, Attribute $source) {
+    private function addAttribute(\DOMElement $target, \DOMAttr $source) {
       list($prefix, $name, $uri) = $this->getNodeDefinition($source);
       if (empty($prefix)) {
         $target->setAttribute($name, $source->value);
@@ -149,7 +159,7 @@ namespace FluentDOM\Transformer\Namespaces {
      * @return array
      */
     private function getNodeDefinition(\DOMNode $node) {
-      $isElement = $node instanceof Element;
+      $isElement = $node instanceof \DOMElement;
       $prefix = $isElement && $node->prefix == 'default'
         ? NULL : $node->prefix;
       $name = $node->localName;
@@ -169,14 +179,14 @@ namespace FluentDOM\Transformer\Namespaces {
     }
 
     /**
-     * @param Element $node
+     * @param \DOMElement $node
      * @param string|NULL $prefix
      * @param string $uri
      */
-    private function addNamespaceAttribute(Element $node, $prefix, $uri) {
+    private function addNamespaceAttribute(\DOMElement $node, $prefix, $uri) {
       $prefix = empty($prefix) ? NULL : $prefix;
       if (
-        ($node->parentNode instanceof Element) &&
+        ($node->parentNode instanceof \DOMElement) &&
         ($this->canAddNamespaceToNode($node->parentNode, $prefix, $uri))
       ) {
         $this->addNamespaceAttribute($node->parentNode, $prefix, $uri);

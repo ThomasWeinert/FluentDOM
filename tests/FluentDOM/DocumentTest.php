@@ -423,5 +423,89 @@ namespace FluentDOM {
         $fd[0]
       );
     }
+
+    /**
+     * @cover FluentDOM\Document:toXml
+     */
+    public function testToXmlWithoutContext() {
+      $dom = new Document();
+      $dom->loadXML('<foo><bar/></foo>');
+      $this->assertEquals(
+        '<?xml version="1.0"?>'."\n".'<foo><bar/></foo>'."\n",
+        $dom->toXml()
+      );
+    }
+
+    /**
+     * @cover FluentDOM\Document:toXml
+     */
+    public function testToXmlWithNodeContext() {
+      $dom = new Document();
+      $dom->loadXML('<foo><bar/></foo>');
+      $this->assertEquals(
+        '<foo><bar/></foo>',
+        $dom->toXml($dom->documentElement)
+      );
+    }
+
+    /**
+     * @cover FluentDOM\Document:toXml
+     */
+    public function testToXmlWithNodeListContext() {
+      $dom = new Document();
+      $dom->loadXML('<foo>TEXT<bar/></foo>');
+      $this->assertEquals(
+        'TEXT<bar/>',
+        $dom->toXml($dom->documentElement->childNodes)
+      );
+    }
+
+    /**
+     * @cover FluentDOM\Document:toHtml
+     */
+    public function testToHtmlWithoutContext() {
+      $dom = new Document();
+      $dom->loadXML('<div>TEXT</div>');
+      $this->assertEquals(
+        "<div>TEXT</div>\n",
+        $dom->toHtml()
+      );
+    }
+
+    /**
+     * @cover FluentDOM\Document:toHtml
+     */
+    public function testToHtmlWithNodeContext() {
+      $dom = new Document();
+      $dom->loadXML('<div>TEXT<br/></div>');
+      $this->assertEquals(
+        "<div>TEXT<br>\n</div>",
+        $dom->toHtml($dom->firstChild)
+      );
+    }
+
+    /**
+     * @cover FluentDOM\Document:toHtml
+     */
+    public function testToHtmlWithNodeListContext() {
+      $dom = new Document();
+      $dom->loadXML('<div>TEXT<br/></div>');
+      $this->assertEquals(
+        "TEXT<br>",
+        $dom->toHtml($dom->firstChild->childNodes)
+      );
+    }
+
+    /**
+     * @cover FluentDOM\Document:saveHTML
+     */
+    public function testSaveHtmlWithNodeListContext() {
+      $dom = new Document();
+      $dom->loadXML('<div>TEXT<br/></div>');
+      $this->assertEquals(
+        "TEXT<br>",
+        $dom->saveHtml($dom->firstChild->childNodes)
+      );
+    }
   }
 }

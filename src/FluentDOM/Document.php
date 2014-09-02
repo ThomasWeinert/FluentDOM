@@ -284,5 +284,56 @@ namespace FluentDOM {
         $node->appendChild($this->createTextNode($content));
       }
     }
+
+    /**
+     * Allow to save XML fragments, providing a node list
+     *
+     * Overloading saveXML() with a removed type hint triggers an E_STRICT error,
+     * so we the function needs a new name. :-(
+     *
+     * @param \DOMNode|\DOMNodeList|NULL $context
+     * @param int $options
+     * @return string
+     */
+    public function toXml($context = NULL, $options = 0) {
+      if ($context instanceof \DOMNodeList) {
+        $result = '';
+        foreach ($context as $node) {
+          $result .= parent::saveXML($node, $options);
+        }
+        return $result;
+      }
+      return parent::saveXML($context, $options);
+    }
+
+    /**
+     * Allow to save HTML fragments, providing a node list.
+     *
+     * This is an alias for the extended saveHTML() method. Make it
+     * consistent with toXml()
+     *
+     * @param \DOMNode|\DOMNodeList|NULL $context
+     * @return string
+     */
+    public function toHtml($context = NULL) {
+      return $this->saveHtml($context);
+    }
+
+    /**
+     * Allow to save HTML fragments, providing a node list
+     *
+     * @param \DOMNode|\DOMNodeList|NULL $context
+     * @return string
+     */
+    public function saveHTML($context = NULL) {
+      if ($context instanceof \DOMNodeList) {
+        $result = '';
+        foreach ($context as $node) {
+          $result .= parent::saveHTML($node);
+        }
+        return $result;
+      }
+      return parent::saveHTML($context);
+    }
   }
 }

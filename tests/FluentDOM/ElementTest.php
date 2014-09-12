@@ -725,5 +725,30 @@ namespace FluentDOM {
         1, $dom->documentElement
       );
     }
+
+    /**
+     * @cover FluentDOM\Document:getElementsByTagName
+     */
+    public function testGetElementsByTagNameWithNamespace() {
+      $dom = new Document();
+      $dom->loadXML('<foo:bar xmlns:foo="urn:foo"><foo:foo></foo:foo></foo:bar>');
+      $dom->registerNamespace('f', 'urn:foo');
+      $this->assertEquals(
+        [$dom->documentElement->firstChild],
+        iterator_to_array($dom->documentElement->getElementsByTagName('f:foo'))
+      );
+    }
+
+    /**
+     * @cover FluentDOM\Document:getElementsByTagName
+     */
+    public function testGetElementsByTagName() {
+      $dom = new Document();
+      $dom->loadXML('<foo><bar></bar></foo>');
+      $this->assertEquals(
+        [$dom->documentElement->firstChild],
+        iterator_to_array($dom->documentElement->getElementsByTagName('bar'))
+      );
+    }
   }
 }

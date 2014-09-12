@@ -335,5 +335,21 @@ namespace FluentDOM {
       }
       return parent::saveHTML($context);
     }
+
+    /**
+     * Allow getElementsByTagName to use the defined namespaces.
+     *
+     * @param string $name
+     * @return \DOMNodeList
+     */
+    public function getElementsByTagName($name) {
+      list($prefix, $localName) = QualifiedName::split($name);
+      $namespace = $namespace = $this->getNamespace($prefix);
+      if ($namespace != '') {
+        return parent::getElementsByTagNameNS($namespace, $localName);
+      } else {
+        return parent::getElementsByTagName($localName);
+      }
+    }
   }
 }

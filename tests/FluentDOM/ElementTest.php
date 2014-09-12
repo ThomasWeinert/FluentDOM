@@ -735,7 +735,7 @@ namespace FluentDOM {
       $dom->registerNamespace('f', 'urn:foo');
       $this->assertEquals(
         [$dom->documentElement->firstChild],
-        iterator_to_array($dom->documentElement->getElementsByTagName('f:foo'))
+        iterator_to_array($dom->documentElement->getElementsByTagName('f:foo'), FALSE)
       );
     }
 
@@ -747,7 +747,7 @@ namespace FluentDOM {
       $dom->loadXML('<foo><bar></bar></foo>');
       $this->assertEquals(
         [$dom->documentElement->firstChild],
-        iterator_to_array($dom->documentElement->getElementsByTagName('bar'))
+        iterator_to_array($dom->documentElement->getElementsByTagName('bar'), FALSE)
       );
     }
   }

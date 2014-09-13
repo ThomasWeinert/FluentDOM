@@ -23,6 +23,51 @@ namespace FluentDOM {
     use Node\Xpath;
 
     /**
+     * Validate if an attribute exists
+     *
+     * @param string $name
+     * @return bool
+     */
+    public function hasAttribute($name) {
+      list($namespace, $localName) = $this->resolveTagName($name);
+      if ($namespace != '') {
+        return parent::hasAttributeNS($namespace, $localName);
+      } else {
+        return parent::hasAttribute($name);
+      }
+    }
+
+    /**
+     * Get an attribute value
+     *
+     * @param string $name
+     * @return string|NULL
+     */
+    public function getAttribute($name) {
+      list($namespace, $localName) = $this->resolveTagName($name);
+      if ($namespace != '') {
+        return parent::getAttributeNS($namespace, $localName);
+      } else {
+        return parent::getAttribute($name);
+      }
+    }
+
+    /**
+     * Get an attribute value
+     *
+     * @param string $name
+     * @return string|NULL
+     */
+    public function getAttributeNode($name) {
+      list($namespace, $localName) = $this->resolveTagName($name);
+      if ($namespace != '') {
+        return parent::getAttributeNS($namespace, $localName);
+      } else {
+        return parent::getAttribute($name);
+      }
+    }
+
+    /**
      * Set an attribute on an element
      *
      * @param string $name
@@ -40,18 +85,33 @@ namespace FluentDOM {
     }
 
     /**
-     * Validate if an attribute exists
+     * Set an attribute on an element
      *
      * @param string $name
+     * @param string $value
      * @return bool
      */
-    public function hasAttribute($name) {
+    public function removeAttribute($name) {
       list($namespace, $localName) = $this->resolveTagName($name);
       if ($namespace != '') {
-        /** @noinspection PhpVoidFunctionResultUsedInspection */
-        return parent::hasAttributeNS($namespace, $localName);
+        return parent::removeAttributeNS($namespace, $localName);
       } else {
-        return parent::hasAttribute($name);
+        return parent::removeAttribute($name);
+      }
+    }
+
+    /**
+     * Set an attribute on an element
+     *
+     * @param string $name
+     * @param bool $isId
+     */
+    public function setIdAttribute($name, $isId) {
+      list($namespace) = $this->resolveTagName($name);
+      if ($namespace != '') {
+        parent::setIdAttributeNS($namespace, $name, $isId);
+      } else {
+        parent::setIdAttribute($name, $isId);
       }
     }
 
@@ -187,6 +247,21 @@ namespace FluentDOM {
      */
     public function find($expression) {
       return \FluentDOM::Query($this)->find($expression);
+    }
+
+    /**
+     * Allow getElementsByTagName to use the defined namespaces.
+     *
+     * @param string $name
+     * @return \DOMNodeList
+     */
+    public function getElementsByTagName($name) {
+      list($namespace, $localName) = $this->resolveTagName($name);
+      if ($namespace != '') {
+        return parent::getElementsByTagNameNS($namespace, $localName);
+      } else {
+        return parent::getElementsByTagName($localName);
+      }
     }
 
     /***************************
@@ -377,22 +452,6 @@ namespace FluentDOM {
         $namespace == $this->namespaceURI &&
         $prefix == ($this->prefix ?: '#default')
       );
-    }
-
-    /**
-     * Allow getElementsByTagName to use the defined namespaces.
-     *
-     * @param string $name
-     * @return \DOMNodeList
-     */
-    public function getElementsByTagName($name) {
-      list($prefix, $localName) = QualifiedName::split($name);
-      $namespace = $namespace = $this->ownerDocument->getNamespace($prefix);
-      if ($namespace != '') {
-        return parent::getElementsByTagNameNS($namespace, $localName);
-      } else {
-        return parent::getElementsByTagName($localName);
-      }
     }
   }
 }

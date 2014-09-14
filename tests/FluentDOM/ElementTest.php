@@ -19,6 +19,56 @@ namespace FluentDOM {
     }
 
     /**
+     * @covers FluentDOM\Element::getAttribute
+     */
+    public function testGetAttribute() {
+      $dom = new Document();
+      $dom->loadXml('<foo attr="value"/>');
+      $this->assertEquals(
+        'value',
+        $dom->documentElement->getAttribute('attr')
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::getAttribute
+     */
+    public function testGetAttributeWithNamespace() {
+      $dom = new Document();
+      $dom->loadXml('<foo xmlns:foo="urn:foo" foo:attr="value"/>');
+      $dom->registerNamespace('f', 'urn:foo');
+      $this->assertEquals(
+        'value',
+        $dom->documentElement->getAttribute('f:attr')
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::getAttributeNode
+     */
+    public function testGetAttributeNode() {
+      $dom = new Document();
+      $dom->loadXml('<foo attr="value"/>');
+      $this->assertEquals(
+        'value',
+        $dom->documentElement->getAttributeNode('attr')->value
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::getAttributeNode
+     */
+    public function testGetAttributeNodeWithNamespace() {
+      $dom = new Document();
+      $dom->loadXml('<foo xmlns:foo="urn:foo" foo:attr="value"/>');
+      $dom->registerNamespace('f', 'urn:foo');
+      $this->assertEquals(
+        'value',
+        $dom->documentElement->getAttributeNode('f:attr')->value
+      );
+    }
+
+    /**
      * @covers FluentDOM\Element::setAttribute
      */
     public function testSetAttribute() {
@@ -46,6 +96,33 @@ namespace FluentDOM {
     }
 
     /**
+     * @covers FluentDOM\Element::setIdAttribute
+     */
+    public function testSetIdAttribute() {
+      $dom = new Document();
+      $dom->loadXML('<root attribute="value"/>');
+      $dom->documentElement->setIdAttribute('attribute', TRUE);
+      $this->assertEquals(
+        $dom->documentElement,
+        $dom->getElementById('value')
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::setIdAttribute
+     */
+    public function testSetIdAttributeWithNamespace() {
+      $dom = new Document();
+      $dom->loadXML('<root xmlns:foo="urn:foo" foo:attribute="value"/>');
+      $dom->registerNamespace('foo', 'urn:foo');
+      $dom->documentElement->setIdAttribute('foo:attribute', TRUE);
+      $this->assertEquals(
+        $dom->documentElement,
+        $dom->getElementById('value')
+      );
+    }
+
+    /**
      * @covers FluentDOM\Element::setAttribute
      */
     public function testSetAttributeXmlAttribute() {
@@ -66,6 +143,33 @@ namespace FluentDOM {
       $dom = new Document();
       $dom->appendChild($dom->createElement('root'));
       $dom->documentElement->setAttribute('xmlns:foo', 'urn:foo');
+      $this->assertEquals(
+        '<root xmlns:foo="urn:foo"/>',
+        $dom->saveXML($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::removeAttribute
+     */
+    public function testRemoveAttribute() {
+      $dom = new Document();
+      $dom->loadXML('<root attribute="value"/>');
+      $dom->documentElement->removeAttribute('attribute');
+      $this->assertEquals(
+        '<root/>',
+        $dom->saveXML($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::removeAttribute
+     */
+    public function testRemoveAttributeWithNamespace() {
+      $dom = new Document();
+      $dom->loadXML('<root xmlns:foo="urn:foo" foo:attribute="value"/>');
+      $dom->registerNamespace('foo', 'urn:foo');
+      $dom->documentElement->removeAttribute('foo:attribute');
       $this->assertEquals(
         '<root xmlns:foo="urn:foo"/>',
         $dom->saveXML($dom->documentElement)
@@ -534,6 +638,31 @@ namespace FluentDOM {
     }
 
     /**
+     * @cover FluentDOM\Document:getElementsByTagName
+     */
+    public function testGetElementsByTagNameWithNamespace() {
+      $dom = new Document();
+      $dom->loadXML('<foo:bar xmlns:foo="urn:foo"><foo:foo></foo:foo></foo:bar>');
+      $dom->registerNamespace('f', 'urn:foo');
+      $this->assertEquals(
+        [$dom->documentElement->firstChild],
+        iterator_to_array($dom->documentElement->getElementsByTagName('f:foo'), FALSE)
+      );
+    }
+
+    /**
+     * @cover FluentDOM\Document:getElementsByTagName
+     */
+    public function testGetElementsByTagName() {
+      $dom = new Document();
+      $dom->loadXML('<foo><bar></bar></foo>');
+      $this->assertEquals(
+        [$dom->documentElement->firstChild],
+        iterator_to_array($dom->documentElement->getElementsByTagName('bar'), FALSE)
+      );
+    }
+
+    /**
      * @covers FluentDOM\Element
      * @dataProvider provideExistingOffsets
      */
@@ -723,31 +852,6 @@ namespace FluentDOM {
       $dom->loadXML('<foo><bar/></foo>');
       $this->assertCount(
         1, $dom->documentElement
-      );
-    }
-
-    /**
-     * @cover FluentDOM\Document:getElementsByTagName
-     */
-    public function testGetElementsByTagNameWithNamespace() {
-      $dom = new Document();
-      $dom->loadXML('<foo:bar xmlns:foo="urn:foo"><foo:foo></foo:foo></foo:bar>');
-      $dom->registerNamespace('f', 'urn:foo');
-      $this->assertEquals(
-        [$dom->documentElement->firstChild],
-        iterator_to_array($dom->documentElement->getElementsByTagName('f:foo'), FALSE)
-      );
-    }
-
-    /**
-     * @cover FluentDOM\Document:getElementsByTagName
-     */
-    public function testGetElementsByTagName() {
-      $dom = new Document();
-      $dom->loadXML('<foo><bar></bar></foo>');
-      $this->assertEquals(
-        [$dom->documentElement->firstChild],
-        iterator_to_array($dom->documentElement->getElementsByTagName('bar'), FALSE)
       );
     }
   }

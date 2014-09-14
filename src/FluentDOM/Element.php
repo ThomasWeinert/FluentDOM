@@ -56,14 +56,14 @@ namespace FluentDOM {
      * Get an attribute value
      *
      * @param string $name
-     * @return string|NULL
+     * @return Attribute|NULL
      */
     public function getAttributeNode($name) {
       list($namespace, $localName) = $this->resolveTagName($name);
       if ($namespace != '') {
-        return parent::getAttributeNS($namespace, $localName);
+        return parent::getAttributeNodeNS($namespace, $localName);
       } else {
-        return parent::getAttribute($name);
+        return parent::getAttributeNode($name);
       }
     }
 
@@ -107,9 +107,9 @@ namespace FluentDOM {
      * @param bool $isId
      */
     public function setIdAttribute($name, $isId) {
-      list($namespace) = $this->resolveTagName($name);
+      list($namespace, $localName) = $this->resolveTagName($name);
       if ($namespace != '') {
-        parent::setIdAttributeNS($namespace, $name, $isId);
+        parent::setIdAttributeNS($namespace, $localName, $isId);
       } else {
         parent::setIdAttribute($name, $isId);
       }

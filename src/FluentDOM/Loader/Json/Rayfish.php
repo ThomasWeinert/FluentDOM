@@ -9,6 +9,7 @@
 namespace FluentDOM\Loader\Json {
 
   use FluentDOM\Document;
+  use FluentDOM\Element;
   use FluentDOM\Loadable;
   use FluentDOM\Loader\Supports;
 
@@ -45,12 +46,7 @@ namespace FluentDOM\Loader\Json {
           $child->appendChild($dom->createTextNode($json->{'#text'}));
         }
         if (isset($json->{'#children'})) {
-          foreach ($namespaces as $name => $value) {
-            $child->setAttribute($name, $value);
-          }
-          foreach ($attributes as $name => $value) {
-            $child->setAttribute($name, $value);
-          }
+          $this->transferAttributes($child, $namespaces, $attributes);
           foreach ($json->{'#children'} as $value) {
             $name = isset($value->{'#name'}) ? $value->{'#name'} : '@';
             if (substr($name, 0, 1) != '@') {
@@ -58,6 +54,22 @@ namespace FluentDOM\Loader\Json {
             }
           }
         }
+      }
+    }
+
+    /**
+     * Transfer attributes to the node.
+     *
+     * @param Element $node
+     * @param \stdClass $namespaces
+     * @param \stdClass $attributes
+     */
+    private function transferAttributes(Element $node, $namespaces, $attributes) {
+      foreach ($namespaces as $name => $value) {
+        $node->setAttribute($name, $value);
+      }
+      foreach ($attributes as $name => $value) {
+        $node->setAttribute($name, $value);
       }
     }
 

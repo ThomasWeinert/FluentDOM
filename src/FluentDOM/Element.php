@@ -41,7 +41,7 @@ namespace FluentDOM {
      * Get an attribute value
      *
      * @param string $name
-     * @return string|NULL
+     * @return string
      */
     public function getAttribute($name) {
       list($namespace, $localName) = $this->resolveTagName($name);
@@ -56,7 +56,7 @@ namespace FluentDOM {
      * Get an attribute value
      *
      * @param string $name
-     * @return Attribute|NULL
+     * @return Attribute|\DOMAttr
      */
     public function getAttributeNode($name) {
       list($namespace, $localName) = $this->resolveTagName($name);
@@ -88,7 +88,6 @@ namespace FluentDOM {
      * Set an attribute on an element
      *
      * @param string $name
-     * @param string $value
      * @return bool
      */
     public function removeAttribute($name) {

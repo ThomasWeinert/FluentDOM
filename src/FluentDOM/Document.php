@@ -344,7 +344,7 @@ namespace FluentDOM {
      */
     public function getElementsByTagName($name) {
       list($prefix, $localName) = QualifiedName::split($name);
-      $namespace = $namespace = $this->getNamespace($prefix);
+      $namespace = $namespace = $this->getNamespace((string)$prefix);
       if ($namespace != '') {
         return parent::getElementsByTagNameNS($namespace, $localName);
       } else {

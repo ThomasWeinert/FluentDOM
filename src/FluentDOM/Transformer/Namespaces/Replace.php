@@ -107,7 +107,7 @@ namespace FluentDOM\Transformer\Namespaces {
 
     /**
      * @param string $namespaceUri
-     * @return mixed
+     * @return string
      */
     private function getMappedNamespace($namespaceUri) {
       if (isset($this->_namespaces[$namespaceUri])) {

@@ -11,7 +11,7 @@ Version 5.1.0:
   attributes depending on the current namespace registration.
 - Added: New FluentDOM\Nodes\Creator allows for compact node creation
 - Added: FluentDOM\Loader\PHP\SimpleXml, load SimpleXmlElement
-- Added: FluentDOM\Loader\PHP\PDO, load PDP statements
+- Added: FluentDOM\Loader\PHP\PDO, load PDO statements
 - Added: FluentDOM\Loader\Json\BadgerFish, load BadgerFish Json
 - Added: FluentDOM\Loader\Json\JsonML, load JsonML
 - Added: FluentDOM\Loader\Json\Rayfish, load Rayfish

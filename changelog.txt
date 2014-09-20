@@ -14,11 +14,15 @@ Version 5.1.0:
 - Added: FluentDOM\Loader\PHP\PDO, load PDP statements
 - Added: FluentDOM\Loader\Json\BadgerFish, load BadgerFish Json
 - Added: FluentDOM\Loader\Json\JsonML, load JsonML
-- Added: FluentDOM\Loader\Lazy - Lazy load other loaders
-- Added: FluentDOM\Serializer\Json\BadgerFish - generate BadgerFish Json
-- Added: FluentDOM\Serializer\Json\JsonML - generate JsonML
-- Added: FluentDOM\Serializer\Json\RabbitFish - generate RabbitFish Json
-- Added: FluentDOM\Serializer\Json\Rayfish - generate Rayfish Json
+- Added: FluentDOM\Loader\Json\Rayfish, load Rayfish
+- Added: FluentDOM\Loader\Lazy, Lazy load other loaders
+- Added: FluentDOM\Serializer\Json\BadgerFish, generate BadgerFish Json
+- Added: FluentDOM\Serializer\Json\JsonML, generate JsonML
+- Added: FluentDOM\Serializer\Json\RabbitFish, generate RabbitFish Json
+- Added: FluentDOM\Serializer\Json\Rayfish, generate Rayfish Json
+- Added: FluentDOM\Transformer\Namespaces\Optimize, optimize
+  namespace attributes, change prefixes
+- Added: FluentDOM\Transformer\Namespaces\Replace, replace namespaces
 
 Version 5.0.2:
 

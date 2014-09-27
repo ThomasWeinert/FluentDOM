@@ -11,6 +11,7 @@ namespace FluentDOM\Loader\Json {
   use FluentDOM\Document;
   use FluentDOM\Loadable;
   use FluentDOM\Loader\Supports;
+  use FluentDOM\QualifiedName;
 
   /**
    * Load a DOM document from a json string or file
@@ -198,7 +199,7 @@ namespace FluentDOM\Loader\Json {
         $target->setAttributeNS(self::XMLNS, 'json:type', 'object');
       }
       foreach ($properties as $property => $item) {
-        $qname = $this->normalizeKey($property);
+        $qname = QualifiedName::normalizeString($property, self::DEFAULT_QNAME);
         $target->appendChild(
           $child = $target->ownerDocument->createElement($qname)
         );
@@ -207,36 +208,6 @@ namespace FluentDOM\Loader\Json {
         }
         $this->transferTo($child, $item, $recursions);
       }
-    }
-
-    /**
-     * Removes all characters from a json key string that are not allowed in a xml NCName. An NCName is the
-     * tag name of an xml element without a prefix.
-     *
-     * If the result of that removal is an empty string, the default QName is returned.
-     *
-     * @param string $key
-     * @return string
-     */
-    private function normalizeKey($key) {
-      $nameStartChar =
-        'A-Z_a-z'.
-        '\\x{C0}-\\x{D6}\\x{D8}-\\x{F6}\\x{F8}-\\x{2FF}\\x{370}-\\x{37D}'.
-        '\\x{37F}-\\x{1FFF}\\x{200C}-\\x{200D}\\x{2070}-\\x{218F}'.
-        '\\x{2C00}-\\x{2FEF}\\x{3001}-\\x{D7FF}\\x{F900}-\\x{FDCF}'.
-        '\\x{FDF0}-\\x{FFFD}\\x{10000}-\\x{EFFFF}';
-      $nameAdditionalChar =
-        $nameStartChar.
-        '\\.\\d\\x{B7}\\x{300}-\\x{36F}\\x{203F}-\\x{2040}';
-      $result = preg_replace(
-        array(
-          '([^'.$nameAdditionalChar.'-]+)u',
-          '(^[^'.$nameStartChar.']+)u',
-        ),
-        '',
-        $key
-      );
-      return (empty($result)) ? self::DEFAULT_QNAME : $result;
     }
   }
 }

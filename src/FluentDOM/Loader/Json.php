@@ -16,7 +16,8 @@ namespace FluentDOM\Loader {
     private $_loaders = [
       '\Json\JsonDOM' => ['json', 'application/json', 'text/json'],
       '\Json\JsonML' => ['jsonml', 'application/jsonml', 'application/jsonml+json'],
-      '\Json\BadgerFish' => ['badgerfish', 'application/badgerfish', 'application/badgerfish+json']
+      '\Json\BadgerFish' => ['badgerfish', 'application/badgerfish', 'application/badgerfish+json'],
+      '\JSONx' => ['jsonx', 'application/xml+jsonx']
     ];
 
     public function __construct() {

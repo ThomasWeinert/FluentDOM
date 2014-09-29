@@ -30,7 +30,8 @@ namespace FluentDOM\Loader {
       return [
         ['json'],
         ['jsonml'],
-        ['badgerfish']
+        ['badgerfish'],
+        ['jsonx']
       ];
     }
   }

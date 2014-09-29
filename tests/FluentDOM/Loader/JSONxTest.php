@@ -12,7 +12,7 @@ namespace FluentDOM\Loader {
      * Test against the examples from the BadgerFish webpage
      * http://badgerfish.ning.com/
      *
-     * @covers FluentDOM\Loader\Json\BadgerFish
+     * @covers FluentDOM\Loader\JSONx
      * @dataProvider provideExamples
      * @param string $JsonDOM
      * @param string $JSONx

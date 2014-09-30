@@ -136,7 +136,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @param array||Traversable $contentNodes
+     * @param array|\Traversable $contentNodes
      * @return \DOMNode
      */
     public function replaceNode($contentNodes) {

@@ -68,12 +68,12 @@ namespace FluentDOM\Serializer {
 
     /**
      * @param \DOMElement $node
-     * @return array|\stdClass|NULL
+     * @return mixed
      */
     abstract protected function getNode(\DOMElement $node);
 
     /**
-     * @return \stdClass|array
+     * @return mixed
      */
     protected function getEmpty() {
       return new \stdClass();

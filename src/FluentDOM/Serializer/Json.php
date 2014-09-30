@@ -57,7 +57,7 @@ namespace FluentDOM\Serializer {
     }
 
     /**
-     * @return array|NULL
+     * @return mixed
      */
     public function jsonSerialize() {
       if (isset($this->_document->documentElement)) {

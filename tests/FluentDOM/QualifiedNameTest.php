@@ -165,6 +165,17 @@ namespace FluentDOM {
       );
     }
 
+    /**
+     * @covers FluentDOM\QualifiedName
+     * @dataProvider provideStringsToNormalize
+     */
+    public function testNormalizeString($expected, $string) {
+      $this->assertEquals(
+        $expected,
+        QualifiedName::normalizeString($string)
+      );
+    }
+
     /*************************
      * Data Provider
      ************************/
@@ -189,6 +200,16 @@ namespace FluentDOM {
         array(array(FALSE, 'bar'), 'bar'),
         array(array('', 'bar'), ':bar'),
       );
+    }
+
+    public static function provideStringsToNormalize() {
+      return [
+        ['foo', 'foo'],
+        ['foo-bar', 'foo-bar'],
+        ['fooBAR', 'foo:BAR'],
+        ['foo', '  f o o   '],
+        ['_', '  ']
+      ];
     }
   }
 }

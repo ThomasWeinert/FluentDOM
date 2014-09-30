@@ -49,6 +49,13 @@ namespace FluentDOM\Serializer\Json {
              <foo json:name="foo" json:type="string">bar</foo>
            </json:json>'
         ],
+        'object, name attribute' => [
+          '{"foo":"bar"}',
+          '<?xml version="1.0" encoding="UTF-8"?>
+           <json:json xmlns:json="urn:carica-json-dom.2013" json:type="object">
+             <_ json:name="foo">bar</_>
+           </json:json>'
+        ],
         'different types' => [
           json_encode(
             array(

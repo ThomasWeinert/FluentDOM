@@ -39,8 +39,8 @@ namespace FluentDOM\Serializer\Json {
       case 'object' :
         $result = new \stdClass();
         foreach ($xpath('*', $node) as $child) {
-          if ($node->hasAttributeNS(self::XMLNS, 'name')) {
-            $name = $node->getAttributeNS(self::XMLNS, 'name');
+          if ($child->hasAttributeNS(self::XMLNS, 'name')) {
+            $name = $child->getAttributeNS(self::XMLNS, 'name');
           } else {
             $name = $child->localName;
           }

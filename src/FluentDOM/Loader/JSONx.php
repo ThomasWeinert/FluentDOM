@@ -40,7 +40,7 @@ namespace FluentDOM\Loader {
      * @return Document|NULL
      */
     public function load($source, $contentType) {
-      if ($this->supports($contentType)) {
+      if ($this->supports($contentType) && !empty($source)) {
         $dom = new Document();
         $dom->preserveWhiteSpace = FALSE;
         $dom->registerNamespace('jx', self::XMLNS_JSONX);

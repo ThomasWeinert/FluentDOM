@@ -25,6 +25,48 @@ namespace FluentDOM\Loader {
       );
     }
 
+    /**
+     * @covers FluentDOM\Loader\Json\JSONx
+     */
+    public function testLoadWithInvalidSourceExpectingNull() {
+      $loader = new JSONx();
+      $this->assertNull(
+        $loader->load(
+          NULL,
+          'jsonx'
+        )
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Loader\Json\JSONx
+     */
+    public function testLoadFromFileConvertToJson() {
+      $loader = new JSONx();
+      $fd = $loader->load(__DIR__.'/TestData/jsonx.xml', 'jsonx');
+      $this->assertXmlStringEqualsXmlString(
+        '<?xml version="1.0"?>
+          <json:json xmlns:json="urn:carica-json-dom.2013">
+            <name>John Smith</name>
+            <address>
+              <streetAddress>21 2nd Street</streetAddress>
+              <city>New York</city>
+              <state>NY</state>
+              <postalCode json:type="number">10021</postalCode>
+            </address>
+            <phoneNumbers json:type="array">
+              <_>212 555-1111</_>
+              <_>212 555-2222</_>
+            </phoneNumbers>
+            <additionalInfo json:type="null"/>
+            <remote json:type="boolean">false</remote>
+            <height json:type="number">62.4</height>
+            <ficoScore>&gt; 640</ficoScore>
+          </json:json>',
+        $fd->saveXml()
+      );
+    }
+
     public  static function provideExamples() {
       return [
         'object as root' => [
@@ -101,6 +143,22 @@ namespace FluentDOM\Loader {
            </json:json>',
           '<json:object xmlns:json="http://www.ibm.com/xmlns/prod/2009/jsonx">
              <json:null name="additionalInfo" />
+           </json:object>'
+        ],
+        'numeric name, needs name attribute' => [
+          '<json:json xmlns:json="urn:carica-json-dom.2013">
+             <_ json:name="123" json:type="null"/>
+           </json:json>',
+          '<json:object xmlns:json="http://www.ibm.com/xmlns/prod/2009/jsonx">
+             <json:null name="123" />
+           </json:object>'
+        ],
+        'empty object, needs type attribute' => [
+          '<json:json xmlns:json="urn:carica-json-dom.2013">
+             <additionalInfo json:type="object"/>
+           </json:json>',
+          '<json:object xmlns:json="http://www.ibm.com/xmlns/prod/2009/jsonx">
+             <json:object name="additionalInfo" />
            </json:object>'
         ]
       ];

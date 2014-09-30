@@ -26,7 +26,7 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @covers FluentDOM\Loader\Json\JSONx
+     * @covers FluentDOM\Loader\JSONx
      */
     public function testLoadWithInvalidSourceExpectingNull() {
       $loader = new JSONx();
@@ -39,7 +39,7 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @covers FluentDOM\Loader\Json\JSONx
+     * @covers FluentDOM\Loader\JSONx
      */
     public function testLoadFromFileConvertToJson() {
       $loader = new JSONx();

@@ -34,6 +34,7 @@ namespace FluentDOM\Loader {
     public function load($source, $contentType) {
       if ($this->supports($contentType)) {
         $dom = new Document();
+        $dom->preserveWhiteSpace = FALSE;
         if ($this->startsWith($source, '<')) {
           $dom->loadXml($source);
         } else {

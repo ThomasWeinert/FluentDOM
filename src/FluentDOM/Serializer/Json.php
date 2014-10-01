@@ -1,6 +1,6 @@
 <?php
 /**
- * Abstract superclass for json serializers (serialize a DOM into a Json structure).
+ * Serialize a DOM into a Json structure.
  *
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
@@ -10,15 +10,37 @@ namespace FluentDOM\Serializer {
   use FluentDOM\Xpath;
 
   /**
-   * Abstract superclass for json serializers (serialize a DOM into a Json structure).
+   * Serialize a DOM into a Json structure. This loader allows to save an imported Json back as JSON.
    *
-   * See http://wiki.open311.org/index.php?title=JSON_and_XML_Conversion for
-   * different formats.
+   * Using this on a standard XML document will ignore a lot of data. Namespaces and Attributes
+   * are ignored, if here are two elements with the same name only the last will be in the output.
+   * If an element has child elements, all text child nodes will be ignored.
+   *
+   * See the other serializers, to keep this data.
+   *
+   * This serializer recognizes attributes from the JsonDOM namespaces. If you import an JSON to a DOM
+   * in FluentDOM, the additional information is stored in these attributes (types, names, ...)
+   *
+   * Here is a example of an XML:
+   *
+   * <?xml version="1.0" encoding="UTF-8"?>
+   * <json:json xmlns:json="urn:carica-json-dom.2013">
+   *   <boolean json:type="boolean">true</boolean>
+   *   <int json:type="number">42</int>
+   *   <null json:type="null"/>
+   *   <string>Foo</string>
+   *   <array json:type="array">
+   *     <_ json:type="number">21</_>
+   *   </array>
+   *   <acomplexname json:type="object" json:name="a complex name"/>
+   * </json:json>
    *
    * @license http://www.opensource.org/licenses/mit-license.php The MIT License
    * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
    */
-  abstract class Json implements \JsonSerializable {
+  class Json implements \JsonSerializable {
+
+    const XMLNS_JSONDOM = 'urn:carica-json-dom.2013';
 
     /**
      * @var \DOMDocument
@@ -70,7 +92,43 @@ namespace FluentDOM\Serializer {
      * @param \DOMElement $node
      * @return mixed
      */
-    abstract protected function getNode(\DOMElement $node);
+    protected function getNode(\DOMElement $node) {
+      $xpath = new Xpath($node->ownerDocument);
+      if ($node->hasAttributeNS(self::XMLNS_JSONDOM, 'type')) {
+        $type = $node->getAttributeNS(self::XMLNS_JSONDOM, 'type');
+      } else {
+        $type = $xpath('count(*) > 0', $node) ? 'object' : 'string';
+      }
+      switch ($type) {
+      case 'object' :
+        $result = new \stdClass();
+        /** @var \DOMElement $child */
+        foreach ($xpath('*', $node) as $child) {
+          if ($child->hasAttributeNS(self::XMLNS_JSONDOM, 'name')) {
+            $name = $child->getAttributeNS(self::XMLNS_JSONDOM, 'name');
+          } else {
+            $name = $child->localName;
+          }
+          $result->{$name} = $this->getNode($child);
+        }
+        break;
+      case 'array' :
+        $result = [];
+        foreach ($xpath('*', $node) as $child) {
+          $result[] = $this->getNode($child);
+        }
+        break;
+      case 'number' :
+        return (float)$node->nodeValue;
+      case 'boolean' :
+        return $node->nodeValue == 'true' ? true : false;
+      case 'null' :
+        return null;
+      default :
+        return $node->nodeValue;
+      }
+      return $result;
+    }
 
     /**
      * @return mixed

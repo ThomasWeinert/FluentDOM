@@ -31,7 +31,7 @@ namespace FluentDOM {
      *
      * @param mixed $source
      * @param string $contentType
-     * @return NULL|\DOMDocument
+     * @return NULL|Document
      */
     function load($source, $contentType);
   }

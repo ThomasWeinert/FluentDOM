@@ -5,6 +5,11 @@ use Symfony\Component\CssSelector\CssSelector;
 abstract class FluentDOM {
 
   /**
+   * @var FluentDOM\Loadable
+   */
+  private static $_loader = null;
+
+  /**
    * Create an FluentDOM::Query instance and load the source into it.
    *
    * @param mixed $source
@@ -53,6 +58,42 @@ abstract class FluentDOM {
   }
 
   /**
+   * Set a loader used in FluentDOM::load(), NULL will reset the loader.
+   * If no loader is provided an FluentDOM\Loader\Standard() will be created.
+   *
+   * @param FluentDOM\Loadable|NULL $loader
+   */
+  public static function setLoader($loader) {
+    self::_require();
+    if ($loader instanceof \FluentDOM\Loadable) {
+      self::$_loader = $loader;
+    } elseif (NULL === $loader) {
+      self::$_loader = NULL;
+    } else {
+      throw new \FluentDOM\Exceptions\InvalidArgument(
+        'loader', ['FluentDOM\Loadable']
+      );
+    }
+  }
+
+  /**
+   * Load a data source into a FluentDOM\Document
+   *
+   * @param mixed $source
+   * @param string $contentType
+   * @return \FluentDOM\Document
+   */
+  public static function load($source, $contentType = 'text/xml') {
+    self::_require();
+    if (!isset(self::$_loader)) {
+      self::$_loader = new FluentDOM\Loader\Standard();
+    }
+    return self::$_loader->load($source, $contentType);
+  }
+
+  /**
+   * Return a FluentDOM Creator instance, allow to create a DOM using nested function calls
+   *
    * @param string $version
    * @param string $encoding
    * @return \FluentDOM\Nodes\Creator

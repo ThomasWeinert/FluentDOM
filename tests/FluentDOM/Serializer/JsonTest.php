@@ -141,7 +141,7 @@ namespace FluentDOM\Serializer {
       return $data;
     }
     /**
-     * @covers FluentDOM\Serializer\Json\JsonDOM
+     * @covers FluentDOM\Serializer\Json
      * @dataProvider provideExamples
      * @param string $expected
      * @param string $xml

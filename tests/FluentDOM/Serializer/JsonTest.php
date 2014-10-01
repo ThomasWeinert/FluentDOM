@@ -157,7 +157,7 @@ namespace FluentDOM\Serializer {
     }
 
     /**
-     * @covers FluentDOM\Serializer\Json\JsonDOM
+     * @covers FluentDOM\Serializer\Json
      */
     public function testIntegrationWithEmptyDocument() {
       $serializer = new Json(new \DOMDocument());

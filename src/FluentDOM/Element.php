@@ -139,7 +139,7 @@ namespace FluentDOM {
         foreach ($value as $node) {
           $this->append($node);
         }
-      } elseif (is_callable($value)) {
+      } elseif ($value instanceof \Closure) {
         $result = $this->append($value());
       } elseif (is_array($value)) {
         foreach ($value as $name => $data) {

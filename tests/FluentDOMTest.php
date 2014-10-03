@@ -50,4 +50,40 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
       (string)$write('test')
     );
   }
+
+  /**
+   * @group FactoryFunctions
+   * @covers FluentDOM::setLoader
+   * @covers FluentDOM::load
+   */
+  public function testLoadWithDefaultLoader() {
+    FluentDOM::setLoader(NULL);
+    $document = FluentDOM::load('<foo/>');
+    $this->assertXmlStringEqualsXmlString('<foo/>', $document->saveXml());
+  }
+
+  /**
+   * @group FactoryFunctions
+   * @covers FluentDOM::setLoader
+   * @covers FluentDOM::load
+   */
+  public function testLoadWithDefinedLoader() {
+    $loader = $this->getMock('FluentDOM\Loadable');
+    $loader
+      ->expects($this->once())
+      ->method('load')
+      ->with('source', 'type')
+      ->will($this->returnValue(new FluentDOM\Document()));
+    FluentDOM::setLoader($loader);
+    $this->assertInstanceOf('FluentDOM\Document', FluentDOM::load('source', 'type'));
+  }
+
+  /**
+   * @group FactoryFunctions
+   * @covers FluentDOM::setLoader
+   */
+  public function testSetLoader() {
+    $this->setExpectedException('FluentDOM\Exception');
+    FluentDOM::setLoader(new stdClass());
+  }
 }

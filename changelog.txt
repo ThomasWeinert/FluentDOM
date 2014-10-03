@@ -3,6 +3,11 @@ Version 5.2.0:
 - Added: FluentDOM::load() provides direct access to the loaders
 - Changed: FluentDOM\Serializer\Json now writes json using the JsonDOM rules.
 
+Version 5.1.1:
+
+- Fixed: FluentDOM\Element::append() needs to ignore arrays and strings
+  if checking for callable
+
 Version 5.1.0:
 
 - Changed: All DOMNode descendants (FluentDOM\Document, FluentDOM\Element,

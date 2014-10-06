@@ -53,10 +53,10 @@ namespace FluentDOM\Transformer {
 
     /**
      * @param Document|Element $parent
-     * @param \DOMNode $node
+     * @param \DOMElement $node
      * @param bool $addNameAttribute
      */
-    public function addNode($parent, $node, $addNameAttribute = FALSE) {
+    public function addNode($parent, \DOMElement $node, $addNameAttribute = FALSE) {
       $xpath = new Xpath($node->ownerDocument);
       if ($node->hasAttributeNS(self::XMLNS_JSONDOM, 'type')) {
         $type = $node->getAttributeNS(self::XMLNS_JSONDOM, 'type');

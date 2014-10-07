@@ -1,6 +1,8 @@
 Version 5.2.0:
 
 - Added: FluentDOM::load() provides direct access to the loaders
+- Added: FluentDOM\Loader\JSONx loads JSONx into a JsonDOM document
+- Added: FluentDOM\Transformer\JSONx, transform a JsonDOM document to JSONx
 - Changed: FluentDOM\Serializer\Json now writes json using the JsonDOM rules.
 
 Version 5.1.1:

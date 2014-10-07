@@ -2,8 +2,7 @@
 require(dirname(__FILE__).'/../../vendor/autoload.php');
 
 $element = simplexml_load_string('<atom:feed xmlns:atom="http://www.w3.org/2005/Atom"/>');
-$title = $element->addChild('atom:title', 'http://www.w3.org/2005/Atom');
-$title->{0} = 'FluentDOM Feed';
+$title = $element->addChild('atom:title', 'FluentDOM Feed', 'http://www.w3.org/2005/Atom');
 
 echo $element->saveXml();
 

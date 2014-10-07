@@ -2,9 +2,8 @@
 require(dirname(__FILE__).'/../../vendor/autoload.php');
 
 $element = simplexml_load_string('<ul/>');
-$li = $element->addChild('li');
+$li = $element->addChild('li', 'FluentDOM');
 $li['href'] = 'http://fluentdom.org';
-$li->{0} = 'FluentDOM';
 
 echo $element->saveXml();
 

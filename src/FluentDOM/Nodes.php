@@ -19,9 +19,12 @@ namespace FluentDOM {
    */
   class Nodes implements \ArrayAccess, \Countable, \IteratorAggregate {
 
-    const CONTEXT_DOCUMENT = 0;
-    const CONTEXT_SELF = 1;
-    const CONTEXT_CHILDREN = 2;
+    const CONTEXT_DOCUMENT = 1;
+    const CONTEXT_SELF = 2;
+    const CONTEXT_CHILDREN = 4;
+
+    const FIND_MODE_MATCH = 4;
+    const FIND_MODE_FILTER = 8;
 
     /**
      * @var Xpath
@@ -669,22 +672,41 @@ namespace FluentDOM {
      * If the $selector is an node or a list of nodes all descendants that
      * match that node/node list are returned.
      *
+     * self::CONTEXT_DOCUMENT will use the document element as context. Otherwise the currently
+     * nodes are used as contexts
+     *
+     * self::FIND_MODE_FILTER will use the $selector only as filter and not execute it directly.
+     * this is the like the jQuery specification - but a lot slower and needs more memory.
+     * Additionally in this mode, it will find only element nodes.     *
+     *
      * @example find.php Usage Example: FluentDOM::find()
      * @param string $selector selector
-     * @param boolean $useDocumentContext ignore current node list
+     * @param integer $options FIND_* options CONTEXT_DOCUMENT, FIND_MODE_FILTER
      * @return Nodes
      */
-    public function find($selector, $useDocumentContext = FALSE) {
-      if ($useDocumentContext || $this->_useDocumentContext) {
-        $expression = '//*|//text()';
+    public function find($selector, $options = 0) {
+      $useDocumentContext = $this->_useDocumentContext ||
+        ($options & self::CONTEXT_DOCUMENT) == self::CONTEXT_DOCUMENT;
+      $selectorIsScalar = is_scalar($selector) || is_null($selector);
+      $selectorIsFilter = $selectorIsScalar &&
+        ($options & self::FIND_MODE_FILTER) == self::FIND_MODE_FILTER;
+      if ($useDocumentContext) {
+        $expression = $selectorIsFilter ? '//*' : '//*|//text()';
         $contextMode = self::CONTEXT_DOCUMENT;
         $options = Nodes\Fetcher::UNIQUE | Nodes\Fetcher::IGNORE_CONTEXT;
       } else {
-        $expression = './/*|.//text()';
+        $expression = $selectorIsFilter ? './/*' : './/*|.//text()';
         $contextMode = self::CONTEXT_CHILDREN;
         $options = Nodes\Fetcher::UNIQUE;
       }
-      if (is_scalar($selector) || is_null($selector)) {
+      if ($selectorIsFilter) {
+        return $this->fetch(
+          $expression,
+          $this->prepareSelectorAsFilter($selector, $contextMode),
+          NULL,
+          $options
+        );
+      } elseif ($selectorIsScalar) {
         return $this->fetch(
           $this->prepareSelector($selector, $contextMode),
           NULL,
@@ -694,6 +716,16 @@ namespace FluentDOM {
       } else {
         return $this->fetch($expression, $selector, NULL, $options);
       }
+    }
+
+    private function prepareSelectorAsFilter($selector, $contextMode) {
+      $filter = $this->prepareSelector($selector, $contextMode);
+      if (preg_match('(^(/{,2})([a-z-]+::.*))', $filter, $matches)) {
+        $filter = $matches[2];
+      } elseif (preg_match('(^(//?)(.*))', $filter, $matches)) {
+        $filter = 'self::'.$matches[2];
+      }
+      return $filter;
     }
 
     /**

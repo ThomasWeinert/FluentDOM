@@ -56,7 +56,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers FluentDOM\Loader\Html
      */
-    public function testLoadWithUnsupportType() {
+    public function testLoadWithUnsupportedType() {
       $loader = new Html();
       $this->assertNull(
         $loader->load(

@@ -8,9 +8,6 @@ php:
 
 install: composer install
 
-before_script:
-  - phpenv config-add travis.php.ini
-
 script: phpunit --configuration phpunit.xml.dist
 
 notifications:

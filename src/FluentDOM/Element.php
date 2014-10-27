@@ -30,9 +30,9 @@ namespace FluentDOM {
       Node\ParentNode {
 
     use
-      Node\ChildNodeImplementation,
-      Node\NonDocumentTypeChildNodeImplementation,
-      Node\ParentNodeImplementation,
+      Node\ChildNode\Implementation,
+      Node\NonDocumentTypeChildNode\Implementation,
+      Node\ParentNode\Implementation,
       Node\StringCast,
       Node\Xpath;
 

@@ -6,9 +6,14 @@ require(__DIR__.'/FluentDOM/XmlSerializable.php');
 
 require(__DIR__.'/FluentDOM/XmlSerialize.php');
 require(__DIR__.'/FluentDOM/Node/ChildNode.php');
+require(__DIR__.'/FluentDOM/Node/ChildNode/Implementation.php');
 require(__DIR__.'/FluentDOM/Node/MutationMacro.php');
 require(__DIR__.'/FluentDOM/Node/NonDocumentTypeChildNode.php');
+require(__DIR__.'/FluentDOM/Node/NonDocumentTypeChildNode/Implementation.php');
+require(__DIR__.'/FluentDOM/Node/NonDocumentTypeChildNode/Properties.php');
 require(__DIR__.'/FluentDOM/Node/ParentNode.php');
+require(__DIR__.'/FluentDOM/Node/ParentNode/Implementation.php');
+require(__DIR__.'/FluentDOM/Node/ParentNode/Properties.php');
 require(__DIR__.'/FluentDOM/Node/StringCast.php');
 require(__DIR__.'/FluentDOM/Node/Xpath.php');
 

@@ -19,8 +19,8 @@ namespace FluentDOM {
     extends \DOMProcessingInstruction
     implements Node\ChildNode, Node\NonDocumentTypeChildNode  {
 
-    use Node\ChildNodeImplementation;
-    use Node\NonDocumentTypeChildNodePropertyImplementation;
+    use Node\ChildNode\Implementation;
+    use Node\NonDocumentTypeChildNode\Properties;
     use Node\StringCast;
     use Node\Xpath;
   }

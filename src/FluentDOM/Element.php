@@ -13,7 +13,11 @@ namespace FluentDOM {
    * FluentDOM\Element extends PHPs DOMDocument class. It adds some generic namespace handling on
    * the document level and registers extended Node classes for convenience.
    *
-   * @property Document $ownerDocument
+   * @property-read Document $ownerDocument
+   * @property-read Element $nextElementSibling
+   * @property-read Element $previousElementSibling
+   * @property-read Element $firstElementChild
+   * @property-read Element $lastElementChild
    */
   class Element
     extends \DOMElement

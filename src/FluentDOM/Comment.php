@@ -11,14 +11,16 @@ namespace FluentDOM {
   /**
    * FluentDOM\Comment extends PHPs DOMComment class.
    *
-   * @property Document $ownerDocument
+   * @property-read Document $ownerDocument
+   * @property-read Element $nextElementSibling
+   * @property-read Element $previousElementSibling
    */
   class Comment
     extends \DOMComment
     implements Node\ChildNode, Node\NonDocumentTypeChildNode  {
 
     use Node\ChildNodeImplementation;
-    use Node\NonDocumentTypeChildNodeImplementation;
+    use Node\NonDocumentTypeChildNodePropertyImplementation;
     use Node\StringCast;
     use Node\Xpath;
   }

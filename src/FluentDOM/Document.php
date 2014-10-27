@@ -10,7 +10,9 @@
 namespace FluentDOM {
 
   /**
-   * @property Element $documentElement
+   * @property-read Element $documentElement
+   * @property-read Element $firstElementChild
+   * @property-read Element $lastElementChild
    */
   class Document extends \DOMDocument implements Node\ParentNode {
 

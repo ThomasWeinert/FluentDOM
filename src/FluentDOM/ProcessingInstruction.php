@@ -14,8 +14,11 @@ namespace FluentDOM {
    * @property Document $ownerDocument
    */
   class ProcessingInstruction
-    extends \DOMProcessingInstruction  {
+    extends \DOMProcessingInstruction
+    implements Node\ChildNode, Node\NonDocumentTypeChildNode  {
 
+    use Node\ChildNodeImplementation;
+    use Node\NonDocumentTypeChildNodeImplementation
     use Node\StringCast;
     use Node\Xpath;
   }

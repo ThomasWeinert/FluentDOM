@@ -17,8 +17,17 @@ namespace FluentDOM {
    */
   class Element
     extends \DOMElement
-    implements \ArrayAccess, \Countable, \IteratorAggregate  {
+    implements
+      \ArrayAccess,
+      \Countable,
+      \IteratorAggregate,
+      Node\ChildNode,
+      Node\NonDocumentTypeChildNode,
+      Node\ParentNode {
 
+    use Node\ChildNodeImplementation;
+    use Node\NonDocumentTypeChildNodeImplementation;
+    use Node\ParentNodeImplementation;
     use Node\StringCast;
     use Node\Xpath;
 

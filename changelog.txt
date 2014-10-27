@@ -4,6 +4,8 @@ Version 5.2.0:
 - Added: FluentDOM\Loader\JSONx loads JSONx into a JsonDOM document
 - Added: FluentDOM\Transformer\JSONx, transform a JsonDOM document to JSONx
 - Changed: FluentDOM\Serializer\Json now writes json using the JsonDOM rules.
+- Changed: FluentDOM\Nodes::find() now has options as the second argument, allow for match/filter modes
+  match mode should improve performance and work better with xpath
 
 Version 5.1.1:
 
@@ -158,6 +160,7 @@ methods.
 - Implemented: changed attr() function parameters to match jQuery 1.4
 - Added: FluentDOM::get(), retrieve elements as array
 - Implemented: support negative position parameter for eq()
+
 Version 3.0:
 - Documented: tutorial for find()
 - Documented: optimized structure for html output

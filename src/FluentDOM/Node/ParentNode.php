@@ -65,6 +65,7 @@ namespace FluentDOM\Node {
       }
     }
   }
+
   trait ParentNodePropertyImplementation {
 
     use ParentNodeImplementation;

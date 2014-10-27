@@ -10,7 +10,7 @@ namespace FluentDOM\Node {
   class NonDocumentTypeChildNodeTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Node\NonDocumentTypeChildNodeImplementation
+     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Implementation
      */
     public function testNextElementSibling() {
       $dom = new Document();
@@ -23,7 +23,7 @@ namespace FluentDOM\Node {
     }
 
     /**
-     * @covers FluentDOM\Node\NonDocumentTypeChildNodeImplementation
+     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Implementation
      */
     public function testPreviousElementSibling() {
       $dom = new Document();

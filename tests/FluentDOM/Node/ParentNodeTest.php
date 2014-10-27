@@ -10,7 +10,7 @@ namespace FluentDOM\Node {
   class ParentNodeTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Node\ParentNodeImplementation
+     * @covers FluentDOM\Node\ParentNode\Implementation
      */
     public function testPrepend() {
       $dom = new Document();
@@ -23,7 +23,7 @@ namespace FluentDOM\Node {
     }
 
     /**
-     * @covers FluentDOM\Node\ParentNodeImplementation
+     * @covers FluentDOM\Node\ParentNode\Implementation
      */
     public function testAppend() {
       $dom = new Document();

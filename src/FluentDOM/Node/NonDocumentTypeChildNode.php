@@ -15,16 +15,6 @@ namespace FluentDOM\Node {
 
   trait NonDocumentTypeChildNodeImplementation {
 
-    public function __get($name) {
-      switch ($name) {
-      case 'nextElementSibling' :
-        return $this->getNextElementSibling();
-      case 'previousElementSibling' :
-        return $this->getPreviousElementSibling();
-      }
-      return $this->$name;
-    }
-
     public function getNextElementSibling() {
       $node = $this;
       while ($node->nextSibling instanceof \DOMNode) {
@@ -45,6 +35,22 @@ namespace FluentDOM\Node {
         $node = $node->previousSibling;
       }
       return NULL;
+    }
+
+  }
+
+  trait NonDocumentTypeChildNodePropertyImplementation  {
+
+    use NonDocumentTypeChildNodeImplementation;
+
+    public function __get($name) {
+      switch ($name) {
+      case 'nextElementSibling' :
+        return $this->getNextElementSibling();
+      case 'previousElementSibling' :
+        return $this->getPreviousElementSibling();
+      }
+      return $this->$name;
     }
 
     public function __set($name, $value) {

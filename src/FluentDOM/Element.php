@@ -25,11 +25,43 @@ namespace FluentDOM {
       Node\NonDocumentTypeChildNode,
       Node\ParentNode {
 
-    use Node\ChildNodeImplementation;
-    use Node\NonDocumentTypeChildNodeImplementation;
-    use Node\ParentNodeImplementation;
-    use Node\StringCast;
-    use Node\Xpath;
+    use
+      Node\ChildNodeImplementation,
+      Node\NonDocumentTypeChildNodeImplementation,
+      Node\ParentNodeImplementation,
+      Node\StringCast,
+      Node\Xpath;
+
+    public function __get($name) {
+      switch ($name) {
+      case 'nextElementSibling' :
+        return $this->getNextElementSibling();
+      case 'previousElementSibling' :
+        return $this->getPreviousElementSibling();
+      case 'firstElementChild' :
+        return $this->getFirstElementChild();
+      case 'lastElementChild' :
+        return $this->getLastElementChild();
+      }
+      return $this->$name;
+    }
+
+    public function __set($name, $value) {
+      switch ($name) {
+      case 'nextElementSibling' :
+      case 'previousElementSibling' :
+      case 'firstElementChild' :
+      case 'lastElementChild' :
+        throw new \BadMethodCallException(
+          sprintf(
+            'Can not write readonly property %s::$%s.',
+            get_class($this), $name
+          )
+        );
+      }
+      $this->$name = $value;
+      return TRUE;
+    }
 
     /**
      * Validate if an attribute exists

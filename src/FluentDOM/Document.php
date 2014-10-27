@@ -12,8 +12,9 @@ namespace FluentDOM {
   /**
    * @property Element $documentElement
    */
-  class Document extends \DOMDocument {
+  class Document extends \DOMDocument implements Node\ParentNode {
 
+    use Node\ParentNodePropertyImplementation;
     use Node\Xpath;
 
     /**

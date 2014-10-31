@@ -52,6 +52,32 @@ namespace FluentDOM {
      /**
      * @covers FluentDOM\DocumentFragment
      */
+    public function testSaveFragment() {
+      $dom = new Document();
+      $fragment = $dom->createDocumentFragment();
+      $fragment->appendXml('<test>success</test>success');
+      $this->assertEquals(
+        '<test>success</test>success',
+        (string)$fragment->saveXmlFragment()
+      );
+    }
+
+     /**
+     * @covers FluentDOM\DocumentFragment
+     */
+    public function testSaveFragmentAddsNamespaces() {
+      $dom = new Document();
+      $fragment = $dom->createDocumentFragment();
+      $fragment->appendXml('<test>success</test>success', ['#default' => 'urn:default']);
+      $this->assertEquals(
+        '<test xmlns="urn:default">success</test>success',
+        (string)$fragment->saveXmlFragment()
+      );
+    }
+
+     /**
+     * @covers FluentDOM\DocumentFragment
+     */
     public function testWithoutNamespaces() {
       $dom = new Document();
       $fragment = $dom->createDocumentFragment();

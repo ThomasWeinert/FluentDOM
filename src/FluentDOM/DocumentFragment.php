@@ -132,6 +132,15 @@ namespace FluentDOM {
         }
       }
     }
+
+    /**
+     * Save as XML string
+     *
+     * @return string
+     */
+    public function saveXmlFragment() {
+      return $this->ownerDocument->saveXML($this);
+    }
   }
 }
 

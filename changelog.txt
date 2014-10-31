@@ -1,5 +1,9 @@
 Version 5.2.0:
 
+- Added: FluentDOM\DocumentFragment is an extended version of the DOMDocumentFragment
+  with support for the namespaces registered on the document object
+- Added: FluentDOM nodes now implement interfaces from the DOM Living Standard
+  ParentNode (except query*), NonDocumentTypeChildNode, ChildNode
 - Added: FluentDOM::load() provides direct access to the loaders
 - Added: FluentDOM\Loader\JSONx loads JSONx into a JsonDOM document
 - Added: FluentDOM\Transformer\JSONx, transform a JsonDOM document to JSONx

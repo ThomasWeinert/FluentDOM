@@ -10,6 +10,8 @@
 namespace FluentDOM {
 
   /**
+   * @method DocumentFragment createDocumentFragment()
+   *
    * @property-read Element $documentElement
    * @property-read Element $firstElementChild
    * @property-read Element $lastElementChild
@@ -49,6 +51,7 @@ namespace FluentDOM {
       $this->registerNodeClass('DOMElement', __NAMESPACE__.'\\Element');
       $this->registerNodeClass('DOMProcessingInstruction', __NAMESPACE__.'\\ProcessingInstruction');
       $this->registerNodeClass('DOMText', __NAMESPACE__.'\\Text');
+      $this->registerNodeClass('DOMDocumentFragment', __NAMESPACE__.'\\DocumentFragment');
     }
 
     /**

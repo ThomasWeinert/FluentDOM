@@ -39,5 +39,13 @@ namespace FluentDOM\Node {
       $this->assertInstanceOf('DOMDocumentFragment', $fragment);
       $this->assertEquals(2, $fragment->childNodes->length);
     }
+    /**
+     * @covers FluentDOM\Node\MutationMacro
+     */
+    public function testExpandFromInvalidArgumentExpectingException() {
+      $dom = new Document();
+      $this->setExpectedException('InvalidArgumentException');
+      MutationMacro::expand($dom, [new \stdClass()]);
+    }
   }
 }

@@ -45,11 +45,58 @@ namespace FluentDOM {
     /**
      * @covers FluentDOM\Element::__get
      */
+    public function testGetPropertyNextElementSibling() {
+      $dom = new Document();
+      $dom->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
+      $this->assertEquals(
+        '<bar attr="value"/>',
+        $dom->documentElement->firstChild->nextElementSibling->saveXml()
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::__get
+     */
+    public function testGetPropertyPreviousElementSibling() {
+      $dom = new Document();
+      $dom->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
+      $this->assertEquals(
+        '<foo/>',
+        $dom->documentElement->lastChild->previousElementSibling->saveXml()
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::__get
+     */
     public function testGetInvalidProperty() {
       $dom = new Document();
       $dom->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
       $this->setExpectedException('PHPUnit_Framework_Error_Notice');
       $dom->documentElement->INVALID_PROPERTY;
+    }
+
+    /**
+     * @covers FluentDOM\Element::__get
+     * @covers FluentDOM\Element::__set
+     */
+    public function testGetUnknownPropertyAfterSet() {
+      $dom = new Document();
+      $node = $dom->appendChild($dom->createElement('foo'));
+      $node->SOME_PROPERTY = 'success';
+      $this->assertEquals(
+        'success', $node->SOME_PROPERTY
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::__set
+     */
+    public function testSetPropertyExpectingException() {
+      $dom = new Document();
+      $dom->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
+      $this->setExpectedException('BadMethodCallException');
+      $dom->documentElement->firstElementChild = $dom->createElement('test');
     }
 
     /**

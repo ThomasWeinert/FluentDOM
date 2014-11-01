@@ -49,6 +49,33 @@ namespace FluentDOM {
       );
     }
 
+    /**
+     * @covers FluentDOM\DocumentFragment
+     */
+    public function testGetIterator() {
+      $dom = new Document();
+      $fragment = $dom->createDocumentFragment();
+      $fragment->appendXml(
+        'TEXT<test index="1"/>TEXT<test index="2"/>TEXT'
+      );
+      $array = iterator_to_array($fragment);
+      $this->assertCount(5, $array);
+    }
+
+    /**
+     * @covers FluentDOM\DocumentFragment
+     */
+    public function testCount() {
+      $dom = new Document();
+      $fragment = $dom->createDocumentFragment();
+      $fragment->appendXml(
+        'TEXT<test index="1"/>TEXT<test index="2"/>TEXT'
+      );
+      $this->assertCount(
+        5, $fragment
+      );
+    }
+
      /**
      * @covers FluentDOM\DocumentFragment
      */

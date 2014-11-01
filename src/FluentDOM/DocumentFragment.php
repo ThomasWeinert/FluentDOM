@@ -70,24 +70,29 @@ namespace FluentDOM {
      * @return array
      */
     public function namespaces($namespaces = NULL) {
-      if ($namespaces instanceof \DOMElement) {
+      if (isset($namespaces)) {
         $this->_namespaces = [];
-        $xpath = new Xpath($namespaces->ownerDocument);
-        foreach ($xpath('namespace::*', $namespaces) as $namespace) {
-          if ($namespace->nodeName == 'xmlns') {
-            $this->_namespaces['#default'] = $namespace->nodeValue;
-          } elseif ($namespace->localName != 'xml') {
-            $this->_namespaces[$namespace->localName] = $namespace->nodeValue;
-          }
+        if ($namespaces instanceof \DOMElement) {
+          $xpath = new Xpath($namespaces->ownerDocument);
+          $namespaces = $xpath('namespace::*', $namespaces);
         }
-      } elseif ($namespaces instanceof \Traversable) {
-        $this->_namespaces = iterator_to_array($namespaces);
-      } elseif (is_array($namespaces)) {
-        $this->_namespaces = $namespaces;
-      } elseif (isset($source)) {
-        throw new \InvalidArgumentException(
-          '$namespaces needs to be a list of namespaces or an element node to fetch the namespaces from.'
-        );
+        if (is_array($namespaces) || $namespaces instanceof \Traversable) {
+          foreach ($namespaces as $key => $namespace) {
+            if ($namespace instanceof \DOMNameSpaceNode) {
+              if ($namespace->nodeName == 'xmlns') {
+                $this->registerNamespace('#default', $namespace->nodeValue);
+              } elseif ($namespace->localName != 'xml') {
+                $this->registerNamespace($namespace->localName, $namespace->nodeValue);
+              }
+            } else {
+              $this->registerNamespace($key, $namespace);
+            }
+          }
+        } elseif (isset($namespaces)) {
+          throw new \InvalidArgumentException(
+            '$namespaces needs to be a list of namespaces or an element node to fetch the namespaces from.'
+          );
+        }
       }
       return empty($this->_namespaces) ? $this->ownerDocument->namespaces() : $this->_namespaces;
     }

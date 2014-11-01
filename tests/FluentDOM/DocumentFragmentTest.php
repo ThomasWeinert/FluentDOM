@@ -108,7 +108,9 @@ namespace FluentDOM {
     public function testWithoutNamespaces() {
       $dom = new Document();
       $fragment = $dom->createDocumentFragment();
-      $fragment->appendXml('<test>success</test>');
+      $this->assertTrue(
+        $fragment->appendXml('<test>success</test>')
+      );
       $dom->appendChild($fragment);
       $this->assertEquals(
         '<test>success</test>',
@@ -146,7 +148,7 @@ namespace FluentDOM {
       );
     }
 
-     /**
+    /**
      * @covers FluentDOM\DocumentFragment
      */
     public function testWithNamespacesFromElementNode() {
@@ -162,6 +164,22 @@ namespace FluentDOM {
       );
     }
 
+    /**
+     * @covers FluentDOM\DocumentFragment
+     */
+    public function testWithDefaultNamespaceFromElementNode() {
+      $dom = new Document();
+      $dom->appendChild($dom->createElementNS('urn:bar', 'root'));
+      $fragment = $dom->createDocumentFragment();
+      $fragment->namespaces($dom->documentElement);
+      $fragment->appendXml('<test>success</test>');
+      $dom->documentElement->appendChild($fragment);
+      $this->assertEquals(
+        '<root xmlns="urn:bar"><test>success</test></root>',
+        $dom->saveXML($dom->documentElement)
+      );
+    }
+
      /**
      * @covers FluentDOM\DocumentFragment
      */
@@ -173,6 +191,29 @@ namespace FluentDOM {
       $this->assertEquals(
         '<foo:test xmlns:foo="urn:bar">success</foo:test>',
         $dom->saveXML($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\DocumentFragment
+     */
+    public function testWithInvalidNamespacesExpectingException() {
+      $dom = new Document();
+      $fragment = $dom->createDocumentFragment();
+      $this->setExpectedException(
+        "InvalidArgumentException"
+      );
+      $fragment->appendXml('<foo:test>success</foo:test>', FALSE);
+    }
+
+    /**
+     * @covers FluentDOM\DocumentFragment
+     */
+    public function testWithInvalidFragmentReturningFalse() {
+      $dom = new Document();
+      $fragment = $dom->createDocumentFragment();
+      $this->assertFalse(
+        @$fragment->appendXml('<test success</test>', ['foo' => 'urn:bar'])
       );
     }
   }

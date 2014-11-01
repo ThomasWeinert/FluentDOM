@@ -19,6 +19,40 @@ namespace FluentDOM {
     }
 
     /**
+     * @covers FluentDOM\Element::__get
+     */
+    public function testGetPropertyFirstElementChild() {
+      $dom = new Document();
+      $dom->loadXml('<foo>TEXT<bar attr="value"/></foo>');
+      $this->assertEquals(
+        '<bar attr="value"/>',
+        $dom->documentElement->firstElementChild->saveXml()
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::__get
+     */
+    public function testGetPropertyLastElementChild() {
+      $dom = new Document();
+      $dom->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
+      $this->assertEquals(
+        '<bar attr="value"/>',
+        $dom->documentElement->lastElementChild->saveXml()
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Element::__get
+     */
+    public function testGetInvalidProperty() {
+      $dom = new Document();
+      $dom->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
+      $this->setExpectedException('PHPUnit_Framework_Error_Notice');
+      $dom->documentElement->INVALID_PROPERTY;
+    }
+
+    /**
      * @covers FluentDOM\Element::getAttribute
      */
     public function testGetAttribute() {

@@ -7,24 +7,24 @@ namespace FluentDOM\Node\NonDocumentTypeChildNode {
   trait Implementation {
 
     public function getNextElementSibling() {
-      $node = $this;
-      while ($node->nextSibling instanceof \DOMNode) {
-        if ($node->nextSibling instanceof Element) {
-          return $node->nextSibling;
+      $node = $this->nextSibling;
+      do {
+        if ($node instanceof Element) {
+          return $node;
         }
         $node = $node->nextSibling;
-      }
+      } while ($node instanceof \DOMNode);
       return NULL;
     }
 
     public function getPreviousElementSibling() {
-      $node = $this;
-      while ($node->previousSibling instanceof \DOMNode) {
-        if ($node->previousSibling instanceof Element) {
-          return $node->previousSibling;
+      $node = $this->previousSibling;
+      do {
+        if ($node instanceof Element) {
+          return $node;
         }
         $node = $node->previousSibling;
-      }
+      } while ($node instanceof \DOMNode);
       return NULL;
     }
   }

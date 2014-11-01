@@ -13,12 +13,12 @@ namespace FluentDOM\Node\ParentNode {
         return $this->documentElement;
       }
       $node = $this->firstChild;
-      while ($node->nextSibling instanceof \DOMNode) {
-        if ($node->nextSibling instanceof Element) {
-          return $node->nextSibling;
+      do {
+        if ($node instanceof Element) {
+          return $node;
         }
         $node = $node->nextSibling;
-      }
+      } while ($node instanceof \DOMNode);
       return NULL;
     }
 
@@ -26,13 +26,14 @@ namespace FluentDOM\Node\ParentNode {
       if ($this instanceof Document) {
         return $this->documentElement;
       }
+      /** @var \DOMNode $this */
       $node = $this->lastChild;
-      while ($node->previousSibling instanceof \DOMNode) {
-        if ($node->previousSibling instanceof Element) {
-          return $node->previousSibling;
+      do {
+        if ($node instanceof Element) {
+          return $node;
         }
         $node = $node->previousSibling;
-      }
+      } while ($node instanceof \DOMNode);
       return NULL;
     }
 

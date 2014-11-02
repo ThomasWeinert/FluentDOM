@@ -6,6 +6,14 @@ namespace FluentDOM {
 
   class DocumentFragmentTest extends TestCase {
 
+    public function setUp() {
+      if (defined('HHVM_VERSION')) {
+        $this->markTestSkipped(
+          'Can not overload DOMDocumentFragment in HHVM. https://github.com/facebook/hhvm/issues/2962'
+        );
+      }
+    }
+
      /**
      * @covers FluentDOM\DocumentFragment
      */
@@ -53,6 +61,7 @@ namespace FluentDOM {
      * @covers FluentDOM\DocumentFragment
      */
     public function testGetIterator() {
+      $this->skipIfHHVM();
       $dom = new Document();
       $fragment = $dom->createDocumentFragment();
       $fragment->appendXml(

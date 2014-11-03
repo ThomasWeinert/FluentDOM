@@ -45,7 +45,7 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
   public function testCreatorWithArguments() {
     $write = FluentDOM::create('2.0', 'ASCII');
     $this->assertInstanceOf('FluentDOM\Nodes\Creator', $write);
-    $this->assertXmlStringEqualsXmlString(
+    $this->assertEquals(
       "<?xml version=\"2.0\" encoding=\"ASCII\"?>\n<test/>\n",
       (string)$write('test')
     );

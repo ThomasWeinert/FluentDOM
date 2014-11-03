@@ -12,6 +12,13 @@ namespace FluentDOM {
   use FluentDOM\HHVM\DOMDocument as DOMDocument;
 
   /**
+   * @method Attribute createAttributeNS($namespace, $name)
+   * @method CdataSection createCdataSection($data)
+   * @method Comment createComment($data)
+   * @method DocumentFragment createDocumentFragment()
+   * @method ProcessingInstruction createProcessingInstruction($target, $data)
+   * @method Text createTextNode($content)
+   *
    * @property-read Element $documentElement
    * @property-read Element $firstElementChild
    * @property-read Element $lastElementChild

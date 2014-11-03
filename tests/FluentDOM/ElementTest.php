@@ -161,7 +161,7 @@ namespace FluentDOM {
       $dom = new Document();
       $dom->appendChild($dom->createElement('root'));
       $dom->documentElement->setAttribute('attribute', 'value');
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<root attribute="value"/>',
         $dom->saveXML($dom->documentElement)
       );
@@ -175,7 +175,7 @@ namespace FluentDOM {
       $dom->registerNamespace('foo', 'urn:foo');
       $dom->appendChild($dom->createElement('root'));
       $dom->documentElement->setAttribute('foo:attribute', 'value');
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<root xmlns:foo="urn:foo" foo:attribute="value"/>',
         $dom->saveXML($dom->documentElement)
       );
@@ -216,7 +216,7 @@ namespace FluentDOM {
       $dom->registerNamespace('foo', 'urn:foo');
       $dom->appendChild($dom->createElement('root'));
       $dom->documentElement->setAttribute('xml:id', 'value');
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<root xml:id="value"/>',
         $dom->saveXML($dom->documentElement)
       );
@@ -229,7 +229,7 @@ namespace FluentDOM {
       $dom = new Document();
       $dom->appendChild($dom->createElement('root'));
       $dom->documentElement->setAttribute('xmlns:foo', 'urn:foo');
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<root xmlns:foo="urn:foo"/>',
         $dom->saveXML($dom->documentElement)
       );
@@ -242,7 +242,7 @@ namespace FluentDOM {
       $dom = new Document();
       $dom->loadXML('<root attribute="value"/>');
       $dom->documentElement->removeAttribute('attribute');
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<root/>',
         $dom->saveXML($dom->documentElement)
       );
@@ -256,7 +256,7 @@ namespace FluentDOM {
       $dom->loadXML('<root xmlns:foo="urn:foo" foo:attribute="value"/>');
       $dom->registerNamespace('foo', 'urn:foo');
       $dom->documentElement->removeAttribute('foo:attribute');
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<root xmlns:foo="urn:foo"/>',
         $dom->saveXML($dom->documentElement)
       );
@@ -323,7 +323,7 @@ namespace FluentDOM {
       $dom->registerNamespace('foo', 'urn:foo');
       $node = $dom->appendElement('bar');
       $node->applyNamespaces();
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<bar xmlns="urn:default" xmlns:foo="urn:foo"/>', $node->saveXml()
       );
     }
@@ -339,7 +339,7 @@ namespace FluentDOM {
       $dom->registerNamespace('bar', 'urn:bar');
       $node = $dom->appendElement('bar');
       $node->applyNamespaces();
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<bar xmlns:foo="urn:foo" xmlns:bar="urn:bar"/>', $node->saveXml()
       );
     }
@@ -355,7 +355,7 @@ namespace FluentDOM {
       $dom->registerNamespace('bar', 'urn:bar');
       $node = $dom->appendElement('bar');
       $node->applyNamespaces('bar');
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<bar xmlns:bar="urn:bar"/>', $node->saveXml()
       );
     }
@@ -372,7 +372,7 @@ namespace FluentDOM {
       $dom->registerNamespace('foobar', 'urn:foobar');
       $node = $dom->appendElement('bar');
       $node->applyNamespaces(['foo', 'bar']);
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<bar xmlns:foo="urn:foo" xmlns:bar="urn:bar"/>', $node->saveXml()
       );
     }
@@ -397,7 +397,7 @@ namespace FluentDOM {
       $dom = new Document();
       $dom->appendChild($dom->createElement('root'));
       $node = $dom->documentElement->append($object);
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<root><success/></root>',
         $dom->saveXML($dom->documentElement)
       );
@@ -414,7 +414,7 @@ namespace FluentDOM {
       $dom = new Document();
       $dom->appendElement('root');
       $dom->documentElement->append('success');
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<root>success</root>',
         $dom->saveXML($dom->documentElement)
       );
@@ -428,7 +428,7 @@ namespace FluentDOM {
       $dom = new Document();
       $dom->appendElement('root');
       $dom->documentElement->append(['result' => 'success']);
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<root result="success"/>',
         $dom->saveXML($dom->documentElement)
       );
@@ -444,7 +444,7 @@ namespace FluentDOM {
       $dom->documentElement->append(
         $dom->createElement('success')
       );
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<root><success/></root>',
         $dom->saveXML($dom->documentElement)
       );
@@ -460,7 +460,7 @@ namespace FluentDOM {
       $dom->documentElement->append(
         $dom->documentElement
       );
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<root><root/></root>',
         $dom->saveXML($dom->documentElement)
       );
@@ -476,7 +476,7 @@ namespace FluentDOM {
       $dom->documentElement->append(
          $dom->createAttribute('result', 'success')
       );
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<root result="success"/>',
         $dom->saveXML($dom->documentElement)
       );
@@ -494,7 +494,7 @@ namespace FluentDOM {
       $dom->documentElement->append(
         $import
       );
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<root><success/></root>',
         $dom->saveXML($dom->documentElement)
       );
@@ -511,7 +511,7 @@ namespace FluentDOM {
       $dom->documentElement->append(
         $import
       );
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<root/>',
         $dom->saveXML($dom->documentElement)
       );
@@ -529,7 +529,7 @@ namespace FluentDOM {
       $dom->documentElement->append(
         $import->documentElement
       );
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<root><success/></root>',
         $dom->saveXML($dom->documentElement)
       );
@@ -547,7 +547,7 @@ namespace FluentDOM {
       $dom->documentElement->append(
         $import->evaluate('/*')
       );
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<root><success/></root>',
         $dom->saveXML($dom->documentElement)
       );
@@ -568,7 +568,7 @@ namespace FluentDOM {
             $dom->createCDATASection('success')
           ]
         );
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<root attr="42"><!--success--><![CDATA[success]]></root>',
         $dom->saveXML($dom->documentElement)
       );
@@ -586,7 +586,7 @@ namespace FluentDOM {
       $dom->documentElement->append(
         $import->documentElement->getAttributeNode('result')
       );
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<root result="success"/>',
         $dom->saveXML($dom->documentElement)
       );
@@ -605,7 +605,7 @@ namespace FluentDOM {
             return $dom->createCDATASection('success');
           }
         );
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<root><![CDATA[success]]></root>',
         $dom->saveXML($dom->documentElement)
       );
@@ -618,7 +618,7 @@ namespace FluentDOM {
       $dom = new Document();
       $dom->appendChild($dom->createElement('root'));
       $dom->documentElement->appendElement('test', 'text', array('attribute' => 'value'));
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<root><test attribute="value">text</test></root>',
         $dom->saveXML($dom->documentElement)
       );
@@ -633,7 +633,7 @@ namespace FluentDOM {
       $dom->documentElement->appendXml(
         '<test attribute="value">text</test>'
       );
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<root><test attribute="value">text</test></root>',
         $dom->saveXML($dom->documentElement)
       );
@@ -648,7 +648,7 @@ namespace FluentDOM {
       $dom->documentElement->appendXml(
         '<foo:test xmlns:foo="urn:foo" foo:attribute="value">text</foo:test>'
       );
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<root><foo:test xmlns:foo="urn:foo" foo:attribute="value">text</foo:test></root>',
         $dom->saveXML($dom->documentElement)
       );
@@ -660,7 +660,7 @@ namespace FluentDOM {
     public function testSaveXml() {
       $dom = new Document();
       $node = $dom->appendChild($dom->createElement('div'));
-      $this->assertEquals('<div/>', $node->saveXml());
+      $this->assertXmlStringEqualsXmlString('<div/>', $node->saveXml());
     }
 
     /**

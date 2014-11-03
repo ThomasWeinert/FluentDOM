@@ -81,6 +81,11 @@ namespace FluentDOM {
      * @covers FluentDOM\Element::__set
      */
     public function testGetUnknownPropertyAfterSet() {
+      if (defined('HHVM_VERSION')) {
+        $this->markTestSkipped(
+          'Setting an unknown property triggers a fatal error on HHVM.'
+        );
+      }
       $dom = new Document();
       $node = $dom->appendChild($dom->createElement('foo'));
       $node->SOME_PROPERTY = 'success';

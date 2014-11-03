@@ -61,7 +61,6 @@ namespace FluentDOM {
      * @covers FluentDOM\DocumentFragment
      */
     public function testGetIterator() {
-      $this->skipIfHHVM();
       $dom = new Document();
       $fragment = $dom->createDocumentFragment();
       $fragment->appendXml(

@@ -250,7 +250,7 @@ namespace FluentDOM {
     private function ensureNodeClass($node) {
       // @codeCoverageIgnoreStart
       $class = get_class($node);
-      if (isset($this->_classes['class'])) {
+      if (isset($this->_classes[$class])) {
         return $node->ownerDocument->importNode($node, TRUE);
       }
       // @codeCoverageIgnoreEnd

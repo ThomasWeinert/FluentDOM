@@ -2,10 +2,11 @@
 
 namespace FluentDOM\Node\NonDocumentTypeChildNode {
 
+  use FluentDOM\Node\HHVMProperties;
 
   trait Properties  {
 
-    use Implementation;
+    use Implementation, HHVMProperties;
 
     public function __get($name) {
       switch ($name) {
@@ -14,7 +15,7 @@ namespace FluentDOM\Node\NonDocumentTypeChildNode {
       case 'previousElementSibling' :
         return $this->getPreviousElementSibling();
       }
-      return $this->$name;
+      return $this->getParentProperty($name);
     }
 
     public function __set($name, $value) {
@@ -28,7 +29,7 @@ namespace FluentDOM\Node\NonDocumentTypeChildNode {
           )
         );
       }
-      $this->$name = $value;
+      $this->setParentProperty($name, $value);
       return TRUE;
     }
   }

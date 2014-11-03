@@ -52,12 +52,15 @@ namespace FluentDOM {
       'DOMDocumentFragment'=> '\\DocumentFragment'
     ];
 
+    private $_isHHVM = NULL;
+
     /**
      * @param string $version
      * @param string $encoding
      */
     public function __construct($version = '1.0', $encoding = 'UTF-8') {
       parent::__construct($version, $encoding);
+      $this->_isHHVM = defined('HHVM_VERSION');
       foreach ($this->_classes as $superClass => $className) {
         $this->registerNodeClass($superClass, __NAMESPACE__.$className);
       }
@@ -249,8 +252,7 @@ namespace FluentDOM {
      */
     private function ensureNodeClass($node) {
       // @codeCoverageIgnoreStart
-      $class = get_class($node);
-      if (isset($this->_classes[$class])) {
+      if ($this->_isHHVM && isset($this->_classes[get_class($node)])) {
         return $node->ownerDocument->importNode($node, TRUE);
       }
       // @codeCoverageIgnoreEnd

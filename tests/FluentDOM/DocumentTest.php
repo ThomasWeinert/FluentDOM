@@ -203,7 +203,6 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Document::createElement
-     * @covers FluentDOM\Document::ensureElement
      * @covers FluentDOM\Document::appendContent
      * @covers FluentDOM\Document::appendAttributes
      */
@@ -219,7 +218,6 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Document::createElement
-     * @covers FluentDOM\Document::ensureElement
      * @covers FluentDOM\Document::appendContent
      * @covers FluentDOM\Document::appendAttributes
      */
@@ -234,7 +232,6 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Document::createElement
-     * @covers FluentDOM\Document::ensureElement
      * @covers FluentDOM\Document::appendContent
      * @covers FluentDOM\Document::appendAttributes
      */
@@ -251,7 +248,6 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Document::createElement
-     * @covers FluentDOM\Document::ensureElement
      * @covers FluentDOM\Document::appendContent
      * @covers FluentDOM\Document::appendAttributes
      */
@@ -268,7 +264,6 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Document::createElement
-     * @covers FluentDOM\Document::ensureElement
      * @covers FluentDOM\Document::appendContent
      * @covers FluentDOM\Document::appendAttributes
      */
@@ -285,7 +280,6 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Document::createElement
-     * @covers FluentDOM\Document::ensureElement
      * @covers FluentDOM\Document::appendContent
      * @covers FluentDOM\Document::appendAttributes
      */
@@ -301,7 +295,6 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Document::createElement
-     * @covers FluentDOM\Document::ensureElement
      * @covers FluentDOM\Document::appendContent
      * @covers FluentDOM\Document::appendAttributes
      */
@@ -316,7 +309,6 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Document::createElementNs
-     * @covers FluentDOM\Document::ensureElement
      * @covers FluentDOM\Document::appendContent
      */
     public function testCreateElementNsWithContent() {

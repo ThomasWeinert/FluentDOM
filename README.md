@@ -50,18 +50,21 @@ additional extensions might be needed, like ext/json to load JSON strings.
 
 ### HHVM
 
- * HHVM >= 3.0
+ * HHVM
 
-FluentDOM 5.1 works with HHVM 3.0. Here is an [issue](https://github.com/facebook/hhvm/issues/1848)
-with DOMDocument::registerNodeClass() and DOMDocument::createElement() at the moment,
-but FluentDOM\Document includes a workaround.
+FluentDOM works with HHVM but it is limited. 
+
+HHVM has some issues with the with DOMDocument::registerNodeClass() at the moment. 
+FluentDOM\Document includes a workaround, but here is no guarantee. 
+
+https://github.com/facebook/hhvm/issues/1848
+https://github.com/facebook/hhvm/issues/2962
 
 The automatic namespace registration can not be disabled at the moment, HHVM does not
 support the 3rd argument for DOMXPath::evaluate(). FluentDOM\Xpath will
 ignore it.
 
-FluentDOM >= 5.2 does not work with HHVM at the moment. Adding the properties from the
-DOM Living Standard to the nodes, [brakes](https://github.com/facebook/hhvm/issues/4100) HHVM.
+https://github.com/facebook/hhvm/issues/2810
 
 ## Usage
 

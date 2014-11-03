@@ -10,8 +10,6 @@
 namespace FluentDOM {
 
   /**
-   * @method DocumentFragment createDocumentFragment()
-   *
    * @property-read Element $documentElement
    * @property-read Element $firstElementChild
    * @property-read Element $lastElementChild
@@ -40,18 +38,29 @@ namespace FluentDOM {
     ];
 
     /**
+     * Map dom node classes to extended descendants.
+     *
+     * @var array
+     */
+    private $_classes = [
+      'DOMAttr' => '\\Attribute',
+      'DOMCdataSection'=> '\\CdataSection',
+      'DOMComment'=> '\\Comment',
+      'DOMElement'=> '\\Element',
+      'DOMProcessingInstruction'=> '\\ProcessingInstruction',
+      'DOMText'=> '\\Text',
+      'DOMDocumentFragment'=> '\\DocumentFragment'
+    ];
+
+    /**
      * @param string $version
      * @param string $encoding
      */
     public function __construct($version = '1.0', $encoding = 'UTF-8') {
       parent::__construct($version, $encoding);
-      $this->registerNodeClass('DOMAttr', __NAMESPACE__.'\\Attribute');
-      $this->registerNodeClass('DOMCdataSection', __NAMESPACE__.'\\CdataSection');
-      $this->registerNodeClass('DOMComment', __NAMESPACE__.'\\Comment');
-      $this->registerNodeClass('DOMElement', __NAMESPACE__.'\\Element');
-      $this->registerNodeClass('DOMProcessingInstruction', __NAMESPACE__.'\\ProcessingInstruction');
-      $this->registerNodeClass('DOMText', __NAMESPACE__.'\\Text');
-      $this->registerNodeClass('DOMDocumentFragment', __NAMESPACE__.'\\DocumentFragment');
+      foreach ($this->_classes as $superClass => $className) {
+        $this->registerNodeClass($superClass, __NAMESPACE__.$className);
+      }
     }
 
     /**
@@ -180,7 +189,7 @@ namespace FluentDOM {
       } else {
         $node = parent::createElement($name);
       }
-      $node = $this->ensureElement($node);
+      $node = $this->ensureNodeClass($node);
       $this->appendAttributes($node, $content, $attributes);
       $this->appendContent($node, $content);
       return $node;
@@ -193,7 +202,7 @@ namespace FluentDOM {
      * @return Element
      */
     public function createElementNS($namespaceURI, $qualifiedName, $content = null) {
-      $node = $this->ensureElement(
+      $node = $this->ensureNodeClass(
         parent::createElementNS($namespaceURI, $qualifiedName)
       );
       $this->appendContent($node, $content);
@@ -220,6 +229,31 @@ namespace FluentDOM {
       if (isset($value)) {
         $node->value = $value;
       }
+      return $this->ensureNodeClass($node);
+    }
+
+    /**
+     * @return \DOMDocumentFragment
+     */
+    public function createDocumentFragment() {
+      return $this->ensureNodeClass(
+        parent::createDocumentFragment()
+      );
+    }
+
+    /**
+     * This is workaround for HHVM issue https://github.com/facebook/hhvm/issues/1848
+     *
+     * @param \DOMElement $node
+     * @return \DOMNode
+     */
+    private function ensureNodeClass($node) {
+      // @codeCoverageIgnoreStart
+      $class = get_class($node);
+      if (isset($this->_classes['class'])) {
+        return $node->ownerDocument->importNode($node, TRUE);
+      }
+      // @codeCoverageIgnoreEnd
       return $node;
     }
 
@@ -247,21 +281,6 @@ namespace FluentDOM {
      */
     public function find($expression) {
       return \FluentDOM::Query($this)->find($expression);
-    }
-
-    /**
-     * This is workaround for issue
-     *
-     * @param \DOMElement $node
-     * @return Element
-     */
-    private function ensureElement(\DOMElement $node) {
-      // @codeCoverageIgnoreStart
-      if (!($node instanceof Element)) {
-        return $node->ownerDocument->importNode($node, TRUE);
-      }
-      // @codeCoverageIgnoreEnd
-      return $node;
     }
 
     /**

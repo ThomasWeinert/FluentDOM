@@ -28,7 +28,7 @@ namespace FluentDOM\HHVM {
 
     /**
      *
-     * @param \DOMElement $node
+     * @param \DOMNode $node
      * @return \DOMNode
      */
     private function repairNodeObject($node) {

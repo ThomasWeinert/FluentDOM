@@ -36,7 +36,8 @@ namespace FluentDOM {
       Node\NonDocumentTypeChildNode\Implementation,
       Node\ParentNode\Implementation,
       Node\StringCast,
-      Node\Xpath;
+      Node\Xpath,
+      Node\HHVMProperties;
 
     public function __get($name) {
       switch ($name) {
@@ -49,7 +50,7 @@ namespace FluentDOM {
       case 'lastElementChild' :
         return $this->getLastElementChild();
       }
-      return $this->$name;
+      return $this->getParentProperty($name);
     }
 
     public function __set($name, $value) {
@@ -65,7 +66,7 @@ namespace FluentDOM {
           )
         );
       }
-      $this->$name = $value;
+      $this->setParentProperty($name, $value);
       return TRUE;
     }
 

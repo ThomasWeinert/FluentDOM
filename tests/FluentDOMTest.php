@@ -22,7 +22,7 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
     $dom->appendChild($dom->createElement('test'));
     $query = FluentDOM::Query($dom->documentElement);
     $this->assertCount(1, $query);
-    $this->assertEquals("<?xml version=\"1.0\"?>\n<test/>\n", (string)$query);
+    $this->assertXmlStringEqualsXmlString("<?xml version=\"1.0\"?>\n<test/>\n", (string)$query);
   }
 
   /**
@@ -32,7 +32,7 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
   public function testCreator() {
     $write = FluentDOM::create();
     $this->assertInstanceOf('FluentDOM\Nodes\Creator', $write);
-    $this->assertEquals(
+    $this->assertXmlStringEqualsXmlString(
       "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<test/>\n",
       (string)$write('test')
     );
@@ -45,7 +45,7 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
   public function testCreatorWithArguments() {
     $write = FluentDOM::create('2.0', 'ASCII');
     $this->assertInstanceOf('FluentDOM\Nodes\Creator', $write);
-    $this->assertEquals(
+    $this->assertXmlStringEqualsXmlString(
       "<?xml version=\"2.0\" encoding=\"ASCII\"?>\n<test/>\n",
       (string)$write('test')
     );

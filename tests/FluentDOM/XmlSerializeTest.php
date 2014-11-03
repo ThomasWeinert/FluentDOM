@@ -32,7 +32,7 @@ namespace FluentDOM {
             }
           )
         );
-      $this->assertEquals('<test/>', $object->getXml());
+      $this->assertXmlStringEqualsXmlString('<test/>', $object->getXml());
     }
 
     /**

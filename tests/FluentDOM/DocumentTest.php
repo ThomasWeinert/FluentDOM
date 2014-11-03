@@ -210,7 +210,7 @@ namespace FluentDOM {
       $dom = new Document();
       $dom->registerNamespace('#default', 'urn:default');
       $dom->appendChild($dom->createElement(':example'));
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<example xmlns=""/>',
         $dom->saveXml($dom->documentElement)
       );
@@ -224,7 +224,7 @@ namespace FluentDOM {
     public function testCreateElementWithContent() {
       $dom = new Document();
       $dom->appendChild($dom->createElement('example', 'Content & More'));
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<example>Content &amp; More</example>',
         $dom->saveXml($dom->documentElement)
       );
@@ -240,7 +240,7 @@ namespace FluentDOM {
       $dom->appendChild(
         $dom->createElement('example', 'Content & More', ['attr' => 'value'])
       );
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<example attr="value">Content &amp; More</example>',
         $dom->saveXml($dom->documentElement)
       );
@@ -256,7 +256,7 @@ namespace FluentDOM {
       $dom->appendChild(
         $dom->createElement('example', ['attr' => 'value'])
       );
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<example attr="value"/>',
         $dom->saveXml($dom->documentElement)
       );
@@ -272,7 +272,7 @@ namespace FluentDOM {
       $dom->appendChild(
         $dom->createElement('example', ['attr1' => 'one'], ['attr2' => 'two'])
       );
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<example attr1="one" attr2="two"/>',
         $dom->saveXml($dom->documentElement)
       );
@@ -287,7 +287,7 @@ namespace FluentDOM {
       $dom = new Document();
       $dom->registerNamespace('test', 'urn:success');
       $dom->appendChild($dom->createElement('test:example'));
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<test:example xmlns:test="urn:success"/>',
         $dom->saveXml($dom->documentElement)
       );
@@ -316,7 +316,7 @@ namespace FluentDOM {
       $dom->appendChild(
         $dom->createElementNs('urn:default', 'example', 'Content & More')
       );
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<example xmlns="urn:default">Content &amp; More</example>',
         $dom->saveXml($dom->documentElement)
       );
@@ -329,7 +329,7 @@ namespace FluentDOM {
       $dom = new Document();
       $node = $dom->appendChild($dom->createElement('example'));
       $node->appendChild($dom->createAttribute('attribute'));
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<example attribute=""/>',
         $node->saveXml()
       );
@@ -343,7 +343,7 @@ namespace FluentDOM {
       $dom->registerNamespace('test', 'urn:success');
       $node = $dom->appendChild($dom->createElement('example'));
       $node->appendChild($dom->createAttribute('test:attribute', 'success'));
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<example xmlns:test="urn:success" test:attribute="success"/>',
         $node->saveXml()
       );
@@ -357,7 +357,7 @@ namespace FluentDOM {
     public function testAppendElement() {
       $dom = new Document();
       $dom->appendElement('test', 'text', array('attribute' => 'value'));
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<test attribute="value">text</test>',
         $dom->saveXML($dom->documentElement)
       );
@@ -372,7 +372,7 @@ namespace FluentDOM {
       $dom = new Document();
       $dom->registerNamespace('foo', 'urn:foo');
       $dom->appendElement('foo:test', 'text', array('foo:attribute' => 'value'));
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<foo:test xmlns:foo="urn:foo" foo:attribute="value">text</foo:test>',
         $dom->saveXML($dom->documentElement)
       );
@@ -422,7 +422,7 @@ namespace FluentDOM {
     public function testToXmlWithoutContext() {
       $dom = new Document();
       $dom->loadXML('<foo><bar/></foo>');
-      $this->assertEquals(
+      $this->assertXmlStringEqualsXmlString(
         '<?xml version="1.0"?>'."\n".'<foo><bar/></foo>'."\n",
         $dom->toXml()
       );

@@ -9,12 +9,14 @@
 
 namespace FluentDOM {
 
+  use FluentDOM\HHVM\DOMDocument as DOMDocument;
+
   /**
    * @property-read Element $documentElement
    * @property-read Element $firstElementChild
    * @property-read Element $lastElementChild
    */
-  class Document extends \DOMDocument implements Node\ParentNode {
+  class Document extends DOMDocument implements Node\ParentNode {
 
     use Node\ParentNode\Implementation;
     use Node\Xpath;
@@ -52,15 +54,12 @@ namespace FluentDOM {
       'DOMDocumentFragment'=> '\\DocumentFragment'
     ];
 
-    private $_isHHVM = NULL;
-
     /**
      * @param string $version
      * @param string $encoding
      */
     public function __construct($version = '1.0', $encoding = 'UTF-8') {
       parent::__construct($version, $encoding);
-      $this->_isHHVM = defined('HHVM_VERSION');
       foreach ($this->_classes as $superClass => $className) {
         $this->registerNodeClass($superClass, __NAMESPACE__.$className);
       }
@@ -192,7 +191,6 @@ namespace FluentDOM {
       } else {
         $node = parent::createElement($name);
       }
-      $node = $this->ensureNodeClass($node);
       $this->appendAttributes($node, $content, $attributes);
       $this->appendContent($node, $content);
       return $node;
@@ -205,9 +203,7 @@ namespace FluentDOM {
      * @return Element
      */
     public function createElementNS($namespaceURI, $qualifiedName, $content = null) {
-      $node = $this->ensureNodeClass(
-        parent::createElementNS($namespaceURI, $qualifiedName)
-      );
+      $node = parent::createElementNS($namespaceURI, $qualifiedName);
       $this->appendContent($node, $content);
       return $node;
     }
@@ -232,30 +228,6 @@ namespace FluentDOM {
       if (isset($value)) {
         $node->value = $value;
       }
-      return $this->ensureNodeClass($node);
-    }
-
-    /**
-     * @return \DOMDocumentFragment
-     */
-    public function createDocumentFragment() {
-      return $this->ensureNodeClass(
-        parent::createDocumentFragment()
-      );
-    }
-
-    /**
-     * This is workaround for HHVM issue https://github.com/facebook/hhvm/issues/1848
-     *
-     * @param \DOMElement $node
-     * @return \DOMNode
-     */
-    private function ensureNodeClass($node) {
-      // @codeCoverageIgnoreStart
-      if ($this->_isHHVM && isset($this->_classes[get_class($node)])) {
-        return $node->ownerDocument->importNode($node, TRUE);
-      }
-      // @codeCoverageIgnoreEnd
       return $node;
     }
 

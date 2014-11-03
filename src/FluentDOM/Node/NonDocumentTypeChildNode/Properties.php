@@ -2,11 +2,9 @@
 
 namespace FluentDOM\Node\NonDocumentTypeChildNode {
 
-  use FluentDOM\Node\HHVMProperties;
+  trait Properties {
 
-  trait Properties  {
-
-    use Implementation, HHVMProperties;
+    use Implementation, \FluentDOM\HHVM\Properties;
 
     public function __get($name) {
       switch ($name) {

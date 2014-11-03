@@ -1,12 +1,18 @@
 <?php
 
-namespace FluentDOM\Node {
+namespace FluentDOM\HHVM {
 
-  use FluentDOM\Document;
+  /**
+   * This trait is a workaround for the current implementation of DOMNode properties in
+   * HHVM
+   *
+   * https://github.com/facebook/hhvm/issues/4100
+   *
+   * @package FluentDOM\HHVM
+   */
+  trait Properties {
 
-  trait HHVMProperties {
-
-    private $_isHHVM = NULL;
+    protected $_isHHVM = NULL;
 
     private function getParentProperty($name) {
       if (NULL === $this->_isHHVM) {

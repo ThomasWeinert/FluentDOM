@@ -37,7 +37,7 @@ namespace FluentDOM {
       Node\ParentNode\Implementation,
       Node\StringCast,
       Node\Xpath,
-      Node\HHVMProperties;
+      \FluentDOM\HHVM\Properties;
 
     public function __get($name) {
       switch ($name) {

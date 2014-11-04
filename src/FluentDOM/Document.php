@@ -9,8 +9,6 @@
 
 namespace FluentDOM {
 
-  use FluentDOM\HHVM;
-
   /**
    * @method Attribute createAttributeNS($namespace, $name)
    * @method CdataSection createCdataSection($data)
@@ -23,7 +21,7 @@ namespace FluentDOM {
    * @property-read Element $firstElementChild
    * @property-read Element $lastElementChild
    */
-  class Document extends HHVM\DOMDocument implements Node\ParentNode {
+  class Document extends \DOMDocument implements Node\ParentNode {
 
     use Node\ParentNode\Implementation;
     use Node\Xpath;

@@ -17,7 +17,6 @@ require(__DIR__.'/FluentDOM/Node/ParentNode/Properties.php');
 require(__DIR__.'/FluentDOM/Node/StringCast.php');
 require(__DIR__.'/FluentDOM/Node/Xpath.php');
 
-require(__DIR__.'/FluentDOM/HHVM/DOMDocument.php');
 require(__DIR__.'/FluentDOM/HHVM/Properties.php');
 
 require(__DIR__.'/FluentDOM/Document.php');

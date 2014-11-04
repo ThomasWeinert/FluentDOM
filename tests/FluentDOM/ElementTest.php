@@ -379,7 +379,6 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Element::append
-     * @covers FluentDOM\Element::appendNode
      */
     public function testAppend() {
       $object = $this->getMock('FluentDOM\\Appendable');
@@ -405,7 +404,6 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Element::append
-     * @covers FluentDOM\Element::appendNode
      */
     public function testAppendWithText() {
       $dom = new Document();
@@ -419,7 +417,6 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Element::append
-     * @covers FluentDOM\Element::appendNode
      */
     public function testAppendWithArraySetsAttributes() {
       $dom = new Document();
@@ -433,7 +430,6 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Element::append
-     * @covers FluentDOM\Element::appendNode
      */
     public function testAppendWithNode() {
       $dom = new Document();
@@ -449,7 +445,6 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Element::append
-     * @covers FluentDOM\Element::appendNode
      */
     public function testAppendWithNodeAppendsClone() {
       $dom = new Document();
@@ -465,7 +460,6 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Element::append
-     * @covers FluentDOM\Element::appendNode
      */
     public function testAppendWithAttributeNode() {
       $dom = new Document();
@@ -481,7 +475,6 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Element::append
-     * @covers FluentDOM\Element::appendNode
      */
     public function testAppendWithDocument() {
       $import = new \DOMDocument();
@@ -499,7 +492,6 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Element::append
-     * @covers FluentDOM\Element::appendNode
      */
     public function testAppendWithEmptyDocument() {
       $import = new \DOMDocument();
@@ -516,7 +508,6 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Element::append
-     * @covers FluentDOM\Element::appendNode
      */
     public function testAppendWithNodeFromOtherDocument() {
       $import = new \DOMDocument();
@@ -534,7 +525,6 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Element::append
-     * @covers FluentDOM\Element::appendNode
      */
     public function testAppendWithNodeListFromOtherDocument() {
       $import = new Document();
@@ -552,7 +542,6 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Element::append
-     * @covers FluentDOM\Element::appendNode
      */
     public function testAppendWithArrayContainingNodes() {
       $dom = new Document();
@@ -573,7 +562,6 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Element::append
-     * @covers FluentDOM\Element::appendNode
      */
     public function testAppendWithAttributeNodeFromOtherDocument() {
       $import = new \DOMDocument();
@@ -591,7 +579,6 @@ namespace FluentDOM {
 
     /**
      * @covers FluentDOM\Element::append
-     * @covers FluentDOM\Element::appendNode
      */
     public function testAppendWithClosure() {
       $dom = new Document();

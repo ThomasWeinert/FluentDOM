@@ -41,7 +41,7 @@ namespace FluentDOM\Node\ParentNode {
       /** @var \DOMNode|Implementation $this */
       if (
         $this->firstChild instanceof \DOMNode
-        && ($nodes = MutationMacro::expand($this->ownerDocument, $nodes))
+        && ($nodes = MutationMacro::expand($this, $nodes))
       ) {
         $this->insertBefore($nodes, $this->firstChild);
       } else {
@@ -51,8 +51,8 @@ namespace FluentDOM\Node\ParentNode {
 
     public function append($nodes) {
       /** @var \DOMNode|Implementation $this */
-      if ($nodes = MutationMacro::expand($this->ownerDocument, $nodes)) {
-        $this->appendChild($nodes, $this);
+      if ($nodes = MutationMacro::expand($this, $nodes)) {
+        $this->appendChild($nodes);
       }
     }
   }

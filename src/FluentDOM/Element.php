@@ -37,7 +37,9 @@ namespace FluentDOM {
       Node\ParentNode\Implementation,
       Node\StringCast,
       Node\Xpath,
-      \FluentDOM\HHVM\Properties;
+      \FluentDOM\HHVM\Properties {
+        Node\ParentNode\Implementation::append as appendToParentNode;
+      }
 
     public function __get($name) {
       switch ($name) {
@@ -173,59 +175,35 @@ namespace FluentDOM {
      * - an array (sets attributes)
      *
      * @param mixed $value
-     * @return $this|Element new element or self
+     * @return $this new element or self
      */
     public function append($value) {
       $result = NULL;
-      if ($value instanceof \DOMNode) {
-        $result = $this->appendNode($value);
+      if ($value instanceof \DOMAttr) {
+        $this->setAttributeNode(
+          $value->ownerDocument == $this->ownerDocument
+            ? $value : $this->ownerDocument->importNode($value)
+        );
       } elseif ($value instanceof Appendable) {
         $namespaces = $this->ownerDocument->namespaces();
-        $result = $value->appendTo($this);
+        $value->appendTo($this);
         $this->ownerDocument->namespaces($namespaces);
-      } elseif ($value instanceof \Traversable) {
-        foreach ($value as $node) {
-          $this->append($node);
-        }
-      } elseif ($value instanceof \Closure) {
-        $result = $this->append($value());
+      } elseif ($value instanceof \Closure && !$value instanceof \DOMNode) {
+        $this->append($value());
       } elseif (is_array($value)) {
+        $nodes = [];
         foreach ($value as $name => $data) {
-          if (is_scalar($data) && QualifiedName::validate($name)) {
+          if (QualifiedName::validate($name)) {
             $this->setAttribute($name, (string)$data);
-          } elseif (!is_scalar($data)) {
-            $this->append($data);
+          } else {
+            $nodes[] = $data;
           }
         }
-      } elseif (is_scalar($value) || method_exists($value, '__toString')) {
-        $result = $this->appendChild(
-          $this->ownerDocument->createTextNode((string)$value)
-        );
+        $this->appendToParentNode($nodes);
+      } else {
+        $this->appendToParentNode($value);
       }
-      return ($result instanceof Element) ? $result : $this;
-    }
-
-    /**
-     * @param \DOMNode $node
-     * @return \DOMAttr|\DOMNode
-     */
-    private function appendNode(\DOMNode $node) {
-      if ($node instanceof \DOMDocument) {
-        if ($node->documentElement instanceof \DOMElement) {
-          return $this->appendChild(
-            $this->getDocument()->importNode($node->documentElement)
-          );
-        }
-        return NULL;
-      } elseif ($node->ownerDocument !== $this->getDocument()) {
-        $node = $this->getDocument()->importNode($node, TRUE);
-      } elseif ($node->parentNode instanceOf \DOMNode) {
-        $node = $node->cloneNode(TRUE);
-      }
-      if ($node instanceof \DOMAttr) {
-        return $this->setAttributeNode($node);
-      }
-      return $this->appendChild($node);
+      return $this;
     }
 
     /**

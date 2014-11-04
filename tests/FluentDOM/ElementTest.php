@@ -396,13 +396,10 @@ namespace FluentDOM {
         );
       $dom = new Document();
       $dom->appendChild($dom->createElement('root'));
-      $node = $dom->documentElement->append($object);
+      $dom->documentElement->append($object);
       $this->assertXmlStringEqualsXmlString(
         '<root><success/></root>',
         $dom->saveXML($dom->documentElement)
-      );
-      $this->assertEquals(
-        "success", $node->tagName
       );
     }
 

@@ -1,13 +1,13 @@
 <?php
 
 namespace FluentDOM\Node {
-  use FluentDOM\Document;
+
   use FluentDOM\Element;
 
   /**
    * Interface ParentNode
-   * @property \FluentDOM\Element $firstElementChild
-   * @property \FluentDOM\Element $lastElementChild
+   * @property Element $firstElementChild
+   * @property Element $lastElementChild
    */
   interface ParentNode {
 

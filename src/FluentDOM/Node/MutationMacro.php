@@ -15,16 +15,8 @@ namespace FluentDOM\Node {
         $nodes = [$nodes];
       };
       foreach ($nodes as $node) {
-        if ($node instanceof \DOMDocument) {
-          if ($node->documentElement instanceof \DOMElement) {
-            $result->appendChild($document->importNode($node->documentElement));
-          }
-        } elseif ($node instanceof \DOMNode) {
-          if ($node->ownerDocument != $document) {
-            $result->appendChild($document->importNode($node));
-          } else {
-            $result->appendChild($node->cloneNode(TRUE));
-          }
+        if ($node instanceof \DOMNode) {
+          self::add($result, $node);
         } elseif (is_scalar($node) || (is_object($node) && method_exists($node, '__toString'))) {
           $result->appendChild($document->createTextNode((string)$node));
         } else {
@@ -34,6 +26,22 @@ namespace FluentDOM\Node {
         }
       }
       return $result->childNodes->length > 0 ? $result : NULL;
+    }
+
+    /**
+     * @param \DOMDocumentFragment $target
+     * @param \DOMNode $node
+     */
+    private static function add($target, $node) {
+      if ($node instanceof \DOMDocument) {
+        if ($node->documentElement instanceof \DOMElement) {
+          $target->appendChild($target->ownerDocument->importNode($node->documentElement, TRUE));
+        }
+      } elseif ($node->ownerDocument != $target->ownerDocument) {
+        $target->appendChild($target->ownerDocument->importNode($node, TRUE));
+      } else {
+        $target->appendChild($node->cloneNode(TRUE));
+      }
     }
   }
 }

@@ -5,19 +5,15 @@ namespace FluentDOM\Node {
   abstract class MutationMacro {
 
     public static function expand(\DOMNode $context, $nodes) {
-      /** @var \DOMDocumentFragment $result */
       $document = $context instanceof \DOMDocument ? $context : $context->ownerDocument;
       $result = $document->createDocumentFragment();
-      if (
-        $nodes instanceof \DOMNode ||
-        !($nodes instanceof \Traversable || is_array($nodes))
-      ) {
+      if (!self::isTraversableOfNodes($nodes)) {
         $nodes = [$nodes];
       };
       foreach ($nodes as $node) {
         if ($node instanceof \DOMNode) {
           self::add($result, $node);
-        } elseif (is_scalar($node) || (is_object($node) && method_exists($node, '__toString'))) {
+        } elseif (self::isStringCastable($node)) {
           $result->appendChild($document->createTextNode((string)$node));
         } else {
           throw new \InvalidArgumentException(
@@ -26,6 +22,25 @@ namespace FluentDOM\Node {
         }
       }
       return $result->childNodes->length > 0 ? $result : NULL;
+    }
+
+    /**
+     * @param mixed $value
+     * @return bool
+     */
+    private static function isStringCastable($value) {
+      return is_scalar($value) || (is_object($value) && method_exists($value, '__toString'));
+    }
+
+    /**
+     * @param mixed $value
+     * @return bool
+     */
+    private static function isTraversableOfNodes($value) {
+      return (
+        !($value instanceof \DOMNode) &&
+        ($value instanceof \Traversable || is_array($value))
+      );
     }
 
     /**

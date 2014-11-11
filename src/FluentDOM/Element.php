@@ -175,10 +175,9 @@ namespace FluentDOM {
      * - an array (sets attributes)
      *
      * @param mixed $value
-     * @return $this new element or self
+     * @return $this
      */
     public function append($value) {
-      $result = NULL;
       if ($value instanceof \DOMAttr) {
         $this->setAttributeNode(
           $value->ownerDocument == $this->ownerDocument

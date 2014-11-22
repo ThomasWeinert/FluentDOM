@@ -378,6 +378,15 @@ namespace FluentDOM {
     }
 
     /**
+     * @covers FluentDOM\Element
+     */
+    public function testAppendChildReturnsAppendedNode() {
+      $dom = new Document();
+      $appended = $dom->appendChild($created = $dom->createElement('foo'));
+      $this->assertSame($appended, $created);
+    }
+
+    /**
      * @covers FluentDOM\Element::append
      */
     public function testAppend() {

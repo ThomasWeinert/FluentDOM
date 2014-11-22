@@ -39,6 +39,7 @@ namespace FluentDOM\Node {
       $this->assertInstanceOf('DOMDocumentFragment', $fragment);
       $this->assertEquals(2, $fragment->childNodes->length);
     }
+
     /**
      * @covers FluentDOM\Node\MutationMacro
      */
@@ -46,6 +47,34 @@ namespace FluentDOM\Node {
       $dom = new Document();
       $this->setExpectedException('InvalidArgumentException');
       MutationMacro::expand($dom, [new \stdClass()]);
+    }
+
+    /**
+     * @covers FluentDOM\Node\MutationMacro
+     */
+    public function testExpandFromDocument() {
+      $dom = new Document();
+      $dom->loadXml('<one/>');
+      $addDom = new Document();
+      $addDom->loadXml('<two/>');
+      $this->assertXmlStringEqualsXmlString(
+        '<two/>',
+        $dom->saveXML(MutationMacro::expand($dom, $addDom))
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Node\MutationMacro
+     */
+    public function testExpandFromNodeInOtherDocument() {
+      $dom = new Document();
+      $dom->loadXml('<one/>');
+      $addDom = new Document();
+      $addDom->loadXml('<two/>');
+      $this->assertXmlStringEqualsXmlString(
+        '<two/>',
+        $dom->saveXML(MutationMacro::expand($dom, $addDom->documentElement))
+      );
     }
   }
 }

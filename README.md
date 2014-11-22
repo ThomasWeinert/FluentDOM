@@ -50,12 +50,12 @@ additional extensions might be needed, like ext/json to load JSON strings.
 
 ### HHVM
 
- * HHVM
+FluentDOM 5.2 (and the current development master) requires HHVM 3.5
 
-FluentDOM works with HHVM but it is limited. 
+FluentDOM 4.0 to 5.1 work with HHVM 3.3 but it is limited.
 
-HHVM has some issues with the with DOMDocument::registerNodeClass() at the moment. 
-FluentDOM\Document includes a workaround, but here is no guarantee. 
+HHVM has some issues with the with DOMDocument::registerNodeClass() at the moment.
+FluentDOM\Document includes a workaround, but here is no guarantee.
 
 https://github.com/facebook/hhvm/issues/1848
 https://github.com/facebook/hhvm/issues/2962

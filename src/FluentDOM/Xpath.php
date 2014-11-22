@@ -75,15 +75,7 @@ namespace FluentDOM {
     public function evaluate($expression, \DOMNode $contextNode = NULL, $registerNodeNS = NULL) {
       $registerNodeNS = (NULL === $registerNodeNS)
         ? $this->_registerNodeNamespaces : $registerNodeNS;
-      if ($this->canDisableNamespaceRegistration()) {
-        return parent::evaluate($expression, $contextNode, (bool)$registerNodeNS);
-        // @codeCoverageIgnoreStart
-      } elseif (isset($contextNode)) {
-        return parent::evaluate($expression, $contextNode);
-      } else {
-        return parent::evaluate($expression);
-      }
-      // @codeCoverageIgnoreEnd
+      return parent::evaluate($expression, $contextNode, (bool)$registerNodeNS);
     }
 
     /**
@@ -214,16 +206,6 @@ namespace FluentDOM {
         $this->_registerNodeNamespaces = FALSE;
       }
       unset($this->$name);
-    }
-
-    /**
-     * HHVM is missing the third argument for evaluate()/query()
-     * and can not disable the automatic namespace registration
-     *
-     * @return bool
-     */
-    private function canDisableNamespaceRegistration() {
-      return !defined('HHVM_VERSION');
     }
   }
 }

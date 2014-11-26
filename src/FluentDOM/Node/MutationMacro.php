@@ -52,7 +52,7 @@ namespace FluentDOM\Node {
         if ($node->documentElement instanceof \DOMElement) {
           $target->appendChild($target->ownerDocument->importNode($node->documentElement, TRUE));
         }
-      } elseif ($node->ownerDocument != $target->ownerDocument) {
+      } elseif ($node->ownerDocument !== $target->ownerDocument) {
         $target->appendChild($target->ownerDocument->importNode($node, TRUE));
       } else {
         $target->appendChild($node->cloneNode(TRUE));

@@ -768,6 +768,7 @@ namespace FluentDOM {
     public function unique(array $array) {
       $sortable = array();
       $unsortable = array();
+      $cache = '';
       foreach ($array as $node) {
         if (!($node instanceof \DOMNode)) {
           throw new \InvalidArgumentException(
@@ -777,25 +778,22 @@ namespace FluentDOM {
             )
           );
         }
+        $hash = spl_object_hash($node);
         if (
           ($node->parentNode instanceof \DOMNode) ||
           $node === $node->ownerDocument->documentElement) {
-          $position = (integer)$this->xpath(
-            'count(ancestor-or-self::node()/preceding::node()) + count(ancestor::node())', $node
-          );
           /* use the document position as index, ignore duplicates */
-          if (!isset($sortable[$position])) {
-            $sortable[$position] = $node;
+          if (!isset($sortable[$hash])) {
+            $sortable[$hash] = $node;
           }
         } else {
-          $hash = spl_object_hash($node);
           /* use the object hash as index, ignore duplicates */
           if (!isset($unsortable[$hash])) {
             $unsortable[$hash] = $node;
           }
         }
       }
-      ksort($sortable, SORT_NUMERIC);
+      uasort($sortable, new Nodes\Compare($this->xpath));
       $result = array_values($sortable);
       array_splice($result, count($result), 0, array_values($unsortable));
       return $result;

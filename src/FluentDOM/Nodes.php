@@ -768,7 +768,6 @@ namespace FluentDOM {
     public function unique(array $array) {
       $sortable = array();
       $unsortable = array();
-      $cache = '';
       foreach ($array as $node) {
         if (!($node instanceof \DOMNode)) {
           throw new \InvalidArgumentException(

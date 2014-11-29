@@ -55,6 +55,13 @@ namespace FluentDOM\Loader {
         $loader = substr($loader, 0, 1) == '\\' ? $loader : '\\'.$loader;
         $class = $namespace.$loader;
         $callback = function() use ($class) {
+          if (!class_exists($class)) {
+            throw new \LogicException(
+              sprintf(
+                'Loader class "%s" not found.', $class
+              )
+            );
+          }
           return new $class;
         };
         if (is_array($types)) {

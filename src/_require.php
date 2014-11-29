@@ -41,6 +41,8 @@ require(__DIR__.'/FluentDOM/Loader/Html5.php');
 require(__DIR__.'/FluentDOM/Loader/PHP.php');
 require(__DIR__.'/FluentDOM/Loader/PHP/PDO.php');
 require(__DIR__.'/FluentDOM/Loader/PHP/SimpleXml.php');
+require(__DIR__.'/FluentDOM/Loader/Text.php');
+require(__DIR__.'/FluentDOM/Loader/Text/ICalendar.php');
 require(__DIR__.'/FluentDOM/Loader/Xml.php');
 require(__DIR__.'/FluentDOM/Loader/Standard.php');
 
@@ -65,6 +67,7 @@ require(__DIR__.'/FluentDOM/Query/Data.php');
 
 require(__DIR__.'/FluentDOM/Iterators/IndexIterator.php');
 require(__DIR__.'/FluentDOM/Iterators/ElementIterator.php');
+require(__DIR__.'/FluentDOM/Iterators/MapIterator.php');
 require(__DIR__.'/FluentDOM/Iterators/NodesIterator.php');
 
 require(__DIR__.'/FluentDOM/Exception.php');

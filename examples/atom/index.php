@@ -73,7 +73,7 @@ foreach ($dom->find($expr) as $entryNode) {
   switch ($summary->attr('type')) {
   case 'html' :
   case 'text/html' :
-    //in real world you whould need to use a purifier
+    //in real world you would need to use a purifier
     printf(
       '<div class="summary">%s</div>'."\n",
       $summary->text()

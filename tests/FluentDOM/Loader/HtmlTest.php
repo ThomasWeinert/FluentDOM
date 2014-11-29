@@ -43,11 +43,6 @@ namespace FluentDOM\Loader {
      * @covers FluentDOM\Loader\Html
      */
     public function testLoadWithValidXmlFile() {
-      if (defined('HHVM_VERSION')) {
-        $this->markTestSkipped(
-          'HHVM broke file loading in 3.3: https://github.com/facebook/hhvm/issues/3974'
-        );
-      }
       $loader = new Html();
       $this->assertInstanceOf(
         'DOMDocument',

@@ -20,6 +20,9 @@ namespace FluentDOM\Loader {
 
     use Supports;
 
+    /**
+     * @return bool
+     */
     private function isHtml5SupportInstalled() {
       return class_exists('Masterminds\\HTML5');
     }
@@ -32,6 +35,10 @@ namespace FluentDOM\Loader {
     }
 
     /**
+     * Load a HTML5 file and copy it into a FluentDOM\Document
+     *
+     * @codeCoverageIgnore
+     *
      * @see Loadable::load
      * @param string $source
      * @param string $contentType

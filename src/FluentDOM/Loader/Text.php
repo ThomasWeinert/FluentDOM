@@ -14,7 +14,8 @@ namespace FluentDOM\Loader {
   class Text extends Lazy {
 
     private $_loaders = [
-      '\\Text\\ICalendar' => ['text/calendar']
+      '\\Text\\ICalendar' => ['text/calendar'],
+      '\\Text\\CSV' => ['text/csv']
     ];
 
     public function __construct() {

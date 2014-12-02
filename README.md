@@ -68,22 +68,45 @@ https://github.com/facebook/hhvm/issues/2810
 
 ## Usage
 
+The first two samples create a new FluentDOM object, load the sample.xml file,
+look for tags &lt;h1> with the attribute "id" that has the value "title",
+set the content of these tags to "Hello World" and output the manipulated
+document.
+
+### jQuery Style API
+
 ```php
 <?php
 echo FluentDOM('sample.xml')
   ->find('//h1[@id = "title"]')
   ->text('Hello World!');
-?>
 ```
 
-The sample creates a new FluentDOM query object, loads the sample.xml file,
-looks for a tag &lt;h1> with the attribute "id" that has the value "title",
-sets the content of this tag to "Hello World" and outputs the manipulated
-document.
+### Extended DOM (FluentDOM 5.2)
+
+```php
+<?php
+$fd = FluentDOM::load('sample.xml');
+foreach ($fd('//h1[@id = "title"]') as $node) {
+  $node->nodeValue = 'Hello World!';
+}
+
+echo $fd->saveXml();
+```
+
+### Creating XML
+
+New features in FluentDOM 5 make it easy to create XML, even XML with namespaces. Basically 
+you can register XML namespaces on the document and methods without direct namespace support 
+(like createElement()) will resolve the namespace and call the namespace aware variant 
+(like createElementNS()).
+
+Check the Wiki for an [example](https://github.com/FluentDOM/FluentDOM/wiki/Creating-XML-with-Namespaces-%28Atom%29).
 
 ## Packagist
 
-FluentDOM is available on [Packagist.org](https://packagist.org/packages/fluentdom/fluentdom), just add the dependency to your composer.json.
+FluentDOM is available on [Packagist.org](https://packagist.org/packages/fluentdom/fluentdom), 
+just add the dependency to your composer.json.
 
 ```javascript
 {
@@ -141,13 +164,9 @@ You can register namespaces on the document. They will be used if elements
 or attributes are created/updated and no explicit namespace is provided. You can
 even register a default namespace for elements.
 
-### Creating XML
-
-New features in FluentDOM 5 make it easy to create XML, even XML with namespaces. Basically you can register XML namespaces on the document and methods without direct namespace support (like createElement()) will resolve the namespace and call the namespace aware variant (like createElementNS()).
-
-Check the Wiki for an [example](https://github.com/FluentDOM/FluentDOM/wiki/Creating-XML-with-Namespaces-%28Atom%29).
-
-## Backwards Compatibility Breaks To &lt;5
+## Backwards Compatibility Breaks
+ 
+### From 4 To 5
 
 Version 5 is a major rewrite. It now uses php namespaces. The original FluentDOM
 classes (FluentDOM, FluentDOMCore and FluentDOMStyle) are merged into the new
@@ -157,6 +176,14 @@ The old loaders are gone and replaced with the new FluentDOM\Loadable interface.
 
 The registerNamespaces() method was replaced with a registerNamespace() method,
 having the same arguments like DOMXpath::registerNamespace().
+
+### From 5.1 To 5.2
+
+The FluentDOM\Loadable::load() method now has a third argument $options. The
+FluentDOM\Nodes method and the FluentDOM function that load data sources got this
+argument, too. It allows to specify additional, loader specific options. The
+values are only used inside the loader. This change affects the implementation of
+loaders, but not the use. 
 
 ## CSS 3 Selectors
 
@@ -169,7 +196,6 @@ supporting CSS 3 selectors.
 $fd = FluentDOM::QueryCss('sample.xml')
   ->find('h1#title')
   ->text('Hello World!');
-?>
 ```
 
 Two libraries are supported:

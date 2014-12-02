@@ -27,9 +27,10 @@ namespace FluentDOM\Loader\PHP {
      * @see Loadable::load
      * @param \PDOStatement $source
      * @param string $contentType
+     * @param array $options
      * @return Document|NULL
      */
-    public function load($source, $contentType) {
+    public function load($source, $contentType, array $options = []) {
       if ($source instanceof \PDOStatement) {
         $dom = new Document('1.0', 'UTF-8');
         $dom->registerNamespace('json', self::XMLNS);

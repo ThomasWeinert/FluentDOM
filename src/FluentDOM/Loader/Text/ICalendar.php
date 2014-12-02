@@ -54,9 +54,10 @@ namespace FluentDOM\Loader\Text {
      * @see Loadable::load
      * @param \PDOStatement $source
      * @param string $contentType
+     * @param array $options
      * @return Document|NULL
      */
-    public function load($source, $contentType) {
+    public function load($source, $contentType, array $options = []) {
       if ($this->supports($contentType) && ($lines = $this->getLines($source))) {
         $dom = new Document('1.0', 'UTF-8');
         $dom->registerNamespace('xCal', self::XMLNS);

@@ -14,13 +14,14 @@ abstract class FluentDOM {
    *
    * @param mixed $source
    * @param string $contentType
+   * @param array $options
    * @return \FluentDOM\Query
    */
-  public static function Query($source = NULL, $contentType = 'text/xml') {
+  public static function Query($source = NULL, $contentType = 'text/xml', array $options = []) {
     self::_require();
     $query = new FluentDOM\Query();
     if (isset($source)) {
-      $query->load($source, $contentType);
+      $query->load($source, $contentType, $options);
     }
     return $query;
   }
@@ -31,11 +32,12 @@ abstract class FluentDOM {
    *
    * @param mixed $source
    * @param string $contentType
+   * @param array $options
    * @throws \LogicException
    * @return \FluentDOM\Query
    * @codeCoverageIgnore
    */
-  public static function QueryCss($source = NULL, $contentType = 'text/xml') {
+  public static function QueryCss($source = NULL, $contentType = 'text/xml', array $options = []) {
     $hasPhpCss = class_exists('PhpCss');
     $hasCssSelector = class_exists('Symfony\Component\CssSelector\CssSelector');
     if (!($hasPhpCss || $hasCssSelector)) {
@@ -43,7 +45,7 @@ abstract class FluentDOM {
         'Install "carica/phpcss" or "symfony/css-selector" to support css selectors.'
       );
     }
-    $query = self::Query($source, $contentType);
+    $query = self::Query($source, $contentType, $options);
     $isHtml = ($query->contentType == 'text/html');
     if ($hasPhpCss) {
       $query->onPrepareSelector = function($selector, $mode) {
@@ -81,9 +83,10 @@ abstract class FluentDOM {
    *
    * @param mixed $source
    * @param string $contentType
+   * @param array $options
    * @return \FluentDOM\Document
    */
-  public static function load($source, $contentType = 'text/xml') {
+  public static function load($source, $contentType = 'text/xml', array $options = []) {
     self::_require();
     if (!isset(self::$_loader)) {
       self::$_loader = new FluentDOM\Loader\Standard();
@@ -172,8 +175,9 @@ abstract class FluentDOM {
  *
  * @param mixed $source
  * @param string $contentType
+ * @param array $options
  * @return \FluentDOM\Query
  */
-function FluentDOM($source = NULL, $contentType = 'text/xml') {
-  return FluentDOM::Query($source, $contentType);
+function FluentDOM($source = NULL, $contentType = 'text/xml', array $options = []) {
+  return FluentDOM::Query($source, $contentType, $options);
 }

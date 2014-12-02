@@ -30,9 +30,10 @@ namespace FluentDOM\Loader\PHP {
      * @see Loadable::load
      * @param \SimpleXMLElement $source
      * @param string $contentType
+     * @param array $options
      * @return Document|NULL
      */
-    public function load($source, $contentType) {
+    public function load($source, $contentType, array $options = []) {
       if ($source instanceof \SimpleXMLElement) {
         $dom = new Document();
         $dom->appendChild($dom->importNode(dom_import_simplexml($source), TRUE));

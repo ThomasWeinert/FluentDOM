@@ -93,10 +93,11 @@ namespace FluentDOM {
      *
      * @param mixed $source
      * @param string $contentType optional, default value 'text/xml'
+     * @param array $options
      * @throws \InvalidArgumentException
      * @return $this
      */
-    public function load($source, $contentType = 'text/xml') {
+    public function load($source, $contentType = 'text/xml', array $options = []) {
       $dom = FALSE;
       $this->_useDocumentContext = TRUE;
       if ($source instanceof Nodes) {

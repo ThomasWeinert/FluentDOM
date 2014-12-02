@@ -74,10 +74,10 @@ namespace FluentDOM\Loader\Json {
      *
      * @param mixed $source
      * @param string $contentType
-     * @throws \UnexpectedValueException
+     * @param array $options
      * @return Document|NULL
      */
-    public function load($source, $contentType) {
+    public function load($source, $contentType, array $options = []) {
       if (FALSE !== ($json = $this->getJson($source, $contentType))) {
         $dom = new Document('1.0', 'UTF-8');
         $dom->appendChild(

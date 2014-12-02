@@ -42,9 +42,10 @@ namespace FluentDOM\Loader {
      * @see Loadable::load
      * @param string $source
      * @param string $contentType
+     * @param array $options
      * @return Document|NULL
      */
-    public function load($source, $contentType) {
+    public function load($source, $contentType, array $options = []) {
       if ($this->supports($contentType)) {
         $html5 = new HTML5Support();
         if ($this->startsWith($source, '<')) {

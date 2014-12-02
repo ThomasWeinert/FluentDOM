@@ -87,9 +87,10 @@ namespace FluentDOM {
      *
      * @param mixed $source
      * @param string $contentType
+     * @param array $options
      * @return \DOMDocument|NULL
      */
-    public function load($source, $contentType) {
+    public function load($source, $contentType, array $options = []) {
       $dom = NULL;
       foreach ($this as $loader) {
         /**

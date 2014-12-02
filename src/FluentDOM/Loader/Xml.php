@@ -29,9 +29,10 @@ namespace FluentDOM\Loader {
      * @see Loadable::load
      * @param string $source
      * @param string $contentType
+     * @param array $options
      * @return Document|NULL
      */
-    public function load($source, $contentType) {
+    public function load($source, $contentType, array $options = []) {
       if ($this->supports($contentType)) {
         $dom = new Document();
         $dom->preserveWhiteSpace = FALSE;

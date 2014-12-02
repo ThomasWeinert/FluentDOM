@@ -111,12 +111,13 @@ namespace FluentDOM\Loader {
     /**
      * @param string $source
      * @param mixed $contentType
+     * @param array $options
      * @return \DOMDocument|NULL|void
      */
-    public function load($source, $contentType) {
+    public function load($source, $contentType, array $options = []) {
       $contentType = $this->normalizeContentType($contentType);
       if ($loader = $this->get($contentType)) {
-        return $loader->load($source, $contentType);
+        return $loader->load($source, $contentType, $options);
       }
       return NULL;
     }

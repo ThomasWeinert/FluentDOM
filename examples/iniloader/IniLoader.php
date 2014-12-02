@@ -8,7 +8,7 @@ class IniLoader implements FluentDOM\Loadable {
     return in_array($contentType, array('ini', 'text/ini'));
   }
 
-  public function load($source, $contentType = 'text/ini') {
+  public function load($source, $contentType = 'text/ini', array $options = []) {
     if (is_string($source) && $this->supports($contentType)) {
 
       if (!file_exists($source)) {

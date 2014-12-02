@@ -18,7 +18,7 @@ namespace FluentDOM\Loader\Supports {
      * @throws \UnexpectedValueException
      * @return Document|NULL
      */
-    public function load($source, $contentType) {
+    public function load($source, $contentType, array $options = []) {
       if (FALSE !== ($json = $this->getJson($source, $contentType))) {
         $dom = new Document('1.0', 'UTF-8');
         $this->transferTo($dom, $json);
@@ -30,6 +30,7 @@ namespace FluentDOM\Loader\Supports {
     /**
      * @param mixed $source
      * @param string $contentType
+     * @param array $options
      * @throws JsonError
      * @return mixed
      */

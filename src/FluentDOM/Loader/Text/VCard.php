@@ -17,11 +17,11 @@ namespace FluentDOM\Loader\Text {
   /**
    * Load a iCalendar (*.ics) file
    */
-  class ICalendar implements Loadable {
+  class VCard implements Loadable {
 
     use Supports;
 
-    const XMLNS = 'urn:ietf:params:xml:ns:xcal';
+    const XMLNS = 'urn:ietf:params:xml:ns:vcard-4.0';
 
     /**
      * @var Element
@@ -32,7 +32,7 @@ namespace FluentDOM\Loader\Text {
      * @return string[]
      */
     public function getSupported() {
-      return array('text/calendar');
+      return array('text/vcard');
     }
 
     /**
@@ -46,9 +46,7 @@ namespace FluentDOM\Loader\Text {
       if ($this->supports($contentType) && ($lines = $this->getLines($source))) {
         $dom = new Document('1.0', 'UTF-8');
         $dom->registerNamespace('', self::XMLNS);
-        $this->_currentNode = $dom
-          ->appendElement('icalendar')
-          ->appendElement('vcalendar');
+        $this->_currentNode = $dom->appendElement('vcards');
         $tokens = new Parser\PropertyLines($lines);
         foreach ($tokens as $token) {
           $this->appendToken($token);
@@ -101,29 +99,36 @@ namespace FluentDOM\Loader\Text {
         $this->_currentNode = $this->_currentNode->parentNode;
         break;
       default :
-        $itemNode = $this->_currentNode->appendElement(
-          strtolower($token['name']), $token['value']
-        );
-        foreach ($token['parameters'] as $name => $parameter) {
-          $paramName = strtolower($name);
-          $itemNode->setAttribute(
-            $paramName, $parameter['value']
-          );
-          if ($paramName == 'tzid') {
-            $timezone = new \DateTimeZone($parameter['value']);
-            $offset = $timezone->getOffset(new \DateTime($token['value']));
-            $offsetHours = floor(abs($offset) / 3600);
-            $offsetMinutes = floor((abs($offset) - $offsetHours * 3600) / 60);
-            $itemNode->setAttribute(
-              'tzoffset',
-              sprintf(
-                '%s%02d:%02d',
-                $offset > 0 ? '+' : '-',
-                $offsetHours,
-                $offsetMinutes
-              )
-            );
+        $itemNode = $this->_currentNode->appendElement(strtolower($token['name']));
+        if (!empty($token['parameters'])) {
+          $parametersNode = $itemNode->appendElement('parameters');
+          foreach ($token['parameters'] as $name => $parameter) {
+            if ($name === 'VALUE') {
+              continue;
+            }
+            $parametersNode
+              ->appendElement(strtolower($name))
+              ->appendElement($parameter['type'], $parameter['value']);
           }
+        }
+        if (!empty($token['parameters']['VALUE'])) {
+          $itemNode->appendElement(
+            $token['parameters']['VALUE']['type'],
+            str_replace(
+              array('\\,', ';', '\\n'),
+              array(',', "\n", "\n\n"),
+              $token['parameters']['VALUE']['value']
+            )
+          );
+        } elseif (!empty($token['value'])) {
+          $itemNode->appendElement(
+            'text',
+            str_replace(
+              array('\\,', ';', '\\n'),
+              array(',', "\n", "\n\n"),
+              $token['value']
+            )
+          );
         }
       }
     }

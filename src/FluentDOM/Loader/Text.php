@@ -15,7 +15,8 @@ namespace FluentDOM\Loader {
 
     private $_loaders = [
       '\\Text\\ICalendar' => ['text/calendar'],
-      '\\Text\\CSV' => ['text/csv']
+      '\\Text\\CSV' => ['text/csv'],
+      '\\Text\\VCard' => ['text/vcard']
     ];
 
     public function __construct() {

@@ -61,13 +61,14 @@ namespace FluentDOM\Loader\Text\ContentLines {
       $this->_lines->rewind();
       $this->_key = -1;
       $this->_current = NULL;
+      $this->_buffer = $this->_lines->current();
       $this->next();
     }
 
     public function next() {
-      $this->_lines->next();
       $this->_current = NULL;
-      while ($this->_lines->valid()) {
+      do {
+        $this->_lines->next();
         $line = $this->_lines->current();
         $firstChar = substr($line, 0, 1);
         if ($this->_buffer != '' && $firstChar != ' ' && $firstChar != "\t") {
@@ -78,8 +79,7 @@ namespace FluentDOM\Loader\Text\ContentLines {
           }
         }
         $this->_buffer .= ltrim($line);
-        $this->_lines->next();
-      }
+      } while ($this->_lines->valid());
     }
 
     public function key() {

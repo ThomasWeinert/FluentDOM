@@ -132,7 +132,6 @@ namespace FluentDOM\Loader\Text {
         $dom->registerNamespace('', self::XMLNS);
         $dom
           ->appendElement('icalendar')
-          ->appendElement('vcalendar')
           ->append($this);
         return $dom;
       }

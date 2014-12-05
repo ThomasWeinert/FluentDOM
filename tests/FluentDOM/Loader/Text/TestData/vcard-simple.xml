@@ -1,20 +1,14 @@
 <?xml version="1.0"?>
-<vcards xmlns="urn:ietf:params:xml:ns:vcard-4.0">
-  <version>
-    <text>4.0</text>
-  </version>
+<vcards xmlns="urn:ietf:params:xml:ns:vcard-4.0" rev="20080424T195243Z" version="4.0">
   <n>
-    <text>Gump
-Forrest
-
-
-</text>
+    <family>Gump</family>
+    <given>Forrest</given>
   </n>
   <fn>
     <text>Forrest Gump</text>
   </fn>
   <org>
-    <text>Bubba Gump Shrimp Co.</text>
+    <orgnam>Bubba Gump Shrimp Co.</orgnam>
   </org>
   <title>
     <text>Shrimp Man</text>
@@ -25,12 +19,13 @@ Forrest
         <text>image/gif</text>
       </mediatype>
     </parameters>
-    <text>http://www.example.com/dir_photos/my_photo.gif</text>
+    <uri>http://www.example.com/dir_photos/my_photo.gif</uri>
   </photo>
   <tel>
     <parameters>
       <type>
-        <text>work,voice</text>
+        <text>work</text>
+        <text>voice</text>
       </type>
     </parameters>
     <uri>tel:+1-111-555-1212</uri>
@@ -38,7 +33,8 @@ Forrest
   <tel>
     <parameters>
       <type>
-        <text>home,voice</text>
+        <text>home</text>
+        <text>voice</text>
       </type>
     </parameters>
     <uri>tel:+1-404-555-1212</uri>
@@ -54,13 +50,11 @@ Baytown, LA 30314
 United States of America</text>
       </label>
     </parameters>
-    <text>
-
-100 Waters Edge
-Baytown
-LA
-30314
-United States of America</text>
+    <street>100 Waters Edge</street>
+    <locality>Baytown</locality>
+    <region>LA</region>
+    <code>30314</code>
+    <country>United States of America</country>
   </adr>
   <adr>
     <parameters>
@@ -73,18 +67,13 @@ Baytown, LA 30314
 United States of America</text>
       </label>
     </parameters>
-    <text>
-
-42 Plantation St.
-Baytown
-LA
-30314
-United States of America</text>
+    <street>42 Plantation St.</street>
+    <locality>Baytown</locality>
+    <region>LA</region>
+    <code>30314</code>
+    <country>United States of America</country>
   </adr>
   <email>
     <text>forrestgump@example.com</text>
   </email>
-  <rev>
-    <text>20080424T195243Z</text>
-  </rev>
 </vcards>

@@ -1,9 +1,8 @@
 <?php
 
-namespace FluentDOM\Loader\Text\Parser {
+namespace FluentDOM\Loader\Text\ContentLines {
 
-
-  class PropertyLines implements \Iterator {
+  class Iterator implements \Iterator {
 
     /**
      * @var string
@@ -16,7 +15,6 @@ namespace FluentDOM\Loader\Text\Parser {
             =
             (?:
               (?:\"[^\"]*\")|
-              (?:uri:[a-zA-Z-\\d]+:[^:;]+)|
               [^:;]+
             )
           )+
@@ -31,13 +29,19 @@ namespace FluentDOM\Loader\Text\Parser {
       (?P<paramName>[A-Z\\d-]+)
       =
       (?P<paramValue>
-        (?P<quotedValue>\"[^\"]*\")|
-        (?P<typedValue>
-          (?P<paramType>uri):(?P<paramValueTyped>[a-z-\\d]+:[^:;]+)
-        )|
+        (?:\"[^\"]*\")|
         [^:;]+
       )
     )x";
+
+    private $_valuePattern = '(
+      (
+        (
+          [^,\\\\]|
+          (\\\\[\\\\,])
+        )+
+      )+
+    )x';
 
     /**
      * @var \Iterator
@@ -98,11 +102,10 @@ namespace FluentDOM\Loader\Text\Parser {
      */
     private function parseLine($line) {
       if (preg_match($this->_linePattern, $line, $parts)) {
-        $result = [
-          'name' => $parts['name'],
-          'value' => isset($parts['value']) ? $parts['value'] : '',
-          'parameters' => []
-        ];
+        $token = new Token(
+          $parts['name'],
+          isset($parts['value']) ? $this->unescape($parts['value']) : ''
+        );
         if (
           !empty($parts['parameters']) &&
           preg_match_all($this->_parametersPattern, $parts['parameters'], $matches, PREG_SET_ORDER)
@@ -110,38 +113,39 @@ namespace FluentDOM\Loader\Text\Parser {
           foreach ($matches as $match) {
             if (empty($match['paramName'])) {
               continue;
-            } elseif (isset($match['typedValue'])) {
-              $paramType = $match['paramType'];
-              $paramValue = $this->unescape($match['paramValueTyped']);
-            } else {
-              $paramType = 'text';
-              if (isset($match['quotedValue'])) {
-                $paramValue = $this->unquote($match['quotedValue']);
-              } else {
-                $paramValue = $this->unescape($match['paramValue']);
-              }
             }
-            $result['parameters'][$match['paramName']] = [
-              'type' => $paramType,
-              'value' => $paramValue
-            ];
+            $token->add(
+              $match['paramName'], $this->parseValue($match['paramValue'])
+            );
           }
         }
-        return $result;
+        return $token;
       }
       return NULL;
     }
 
+    private function parseValue($string) {
+      $string = trim($string, ',');
+      $firstChar = substr($string, 0, 1);
+      if ($firstChar == '"') {
+        return new Value($this->unquote($string));
+      }
+      if (preg_match_all($this->_valuePattern, $string, $matches)) {
+        $values = [];
+        foreach ($matches[1] as $value) {
+          $values[] = $this->unescape($value);
+        }
+        return new Value($values);
+      }
+      return '';
+    }
+
     private function unescape($string) {
-      return str_replace(
-        array('\\,', ';', '\\n'),
-        array(',', "\n", "\n\n"),
-        $string
-      );
+      return str_replace(['\\n', '\\N'], "\n",  $string);
     }
 
     private function unquote($string) {
-      return str_replace('\\n', "\n", substr($string, 1, -1));
+      return $this->unescape(substr($string, 1, -1));
     }
   }
 }

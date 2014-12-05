@@ -28,22 +28,8 @@ namespace FluentDOM\Loader\Text {
      */
     public function testLoad() {
       $loader = new ICalendar();
-      $this->assertXmlStringEqualsXmlString(
-        '<?xml version="1.0"?>
-        <icalendar xmlns="urn:ietf:params:xml:ns:xcal">
-          <vcalendar>
-            <version>2.0</version>
-            <prodid>-//hacksw/handcal//NONSGML v1.0//EN</prodid>
-            <vevent>
-              <uid>uid1@example.com</uid>
-              <dtstamp>19970714T170000Z</dtstamp>
-              <organizer cn="John Doe">MAILTO:john.doe@example.com</organizer>
-              <dtstart>19970714T170000Z</dtstart>
-              <dtend>19970715T035959Z</dtend>
-              <summary>Bastille Day Party</summary>
-            </vevent>
-          </vcalendar>
-        </icalendar>',
+      $this->assertXmlStringEqualsXmlFile(
+        __DIR__.'/TestData/icalendar-simple.xml',
         $loader->load(
           'BEGIN:VCALENDAR
 VERSION:2.0

@@ -10,18 +10,102 @@ namespace FluentDOM\Loader\Text {
 
   use FluentDOM\Document;
   use FluentDOM\Element;
-  use FluentDOM\Iterators\MapIterator;
-  use FluentDOM\Loadable;
   use FluentDOM\Loader\Supports;
 
   /**
    * Load a iCalendar (*.ics) file
    */
-  class ICalendar implements Loadable {
+  class ICalendar extends ContentLines {
 
     use Supports;
 
     const XMLNS = 'urn:ietf:params:xml:ns:xcal';
+
+    protected $_attributeProperties = [
+      'CLASS' => 'PUBLIC',
+      'PRODID' => NULL,
+      'REV' => NULL,
+      'UID' => NULL,
+      'VERSION' => NULL
+    ];
+
+    protected $_parameters = [
+      'ALTREP' => 'text',
+      'CN' => 'text',
+      'CUTYPE' => 'text',
+      'DELEGATED-FROM' => 'cal-address',
+      'DELEGATED-TO' => 'cal-address',
+      'DIR' => 'uri',
+      'ENCODING' => 'text',
+      'FMTTYPE' => 'text',
+      'FBTYPE' => 'text',
+      'LANGUAGE' => 'language-tag',
+      'MEMBER' => 'cal-address',
+      'PARTSTAT' => 'text',
+      'RANGE' => 'text',
+      'RELATED' => 'text',
+      'RELTYPE' => 'text',
+      'ROLE' => 'text',
+      'RSVP' => 'boolean',
+      'SENT-BY' => 'cal-address',
+      'TZID' => 'text'
+    ];
+
+    protected $_properties = [
+      // General Properties
+      'CALSCALE' => 'text',
+      'METHOD' => 'text',
+      'PRODID' => 'text',
+      'VERSION' => 'text',
+      // Descriptive Component Properties
+      'ATTACH' => 'uri',
+      'CATEGORIES' => 'text',
+      'CLASS' => 'text',
+      'COMMENT' => 'text',
+      'DESCRIPTION' => 'text',
+      'GEO' => 'text', // @todo [lat, lng] support
+      'LOCATION' => 'text',
+      'PERCENT-COMPLETE' => 'integer',
+      'PRIORITY' => 'integer',
+      'RESOURCES' => 'text',
+      'STATUS' => 'text',
+      'SUMMARY' => 'text',
+      'COMPLETED' => 'date-time',
+      'DTEND' => 'date-time',
+      'DUE' => 'date-time',
+      'DTSTART' => 'date-time',
+      'DURATION' => 'duration',
+      'FREEBUSY' => 'period',
+      'TRANSP' => 'text',
+      'TZID' => 'text',
+      'TZNAME' => 'text',
+      'TZOFFSETFROM' => 'utc-offset',
+      'TZOFFSETTO' => 'utc-offset',
+      'TZURL' => 'uri',
+      // Relationship Component Properties
+      'ATTENDEE' => 'cal-address',
+      'CONTACT' => 'text',
+      'ORGANIZER' => 'cal-address',
+      'RECURRENCE-ID' => 'date-time',
+      'RELATED-TO' => 'text',
+      'URL' => 'uri',
+      'UID' => 'uri',
+      // Recurrence Component Properties
+      'EXDATE' => 'date-time',
+      'RDATE' => 'date-time',
+      'RRULE' => 'recur', // @todo support special type
+      // Alarm Component Properties
+      'ACTION' => 'text',
+      'REPEAT' => 'integer',
+      'TRIGGER' => 'duration',
+      // Change Management Component Properties
+      'CREATED' => 'date-time',
+      'DTSTAMP' => 'date-time',
+      'LAST-MODIFIED' => 'date-time',
+      'SEQUENCE' => 'integer'
+    ];
+
+    protected $_defaultType = 'text';
 
     /**
      * @var Element
@@ -43,89 +127,16 @@ namespace FluentDOM\Loader\Text {
      * @return Document|NULL
      */
     public function load($source, $contentType, array $options = []) {
-      if ($this->supports($contentType) && ($lines = $this->getLines($source))) {
+      if ($this->supports($contentType) && ($this->_lines = $this->getLines($source))) {
         $dom = new Document('1.0', 'UTF-8');
         $dom->registerNamespace('', self::XMLNS);
-        $this->_currentNode = $dom
+        $dom
           ->appendElement('icalendar')
-          ->appendElement('vcalendar');
-        $tokens = new Parser\PropertyLines($lines);
-        foreach ($tokens as $token) {
-          $this->appendToken($token);
-        }
+          ->appendElement('vcalendar')
+          ->append($this);
         return $dom;
       }
       return NULL;
-    }
-
-    private function getLines($source) {
-      $result = null;
-      if ($this->isFile($source)) {
-        $file = new \SplFileObject($source);
-        $file->setFlags(\SplFileObject::DROP_NEW_LINE);
-        return $file;
-      } elseif (is_string($source)) {
-        $result = new \ArrayIterator(explode("\n", $source));
-      } elseif (is_array($source)) {
-        $result = new \ArrayIterator($source);
-      } elseif ($source instanceof \Traversable) {
-        $result = $source;
-      }
-      if (empty($result)) {
-        return null;
-      } else {
-        return new MapIterator($result, function($line) { return rtrim($line, "\r\n"); } );
-      }
-    }
-
-    private function isFile($source) {
-      return (is_string($source) && (FALSE === strpos($source, "\n")));
-    }
-
-    /**
-     * Append the token data to the dom, If the name is BEGIN an new group element ist created
-     * and set as the current element. END switches the current element to its parent
-     *
-     * All other tokens are appended as with ther name in lowecase as element name.
-     * Parameters are converted to attributes.
-     *
-     * @param array $token
-     */
-
-    private function appendToken(array $token) {
-      switch ($token['name']) {
-      case 'BEGIN' :
-        $this->_currentNode = $this->_currentNode->appendElement(strtolower($token['value']));
-        break;
-      case 'END' :
-        $this->_currentNode = $this->_currentNode->parentNode;
-        break;
-      default :
-        $itemNode = $this->_currentNode->appendElement(
-          strtolower($token['name']), $token['value']
-        );
-        foreach ($token['parameters'] as $name => $parameter) {
-          $paramName = strtolower($name);
-          $itemNode->setAttribute(
-            $paramName, $parameter['value']
-          );
-          if ($paramName == 'tzid') {
-            $timezone = new \DateTimeZone($parameter['value']);
-            $offset = $timezone->getOffset(new \DateTime($token['value']));
-            $offsetHours = floor(abs($offset) / 3600);
-            $offsetMinutes = floor((abs($offset) - $offsetHours * 3600) / 60);
-            $itemNode->setAttribute(
-              'tzoffset',
-              sprintf(
-                '%s%02d:%02d',
-                $offset > 0 ? '+' : '-',
-                $offsetHours,
-                $offsetMinutes
-              )
-            );
-          }
-        }
-      }
     }
   }
 }

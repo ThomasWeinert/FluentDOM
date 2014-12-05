@@ -37,7 +37,7 @@ namespace FluentDOM\Loader\Text {
 
     /**
      * @see Loadable::load
-     * @param \SplFileObject|string $source
+     * @param mixed $source
      * @param string $contentType
      * @param array $options
      * @return Document|NULL

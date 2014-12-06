@@ -27,7 +27,6 @@ namespace FluentDOM\Loader {
 
     public static function provideSupportedTypes() {
       return [
-        ['text/calendar'],
         ['text/csv']
       ];
     }

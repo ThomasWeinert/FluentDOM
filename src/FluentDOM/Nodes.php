@@ -140,7 +140,7 @@ namespace FluentDOM {
           );
         }
       } elseif (NULL === $this->_loaders) {
-        $this->_loaders = new Loader\Standard();
+        $this->_loaders = \FluentDOM::getDefaultLoaders();
       }
       return $this->_loaders;
     }

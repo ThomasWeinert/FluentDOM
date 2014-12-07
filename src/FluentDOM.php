@@ -10,6 +10,11 @@ abstract class FluentDOM {
   private static $_loader = null;
 
   /**
+   * @var array
+   */
+  private static $_defaultLoaders = [];
+
+  /**
    * Create an FluentDOM::Query instance and load the source into it.
    *
    * @param mixed $source
@@ -79,6 +84,31 @@ abstract class FluentDOM {
   }
 
   /**
+   * Register an additional default loader
+   *
+   * @param \FluentDOM\Loadable $loader
+   * @return array|\FluentDOM\Loaders
+   */
+  public static function registerLoader(FluentDOM\Loadable $loader) {
+    $loaders = self::getDefaultLoaders();
+    $loaders->add($loader);
+    self::$_loader = NULL;
+    return $loaders;
+  }
+
+  /**
+   * Standard loader + any registered loader.
+   *
+   * @return array|\FluentDOM\Loaders
+   */
+  public static function getDefaultLoaders() {
+    if (!(self::$_defaultLoaders instanceof FluentDOM\Loaders)) {
+      self::$_defaultLoaders = new FluentDOM\Loaders(new FluentDOM\Loader\Standard());
+    }
+    return self::$_defaultLoaders;
+  }
+
+  /**
    * Load a data source into a FluentDOM\Document
    *
    * @param mixed $source
@@ -89,9 +119,9 @@ abstract class FluentDOM {
   public static function load($source, $contentType = 'text/xml', array $options = []) {
     self::_require();
     if (!isset(self::$_loader)) {
-      self::$_loader = new FluentDOM\Loader\Standard();
+      self::$_loader = self::getDefaultLoaders();
     }
-    return self::$_loader->load($source, $contentType);
+    return self::$_loader->load($source, $contentType, $options);
   }
 
   /**

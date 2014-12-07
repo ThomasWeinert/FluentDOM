@@ -82,8 +82,34 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
    * @group FactoryFunctions
    * @covers FluentDOM::setLoader
    */
-  public function testSetLoader() {
+  public function testSetLoaderWithInvalidObject() {
     $this->setExpectedException('FluentDOM\Exception');
     FluentDOM::setLoader(new stdClass());
+  }
+
+  /**
+   * @group FactoryFunctions
+   * @group Plugins
+   * @covers FluentDOM::registerLoader
+   * @covers FluentDOM::getDefaultLoaders
+   */
+  public function testRegisterLoader() {
+    $dom = new \FluentDOM\Document();
+    $dom->loadXML('<success/>');
+    $mockLoader = $this->getMock('FluentDOM\\Loadable');
+    $mockLoader
+      ->expects($this->any())
+      ->method('supports')
+      ->will($this->returnValue(['mock/loader']));
+    $mockLoader
+      ->expects($this->any())
+      ->method('load')
+      ->with('test.xml', 'mock/loader')
+      ->will($this->returnValue($dom));
+    FluentDOM::registerLoader($mockLoader);
+    $this->assertEquals(
+      $dom,
+      FluentDOM::load('test.xml', "mock/loader")
+    );
   }
 }

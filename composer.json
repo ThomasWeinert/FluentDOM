@@ -13,8 +13,7 @@
     },
     "suggest": {
       "carica/phpcss": "Allows to use css selectors with FluentDOM::QueryCss().",
-      "symfony/css-selector": "Allows to use css selectors with FluentDOM::QueryCss().",
-      "masterminds/html5": "Read/Write HTML5 (https://github.com/Masterminds/html5-php)"
+      "symfony/css-selector": "Allows to use css selectors with FluentDOM::QueryCss()."
     },
     "autoload": {
         "files" : ["src/FluentDOM.php"],

@@ -43,7 +43,7 @@ namespace FluentDOM\Loader\Text {
      * @return Document|NULL
      */
     public function load($source, $contentType, array $options = []) {
-      $hasHeader = isset($options['HEADER']) ? (bool)$options['HEADER'] : !isset($options['FIELDS']);
+      $hasHeaderLine = isset($options['HEADER']) ? (bool)$options['HEADER'] : !isset($options['FIELDS']);
       $this->_delimiter = isset($options['DELIMITER']) ? $options['DELIMITER'] : $this->_delimiter;
       $this->_enclosure = isset($options['ENCLOSURE']) ? $options['ENCLOSURE'] : $this->_enclosure;
       $this->_escape = isset($options['ESCAPE']) ? $options['ESCAPE'] : $this->_escape;
@@ -54,37 +54,57 @@ namespace FluentDOM\Loader\Text {
         $headers = NULL;
         foreach ($lines as $line) {
           if ($headers === NULL) {
-            $headers = [];
-            if (isset($options['FIELDS'])) {
-              foreach ($line as $index => $field) {
-                $key = $hasHeader ? $field : $index;
-                $headers[$index] = isset($options['FIELDS'][$key])
-                  ? $options['FIELDS'][$key] : FALSE;
-              }
-            } elseif ($hasHeader) {
-              $headers = $line;
-            } else {
-              $headers = array_keys($line);
-            }
-            if ($hasHeader) {
+            $headers = $this->getHeaders(
+              $line, $hasHeaderLine, isset($options['FIELDS']) ? $options['FIELDS'] : NULL
+            );
+            if ($hasHeaderLine) {
               continue;
             }
           }
           $node = $list->appendChild($dom->createElement(self::DEFAULT_QNAME));
           foreach ($line as $index => $field) {
             if (isset($headers[$index])) {
-              $qname = QualifiedName::normalizeString($headers[$index], self::DEFAULT_QNAME);
-              $node->appendChild($child = $dom->createElement($qname));
-              if ($qname != $headers[$index]) {
-                $child->setAttributeNS(self::XMLNS, 'json:name', $headers[$index]);
-              }
-              $child->appendChild($dom->createTextNode($field));
+              $this->appendField($node, $headers[$index], $field);
             }
           }
         }
         return $dom;
       }
       return NULL;
+    }
+
+    /**
+     * @param Element $parent
+     * @param string $name
+     * @param string $value
+     */
+    private function appendField(Element $parent, $name, $value) {
+      $qname = QualifiedName::normalizeString($name, self::DEFAULT_QNAME);
+      $child = $parent->appendElement($qname, $value);
+      if ($qname != $name) {
+        $child->setAttributeNS(self::XMLNS, 'json:name', $name);
+      }
+    }
+
+    /**
+     * @param array $line
+     * @param bool $hasHeaderLine
+     * @param array|NULL $fields
+     * @return array
+     */
+    private function getHeaders(array $line, $hasHeaderLine, $fields = NULL) {
+      if (is_array($fields)) {
+        $headers = [];
+        foreach ($line as $index => $field) {
+          $key = $hasHeaderLine ? $field : $index;
+          $headers[$index] = isset($fields[$key]) ? $fields[$key] : FALSE;
+        }
+        return $headers;
+      } elseif ($hasHeaderLine) {
+        return $line;
+      } else {
+        return array_keys($line);
+      }
     }
 
     private function getLines($source) {

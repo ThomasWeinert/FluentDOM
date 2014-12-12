@@ -12,8 +12,6 @@ namespace FluentDOM\HHVM {
    */
   trait Properties {
 
-    protected $_useDynamicPropertyMethods = NULL;
-
     private function getParentProperty($name) {
       static $useParentMethod = NULL;
       if (NULL === $useParentMethod) {

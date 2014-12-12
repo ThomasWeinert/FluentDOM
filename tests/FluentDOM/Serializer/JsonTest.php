@@ -30,7 +30,7 @@ namespace FluentDOM\Serializer {
      * @covers FluentDOM\Serializer\Json
      */
     public function testToStringWithLimitedDepthExpectingEmptyString() {
-      if (version_compare(PHP_VERSION, '5.5.0', '<') || defined('HHVM_VERSION')) {
+      if (version_compare(PHP_VERSION, '5.5.0', '<')) {
         $this->markTestSkipped('Minimum version for $depth argument is PHP 5.5');
       }
       $serializer = new Json_TestProxy(new \DOMDocument(), 0, 1);

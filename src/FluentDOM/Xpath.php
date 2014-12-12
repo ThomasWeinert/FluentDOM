@@ -28,8 +28,8 @@ namespace FluentDOM {
     private $_documentReference = NULL;
 
     /**
-     * HHVM and some old PHP versions do have a $document property by default
-     * Add it is it was not found after executing parent constructor.
+     * HHVM and some old PHP versions do not have a $document property by default
+     * Add it is added if it was not found after executing parent constructor.
      *
      * @param \DOMDocument $dom
      */

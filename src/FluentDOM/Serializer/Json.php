@@ -72,7 +72,11 @@ namespace FluentDOM\Serializer {
      * @return string
      */
     public function __toString() {
-      $json = version_compare(PHP_VERSION, '5.5.0', '>=')
+      static $useDepth = NULL;
+      if (NULL === $useDepth) {
+        $useDepth = defined('HHVM_VERSION') || version_compare(PHP_VERSION, '5.5.0', '>=');
+      }
+      $json = $useDepth
         ? json_encode($this, $this->_options, $this->_depth)
         : json_encode($this, $this->_options);
       return ($json) ? $json : '';

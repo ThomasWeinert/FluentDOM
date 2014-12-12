@@ -10,11 +10,6 @@ namespace FluentDOM {
      * @covers FluentDOM\Comment
      */
     public function testMagicMethodToString() {
-      if (defined('HHVM_VERSION') && !version_compare(HHVM_VERSION, '3.2', '>=')) {
-        $this->markTestSkipped(
-          'DOMDocument::createComment() creates a cdata section in HHVM < 3.2'
-        );
-      }
       $dom = new Document();
       $dom->appendElement('test')->appendChild($dom->createComment('success'));
       $this->assertEquals(

@@ -12,20 +12,22 @@ namespace FluentDOM\HHVM {
    */
   trait Properties {
 
-    protected $_isHHVM = NULL;
+    protected $_useDynamicPropertyMethods = NULL;
 
     private function getParentProperty($name) {
-      if (NULL === $this->_isHHVM) {
-         $this->_isHHVM = defined('HHVM_VERSION');
+      static $useParentMethod = NULL;
+      if (NULL === $useParentMethod) {
+         $useParentMethod = method_exists(get_parent_class($this), '__get');
       }
-      return $this->_isHHVM ? parent::__get($name) : $this->$name;
+      return $useParentMethod ? parent::__get($name) : $this->$name;
     }
 
     private function setParentProperty($name, $value) {
-      if (NULL === $this->_isHHVM) {
-         $this->_isHHVM = defined('HHVM_VERSION');
+      static $useParentMethod = NULL;
+      if (NULL === $useParentMethod) {
+         $useParentMethod = method_exists(get_parent_class($this), '__set');
       }
-      if ($this->_isHHVM) {
+      if ($useParentMethod) {
         parent::__set($name, $value);
       } else {
         $this->$name = $value;

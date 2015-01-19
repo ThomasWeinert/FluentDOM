@@ -44,9 +44,7 @@ namespace FluentDOM\Loader\Text {
      */
     public function load($source, $contentType, array $options = []) {
       $hasHeaderLine = isset($options['HEADER']) ? (bool)$options['HEADER'] : !isset($options['FIELDS']);
-      $this->_delimiter = isset($options['DELIMITER']) ? $options['DELIMITER'] : $this->_delimiter;
-      $this->_enclosure = isset($options['ENCLOSURE']) ? $options['ENCLOSURE'] : $this->_enclosure;
-      $this->_escape = isset($options['ESCAPE']) ? $options['ESCAPE'] : $this->_escape;
+      $this->configure($options);
       if ($this->supports($contentType) && ($lines = $this->getLines($source))) {
         $dom = new Document('1.0', 'UTF-8');
         $dom->appendChild($list = $dom->createElementNS(self::XMLNS, 'json:json'));
@@ -61,7 +59,7 @@ namespace FluentDOM\Loader\Text {
               continue;
             }
           }
-          $node = $list->appendChild($dom->createElement(self::DEFAULT_QNAME));
+          $list->appendChild($node =  $dom->createElement(self::DEFAULT_QNAME));
           foreach ($line as $index => $field) {
             if (isset($headers[$index])) {
               $this->appendField($node, $headers[$index], $field);
@@ -81,7 +79,7 @@ namespace FluentDOM\Loader\Text {
     private function appendField(Element $parent, $name, $value) {
       $qname = QualifiedName::normalizeString($name, self::DEFAULT_QNAME);
       $child = $parent->appendElement($qname, $value);
-      if ($qname != $name) {
+      if ($qname !== $name) {
         $child->setAttributeNS(self::XMLNS, 'json:name', $name);
       }
     }
@@ -131,6 +129,15 @@ namespace FluentDOM\Loader\Text {
 
     private function isFile($source) {
       return (is_string($source) && (FALSE === strpos($source, "\n")));
+    }
+
+    /**
+     * @param array $options
+     */
+    private function configure(array $options) {
+      $this->_delimiter = isset($options['DELIMITER']) ? $options['DELIMITER'] : $this->_delimiter;
+      $this->_enclosure = isset($options['ENCLOSURE']) ? $options['ENCLOSURE'] : $this->_enclosure;
+      $this->_escape = isset($options['ESCAPE']) ? $options['ESCAPE'] : $this->_escape;
     }
   }
 }

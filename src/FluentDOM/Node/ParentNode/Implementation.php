@@ -6,7 +6,17 @@ namespace FluentDOM\Node\ParentNode {
   use FluentDOM\Element;
   use FluentDOM\Node\MutationMacro;
 
+  /**
+   * @property-read \DOMNode $firstChild
+   * @property-read \DOMNode $lastChild
+   * @property-read \DOMNode $nextSibling
+   * @property-read \DOMNode $previousSibling
+   */
   trait Implementation {
+
+    abstract public function insertBefore(\DOMNode $newChild, \DOMNode $refChild = NULL);
+
+    abstract public function appendChild(\DOMNode $newChild);
 
     public function getFirstElementChild() {
       if ($this instanceof Document) {

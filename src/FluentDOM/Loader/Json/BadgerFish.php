@@ -59,7 +59,7 @@ namespace FluentDOM\Loader\Json {
      * @param string|NULL $prefix
      * @return string
      */
-    private function getNamespacePropertyName($prefix) {
+    protected function getNamespacePropertyName($prefix) {
       return empty($prefix) ? '$' : $prefix;
     }
 

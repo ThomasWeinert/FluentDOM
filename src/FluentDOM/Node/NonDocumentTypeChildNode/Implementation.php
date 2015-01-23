@@ -4,6 +4,12 @@ namespace FluentDOM\Node\NonDocumentTypeChildNode {
 
   use FluentDOM\Element;
 
+  /**
+   * @property-read \DOMNode $firstChild
+   * @property-read \DOMNode $lastChild
+   * @property-read \DOMNode $nextSibling
+   * @property-read \DOMNode $previousSibling
+   */
   trait Implementation {
 
     public function getNextElementSibling() {

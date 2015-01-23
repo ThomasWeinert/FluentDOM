@@ -15,11 +15,6 @@ namespace FluentDOM\Iterators {
     protected $_position  = 0;
 
     /**
-     * @var \Traversable
-     */
-    private $_traversable = NULL;
-
-    /**
      * @var callable
      */
     private $_callback = NULL;

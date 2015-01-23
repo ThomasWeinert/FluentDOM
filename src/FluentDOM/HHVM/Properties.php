@@ -7,8 +7,6 @@ namespace FluentDOM\HHVM {
    * HHVM
    *
    * https://github.com/facebook/hhvm/issues/4100
-   *
-   * @package FluentDOM\HHVM
    */
   trait Properties {
 
@@ -17,6 +15,7 @@ namespace FluentDOM\HHVM {
       if (NULL === $useParentMethod) {
          $useParentMethod = method_exists(get_parent_class($this), '__get');
       }
+      /** @noinspection PhpUndefinedMethodInspection */
       return $useParentMethod ? parent::__get($name) : $this->$name;
     }
 
@@ -26,6 +25,7 @@ namespace FluentDOM\HHVM {
          $useParentMethod = method_exists(get_parent_class($this), '__set');
       }
       if ($useParentMethod) {
+        /** @noinspection PhpUndefinedMethodInspection */
         parent::__set($name, $value);
       } else {
         $this->$name = $value;

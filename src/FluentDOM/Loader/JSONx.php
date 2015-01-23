@@ -20,7 +20,7 @@ namespace FluentDOM\Loader {
    */
   class JSONx implements Loadable {
 
-    use \FluentDOM\Loader\Supports;
+    use Supports;
 
     const XMLNS_JSONX = 'http://www.ibm.com/xmlns/prod/2009/jsonx';
     const XMLNS_JSONDOM = 'urn:carica-json-dom.2013';
@@ -61,8 +61,8 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @param Element $sourceNode
-     * @param Element|Document $target
+     * @param Element $node
+     * @param \DOMNode|Document|Element $target
      */
     private function transferNode(Element $node, \DOMNode $target) {
       if ($node->namespaceURI == self::XMLNS_JSONX) {

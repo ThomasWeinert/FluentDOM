@@ -10,7 +10,7 @@ abstract class FluentDOM {
   private static $_loader = null;
 
   /**
-   * @var array
+   * @var FluentDOM\Loadable
    */
   private static $_defaultLoaders = [];
 
@@ -87,7 +87,7 @@ abstract class FluentDOM {
    * Register an additional default loader
    *
    * @param \FluentDOM\Loadable $loader
-   * @return array|\FluentDOM\Loaders
+   * @return \FluentDOM\Loaders
    */
   public static function registerLoader(FluentDOM\Loadable $loader) {
     $loaders = self::getDefaultLoaders();
@@ -183,7 +183,7 @@ abstract class FluentDOM {
   }
 
   /**
-   * Try autoloading. If is not available, use the _require.php
+   * Try using autoloader. If is not available, use the _require.php
    *
    * Try only once, if the source it not here it will
    * not exists in the second call.

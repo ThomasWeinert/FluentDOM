@@ -37,16 +37,13 @@ require(__DIR__.'/FluentDOM/Loader/Json/BadgerFish.php');
 require(__DIR__.'/FluentDOM/Loader/Json/JsonDOM.php');
 require(__DIR__.'/FluentDOM/Loader/Json/JsonML.php');
 require(__DIR__.'/FluentDOM/Loader/Html.php');
-require(__DIR__.'/FluentDOM/Loader/Html5.php');
 require(__DIR__.'/FluentDOM/Loader/PHP.php');
 require(__DIR__.'/FluentDOM/Loader/PHP/PDO.php');
 require(__DIR__.'/FluentDOM/Loader/PHP/SimpleXml.php');
 require(__DIR__.'/FluentDOM/Loader/Text.php');
-require(__DIR__.'/FluentDOM/Loader/Text/ICalendar.php');
 require(__DIR__.'/FluentDOM/Loader/Xml.php');
 require(__DIR__.'/FluentDOM/Loader/Standard.php');
 
-require(__DIR__.'/FluentDOM/Serializer/Html5.php');
 require(__DIR__.'/FluentDOM/Serializer/Json.php');
 require(__DIR__.'/FluentDOM/Serializer/Json/JsonML.php');
 require(__DIR__.'/FluentDOM/Serializer/Json/BadgerFish.php');

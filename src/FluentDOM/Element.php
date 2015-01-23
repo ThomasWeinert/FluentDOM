@@ -37,7 +37,7 @@ namespace FluentDOM {
       Node\ParentNode\Implementation,
       Node\StringCast,
       Node\Xpath,
-      \FluentDOM\HHVM\Properties {
+      HHVM\Properties {
         Node\ParentNode\Implementation::append as appendToParentNode;
       }
 

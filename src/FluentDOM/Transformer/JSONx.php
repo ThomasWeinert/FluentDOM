@@ -17,11 +17,6 @@ namespace FluentDOM\Transformer {
     private $_document = NULL;
 
     /**
-     * @var string
-     */
-    private $_prefix = 'json:';
-
-    /**
      * Import a DOM document and use the JsonDOM rules to convert it into JSONx.
      *
      * @param \DOMDocument $document

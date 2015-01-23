@@ -7,7 +7,6 @@
  */
 
 namespace FluentDOM {
-  use FluentDOM\Exceptions\InvalidArgument;
 
   /**
    * FluentDOM\DocumentFrag,ent extends PHPs DOMDocumentFragment class. It adds some namespace handling and
@@ -63,7 +62,7 @@ namespace FluentDOM {
      * Get/Set the namespace definition used for the fragment strings.
      *
      * You can use an array(prefix => $namespace, ...) or an element node
-     * to set the namespaces. If the list is empty the document, the namespces from
+     * to set the namespaces. If the list is empty the document, the namespaces from
      * the document object will be used.
      *
      * @param null|array|\Traversable|\DOMElement $namespaces

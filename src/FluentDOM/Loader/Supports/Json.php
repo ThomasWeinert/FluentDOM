@@ -15,7 +15,7 @@ namespace FluentDOM\Loader\Supports {
      *
      * @param mixed $source
      * @param string $contentType
-     * @throws \UnexpectedValueException
+     * @param array $options
      * @return Document|NULL
      */
     public function load($source, $contentType, array $options = []) {
@@ -30,8 +30,6 @@ namespace FluentDOM\Loader\Supports {
     /**
      * @param mixed $source
      * @param string $contentType
-     * @param array $options
-     * @throws JsonError
      * @return mixed
      */
     private function getJson($source, $contentType)  {

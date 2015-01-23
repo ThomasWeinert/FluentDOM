@@ -100,6 +100,7 @@ abstract class FluentDOM {
    * Standard loader + any registered loader.
    *
    * @return array|\FluentDOM\Loaders
+   * @codeCoverageIgnore
    */
   public static function getDefaultLoaders() {
     if (!(self::$_defaultLoaders instanceof FluentDOM\Loaders)) {
@@ -207,6 +208,7 @@ abstract class FluentDOM {
  * @param string $contentType
  * @param array $options
  * @return \FluentDOM\Query
+ * @codeCoverageIgnore
  */
 function FluentDOM($source = NULL, $contentType = 'text/xml', array $options = []) {
   return FluentDOM::Query($source, $contentType, $options);

@@ -58,6 +58,12 @@ namespace FluentDOM\Serializer {
     private $_depth = 512;
 
     /**
+     * Allowthe use of the recursion limitation argument
+     * @var bool
+     */
+    private $_useDepth = FALSE;
+
+    /**
      * @param \DOMDocument $document
      * @param int $options
      * @param int $depth
@@ -66,17 +72,14 @@ namespace FluentDOM\Serializer {
       $this->_document = $document;
       $this->_options = (int)$options;
       $this->_depth = (int)$depth;
+      $this->_useDepth = defined('HHVM_VERSION') || version_compare(PHP_VERSION, '5.5.0', '>=');
     }
 
     /**
      * @return string
      */
     public function __toString() {
-      static $useDepth = NULL;
-      if (NULL === $useDepth) {
-        $useDepth = defined('HHVM_VERSION') || version_compare(PHP_VERSION, '5.5.0', '>=');
-      }
-      $json = $useDepth
+      $json = $this->_useDepth
         ? json_encode($this, $this->_options, $this->_depth)
         : json_encode($this, $this->_options);
       return ($json) ? $json : '';

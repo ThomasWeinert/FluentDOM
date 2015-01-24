@@ -70,6 +70,24 @@ namespace FluentDOM\Loader {
     /**
      * @covers FluentDOM\Loader\Lazy
      */
+    public function testAddClassesWithSingleTypeExpectingException() {
+      $loader = new Lazy();
+      $loader->addClasses(
+        [
+          'NonExistingClassName' => 'test/unittest'
+        ],
+        __NAMESPACE__
+      );
+      $this->setExpectedException(
+        'LogicException',
+        'Loader class "FluentDOM\Loader\NonExistingClassName" not found.'
+      );
+      $this->assertInstanceOf('FluentDOM\Loader\Xml', $loader->get('test/unittest'));
+    }
+
+    /**
+     * @covers FluentDOM\Loader\Lazy
+     */
     public function testAddClassesWithSeveralTypes() {
       $loader = new Lazy();
       $loader->addClasses(

@@ -14,7 +14,9 @@ namespace FluentDOM\Nodes {
     }
 
     public function __invoke($one, $two) {
-      if (
+      if ($one === $two) {
+        return 0;
+      } elseif (
         $one === $this->_document->documentElement ||
         $one === $two->previousSibling ||
         $one === $two->parentNode

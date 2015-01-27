@@ -721,12 +721,14 @@ namespace FluentDOM {
 
     private function prepareSelectorAsFilter($selector, $contextMode) {
       $filter = $this->prepareSelector($selector, $contextMode);
-      if (preg_match('(^(/{,2})([a-z-]+::.*))', $filter, $matches)) {
+      if (preg_match('(^(/{0,2})([a-z-]+::.*))ui', $filter, $matches)) {
         $filter = $matches[2];
       } elseif (preg_match('(^(//?)(.*))', $filter, $matches)) {
         $filter = 'self::'.$matches[2];
       }
-      return $filter;
+      return function($node) use ($filter) {
+        return $this->xpath->evaluate($filter, $node)->length > 0;
+      };
     }
 
     /**

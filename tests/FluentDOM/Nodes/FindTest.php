@@ -64,11 +64,54 @@ namespace FluentDOM {
      * @group TraversingFind
      * @covers FluentDOM\Nodes::find
      * @covers FluentDOM\Nodes::fetch
+     * @covers FluentDOM\Nodes::prepareSelectorAsFilter
      */
     public function testFindWithSelectorCallback() {
       $fd = new Nodes(self::XML);
       $fd->onPrepareSelector = function() {return '//item'; };
       $fd = $fd->find('/*');
+      $this->assertEquals(3, $fd->length);
+    }
+
+    /**
+     * @group Traversing
+     * @group TraversingFind
+     * @covers FluentDOM\Nodes::find
+     * @covers FluentDOM\Nodes::fetch
+     * @covers FluentDOM\Nodes::prepareSelectorAsFilter
+     */
+    public function testFindUsingFilterModeWithSelectorCallback() {
+      $fd = new Nodes(self::XML);
+      $fd->onPrepareSelector = function() {return 'self::item'; };
+      $fd = $fd->find('', \FluentDOM\Nodes::FIND_MODE_FILTER);
+      $this->assertEquals(3, $fd->length);
+    }
+
+    /**
+     * @group Traversing
+     * @group TraversingFind
+     * @covers FluentDOM\Nodes::find
+     * @covers FluentDOM\Nodes::fetch
+     * @covers FluentDOM\Nodes::prepareSelectorAsFilter
+     */
+    public function testFindUsingFilterModeWithSelectorCallbackIgnoreRootDescendantFix() {
+      $fd = new Nodes(self::XML);
+      $fd->onPrepareSelector = function() { return '//self::item'; };
+      $fd = $fd->find('', \FluentDOM\Nodes::FIND_MODE_FILTER);
+      $this->assertEquals(3, $fd->length);
+    }
+
+    /**
+     * @group Traversing
+     * @group TraversingFind
+     * @covers FluentDOM\Nodes::find
+     * @covers FluentDOM\Nodes::fetch
+     * @covers FluentDOM\Nodes::prepareSelectorAsFilter
+     */
+    public function testFindUsingFilterModeWithSelectorCallbackAddSelfAxeFix() {
+      $fd = new Nodes(self::XML);
+      $fd->onPrepareSelector = function() { return '//item'; };
+      $fd = $fd->find('', \FluentDOM\Nodes::FIND_MODE_FILTER);
       $this->assertEquals(3, $fd->length);
     }
 

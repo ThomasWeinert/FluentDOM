@@ -1,5 +1,7 @@
 Version 5.2.0:
 
+- Added: FluentDOM\Loader\Text\CSV loads csv data into a xml document
+- Added: FluentDOM::registerLoader() as a plugin system for loaders provided by other composer packages
 - Added: FluentDOM\DocumentFragment is an extended version of the DOMDocumentFragment
   with support for the namespaces registered on the document object
 - Added: FluentDOM nodes now implement interfaces from the DOM Living Standard
@@ -10,6 +12,8 @@ Version 5.2.0:
 - Changed: FluentDOM\Serializer\Json now writes json using the JsonDOM rules.
 - Changed: FluentDOM\Nodes::find() now has options as the second argument, allow for match/filter modes
   match mode should improve performance and work better with xpath
+- Refactored: FluentDOM\Nodes\Compare implements compare for nodes, allowing to optimize sorting
+- Refactored: most workarounds for HHVM are not neccessary with HHVM 3.5, HHVM 3.5 is required for FluentDOM 5.2
 
 Version 5.1.1:
 

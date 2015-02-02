@@ -175,7 +175,10 @@ namespace FluentDOM {
     private function getXpath() {
       if ($this->_document instanceof Document) {
         return $this->_document->xpath();
-      } elseif (isset($this->_xpath) && $this->_xpath->document === $this->_document) {
+      } elseif (
+        isset($this->_xpath) &&
+        (defined('HHVM_VERSION') || $this->_xpath->document === $this->_document)
+      ) {
         return $this->_xpath;
       } else {
         $this->_xpath = new Xpath($this->getDocument());

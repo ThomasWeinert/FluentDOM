@@ -65,7 +65,6 @@ namespace FluentDOM {
      */
     public function __construct($version = '1.0', $encoding = 'UTF-8') {
       parent::__construct($version, $encoding);
-      $this->registerNodeClass('DOMDocument', get_class($this));
       foreach ($this->_classes as $superClass => $className) {
         $this->registerNodeClass($superClass, __NAMESPACE__.$className);
       }

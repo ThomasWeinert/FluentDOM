@@ -1,4 +1,10 @@
-Version 5.2.0:
+Dev-Master
+----------
+
+- Refactored: use === not just ==
+
+Version 5.2.0
+-------------
 
 - Added: FluentDOM\Loader\Text\CSV loads csv data into a xml document
 - Added: FluentDOM::registerLoader() as a plugin system for loaders provided by other composer packages
@@ -15,12 +21,14 @@ Version 5.2.0:
 - Refactored: FluentDOM\Nodes\Compare implements compare for nodes, allow to optimize sorting
 - Refactored: most workarounds for HHVM are not necessary with HHVM 3.5, HHVM 3.5 is required for FluentDOM 5.2
 
-Version 5.1.1:
+Version 5.1.1
+-------------
 
 - Fixed: FluentDOM\Element::append() needs to ignore arrays and strings
   if checking for callable
 
-Version 5.1.0:
+Version 5.1.0
+-------------
 
 - Changed: All DOMNode descendants (FluentDOM\Document, FluentDOM\Element,
   FluentDOM\Text, ...) are now functors, allowing to evaluate an
@@ -46,17 +54,20 @@ Version 5.1.0:
   namespace attributes, change prefixes
 - Added: FluentDOM\Transformer\Namespaces\Replace, replace namespaces
 
-Version 5.0.2:
+Version 5.0.2
+-------------
 
 - Fixed: Remove null bytes in FluentDOM\Xpath::quote()
 - Fixed: Namespace definition for Symfony CSS Selector
 
-Version 5.0.1:
+Version 5.0.1
+-------------
 
 - Fixed: Disable automatic namespace registration using the third
   argument to evaluate(), if activated using the property
 
-Version 5.0.0:
+Version 5.0.0
+-------------
 
 Complete Rewrite!
 - PHP Namespaces, PSR-4 comatible, Composer support
@@ -84,7 +95,8 @@ Complete Rewrite!
 - Added: FluentDOM\Appendable - define objects appendable to a FluentDOM\Element
 - Added: FluentDOM\XmlSerializable - define objects serializable to xml fragments
 
-Version 4.1:
+Version 4.1
+-----------
 
 For css() and attr() now property access is possible. HTML 5 data attributes are supported, too.
 
@@ -104,7 +116,8 @@ is disabled if possible. This improves performance, too.
 - Added: FluentDOM::hasData() check if an element has HTML 5 data attributes
 - Added: FluentDOM::reverse() reverse the order of the matched nodes.
 
-Version 4.0:
+Version 4.0
+-----------
 
 This version has been restructured because the class had grown to large. The new structure allows
 better testing and inheritance.
@@ -169,7 +182,8 @@ methods.
 - Added: FluentDOM::get(), retrieve elements as array
 - Implemented: support negative position parameter for eq()
 
-Version 3.0:
+Version 3.0
+-----------
 - Documented: tutorial for find()
 - Documented: optimized structure for html output
 - Documented: custom loaders
@@ -225,6 +239,7 @@ Version 3.0:
 - patch by Sebastian Bergmann
 
 Version 2.0
+-----------
 - added: FluentDOMIterator
 - added: FluentDOM now implements IteratorAggregate
 - removed: FluentDOM does not implement RecursiveIterator any more
@@ -252,4 +267,6 @@ Version 2.0
 - fixed: attribute name check allowed invalid attribute names
 
 Version 1.0
+-----------
+
 - initial release

@@ -51,7 +51,7 @@ abstract class FluentDOM {
       );
     }
     $query = self::Query($source, $contentType, $options);
-    $isHtml = ($query->contentType == 'text/html');
+    $isHtml = ($query->contentType === 'text/html');
     if ($hasPhpCss) {
       $query->onPrepareSelector = function($selector, $mode) {
         return self::prepareWithPhpCss($selector, $mode);

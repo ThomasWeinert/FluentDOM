@@ -69,7 +69,7 @@ namespace FluentDOM\Loader\Json {
      */
     protected function transferNamespacesTo(\DOMElement $node, $data) {
       foreach ($data as $key => $namespace) {
-        $prefix = $key == '$' ? NULL : $key;
+        $prefix = $key === '$' ? NULL : $key;
         if ($node->lookupNamespaceUri($prefix) != $namespace) {
           $node->setAttribute(
             empty($prefix) ? 'xmlns' : 'xmlns:' . $prefix,

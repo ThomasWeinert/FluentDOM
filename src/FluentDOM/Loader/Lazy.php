@@ -50,9 +50,9 @@ namespace FluentDOM\Loader {
      * @param string $namespace
      */
     public function addClasses($classes, $namespace = '') {
-      $namespace = substr($namespace, -1) == '\\' ? substr($namespace, 0, -1) : $namespace;
+      $namespace = substr($namespace, -1) === '\\' ? substr($namespace, 0, -1) : $namespace;
       foreach ($classes as $loader => $types) {
-        $loader = substr($loader, 0, 1) == '\\' ? $loader : '\\'.$loader;
+        $loader = substr($loader, 0, 1) === '\\' ? $loader : '\\'.$loader;
         $class = $namespace.$loader;
         $callback = function() use ($class) {
           if (!class_exists($class)) {

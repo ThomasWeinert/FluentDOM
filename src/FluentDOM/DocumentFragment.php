@@ -78,7 +78,7 @@ namespace FluentDOM {
         if (is_array($namespaces) || $namespaces instanceof \Traversable) {
           foreach ($namespaces as $key => $namespace) {
             if ($namespace instanceof \DOMNameSpaceNode) {
-              if ($namespace->nodeName == 'xmlns') {
+              if ($namespace->nodeName === 'xmlns') {
                 $this->registerNamespace('#default', $namespace->nodeValue);
               } elseif ($namespace->localName != 'xml') {
                 $this->registerNamespace($namespace->localName, $namespace->nodeValue);
@@ -120,7 +120,7 @@ namespace FluentDOM {
       } else {
         $fragment = '<fragment';
         foreach ($namespaces as $key => $xmlns) {
-          $prefix = $key == '#default' ? '' : $key;
+          $prefix = $key === '#default' ? '' : $key;
           $fragment .= ' '.htmlspecialchars(empty($prefix) ? 'xmlns' : 'xmlns:'.$prefix);
           $fragment .= '="'.htmlspecialchars($xmlns).'"';
         }

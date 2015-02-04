@@ -312,7 +312,7 @@ namespace FluentDOM {
         $result->push($this->spawn($context)->find($selector));
       } elseif (
         is_object($selector) ||
-        (is_string($selector) && substr(ltrim($selector), 0, 1) == '<')
+        (is_string($selector) && substr(ltrim($selector), 0, 1) === '<')
       ) {
         $result->push($this->build()->getContentNodes($selector));
       } else {
@@ -1470,7 +1470,7 @@ namespace FluentDOM {
           } else {
             $classString = $class;
           }
-          if (empty($classString) && $switch == FALSE) {
+          if (empty($classString) && !$switch) {
             if ($node->hasAttribute('class')) {
               $node->removeAttribute('class');
             }

@@ -84,9 +84,9 @@ namespace FluentDOM\Loader\Json {
         foreach ($json->{'#children'} as $child) {
           $name = isset($child->{'#name'}) ? $child->{'#name'} : '';
           $value = isset($child->{'#text'}) ? $child->{'#text'} : '';
-          if ($name == '@xmlns' || substr($name, 0, 7) == '@xmlns:') {
+          if ($name === '@xmlns' || substr($name, 0, 7) === '@xmlns:') {
             $namespaces->{substr($name, 1)} = $value;
-          } elseif (substr($name, 0, 1) == '@') {
+          } elseif (substr($name, 0, 1) === '@') {
             $attributes->{substr($name, 1)} = $value;
           }
         }

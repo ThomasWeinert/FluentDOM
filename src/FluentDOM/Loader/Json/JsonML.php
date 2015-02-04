@@ -46,9 +46,9 @@ namespace FluentDOM\Loader\Json {
      */
     private function addNamespaceAttributes(\DOMElement $node, $properties) {
       foreach ($properties as $name => $value) {
-        if ($name == 'xmlns' || substr($name, 0, 6) == 'xmlns:') {
+        if ($name === 'xmlns' || substr($name, 0, 6) === 'xmlns:') {
           if ($node instanceof \DOMElement) {
-            $prefix = $name == 'xmlns' ? NULL : substr($name, 6);
+            $prefix = $name === 'xmlns' ? NULL : substr($name, 6);
             if ($node->lookupNamespaceUri($prefix) != $value) {
               $node->setAttribute($name, $value);
             }
@@ -64,7 +64,7 @@ namespace FluentDOM\Loader\Json {
     private function addAttributes(\DOMElement $node, $properties) {
       $dom = $node instanceof \DOMDocument ? $node : $node->ownerDocument;
       foreach ($properties as $name => $value) {
-        if (!($name == 'xmlns' || substr($name, 0, 6) == 'xmlns:')) {
+        if (!($name === 'xmlns' || substr($name, 0, 6) === 'xmlns:')) {
           $namespace = $this->getNamespaceForNode($name, $properties, $node);
           $attribute = empty($namespace)
             ? $dom->createAttribute($name)

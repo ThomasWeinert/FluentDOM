@@ -93,7 +93,7 @@ namespace FluentDOM {
     private static function isCallableArray($callback) {
       return (
        is_array($callback) &&
-       count($callback) == 2 &&
+       count($callback) === 2 &&
        (is_object($callback[0]) || is_string($callback[0])) &&
        is_string($callback[1])
       );
@@ -107,7 +107,7 @@ namespace FluentDOM {
      * @return bool
      */
     public static function hasOption($options, $option) {
-      return ($options & $option) == $option;
+      return ($options & $option) === $option;
     }
   }
 }

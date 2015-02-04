@@ -690,10 +690,10 @@ namespace FluentDOM {
      */
     public function find($selector, $options = 0) {
       $useDocumentContext = $this->_useDocumentContext ||
-        ($options & self::CONTEXT_DOCUMENT) == self::CONTEXT_DOCUMENT;
+        ($options & self::CONTEXT_DOCUMENT) === self::CONTEXT_DOCUMENT;
       $selectorIsScalar = is_scalar($selector) || is_null($selector);
       $selectorIsFilter = $selectorIsScalar &&
-        ($options & self::FIND_MODE_FILTER) == self::FIND_MODE_FILTER;
+        ($options & self::FIND_MODE_FILTER) === self::FIND_MODE_FILTER;
       if ($useDocumentContext) {
         $expression = $selectorIsFilter ? '//*' : '//*|//text()';
         $contextMode = self::CONTEXT_DOCUMENT;

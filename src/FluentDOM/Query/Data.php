@@ -122,7 +122,7 @@ namespace FluentDOM\Query {
      * @return bool
      */
     private function isDataProperty($name) {
-      return (0 === strpos($name, 'data-') && $name == strtolower($name));
+      return (0 === strpos($name, 'data-') && $name === strtolower($name));
     }
 
     /**
@@ -164,9 +164,9 @@ namespace FluentDOM\Query {
      */
     private function decodeValue($value) {
       switch (TRUE) {
-      case ($value == 'true') :
+      case ($value === 'true') :
         return TRUE;
-      case ($value == 'false') :
+      case ($value === 'false') :
         return FALSE;
       case (in_array(substr($value, 0, 1), array('{', '['))) :
         if ($json = json_decode($value)) {

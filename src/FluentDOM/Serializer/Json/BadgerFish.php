@@ -64,14 +64,14 @@ namespace FluentDOM\Serializer\Json {
      * @param Xpath $xpath
      */
     protected function addNamespaces(\stdClass $target, \DOMElement $node, Xpath $xpath) {
-      if ($node->namespaceURI != '' && $node->prefix == '') {
+      if ($node->namespaceURI != '' && $node->prefix === '') {
         if (!isset($target->{'@xmlns'})) {
           $target->{'@xmlns'} = new \stdClass();
         }
         $target->{'@xmlns'}->{'$'} = $node->namespaceURI;
       }
       foreach ($xpath->evaluate('namespace::*', $node) as $namespace) {
-        if ($namespace->localName == 'xml' || $namespace->localName == 'xmlns') {
+        if ($namespace->localName === 'xml' || $namespace->localName === 'xmlns') {
           continue;
         }
         if (!isset($target->{'@xmlns'})) {

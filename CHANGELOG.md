@@ -1,8 +1,9 @@
-Dev-Master
-----------
+Version 5.2.1
+-------------
 
-- Refactored: use === not just ==
-- Implemented: allow associative arrays in JsonDOM loader 
+- Implemented: allow associative arrays in JsonDOM loader
+- Refactored: use === not just == 
+- Fixed: HHVM now has native properties, adapted XPath to Document connection 
 
 Version 5.2.0
 -------------

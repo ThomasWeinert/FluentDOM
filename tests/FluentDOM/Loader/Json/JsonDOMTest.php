@@ -146,6 +146,27 @@ namespace FluentDOM\Loader\Json {
     /**
      * @covers FluentDOM\Loader\Json\JsonDOM
      */
+    public function testLoadWithAssociativeArray() {
+      $loader = new JsonDOM();
+      $json = ['foo' => 'bar'];
+      $this->assertInstanceOf(
+        'DOMDocument',
+        $dom = $loader->load(
+          $json, 'json'
+        )
+      );
+      $this->assertXmlStringEqualsXmlString(
+        '<?xml version="1.0" encoding="UTF-8"?>'.
+        '<json:json xmlns:json="urn:carica-json-dom.2013">'.
+        '<foo>bar</foo>'.
+        '</json:json>',
+        $dom->saveXml()
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Loader\Json\JsonDOM
+     */
     public function testLoadWithInvalidSourceExpectingNull() {
       $loader = new JsonDOM();
       $this->assertNull(

@@ -2,6 +2,7 @@ Dev-Master
 ----------
 
 - Refactored: use === not just ==
+- Implemented: allow associative arrays in JsonDOM loader 
 
 Version 5.2.0
 -------------

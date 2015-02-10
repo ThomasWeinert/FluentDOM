@@ -232,7 +232,7 @@ namespace FluentDOM\Nodes {
         // get the first element without child elements.
         $targets = $this->getOwner()->xpath('.//*[count(*) = 0]', $wrapper);
       }
-      if ($simple || $targets->length == 0) {
+      if ($simple || $targets->length === 0) {
         $target = $wrapper;
         $simple = TRUE;
       } elseif ($targets instanceof \DOMNodeList) {

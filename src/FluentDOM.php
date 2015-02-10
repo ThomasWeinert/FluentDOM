@@ -4,10 +4,12 @@ use Symfony\Component\CssSelector\CssSelector;
 
 abstract class FluentDOM {
 
+  public static $isHHVM = FALSE;
+
   /**
    * @var FluentDOM\Loadable
    */
-  private static $_loader = null;
+  private static $_loader = NULL;
 
   /**
    * @var FluentDOM\Loadable
@@ -51,7 +53,7 @@ abstract class FluentDOM {
       );
     }
     $query = self::Query($source, $contentType, $options);
-    $isHtml = ($query->contentType == 'text/html');
+    $isHtml = ($query->contentType === 'text/html');
     if ($hasPhpCss) {
       $query->onPrepareSelector = function($selector, $mode) {
         return self::prepareWithPhpCss($selector, $mode);
@@ -119,6 +121,9 @@ abstract class FluentDOM {
    */
   public static function load($source, $contentType = 'text/xml', array $options = []) {
     self::_require();
+    if ($contentType instanceof FluentDOM\Loadable) {
+
+    }
     if (!isset(self::$_loader)) {
       self::$_loader = self::getDefaultLoaders();
     }
@@ -199,6 +204,8 @@ abstract class FluentDOM {
     $load = FALSE;
   }
 }
+FluentDOM::$isHHVM = defined('HHVM_VERSION');
+
 
 /**
  * FluentDOM function, is an Alias for the \FluentDOM\FluentDOM::Query()

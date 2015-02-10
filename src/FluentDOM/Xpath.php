@@ -53,9 +53,9 @@ namespace FluentDOM {
      * @return bool
      */
     public function registerNamespace($prefix, $namespace) {
-      if ($this->document instanceOf Document &&
-          $this->document->getNamespace($prefix) !== $namespace) {
-        $this->document->registerNameSpace($prefix, $namespace);
+      if ($this->_documentReference instanceOf Document &&
+          $this->_documentReference->getNamespace($prefix) !== $namespace) {
+        $this->_documentReference->registerNameSpace($prefix, $namespace);
       }
       return parent::registerNamespace($prefix, $namespace);
     }
@@ -147,7 +147,7 @@ namespace FluentDOM {
           $result = '';
           preg_match_all('("[^\']*|[^"]+)', $string, $matches);
           foreach ($matches[0] as $part) {
-            $quoteChar = (substr($part, 0, 1) == '"') ? "'" : '"';
+            $quoteChar = (substr($part, 0, 1) === '"') ? "'" : '"';
             $result .= ", ".$quoteChar.$part.$quoteChar;
           }
           return 'concat('.substr($result, 2).')';

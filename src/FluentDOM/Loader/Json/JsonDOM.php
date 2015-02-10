@@ -100,7 +100,7 @@ namespace FluentDOM\Loader\Json {
      * @param $value
      * @param int $recursions
      */
-    protected  function transferTo(\DOMNode $target, $value, $recursions = 100) {
+    protected function transferTo(\DOMNode $target, $value, $recursions = 100) {
       if ($recursions < 1) {
         return;
       } elseif ($target instanceof \DOMElement) {
@@ -132,10 +132,13 @@ namespace FluentDOM\Loader\Json {
      */
     public function getTypeFromValue($value) {
       if (is_array($value)) {
-        return self::TYPE_ARRAY;
+        if (empty($value) || array_keys($value) === range(0, count($value) - 1)) {
+          return self::TYPE_ARRAY;
+        }
+        return self::TYPE_OBJECT;
       } elseif (is_object($value)) {
         return self::TYPE_OBJECT;
-      } elseif (is_null($value)) {
+      } elseif (NULL === $value) {
         return self::TYPE_NULL;
       } elseif (is_bool($value)) {
         return self::TYPE_BOOLEAN;
@@ -194,7 +197,7 @@ namespace FluentDOM\Loader\Json {
      * @param int $recursions
      */
     private function transferObjectTo(\DOMElement $target, $value, $recursions) {
-      $properties = get_object_vars($value);
+      $properties = is_array($value) ? $value : get_object_vars($value);
       if ($this->_verbose || empty($properties)) {
         $target->setAttributeNS(self::XMLNS, 'json:type', 'object');
       }

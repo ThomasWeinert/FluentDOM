@@ -65,7 +65,7 @@ namespace FluentDOM\Loader {
      * @param \DOMNode|Document|Element $target
      */
     private function transferNode(Element $node, \DOMNode $target) {
-      if ($node->namespaceURI == self::XMLNS_JSONX) {
+      if ($node->namespaceURI === self::XMLNS_JSONX) {
         if ($target instanceOf Document) {
           $normalizedName = $name = 'json:json';
         } else {

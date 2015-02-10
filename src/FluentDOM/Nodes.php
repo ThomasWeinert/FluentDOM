@@ -114,7 +114,7 @@ namespace FluentDOM {
       if ($dom instanceof \DOMDocument) {
         $this->_document = $dom;
         $this->setContentType($contentType, TRUE);
-        unset($this->_xpath);
+        $this->_xpath = NULL;
         $this->applyNamespaces();
         return $this;
       }
@@ -175,7 +175,10 @@ namespace FluentDOM {
     private function getXpath() {
       if ($this->_document instanceof Document) {
         return $this->_document->xpath();
-      } elseif (isset($this->_xpath) && $this->_xpath->document === $this->_document) {
+      } elseif (
+        isset($this->_xpath) &&
+        (\FluentDOM::$isHHVM || $this->_xpath->document === $this->_document)
+      ) {
         return $this->_xpath;
       } else {
         $this->_xpath = new Xpath($this->getDocument());
@@ -329,7 +332,7 @@ namespace FluentDOM {
      * @return callable|null
      */
     public function getSelectorCallback($selector) {
-      if (is_null($selector) || Constraints::isCallable($selector)) {
+      if (NULL === $selector || Constraints::isCallable($selector)) {
         return $selector;
       } elseif ($selector instanceof \DOMNode) {
         return function(\DOMNode $node) use ($selector) {
@@ -633,7 +636,7 @@ namespace FluentDOM {
             }
           }
         }
-      } elseif (!is_null($elements)) {
+      } elseif (NULL !== $elements) {
         throw new \InvalidArgumentException('Invalid elements variable.');
       }
       return $this;
@@ -687,14 +690,14 @@ namespace FluentDOM {
      */
     public function find($selector, $options = 0) {
       $useDocumentContext = $this->_useDocumentContext ||
-        ($options & self::CONTEXT_DOCUMENT) == self::CONTEXT_DOCUMENT;
-      $selectorIsScalar = is_scalar($selector) || is_null($selector);
+        ($options & self::CONTEXT_DOCUMENT) === self::CONTEXT_DOCUMENT;
+      $selectorIsScalar = is_scalar($selector) || NULL === $selector;
       $selectorIsFilter = $selectorIsScalar &&
-        ($options & self::FIND_MODE_FILTER) == self::FIND_MODE_FILTER;
+        ($options & self::FIND_MODE_FILTER) === self::FIND_MODE_FILTER;
       if ($useDocumentContext) {
         $expression = $selectorIsFilter ? '//*' : '//*|//text()';
         $contextMode = self::CONTEXT_DOCUMENT;
-        $options = Nodes\Fetcher::UNIQUE | Nodes\Fetcher::IGNORE_CONTEXT;
+        $options = Nodes\Fetcher::IGNORE_CONTEXT;
       } else {
         $expression = $selectorIsFilter ? './/*' : './/*|.//text()';
         $contextMode = self::CONTEXT_CHILDREN;
@@ -739,7 +742,7 @@ namespace FluentDOM {
      */
     public function index($selector = NULL) {
       if (count($this->_nodes) > 0) {
-        if (is_null($selector)) {
+        if (NULL === $selector) {
           return $this->xpath(
             'count(
               preceding-sibling::node()[
@@ -769,17 +772,19 @@ namespace FluentDOM {
      * @return array
      */
     public function unique(array $array) {
+      $count = count($array);
+      if ($count <= 1) {
+        if ($count == 1) {
+          Constraints::assertNode(
+            reset($array), 'Array must only contain dom nodes, found "%s".'
+          );
+        }
+        return $array;
+      }
       $sortable = array();
       $unsortable = array();
       foreach ($array as $node) {
-        if (!($node instanceof \DOMNode)) {
-          throw new \InvalidArgumentException(
-            sprintf(
-              'Array must only contain dom nodes, found "%s".',
-              is_object($node) ? get_class($node) : gettype($node)
-            )
-          );
-        }
+        Constraints::assertNode($node, 'Array must only contain dom nodes, found "%s".');
         $hash = spl_object_hash($node);
         if (
           ($node->parentNode instanceof \DOMNode) ||

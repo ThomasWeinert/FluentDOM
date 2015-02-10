@@ -50,6 +50,7 @@ namespace FluentDOM {
      * @var array
      */
     private $_classes = [
+      'DOMDocument' => '\\Document',
       'DOMAttr' => '\\Attribute',
       'DOMCdataSection'=> '\\CdataSection',
       'DOMComment'=> '\\Comment',
@@ -77,7 +78,10 @@ namespace FluentDOM {
      * @return Xpath
      */
     public function xpath() {
-      if (isset($this->_xpath) && $this->_xpath->document == $this) {
+      if (
+        isset($this->_xpath) &&
+        (\FluentDOM::$isHHVM || $this->_xpath->document === $this)
+      ) {
         return $this->_xpath;
       }
       $this->_xpath = new Xpath($this);

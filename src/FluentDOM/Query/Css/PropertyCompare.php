@@ -62,7 +62,7 @@ namespace FluentDOM\Query\Css {
      * @return array
      */
     private function _decodeName($propertyName) {
-      if (substr($propertyName, 0, 1) == '-') {
+      if (substr($propertyName, 0, 1) === '-') {
         $pos = strpos($propertyName, '-', 1);
         $items = explode('-', substr($propertyName, $pos + 1));
         $items[] = substr($propertyName, 1, $pos);

@@ -44,6 +44,23 @@ namespace FluentDOM {
     }
 
     /**
+     * @param mixed $node
+     * @param string $message
+     * @return bool
+     */
+    public static function assertNode($node, $message = 'DOMNode expected, got: %s.') {
+      if (!($node instanceof \DOMNode)) {
+        throw new \InvalidArgumentException(
+          sprintf(
+            $message,
+            is_object($node) ? get_class($node) : gettype($node)
+          )
+        );
+      }
+      return TRUE;
+    }
+
+    /**
      * Check if $elements is a traversable node list. It returns
      * the $elements or NULL
      *
@@ -93,7 +110,7 @@ namespace FluentDOM {
     private static function isCallableArray($callback) {
       return (
        is_array($callback) &&
-       count($callback) == 2 &&
+       count($callback) === 2 &&
        (is_object($callback[0]) || is_string($callback[0])) &&
        is_string($callback[1])
       );
@@ -107,7 +124,7 @@ namespace FluentDOM {
      * @return bool
      */
     public static function hasOption($options, $option) {
-      return ($options & $option) == $option;
+      return ($options & $option) === $option;
     }
   }
 }

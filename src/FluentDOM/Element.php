@@ -180,7 +180,7 @@ namespace FluentDOM {
     public function append($value) {
       if ($value instanceof \DOMAttr) {
         $this->setAttributeNode(
-          $value->ownerDocument == $this->ownerDocument
+          $value->ownerDocument === $this->ownerDocument
             ? $value : $this->ownerDocument->importNode($value)
         );
       } elseif ($value instanceof Appendable) {
@@ -457,7 +457,7 @@ namespace FluentDOM {
           ($prefixes === NULL || in_array($prefix, $prefixes))
         ) {
           $this->setAttribute(
-            ($prefix == '#default') ? 'xmlns' : 'xmlns:'.$prefix,
+            ($prefix === '#default') ? 'xmlns' : 'xmlns:'.$prefix,
             $namespace
           );
         }
@@ -473,8 +473,8 @@ namespace FluentDOM {
      */
     private function isCurrentNamespace($prefix, $namespace) {
       return (
-        $namespace == $this->namespaceURI &&
-        $prefix == ($this->prefix ?: '#default')
+        $namespace === $this->namespaceURI &&
+        $prefix === ($this->prefix ?: '#default')
       );
     }
   }

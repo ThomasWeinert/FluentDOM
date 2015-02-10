@@ -312,7 +312,7 @@ namespace FluentDOM {
         $result->push($this->spawn($context)->find($selector));
       } elseif (
         is_object($selector) ||
-        (is_string($selector) && substr(ltrim($selector), 0, 1) == '<')
+        (is_string($selector) && substr(ltrim($selector), 0, 1) === '<')
       ) {
         $result->push($this->build()->getContentNodes($selector));
       } else {
@@ -1335,7 +1335,7 @@ namespace FluentDOM {
      * @return string|Query attribute value or $this
      */
     public function attr($attribute, $value = NULL) {
-      if (is_null($value) && !is_array(($attribute))) {
+      if (NULL === $value && !is_array(($attribute))) {
         //empty value - read attribute from first element in list
         $attribute = (new QualifiedName($attribute))->name;
         $node = $this->getFirstElement();
@@ -1395,7 +1395,7 @@ namespace FluentDOM {
       $this->each(
         function(\DOMElement $node) use ($names) {
           /** @noinspection PhpParamsInspection */
-          $attributes = is_null($names)
+          $attributes = NULL === $names
             ? array_keys(iterator_to_array($node->attributes))
             : $names;
           foreach ($attributes as $attribute) {
@@ -1470,7 +1470,7 @@ namespace FluentDOM {
           } else {
             $classString = $class;
           }
-          if (empty($classString) && $switch == FALSE) {
+          if (empty($classString) && !$switch) {
             if ($node->hasAttribute('class')) {
               $node->removeAttribute('class');
             }
@@ -1517,11 +1517,11 @@ namespace FluentDOM {
       foreach ($toggleClasses as $class) {
         if (
           isset($currentClasses[$class]) &&
-          ($switch === FALSE || is_null($switch))
+          (NULL === $switch || FALSE === $switch)
         ) {
           unset($currentClasses[$class]);
           $modified = TRUE;
-        } elseif ($switch === TRUE || is_null($switch)) {
+        } elseif (NULL === $switch || TRUE === $switch) {
           $currentClasses[$class] = TRUE;
           $modified = TRUE;
         }
@@ -1544,7 +1544,7 @@ namespace FluentDOM {
      * @return string|NULL|$this
      */
     public function css($property, $value = NULL) {
-      if (is_string($property) && is_null($value)) {
+      if (NULL === $value && is_string($property)) {
         $properties = new Query\Css\Properties((string)$this->attr('style'));
         if (isset($properties[$property])) {
           return $properties[$property];
@@ -1585,7 +1585,7 @@ namespace FluentDOM {
      * @return mixed
      */
     public function data($name, $value = NULL) {
-      if (!is_array($name) && is_null($value)) {
+      if (NULL === $value && !is_array($name)) {
         //reading
         if ($node = $this->getFirstElement()) {
           $data = new Query\Data($node);

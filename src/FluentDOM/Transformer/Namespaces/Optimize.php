@@ -125,7 +125,7 @@ namespace FluentDOM\Transformer\Namespaces {
     private function createElement(\DOMNode $target, $prefix, $name, $uri) {
       $document = $target instanceof \DOMDocument ? $target : $target->ownerDocument;
       $newNodeName = empty($prefix) ? $name : $prefix.':'.$name;
-      if (empty($uri) && NULL == $target->lookupNamespaceUri(NULL)) {
+      if (empty($uri) && NULL === $target->lookupNamespaceUri(NULL)) {
         $newNode = $document->createElement($newNodeName);
       } else {
         $newNode = $document->createElementNS((string)$uri, $newNodeName);
@@ -160,7 +160,7 @@ namespace FluentDOM\Transformer\Namespaces {
      */
     private function getNodeDefinition(\DOMNode $node) {
       $isElement = $node instanceof \DOMElement;
-      $prefix = $isElement && $node->prefix == 'default'
+      $prefix = $isElement && $node->prefix === 'default'
         ? NULL : $node->prefix;
       $name = $node->localName;
       $uri = $node->namespaceURI;

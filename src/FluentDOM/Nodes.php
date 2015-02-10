@@ -772,17 +772,19 @@ namespace FluentDOM {
      * @return array
      */
     public function unique(array $array) {
+      $count = count($array);
+      if ($count <= 1) {
+        if ($count == 1) {
+          Constraints::assertNode(
+            reset($array), 'Array must only contain dom nodes, found "%s".'
+          );
+        }
+        return $array;
+      }
       $sortable = array();
       $unsortable = array();
       foreach ($array as $node) {
-        if (!($node instanceof \DOMNode)) {
-          throw new \InvalidArgumentException(
-            sprintf(
-              'Array must only contain dom nodes, found "%s".',
-              is_object($node) ? get_class($node) : gettype($node)
-            )
-          );
-        }
+        Constraints::assertNode($node, 'Array must only contain dom nodes, found "%s".');
         $hash = spl_object_hash($node);
         if (
           ($node->parentNode instanceof \DOMNode) ||

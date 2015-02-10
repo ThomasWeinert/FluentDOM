@@ -44,6 +44,23 @@ namespace FluentDOM {
     }
 
     /**
+     * @param mixed $node
+     * @param string $message
+     * @return bool
+     */
+    public static function assertNode($node, $message = 'DOMNode expected, got: %s.') {
+      if (!($node instanceof \DOMNode)) {
+        throw new \InvalidArgumentException(
+          sprintf(
+            $message,
+            is_object($node) ? get_class($node) : gettype($node)
+          )
+        );
+      }
+      return TRUE;
+    }
+
+    /**
      * Check if $elements is a traversable node list. It returns
      * the $elements or NULL
      *

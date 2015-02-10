@@ -114,7 +114,7 @@ namespace FluentDOM {
       if ($dom instanceof \DOMDocument) {
         $this->_document = $dom;
         $this->setContentType($contentType, TRUE);
-        unset($this->_xpath);
+        $this->_xpath = NULL;
         $this->applyNamespaces();
         return $this;
       }

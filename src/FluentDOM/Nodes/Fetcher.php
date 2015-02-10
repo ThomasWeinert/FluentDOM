@@ -71,7 +71,7 @@ namespace FluentDOM\Nodes {
           );
         }
       }
-      if (!$ignoreContext && Constraints::hasOption($options, self::UNIQUE)) {
+      if (count($this->_nodes) > 1 && Constraints::hasOption($options, self::UNIQUE)) {
         $nodes = $this->_nodes->unique($nodes);
       }
       return $nodes;

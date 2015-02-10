@@ -697,7 +697,7 @@ namespace FluentDOM {
       if ($useDocumentContext) {
         $expression = $selectorIsFilter ? '//*' : '//*|//text()';
         $contextMode = self::CONTEXT_DOCUMENT;
-        $options = Nodes\Fetcher::UNIQUE | Nodes\Fetcher::IGNORE_CONTEXT;
+        $options = Nodes\Fetcher::IGNORE_CONTEXT;
       } else {
         $expression = $selectorIsFilter ? './/*' : './/*|.//text()';
         $contextMode = self::CONTEXT_CHILDREN;

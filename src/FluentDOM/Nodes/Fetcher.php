@@ -54,7 +54,10 @@ namespace FluentDOM\Nodes {
         );
       }
       $nodes = array();
-      if (Constraints::hasOption($options, self::IGNORE_CONTEXT)) {
+      $ignoreContext =
+        Constraints::hasOption($options, self::IGNORE_CONTEXT) ||
+        (strpos($expression, '/') === 0);
+      if ($ignoreContext) {
         $nodes = $this->fetchFor(
           $expression, NULL, $filter, $stopAt, $options
         );
@@ -68,7 +71,7 @@ namespace FluentDOM\Nodes {
           );
         }
       }
-      if (Constraints::hasOption($options, self::UNIQUE)) {
+      if (!$ignoreContext && Constraints::hasOption($options, self::UNIQUE)) {
         $nodes = $this->_nodes->unique($nodes);
       }
       return $nodes;

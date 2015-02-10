@@ -80,7 +80,7 @@ namespace FluentDOM {
     public function xpath() {
       if (
         isset($this->_xpath) &&
-        (defined('HHVM_VERSION') || $this->_xpath->document === $this)
+        (\FluentDOM::$isHHVM || $this->_xpath->document === $this)
       ) {
         return $this->_xpath;
       }

@@ -138,7 +138,7 @@ namespace FluentDOM\Loader\Json {
         return self::TYPE_OBJECT;
       } elseif (is_object($value)) {
         return self::TYPE_OBJECT;
-      } elseif (is_null($value)) {
+      } elseif (NULL === $value) {
         return self::TYPE_NULL;
       } elseif (is_bool($value)) {
         return self::TYPE_BOOLEAN;

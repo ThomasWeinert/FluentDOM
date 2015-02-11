@@ -24,6 +24,8 @@ namespace FluentDOM\Nodes {
     const UNIQUE = 4;
     /** ignore the current context (use the document context) */
     const IGNORE_CONTEXT = 8;
+    /** ignore the current context (use the document context) */
+    const FORCE_SORT = 16;
 
     /**
      * @var Nodes
@@ -71,7 +73,10 @@ namespace FluentDOM\Nodes {
           );
         }
       }
-      if (count($this->_nodes) > 1 && Constraints::hasOption($options, self::UNIQUE)) {
+      if (
+        Constraints::hasOption($options, self::FORCE_SORT) ||
+        (count($this->_nodes) > 1 && Constraints::hasOption($options, self::UNIQUE))
+      ) {
         $nodes = $this->_nodes->unique($nodes);
       }
       return $nodes;

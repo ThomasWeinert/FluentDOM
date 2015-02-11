@@ -70,7 +70,7 @@ namespace FluentDOM {
     public static function isNodeList($elements) {
       if ($elements instanceof \Traversable ||
           is_array($elements)) {
-        return empty($elements) ? new \ArrayIterator(array()) : $elements;
+        return empty($elements) ? new \EmptyIterator() : $elements;
       }
       return NULL;
     }

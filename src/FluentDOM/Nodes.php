@@ -23,8 +23,9 @@ namespace FluentDOM {
     const CONTEXT_SELF = 2;
     const CONTEXT_CHILDREN = 4;
 
-    const FIND_MODE_MATCH = 4;
-    const FIND_MODE_FILTER = 8;
+    const FIND_MODE_MATCH = 8;
+    const FIND_MODE_FILTER = 16;
+    const FIND_FORCE_SORT = 32;
 
     /**
      * @var Xpath
@@ -87,6 +88,7 @@ namespace FluentDOM {
         $this->setContentType($contentType);
       }
     }
+
     /**
      * Load a $source. The type of the source depends on the loaders. If no explicit loaders are set
      * it will use a set of default loaders for xml/html and json.
@@ -619,22 +621,21 @@ namespace FluentDOM {
      */
     public function push($elements, $ignoreTextNodes = FALSE) {
       if (Constraints::isNode($elements, $ignoreTextNodes)) {
-        $elements = array($elements);
-      }
-      if ($nodes = Constraints::isNodeList($elements)) {
+        if ($elements->ownerDocument !== $this->_document) {
+          throw new \OutOfBoundsException(
+            'Node is not a part of this document'
+          );
+        }
+        $this->_nodes[] = $elements;
+      } elseif ($nodes = Constraints::isNodeList($elements)) {
         $this->_useDocumentContext = FALSE;
         foreach ($nodes as $index => $node) {
-          if (Constraints::isNode($node, $ignoreTextNodes)) {
-            if ($node->ownerDocument === $this->_document) {
-              $this->_nodes[] = $node;
-            } else {
-              throw new \OutOfBoundsException(
-                sprintf(
-                  'Node #%d is not a part of this document', $index
-                )
-              );
-            }
+          if ($node->ownerDocument !== $this->_document) {
+            throw new \OutOfBoundsException(
+              sprintf('Node #%d is not a part of this document', $index)
+            );
           }
+          $this->_nodes[] = $node;
         }
       } elseif (NULL !== $elements) {
         throw new \InvalidArgumentException('Invalid elements variable.');
@@ -685,7 +686,7 @@ namespace FluentDOM {
      *
      * @example find.php Usage Example: FluentDOM::find()
      * @param string $selector selector
-     * @param integer $options FIND_* options CONTEXT_DOCUMENT, FIND_MODE_FILTER
+     * @param integer $options FIND_* options CONTEXT_DOCUMENT, FIND_MODE_FILTER, FIND_FORCE_SORT
      * @return Nodes
      */
     public function find($selector, $options = 0) {
@@ -697,28 +698,31 @@ namespace FluentDOM {
       if ($useDocumentContext) {
         $expression = $selectorIsFilter ? '//*' : '//*|//text()';
         $contextMode = self::CONTEXT_DOCUMENT;
-        $options = Nodes\Fetcher::IGNORE_CONTEXT;
+        $fetchOptions = Nodes\Fetcher::IGNORE_CONTEXT;
       } else {
         $expression = $selectorIsFilter ? './/*' : './/*|.//text()';
         $contextMode = self::CONTEXT_CHILDREN;
-        $options = Nodes\Fetcher::UNIQUE;
+        $fetchOptions = Nodes\Fetcher::UNIQUE;
+      }
+      if (($options & self::FIND_FORCE_SORT) === self::FIND_FORCE_SORT) {
+        $fetchOptions |= Nodes\Fetcher::FORCE_SORT;
       }
       if ($selectorIsFilter) {
         return $this->fetch(
           $expression,
           $this->prepareSelectorAsFilter($selector, $contextMode),
           NULL,
-          $options
+          $fetchOptions
         );
       } elseif ($selectorIsScalar) {
         return $this->fetch(
           $this->prepareSelector($selector, $contextMode),
           NULL,
           NULL,
-          $options
+          $fetchOptions
         );
       } else {
-        return $this->fetch($expression, $selector, NULL, $options);
+        return $this->fetch($expression, $selector, NULL, $fetchOptions);
       }
     }
 

@@ -17,6 +17,9 @@ namespace FluentDOM {
    */
   class QualifiedName {
 
+    public static $cacheLimit = 100;
+    private static $_cache = [];
+
     private $_prefix = '';
     private $_localName = '';
 
@@ -33,15 +36,26 @@ namespace FluentDOM {
     private function setQName($name) {
       if (empty($name)) {
         throw new \UnexpectedValueException('Invalid QName: QName is empty.');
+      } elseif (isset(self::$_cache[$name])) {
+        $this->_prefix = self::$_cache[$name][0];
+        $this->_localName = self::$_cache[$name][1];
+        return;
       } elseif (FALSE !== ($position = strpos($name, ':'))) {
-        $this->isNCName($name, 0, $position);
+        list($prefix, $localName) = explode(':', $name, 2);
+        $this->isNCName($prefix);
         $this->isNCName($name, $position + 1);
-        $this->_prefix = substr($name, 0, $position);
-        $this->_localName = substr($name, $position + 1);
+        $this->_prefix = $prefix;
+        $this->_localName = $localName;
       } else {
         $this->isNCName($name);
         $this->_localName = $name;
       }
+      if (count(self::$_cache) > self::$cacheLimit) {
+        array_splice(self::$_cache, 0, self::$cacheLimit / 2);
+      } elseif (isset(self::$_cache[$name])) {
+        unset(self::$_cache[$name]);
+      }
+      self::$_cache[$name] = [$this->_prefix, $this->_localName];
     }
 
     /**

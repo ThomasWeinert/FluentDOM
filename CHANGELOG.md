@@ -1,3 +1,12 @@
+Dev-Master
+----------
+
+- Implemented: Cache validated qualified tag names, avoid repeating the validation with pcre.
+    Can be configured using FluentDOM\QualifiedName::$cacheLimit
+- Implemented: Avoid sorting if nodes should be in order (FluentDOM\Nodes), faster
+- Implemented: Added FluentDOM\Nodes::FIND_FORCE_SORT, allow to force sorting for find()
+- Fixed: _require.php explicit class loading
+
 Version 5.2.1
 -------------
 
@@ -36,7 +45,7 @@ Version 5.1.0
   FluentDOM\Text, ...) are now functors, allowing to evaluate an
   Xpath expression relative to them
 - Changed: FluentDOM\Xpath is now a functor.
-- Changed: FluentDOM\Element::apppend() is now longer restricted to
+- Changed: FluentDOM\Element::append() is now longer restricted to
   FluentDOM\Appendable, but allows all kind of arguments
 - Added: FluentDOM\ProcessingInstruction extends DOMProcessingInstruction
 - Added: FluentDOM\Element::applyNamespaces(), adds xmlns

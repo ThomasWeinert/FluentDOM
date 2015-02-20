@@ -307,6 +307,19 @@ namespace FluentDOM {
      * @group CoreFunctions
      * @covers FluentDOM\Nodes::unique
      */
+    public function testUniquewithASingleNode() {
+      $fd = new Nodes();
+      $fd->document->appendElement('test');
+      $nodes = $fd->unique(
+        [$fd->document->documentElement]
+      );
+      $this->assertCount(1, $nodes);
+    }
+
+    /**
+     * @group CoreFunctions
+     * @covers FluentDOM\Nodes::unique
+     */
     public function testUniqueWithUnattachedNodes() {
       $fd = new Nodes();
       $node = $fd->document->createElement("test");

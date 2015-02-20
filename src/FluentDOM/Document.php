@@ -194,9 +194,9 @@ namespace FluentDOM {
         $namespace = $this->getNamespace('#default');
       }
       if ($namespace != '') {
-        $node = parent::createElementNS($namespace, $name);
+        $node = $this->createElementNS($namespace, $name);
       } elseif (isset($this->_namespaces['#default'])) {
-        $node = parent::createElementNS('', $name);
+        $node = $this->createElementNS('', $name);
       } else {
         $node = parent::createElement($name);
       }
@@ -232,7 +232,7 @@ namespace FluentDOM {
       if (empty($prefix)) {
         $node = parent::createAttribute($name);
       } else {
-        $node = parent::createAttributeNS($this->getNamespace($prefix), $name);
+        $node = $this->createAttributeNS($this->getNamespace($prefix), $name);
       }
       if (isset($value)) {
         $node->value = $value;
@@ -307,11 +307,11 @@ namespace FluentDOM {
       if ($context instanceof \DOMNodeList) {
         $result = '';
         foreach ($context as $node) {
-          $result .= parent::saveXML($node, $options);
+          $result .= $this->saveXML($node, $options);
         }
         return $result;
       }
-      return parent::saveXML($context, $options);
+      return $this->saveXML($context, $options);
     }
 
     /**
@@ -354,7 +354,7 @@ namespace FluentDOM {
       list($prefix, $localName) = QualifiedName::split($name);
       $namespace = $namespace = $this->getNamespace((string)$prefix);
       if ($namespace != '') {
-        return parent::getElementsByTagNameNS($namespace, $localName);
+        return $this->getElementsByTagNameNS($namespace, $localName);
       } else {
         return parent::getElementsByTagName($localName);
       }

@@ -1190,7 +1190,7 @@ namespace FluentDOM {
      * @param string|callable|NULL $xml
      * @return string|self
      */
-    function outerXml($xml = NULL) {
+    public function outerXml($xml = NULL) {
       return $this->outerContent(
         $xml,
         function($node) {
@@ -1209,7 +1209,7 @@ namespace FluentDOM {
      * @param string|callable|NULL $html
      * @return string|self
      */
-    function outerHtml($html = NULL) {
+    public function outerHtml($html = NULL) {
       return $this->outerContent(
         $html,
         function($node) {
@@ -1472,7 +1472,7 @@ namespace FluentDOM {
           } else {
             $classString = $class;
           }
-          if (empty($classString) && !$switch) {
+          if (empty($classString) && !(bool)$switch) {
             if ($node->hasAttribute('class')) {
               $node->removeAttribute('class');
             }

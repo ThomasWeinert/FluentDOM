@@ -229,10 +229,10 @@ namespace FluentDOM {
      */
     public function createAttribute($name, $value = NULL) {
       list($prefix) = QualifiedName::split($name);
-      if ($prefix) {
-        $node = parent::createAttributeNS($this->getNamespace($prefix), $name);
-      } else {
+      if (empty($prefix)) {
         $node = parent::createAttribute($name);
+      } else {
+        $node = parent::createAttributeNS($this->getNamespace($prefix), $name);
       }
       if (isset($value)) {
         $node->value = $value;

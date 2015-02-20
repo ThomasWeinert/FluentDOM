@@ -424,13 +424,13 @@ namespace FluentDOM {
      * @return string[]
      */
     private function resolveTagName($name) {
-      $namespace = '';
       list($prefix, $localName) = QualifiedName::split($name);
-      if ($prefix) {
+      if (empty($prefix)) {
+        return array('', $localName);
+      } else {
         $namespace = $this->getDocument()->getNamespace($prefix);
         return array($namespace, $localName);
       }
-      return array($namespace, $localName);
     }
 
     /**

@@ -5,6 +5,11 @@ namespace FluentDOM {
 
   class QualifiedNameTest extends TestCase {
 
+    public function setUp() {
+      // disable caching limit
+      QualifiedName::$cacheLimit = 0;
+    }
+
     /**
      * @covers FluentDOM\QualifiedName
      * @dataProvider dataProviderValidQualifiedNames
@@ -65,12 +70,37 @@ namespace FluentDOM {
     /**
      * @covers FluentDOM\QualifiedName
      */
+    public function testIsNCNameWithInvalidPrefixCharExpectingException() {
+      $this->setExpectedException(
+        'UnexpectedValueException',
+        'Invalid QName "n<c>:tag": Invalid character at index 1.'
+      );
+      new QualifiedName('n<c>:tag');
+    }
+
+    /**
+     * @covers FluentDOM\QualifiedName
+     */
     public function testIsNCNameWithInvalidTagnameStartingCharExpectingException() {
       $this->setExpectedException(
         'UnexpectedValueException',
         'Invalid QName "nc:1tag": Invalid character at index 3.'
       );
       new QualifiedName('nc:1tag');
+    }
+
+    /**
+     * This is an integration test for the transparent caching.
+     * With the low limit all parts of the logic will be triggered.
+     *
+     * @covers FluentDOM\QualifiedName
+     */
+    public function testCaching() {
+      QualifiedName::$cacheLimit = 3;
+      $names = ['one', 'two', 'one', 'three', 'four', 'five', 'one'];
+      foreach ($names as $name) {
+        $this->assertTrue(QualifiedName::validate($name));
+      }
     }
 
     /**

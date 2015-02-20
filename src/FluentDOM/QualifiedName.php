@@ -42,7 +42,7 @@ namespace FluentDOM {
         return;
       } elseif (FALSE !== ($position = strpos($name, ':'))) {
         list($prefix, $localName) = explode(':', $name, 2);
-        $this->isNCName($prefix);
+        $this->isNCName($prefix, 0, $name);
         $this->isNCName($name, $position + 1);
         $this->_prefix = $prefix;
         $this->_localName = $localName;
@@ -52,8 +52,6 @@ namespace FluentDOM {
       }
       if (count(self::$_cache) > self::$cacheLimit) {
         array_splice(self::$_cache, 0, self::$cacheLimit / 2);
-      } elseif (isset(self::$_cache[$name])) {
-        unset(self::$_cache[$name]);
       }
       self::$_cache[$name] = [$this->_prefix, $this->_localName];
     }
@@ -63,11 +61,11 @@ namespace FluentDOM {
      *
      * @param string $name full QName
      * @param integer $offset Offset of NCName part in QName
-     * @param integer $length Length of NCName part in QName
+     * @param string $fullName full name used in error message
      * @throws \UnexpectedValueException
      * @return boolean
      */
-    private function isNCName($name, $offset = 0, $length = 0) {
+    private function isNCName($name, $offset = 0, $fullName = NULL) {
       $nameStartChar =
         'A-Z_a-z'.
         '\\x{C0}-\\x{D6}\\x{D8}-\\x{F6}\\x{F8}-\\x{2FF}\\x{370}-\\x{37D}'.
@@ -77,12 +75,11 @@ namespace FluentDOM {
       $nameChar =
         $nameStartChar.
         '\\.\\d\\x{B7}\\x{300}-\\x{36F}\\x{203F}-\\x{2040}';
-      if ($length > 0) {
-        $namePart = substr($name, $offset, $length);
-      } elseif ($offset > 0) {
+      if ($offset > 0) {
         $namePart = substr($name, $offset);
       } else {
         $namePart = $name;
+        $name = $fullName ?: $namePart;
       }
       if (empty($namePart)) {
         throw new \UnexpectedValueException(

@@ -71,6 +71,22 @@ namespace FluentDOM\Nodes {
     /**
      * @covers FluentDOM\Nodes\Fetcher
      */
+    public function testFetchUnique() {
+      $fd = (new Nodes(self::XML))->find('/items/group/item');
+      $fetcher = new Fetcher($fd);
+      $this->assertXmlNodesArrayEqualsXmlStrings(
+        array(
+          '<item index="0">text1</item>',
+          '<item index="1">text2</item>',
+          '<item index="2">text3</item>'
+        ),
+        $fetcher->fetch('self::*', NULL, NULL, Fetcher::UNIQUE)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Nodes\Fetcher
+     */
     public function testFetchUntil() {
       $fd = (new Nodes(self::XML))->find('/items/group');
       $fetcher = new Fetcher($fd);

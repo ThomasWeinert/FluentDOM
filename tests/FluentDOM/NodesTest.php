@@ -209,6 +209,18 @@ namespace FluentDOM {
     }
 
     /**
+     * @group Load
+     * @covers FluentDOM\Nodes::push
+     */
+    public function testPushListWithNodesFromDifferentDocumentExpectingException() {
+      $dom = new Document();
+      $dom->appendElement('test');
+      $fd = new Nodes();
+      $this->setExpectedException('OutOfBoundsException');
+      $fd->push([$dom->documentElement]);
+    }
+
+    /**
      * @group CoreFunctions
      * @covers FluentDOM\Nodes::formatOutput
      */

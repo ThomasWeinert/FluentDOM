@@ -46,6 +46,43 @@ namespace FluentDOM {
     /**
      * @group Utility
      * @group Constraints
+     * @dataProvider provideValidNodes
+     * @covers FluentDOM\Constraints::assertNode
+     */
+    public function testAssertNodeExpectingNode($node) {
+      $this->assertTrue(Constraints::assertNode($node));
+    }
+
+    /**
+     * @group Utility
+     * @group Constraints
+     * @covers FluentDOM\Constraints::assertNode
+     */
+    public function testAssertNodeExpectingException() {
+      $this->setExpectedException(
+        'InvalidArgumentException',
+        'DOMNode expected, got: boolean.'
+      );
+      Constraints::assertNode(FALSE);
+    }
+
+    /**
+     * @group Utility
+     * @group Constraints
+     * @covers FluentDOM\Constraints::assertNode
+     */
+    public function testAssertNodeExpectingExceptionWithModifiedMessage() {
+      $this->setExpectedException(
+        'InvalidArgumentException',
+        'Not a node but a stdClass.'
+      );
+      Constraints::assertNode(new \stdClass, 'Not a node but a %s.');
+    }
+
+
+    /**
+     * @group Utility
+     * @group Constraints
      * @dataProvider provideNodeLists
      * @covers FluentDOM\Constraints::isNodeList
      */

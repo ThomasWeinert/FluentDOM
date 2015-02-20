@@ -117,7 +117,9 @@ namespace FluentDOM {
         );
       }
       parent::__unset($name);
+      // @codeCoverageIgnoreStart
     }
+    // @codeCoverageIgnoreEnd
 
     /**
      * declaring an empty() or clone() method will crash the parser so we use some magic

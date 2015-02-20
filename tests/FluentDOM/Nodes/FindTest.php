@@ -29,6 +29,20 @@ namespace FluentDOM {
      * @covers FluentDOM\Nodes::find
      * @covers FluentDOM\Nodes::fetch
      */
+    public function testFinForcingSort() {
+      $fd = (new Nodes(self::XML))->find('/*');
+      $this->assertEquals(1, $fd->length);
+      $findFd = $fd->find('group/item', \FluentDOM\Nodes::FIND_FORCE_SORT);
+      $this->assertEquals(3, $findFd->length);
+      $this->assertTrue($findFd !== $fd);
+    }
+
+    /**
+     * @group Traversing
+     * @group TraversingFind
+     * @covers FluentDOM\Nodes::find
+     * @covers FluentDOM\Nodes::fetch
+     */
     public function testFindWithCallableSelector() {
       $fd = (new Nodes(self::XML))->find('/*');
       $this->assertEquals(1, $fd->length);

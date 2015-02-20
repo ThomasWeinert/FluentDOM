@@ -121,9 +121,6 @@ abstract class FluentDOM {
    */
   public static function load($source, $contentType = 'text/xml', array $options = []) {
     self::_require();
-    if ($contentType instanceof FluentDOM\Loadable) {
-
-    }
     if (!isset(self::$_loader)) {
       self::$_loader = self::getDefaultLoaders();
     }

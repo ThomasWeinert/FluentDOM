@@ -18,6 +18,10 @@ namespace FluentDOM\Node\ParentNode {
 
     abstract public function appendChild(\DOMNode $newChild);
 
+    /**
+     * Returns the first element child node
+     * @return Element|null
+     */
     public function getFirstElementChild() {
       if ($this instanceof Document) {
         return $this->documentElement;
@@ -32,6 +36,10 @@ namespace FluentDOM\Node\ParentNode {
       return NULL;
     }
 
+    /**
+     * Returns the last element child node
+     * @return Element|null
+     */
     public function getLastElementChild() {
       if ($this instanceof Document) {
         return $this->documentElement;
@@ -47,6 +55,11 @@ namespace FluentDOM\Node\ParentNode {
       return NULL;
     }
 
+    /**
+     * Insert nodes before the first child node
+     *
+     * @param mixed $nodes
+     */
     public function prepend($nodes) {
       /** @var \DOMNode|Implementation $this */
       if (
@@ -59,6 +72,11 @@ namespace FluentDOM\Node\ParentNode {
       }
     }
 
+    /**
+     * Append nodes as children to the node itself
+     *
+     * @param mixed $nodes
+     */
     public function append($nodes) {
       /** @var \DOMNode|Implementation $this */
       if ($nodes = MutationMacro::expand($this, $nodes)) {

@@ -11,6 +11,7 @@ namespace FluentDOM\Node {
 
     /**
      * @covers FluentDOM\Node\NonDocumentTypeChildNode\Implementation
+     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Properties
      */
     public function testNextElementSibling() {
       $dom = new Document();
@@ -21,9 +22,21 @@ namespace FluentDOM\Node {
         $node->saveXml()
       );
     }
+    /**
+     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Implementation
+     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Properties
+     */
+    public function testNextElementSiblingExpectingNull() {
+      $dom = new Document();
+      $dom->loadXML('<foo><bar index="0"/>TEXT</foo>');
+      $this->assertNull(
+        $dom->documentElement->firstChild->nextElementSibling
+      );
+    }
 
     /**
      * @covers FluentDOM\Node\NonDocumentTypeChildNode\Implementation
+     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Properties
      */
     public function testPreviousElementSibling() {
       $dom = new Document();
@@ -32,6 +45,18 @@ namespace FluentDOM\Node {
       $this->assertEquals(
         '<bar index="0"/>',
         $node->saveXml()
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Implementation
+     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Properties
+     */
+    public function testPreviousElementSiblingExpectingNull() {
+      $dom = new Document();
+      $dom->loadXML('<foo>TEXT<bar index="1"/></foo>');
+      $this->assertNull(
+        $dom->documentElement->lastChild->previousElementSibling
       );
     }
   }

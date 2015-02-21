@@ -50,20 +50,12 @@ namespace FluentDOM\Nodes {
     public function fetch(
       $expression, callable $filter = NULL, callable $stopAt = NULL, $options = 0
     ) {
-      if (!is_string($expression) || empty($expression)) {
-        throw new \InvalidArgumentException(
-          'Invalid selector/expression.'
-        );
-      }
-      $nodes = array();
-      $ignoreContext =
-        Constraints::hasOption($options, self::IGNORE_CONTEXT) ||
-        (strpos($expression, '/') === 0);
-      if ($ignoreContext) {
+      if ($this->validateContextIgnore($expression, $options)) {
         $nodes = $this->fetchFor(
           $expression, NULL, $filter, $stopAt, $options
         );
       } else {
+        $nodes = array();
         foreach ($this->_nodes->toArray() as $context) {
           $nodes = array_merge(
             $nodes,
@@ -73,6 +65,35 @@ namespace FluentDOM\Nodes {
           );
         }
       }
+      return $this->unique($nodes, $options);
+    }
+
+    /**
+     * Validate if the context can be ignored.
+     *
+     * @param string $expression
+     * @param int $options
+     * @return bool
+     */
+    private function validateContextIgnore($expression, $options) {
+      if (!is_string($expression) || empty($expression)) {
+        throw new \InvalidArgumentException(
+          'Invalid selector/expression.'
+        );
+      }
+      return
+        Constraints::hasOption($options, self::IGNORE_CONTEXT) ||
+        (strpos($expression, '/') === 0);
+    }
+
+    /**
+     * Make nodes unique if needed or forced.
+     *
+     * @param array $nodes
+     * @param int $options
+     * @return array
+     */
+    private function unique($nodes, $options) {
       if (
         Constraints::hasOption($options, self::FORCE_SORT) ||
         (count($this->_nodes) > 1 && Constraints::hasOption($options, self::UNIQUE))

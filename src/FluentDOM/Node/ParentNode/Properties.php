@@ -13,8 +13,10 @@ namespace FluentDOM\Node\ParentNode {
       case 'lastElementChild' :
         return $this->getLastElementChild();
       }
+      // @codeCoverageIgnoreStart
       return $this->getParentProperty($name);
     }
+    // @codeCoverageIgnoreEnd
 
     public function __set($name, $value) {
       switch ($name) {
@@ -27,9 +29,10 @@ namespace FluentDOM\Node\ParentNode {
           )
         );
       }
+      // @codeCoverageIgnoreStart
       $this->setParentProperty($name, $value);
-      return TRUE;
     }
+    // @codeCoverageIgnoreEnd
   }
 
 }

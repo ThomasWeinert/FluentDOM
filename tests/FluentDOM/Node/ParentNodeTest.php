@@ -47,6 +47,20 @@ namespace FluentDOM\Node {
         $dom->documentElement->firstElementChild
       );
     }
+
+    /**
+     * @covers FluentDOM\Node\ParentNode\Implementation
+     * @covers FluentDOM\Node\ParentNode\Properties
+     */
+    public function testSetFirstElementChildExpectingException() {
+      $dom = new Document();
+      $dom->loadXML('<foo>TEXT</foo>');
+      $this->setExpectedException(
+        'BadMethodCallException'
+      );
+      $dom->firstElementChild = $dom->createElement('dummy');
+    }
+
     /**
      * @covers FluentDOM\Node\ParentNode\Implementation
      * @covers FluentDOM\Node\ParentNode\Properties
@@ -84,6 +98,19 @@ namespace FluentDOM\Node {
       $this->assertNull(
         $dom->documentElement->lastElementChild
       );
+    }
+
+    /**
+     * @covers FluentDOM\Node\ParentNode\Implementation
+     * @covers FluentDOM\Node\ParentNode\Properties
+     */
+    public function testSetLastElementChildExpectingException() {
+      $dom = new Document();
+      $dom->loadXML('<foo>TEXT</foo>');
+      $this->setExpectedException(
+        'BadMethodCallException'
+      );
+      $dom->lastElementChild = $dom->createElement('dummy');
     }
 
     /**

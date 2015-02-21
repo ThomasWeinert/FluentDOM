@@ -38,12 +38,25 @@ namespace FluentDOM\Node {
     /**
      * @covers FluentDOM\Node\ChildNode\Implementation
      */
-    public function testAfterAppendsStringAsTextNodeBeforeElementNode() {
+    public function testAfterAppendsStringAsTextNode() {
       $dom = new Document();
       $dom->loadXML('<foo><bar/></foo>');
       $dom('/foo/bar')->item(0)->after('APPENDED');
       $this->assertXmlStringEqualsXmlString(
         '<foo><bar/>APPENDED</foo>',
+        $dom->saveXML()
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Node\ChildNode\Implementation
+     */
+    public function testAfterAppendsStringAsTextNodeBeforeElementNode() {
+      $dom = new Document();
+      $dom->loadXML('<foo><bar/><bar/></foo>');
+      $dom('/foo/bar')->item(0)->after('APPENDED');
+      $this->assertXmlStringEqualsXmlString(
+        '<foo><bar/>APPENDED<bar/></foo>',
         $dom->saveXML()
       );
     }

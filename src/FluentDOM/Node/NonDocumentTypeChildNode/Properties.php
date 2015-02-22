@@ -28,7 +28,6 @@ namespace FluentDOM\Node\NonDocumentTypeChildNode {
         );
       }
       $this->setParentProperty($name, $value);
-      return TRUE;
     }
   }
 }

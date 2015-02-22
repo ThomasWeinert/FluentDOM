@@ -7,6 +7,8 @@ namespace FluentDOM\HHVM {
    * HHVM
    *
    * https://github.com/facebook/hhvm/issues/4100
+   *
+   * @codeCoverageIgnore
    */
   trait Properties {
 

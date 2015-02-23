@@ -129,14 +129,33 @@ namespace FluentDOM\Node {
      * @covers FluentDOM\Node\NonDocumentTypeChildNode\Properties
      */
     public function testSetUnknownProperty() {
+      if (defined('HHVM_VERSION')) {
+        $this->markTestSkipped(
+          'Setting properties on DOM objects results in a fatal error on HHVM.'
+        );
+      }
       $dom = new Document();
       $dom->loadXML('<foo><!--comment--></foo>');
-      $dom->documentElement->firstChild->UNKNOWN_PROPERTY = 'success';
+      $node = $dom->documentElement->firstChild;
+      $node->SOME_PROPERTY_X = 'success';
       $this->setExpectedException(
         'PHPUnit_Framework_Error_Notice',
-        'Undefined property: FluentDOM\\Comment::$UNKNOWN_PROPERTY'
+        'Undefined property: FluentDOM\\Comment::$SOME_PROPERTY'
       );
-      $dom->documentElement->firstChild->UNKNOWN_PROPERTY;
+      $this->assertEquals('success', $node->SOME_PROPERTY);
+    }
+
+    /**
+     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Implementation
+     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Properties
+     */
+    public function testGetUnknownPropertyExpectingException() {
+      $dom = new Document();
+      $dom->loadXML('<foo><!--comment--></foo>');
+      $node = $dom->documentElement->firstChild;
+      $node->SOME_PROPERTY_X = 'success';
+      $this->setExpectedException('PHPUnit_Framework_Error_Notice');
+      $node->SOME_PROPERTY;
     }
   }
 }

@@ -137,11 +137,7 @@ namespace FluentDOM\Node {
       $dom = new Document();
       $dom->loadXML('<foo><!--comment--></foo>');
       $node = $dom->documentElement->firstChild;
-      $node->SOME_PROPERTY_X = 'success';
-      $this->setExpectedException(
-        'PHPUnit_Framework_Error_Notice',
-        'Undefined property: FluentDOM\\Comment::$SOME_PROPERTY'
-      );
+      $node->SOME_PROPERTY = 'success';
       $this->assertEquals('success', $node->SOME_PROPERTY);
     }
 
@@ -150,10 +146,14 @@ namespace FluentDOM\Node {
      * @covers FluentDOM\Node\NonDocumentTypeChildNode\Properties
      */
     public function testGetUnknownPropertyExpectingException() {
+      if (defined('HHVM_VERSION') && version_compare(HHVM_VERSION, '3.6', '<')) {
+        $this->markTestSkipped(
+          'Setting properties on DOM objects results in a fatal error on HHVM.'
+        );
+      }
       $dom = new Document();
       $dom->loadXML('<foo><!--comment--></foo>');
       $node = $dom->documentElement->firstChild;
-      $node->SOME_PROPERTY_X = 'success';
       $this->setExpectedException('PHPUnit_Framework_Error_Notice');
       $node->SOME_PROPERTY;
     }

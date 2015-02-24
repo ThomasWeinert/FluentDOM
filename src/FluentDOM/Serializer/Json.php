@@ -100,28 +100,17 @@ namespace FluentDOM\Serializer {
      * @return mixed
      */
     protected function getNode(\DOMElement $node) {
-      $xpath = new Xpath($node->ownerDocument);
-      if ($node->hasAttributeNS(self::XMLNS_JSONDOM, 'type')) {
-        $type = $node->getAttributeNS(self::XMLNS_JSONDOM, 'type');
-      } else {
-        $type = $xpath('count(*) > 0', $node) ? 'object' : 'string';
-      }
-      switch ($type) {
+      switch ($this->getType($node)) {
       case 'object' :
         $result = new \stdClass();
         /** @var \DOMElement $child */
-        foreach ($xpath('*', $node) as $child) {
-          if ($child->hasAttributeNS(self::XMLNS_JSONDOM, 'name')) {
-            $name = $child->getAttributeNS(self::XMLNS_JSONDOM, 'name');
-          } else {
-            $name = $child->localName;
-          }
-          $result->{$name} = $this->getNode($child);
+        foreach ($this->getChildElements($node) as $child) {
+          $result->{$this->getName($child)} = $this->getNode($child);
         }
         break;
       case 'array' :
         $result = [];
-        foreach ($xpath('*', $node) as $child) {
+        foreach ($this->getChildElements($node) as $child) {
           $result[] = $this->getNode($child);
         }
         break;
@@ -135,6 +124,40 @@ namespace FluentDOM\Serializer {
         return $node->nodeValue;
       }
       return $result;
+    }
+
+    /**
+     * @param \DOMElement $source
+     * @return \DOMNodeList
+     */
+    private function getChildElements(\DOMElement $source) {
+      $xpath = new Xpath($source->ownerDocument);
+      return $xpath('*', $source);
+    }
+
+    /**
+     * @param \DOMElement $node
+     * @return string
+     */
+    private function getType(\DOMElement $node) {
+      if ($node->hasAttributeNS(self::XMLNS_JSONDOM, 'type')) {
+        return $node->getAttributeNS(self::XMLNS_JSONDOM, 'type');
+      } else {
+        $xpath = new Xpath($node->ownerDocument);
+        return $xpath('count(*) > 0', $node) ? 'object' : 'string';
+      }
+    }
+
+    /**
+     * @param \DOMElement $node
+     * @return string
+     */
+    private function getName(\DOMElement $node) {
+      if ($node->hasAttributeNS(self::XMLNS_JSONDOM, 'name')) {
+        return $node->getAttributeNS(self::XMLNS_JSONDOM, 'name');
+      } else {
+        return $node->localName;
+      }
     }
 
     /**

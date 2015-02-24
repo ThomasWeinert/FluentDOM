@@ -685,7 +685,7 @@ namespace FluentDOM {
      * Additionally in this mode, it will find only element nodes.     *
      *
      * @example find.php Usage Example: FluentDOM::find()
-     * @param string $selector selector
+     * @param mixed $selector selector
      * @param integer $options FIND_* options CONTEXT_DOCUMENT, FIND_MODE_FILTER, FIND_FORCE_SORT
      * @return Nodes
      */

@@ -52,25 +52,14 @@ namespace FluentDOM\Transformer {
      * @param bool $addNameAttribute
      */
     public function addNode($parent, \DOMElement $node, $addNameAttribute = FALSE) {
-      $xpath = new Xpath($node->ownerDocument);
-      if ($node->hasAttributeNS(self::XMLNS_JSONDOM, 'type')) {
-        $type = $node->getAttributeNS(self::XMLNS_JSONDOM, 'type');
-      } else {
-        $type = $xpath('count(*) > 0', $node) ? 'object' : 'string';
-      }
-      switch ($type) {
+      switch ($this->getType($node)) {
       case 'object' :
         $result = $parent->appendElement('json:object');
-        /** @var \DOMElement $child */
-        foreach ($xpath('*', $node) as $child) {
-          $this->addNode($result, $child, TRUE);
-        }
+        $this->appendChildNodes($result, $node, TRUE);
         break;
       case 'array' :
         $result = $parent->appendElement('json:array');
-        foreach ($xpath('*', $node) as $child) {
-          $this->addNode($result, $child, FALSE);
-        }
+        $this->appendChildNodes($result, $node, FALSE);
         break;
       case 'number' :
         $result = $parent->appendElement('json:number', $node->nodeValue);
@@ -91,6 +80,32 @@ namespace FluentDOM\Transformer {
           $name = $node->getAttributeNS(self::XMLNS_JSONDOM, 'name');
         }
         $result['name'] = $name;
+      }
+    }
+
+    /**
+     * @param \DOMElement $target
+     * @param \DOMElement $source
+     * @param bool $addNameAttribute
+     */
+    private function appendChildNodes(\DOMElement $target, \DOMElement $source, $addNameAttribute = FALSE) {
+      $xpath = new Xpath($source->ownerDocument);
+      /** @var \DOMElement $child */
+      foreach ($xpath('*', $source) as $child) {
+        $this->addNode($target, $child, $addNameAttribute);
+      }
+    }
+
+    /**
+     * @param \DOMElement $node
+     * @return string
+     */
+    private function getType(\DOMElement $node) {
+      if ($node->hasAttributeNS(self::XMLNS_JSONDOM, 'type')) {
+        return $node->getAttributeNS(self::XMLNS_JSONDOM, 'type');
+      } else {
+        $xpath = new Xpath($node->ownerDocument);
+        return $xpath('count(*) > 0', $node) ? 'object' : 'string';
       }
     }
   }

@@ -42,16 +42,37 @@ namespace FluentDOM\Loader\Json {
           $nodeName
         );
         $node->appendChild($child);
-        if (isset($json->{'#text'})) {
-          $child->appendChild($dom->createTextNode($json->{'#text'}));
-        }
-        if (isset($json->{'#children'})) {
-          $this->transferAttributes($child, $namespaces, $attributes);
-          foreach ($json->{'#children'} as $value) {
-            $name = isset($value->{'#name'}) ? $value->{'#name'} : '@';
-            if (substr($name, 0, 1) != '@') {
-              $this->transferTo($child, $value);
-            }
+        $this->transferText($dom, $child, $json);
+        $this->transferChildren($child, $json, $namespaces, $attributes);
+      }
+    }
+
+    /**
+     * @param \DOMDocument $dom
+     * @param \DOMElement $target
+     * @param \stdClass $json
+     */
+    private function transferText(\DOMDocument $dom, \DOMElement $target, $json) {
+      if (isset($json->{'#text'})) {
+        $target->appendChild($dom->createTextNode($json->{'#text'}));
+      }
+    }
+
+    /**
+     * @param \DOMElement $target
+     * @param \stdClass $json
+     * @param \stdClass $namespaces
+     * @param \stdClass $attributes
+     */
+    private function transferChildren(
+      \DOMElement $target, $json, $namespaces, $attributes
+    ) {
+      if (isset($json->{'#children'})) {
+        $this->transferAttributes($target, $namespaces, $attributes);
+        foreach ($json->{'#children'} as $value) {
+          $name = isset($value->{'#name'}) ? $value->{'#name'} : '@';
+          if (substr($name, 0, 1) != '@') {
+            $this->transferTo($target, $value);
           }
         }
       }

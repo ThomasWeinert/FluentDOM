@@ -690,23 +690,13 @@ namespace FluentDOM {
      * @return Nodes
      */
     public function find($selector, $options = 0) {
-      $useDocumentContext = $this->_useDocumentContext ||
-        ($options & self::CONTEXT_DOCUMENT) === self::CONTEXT_DOCUMENT;
-      $selectorIsScalar = is_scalar($selector) || NULL === $selector;
-      $selectorIsFilter = $selectorIsScalar &&
-        ($options & self::FIND_MODE_FILTER) === self::FIND_MODE_FILTER;
-      if ($useDocumentContext) {
-        $expression = $selectorIsFilter ? '//*' : '//*|//text()';
-        $contextMode = self::CONTEXT_DOCUMENT;
-        $fetchOptions = Nodes\Fetcher::IGNORE_CONTEXT;
-      } else {
-        $expression = $selectorIsFilter ? './/*' : './/*|.//text()';
-        $contextMode = self::CONTEXT_CHILDREN;
-        $fetchOptions = Nodes\Fetcher::UNIQUE;
-      }
-      if (($options & self::FIND_FORCE_SORT) === self::FIND_FORCE_SORT) {
-        $fetchOptions |= Nodes\Fetcher::FORCE_SORT;
-      }
+      list(
+        $selectorIsScalar,
+        $selectorIsFilter,
+        $expression,
+        $contextMode,
+        $fetchOptions
+      ) = $this->prepareFindContext($selector, $options);
       if ($selectorIsFilter) {
         return $this->fetch(
           $expression,
@@ -724,6 +714,33 @@ namespace FluentDOM {
       } else {
         return $this->fetch($expression, $selector, NULL, $fetchOptions);
       }
+    }
+
+    /**
+     * @param mixed $selector
+     * @param int $options
+     * @return array
+     */
+    private function prepareFindContext($selector, $options) {
+      $useDocumentContext = $this->_useDocumentContext ||
+        ($options & self::CONTEXT_DOCUMENT) === self::CONTEXT_DOCUMENT;
+      $selectorIsScalar = is_scalar($selector) || NULL === $selector;
+      $selectorIsFilter = $selectorIsScalar &&
+        ($options & self::FIND_MODE_FILTER) === self::FIND_MODE_FILTER;
+      if ($useDocumentContext) {
+        $expression = $selectorIsFilter ? '//*' : '//*|//text()';
+        $contextMode = self::CONTEXT_DOCUMENT;
+        $fetchOptions = Nodes\Fetcher::IGNORE_CONTEXT;
+      } else {
+        $expression = $selectorIsFilter ? './/*' : './/*|.//text()';
+        $contextMode = self::CONTEXT_CHILDREN;
+        $fetchOptions = Nodes\Fetcher::UNIQUE;
+      }
+      if (($options & self::FIND_FORCE_SORT) === self::FIND_FORCE_SORT) {
+        $fetchOptions |= Nodes\Fetcher::FORCE_SORT;
+        return array($selectorIsScalar, $selectorIsFilter, $expression, $contextMode, $fetchOptions);
+      }
+      return array($selectorIsScalar, $selectorIsFilter, $expression, $contextMode, $fetchOptions);
     }
 
     private function prepareSelectorAsFilter($selector, $contextMode) {

@@ -79,17 +79,17 @@ abstract class FluentDOM {
    * @codeCoverageIgnore
    */
   public static function QueryCss($source = NULL, $contentType = 'text/xml', array $options = []) {
-    if ($builder = self::getXPathTransformer()) {
-      $query = self::Query($source, $contentType, $options);
-      $isHtml = ($query->contentType === 'text/html');
-      $query->onPrepareSelector = function($selector, $mode) use ($builder, $isHtml) {
-        return $builder->toXpath(
-          $selector,
-          $mode === \FluentDOM\Nodes::CONTEXT_DOCUMENT,
-          $isHtml
-        );
-      };
-    }
+    $builder = self::getXPathTransformer();
+    $query = self::Query($source, $contentType, $options);
+    $isHtml = ($query->contentType === 'text/html');
+    $query->onPrepareSelector = function($selector, $mode) use ($builder, $isHtml) {
+      return $builder->toXpath(
+        $selector,
+        $mode === \FluentDOM\Nodes::CONTEXT_DOCUMENT,
+        $isHtml
+      );
+    };
+    return $query;
   }
 
   /**

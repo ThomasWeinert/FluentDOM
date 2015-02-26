@@ -28,24 +28,11 @@ namespace FluentDOM\Node\QuerySelector {
      * @return \DOMNodeList
      */
     public function querySelectorAll($selector) {
-      $hasPhpCss = class_exists('PhpCss');
-      $hasCssSelector = class_exists('Symfony\Component\CssSelector\CssSelector');
-      $isDocumentContext = $this instanceof \DOMDocument;
-      if ($hasPhpCss) {
-        $options = ($isDocumentContext)
-          ? \PhpCss\Ast\Visitor\Xpath::OPTION_USE_CONTEXT_DOCUMENT
-          : \PhpCss\Ast\Visitor\Xpath::OPTION_USE_CONTEXT_SELF;
-        $expression = \PhpCss::toXpath($selector, $options);
-      } elseif ($hasCssSelector) {
-        CssSelector::enableHtmlExtension();
-        $expression = (($isDocumentContext) ? '/' : './').CssSelector::toXpath($selector);
-      } else {
-        throw new \LogicException(
-          'Install "carica/phpcss" or "symfony/css-selector" to support css selectors.'
-        );
-      }
+      $builder = \FluentDOM::getXPathTransformer();
       /** @var Document|Element $this */
-      return $this->evaluate($expression);
+      return $this->evaluate(
+        $builder->toXpath($selector, $this instanceof \DOMDocument)
+      );
     }
   }
 }

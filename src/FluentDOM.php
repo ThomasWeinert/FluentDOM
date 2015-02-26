@@ -1,9 +1,10 @@
 <?php
 
-use Symfony\Component\CssSelector\CssSelector;
-
 abstract class FluentDOM {
 
+  /**
+   * @var bool
+   */
   public static $isHHVM = FALSE;
 
   /**
@@ -12,9 +13,42 @@ abstract class FluentDOM {
   private static $_loader = NULL;
 
   /**
+   * @var array
+   */
+  private static $_xpathTransformers = [];
+
+  /**
    * @var FluentDOM\Loadable
    */
   private static $_defaultLoaders = [];
+
+  /**
+   * Load a data source into a FluentDOM\Document
+   *
+   * @param mixed $source
+   * @param string $contentType
+   * @param array $options
+   * @return \FluentDOM\Document
+   */
+  public static function load($source, $contentType = 'text/xml', array $options = []) {
+    self::_require();
+    if (!isset(self::$_loader)) {
+      self::$_loader = self::getDefaultLoaders();
+    }
+    return self::$_loader->load($source, $contentType, $options);
+  }
+
+  /**
+   * Return a FluentDOM Creator instance, allow to create a DOM using nested function calls
+   *
+   * @param string $version
+   * @param string $encoding
+   * @return \FluentDOM\Nodes\Creator
+   */
+  public static function create($version = '1.0', $encoding = 'UTF-8') {
+    self::_require();
+    return new \FluentDOM\Nodes\Creator($version, $encoding);
+  }
 
   /**
    * Create an FluentDOM::Query instance and load the source into it.
@@ -45,25 +79,17 @@ abstract class FluentDOM {
    * @codeCoverageIgnore
    */
   public static function QueryCss($source = NULL, $contentType = 'text/xml', array $options = []) {
-    $hasPhpCss = class_exists('PhpCss');
-    $hasCssSelector = class_exists('Symfony\Component\CssSelector\CssSelector');
-    if (!($hasPhpCss || $hasCssSelector)) {
-      throw new \LogicException(
-        'Install "carica/phpcss" or "symfony/css-selector" to support css selectors.'
-      );
-    }
-    $query = self::Query($source, $contentType, $options);
-    $isHtml = ($query->contentType === 'text/html');
-    if ($hasPhpCss) {
-      $query->onPrepareSelector = function($selector, $mode) {
-        return self::prepareWithPhpCss($selector, $mode);
-      };
-    } else {
-      $query->onPrepareSelector = function($selector, $mode) use ($isHtml) {
-        return self::prepareWithCssSelector($selector, $mode, $isHtml);
+    if ($builder = self::getXPathTransformer()) {
+      $query = self::Query($source, $contentType, $options);
+      $isHtml = ($query->contentType === 'text/html');
+      $query->onPrepareSelector = function($selector, $mode) use ($builder, $isHtml) {
+        return $builder->toXpath(
+          $selector,
+          $mode === \FluentDOM\Nodes::CONTEXT_DOCUMENT,
+          $isHtml
+        );
       };
     }
-    return $query;
   }
 
   /**
@@ -112,77 +138,35 @@ abstract class FluentDOM {
   }
 
   /**
-   * Load a data source into a FluentDOM\Document
+   * Get a xpath expression builder to convert css selectors to xpath
    *
-   * @param mixed $source
-   * @param string $contentType
-   * @param array $options
-   * @return \FluentDOM\Document
+   * @param string $errorMessage
+   * @return \FluentDOM\Xpath\Transformer
    */
-  public static function load($source, $contentType = 'text/xml', array $options = []) {
-    self::_require();
-    if (!isset(self::$_loader)) {
-      self::$_loader = self::getDefaultLoaders();
+  public static function getXPathTransformer($errorMessage = 'No CSS selector support installed') {
+    foreach (FluentDOM::$_xpathTransformers as $index => $transformer) {
+      if (is_string($transformer) && class_exists($transformer)) {
+        FluentDOM::$_xpathTransformers[$index] = new $transformer();
+      } elseif (is_callable($transformer)) {
+        FluentDOM::$_xpathTransformers[$index] = $transformer();
+      }
+      if (FluentDOM::$_xpathTransformers[$index] instanceof \FluentDOM\Xpath\Transformer) {
+        return FluentDOM::$_xpathTransformers[$index];
+      } else {
+        unset(FluentDOM::$_xpathTransformers[$index]);
+      }
     }
-    return self::$_loader->load($source, $contentType, $options);
+    throw new \LogicException($errorMessage);
   }
 
   /**
-   * Return a FluentDOM Creator instance, allow to create a DOM using nested function calls
-   *
-   * @param string $version
-   * @param string $encoding
-   * @return \FluentDOM\Nodes\Creator
+   * @param string|callable|FluentDOM\Xpath\Transformer $transformer
    */
-  public static function create($version = '1.0', $encoding = 'UTF-8') {
-    self::_require();
-    return new \FluentDOM\Nodes\Creator($version, $encoding);
-  }
-
-  /**
-   * Convert css selector to xpath with Carica/PhpCss
-   *
-   * @param string $selector
-   * @param int $mode
-   * @return string
-   * @codeCoverageIgnore
-   */
-  private static function prepareWithPhpCss($selector, $mode) {
-    $options = 0;
-    switch ($mode) {
-    case FluentDOM\Nodes::CONTEXT_SELF :
-      $options = \PhpCss\Ast\Visitor\Xpath::OPTION_USE_CONTEXT_SELF;
-      break;
-    case FluentDOM\Nodes::CONTEXT_DOCUMENT :
-      $options = \PhpCss\Ast\Visitor\Xpath::OPTION_USE_CONTEXT_DOCUMENT;
-      break;
+  public static function registerXpathTransformer($transformer, $reset = FALSE) {
+    if ($reset) {
+      self::$_xpathTransformers = [];
     }
-    return \PhpCss::toXpath($selector, $options);
-  }
-
-  /**
-   * Convert css selector to xpath with Symfony/CssSelector
-   *
-   * @param string $selector
-   * @param int $mode
-   * @param bool $isHtml
-   * @return string
-   * @codeCoverageIgnore
-   */
-  private static function prepareWithCssSelector($selector, $mode, $isHtml) {
-    if ($isHtml) {
-      CssSelector::enableHtmlExtension();
-    } else {
-      CssSelector::disableHtmlExtension();
-    }
-    $result = CssSelector::toXpath($selector);
-    switch ($mode) {
-    case FluentDOM\Nodes::CONTEXT_CHILDREN :
-      return './'.$result;
-    case FluentDOM\Nodes::CONTEXT_DOCUMENT :
-      return '/'.$result;
-    }
-    return $result;
+    array_unshift(self::$_xpathTransformers, $transformer);
   }
 
   /**

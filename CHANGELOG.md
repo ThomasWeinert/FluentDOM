@@ -1,6 +1,10 @@
 Dev-Master
 ----------
 
+- Changed: CSS Selectors are now provided by small connector libraries
+- Added: Interface FluentDOM\Xpath\Transformer, transform selectors to XPath
+- Added: QuerySelectors are now supported if a CSS2XPath library is installed
+- Refactored: extract some logic into private methods to reduce complexity 
 - Implemented: Cache validated qualified tag names, avoid repeating the validation with pcre.
     Can be configured using FluentDOM\QualifiedName::$cacheLimit
 - Implemented: Avoid sorting if nodes should be in order (FluentDOM\Nodes), faster

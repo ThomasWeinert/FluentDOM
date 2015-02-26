@@ -19,6 +19,11 @@ require(__DIR__.'/FluentDOM/Node/ParentNode/Properties.php');
 require(__DIR__.'/FluentDOM/Node/StringCast.php');
 require(__DIR__.'/FluentDOM/Node/Xpath.php');
 
+
+require(__DIR__.'/FluentDOM/Xpath/Transformer.php');
+require(__DIR__.'/FluentDOM/Node/QuerySelector.php');
+require(__DIR__.'/FluentDOM/Node/QuerySelector/Implementation.php');
+
 require(__DIR__.'/FluentDOM/Document.php');
 require(__DIR__.'/FluentDOM/Attribute.php');
 require(__DIR__.'/FluentDOM/CdataSection.php');

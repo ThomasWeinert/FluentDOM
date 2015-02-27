@@ -12,8 +12,7 @@
         "php": ">=5.4.0"
     },
     "suggest": {
-      "carica/phpcss": "Allows to use css selectors with FluentDOM::QueryCss().",
-      "symfony/css-selector": "Allows to use css selectors with FluentDOM::QueryCss()."
+      "fluentdom/css-selector": "Allows to use css selectors.",
     },
     "autoload": {
         "files" : ["src/FluentDOM.php"],

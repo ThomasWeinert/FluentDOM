@@ -2,14 +2,15 @@
     "name": "fluentdom/fluentdom",
     "type": "library",
     "description": "A fluent api for the php dom extension.",
-    "keywords": ["xml","dom","jquery"],
+    "keywords": ["xml", "xpath", "dom", "jquery"],
     "license": "MIT",
     "homepage": "http://fluentdom.org",
     "authors": [
         {"name": "FluentDOM Contributors", "homepage": "https://github.com/FluentDOM/FluentDOM/contributors"}
     ],
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "ext-dom": "*"
     },
     "suggest": {
       "fluentdom/css-selector": "Allows to use css selectors."

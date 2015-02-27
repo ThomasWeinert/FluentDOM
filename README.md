@@ -28,15 +28,20 @@ now provides classes that extend PHPs DOMDocument. Another focus was
 XML namespace support for document creation.
 
 ## Table Of Contents
-* Requirements
-* Usage
-* Packagist
 * Support
-* Similarities With jQuery
-* Differences To jQuery
-* Extensions to PHPs DOM classes
+* Requirements
+* Packagist
+* Usage
+* jQuery Similarities & Differences
 * Backwards Compatibility Breaks
-* CSS 3 Selectors
+
+## Support
+
+The [wiki](https://github.com/FluentDOM/FluentDOM/wiki) provides information and usage examples.
+
+If you find a bug or have a feature request please report it in the [issue tracker](https://github.com/FluentDOM/FluentDOM/issues).
+
+You can check out the [![Gitter chat](https://badges.gitter.im/FluentDOM/FluentDOM.png)](https://gitter.im/FluentDOM/FluentDOM), too.
 
 ## Requirements
 
@@ -55,43 +60,6 @@ FluentDOM 5.2 (and the current development master) requires HHVM 3.5.
 FluentDOM 4.0 to 5.1 work with HHVM 3.3 but it was limited. If you like to use
 HHVM it is strongly suggest to use newer releases.
 
-## Usage
-
-The first two samples create a new `FluentDOM\Query` object, load the sample.xml file,
-look for tags &lt;h1> with the attribute "id" that has the value "title",
-set the content of these tags to "Hello World" and output the manipulated
-document.
-
-### jQuery Style API
-
-```php
-<?php
-echo FluentDOM('sample.xml')
-  ->find('//h1[@id = "title"]')
-  ->text('Hello World!');
-```
-
-### Extended DOM (FluentDOM 5.2)
-
-```php
-<?php
-$fd = FluentDOM::load('sample.xml');
-foreach ($fd('//h1[@id = "title"]') as $node) {
-  $node->nodeValue = 'Hello World!';
-}
-
-echo $fd->saveXml();
-```
-
-### Creating XML
-
-New features in FluentDOM 5 make it easy to create XML, even XML with namespaces. Basically 
-you can register XML namespaces on the document and methods without direct namespace support 
-(like `createElement()`) will resolve the namespace and call the namespace aware variant 
-(like `createElementNS()`).
-
-Check the Wiki for an [example](https://github.com/FluentDOM/FluentDOM/wiki/Creating-XML-with-Namespaces-%28Atom%29).
-
 ## Packagist
 
 FluentDOM is available on [Packagist.org](https://packagist.org/packages/fluentdom/fluentdom), 
@@ -105,16 +73,86 @@ just add the dependency to your composer.json.
 }
 ```
 
-## Support
+### CSS Selectors
 
-The [wiki](https://github.com/FluentDOM/FluentDOM/wiki) provides information and usage examples.
+To use CSS selectors, you need a CSS to XPath library.
 
-If you find a bug or have a feature request please report it in the [issue tracker](https://github.com/FluentDOM/FluentDOM/issues).
+#### FluentDOM >= 5.3
 
-You can check out the [![Gitter chat](https://badges.gitter.im/FluentDOM/FluentDOM.png)](https://gitter.im/FluentDOM/FluentDOM), too.
+Here is a new interface `FluentDOM\Xpath\Transformer` which is implemented in 
+separate connector packages. Two are currently available.
 
+  1. [FluentDOM/Selectors-PHPCss](https://github.com/FluentDOM/Selectors-PHPCss)
+  2. [FluentDOM/Selectors-Symfony](https://github.com/FluentDOM/Selectors-Symfony)
+  
+The packages provide a `fluentdom/css-selector` meta package.
 
-## Similarities With jQuery
+### FluentDOM <= 5.2
+
+Had fixed support for two CSS to XPath libraries. If they are installed in the project
+CSS selects are available.
+
+  1. [Carica/PhpCss](https://github.com/ThomasWeinert/PhpCss)
+  2. [Symfony/CssSelector](https://github.com/symfony/CssSelector)
+
+## Usage
+
+The examples load the sample.xml file,
+look for tags &lt;h1> with the attribute "id" that has the value "title",
+set the content of these tags to "Hello World" and output the manipulated
+document.
+
+### Extended DOM (FluentDOM >= 5.2)
+
+Using the `FluentDOM\Document` class:
+
+```php
+<?php
+$fd = FluentDOM::load('sample.xml');
+foreach ($fd('//h1[@id = "title"]') as $node) {
+  $node->nodeValue = 'Hello World!';
+}
+
+echo $fd->saveXml();
+```
+
+### jQuery Style API
+
+Using the `FluentDOM\Query` class:
+
+```php
+<?php
+echo FluentDOM('sample.xml')
+  ->find('//h1[@id = "title"]')
+  ->text('Hello World!');
+```
+
+### CSS Selectors
+
+If you install a CSS selector to Xpath translation library into a project,
+you can use the `FluentDOM::QueryCss()` function. It returns a `FluentDOM\Query` instance
+supporting CSS 3 selectors.
+
+```php
+<?php
+$fd = FluentDOM::QueryCss('sample.xml')
+  ->find('h1#title')
+  ->text('Hello World!');
+
+### Creating XML
+
+New features in FluentDOM 5 make it easy to create XML, even XML with namespaces. Basically 
+you can register XML namespaces on the document and methods without direct namespace support 
+(like `createElement()`) will resolve the namespace and call the namespace aware variant 
+(like `createElementNS()`).
+
+Check the Wiki for an [example](https://github.com/FluentDOM/FluentDOM/wiki/Creating-XML-with-Namespaces-%28Atom%29).
+
+```
+
+## jQuery
+
+### Similarities
 
 FluentDOM was created after the jQuery API and concepts. You will notice that
 the most method names and parameters are the same.
@@ -128,9 +166,9 @@ written. Most of them are copied and adapted from or are deeply inspired by the
 jQuery documentation. They are located in the 'examples' folder.
 Once again many thanks to the jQuery team.
 
-## Major Differences To jQuery
+### Differences
 
-### 1) XPath selectors
+#### XPath selectors
 
 By default every method that supports a selector uses XPath not CSS selectors.
 Since XPath is supported by the ext/dom extension, no extra parsing need to be
@@ -138,12 +176,12 @@ done. This should be faster processing the selectors and btw it was easier to im
 
 But FluentDOM 5 can use CSS selectors with the help of a converter library.
 
-### 2) Text nodes
+#### Text nodes
 
 With a few exceptions FluentDOM handles text nodes just like element nodes.
 You can select, traverse and manipulate them.
 
-## Extensions to PHPs DOM classes
+#### Extensions to PHPs DOM classes
 
 FluentDOM 5 provides extended variants of some of the DOM classes. Most of
 it is dedicated to improve namespace handling, some works around known problems
@@ -154,6 +192,19 @@ or attributes are created/updated and no explicit namespace is provided. You can
 even register a default namespace for elements.
 
 ## Backwards Compatibility Breaks
+
+### From 5.2 To 5.3
+
+CSS Selectors are now provided by separate packages. If you like to use them
+change you need to require the connector package now.
+
+### From 5.1 To 5.2
+
+The `FluentDOM\Loadable::load()` method now has a third argument $options. The
+FluentDOM\Nodes method and the FluentDOM function that load data sources got this
+argument, too. It allows to specify additional, loader specific options. The
+values are only used inside the loader. This change affects the implementation of
+loaders, but not the use. 
  
 ### From 4 To 5
 
@@ -166,48 +217,4 @@ The old loaders are gone and replaced with the new FluentDOM\Loadable interface.
 The registerNamespaces() method was replaced with a registerNamespace() method,
 having the same arguments like DOMXpath::registerNamespace().
 
-### From 5.1 To 5.2
-
-The `FluentDOM\Loadable::load()` method now has a third argument $options. The
-FluentDOM\Nodes method and the FluentDOM function that load data sources got this
-argument, too. It allows to specify additional, loader specific options. The
-values are only used inside the loader. This change affects the implementation of
-loaders, but not the use. 
-
-### From 5.1 To 5.3
-
-CSS Selectors are now provided by separate packages. If you like to use them
-change you need to require the connector package now.
-
-## CSS 3 Selectors
-
-If you install a CSS selector to Xpath translation library into a project,
-you can use the `FluentDOM::QueryCss()` function. It returns a FluentDOM instance
-supporting CSS 3 selectors.
-
-```php
-<?php
-$fd = FluentDOM::QueryCss('sample.xml')
-  ->find('h1#title')
-  ->text('Hello World!');
-```
-
-### FluentDOM >= 5.3
-
-Here is a new interface `FluentDOM\Xpath\Transformer` which is implemented in 
-separate connector packages. Two are currently available.
-
-  1. [FluentDOM/Selectors-PHPCss](https://github.com/FluentDOM/Selectors-PHPCss)
-  2. [FluentDOM/Selectors-Symfony](https://github.com/FluentDOM/Selectors-Symfony)
-  
-The packages provide a `fluentdom/css-selector` meta package.
-
-### FluentDOM <= 5.2
-
-HAd fixed support for two CSS to XPath libraries. If they are installed in the project
-CSS selects are available.
-
-  1. [Carica/PhpCss](https://github.com/ThomasWeinert/PhpCss)
-  2. [Symfony/CssSelector](https://github.com/symfony/CssSelector)
-   
 

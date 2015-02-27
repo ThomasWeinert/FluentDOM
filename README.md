@@ -50,25 +50,14 @@ additional extensions might be needed, like ext/json to load JSON strings.
 
 ### HHVM
 
-FluentDOM 5.2 (and the current development master) requires HHVM 3.5
+FluentDOM 5.2 (and the current development master) requires HHVM 3.5.
 
-FluentDOM 4.0 to 5.1 work with HHVM 3.3 but it is limited.
-
-HHVM has some issues with the with DOMDocument::registerNodeClass() at the moment.
-FluentDOM\Document includes a workaround, but here is no guarantee.
-
-https://github.com/facebook/hhvm/issues/1848
-https://github.com/facebook/hhvm/issues/2962
-
-The automatic namespace registration can not be disabled at the moment, HHVM does not
-support the 3rd argument for DOMXPath::evaluate(). FluentDOM\Xpath will
-ignore it.
-
-https://github.com/facebook/hhvm/issues/2810
+FluentDOM 4.0 to 5.1 work with HHVM 3.3 but it was limited. If you like to use
+HHVM it is strongly suggest to use newer releases.
 
 ## Usage
 
-The first two samples create a new FluentDOM object, load the sample.xml file,
+The first two samples create a new `FluentDOM\Query` object, load the sample.xml file,
 look for tags &lt;h1> with the attribute "id" that has the value "title",
 set the content of these tags to "Hello World" and output the manipulated
 document.
@@ -98,8 +87,8 @@ echo $fd->saveXml();
 
 New features in FluentDOM 5 make it easy to create XML, even XML with namespaces. Basically 
 you can register XML namespaces on the document and methods without direct namespace support 
-(like createElement()) will resolve the namespace and call the namespace aware variant 
-(like createElementNS()).
+(like `createElement()`) will resolve the namespace and call the namespace aware variant 
+(like `createElementNS()`).
 
 Check the Wiki for an [example](https://github.com/FluentDOM/FluentDOM/wiki/Creating-XML-with-Namespaces-%28Atom%29).
 
@@ -169,8 +158,8 @@ even register a default namespace for elements.
 ### From 4 To 5
 
 Version 5 is a major rewrite. It now uses php namespaces. The original FluentDOM
-classes (FluentDOM, FluentDOMCore and FluentDOMStyle) are merged into the new
-FluentDOM\Query class.
+classes (`FluentDOM`, `FluentDOMCore` and `FluentDOMStyle`) are merged into the new
+`FluentDOM\Query` class.
 
 The old loaders are gone and replaced with the new FluentDOM\Loadable interface.
 
@@ -179,16 +168,21 @@ having the same arguments like DOMXpath::registerNamespace().
 
 ### From 5.1 To 5.2
 
-The FluentDOM\Loadable::load() method now has a third argument $options. The
+The `FluentDOM\Loadable::load()` method now has a third argument $options. The
 FluentDOM\Nodes method and the FluentDOM function that load data sources got this
 argument, too. It allows to specify additional, loader specific options. The
 values are only used inside the loader. This change affects the implementation of
 loaders, but not the use. 
 
+### From 5.1 To 5.3
+
+CSS Selectors are now provided by separate packages. If you like to use them
+change you need to require the connector package now.
+
 ## CSS 3 Selectors
 
 If you install a CSS selector to Xpath translation library into a project,
-you can use the FluentDOM::QueryCss() function. It returns a FluentDOM instance
+you can use the `FluentDOM::QueryCss()` function. It returns a FluentDOM instance
 supporting CSS 3 selectors.
 
 ```php
@@ -198,8 +192,22 @@ $fd = FluentDOM::QueryCss('sample.xml')
   ->text('Hello World!');
 ```
 
-Two libraries are supported:
+### FluentDOM >= 5.3
+
+Here is a new interface `FluentDOM\Xpath\Transformer` which is implemented in 
+separate connector packages. Two are currently available.
+
+  1. [FluentDOM/Selectors-PHPCss](https://github.com/FluentDOM/Selectors-PHPCss)
+  2. [FluentDOM/Selectors-Symfony](https://github.com/FluentDOM/Selectors-Symfony)
+  
+The packages provide a `fluentdom/css-selector` meta package.
+
+### FluentDOM <= 5.2
+
+HAd fixed support for two CSS to XPath libraries. If they are installed in the project
+CSS selects are available.
 
   1. [Carica/PhpCss](https://github.com/ThomasWeinert/PhpCss)
   2. [Symfony/CssSelector](https://github.com/symfony/CssSelector)
+   
 

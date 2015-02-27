@@ -5,6 +5,7 @@ namespace FluentDOM\Node\ParentNode {
   use FluentDOM\Document;
   use FluentDOM\Element;
   use FluentDOM\Node\MutationMacro;
+  use FluentDOM\Node\QuerySelector;
 
   /**
    * @property-read \DOMNode $firstChild

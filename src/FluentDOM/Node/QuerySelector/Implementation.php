@@ -6,13 +6,7 @@ namespace FluentDOM\Node\QuerySelector {
   use FluentDOM\Element;
   use FluentDOM\Node\QuerySelector;
 
-  /**
-   * Class Implementation
-   * @package FluentDOM\Node\QuerySelector
-   *
-   * @codeCoverageIgnore
-   */
-  class Implementation implements QuerySelector {
+  trait Implementation {
 
     /**
      * @param string $selector

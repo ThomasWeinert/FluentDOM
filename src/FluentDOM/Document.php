@@ -23,8 +23,10 @@ namespace FluentDOM {
    */
   class Document extends \DOMDocument implements Node\ParentNode {
 
-    use Node\ParentNode\Properties;
-    use Node\Xpath;
+    use
+      Node\ParentNode\Properties,
+      Node\QuerySelector\Implementation,
+      Node\Xpath;
 
     /**
      * @var Xpath

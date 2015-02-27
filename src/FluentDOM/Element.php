@@ -35,6 +35,7 @@ namespace FluentDOM {
       Node\ChildNode\Implementation,
       Node\NonDocumentTypeChildNode\Implementation,
       Node\ParentNode\Implementation,
+      Node\QuerySelector\Implementation,
       Node\StringCast,
       Node\Xpath,
       HHVM\Properties {

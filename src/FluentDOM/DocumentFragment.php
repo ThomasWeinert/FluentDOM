@@ -27,6 +27,7 @@ namespace FluentDOM {
 
     use
       Node\ParentNode\Properties,
+      Node\QuerySelector\Implementation,
       Node\Xpath;
 
     private $_namespaces = [];

@@ -9,7 +9,7 @@ namespace FluentDOM\Node {
    * @property Element $firstElementChild
    * @property Element $lastElementChild
    */
-  interface ParentNode {
+  interface ParentNode extends QuerySelector {
 
     function prepend($nodes);
 

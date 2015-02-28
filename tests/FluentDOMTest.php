@@ -120,7 +120,7 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
    * @covers FluentDOM::getXPathTransformer
    */
   public function testGetXPathTransformerAfterRegister() {
-    $transformer = $this->getMock('FluentDOM\\XPath\\Transformer');
+    $transformer = $this->getMock('FluentDOM\\Xpath\\Transformer');
     FluentDOM::registerXpathTransformer($transformer, TRUE);
     $this->assertSame(
       $transformer,

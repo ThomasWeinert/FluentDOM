@@ -134,9 +134,52 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
    * @covers FluentDOM::registerXPathTransformer
    * @covers FluentDOM::getXPathTransformer
    */
+  public function testGetXPathTransformerAfterRegisterWithCallback() {
+    $transformer = $this->getMock('FluentDOM\\Xpath\\Transformer');
+    FluentDOM::registerXpathTransformer(
+      function() use ($transformer) {
+        return $transformer;
+      },
+      TRUE
+    );
+    $this->assertSame(
+      $transformer,
+      FluentDOM::getXPathTransformer()
+    );
+  }
+
+  /**
+   * @group FactoryFunctions
+   * @group Plugins
+   * @covers FluentDOM::registerXPathTransformer
+   * @covers FluentDOM::getXPathTransformer
+   */
+  public function testGetXPathTransformerAfterRegisterwithClassName() {
+    FluentDOM::registerXpathTransformer(
+      'FluentDOMXpathTransformer_TestProxy',
+      TRUE
+    );
+    $this->assertInstanceOf(
+      'FluentDOMXpathTransformer_TestProxy',
+      FluentDOM::getXPathTransformer()
+    );
+  }
+
+  /**
+   * @group FactoryFunctions
+   * @group Plugins
+   * @covers FluentDOM::registerXPathTransformer
+   * @covers FluentDOM::getXPathTransformer
+   */
   public function testGetXPathTransformerExpectingException() {
     FluentDOM::registerXpathTransformer('', TRUE);
     $this->setExpectedException('LogicException', 'No CSS selector support installed');
     FluentDOM::getXPathTransformer();
+  }
+}
+
+class FluentDOMXpathTransformer_TestProxy implements \FluentDOM\Xpath\Transformer {
+  public function toXpath($selector, $isDocumentContext = false, $isHtml = false) {
+    return null;
   }
 }

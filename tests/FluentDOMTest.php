@@ -112,4 +112,31 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
       FluentDOM::load('test.xml', "mock/loader")
     );
   }
+
+  /**
+   * @group FactoryFunctions
+   * @group Plugins
+   * @covers FluentDOM::registerXPathTransformer
+   * @covers FluentDOM::getXPathTransformer
+   */
+  public function testGetXPathTransformerAfterRegister() {
+    $transformer = $this->getMock('FluentDOM\\XPath\\Transformer');
+    FluentDOM::registerXpathTransformer($transformer, TRUE);
+    $this->assertSame(
+      $transformer,
+      FluentDOM::getXPathTransformer()
+    );
+  }
+
+  /**
+   * @group FactoryFunctions
+   * @group Plugins
+   * @covers FluentDOM::registerXPathTransformer
+   * @covers FluentDOM::getXPathTransformer
+   */
+  public function testGetXPathTransformerExpectingException() {
+    FluentDOM::registerXpathTransformer('', TRUE);
+    $this->setExpectedException('LogicException', 'No CSS selector support installed');
+    FluentDOM::getXPathTransformer();
+  }
 }

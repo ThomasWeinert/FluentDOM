@@ -7,6 +7,7 @@
  */
 
 namespace FluentDOM {
+  use FluentDOM\Xpath\Transformer;
 
   /**
    * Implements an extended replacement for DOMNodeList.
@@ -19,9 +20,9 @@ namespace FluentDOM {
    */
   class Nodes implements \ArrayAccess, \Countable, \IteratorAggregate {
 
-    const CONTEXT_DOCUMENT = 1;
-    const CONTEXT_SELF = 2;
-    const CONTEXT_CHILDREN = 4;
+    const CONTEXT_DOCUMENT = Transformer::CONTEXT_DOCUMENT;
+    const CONTEXT_SELF = Transformer::CONTEXT_SELF;
+    const CONTEXT_CHILDREN = Transformer::CONTEXT_CHILDREN;
 
     const FIND_MODE_MATCH = 8;
     const FIND_MODE_FILTER = 16;

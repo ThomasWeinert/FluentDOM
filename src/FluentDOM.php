@@ -82,12 +82,8 @@ abstract class FluentDOM {
     $builder = self::getXPathTransformer();
     $query = self::Query($source, $contentType, $options);
     $isHtml = ($query->contentType === 'text/html');
-    $query->onPrepareSelector = function($selector, $mode) use ($builder, $isHtml) {
-      return $builder->toXpath(
-        $selector,
-        $mode === \FluentDOM\Nodes::CONTEXT_DOCUMENT,
-        $isHtml
-      );
+    $query->onPrepareSelector = function($selector, $contextMode) use ($builder, $isHtml) {
+      return $builder->toXpath($selector, $contextMode, $isHtml);
     };
     return $query;
   }

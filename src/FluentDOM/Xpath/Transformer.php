@@ -13,6 +13,10 @@ namespace FluentDOM\Xpath {
    */
   interface Transformer {
 
-    function toXpath($selector, $isDocumentContext = FALSE, $isHtml = FALSE);
+    const CONTEXT_CHILDREN = 0;
+    const CONTEXT_DOCUMENT = 1;
+    const CONTEXT_SELF = 2;
+
+    function toXpath($selector, $contextMode = self::CONTEXT_CHILDREN, $isHtml = FALSE);
   }
 }

@@ -5,6 +5,7 @@ namespace FluentDOM\Node\QuerySelector {
   use FluentDOM\Document;
   use FluentDOM\Element;
   use FluentDOM\Node\QuerySelector;
+  use FluentDOM\Xpath\Transformer;
 
   trait Implementation {
 
@@ -25,7 +26,10 @@ namespace FluentDOM\Node\QuerySelector {
       $builder = \FluentDOM::getXPathTransformer();
       /** @var Document|Element $this */
       return $this->evaluate(
-        $builder->toXpath($selector, $this instanceof \DOMDocument)
+        $builder->toXpath(
+          $selector,
+          $this instanceof \DOMDocument ? Transformer::CONTEXT_DOCUMENT : Transformer::CONTEXT_CHILDREN
+        )
       );
     }
   }

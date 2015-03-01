@@ -179,7 +179,7 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
 }
 
 class FluentDOMXpathTransformer_TestProxy implements \FluentDOM\Xpath\Transformer {
-  public function toXpath($selector, $isDocumentContext = false, $isHtml = false) {
+  public function toXpath($selector, $contextMode = FluentDOM\Xpath\Transformer::CONTEXT_CHILDREN, $isHtml = false) {
     return null;
   }
 }

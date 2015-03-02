@@ -139,6 +139,7 @@ supporting CSS 3 selectors.
 $fd = FluentDOM::QueryCss('sample.xml')
   ->find('h1#title')
   ->text('Hello World!');
+```
 
 ### Creating XML
 
@@ -148,8 +149,6 @@ you can register XML namespaces on the document and methods without direct names
 (like `createElementNS()`).
 
 Check the Wiki for an [example](https://github.com/FluentDOM/FluentDOM/wiki/Creating-XML-with-Namespaces-%28Atom%29).
-
-```
 
 ## jQuery
 

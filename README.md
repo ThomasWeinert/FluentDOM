@@ -42,7 +42,7 @@ The [wiki](https://github.com/FluentDOM/FluentDOM/wiki) provides information and
 
 If you find a bug or have a feature request please report it in the [issue tracker](https://github.com/FluentDOM/FluentDOM/issues).
 
-You can check out the [![Gitter chat](https://badges.gitter.im/FluentDOM/FluentDOM.png)](https://gitter.im/FluentDOM/FluentDOM), too.
+You can check out the [![Gitter chat](https://img.shields.io/badge/gitter-join--chat-blue.svg)](https://gitter.im/FluentDOM/FluentDOM), too.
 
 ## Requirements
 

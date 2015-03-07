@@ -5,7 +5,7 @@
 
 [![License](https://img.shields.io/packagist/l/.svg)](http://www.opensource.org/licenses/mit-license.php)
 [![HHVM Status]( 	https://img.shields.io/hhvm/fluentdom/fluentdom.svg)](http://hhvm.h4cc.de/package/fluentdom/fluentdom)
-[![Total Downloads](https://img.shields.io/packagist/dt.svg)](https://packagist.org/packages/fluentdom/fluentdom)
+[![Total Downloads](https://img.shields.io/packagist/dt/fluentdom/fluentdom.svg)](https://packagist.org/packages/fluentdom/fluentdom)
 [![Latest Stable Version](https://img.shields.io/packagist/v/fluentdom/fluentdom.svg)](https://packagist.org/packages/fluentdom/fluentdom)
 [![Latest Unstable Version](https://img.shields.io/packagist/vpre/fluentdom/fluentdom.svg)](https://packagist.org/packages/fluentdom/fluentdom)
 

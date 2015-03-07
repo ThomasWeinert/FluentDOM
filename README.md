@@ -1,10 +1,10 @@
 # FluentDOM
 
-[![Build Status](https://img.shields.io/travis/fluentdom/fluentdom.svg)](https://travis-ci.org/FluentDOM/FluentDOM)
+[![Build Status](https://img.shields.io/travis/FluentDOM/FluentDOM.svg)](https://travis-ci.org/FluentDOM/FluentDOM)
 [![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/fluentdom/fluentdom.svg)](https://scrutinizer-ci.com/g/FluentDOM/FluentDOM/?branch=master)
 
-[![License](https://img.shields.io/packagist/l/.svg)](http://www.opensource.org/licenses/mit-license.php)
-[![HHVM Status]( 	https://img.shields.io/hhvm/fluentdom/fluentdom.svg)](http://hhvm.h4cc.de/package/fluentdom/fluentdom)
+[![License](https://img.shields.io/packagist/l/fluentdom/fluentdom.svg)](http://www.opensource.org/licenses/mit-license.php)
+[![HHVM Status](https://img.shields.io/hhvm/fluentdom/fluentdom.svg)](http://hhvm.h4cc.de/package/fluentdom/fluentdom)
 [![Total Downloads](https://img.shields.io/packagist/dt/fluentdom/fluentdom.svg)](https://packagist.org/packages/fluentdom/fluentdom)
 [![Latest Stable Version](https://img.shields.io/packagist/v/fluentdom/fluentdom.svg)](https://packagist.org/packages/fluentdom/fluentdom)
 [![Latest Unstable Version](https://img.shields.io/packagist/vpre/fluentdom/fluentdom.svg)](https://packagist.org/packages/fluentdom/fluentdom)

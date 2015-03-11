@@ -235,6 +235,20 @@ namespace FluentDOM {
      * @covers FluentDOM\Document::appendContent
      * @covers FluentDOM\Document::appendAttributes
      */
+    public function testCreateElementWithZeroContent() {
+      $dom = new Document();
+      $dom->appendChild($dom->createElement('example', '0'));
+      $this->assertXmlStringEqualsXmlString(
+        '<example>0</example>',
+        $dom->saveXml($dom->documentElement)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Document::createElement
+     * @covers FluentDOM\Document::appendContent
+     * @covers FluentDOM\Document::appendAttributes
+     */
     public function testCreateElementWithContentAndAttribute() {
       $dom = new Document();
       $dom->appendChild(

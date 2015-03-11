@@ -290,7 +290,7 @@ namespace FluentDOM {
      * @param string|array|NULL $content
      */
     private function appendContent($node, $content = NULL) {
-      if (!(empty($content) || is_array($content))) {
+      if (!((empty($content) && !is_numeric($content)) || is_array($content) )) {
         $node->appendChild($this->createTextNode($content));
       }
     }

@@ -159,6 +159,7 @@ abstract class FluentDOM {
    * @param string|callable|FluentDOM\Xpath\Transformer $transformer
    */
   public static function registerXpathTransformer($transformer, $reset = FALSE) {
+    self::_require();
     if ($reset) {
       self::$_xpathTransformers = [];
     }

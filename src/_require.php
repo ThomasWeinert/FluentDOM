@@ -6,6 +6,10 @@ require(__DIR__.'/FluentDOM/XmlSerializable.php');
 
 require(__DIR__.'/FluentDOM/HHVM/Properties.php');
 
+require(__DIR__.'/FluentDOM/Xpath/Transformer.php');
+require(__DIR__.'/FluentDOM/Node/QuerySelector.php');
+require(__DIR__.'/FluentDOM/Node/QuerySelector/Implementation.php');
+
 require(__DIR__.'/FluentDOM/XmlSerialize.php');
 require(__DIR__.'/FluentDOM/Node/ChildNode.php');
 require(__DIR__.'/FluentDOM/Node/ChildNode/Implementation.php');
@@ -19,15 +23,11 @@ require(__DIR__.'/FluentDOM/Node/ParentNode/Properties.php');
 require(__DIR__.'/FluentDOM/Node/StringCast.php');
 require(__DIR__.'/FluentDOM/Node/Xpath.php');
 
-
-require(__DIR__.'/FluentDOM/Xpath/Transformer.php');
-require(__DIR__.'/FluentDOM/Node/QuerySelector.php');
-require(__DIR__.'/FluentDOM/Node/QuerySelector/Implementation.php');
-
 require(__DIR__.'/FluentDOM/Document.php');
 require(__DIR__.'/FluentDOM/Attribute.php');
 require(__DIR__.'/FluentDOM/CdataSection.php');
 require(__DIR__.'/FluentDOM/Comment.php');
+require(__DIR__.'/FluentDOM/DocumentFragment.php');
 require(__DIR__.'/FluentDOM/Element.php');
 require(__DIR__.'/FluentDOM/ProcessingInstruction.php');
 require(__DIR__.'/FluentDOM/Text.php');
@@ -57,6 +57,7 @@ require(__DIR__.'/FluentDOM/Serializer/Json/Rayfish.php');
 
 require(__DIR__.'/FluentDOM/Nodes.php');
 require(__DIR__.'/FluentDOM/Nodes/Builder.php');
+require(__DIR__.'/FluentDOM/Nodes/Compare.php');
 require(__DIR__.'/FluentDOM/Nodes/Creator.php');
 require(__DIR__.'/FluentDOM/Nodes/Fetcher.php');
 require(__DIR__.'/FluentDOM/Nodes/Modifier.php');

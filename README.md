@@ -196,7 +196,10 @@ even register a default namespace for elements.
 ### From 5.2 To 5.3
 
 CSS Selectors are now provided by separate packages. If you like to use them
-change you need to require the connector package now.
+you will need to require the connector package now.
+
+* [fluentdom/selectors-phpcss](https://packagist.org/packages/fluentdom/selectors-phpcss)
+* [fluentdom/selectors-symfony](https://packagist.org/packages/fluentdom/selectors-symfony)
 
 ### From 5.1 To 5.2
 

@@ -6,13 +6,10 @@ php:
   - 5.6
   - nightly
   - hhvm
-  - hhvm-nightly
   
 matrix:
   allow_failures:
     - php: nightly
-    - php: hhvm
-    - php: hhvm-nightly
 
 install: composer install
 

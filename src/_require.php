@@ -41,6 +41,8 @@ require(__DIR__.'/FluentDOM/Loader/Json.php');
 require(__DIR__.'/FluentDOM/Loader/Json/BadgerFish.php');
 require(__DIR__.'/FluentDOM/Loader/Json/JsonDOM.php');
 require(__DIR__.'/FluentDOM/Loader/Json/JsonML.php');
+require(__DIR__.'/FluentDOM/Loader/Json/SimpleXML.php');
+require(__DIR__.'/FluentDOM/Loader/Json/Rayfish.php');
 require(__DIR__.'/FluentDOM/Loader/Html.php');
 require(__DIR__.'/FluentDOM/Loader/PHP.php');
 require(__DIR__.'/FluentDOM/Loader/PHP/PDO.php');

@@ -5,6 +5,13 @@ filter:
 tools:
     php_code_coverage: true
 build:
+    tests:
+        override:
+            -
+                command: 'phpunit --coverage-clover=coverage.xml'
+                coverage:
+                    file: 'coverage.xml'
+                    format: 'php-clover'
     dependencies:
         before:
             - composer install --prefer-source

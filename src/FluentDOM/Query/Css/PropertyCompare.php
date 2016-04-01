@@ -12,8 +12,15 @@ namespace FluentDOM\Query\Css {
    */
   class PropertyCompare {
 
-    public function __invoke() {
-      return call_user_func_array(array($this, 'compare'), func_get_args());
+    /**
+     * Compare to css property names by name, browser-prefix and level.
+     *
+     * @param string $propertyNameOne
+     * @param string $propertyNameTwo
+     * @return integer
+     */
+    public function __invoke($propertyNameOne, $propertyNameTwo) {
+      return $this->compare($propertyNameOne, $propertyNameTwo);
     }
 
     /**

@@ -79,15 +79,13 @@ namespace FluentDOM\Nodes {
 
     /**
      * @param string $name
-     * @param mixed ...$parameter
+     * @param mixed ...$parameters
      * @return Creator\Node
      */
-    public function __invoke($name) {
+    public function __invoke($name, ...$parameters) {
       return new Creator\Node(
         $this->_document,
-        call_user_func_array(
-          array($this, 'element'), func_get_args()
-        )
+        $this->element($name, ...$parameters)
       );
     }
 
@@ -103,14 +101,12 @@ namespace FluentDOM\Nodes {
      * - Strings or objects castable to string are appended as text nodes
      *
      * @param string $name
-     * @param mixed ...$parameter
+     * @param mixed ...$parameters
      * @return \FluentDOM\Element
      */
-    public function element($name) {
+    public function element($name, ...$parameters) {
       $node = $this->_document->createElement($name);
-      $arguments = func_get_args();
-      array_shift($arguments);
-      foreach ($arguments as $parameter) {
+      foreach ($parameters as $parameter) {
         $node->append($parameter);
       }
       return $node;

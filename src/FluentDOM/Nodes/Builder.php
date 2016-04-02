@@ -102,7 +102,11 @@ namespace FluentDOM\Nodes {
       if ($nodes = $this->getNodeList($content, $includeTextNodes, $limit)) {
         $result = $nodes;
       } elseif (is_string($content)) {
-        $result = $this->getXmlFragment($content, $includeTextNodes, $limit);
+        if ($this->_nodes->contentType == 'text/html') {
+          $result = $this->getHtmlFragment($content, $includeTextNodes, $limit);
+        } else {
+          $result = $this->getXmlFragment($content, $includeTextNodes, $limit);
+        }
       }
       if (!is_array($result) || empty($result)) {
         throw new \InvalidArgumentException('Invalid/empty content parameter.');
@@ -163,7 +167,7 @@ namespace FluentDOM\Nodes {
      * @throws \UnexpectedValueException
      * @return array
      */
-    public function getHtmlFragment($html) {
+    public function getHtmlFragment($html, $includeTextNodes = TRUE, $limit = -1) {
       $html = $this->getContentAsString($html);
       if (!$html) {
         return array();
@@ -178,10 +182,15 @@ namespace FluentDOM\Nodes {
       $document = $this->getOwner()->getDocument();
       if ($nodes instanceof \Traversable) {
         foreach ($nodes as $node) {
-          $result[] = $document->importNode($node, TRUE);
+          if (
+            $node instanceof \DOMElement ||
+            ($includeTextNodes && Constraints::isNode($node))
+          ) {
+            $result[] = $document->importNode($node, TRUE);
+          }
         }
       }
-      return $result;
+      return $this->getLimitedArray($result, $limit);
     }
 
     /**

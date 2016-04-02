@@ -213,6 +213,23 @@ namespace FluentDOM\Nodes {
     /**
      * @covers FluentDOM\Nodes\Builder
      */
+    public function testGetContentNodesWithHtml() {
+      $nodes = new Nodes();
+      $nodes->contentType = 'text/html';
+      $builder = new Builder($nodes);
+      $array = $builder->getContentNodes('<input>');
+      $nodes->document->appendChild(
+        $array[0]
+      );
+      $this->assertEquals(
+        "<input>\n",
+        (string)$nodes
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Nodes\Builder
+     */
     public function testGetContentNodesImportingNodes() {
       $dom = new Document();
       $dom->loadXml(self::XML);

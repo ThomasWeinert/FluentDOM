@@ -18,11 +18,13 @@ namespace FluentDOM\Loader {
 
     use Supports;
 
+    const IS_FRAGMENT = 'fragment';
+
     /**
      * @return string[]
      */
     public function getSupported() {
-      return array('html', 'text/html');
+      return array('html', 'text/html', 'html-fragment', 'text/html-fragment');
     }
 
     /**
@@ -36,7 +38,9 @@ namespace FluentDOM\Loader {
       if ($this->supports($contentType)) {
         $dom = new Document();
         $errorSetting = libxml_use_internal_errors(TRUE);
-        if ($this->startsWith($source, '<')) {
+        if ($this->isFragment($contentType, $options)) {
+          $this->loadFragmentIntoDom($dom, $source);
+        } else if ($this->startsWith($source, '<')) {
           $dom->loadHTML($source);
         } else {
           $dom->loadHTMLFile($source);
@@ -46,6 +50,24 @@ namespace FluentDOM\Loader {
         return $dom;
       }
       return NULL;
+    }
+
+    private function isFragment($contentType, $options) {
+      return (
+        $contentType == 'html-fragment' ||
+        $contentType == 'text/html-fragment' ||
+        (isset($options[self::IS_FRAGMENT]) && $options[self::IS_FRAGMENT])
+      );
+    }
+
+    private function loadFragmentIntoDom($dom, $source) {
+      $htmlDom = new Document();
+      $htmlDom->loadHtml('<html-fragment>'.$source.'</html-fragment>');
+      $result = array();
+      $nodes = $htmlDom->evaluate('//html-fragment[1]/node()');
+      foreach ($nodes as $node) {
+        $dom->appendChild($dom->importNode($node, TRUE));
+      }
     }
   }
 }

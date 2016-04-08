@@ -40,6 +40,17 @@ namespace FluentDOM {
     }
 
     /**
+     * @covers FluentDOM\Nodes::__construct
+     */
+    public function testConstructorWithHtmlFragment() {
+      $fd = new Nodes('<label>Test</label><input>', 'html-fragment');
+      $this->assertEquals(
+        '<label>Test</label><input>'."\n",
+        (string)$fd
+      );
+    }
+
+    /**
      * @group Load
      * @covers FluentDOM\Nodes::load
      */

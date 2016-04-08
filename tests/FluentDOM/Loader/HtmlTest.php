@@ -28,7 +28,7 @@ namespace FluentDOM\Loader {
      * @covers FluentDOM\Loader\Html
      * @covers FluentDOM\Loader\Supports
      */
-    public function testLoadWithValidXml() {
+    public function testLoadWithValidHtml() {
       $loader = new Html();
       $this->assertInstanceOf(
         'DOMDocument',
@@ -41,8 +41,27 @@ namespace FluentDOM\Loader {
 
     /**
      * @covers FluentDOM\Loader\Html
+     * @covers FluentDOM\Loader\Supports
      */
-    public function testLoadWithValidXmlFile() {
+    public function testLoadWithValidHtmlFragment() {
+      $loader = new Html();
+      $this->assertInstanceOf(
+        'DOMDocument',
+        $document = $loader->load(
+          '<div>Test</div>Text<input>',
+          'text/html-fragment'
+        )
+      );
+      $this->assertEquals(
+        "<div>Test</div>Text<input>\n",
+        $document->saveHtml()
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Loader\Html
+     */
+    public function testLoadWithValidHtmlFile() {
       $loader = new Html();
       $this->assertInstanceOf(
         'DOMDocument',

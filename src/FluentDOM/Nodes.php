@@ -119,6 +119,9 @@ namespace FluentDOM {
         $this->setContentType($contentType, TRUE);
         $this->_xpath = NULL;
         $this->applyNamespaces();
+        if ($contentType == 'html-fragment' || $contentType == 'text/html-fragment') {
+          $this->push($this->fetch('/*'));
+        }
         return $this;
       }
       throw new Exceptions\InvalidSource($source, $contentType);
@@ -283,6 +286,8 @@ namespace FluentDOM {
       case 'text/xml' :
         $newContentType = 'text/xml';
         break;
+      case 'html-fragment' :
+      case 'text/html-fragment' :
       case 'html' :
       case 'text/html' :
         $newContentType = 'text/html';

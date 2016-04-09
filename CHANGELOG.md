@@ -1,5 +1,16 @@
+Version 6.0
+-----------
+
+- Changed: minimum PHP version is now 5.6
+- Added: HTML loader now supports 'html-fragment' and 'text/html-fragment'
+- Refactored: Replace func_get_args() with variadics
+- Changed: string arguments to methods like FluentDOM\Query::append() are now parsed as
+    HTML fragments if the content type of the FluentDOM\Query instance is a HTML type.
+- Changed: NULL values can now be set using FluentDOM\Query::attr(), FluentDOM\Query::css()
+    and FluentDOM\Query::data() methods.
+
 Version 5.3
-----------
+-----------
 
 - Changed: CSS Selectors are now provided by small connector libraries
 - Added: Interface FluentDOM\Xpath\Transformer, transform selectors to XPath

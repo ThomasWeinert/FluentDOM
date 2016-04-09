@@ -9,8 +9,7 @@
 [![Latest Stable Version](https://img.shields.io/packagist/v/fluentdom/fluentdom.svg)](https://packagist.org/packages/fluentdom/fluentdom)
 [![Latest Unstable Version](https://img.shields.io/packagist/vpre/fluentdom/fluentdom.svg)](https://packagist.org/packages/fluentdom/fluentdom)
 
-  Version: 5<br />
-  Copyright: 2009-2014 Bastian Feder, Thomas Weinert <br />
+  Copyright: 2009-2016 Bastian Feder, Thomas Weinert <br />
   Licence: [The MIT License](http://www.opensource.org/licenses/mit-license.php) <br />
 
 FluentDOM provides an easy to use fluent interface for DOMDocument. We tried to
@@ -19,14 +18,17 @@ keep the jQuery API but adapted it to PHP and the server environment.
 The idea was born in a workshop of Tobias Schlitt (http://schlitt.info) about
 the PHP XML extensions at the IPC Spring in Berlin. He used this idea to show
 XPath samples in the session. Since then he contributed several ideas and hints.
-The loader concept was his idea, too.
+The basic loader concept was his idea, too.
 
 FluentDOM is a test driven project. We write tests before and during the
 development. You will find the PHPUnit test in the "tests" subdirectory.
 
-Version 5 is a complete rewrite. It is updated to the new PHP 5.4 syntax. It
+Version 5 was a complete rewrite. It is updated to the new PHP 5.4 syntax. It
 now provides classes that extend PHPs DOMDocument. Another focus was
 XML namespace support for document creation.
+
+Version 6 bumps the mininmum required PHP version to 5.6. Mostly to make use of the
+variadics syntax.
 
 ## Table Of Contents
 * Support
@@ -56,7 +58,7 @@ additional extensions might be needed, like ext/json to load JSON strings.
 
 ### HHVM
 
-FluentDOM 5.2 (and the current development master) requires HHVM 3.5.
+FluentDOM 5.2 and later requires HHVM 3.5.
 
 FluentDOM 4.0 to 5.1 work with HHVM 3.3 but it was limited. If you like to use
 HHVM it is strongly suggest to use newer releases.
@@ -69,7 +71,7 @@ just add the dependency to your composer.json.
 ```javascript
 {
   "require" : {
-    "fluentdom/fluentdom": "5.x"
+    "fluentdom/fluentdom": "^5.3"
   }
 }
 ```
@@ -143,7 +145,7 @@ $fd = FluentDOM::QueryCss('sample.xml')
 
 ### Creating XML
 
-New features in FluentDOM 5 make it easy to create XML, even XML with namespaces. Basically 
+New features in FluentDOM make it easy to create XML, even XML with namespaces. Basically
 you can register XML namespaces on the document and methods without direct namespace support 
 (like `createElement()`) will resolve the namespace and call the namespace aware variant 
 (like `createElementNS()`).
@@ -172,9 +174,9 @@ Once again many thanks to the jQuery team.
 
 By default every method that supports a selector uses XPath not CSS selectors.
 Since XPath is supported by the ext/dom extension, no extra parsing need to be
-done. This should be faster processing the selectors and btw it was easier to implement.
+done. This should be faster processing the selectors and was easier to implement.
 
-But FluentDOM 5 can use CSS selectors with the help of a converter library.
+But FluentDOM can use CSS selectors with the help of a converter library.
 
 #### Text nodes
 
@@ -183,7 +185,7 @@ You can select, traverse and manipulate them.
 
 #### Extensions to PHPs DOM classes
 
-FluentDOM 5 provides extended variants of some of the DOM classes. Most of
+FluentDOM provides extended variants of some of the DOM classes. Most of
 it is dedicated to improve namespace handling, some works around known problems
 and some is just for comfort.
 
@@ -192,6 +194,16 @@ or attributes are created/updated and no explicit namespace is provided. You can
 even register a default namespace for elements.
 
 ## Backwards Compatibility Breaks
+
+### From 5.3 to 6.0
+
+The minimum required PHP version now is 5.6.
+
+`FluentDOM\Query` now parses fragment arguments as HTML or XML depending on the
+content type.
+
+`FluentDOM\Query::attr()`, `FluentDOM\Query::css()` and `FluentDOM\Query::data()`
+now recognize that the second argument is provided, even if it is NULL.
 
 ### From 5.2 To 5.3
 

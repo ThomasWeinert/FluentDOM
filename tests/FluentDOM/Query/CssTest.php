@@ -279,6 +279,18 @@ namespace FluentDOM\Query {
     /**
      * @group ManipulationCSS
      * @covers FluentDOM\Query::css
+     */
+    public function testCssWriteWithNullValue() {
+      $fd = $this->getQueryFixtureFromString(self::HTML, '//div');
+      $this->assertSame(
+        $fd,
+        $fd->css('text-align', NULL)
+      );
+    }
+
+    /**
+     * @group ManipulationCSS
+     * @covers FluentDOM\Query::css
      * @covers FluentDOM\Query::getSetterValues
      */
     public function testCssWriteWithArray() {

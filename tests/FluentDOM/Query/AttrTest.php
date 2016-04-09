@@ -95,6 +95,20 @@ namespace FluentDOM\Query {
 
     /**
      * @group Attributes
+     * @covers FluentDOM\Query::attr
+     * @covers FluentDOM\Query::getSetterValues
+     */
+    public function testAttrWriteWithNullValue() {
+      $fd = $this->getQueryFixtureFromString(self::XML)
+        ->find('//group/item')
+        ->attr('index', NULL)
+        ->attr('index');
+      $this->assertEquals('', $fd);
+    }
+
+
+    /**
+     * @group Attributes
      * @dataProvider dataProviderInvalidAttributeNames
      * @covers FluentDOM\Query::attr
      * @covers FluentDOM\Query::getSetterValues

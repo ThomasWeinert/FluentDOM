@@ -255,6 +255,20 @@ namespace FluentDOM\Query {
         $fd->document->saveXml($fd->document->documentElement)
       );
     }
+
+    /**
+     * @group AttributesData
+     * @covers FluentDOM\Query::data
+     * @covers FluentDOM\Query::getSetterValues
+     */
+    public function testDataWriteWithNullValue() {
+      $fd = $this->getQueryFixtureFromString('<sample/>')->find('//sample');
+      $this->assertSame(
+        $fd,
+        $fd->data('foo', NULL)
+      );
+    }
+
     /**
      * @group AttributesData
      * @covers FluentDOM\Query::data

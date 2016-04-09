@@ -1333,11 +1333,11 @@ namespace FluentDOM {
      *
      * @example attr.php Usage Example: FluentDOM\Query::attr() Read an attribute value.
      * @param string|array $attribute attribute name or attribute list
-     * @param string|callable $value function callback($index, $value) or value
-     * @return string|Query attribute value or $this
+     * @param [callable|string] $arguments
+     * @return Query|string attribute value or $this
      */
-    public function attr($attribute, $value = NULL) {
-      if (NULL === $value && !is_array(($attribute))) {
+    public function attr($attribute, ...$arguments) {
+      if (count($arguments) == 0 && is_string($attribute)) {
         //empty value - read attribute from first element in list
         $attribute = (new QualifiedName($attribute))->name;
         $node = $this->getFirstElement();
@@ -1346,7 +1346,7 @@ namespace FluentDOM {
         }
         return NULL;
       } else {
-        $attributes = $this->getSetterValues($attribute, $value);
+        $attributes = $this->getSetterValues($attribute, isset($arguments[0]) ? $arguments[0] : NULL);
         // set attributes on each element
         foreach ($attributes as $key => $value) {
           $name = (new QualifiedName($key))->name;
@@ -1541,19 +1541,19 @@ namespace FluentDOM {
      * get or set CSS values in style attributes
      *
      * @param string|array $property
-     * @param NULL|string|object|callable $value
+     * @param [string|object|callable] $arguments
      * @throws \InvalidArgumentException
      * @return string|NULL|$this
      */
-    public function css($property, $value = NULL) {
-      if (NULL === $value && is_string($property)) {
+    public function css($property, ...$arguments) {
+      if (count($arguments) == 0 && is_string($property)) {
         $properties = new Query\Css\Properties((string)$this->attr('style'));
         if (isset($properties[$property])) {
           return $properties[$property];
         }
         return NULL;
       }
-      $values = $this->getSetterValues($property, $value);
+      $values = $this->getSetterValues($property, isset($arguments[0]) ? $arguments[0] : NULL);
       //set list of properties to all elements
       $this->each(
         function(\DOMElement $node, $index) use ($values) {
@@ -1583,11 +1583,11 @@ namespace FluentDOM {
      *
      * @example data.php Usage Example: FluentDOM\Query::data()
      * @param string|array $name data attribute identifier or array of data attributes to set
-     * @param mixed $value
+     * @param [mixed] ...$arguments
      * @return mixed
      */
-    public function data($name, $value = NULL) {
-      if (NULL === $value && !is_array($name)) {
+    public function data($name, ...$arguments) {
+      if (count($arguments) == 0 && !is_array($name)) {
         //reading
         if ($node = $this->getFirstElement()) {
           $data = new Query\Data($node);
@@ -1595,7 +1595,7 @@ namespace FluentDOM {
         }
         return NULL;
       }
-      $values = $this->getSetterValues($name, $value);
+      $values = $this->getSetterValues($name, isset($arguments[0]) ? $arguments[0] : NULL);
       $this->each(
         function(\DOMElement $node) use ($values) {
           $data = new Query\Data($node);

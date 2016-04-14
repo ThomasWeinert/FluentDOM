@@ -68,7 +68,7 @@ namespace FluentDOM\Loader {
           version_compare(LIBXML_DOTTED_VERSION, '2.9', '>=')
         )
       ) {
-        $this->markTestSkipped('LibXML options not available.'.LIBXML_DOTTED_VERSION);
+        $this->markTestSkipped('LibXML options not available, LibXML version: '.LIBXML_DOTTED_VERSION);
       }
       $loader = new Html();
       $document = $loader->load(

@@ -27,7 +27,7 @@ Version 5 was a complete rewrite. It is updated to the new PHP 5.4 syntax. It
 now provides classes that extend PHPs DOMDocument. Another focus was
 XML namespace support for document creation.
 
-Version 6 bumps the mininmum required PHP version to 5.6. Mostly to make use of the
+Version 6 bumps the minimum required PHP version to 5.6. Mostly to make use of the
 variadics syntax.
 
 ## Table Of Contents
@@ -50,10 +50,10 @@ You can check out the [![Gitter chat](https://img.shields.io/badge/gitter-join--
 
 ### PHP
 
- * PHP >= 5.4
+ * PHP >= 5.6
  * ext/dom
 
-FluentDOM needs at least PHP 5.4 and the DOM extension. For some features
+FluentDOM needs at least PHP 5.6 and the DOM extension. For some features
 additional extensions might be needed, like ext/json to load JSON strings.
 
 ### HHVM

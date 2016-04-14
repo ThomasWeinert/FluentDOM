@@ -29,12 +29,32 @@ namespace FluentDOM\Loader {
      */
     public function testLoadWithValidXml() {
       $loader = new Xml();
-      $this->assertInstanceOf(
-        'DOMDocument',
-        $loader->load(
-          '<xml/>',
-          'text/xml'
-        )
+      $document = $loader->load(
+        '<xml><![CDATA[Test]]></xml>',
+        'text/xml'
+      );
+      $this->assertEquals(
+        '<xml><![CDATA[Test]]></xml>',
+        $document->documentElement->saveXml()
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Loader\Xml
+     * @covers FluentDOM\Loader\Supports
+     */
+    public function testLoadReplacingCdataInXml() {
+      $loader = new Xml();
+      $document = $loader->load(
+        '<xml><![CDATA[Test]]></xml>',
+        'text/xml',
+        [
+          Xml::LIBXML_OPTIONS => LIBXML_NOCDATA
+        ]
+      );
+      $this->assertEquals(
+        '<xml>Test</xml>',
+        $document->documentElement->saveXml()
       );
     }
 

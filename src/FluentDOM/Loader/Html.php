@@ -19,6 +19,7 @@ namespace FluentDOM\Loader {
     use Supports;
 
     const IS_FRAGMENT = 'fragment';
+    const LIBXML_OPTIONS = 'libxml';
 
     /**
      * @return string[]
@@ -38,12 +39,13 @@ namespace FluentDOM\Loader {
       if ($this->supports($contentType)) {
         $dom = new Document();
         $errorSetting = libxml_use_internal_errors(TRUE);
+        $loadOptions = isset($options[self::LIBXML_OPTIONS]) ? (int)$options[self::LIBXML_OPTIONS] : 0;
         if ($this->isFragment($contentType, $options)) {
-          $this->loadFragmentIntoDom($dom, $source);
+          $this->loadFragmentIntoDom($dom, $source, $loadOptions);
         } else if ($this->startsWith($source, '<')) {
-          $dom->loadHTML($source);
+          $dom->loadHTML($source, $loadOptions);
         } else {
-          $dom->loadHTMLFile($source);
+          $dom->loadHTMLFile($source, $loadOptions);
         }
         libxml_clear_errors();
         libxml_use_internal_errors($errorSetting);
@@ -60,9 +62,9 @@ namespace FluentDOM\Loader {
       );
     }
 
-    private function loadFragmentIntoDom($dom, $source) {
+    private function loadFragmentIntoDom($dom, $source, $loadOptions) {
       $htmlDom = new Document();
-      $htmlDom->loadHtml('<html-fragment>'.$source.'</html-fragment>');
+      $htmlDom->loadHtml('<html-fragment>'.$source.'</html-fragment>', $loadOptions);
       $result = array();
       $nodes = $htmlDom->evaluate('//html-fragment[1]/node()');
       foreach ($nodes as $node) {

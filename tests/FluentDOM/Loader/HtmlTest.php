@@ -43,6 +43,41 @@ namespace FluentDOM\Loader {
      * @covers FluentDOM\Loader\Html
      * @covers FluentDOM\Loader\Supports
      */
+    public function testLoadWithoutOptionsAddsElements() {
+      $loader = new Html();
+      $document = $loader->load(
+        '<div/>',
+        'text/html'
+      );
+      $this->assertEquals(
+        '<html><body><div/></body></html>',
+        $document->documentElement->saveXML()
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Loader\Html
+     * @covers FluentDOM\Loader\Supports
+     */
+    public function testLoadWithOptions() {
+      $loader = new Html();
+      $document = $loader->load(
+        '<div/>',
+        'text/html',
+        [
+          Html::LIBXML_OPTIONS => LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED
+        ]
+      );
+      $this->assertEquals(
+        '<div/>',
+        $document->documentElement->saveXML()
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Loader\Html
+     * @covers FluentDOM\Loader\Supports
+     */
     public function testLoadWithValidHtmlFragment() {
       $loader = new Html();
       $this->assertInstanceOf(

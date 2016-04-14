@@ -18,6 +18,8 @@ namespace FluentDOM\Loader {
 
     use Supports;
 
+    const LIBXML_OPTIONS = 'libxml';
+
     /**
      * @return string[]
      */
@@ -36,10 +38,11 @@ namespace FluentDOM\Loader {
       if ($this->supports($contentType)) {
         $dom = new Document();
         $dom->preserveWhiteSpace = FALSE;
+        $loadOptions = isset($options[self::LIBXML_OPTIONS]) ? (int)$options[self::LIBXML_OPTIONS] : 0;
         if ($this->startsWith($source, '<')) {
-          $dom->loadXml($source);
+          $dom->loadXml($source, $loadOptions);
         } else {
-          $dom->load($source);
+          $dom->load($source, $loadOptions);
         }
         return $dom;
       }

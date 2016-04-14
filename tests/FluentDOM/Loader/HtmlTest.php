@@ -60,6 +60,9 @@ namespace FluentDOM\Loader {
      * @covers FluentDOM\Loader\Supports
      */
     public function testLoadWithOptions() {
+      if (!(defined('LIBXML_HTML_NODEFDTD') && defined('LIBXML_HTML_NOIMPLIED'))) {
+        $this->markTestSkipped('LibXML options not available.');
+      }
       $loader = new Html();
       $document = $loader->load(
         '<div/>',

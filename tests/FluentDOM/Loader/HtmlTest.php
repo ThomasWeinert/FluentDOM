@@ -60,8 +60,15 @@ namespace FluentDOM\Loader {
      * @covers FluentDOM\Loader\Supports
      */
     public function testLoadWithOptions() {
-      if (!(defined('LIBXML_HTML_NODEFDTD') && defined('LIBXML_HTML_NOIMPLIED'))) {
-        $this->markTestSkipped('LibXML options not available.');
+      if (
+        !(
+          defined('LIBXML_HTML_NODEFDTD') &&
+          defined('LIBXML_HTML_NOIMPLIED') &&
+          defined('LIBXML_DOTTED_VERSION') &&
+          version_compare(LIBXML_DOTTED_VERSION, '2.9', '>=')
+        )
+      ) {
+        $this->markTestSkipped('LibXML options not available.'.LIBXML_DOTTED_VERSION);
       }
       $loader = new Html();
       $document = $loader->load(

@@ -216,5 +216,34 @@ namespace FluentDOM\Loader\Json {
           ->saveXML()
       );
     }
+
+    /**
+     * @covers FluentDOM\Loader\Json\JsonDOM
+     */
+    public function testLoadWithArrayMappingTagName() {
+      $loader = new JsonDOM();
+      $json = [
+        'numbers' => [21, 42]
+      ];
+      $dom = $loader->load(
+        $json,
+        'json',
+        [
+          JsonDOM::ON_MAP_KEY => function($key, $isArrayElement) {
+            return $isArrayElement ? 'number' : $key;
+          }
+        ]
+      );
+      $this->assertXmlStringEqualsXmlString(
+        '<?xml version="1.0" encoding="UTF-8"?>'.
+        '<json:json xmlns:json="urn:carica-json-dom.2013">'.
+        '<numbers json:type="array">'.
+          '<number json:type="number">21</number>'.
+          '<number json:type="number">42</number>'.
+        '</numbers>'.
+        '</json:json>',
+        $dom->saveXml()
+      );
+    }
   }
 }

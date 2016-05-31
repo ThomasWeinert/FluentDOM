@@ -20,6 +20,8 @@ namespace FluentDOM\Loader\Json {
 
     use Supports\Json;
 
+    const ON_MAP_KEY = 'onMapKey';
+
     const XMLNS = 'urn:carica-json-dom.2013';
     const DEFAULT_QNAME = '_';
 
@@ -45,6 +47,12 @@ namespace FluentDOM\Loader\Json {
      * @var bool
      */
     private $_verbose = FALSE;
+
+    /**
+     * Called to map key names tag names
+     * @var null|callable
+     */
+    private $_onMapKey = NULL;
 
     /**
      * Create the loader for a json string.
@@ -83,10 +91,31 @@ namespace FluentDOM\Loader\Json {
         $dom->appendChild(
           $root = $dom->createElementNS(self::XMLNS, 'json:json')
         );
+        $onMapKey = $this->_onMapKey;
+        if (isset($options[self::ON_MAP_KEY]) && is_callable($options[self::ON_MAP_KEY])) {
+          $this->onMapKey($options[self::ON_MAP_KEY]);
+        }
         $this->transferTo($root, $json, $this->_recursions);
+        $this->_onMapKey = $onMapKey;
         return $dom;
       }
       return NULL;
+    }
+
+    /**
+     * Get/Set a mapping callback for the tag names. If it is a callable
+     * it will be set. FALSE removes the callback.
+     *
+     * function callback(string $key, boolean $isArrayElement) {}
+     *
+     * @param NULL|FALSE|callable $callback
+     * @return callable|null
+     */
+    public function onMapKey($callback = NULL) {
+      if (isset($callback)) {
+        $this->_onMapKey = is_callable($callback) ? $callback : NULL;
+      }
+      return $this->_onMapKey;
     }
 
     /**
@@ -150,6 +179,23 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
+     * Get a valid qualified name (tag name) using the property name/key.
+     *
+     * @param $key
+     * @param $default
+     * @param bool $isArrayElement
+     * @return string
+     */
+    private function getQualifiedName($key, $default, $isArrayElement = FALSE) {
+      if ($callback = $this->onMapKey()) {
+        $key = $callback($key, $isArrayElement);
+      } elseif ($isArrayElement) {
+        $key = $default;
+      }
+      return QualifiedName::normalizeString($key, self::DEFAULT_QNAME);
+    }
+
+    /**
      * @param string $type
      * @param mixed $value
      * @return null|string
@@ -175,9 +221,13 @@ namespace FluentDOM\Loader\Json {
      */
     private function transferArrayTo(\DOMElement $target, array $value, $recursions) {
       $target->setAttributeNS(self::XMLNS, 'json:type', 'array');
+      $parentName = $target->getAttributeNS(self::XMLNS, 'name') ?: $target->localName;
       foreach ($value as $item) {
         $target->appendChild(
-          $child = $target->ownerDocument->createElement(self::DEFAULT_QNAME)
+          $child = $target->ownerDocument->createElement(
+            $this->getQualifiedName($parentName, self::DEFAULT_QNAME, TRUE
+            )
+          )
         );
         $this->transferTo($child, $item, $recursions);
       }
@@ -202,7 +252,7 @@ namespace FluentDOM\Loader\Json {
         $target->setAttributeNS(self::XMLNS, 'json:type', 'object');
       }
       foreach ($properties as $property => $item) {
-        $qname = QualifiedName::normalizeString($property, self::DEFAULT_QNAME);
+        $qname = $this->getQualifiedName($property, self::DEFAULT_QNAME);
         $target->appendChild(
           $child = $target->ownerDocument->createElement($qname)
         );

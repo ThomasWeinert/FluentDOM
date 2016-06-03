@@ -4,6 +4,8 @@ Version 6.0
 - Changed: minimum PHP version is now 5.6
 - Added: HTML loader now supports 'html-fragment' and 'text/html-fragment'
 - Added: XML/HTML loaders now support libxml options for the load methods
+- Added: JsonDOM loader supports a callback for mapping keys to tag names
+   The callback can be set using an option or JsonDOM::onMapKey().
 - Refactored: Replace func_get_args() with variadics
 - Changed: string arguments to methods like FluentDOM\Query::append() are now parsed as
     HTML fragments if the content type of the FluentDOM\Query instance is a HTML type.

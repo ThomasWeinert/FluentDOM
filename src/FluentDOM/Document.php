@@ -336,6 +336,10 @@ namespace FluentDOM {
      * @return string
      */
     public function saveHTML($context = NULL) {
+      //if (\FluentDOM::$isHHVM && $context instanceof \DOMDocumentFragment) {
+      if ($context instanceof \DOMDocumentFragment) {
+        $context = $context->childNodes;
+      }
       if ($context instanceof \DOMNodeList) {
         $result = '';
         foreach ($context as $node) {

@@ -515,6 +515,21 @@ namespace FluentDOM {
     }
 
     /**
+     * @cover FluentDOM\Document:saveHTML
+     */
+    public function testSaveHtmlWithDocumentFragmentContext() {
+      $document = new Document();
+      $fragment = $document->createDocumentFragment();
+      $fragment->appendChild($document->createElement('em', 'test'));
+      $fragment->appendChild($document->createTextNode('test'));
+
+      $this->assertEquals(
+        "<em>test</em>test",
+        $document->saveHtml($fragment)
+      );
+    }
+
+    /**
      * @cover FluentDOM\Document:getElementsByTagName
      */
     public function testGetElementsByTagNameWithNamespace() {

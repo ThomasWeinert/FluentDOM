@@ -143,9 +143,13 @@ namespace FluentDOM\Loader {
           'text/html-fragment'
         )
       );
+      $result = '';
+      foreach ($fragment->childNodes as $node) {
+        $result .= $fragment->ownerDocument->saveHtml($node);
+      }
       $this->assertEquals(
         "<div>Test</div>Text<input>",
-        $fragment->ownerDocument->saveHtml($fragment)
+        $result
       );
     }
   }

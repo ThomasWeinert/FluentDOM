@@ -115,23 +115,13 @@ namespace FluentDOM {
     /**
      * @group Load
      * @covers FluentDOM\Nodes::load
-     */
-    public function testLoadWithInvalidArgumentExpectingException() {
-      $fd = new Nodes();
-      $this->setExpectedException('InvalidArgumentException');
-      $fd->load(NULL, 'unknown');
-    }
-
-    /**
-     * @group Load
-     * @covers FluentDOM\Nodes::load
      * @covers FluentDOM\Nodes::setContentType
      */
-    public function testLoadWithInvalidContentTypeFallbackToXml() {
+    public function testLoadWithUnknownContentType() {
       $dom = new Document();
       $fd = new Nodes();
       $fd->load($dom, 'unknown');
-      $this->assertEquals('text/xml', $fd->contentType);
+      $this->assertEquals('unknown', $fd->contentType);
     }
 
     /**
@@ -749,17 +739,6 @@ namespace FluentDOM {
         'text/html',
         $fdParent->contentType
       );
-    }
-
-    /**
-     * @group Properties
-     * @covers FluentDOM\Nodes::__set
-     * @covers FluentDOM\Nodes::setContentType
-     */
-    public function testSetPropertyContentTypeInvalid() {
-      $fd = new Nodes();
-      $this->setExpectedException('UnexpectedValueException');
-      $fd->contentType = 'Invalid Type';
     }
 
     /**

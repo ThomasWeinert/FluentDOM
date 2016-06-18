@@ -16,7 +16,7 @@ namespace FluentDOM {
    * The list is iterated until a valid document is returned by the loader
    *
    */
-  class Loaders implements \IteratorAggregate, Loadable {
+  class Loaders implements \IteratorAggregate, Loadable, Loadable\Fragment {
 
     private $_list = array();
 
@@ -96,11 +96,37 @@ namespace FluentDOM {
         /**
          * @var Loadable $loader
          */
-        if ($loader->supports($contentType) && ($dom = $loader->load($source, $contentType))) {
+        if ($loader->supports($contentType) && ($dom = $loader->load($source, $contentType, $options))) {
           break;
         }
       }
       return ($dom instanceOf \DOMDocument) ? $dom : NULL;
+    }
+
+    /**
+     * Load a data source as a fragment, the content type allows the loader to decide if it supports
+     * the data source
+     *
+     * @param mixed $source
+     * @param string $contentType
+     * @param array $options
+     * @return \DOMDocumentFragment|NULL
+     */
+    public function loadFragment($source, $contentType, array $options = []) {
+      $fragment = NULL;
+      foreach ($this as $loader) {
+        /**
+         * @var Loadable\Fragment $loader
+         */
+        if (
+          $loader instanceof Loadable\Fragment &&
+          $loader->supports($contentType) &&
+          ($fragment = $loader->loadFragment($source, $contentType, $options))
+        ) {
+          break;
+        }
+      }
+      return ($fragment instanceOf \DOMDocumentFragment) ? $fragment : NULL;
     }
   }
 }

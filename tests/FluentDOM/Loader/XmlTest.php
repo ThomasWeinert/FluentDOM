@@ -85,5 +85,21 @@ namespace FluentDOM\Loader {
         )
       );
     }
+
+    /**
+     * @covers FluentDOM\Loader\Xml
+     * @covers FluentDOM\Loader\Supports
+     */
+    public function testLoadFragmentWithValidXml() {
+      $loader = new Xml();
+      $fragment = $loader->loadFragment(
+        'TEXT<xml><![CDATA[Test]]></xml>',
+        'text/xml'
+      );
+      $this->assertEquals(
+        'TEXT<xml><![CDATA[Test]]></xml>',
+        $fragment->ownerDocument->saveXml($fragment)
+      );
+    }
   }
 }

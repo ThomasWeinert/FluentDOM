@@ -276,10 +276,8 @@ namespace FluentDOM {
      *
      * @param string $value
      * @param bool $silentFallback
-     * @throws \Exception
-     * @throws \UnexpectedValueException
      */
-    private function setContentType($value, $silentFallback = FALSE) {
+    private function setContentType($value) {
       switch (strtolower($value)) {
       case 'xml' :
       case 'application/xml' :
@@ -293,11 +291,7 @@ namespace FluentDOM {
         $newContentType = 'text/html';
         break;
       default :
-        if ($silentFallback) {
-          $newContentType = 'text/xml';
-        } else {
-          throw new \UnexpectedValueException('Invalid content type value');
-        }
+        $this->_contentType = $newContentType = $value;
       }
       if (isset($this->_parent) && $this->_contentType != $newContentType) {
         $this->_parent->contentType = $newContentType;

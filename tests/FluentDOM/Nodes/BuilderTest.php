@@ -293,7 +293,7 @@ namespace FluentDOM\Nodes {
       $builder = new Builder($nodes);
       $this->assertXmlNodesArrayEqualsXmlStrings(
         ['<one/>', '<two/>', 'three'],
-        $builder->getXmlFragment('<one/><two/>three')
+        $builder->getFragment('<one/><two/>three', 'text/xml')
       );
     }
 
@@ -304,7 +304,7 @@ namespace FluentDOM\Nodes {
       $nodes = new Nodes();
       $builder = new Builder($nodes);
       $this->assertEquals(
-        [], $builder->getXmlFragment('')
+        [], $builder->getFragment('', 'text/xml')
       );
     }
 
@@ -318,7 +318,7 @@ namespace FluentDOM\Nodes {
         'UnexpectedValueException',
         'Invalid document fragment'
       );
-      $builder->getXmlFragment(NULL);
+      $builder->getFragment(NULL, 'text/xml');
     }
 
     /**
@@ -329,7 +329,7 @@ namespace FluentDOM\Nodes {
       $builder = new Builder($nodes);
       $this->assertEquals(
         [],
-        @$builder->getXmlFragment('')
+        @$builder->getFragment('', 'text/xml')
       );
     }
 
@@ -341,7 +341,7 @@ namespace FluentDOM\Nodes {
       $builder = new Builder($nodes);
       $this->assertXmlNodesArrayEqualsXmlStrings(
         ['<br/>', 'TEXT', '<br/>'],
-        $builder->getHtmlFragment('<br/>TEXT<br/>')
+        $builder->getFragment('<br/>TEXT<br/>', 'text/html')
       );
     }
 
@@ -352,7 +352,7 @@ namespace FluentDOM\Nodes {
       $nodes = new Nodes();
       $builder = new Builder($nodes);
       $this->assertEquals(
-        [], $builder->getHtmlFragment('')
+        [], $builder->getFragment('', 'text/html')
       );
     }
 
@@ -366,7 +366,7 @@ namespace FluentDOM\Nodes {
         'UnexpectedValueException',
         'Invalid document fragment'
       );
-      $builder->getHtmlFragment(NULL);
+      $builder->getFragment(NULL, 'text/html');
     }
 
     /**

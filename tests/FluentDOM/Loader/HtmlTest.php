@@ -129,5 +129,24 @@ namespace FluentDOM\Loader {
         )
       );
     }
+
+    /**
+     * @covers FluentDOM\Loader\Html
+     * @covers FluentDOM\Loader\Supports
+     */
+    public function testLoadFragmentWithValidHtmlFragment() {
+      $loader = new Html();
+      $this->assertInstanceOf(
+        'DOMDocumentFragment',
+        $fragment = $loader->loadFragment(
+          '<div>Test</div>Text<input>',
+          'text/html-fragment'
+        )
+      );
+      $this->assertEquals(
+        "<div>Test</div>Text<input>",
+        $fragment->ownerDocument->saveHtml($fragment)
+      );
+    }
   }
 }

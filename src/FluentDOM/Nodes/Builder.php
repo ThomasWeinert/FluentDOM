@@ -102,11 +102,7 @@ namespace FluentDOM\Nodes {
       if ($nodes = $this->getNodeList($content, $includeTextNodes, $limit)) {
         $result = $nodes;
       } elseif (is_string($content)) {
-        if ($this->_nodes->contentType == 'text/html') {
-          $result = $this->getHtmlFragment($content, $includeTextNodes, $limit);
-        } else {
-          $result = $this->getXmlFragment($content, $includeTextNodes, $limit);
-        }
+        $result = $this->getFragment($content, $this->getOwner()->contentType, $includeTextNodes, $limit);
       }
       if (!is_array($result) || empty($result)) {
         throw new \InvalidArgumentException('Invalid/empty content parameter.');
@@ -134,59 +130,34 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * Convert a given content xml string into and array of nodes
+     * Convert a given content string into and array of nodes
      *
      * @param string $xml
+     * @param string $contentType
      * @param boolean $includeTextNodes
      * @param integer $limit
      * @throws \UnexpectedValueException
      * @return array
      */
-    public function getXmlFragment($xml, $includeTextNodes = TRUE, $limit = -1) {
+    public function getFragment($xml, $contentType = 'text/xml', $includeTextNodes = TRUE, $limit = -1) {
       $xml = $this->getContentAsString($xml);
+      $loader = $this->getOwner()->loaders();
+      if (!$loader->supports($contentType)) {
+        throw new \FluentDOM\Exceptions\InvalidFragmentLoader();
+      }
       if (!$xml) {
         return array();
       }
       $result = array();
-      $fragment = $this->getOwner()->getDocument()->createDocumentFragment();
-      if ($fragment->appendXML($xml)) {
+      $fragment = $loader->loadFragment($xml, $contentType);
+      if ($fragment) {
+        $fragment = $this->getOwner()->document->importNode($fragment, TRUE);
         for ($i = $fragment->childNodes->length - 1; $i >= 0; $i--) {
           $element = $fragment->childNodes->item($i);
           if ($element instanceof \DOMElement ||
             ($includeTextNodes && Constraints::isNode($element))) {
             array_unshift($result, $element);
             $element->parentNode->removeChild($element);
-          }
-        }
-      }
-      return $this->getLimitedArray($result, $limit);
-    }
-
-    /**
-     * @param string $html
-     * @throws \UnexpectedValueException
-     * @return array
-     */
-    public function getHtmlFragment($html, $includeTextNodes = TRUE, $limit = -1) {
-      $html = $this->getContentAsString($html);
-      if (!$html) {
-        return array();
-      }
-      $htmlDom = new Document();
-      $status = libxml_use_internal_errors(TRUE);
-      $htmlDom->loadHtml('<html-fragment>'.$html.'</html-fragment>');
-      libxml_clear_errors();
-      libxml_use_internal_errors($status);
-      $result = array();
-      $nodes = $htmlDom->evaluate('//html-fragment[1]/node()');
-      $document = $this->getOwner()->getDocument();
-      if ($nodes instanceof \Traversable) {
-        foreach ($nodes as $node) {
-          if (
-            $node instanceof \DOMElement ||
-            ($includeTextNodes && Constraints::isNode($node))
-          ) {
-            $result[] = $document->importNode($node, TRUE);
           }
         }
       }

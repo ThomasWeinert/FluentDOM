@@ -1175,7 +1175,7 @@ namespace FluentDOM {
           return $this->build()->getInnerXml($node);
         },
         function($node) {
-          return $this->build()->getXmlFragment($node, TRUE);
+          return $this->build()->getFragment($node, 'text/xml', TRUE);
         },
         function($node, $fragment) {
           $this->modify($node)->replaceChildren($fragment);
@@ -1197,7 +1197,7 @@ namespace FluentDOM {
           return $this->getDocument()->saveXML($node);
         },
         function($xml) {
-          return $this->build()->getXmlFragment($xml, TRUE);
+          return $this->build()->getFragment($xml, 'text/xml', TRUE);
         }
       );
     }
@@ -1216,7 +1216,7 @@ namespace FluentDOM {
           return $this->getDocument()->saveHTML($node);
         },
         function($html) {
-          return $this->build()->getHtmlFragment($html);
+          return $this->build()->getFragment($html, 'text/html');
         }
       );
     }
@@ -1239,7 +1239,7 @@ namespace FluentDOM {
           return $result;
         },
         function($html) {
-          return $this->build()->getHtmlFragment($html);
+          return $this->build()->getFragment($html, 'text/html');
         },
         function($node, $fragment) {
           $this->modify($node)->replaceChildren($fragment);

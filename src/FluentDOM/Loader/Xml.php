@@ -14,7 +14,7 @@ namespace FluentDOM\Loader {
   /**
    * Load a DOM document from a xml file or string
    */
-  class Xml implements Loadable {
+  class Xml implements Loadable, Loadable\Fragment {
 
     use Supports;
 
@@ -49,5 +49,21 @@ namespace FluentDOM\Loader {
       return NULL;
     }
 
+    /**
+     * @see LoadableFragment::loadFragment
+     * @param string $source
+     * @param string $contentType
+     * @param array $options
+     * @return DocumentFragment|NULL
+     */
+    public function loadFragment($source, $contentType, array $options = []) {
+      if ($this->supports($contentType)) {
+        $dom = new Document();
+        $fragment = $dom->createDocumentFragment();
+        $fragment->appendXml($source);
+        return $fragment;
+      }
+      return NULL;
+    }
   }
 }

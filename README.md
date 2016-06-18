@@ -199,8 +199,15 @@ even register a default namespace for elements.
 
 The minimum required PHP version now is 5.6.
 
-`FluentDOM\Query` now parses fragment arguments as HTML or XML depending on the
-content type.
+`FluentDOM\Query` now parses fragment arguments depending on the
+content type. It uses the loaders to parse the fragments for methods like
+`FluentDOM\Query::append()`. To parse the fragments as XML change the content type 
+after loading.
+
+```php
+$fd = FluentDOM($content, 'type/some-type');
+$fd->contentType = 'text/xml';
+```
 
 `FluentDOM\Query::attr()`, `FluentDOM\Query::css()` and `FluentDOM\Query::data()`
 now recognize that the second argument is provided, even if it is NULL.

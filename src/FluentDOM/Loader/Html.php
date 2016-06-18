@@ -9,12 +9,13 @@
 namespace FluentDOM\Loader {
 
   use FluentDOM\Document;
+  use FluentDOM\DocumentFragment;
   use FluentDOM\Loadable;
 
   /**
    * Load a DOM document from a xml string
    */
-  class Html implements Loadable {
+  class Html implements Loadable, Loadable\Fragment {
 
     use Supports;
 
@@ -54,6 +55,31 @@ namespace FluentDOM\Loader {
       return NULL;
     }
 
+    /**
+     * @see LoadableFragment::loadFragment
+     * @param string $source
+     * @param string $contentType
+     * @param array $options
+     * @return DocumentFragment|NULL
+     */
+    public function loadFragment($source, $contentType, array $options = []) {
+      if ($this->supports($contentType)) {
+        $htmlDom = new Document();
+        $errorSetting = libxml_use_internal_errors(TRUE);
+        $loadOptions = isset($options[self::LIBXML_OPTIONS]) ? (int)$options[self::LIBXML_OPTIONS] : 0;
+        $htmlDom->loadHtml('<html-fragment>'.$source.'</html-fragment>', $loadOptions);
+        $nodes = $htmlDom->evaluate('//html-fragment[1]/node()');
+        $fragment = $htmlDom->createDocumentFragment();
+        foreach ($nodes as $node) {
+          $fragment->appendChild($node);
+        }
+        libxml_clear_errors();
+        libxml_use_internal_errors($errorSetting);
+        return $fragment;
+      }
+      return NULL;
+    }
+
     private function isFragment($contentType, $options) {
       return (
         $contentType == 'html-fragment' ||
@@ -65,7 +91,6 @@ namespace FluentDOM\Loader {
     private function loadFragmentIntoDom($dom, $source, $loadOptions) {
       $htmlDom = new Document();
       $htmlDom->loadHtml('<html-fragment>'.$source.'</html-fragment>', $loadOptions);
-      $result = array();
       $nodes = $htmlDom->evaluate('//html-fragment[1]/node()');
       foreach ($nodes as $node) {
         $dom->appendChild($dom->importNode($node, TRUE));

@@ -36,7 +36,6 @@ abstract class FluentDOM {
    * @return \FluentDOM\Document
    */
   public static function load($source, $contentType = 'text/xml', array $options = []) {
-    self::_require();
     if (!isset(self::$_loader)) {
       self::$_loader = self::getDefaultLoaders();
     }
@@ -51,7 +50,6 @@ abstract class FluentDOM {
    * @return \FluentDOM\Nodes\Creator
    */
   public static function create($version = '1.0', $encoding = 'UTF-8') {
-    self::_require();
     return new \FluentDOM\Nodes\Creator($version, $encoding);
   }
 
@@ -64,7 +62,6 @@ abstract class FluentDOM {
    * @return \FluentDOM\Query
    */
   public static function Query($source = NULL, $contentType = 'text/xml', array $options = []) {
-    self::_require();
     $query = new FluentDOM\Query();
     if (isset($source)) {
       $query->load($source, $contentType, $options);
@@ -100,7 +97,6 @@ abstract class FluentDOM {
    * @param FluentDOM\Loadable|NULL $loader
    */
   public static function setLoader($loader) {
-    self::_require();
     if ($loader instanceof \FluentDOM\Loadable) {
       self::$_loader = $loader;
     } elseif (NULL === $loader) {
@@ -194,27 +190,10 @@ abstract class FluentDOM {
    * @param string|callable|FluentDOM\Xpath\Transformer $transformer
    */
   public static function registerXpathTransformer($transformer, $reset = FALSE) {
-    self::_require();
     if ($reset) {
       self::$_xpathTransformers = [];
     }
     array_unshift(self::$_xpathTransformers, $transformer);
-  }
-
-  /**
-   * Try using autoloader. If is not available, use the _require.php
-   *
-   * Try only once, if the source it not here it will
-   * not exists in the second call.
-   *
-   * @codeCoverageIgnore
-   */
-  private static function _require() {
-    static $load = TRUE;
-    if ($load && !interface_exists('FluentDOM\Appendable')) {
-      include(__DIR__.'/_require.php');
-    }
-    $load = FALSE;
   }
 }
 FluentDOM::$isHHVM = defined('HHVM_VERSION');

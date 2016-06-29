@@ -26,4 +26,6 @@ $json = <<<JSON
 JSON;
 
 $fd = FluentDOM($json, 'text/json');
-echo $fd->find('/*/phoneNumbers/*[type="home"]/number')->text();
+$fd->find('/*/phoneNumbers/*[type="home"]/number')->text('789');
+
+echo $fd;

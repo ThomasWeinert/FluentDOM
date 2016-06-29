@@ -560,17 +560,28 @@ namespace FluentDOM {
     }
 
     /**
-     * Return the XML output of the internal dom document
+     * Return the output of the internal dom document
+     *
+     * @return string
+     */
+    public function toString() {
+      if ($serializer = \FluentDOM::getSerializerFactories()->createSerializer($this->contentType, $this->document)) {
+        return (string)$serializer;
+      } else {
+        return $this->document->saveXML();
+      }
+    }
+
+    /**
+     * Return the output of the internal dom document
      *
      * @return string
      */
     public function __toString() {
-      switch ($this->contentType) {
-      case 'html' :
-      case 'text/html' :
-        return $this->document->saveHTML();
-      default :
-        return $this->document->saveXML();
+      try {
+        return $this->toString();
+      } catch (\Exception $e) {
+        return '';
       }
     }
 

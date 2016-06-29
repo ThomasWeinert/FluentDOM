@@ -23,6 +23,11 @@ abstract class FluentDOM {
   private static $_defaultLoaders = [];
 
   /**
+   * @var FluentDOM\Serializer\Factory\Group
+   */
+  private static $_serializerFactories = NULL;
+
+  /**
    * Load a data source into a FluentDOM\Document
    *
    * @param mixed $source
@@ -131,6 +136,36 @@ abstract class FluentDOM {
       self::$_defaultLoaders = new FluentDOM\Loaders(new FluentDOM\Loader\Standard());
     }
     return self::$_defaultLoaders;
+  }
+
+  /**
+   * Return registered serializer factories
+   *
+   * @return \FluentDOM\Serializer\Factory\Group
+   */
+  public static function getSerializerFactories() {
+    if (!(self::$_serializerFactories instanceof FluentDOM\Serializer\Factory)) {
+      $xml = function($contentType, \DOMNode $node) {
+        return new FluentDOM\Serializer\Xml($node);
+      };
+      $html = function($contentType, \DOMNode $node) {
+        return new FluentDOM\Serializer\Html($node);
+      };
+      $json = function($contentType, \DOMNode $node) {
+        return new FluentDOM\Serializer\Json($node);
+      };
+      self::$_serializerFactories = new FluentDOM\Serializer\Factory\Group(
+        [
+          'text/html' => $html,
+          'html' => $html,
+          'text/xml' => $xml,
+          'xml' => $xml,
+          'text/json' => $json,
+          'json' => $json
+        ]
+      );
+    }
+    return self::$_serializerFactories;
   }
 
   /**

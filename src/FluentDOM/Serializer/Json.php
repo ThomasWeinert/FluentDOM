@@ -43,9 +43,9 @@ namespace FluentDOM\Serializer {
     const XMLNS_JSONDOM = 'urn:carica-json-dom.2013';
 
     /**
-     * @var \DOMDocument
+     * @var \DOMNode
      */
-    protected $_document = NULL;
+    protected $_node = NULL;
 
     /**
      * @var int
@@ -68,8 +68,8 @@ namespace FluentDOM\Serializer {
      * @param int $options
      * @param int $depth
      */
-    public function __construct(\DOMDocument $document, $options = 0, $depth = 512) {
-      $this->_document = $document;
+    public function __construct(\DOMNode $node, $options = 0, $depth = 512) {
+      $this->_node = $node;
       $this->_options = (int)$options;
       $this->_depth = (int)$depth;
       $this->_useDepth = \FluentDOM::$isHHVM || version_compare(PHP_VERSION, '5.5.0', '>=');
@@ -89,8 +89,12 @@ namespace FluentDOM\Serializer {
      * @return mixed
      */
     public function jsonSerialize() {
-      if (isset($this->_document->documentElement)) {
-        return $this->getNode($this->_document->documentElement);
+      $node = $this->_node;
+      if ($node instanceof \DOMDocument) {
+        $node = $node->documentElement;
+      }
+      if (isset($node)) {
+        return $this->getNode($node);
       }
       return $this->getEmpty();
     }

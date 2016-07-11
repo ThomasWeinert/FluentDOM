@@ -135,6 +135,17 @@ abstract class FluentDOM {
   }
 
   /**
+   * Register a serializer factory for a specified content type. This can be
+   * a callable returning the create serializer.
+   *
+   * @param string $contentType
+   * @param \FluentDOM\Serializer\Factory|callable $factory
+   */
+  public static function registerSerializerFactory($contentType, $factory) {
+    self::getSerializerFactories()[$contentType] = $factory;
+  }
+
+  /**
    * Return registered serializer factories
    *
    * @return \FluentDOM\Serializer\Factory\Group

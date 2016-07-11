@@ -2,10 +2,10 @@
 
 namespace FluentDOM\Serializer\Factory {
 
-  use FluentDOM\Serializer\Factory;
+  use FluentDOM\Serializer\Factory as SerializerFactory;
   use FluentDOM\Exceptions;
 
-  class Group implements \ArrayAccess, \IteratorAggregate, \Countable {
+  class Group implements SerializerFactory, \ArrayAccess, \IteratorAggregate, \Countable {
 
     private $_factories = [];
 

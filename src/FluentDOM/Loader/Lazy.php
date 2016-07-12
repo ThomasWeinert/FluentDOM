@@ -12,7 +12,7 @@ namespace FluentDOM\Loader {
   /**
    * A list of lazy initialized loaders.
    */
-  class Lazy implements Loadable {
+  class Lazy implements Loadable, Loadable\Fragment {
 
     private $_list = [];
 
@@ -118,6 +118,21 @@ namespace FluentDOM\Loader {
       $contentType = $this->normalizeContentType($contentType);
       if ($loader = $this->get($contentType)) {
         return $loader->load($source, $contentType, $options);
+      }
+      return NULL;
+    }
+
+    /**
+     * @param string $source
+     * @param mixed $contentType
+     * @param array $options
+     * @return \DOMDocument|NULL|void
+     */
+    public function loadFragment($source, $contentType, array $options = []) {
+      $contentType = $this->normalizeContentType($contentType);
+      $loader = $this->get($contentType);
+      if ($loader instanceof Loadable\Fragment) {
+        return $loader->loadFragment($source, $contentType, $options);
       }
       return NULL;
     }

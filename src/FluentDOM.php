@@ -111,12 +111,23 @@ abstract class FluentDOM {
   /**
    * Register an additional default loader
    *
-   * @param \FluentDOM\Loadable $loader
+   * @param \FluentDOM\Loadable|callable $loader
+   * @param [string] ...$contentTypes
    * @return \FluentDOM\Loaders
    */
-  public static function registerLoader(FluentDOM\Loadable $loader) {
+  public static function registerLoader($loader, ...$contentTypes) {
     $loaders = self::getDefaultLoaders();
-    $loaders->add($loader);
+    if (count($contentTypes) > 0) {
+      $lazyLoader = new \FluentDOM\Loader\Lazy();
+      foreach ($contentTypes as $contentType) {
+        $lazyLoader->add($contentType, $loader);
+      }
+      $loaders->add($lazyLoader);
+    } else if (is_callable($loader)) {
+      $loaders->add($loader());
+    } else {
+      $loaders->add($loader);
+    }
     self::$_loader = NULL;
     return $loaders;
   }
@@ -124,7 +135,7 @@ abstract class FluentDOM {
   /**
    * Standard loader + any registered loader.
    *
-   * @return array|\FluentDOM\Loaders
+   * @return \FluentDOM\Loaders
    * @codeCoverageIgnore
    */
   public static function getDefaultLoaders() {
@@ -135,14 +146,16 @@ abstract class FluentDOM {
   }
 
   /**
-   * Register a serializer factory for a specified content type. This can be
+   * Register a serializer factory for a specified content type(s). This can be
    * a callable returning the create serializer.
    *
-   * @param string $contentType
    * @param \FluentDOM\Serializer\Factory|callable $factory
+   * @param [string] ...$contentTypes
    */
-  public static function registerSerializerFactory($contentType, $factory) {
-    self::getSerializerFactories()[$contentType] = $factory;
+  public static function registerSerializerFactory($factory, ...$contentTypes) {
+    foreach ($contentTypes as $contentType) {
+      self::getSerializerFactories()[$contentType] = $factory;
+    }
   }
 
   /**

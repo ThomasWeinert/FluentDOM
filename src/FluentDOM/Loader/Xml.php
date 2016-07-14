@@ -9,12 +9,13 @@
 namespace FluentDOM\Loader {
 
   use FluentDOM\Document;
+  use FluentDOM\DocumentFragment;
   use FluentDOM\Loadable;
 
   /**
    * Load a DOM document from a xml file or string
    */
-  class Xml implements Loadable, Loadable\Fragment {
+  class Xml implements Loadable {
 
     use Supports;
 

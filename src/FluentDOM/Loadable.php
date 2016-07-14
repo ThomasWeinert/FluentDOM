@@ -35,5 +35,16 @@ namespace FluentDOM {
      * @return NULL|Document
      */
     function load($source, $contentType, array $options = []);
+
+    /**
+     * Load the data source and return the new DOM document. Return NULL if
+     * the data source could not be loaded.
+     *
+     * @param mixed $source
+     * @param string $contentType
+     * @param array $options Optional options for the loader
+     * @return NULL|\FluentDOM\DocumentFragment
+     */
+    public function loadFragment($source, $contentType, array $options = []);
   }
 }

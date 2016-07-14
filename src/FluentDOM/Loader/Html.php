@@ -11,11 +11,13 @@ namespace FluentDOM\Loader {
   use FluentDOM\Document;
   use FluentDOM\DocumentFragment;
   use FluentDOM\Loadable;
+  use FluentDOM\Loaders;
+  use Hal\Component\Config\Loader;
 
   /**
    * Load a DOM document from a xml string
    */
-  class Html implements Loadable, Loadable\Fragment {
+  class Html implements Loadable {
 
     use Supports;
 
@@ -34,23 +36,25 @@ namespace FluentDOM\Loader {
      * @param string $source
      * @param string $contentType
      * @param array $options
-     * @return Document|NULL
+     * @return Document|Result|NULL
      */
     public function load($source, $contentType, array $options = []) {
       if ($this->supports($contentType)) {
-        $dom = new Document();
+        $selection = false;
+        $document = new Document();
         $errorSetting = libxml_use_internal_errors(TRUE);
         $loadOptions = isset($options[self::LIBXML_OPTIONS]) ? (int)$options[self::LIBXML_OPTIONS] : 0;
         if ($this->isFragment($contentType, $options)) {
-          $this->loadFragmentIntoDom($dom, $source, $loadOptions);
+          $this->loadFragmentIntoDom($document, $source, $loadOptions);
+          $selection = $document->evaluate('/*');
         } else if ($this->startsWith($source, '<')) {
-          $dom->loadHTML($source, $loadOptions);
+          $document->loadHTML($source, $loadOptions);
         } else {
-          $dom->loadHTMLFile($source, $loadOptions);
+          $document->loadHTMLFile($source, $loadOptions);
         }
         libxml_clear_errors();
         libxml_use_internal_errors($errorSetting);
-        return $dom;
+        return new Result($document, 'text/html', $selection);
       }
       return NULL;
     }

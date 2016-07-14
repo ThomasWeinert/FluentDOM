@@ -39,7 +39,8 @@ abstract class FluentDOM {
     if (!isset(self::$_loader)) {
       self::$_loader = self::getDefaultLoaders();
     }
-    return self::$_loader->load($source, $contentType, $options);
+    $result = self::$_loader->load($source, $contentType, $options);
+    return $result instanceof \DOMDocument ? $result : $result->getDocument();
   }
 
   /**

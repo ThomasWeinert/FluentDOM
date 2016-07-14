@@ -9,6 +9,8 @@
 
 namespace FluentDOM {
 
+  use FluentDOM\Loader\Result;
+
   /**
    * FluentDOM\Loaders is a list of loaders that allow to import data sources into
    * a DOM document.
@@ -16,7 +18,7 @@ namespace FluentDOM {
    * The list is iterated until a valid document is returned by the loader
    *
    */
-  class Loaders implements \IteratorAggregate, Loadable, Loadable\Fragment {
+  class Loaders implements \IteratorAggregate, Loadable {
 
     private $_list = array();
 
@@ -88,7 +90,7 @@ namespace FluentDOM {
      * @param mixed $source
      * @param string $contentType
      * @param array $options
-     * @return \DOMDocument|NULL
+     * @return \DOMDocument|Result|NULL
      */
     public function load($source, $contentType, array $options = []) {
       $dom = NULL;
@@ -100,7 +102,7 @@ namespace FluentDOM {
           break;
         }
       }
-      return ($dom instanceOf \DOMDocument) ? $dom : NULL;
+      return ($dom instanceOf \DOMDocument || $dom instanceof Result) ? $dom : NULL;
     }
 
     /**
@@ -116,10 +118,9 @@ namespace FluentDOM {
       $fragment = NULL;
       foreach ($this as $loader) {
         /**
-         * @var Loadable\Fragment $loader
+         * @var Loadable $loader
          */
         if (
-          $loader instanceof Loadable\Fragment &&
           $loader->supports($contentType) &&
           ($fragment = $loader->loadFragment($source, $contentType, $options))
         ) {

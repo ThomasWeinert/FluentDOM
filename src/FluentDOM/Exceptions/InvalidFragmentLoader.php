@@ -4,14 +4,13 @@ namespace FluentDOM\Exceptions {
 
   use FluentDOM\Exception;
 
-  class InvalidArgument extends \InvalidArgumentException implements Exception {
+  class InvalidFragmentLoader extends \InvalidArgumentException implements Exception {
 
     /**
-     * @param string $argumentName
-     * @param string|string[] $expectedTypes
+     * @param string $className
      */
-    public function __construct() {
-      $message = sprintf('Loader can not load fragments.');
+    public function __construct($className) {
+      $message = sprintf('Loader "%s" can not load fragments.');
       parent::__construct($message);
     }
   }

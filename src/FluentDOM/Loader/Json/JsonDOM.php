@@ -103,6 +103,27 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
+     * @param string $source
+     * @param string $contentType
+     * @param array $options
+     * @return \FluentDOM\DocumentFragment|null
+     */
+    public function loadFragment($source, $contentType, array $options = []) {
+      if ($this->supports($contentType)) {
+        $dom = new Document('1.0', 'UTF-8');
+        $fragment = $dom->createDocumentFragment();
+        $onMapKey = $this->_onMapKey;
+        if (isset($options[self::ON_MAP_KEY]) && is_callable($options[self::ON_MAP_KEY])) {
+          $this->onMapKey($options[self::ON_MAP_KEY]);
+        }
+        $this->transferTo($fragment, json_decode($source), $this->_recursions);
+        $this->_onMapKey = $onMapKey;
+        return $fragment;
+      }
+      return NULL;
+    }
+
+    /**
      * Get/Set a mapping callback for the tag names. If it is a callable
      * it will be set. FALSE removes the callback.
      *

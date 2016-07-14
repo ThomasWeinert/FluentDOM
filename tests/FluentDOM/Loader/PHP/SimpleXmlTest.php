@@ -1,6 +1,7 @@
 <?php
 namespace FluentDOM\Loader\PHP {
 
+  use FluentDOM\Loader\Result;
   use FluentDOM\TestCase;
 
   require_once(__DIR__ . '/../../TestCase.php');
@@ -29,7 +30,7 @@ namespace FluentDOM\Loader\PHP {
     public function testLoadWithValidXml() {
       $loader = new SimpleXml();
       $this->assertInstanceOf(
-        'DOMDocument',
+        Result::class,
         $loader->load(
           simplexml_load_string('<xml/>'),
           'php/simplexml'
@@ -43,14 +44,14 @@ namespace FluentDOM\Loader\PHP {
     public function testLoadSelectingChildNode() {
       $loader = new SimpleXml();
       $this->assertInstanceOf(
-        'DOMDocument',
-        $dom = $loader->load(
+        Result::class,
+        $result = $loader->load(
           simplexml_load_string('<xml><child/></xml>')->child,
           'php/simplexml'
         )
       );
       $this->assertXmlStringEqualsXmlString(
-        '<child/>', $dom->saveXML()
+        '<child/>', $result->getDocument()->saveXML()
       );
     }
 

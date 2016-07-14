@@ -101,27 +101,32 @@ namespace FluentDOM {
      * @return $this
      */
     public function load($source, $contentType = 'text/xml', array $options = []) {
-      $dom = FALSE;
+      $loaded = FALSE;
       $this->_useDocumentContext = TRUE;
       if ($source instanceof Nodes) {
-        $dom = $source->getDocument();
+        $loaded = $source->getDocument();
       } elseif ($source instanceof \DOMDocument) {
-        $dom = $source;
+        $loaded = $source;
       } elseif ($source instanceof \DOMNode) {
-        $dom = $source->ownerDocument;
+        $loaded = $source->ownerDocument;
         $this->_nodes = array($source);
         $this->_useDocumentContext = FALSE;
       } elseif ($this->loaders()->supports($contentType)) {
-        $dom = $this->loaders()->load($source, $contentType);
+        $loaded = $this->loaders()->load($source, $contentType);
       }
-      if ($dom instanceof \DOMDocument) {
-        $this->_document = $dom;
-        $this->setContentType($contentType, TRUE);
+      if ($loaded instanceof Loader\Result || $loaded instanceof \DOMDocument) {
+        if ($loaded instanceof Loader\Result) {
+          $this->_document = $loaded->getDocument();
+          $this->setContentType($loaded->getContentType());
+          if ($selection = $loaded->getSelection()) {
+            $this->push($selection);
+          }
+        } else {
+          $this->_document = $loaded;
+          $this->setContentType($contentType);
+        }
         $this->_xpath = NULL;
         $this->applyNamespaces();
-        if ($contentType == 'html-fragment' || $contentType == 'text/html-fragment') {
-          $this->push($this->fetch('/*'));
-        }
         return $this;
       }
       throw new Exceptions\InvalidSource($source, $contentType);

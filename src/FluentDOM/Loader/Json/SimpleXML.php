@@ -12,6 +12,7 @@ namespace FluentDOM\Loader\Json {
   use FluentDOM\Document;
   use FluentDOM\Element;
   use FluentDOM\Loadable;
+  use FluentDOM\Loader\Result;
   use FluentDOM\Loader\Supports;
 
   /**
@@ -35,7 +36,7 @@ namespace FluentDOM\Loader\Json {
      * @return string[]
      */
     public function getSupported() {
-      return ['simplexml', 'application/simplexml', 'application/simplexml+json'];
+      return ['text/simplexml', 'text/simplexml+json', 'application/simplexml+json'];
     }
 
     /**
@@ -44,16 +45,16 @@ namespace FluentDOM\Loader\Json {
      * @param mixed $source
      * @param string $contentType
      * @param array $options
-     * @return Document|NULL
+     * @return Document|Result|NULL
      */
     public function load($source, $contentType, array $options = []) {
       if (FALSE !== ($json = $this->getJson($source, $contentType))) {
-        $dom = new Document('1.0', 'UTF-8');
-        $dom->appendChild(
-          $root = $dom->createElementNS(self::XMLNS, 'json:json')
+        $document = new Document('1.0', 'UTF-8');
+        $document->appendChild(
+          $root = $document->createElementNS(self::XMLNS, 'json:json')
         );
-        $this->transferTo($root, $json, $this->_recursions);
-        return $dom;
+        $this->transferTo($root, $json);
+        return $document;
       }
       return NULL;
     }
@@ -63,9 +64,9 @@ namespace FluentDOM\Loader\Json {
      * @param mixed $json
      */
     protected function transferTo(\DOMNode $node, $json) {
+      /** @var Document $dom */
       $dom = $node->ownerDocument ?: $node;
       if ($json instanceof \stdClass) {
-        /** @var Document $dom */
         foreach ($json as $name => $data) {
           if ($name == '@attributes') {
             if ($data instanceof \stdClass) {

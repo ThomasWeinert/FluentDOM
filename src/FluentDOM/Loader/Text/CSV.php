@@ -9,7 +9,9 @@
 namespace FluentDOM\Loader\Text {
 
   use FluentDOM\Document;
+  use FluentDOM\DocumentFragment;
   use FluentDOM\Element;
+  use FluentDOM\Exceptions\InvalidFragmentLoader;
   use FluentDOM\Loadable;
   use FluentDOM\Loader\Supports;
   use FluentDOM\QualifiedName;
@@ -69,6 +71,19 @@ namespace FluentDOM\Loader\Text {
         return $dom;
       }
       return NULL;
+    }
+
+    /**
+     * @see Loadable::loadFragment
+     *
+     * @param string $source
+     * @param string $contentType
+     * @param array $options
+     * @return DocumentFragment|NULL
+     */
+    public function loadFragment($source, $contentType, array $options = []) {
+      // TODO: Implement loadFragment() method.
+      throw new InvalidFragmentLoader(self::class);
     }
 
     /**

@@ -31,7 +31,7 @@ namespace FluentDOM\Loader {
     public function testLoadWithValidHtml() {
       $loader = new Html();
       $this->assertInstanceOf(
-        'DOMDocument',
+        Result::class,
         $loader->load(
           '<html/>',
           'text/html'
@@ -45,13 +45,13 @@ namespace FluentDOM\Loader {
      */
     public function testLoadWithoutOptionsAddsElements() {
       $loader = new Html();
-      $document = $loader->load(
+      $result = $loader->load(
         '<div/>',
         'text/html'
       );
       $this->assertEquals(
         '<html><body><div/></body></html>',
-        $document->documentElement->saveXML()
+        $result->getDocument()->documentElement->saveXML()
       );
     }
 
@@ -71,7 +71,7 @@ namespace FluentDOM\Loader {
         $this->markTestSkipped('LibXML options not available, LibXML version: '.LIBXML_DOTTED_VERSION);
       }
       $loader = new Html();
-      $document = $loader->load(
+      $result = $loader->load(
         '<div/>',
         'text/html',
         [
@@ -80,7 +80,7 @@ namespace FluentDOM\Loader {
       );
       $this->assertEquals(
         '<div/>',
-        $document->documentElement->saveXML()
+        $result->getDocument()->documentElement->saveXML()
       );
     }
 
@@ -91,15 +91,15 @@ namespace FluentDOM\Loader {
     public function testLoadWithValidHtmlFragment() {
       $loader = new Html();
       $this->assertInstanceOf(
-        'DOMDocument',
-        $document = $loader->load(
+        Result::class,
+        $result = $loader->load(
           '<div>Test</div>Text<input>',
           'text/html-fragment'
         )
       );
       $this->assertEquals(
         "<div>Test</div>Text<input>\n",
-        $document->saveHtml()
+        $result->getDocument()->saveHtml()
       );
     }
 
@@ -109,7 +109,7 @@ namespace FluentDOM\Loader {
     public function testLoadWithValidHtmlFile() {
       $loader = new Html();
       $this->assertInstanceOf(
-        'DOMDocument',
+        Result::class,
         $loader->load(
           __DIR__.'/TestData/loader.html',
           'text/html'

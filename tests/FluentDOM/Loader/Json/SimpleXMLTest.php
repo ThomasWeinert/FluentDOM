@@ -16,9 +16,9 @@ namespace FluentDOM\Loader\Json {
     public function testIntegeration($xmlInput, $expectedXml) {
       $json = json_decode(json_encode(new \SimpleXMLElement($xmlInput)));
       $loader = new SimpleXML();
-      $dom = $loader->load($json, 'simplexml');
+      $document = $loader->load($json, 'text/simplexml');
       $this->assertXmlStringEqualsXmlString(
-        $expectedXml, $dom->saveXml()
+        $expectedXml, $document->saveXml()
       );
     }
 
@@ -30,7 +30,7 @@ namespace FluentDOM\Loader\Json {
       $this->assertNull(
         $loader->load(
           NULL,
-          'simplexml'
+          'text/simplexml'
         )
       );
     }

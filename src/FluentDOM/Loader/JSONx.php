@@ -9,7 +9,9 @@
 namespace FluentDOM\Loader {
 
   use FluentDOM\Document;
+  use FluentDOM\DocumentFragment;
   use FluentDOM\Element;
+  use FluentDOM\Exceptions\InvalidFragmentLoader;
   use FluentDOM\Loadable;
   use FluentDOM\QualifiedName;
 
@@ -58,6 +60,19 @@ namespace FluentDOM\Loader {
         return $target;
       }
       return NULL;
+    }
+
+     /**
+      * @see Loadable::loadFragment
+      *
+      * @param string $source
+      * @param string $contentType
+      * @param array $options
+      * @return DocumentFragment|NULL
+      */
+    public function loadFragment($source, $contentType, array $options = []) {
+      // TODO: Implement loadFragment() method.
+      throw new InvalidFragmentLoader(self::class);
     }
 
     /**

@@ -43,7 +43,7 @@ namespace FluentDOM\Loader\PHP {
             <givenname>Bob</givenname>
           </_>
         </json:json>',
-        $loader->load($pdo->query("SELECT * FROM persons"), 'php/pdo')->saveXML()
+        $loader->load($pdo->query("SELECT * FROM persons"), 'php/pdo')->getDocument()->saveXML()
       );
     }
 

@@ -3,7 +3,7 @@
 [![Build Status](https://img.shields.io/travis/FluentDOM/FluentDOM.svg)](https://travis-ci.org/FluentDOM/FluentDOM)
 [![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/fluentdom/fluentdom.svg)](https://scrutinizer-ci.com/g/FluentDOM/FluentDOM/?branch=master)
 
-[![License](https://img.shields.io/packagist/l/fluentdom/fluentdom.svg)](http://www.opensource.org/licenses/mit-license.php)
+[![License](https://img.shields.io/packagist/l/fluentdom/fluentdom.svg)](http://opensource.org/licenses/mit-license.php)
 [![HHVM Status](https://img.shields.io/hhvm/fluentdom/fluentdom.svg)](http://hhvm.h4cc.de/package/fluentdom/fluentdom)
 [![Total Downloads](https://img.shields.io/packagist/dt/fluentdom/fluentdom.svg)](https://packagist.org/packages/fluentdom/fluentdom)
 [![Latest Stable Version](https://img.shields.io/packagist/v/fluentdom/fluentdom.svg)](https://packagist.org/packages/fluentdom/fluentdom)
@@ -96,7 +96,7 @@ Had fixed support for two CSS to XPath libraries. If they are installed in the p
 CSS selects are available.
 
   1. [Carica/PhpCss](https://github.com/ThomasWeinert/PhpCss)
-  2. [Symfony/CssSelector](https://github.com/symfony/CssSelector)
+  2. [Symfony/CssSelector](https://github.com/symfony/css-selector)
 
 ## Usage
 

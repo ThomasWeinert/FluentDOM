@@ -9,6 +9,7 @@
 namespace FluentDOM\Loader\Json {
 
   use FluentDOM\Document;
+  use FluentDOM\DocumentFragment;
   use FluentDOM\Loadable;
   use FluentDOM\Loader\Supports;
   use FluentDOM\QualifiedName;
@@ -153,7 +154,7 @@ namespace FluentDOM\Loader\Json {
     protected function transferTo(\DOMNode $target, $value, $recursions = 100) {
       if ($recursions < 1) {
         return;
-      } elseif ($target instanceof \DOMElement) {
+      } elseif ($target instanceof \DOMElement || $target instanceOf \DOMDocumentFragment) {
         $type = $this->getTypeFromValue($value);
         switch ($type) {
         case self::TYPE_ARRAY :
@@ -263,11 +264,11 @@ namespace FluentDOM\Loader\Json {
      * If the normalized NCName is different from the property name or verbose is TRUE, a json:name attribute
      * with the property name will be added.
      *
-     * @param \DOMElement $target
+     * @param \DOMElement|\DOMDocumentFragment $target
      * @param object $value
      * @param int $recursions
      */
-    private function transferObjectTo(\DOMElement $target, $value, $recursions) {
+    private function transferObjectTo(\DOMNode $target, $value, $recursions) {
       $properties = is_array($value) ? $value : get_object_vars($value);
       if ($this->_verbose || empty($properties)) {
         $target->setAttributeNS(self::XMLNS, 'json:type', 'object');

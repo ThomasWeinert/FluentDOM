@@ -1,6 +1,7 @@
 <?php
 namespace FluentDOM\Loader\PHP {
 
+  use FluentDOM\Exceptions\InvalidArgument;
   use FluentDOM\Loader\Result;
   use FluentDOM\TestCase;
 
@@ -63,6 +64,46 @@ namespace FluentDOM\Loader\PHP {
       $this->assertNull(
         $loader->load('', 'php/simplexml')
       );
+    }
+
+    public function testLoadFragmentWithString() {
+      $loader = new SimpleXml();
+      $fragment = $loader->loadFragment('<test/>', 'php/simplexml');
+      $this->assertXmlStringEqualsXmlString(
+        '<test/>',
+        $fragment->ownerDocument->saveXML($fragment)
+      );
+    }
+
+    public function testLoadFragmentWithSimpleXMLElement() {
+      $loader = new SimpleXml();
+      $fragment = $loader->loadFragment(new \SimpleXMLElement('<test/>'), 'php/simplexml');
+      $this->assertXmlStringEqualsXmlString(
+        '<test/>',
+        $fragment->ownerDocument->saveXML($fragment)
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Loader\PHP\SimpleXml
+     */
+    public function testLoadFragmentWithTypeExpectingNull() {
+      $loader = new SimpleXml();
+      $this->assertNull(
+        $loader->loadFragment('', 'unsupported')
+      );
+    }
+
+    /**
+     * @covers FluentDOM\Loader\PHP\SimpleXml
+     */
+    public function testLoadFragmentWithInvalidSourceExpectingException() {
+      $loader = new SimpleXml();
+      $this->setExpectedException(
+        InvalidArgument::class,
+        'Invalid $source argument. Expected: SimpleXMLElement, string'
+      );
+      $loader->loadFragment(42, 'php/simplexml');
     }
   }
 }

@@ -245,5 +245,33 @@ namespace FluentDOM\Loader\Json {
         $dom->saveXml()
       );
     }
+
+    public function testLoadFragmentWithString() {
+      $loader = new JsonDOM();
+      $json = [
+        'numbers' => [21, 42]
+      ];
+      $fragment = $loader->loadFragment(
+        json_encode($json),
+        'json',
+        [
+          JsonDOM::ON_MAP_KEY => function($key, $isArrayElement) {
+            return $isArrayElement ? 'number' : $key;
+          }
+        ]
+      );
+      $this->assertXmlStringEqualsXmlString(
+        '<numbers xmlns:json="urn:carica-json-dom.2013" json:type="array">'.
+        '<number json:type="number">21</number>'.
+        '<number json:type="number">42</number>'.
+        '</numbers>',
+        $fragment->ownerDocument->saveXml($fragment)
+      );
+    }
+
+    public function testLoadFragmentWithUnsupportedTypeExpectingNull() {
+      $loader = new JsonDOM();
+      $this->assertNull($loader->loadFragment('', 'unknown'));
+    }
   }
 }

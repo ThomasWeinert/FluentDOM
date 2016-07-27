@@ -8,12 +8,15 @@
 
 namespace FluentDOM\Loader\PHP {
 
+  use Doctrine\Instantiator\Exception\InvalidArgumentException;
   use FluentDOM\Document;
   use FluentDOM\DocumentFragment;
+  use FluentDOM\Exceptions\InvalidArgument;
   use FluentDOM\Exceptions\InvalidFragmentLoader;
   use FluentDOM\Loadable;
   use FluentDOM\Loader\Result;
   use FluentDOM\Loader\Supports;
+  use FluentDOM\Loader\Xml;
 
   /**
    * Load a DOM document from a SimpleXML element
@@ -21,6 +24,11 @@ namespace FluentDOM\Loader\PHP {
   class SimpleXml implements Loadable {
 
     use Supports;
+
+    /**
+     * @var Xml|null
+     */
+    private $_xmlLoader = NULL;
 
     /**
      * @return string[]
@@ -54,8 +62,18 @@ namespace FluentDOM\Loader\PHP {
      * @return DocumentFragment|NULL
      */
     public function loadFragment($source, $contentType, array $options = []) {
-      // TODO: Implement loadFragment() method.
-      throw new InvalidFragmentLoader(self::class);
+      if (!$this->supports($contentType)) {
+        return NULL;
+      } elseif (is_string($source)) {
+        $this->_xmlLoader = $this->_xmlLoader ?: new Xml();
+        return $this->_xmlLoader->loadFragment($source, 'text/xml');
+      } elseif ($source instanceof \SimpleXMLElement) {
+        $node = dom_import_simplexml($source);
+        $fragment = $node->ownerDocument->createDocumentFragment();
+        $fragment->appendChild($node->cloneNode(TRUE));
+        return $fragment;
+      }
+      throw new InvalidArgument('source', ['SimpleXMLElement', 'string']);
     }
   }
 }

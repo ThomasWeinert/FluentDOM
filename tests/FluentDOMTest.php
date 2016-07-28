@@ -176,6 +176,18 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
     $this->setExpectedException('LogicException', 'No CSS selector support installed');
     FluentDOM::getXPathTransformer();
   }
+
+  /**
+   * @group FactoryFunction
+   * @group Plugins
+   * @covers FluentDOM::registerSerializerFactory
+   * @covers FluentDOM::getSerializerFactories
+   */
+  public function testRegisterSerializerFactory() {
+    $factory = function() {};
+    FluentDOM::registerSerializerFactory($factory, 'example/type');
+    $this->assertSame($factory, FluentDOM::getSerializerFactories()['example/type']);
+  }
 }
 
 class FluentDOMXpathTransformer_TestProxy implements \FluentDOM\Xpath\Transformer {

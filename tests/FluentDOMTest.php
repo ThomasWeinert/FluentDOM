@@ -10,7 +10,7 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
    */
   public function testQuery() {
     $query = FluentDOM::Query();
-    $this->assertInstanceOf('FluentDOM\Query', $query);
+    $this->assertInstanceOf(\FluentDOM\Query::class, $query);
   }
 
   /**
@@ -31,7 +31,7 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
    */
   public function testCreator() {
     $write = FluentDOM::create();
-    $this->assertInstanceOf('FluentDOM\Nodes\Creator', $write);
+    $this->assertInstanceOf(\FluentDOM\Nodes\Creator::class, $write);
     $this->assertXmlStringEqualsXmlString(
       "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<test/>\n",
       (string)$write('test')
@@ -44,7 +44,7 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
    */
   public function testCreatorWithArguments() {
     $write = FluentDOM::create('2.0', 'ASCII');
-    $this->assertInstanceOf('FluentDOM\Nodes\Creator', $write);
+    $this->assertInstanceOf(\FluentDOM\Nodes\Creator::class, $write);
     $this->assertEquals(
       "<?xml version=\"2.0\" encoding=\"ASCII\"?>\n<test/>\n",
       (string)$write('test')
@@ -68,14 +68,14 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
    * @covers FluentDOM::load
    */
   public function testLoadWithDefinedLoader() {
-    $loader = $this->getMock('FluentDOM\Loadable');
+    $loader = $this->getMockBuilder(\FluentDOM\Loadable::class)->getMock();
     $loader
       ->expects($this->once())
       ->method('load')
       ->with('source', 'type')
       ->will($this->returnValue(new FluentDOM\Document()));
     FluentDOM::setLoader($loader);
-    $this->assertInstanceOf('FluentDOM\Document', FluentDOM::load('source', 'type'));
+    $this->assertInstanceOf(FluentDOM\Document::class, FluentDOM::load('source', 'type'));
   }
 
   /**
@@ -83,7 +83,7 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
    * @covers FluentDOM::setLoader
    */
   public function testSetLoaderWithInvalidObject() {
-    $this->setExpectedException('FluentDOM\Exception');
+    $this->setExpectedException(\FluentDOM\Exception::class);
     FluentDOM::setLoader(new stdClass());
   }
 
@@ -96,7 +96,7 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
   public function testRegisterLoader() {
     $dom = new \FluentDOM\Document();
     $dom->loadXML('<success/>');
-    $mockLoader = $this->getMock('FluentDOM\\Loadable');
+    $mockLoader = $this->getMockBuilder(\FluentDOM\Loadable::class)->getMock();
     $mockLoader
       ->expects($this->any())
       ->method('supports')
@@ -120,7 +120,7 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
    * @covers FluentDOM::getXPathTransformer
    */
   public function testGetXPathTransformerAfterRegister() {
-    $transformer = $this->getMock('FluentDOM\\Xpath\\Transformer');
+    $transformer = $this->getMockBuilder(FluentDOM\Xpath\Transformer::class)->getMock();
     FluentDOM::registerXpathTransformer($transformer, TRUE);
     $this->assertSame(
       $transformer,
@@ -135,7 +135,7 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
    * @covers FluentDOM::getXPathTransformer
    */
   public function testGetXPathTransformerAfterRegisterWithCallback() {
-    $transformer = $this->getMock('FluentDOM\\Xpath\\Transformer');
+    $transformer = $this->getMockBuilder(\FluentDOM\Xpath\Transformer::class)->getMock();
     FluentDOM::registerXpathTransformer(
       function() use ($transformer) {
         return $transformer;
@@ -156,11 +156,11 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
    */
   public function testGetXPathTransformerAfterRegisterwithClassName() {
     FluentDOM::registerXpathTransformer(
-      'FluentDOMXpathTransformer_TestProxy',
+      FluentDOMXpathTransformer_TestProxy::class,
       TRUE
     );
     $this->assertInstanceOf(
-      'FluentDOMXpathTransformer_TestProxy',
+      FluentDOMXpathTransformer_TestProxy::class,
       FluentDOM::getXPathTransformer()
     );
   }
@@ -173,7 +173,7 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
    */
   public function testGetXPathTransformerExpectingException() {
     FluentDOM::registerXpathTransformer('', TRUE);
-    $this->setExpectedException('LogicException', 'No CSS selector support installed');
+    $this->setExpectedException(\LogicException::class, 'No CSS selector support installed');
     FluentDOM::getXPathTransformer();
   }
 

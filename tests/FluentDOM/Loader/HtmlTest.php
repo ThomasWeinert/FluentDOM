@@ -8,7 +8,7 @@ namespace FluentDOM\Loader {
   class HtmlTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Loader\Html
+     * @covers \FluentDOM\Loader\Html
      */
     public function testSupportsExpectingTrue() {
       $loader = new Html();
@@ -16,8 +16,8 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @covers FluentDOM\Loader\Html
-     * @covers FluentDOM\Loader\Supports
+     * @covers \FluentDOM\Loader\Html
+     * @covers \FluentDOM\Loader\Supports
      */
     public function testSupportsExpectingFalse() {
       $loader = new Html();
@@ -25,8 +25,8 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @covers FluentDOM\Loader\Html
-     * @covers FluentDOM\Loader\Supports
+     * @covers \FluentDOM\Loader\Html
+     * @covers \FluentDOM\Loader\Supports
      */
     public function testLoadWithValidHtml() {
       $loader = new Html();
@@ -40,8 +40,8 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @covers FluentDOM\Loader\Html
-     * @covers FluentDOM\Loader\Supports
+     * @covers \FluentDOM\Loader\Html
+     * @covers \FluentDOM\Loader\Supports
      */
     public function testLoadWithoutOptionsAddsElements() {
       $loader = new Html();
@@ -56,8 +56,8 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @covers FluentDOM\Loader\Html
-     * @covers FluentDOM\Loader\Supports
+     * @covers \FluentDOM\Loader\Html
+     * @covers \FluentDOM\Loader\Supports
      */
     public function testLoadWithOptions() {
       if (
@@ -85,8 +85,8 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @covers FluentDOM\Loader\Html
-     * @covers FluentDOM\Loader\Supports
+     * @covers \FluentDOM\Loader\Html
+     * @covers \FluentDOM\Loader\Supports
      */
     public function testLoadWithValidHtmlFragment() {
       $loader = new Html();
@@ -104,7 +104,7 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @covers FluentDOM\Loader\Html
+     * @covers \FluentDOM\Loader\Html
      */
     public function testLoadWithValidHtmlFile() {
       $loader = new Html();
@@ -118,7 +118,7 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @covers FluentDOM\Loader\Html
+     * @covers \FluentDOM\Loader\Html
      */
     public function testLoadWithUnsupportedType() {
       $loader = new Html();
@@ -131,8 +131,8 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @covers FluentDOM\Loader\Html
-     * @covers FluentDOM\Loader\Supports
+     * @covers \FluentDOM\Loader\Html
+     * @covers \FluentDOM\Loader\Supports
      */
     public function testLoadFragmentWithValidHtmlFragment() {
       $loader = new Html();

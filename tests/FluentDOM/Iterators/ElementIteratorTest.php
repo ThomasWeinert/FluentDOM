@@ -10,7 +10,7 @@ namespace FluentDOM\Element {
   class IteratorTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Iterators\ElementIterator
+     * @covers \FluentDOM\Iterators\ElementIterator
      */
     public function testIterator() {
       $dom = new Document();
@@ -25,7 +25,7 @@ namespace FluentDOM\Element {
     }
 
     /**
-     * @covers FluentDOM\Iterators\ElementIterator
+     * @covers \FluentDOM\Iterators\ElementIterator
      */
     public function testSeek() {
       $dom = new Document();
@@ -39,7 +39,7 @@ namespace FluentDOM\Element {
     }
 
     /**
-     * @covers FluentDOM\Iterators\ElementIterator
+     * @covers \FluentDOM\Iterators\ElementIterator
      */
     public function testSeekWithInvalidPositionExpectingException() {
       $dom = new Document();
@@ -54,7 +54,7 @@ namespace FluentDOM\Element {
     }
 
     /**
-     * @covers FluentDOM\Iterators\ElementIterator
+     * @covers \FluentDOM\Iterators\ElementIterator
      */
     public function testRecursiveIterator() {
       $dom = new Document();
@@ -73,7 +73,7 @@ namespace FluentDOM\Element {
     }
 
     /**
-     * @covers FluentDOM\Iterators\ElementIterator
+     * @covers \FluentDOM\Iterators\ElementIterator
      */
     public function testGetChildrenOnTextNodeExpectingException() {
       $dom = new Document();

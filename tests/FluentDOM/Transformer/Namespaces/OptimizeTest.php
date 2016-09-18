@@ -15,7 +15,7 @@ namespace FluentDOM\Transformer\Namespaces {
   class OptimizeTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Transformer\Namespaces\Optimize
+     * @covers \FluentDOM\Transformer\Namespaces\Optimize
      * @dataProvider provideOptimizeExamples
      */
     public function testOptimize($expected, $xml, $namespaces = []) {

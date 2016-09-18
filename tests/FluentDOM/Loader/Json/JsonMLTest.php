@@ -9,7 +9,7 @@ namespace FluentDOM\Loader\Json {
 
 
     /**
-     * @covers FluentDOM\Loader\Json\JsonML
+     * @covers \FluentDOM\Loader\Json\JsonML
      * @dataProvider provideExamples
      * @param string $json
      * @param string $xml
@@ -23,7 +23,7 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * @covers FluentDOM\Loader\Json\JsonML
+     * @covers \FluentDOM\Loader\Json\JsonML
      */
     public function testLoadWithInvalidSourceExpectingNull() {
       $loader = new JsonML();

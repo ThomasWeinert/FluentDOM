@@ -3,6 +3,7 @@
 
 namespace FluentDOM\Loader\Supports {
 
+  use FluentDOM\Exceptions\JsonError;
   use FluentDOM\TestCase;
 
   require_once(__DIR__.'/../../TestCase.php');
@@ -36,7 +37,7 @@ namespace FluentDOM\Loader\Supports {
   class JsonTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Loader\Supports\Json
+     * @covers \FluentDOM\Loader\Supports\Json
      */
     public function testGetSourceWithArrayAsString() {
       $loader = new Json_TestProxy();
@@ -44,7 +45,7 @@ namespace FluentDOM\Loader\Supports {
     }
 
     /**
-     * @covers FluentDOM\Loader\Supports\Json
+     * @covers \FluentDOM\Loader\Supports\Json
      */
     public function testGetSourceWithObjectAsString() {
       $json = new \stdClass();
@@ -54,7 +55,7 @@ namespace FluentDOM\Loader\Supports {
     }
 
     /**
-     * @covers FluentDOM\Loader\Supports\Json
+     * @covers \FluentDOM\Loader\Supports\Json
      */
     public function testGetSourceWithObject() {
       $json = new \stdClass();
@@ -64,7 +65,7 @@ namespace FluentDOM\Loader\Supports {
     }
 
     /**
-     * @covers FluentDOM\Loader\Supports\Json
+     * @covers \FluentDOM\Loader\Supports\Json
      */
     public function testGetSourceWithFile() {
       $json = new \stdClass();
@@ -74,7 +75,7 @@ namespace FluentDOM\Loader\Supports {
     }
 
     /**
-     * @covers FluentDOM\Loader\Supports\Json
+     * @covers \FluentDOM\Loader\Supports\Json
      */
     public function testGetSourceWithUnsupportedTypeExpectingFalse() {
       $json = new \stdClass();
@@ -84,16 +85,16 @@ namespace FluentDOM\Loader\Supports {
     }
 
     /**
-     * @covers FluentDOM\Loader\Supports\Json
+     * @covers \FluentDOM\Loader\Supports\Json
      */
     public function testGetSourceWithInvalidJsonExpectingException() {
       $loader = new Json_TestProxy();
-      $this->setExpectedException('FluentDOM\Exceptions\JsonError');
+      $this->setExpectedException(JsonError::class);
       $loader->getSource('{invalid');
     }
 
     /**
-     * @covers FluentDOM\Loader\Supports\Json
+     * @covers \FluentDOM\Loader\Supports\Json
      */
     public function testLoad() {
       $json = new \stdClass();
@@ -106,7 +107,7 @@ namespace FluentDOM\Loader\Supports {
     }
 
     /**
-     * @covers FluentDOM\Loader\Supports\Json
+     * @covers \FluentDOM\Loader\Supports\Json
      */
     public function testLoadExpectingNull() {
       $json = new \stdClass();
@@ -118,7 +119,7 @@ namespace FluentDOM\Loader\Supports {
     }
 
     /**
-     * @covers FluentDOM\Loader\Supports\Json
+     * @covers \FluentDOM\Loader\Supports\Json
      */
     public function testGetNamespaceForNodeFromNode() {
       $dom = new \DOMDocument();
@@ -133,7 +134,7 @@ namespace FluentDOM\Loader\Supports {
     }
 
     /**
-     * @covers FluentDOM\Loader\Supports\Json
+     * @covers \FluentDOM\Loader\Supports\Json
      */
     public function testGetNamespaceForNodeFromJsonProperties() {
       $dom = new \DOMDocument();
@@ -150,7 +151,7 @@ namespace FluentDOM\Loader\Supports {
     }
 
     /**
-     * @covers FluentDOM\Loader\Supports\Json
+     * @covers \FluentDOM\Loader\Supports\Json
      * @dataProvider provideJsonValues
      */
     public function testGetValueAsJson($expected, $value) {

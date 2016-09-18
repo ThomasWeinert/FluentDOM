@@ -9,7 +9,7 @@ namespace FluentDOM\Serializer {
   class JsonTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Serializer\Json
+     * @covers \FluentDOM\Serializer\Json
      * @dataProvider provideJsonExamples
      * @param string $expected
      * @param string $data
@@ -27,7 +27,7 @@ namespace FluentDOM\Serializer {
     }
 
     /**
-     * @covers FluentDOM\Serializer\Json
+     * @covers \FluentDOM\Serializer\Json
      */
     public function testToStringWithLimitedDepthExpectingEmptyString() {
       if (version_compare(PHP_VERSION, '5.5.0', '<')) {
@@ -49,7 +49,7 @@ namespace FluentDOM\Serializer {
 
 
     /**
-     * @covers FluentDOM\Serializer\Json
+     * @covers \FluentDOM\Serializer\Json
      * @dataProvider provideJsonExamples
      * @param string $expected
      * @param string $data
@@ -68,7 +68,7 @@ namespace FluentDOM\Serializer {
     }
 
     /**
-     * @covers FluentDOM\Serializer\Json
+     * @covers \FluentDOM\Serializer\Json
      */
     public function testJsonSerializableWithLimitedDepthExpectingFalse() {
       if (version_compare(PHP_VERSION, '5.5.0', '<') || defined('HHVM_VERSION')) {
@@ -91,7 +91,7 @@ namespace FluentDOM\Serializer {
     }
 
     /**
-     * @covers FluentDOM\Serializer\Json
+     * @covers \FluentDOM\Serializer\Json
      */
     public function testJsonSerializeCallingGetNode() {
       $dom = new Document();
@@ -103,7 +103,7 @@ namespace FluentDOM\Serializer {
     }
 
     /**
-     * @covers FluentDOM\Serializer\Json
+     * @covers \FluentDOM\Serializer\Json
      */
     public function testJsonSerializeCallingGetEmpty() {
       $serializer = new Json_TestProxy(new \DOMDocument());
@@ -113,7 +113,7 @@ namespace FluentDOM\Serializer {
     }
 
     /**
-     * @covers FluentDOM\Serializer\Json
+     * @covers \FluentDOM\Serializer\Json
      */
     public function testGetNamespaces() {
       $dom = new Document();
@@ -141,7 +141,7 @@ namespace FluentDOM\Serializer {
       return $data;
     }
     /**
-     * @covers FluentDOM\Serializer\Json
+     * @covers \FluentDOM\Serializer\Json
      * @dataProvider provideExamples
      * @param string $expected
      * @param string $xml
@@ -157,7 +157,7 @@ namespace FluentDOM\Serializer {
     }
 
     /**
-     * @covers FluentDOM\Serializer\Json
+     * @covers \FluentDOM\Serializer\Json
      */
     public function testIntegrationWithEmptyDocument() {
       $serializer = new Json(new \DOMDocument());

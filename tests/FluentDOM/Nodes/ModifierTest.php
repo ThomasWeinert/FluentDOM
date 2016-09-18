@@ -8,7 +8,7 @@ namespace FluentDOM\Nodes {
   class ModifierTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Nodes\Modifier
+     * @covers \FluentDOM\Nodes\Modifier
      */
     public function testConstructor() {
       $dom = new \DOMDocument();
@@ -21,7 +21,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Modifier
+     * @covers \FluentDOM\Nodes\Modifier
      */
     public function testAppendChildren() {
       $dom = new \DOMDocument();
@@ -37,7 +37,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Modifier
+     * @covers \FluentDOM\Nodes\Modifier
      */
     public function testReplaceChildren() {
       $dom = new \DOMDocument();
@@ -54,7 +54,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Modifier
+     * @covers \FluentDOM\Nodes\Modifier
      */
     public function testInsertChildrenBefore() {
       $dom = new \DOMDocument();
@@ -71,7 +71,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Modifier
+     * @covers \FluentDOM\Nodes\Modifier
      */
     public function testInsertChildrenBeforeIntoEmptyElement() {
       $dom = new \DOMDocument();
@@ -87,7 +87,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Modifier
+     * @covers \FluentDOM\Nodes\Modifier
      */
     public function testInsertNodesAfter() {
       $dom = new \DOMDocument();
@@ -105,7 +105,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Modifier
+     * @covers \FluentDOM\Nodes\Modifier
      */
     public function testInsertNodesAfterLastChild() {
       $dom = new \DOMDocument();
@@ -123,7 +123,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Modifier
+     * @covers \FluentDOM\Nodes\Modifier
      */
     public function testInsertNodesBefore() {
       $dom = new \DOMDocument();
@@ -141,7 +141,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Modifier
+     * @covers \FluentDOM\Nodes\Modifier
      */
     public function testInsertNodesBeforeFirstChild() {
       $dom = new \DOMDocument();
@@ -159,7 +159,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Modifier
+     * @covers \FluentDOM\Nodes\Modifier
      */
     public function testReplaceNode() {
       $dom = new \DOMDocument();

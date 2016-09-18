@@ -10,8 +10,8 @@ namespace FluentDOM\Node {
   class ParentNodeTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Node\ParentNode\Implementation
-     * @covers FluentDOM\Node\ParentNode\Properties
+     * @covers \FluentDOM\Node\ParentNode\Implementation
+     * @covers \FluentDOM\Node\ParentNode\Properties
      */
     public function testGetFirstElementChild() {
       $dom = new Document();
@@ -24,8 +24,8 @@ namespace FluentDOM\Node {
     }
 
     /**
-     * @covers FluentDOM\Node\ParentNode\Implementation
-     * @covers FluentDOM\Node\ParentNode\Properties
+     * @covers \FluentDOM\Node\ParentNode\Implementation
+     * @covers \FluentDOM\Node\ParentNode\Properties
      */
     public function testGetFirstElementChildOnDocument() {
       $dom = new Document();
@@ -37,8 +37,8 @@ namespace FluentDOM\Node {
     }
 
     /**
-     * @covers FluentDOM\Node\ParentNode\Implementation
-     * @covers FluentDOM\Node\ParentNode\Properties
+     * @covers \FluentDOM\Node\ParentNode\Implementation
+     * @covers \FluentDOM\Node\ParentNode\Properties
      */
     public function testGetFirstElementChildExpectingNull() {
       $dom = new Document();
@@ -49,8 +49,8 @@ namespace FluentDOM\Node {
     }
 
     /**
-     * @covers FluentDOM\Node\ParentNode\Implementation
-     * @covers FluentDOM\Node\ParentNode\Properties
+     * @covers \FluentDOM\Node\ParentNode\Implementation
+     * @covers \FluentDOM\Node\ParentNode\Properties
      */
     public function testSetFirstElementChildExpectingException() {
       $dom = new Document();
@@ -62,8 +62,8 @@ namespace FluentDOM\Node {
     }
 
     /**
-     * @covers FluentDOM\Node\ParentNode\Implementation
-     * @covers FluentDOM\Node\ParentNode\Properties
+     * @covers \FluentDOM\Node\ParentNode\Implementation
+     * @covers \FluentDOM\Node\ParentNode\Properties
      */
     public function testGetLastElementChild() {
       $dom = new Document();
@@ -76,8 +76,8 @@ namespace FluentDOM\Node {
     }
 
     /**
-     * @covers FluentDOM\Node\ParentNode\Implementation
-     * @covers FluentDOM\Node\ParentNode\Properties
+     * @covers \FluentDOM\Node\ParentNode\Implementation
+     * @covers \FluentDOM\Node\ParentNode\Properties
      */
     public function testGetLastElementChildOnDocument() {
       $dom = new Document();
@@ -89,8 +89,8 @@ namespace FluentDOM\Node {
     }
 
     /**
-     * @covers FluentDOM\Node\ParentNode\Implementation
-     * @covers FluentDOM\Node\ParentNode\Properties
+     * @covers \FluentDOM\Node\ParentNode\Implementation
+     * @covers \FluentDOM\Node\ParentNode\Properties
      */
     public function testGetLastElementChildExpectingNull() {
       $dom = new Document();
@@ -101,8 +101,8 @@ namespace FluentDOM\Node {
     }
 
     /**
-     * @covers FluentDOM\Node\ParentNode\Implementation
-     * @covers FluentDOM\Node\ParentNode\Properties
+     * @covers \FluentDOM\Node\ParentNode\Implementation
+     * @covers \FluentDOM\Node\ParentNode\Properties
      */
     public function testSetLastElementChildExpectingException() {
       $dom = new Document();
@@ -114,8 +114,8 @@ namespace FluentDOM\Node {
     }
 
     /**
-     * @covers FluentDOM\Node\ParentNode\Implementation
-     * @covers FluentDOM\Node\ParentNode\Properties
+     * @covers \FluentDOM\Node\ParentNode\Implementation
+     * @covers \FluentDOM\Node\ParentNode\Properties
      */
     public function testPrepend() {
       $dom = new Document();
@@ -128,8 +128,8 @@ namespace FluentDOM\Node {
     }
 
     /**
-     * @covers FluentDOM\Node\ParentNode\Implementation
-     * @covers FluentDOM\Node\ParentNode\Properties
+     * @covers \FluentDOM\Node\ParentNode\Implementation
+     * @covers \FluentDOM\Node\ParentNode\Properties
      */
     public function testPrependToNodeWithoutChildren() {
       $dom = new Document();
@@ -142,8 +142,8 @@ namespace FluentDOM\Node {
     }
 
     /**
-     * @covers FluentDOM\Node\ParentNode\Implementation
-     * @covers FluentDOM\Node\ParentNode\Properties
+     * @covers \FluentDOM\Node\ParentNode\Implementation
+     * @covers \FluentDOM\Node\ParentNode\Properties
      */
     public function testAppend() {
       $dom = new Document();

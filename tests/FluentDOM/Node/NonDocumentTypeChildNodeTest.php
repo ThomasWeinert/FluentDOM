@@ -10,8 +10,8 @@ namespace FluentDOM\Node {
   class NonDocumentTypeChildNodeTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Implementation
-     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Properties
+     * @covers \FluentDOM\Node\NonDocumentTypeChildNode\Implementation
+     * @covers \FluentDOM\Node\NonDocumentTypeChildNode\Properties
      */
     public function testNextElementSibling() {
       $dom = new Document();
@@ -24,8 +24,8 @@ namespace FluentDOM\Node {
     }
 
     /**
-     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Implementation
-     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Properties
+     * @covers \FluentDOM\Node\NonDocumentTypeChildNode\Implementation
+     * @covers \FluentDOM\Node\NonDocumentTypeChildNode\Properties
      */
     public function testNextElementSiblingFromCommentNode() {
       $dom = new Document();
@@ -38,8 +38,8 @@ namespace FluentDOM\Node {
     }
 
     /**
-     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Implementation
-     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Properties
+     * @covers \FluentDOM\Node\NonDocumentTypeChildNode\Implementation
+     * @covers \FluentDOM\Node\NonDocumentTypeChildNode\Properties
      */
     public function testNextElementSiblingExpectingNull() {
       $dom = new Document();
@@ -50,8 +50,8 @@ namespace FluentDOM\Node {
     }
 
     /**
-     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Implementation
-     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Properties
+     * @covers \FluentDOM\Node\NonDocumentTypeChildNode\Implementation
+     * @covers \FluentDOM\Node\NonDocumentTypeChildNode\Properties
      */
     public function testPreviousElementSibling() {
       $dom = new Document();
@@ -64,8 +64,8 @@ namespace FluentDOM\Node {
     }
 
     /**
-     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Implementation
-     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Properties
+     * @covers \FluentDOM\Node\NonDocumentTypeChildNode\Implementation
+     * @covers \FluentDOM\Node\NonDocumentTypeChildNode\Properties
      */
     public function testPreviousElementSiblingFromCommentNode() {
       $dom = new Document();
@@ -78,8 +78,8 @@ namespace FluentDOM\Node {
     }
 
     /**
-     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Implementation
-     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Properties
+     * @covers \FluentDOM\Node\NonDocumentTypeChildNode\Implementation
+     * @covers \FluentDOM\Node\NonDocumentTypeChildNode\Properties
      */
     public function testPreviousElementSiblingExpectingNull() {
       $dom = new Document();
@@ -90,8 +90,8 @@ namespace FluentDOM\Node {
     }
 
     /**
-     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Implementation
-     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Properties
+     * @covers \FluentDOM\Node\NonDocumentTypeChildNode\Implementation
+     * @covers \FluentDOM\Node\NonDocumentTypeChildNode\Properties
      */
     public function testGetParentPropertyFromCommentNode() {
       $dom = new Document();
@@ -103,30 +103,30 @@ namespace FluentDOM\Node {
     }
 
     /**
-     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Implementation
-     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Properties
+     * @covers \FluentDOM\Node\NonDocumentTypeChildNode\Implementation
+     * @covers \FluentDOM\Node\NonDocumentTypeChildNode\Properties
      */
     public function testSetNextElementChildExpectingException() {
       $dom = new Document();
       $dom->loadXML('<foo><!--comment--></foo>');
-      $this->setExpectedException('BadMethodCallException');
+      $this->setExpectedException(\BadMethodCallException::class);
       $dom->documentElement->firstChild->nextElementSibling = $dom->createElement('foo');
     }
 
     /**
-     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Implementation
-     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Properties
+     * @covers \FluentDOM\Node\NonDocumentTypeChildNode\Implementation
+     * @covers \FluentDOM\Node\NonDocumentTypeChildNode\Properties
      */
     public function testSetPreviousElementChildExpectingException() {
       $dom = new Document();
       $dom->loadXML('<foo><!--comment--></foo>');
-      $this->setExpectedException('BadMethodCallException');
+      $this->setExpectedException(\BadMethodCallException::class);
       $dom->documentElement->firstChild->previousElementSibling = $dom->createElement('foo');
     }
 
     /**
-     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Implementation
-     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Properties
+     * @covers \FluentDOM\Node\NonDocumentTypeChildNode\Implementation
+     * @covers \FluentDOM\Node\NonDocumentTypeChildNode\Properties
      */
     public function testSetUnknownProperty() {
       if (defined('HHVM_VERSION')) {
@@ -142,8 +142,8 @@ namespace FluentDOM\Node {
     }
 
     /**
-     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Implementation
-     * @covers FluentDOM\Node\NonDocumentTypeChildNode\Properties
+     * @covers \FluentDOM\Node\NonDocumentTypeChildNode\Implementation
+     * @covers \FluentDOM\Node\NonDocumentTypeChildNode\Properties
      */
     public function testGetUnknownPropertyExpectingException() {
       if (defined('HHVM_VERSION') && version_compare(HHVM_VERSION, '3.6', '<')) {
@@ -154,7 +154,7 @@ namespace FluentDOM\Node {
       $dom = new Document();
       $dom->loadXML('<foo><!--comment--></foo>');
       $node = $dom->documentElement->firstChild;
-      $this->setExpectedException('PHPUnit_Framework_Error_Notice');
+      $this->setExpectedException(\PHPUnit_Framework_Error_Notice::class);
       $node->SOME_PROPERTY;
     }
   }

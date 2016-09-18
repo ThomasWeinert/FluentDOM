@@ -13,7 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testPrependTo() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);

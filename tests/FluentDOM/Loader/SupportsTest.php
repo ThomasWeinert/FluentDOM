@@ -22,7 +22,7 @@ namespace FluentDOM\Loader {
   class SupportsTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Loader\Supports
+     * @covers \FluentDOM\Loader\Supports
      */
     public function testSupportsExpectingTrue() {
       $loader = new Supports_TestProxy();
@@ -30,7 +30,7 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @covers FluentDOM\Loader\Supports
+     * @covers \FluentDOM\Loader\Supports
      */
     public function testSupportsExpectingFalse() {
       $loader = new Supports_TestProxy();
@@ -38,7 +38,7 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @covers FluentDOM\Loader\Supports
+     * @covers \FluentDOM\Loader\Supports
      */
     public function testSupportsDefaultExpectingFalse() {
       $loader = new Supports_TestProxyDefault();

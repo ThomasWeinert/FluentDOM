@@ -10,7 +10,7 @@ namespace FluentDOM\Serializer {
   class JSONxTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Transformer\JSONx
+     * @covers \FluentDOM\Transformer\JSONx
      * @dataProvider provideExamples
      * @param string $JsonDOM
      * @param string $JSONx

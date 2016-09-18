@@ -12,8 +12,8 @@ namespace FluentDOM\Query {
 
     /**
      * @group Attributes
-     * @covers FluentDOM\Query::attr
-     * @covers FluentDOM\Query::getFirstElement
+     * @covers \FluentDOM\Query::attr
+     * @covers \FluentDOM\Query::getFirstElement
      */
     public function testAttrRead() {
       $fd = $this->getQueryFixtureFromString(self::XML)
@@ -24,8 +24,8 @@ namespace FluentDOM\Query {
 
     /**
      * @group Attributes
-     * @covers FluentDOM\Query::attr
-     * @covers FluentDOM\Query::getFirstElement
+     * @covers \FluentDOM\Query::attr
+     * @covers \FluentDOM\Query::getFirstElement
      */
     public function testAttrReadFromRoot() {
       $fd = $this->getQueryFixtureFromString(self::XML);
@@ -36,11 +36,11 @@ namespace FluentDOM\Query {
 
     /**
      * @group Attributes
-     * @covers FluentDOM\Query::attr
-     * @covers FluentDOM\Query::getFirstElement
+     * @covers \FluentDOM\Query::attr
+     * @covers \FluentDOM\Query::getFirstElement
      */
     public function testAttrReadInvalid() {
-      $this->setExpectedException('UnexpectedValueException');
+      $this->setExpectedException(\UnexpectedValueException::class);
       $this->getQueryFixtureFromString(self::XML)
         ->find('//item')
         ->attr('');
@@ -48,7 +48,7 @@ namespace FluentDOM\Query {
 
     /**
      * @group Attributes
-     * @covers FluentDOM\Query::attr
+     * @covers \FluentDOM\Query::attr
      */
     public function testAttrReadNoMatch() {
       $fd = $this->getQueryFixtureFromString(self::XML)->attr('index');
@@ -57,8 +57,8 @@ namespace FluentDOM\Query {
 
     /**
      * @group Attributes
-     * @covers FluentDOM\Query::attr
-     * @covers FluentDOM\Query::getFirstElement
+     * @covers \FluentDOM\Query::attr
+     * @covers \FluentDOM\Query::getFirstElement
      */
     public function testAttrReadNoAttribute() {
       $fd = $this
@@ -70,8 +70,8 @@ namespace FluentDOM\Query {
 
     /**
      * @group Attributes
-     * @covers FluentDOM\Query::attr
-     * @covers FluentDOM\Query::getFirstElement
+     * @covers \FluentDOM\Query::attr
+     * @covers \FluentDOM\Query::getFirstElement
      */
     public function testAttrReadOnDomtext() {
       $fd = $this->getQueryFixtureFromString(self::XML)
@@ -82,8 +82,8 @@ namespace FluentDOM\Query {
 
     /**
      * @group Attributes
-     * @covers FluentDOM\Query::attr
-     * @covers FluentDOM\Query::getSetterValues
+     * @covers \FluentDOM\Query::attr
+     * @covers \FluentDOM\Query::getSetterValues
      */
     public function testAttrWrite() {
       $fd = $this->getQueryFixtureFromString(self::XML)
@@ -95,8 +95,8 @@ namespace FluentDOM\Query {
 
     /**
      * @group Attributes
-     * @covers FluentDOM\Query::attr
-     * @covers FluentDOM\Query::getSetterValues
+     * @covers \FluentDOM\Query::attr
+     * @covers \FluentDOM\Query::getSetterValues
      */
     public function testAttrWriteWithNullValue() {
       $fd = $this->getQueryFixtureFromString(self::XML)
@@ -110,8 +110,8 @@ namespace FluentDOM\Query {
     /**
      * @group Attributes
      * @dataProvider dataProviderInvalidAttributeNames
-     * @covers FluentDOM\Query::attr
-     * @covers FluentDOM\Query::getSetterValues
+     * @covers \FluentDOM\Query::attr
+     * @covers \FluentDOM\Query::getSetterValues
      */
     public function testAttrWriteWithInvalidNames($attrName) {
       try {
@@ -137,8 +137,8 @@ namespace FluentDOM\Query {
     /**
      * @group Attributes
      * @dataProvider dataProviderValidAttributeNames
-     * @covers FluentDOM\Query::attr
-     * @covers FluentDOM\Query::getSetterValues
+     * @covers \FluentDOM\Query::attr
+     * @covers \FluentDOM\Query::getSetterValues
      */
     public function testAttrWriteWithValidNames($attrName) {
       $fd = $this->getQueryFixtureFromString(self::XML)
@@ -157,8 +157,8 @@ namespace FluentDOM\Query {
 
     /**
      * @group Attributes
-     * @covers FluentDOM\Query::attr
-     * @covers FluentDOM\Query::getSetterValues
+     * @covers \FluentDOM\Query::attr
+     * @covers \FluentDOM\Query::getSetterValues
      */
     public function testAttrWriteWithArray() {
       $fd = $this->getQueryFixtureFromString(self::XML)
@@ -171,8 +171,8 @@ namespace FluentDOM\Query {
 
     /**
      * @group Attributes
-     * @covers FluentDOM\Query::attr
-     * @covers FluentDOM\Query::getSetterValues
+     * @covers \FluentDOM\Query::attr
+     * @covers \FluentDOM\Query::getSetterValues
      */
     public function testAttrWriteWithCallback() {
       $fd = $this->getQueryFixtureFromString(self::XML)
@@ -188,7 +188,7 @@ namespace FluentDOM\Query {
 
     /**
      * @group Attributes
-     * @covers FluentDOM\Query::hasAttr
+     * @covers \FluentDOM\Query::hasAttr
      */
     public function testHasAttrExpectingTrue() {
       $this->assertTrue(
@@ -200,7 +200,7 @@ namespace FluentDOM\Query {
 
     /**
      * @group Attributes
-     * @covers FluentDOM\Query::hasAttr
+     * @covers \FluentDOM\Query::hasAttr
      */
     public function testHasAttrNotOnFirstNodeExpectingTrue() {
       $this->assertTrue(
@@ -214,7 +214,7 @@ namespace FluentDOM\Query {
 
     /**
      * @group Attributes
-     * @covers FluentDOM\Query::hasAttr
+     * @covers \FluentDOM\Query::hasAttr
      */
     public function testHasAttrExpectingFalse() {
       $this->assertFalse(
@@ -226,8 +226,8 @@ namespace FluentDOM\Query {
 
     /**
      * @group Attributes
-     * @covers FluentDOM\Query::removeAttr
-     * @covers FluentDOM\Query::getNamesList
+     * @covers \FluentDOM\Query::removeAttr
+     * @covers \FluentDOM\Query::getNamesList
      */
     public function testRemoveAttr() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -239,19 +239,19 @@ namespace FluentDOM\Query {
 
     /**
      * @group Attributes
-     * @covers FluentDOM\Query::removeAttr
-     * @covers FluentDOM\Query::getNamesList
+     * @covers \FluentDOM\Query::removeAttr
+     * @covers \FluentDOM\Query::getNamesList
      */
     public function testRemoveAttrWithInvalidParameter() {
       $fd = new Query();
-      $this->setExpectedException('InvalidArgumentException');
+      $this->setExpectedException(\InvalidArgumentException::class);
       $fd->removeAttr(1);
     }
 
     /**
      * @group Attributes
-     * @covers FluentDOM\Query::removeAttr
-     * @covers FluentDOM\Query::getNamesList
+     * @covers \FluentDOM\Query::removeAttr
+     * @covers \FluentDOM\Query::getNamesList
      */
     public function testRemoveAttrWithListParameter() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -263,8 +263,8 @@ namespace FluentDOM\Query {
 
     /**
      * @group Attributes
-     * @covers FluentDOM\Query::removeAttr
-     * @covers FluentDOM\Query::getNamesList
+     * @covers \FluentDOM\Query::removeAttr
+     * @covers \FluentDOM\Query::getNamesList
      */
     public function testRemoveAttrWithAsteriskParameter() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -276,12 +276,12 @@ namespace FluentDOM\Query {
 
     /**
      * @group Attributes
-     * @covers FluentDOM\Query::__get
+     * @covers \FluentDOM\Query::__get
      */
     public function testPropertyAttrGet() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//item[2]');
       $attr = $fd->attr;
-      $this->assertInstanceOf('FluentDOM\\Query\\Attributes', $attr);
+      $this->assertInstanceOf(Attributes::class, $attr);
       $this->assertAttributeSame(
         $fd, '_fd', $attr
       );
@@ -289,7 +289,7 @@ namespace FluentDOM\Query {
 
     /**
      * @group Attributes
-     * @covers FluentDOM\Query::__set
+     * @covers \FluentDOM\Query::__set
      */
     public function testPropertyAttrSetWithArray() {
       $fd = $this->getQueryFixtureFromString('<sample/>')->find('/*');
@@ -304,7 +304,7 @@ namespace FluentDOM\Query {
 
     /**
      * @group Attributes
-     * @covers FluentDOM\Query::__set
+     * @covers \FluentDOM\Query::__set
      */
     public function testPropertyAttrSetWithFluentDOMAttributes() {
       $fd = $this->getQueryFixtureFromString('<sample><item foo="1"/><item/></sample>')->find('//item');

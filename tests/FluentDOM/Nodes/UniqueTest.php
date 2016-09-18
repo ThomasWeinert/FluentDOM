@@ -10,7 +10,7 @@ namespace FluentDOM {
 
     /**
      * @group Nodes
-     * @covers FluentDOM\Nodes::unique
+     * @covers \FluentDOM\Nodes::unique
      */
     public function testUniqueKeepsAllNodes() {
       $fd = new Nodes(

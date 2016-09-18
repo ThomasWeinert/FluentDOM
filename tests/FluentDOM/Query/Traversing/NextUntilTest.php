@@ -13,7 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Query::nextUntil
+     * @covers \FluentDOM\Query::nextUntil
      */
     public function testNextUntil() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -21,7 +21,7 @@ namespace FluentDOM\Query {
         ->find('//*[@id = "term-2"]')
         ->nextUntil('name() = "dt"')
         ->addClass('next');
-      $this->assertInstanceOf('FluentDOM\\Query', $fd);
+      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
   }

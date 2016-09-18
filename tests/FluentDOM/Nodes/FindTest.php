@@ -12,10 +12,10 @@ namespace FluentDOM {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Nodes::find
-     * @covers FluentDOM\Nodes::fetch
-     * @covers FluentDOM\Nodes::prepareFindContext
-     * @covers FluentDOM\Nodes::prepareSelectorAsFilter
+     * @covers \FluentDOM\Nodes::find
+     * @covers \FluentDOM\Nodes::fetch
+     * @covers \FluentDOM\Nodes::prepareFindContext
+     * @covers \FluentDOM\Nodes::prepareSelectorAsFilter
      */
     public function testFind() {
       $fd = (new Nodes(self::XML))->find('/*');
@@ -28,10 +28,10 @@ namespace FluentDOM {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Nodes::find
-     * @covers FluentDOM\Nodes::fetch
-     * @covers FluentDOM\Nodes::prepareFindContext
-     * @covers FluentDOM\Nodes::prepareSelectorAsFilter
+     * @covers \FluentDOM\Nodes::find
+     * @covers \FluentDOM\Nodes::fetch
+     * @covers \FluentDOM\Nodes::prepareFindContext
+     * @covers \FluentDOM\Nodes::prepareSelectorAsFilter
      */
     public function testFinForcingSort() {
       $fd = (new Nodes(self::XML))->find('/*');
@@ -44,10 +44,10 @@ namespace FluentDOM {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Nodes::find
-     * @covers FluentDOM\Nodes::fetch
-     * @covers FluentDOM\Nodes::prepareFindContext
-     * @covers FluentDOM\Nodes::prepareSelectorAsFilter
+     * @covers \FluentDOM\Nodes::find
+     * @covers \FluentDOM\Nodes::fetch
+     * @covers \FluentDOM\Nodes::prepareFindContext
+     * @covers \FluentDOM\Nodes::prepareSelectorAsFilter
      */
     public function testFindWithCallableSelector() {
       $fd = (new Nodes(self::XML))->find('/*');
@@ -64,10 +64,10 @@ namespace FluentDOM {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Nodes::find
-     * @covers FluentDOM\Nodes::fetch
-     * @covers FluentDOM\Nodes::prepareFindContext
-     * @covers FluentDOM\Nodes::prepareSelectorAsFilter
+     * @covers \FluentDOM\Nodes::find
+     * @covers \FluentDOM\Nodes::fetch
+     * @covers \FluentDOM\Nodes::prepareFindContext
+     * @covers \FluentDOM\Nodes::prepareSelectorAsFilter
      */
     public function testFindWithCallableSelectorReturningFalse() {
       $fd = (new Nodes(self::XML))->find('/*');
@@ -84,10 +84,10 @@ namespace FluentDOM {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Nodes::find
-     * @covers FluentDOM\Nodes::fetch
-     * @covers FluentDOM\Nodes::prepareFindContext
-     * @covers FluentDOM\Nodes::prepareSelectorAsFilter
+     * @covers \FluentDOM\Nodes::find
+     * @covers \FluentDOM\Nodes::fetch
+     * @covers \FluentDOM\Nodes::prepareFindContext
+     * @covers \FluentDOM\Nodes::prepareSelectorAsFilter
      */
     public function testFindWithSelectorCallback() {
       $fd = new Nodes(self::XML);
@@ -99,10 +99,10 @@ namespace FluentDOM {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Nodes::find
-     * @covers FluentDOM\Nodes::fetch
-     * @covers FluentDOM\Nodes::prepareFindContext
-     * @covers FluentDOM\Nodes::prepareSelectorAsFilter
+     * @covers \FluentDOM\Nodes::find
+     * @covers \FluentDOM\Nodes::fetch
+     * @covers \FluentDOM\Nodes::prepareFindContext
+     * @covers \FluentDOM\Nodes::prepareSelectorAsFilter
      */
     public function testFindUsingFilterModeWithSelectorCallback() {
       $fd = new Nodes(self::XML);
@@ -114,10 +114,10 @@ namespace FluentDOM {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Nodes::find
-     * @covers FluentDOM\Nodes::fetch
-     * @covers FluentDOM\Nodes::prepareFindContext
-     * @covers FluentDOM\Nodes::prepareSelectorAsFilter
+     * @covers \FluentDOM\Nodes::find
+     * @covers \FluentDOM\Nodes::fetch
+     * @covers \FluentDOM\Nodes::prepareFindContext
+     * @covers \FluentDOM\Nodes::prepareSelectorAsFilter
      */
     public function testFindUsingFilterModeWithSelectorCallbackIgnoreRootDescendantFix() {
       $fd = new Nodes(self::XML);
@@ -129,10 +129,10 @@ namespace FluentDOM {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Nodes::find
-     * @covers FluentDOM\Nodes::fetch
-     * @covers FluentDOM\Nodes::prepareFindContext
-     * @covers FluentDOM\Nodes::prepareSelectorAsFilter
+     * @covers \FluentDOM\Nodes::find
+     * @covers \FluentDOM\Nodes::fetch
+     * @covers \FluentDOM\Nodes::prepareFindContext
+     * @covers \FluentDOM\Nodes::prepareSelectorAsFilter
      */
     public function testFindUsingFilterModeWithSelectorCallbackAddSelfAxeFix() {
       $fd = new Nodes(self::XML);
@@ -144,10 +144,10 @@ namespace FluentDOM {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Nodes::find
-     * @covers FluentDOM\Nodes::fetch
-     * @covers FluentDOM\Nodes::prepareFindContext
-     * @covers FluentDOM\Nodes::prepareSelectorAsFilter
+     * @covers \FluentDOM\Nodes::find
+     * @covers \FluentDOM\Nodes::fetch
+     * @covers \FluentDOM\Nodes::prepareFindContext
+     * @covers \FluentDOM\Nodes::prepareSelectorAsFilter
      */
     public function testFindFromRootNode() {
       $fd = (new Nodes(self::XML))->find('/*');
@@ -160,10 +160,10 @@ namespace FluentDOM {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Nodes::find
-     * @covers FluentDOM\Nodes::fetch
-     * @covers FluentDOM\Nodes::prepareFindContext
-     * @covers FluentDOM\Nodes::prepareSelectorAsFilter
+     * @covers \FluentDOM\Nodes::find
+     * @covers \FluentDOM\Nodes::fetch
+     * @covers \FluentDOM\Nodes::prepareFindContext
+     * @covers \FluentDOM\Nodes::prepareSelectorAsFilter
      */
     public function testFindWithNode() {
       $fd = new Nodes(self::XML);
@@ -174,10 +174,10 @@ namespace FluentDOM {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Nodes::find
-     * @covers FluentDOM\Nodes::fetch
-     * @covers FluentDOM\Nodes::prepareFindContext
-     * @covers FluentDOM\Nodes::prepareSelectorAsFilter
+     * @covers \FluentDOM\Nodes::find
+     * @covers \FluentDOM\Nodes::fetch
+     * @covers \FluentDOM\Nodes::prepareFindContext
+     * @covers \FluentDOM\Nodes::prepareSelectorAsFilter
      */
     public function testFindWithNodeList() {
       $fd = new Nodes(self::XML);
@@ -188,10 +188,10 @@ namespace FluentDOM {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Nodes::find
-     * @covers FluentDOM\Nodes::fetch
-     * @covers FluentDOM\Nodes::prepareFindContext
-     * @covers FluentDOM\Nodes::prepareSelectorAsFilter
+     * @covers \FluentDOM\Nodes::find
+     * @covers \FluentDOM\Nodes::fetch
+     * @covers \FluentDOM\Nodes::prepareFindContext
+     * @covers \FluentDOM\Nodes::prepareSelectorAsFilter
      */
     public function testFindWithExpressionThatReturnsScalarExpectingException() {
       $fd = new Nodes(self::XML);
@@ -205,10 +205,10 @@ namespace FluentDOM {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Nodes::find
-     * @covers FluentDOM\Nodes::fetch
-     * @covers FluentDOM\Nodes::prepareFindContext
-     * @covers FluentDOM\Nodes::prepareSelectorAsFilter
+     * @covers \FluentDOM\Nodes::find
+     * @covers \FluentDOM\Nodes::fetch
+     * @covers \FluentDOM\Nodes::prepareFindContext
+     * @covers \FluentDOM\Nodes::prepareSelectorAsFilter
      */
     public function testFindWithInvalidSelectorExpectingException() {
       $fd = new Nodes(self::XML);

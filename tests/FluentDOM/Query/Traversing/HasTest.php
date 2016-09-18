@@ -13,7 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFilter
-     * @covers FluentDOM\Query::has
+     * @covers \FluentDOM\Query::has
      */
     public function testHas() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -27,7 +27,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFilter
-     * @covers FluentDOM\Query::has
+     * @covers \FluentDOM\Query::has
      */
     public function testHasWithNode() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);

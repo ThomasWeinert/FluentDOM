@@ -1,6 +1,9 @@
 <?php
 namespace FluentDOM\Nodes {
 
+  use FluentDOM\Appendable;
+  use FluentDOM\Document;
+  use FluentDOM\Element;
   use FluentDOM\TestCase;
   use FluentDOM\Nodes;
 
@@ -9,7 +12,7 @@ namespace FluentDOM\Nodes {
   class CreatorTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Nodes\Creator
      */
     public function testClone() {
       $creator = new Creator();
@@ -21,8 +24,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Creator
-     * @covers FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Nodes\Creator\Node
      */
     public function testCreate() {
       $_ = new Creator();
@@ -33,8 +36,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Creator
-     * @covers FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Nodes\Creator\Node
      */
     public function testWithNamespace() {
       $_ = new Creator();
@@ -46,47 +49,47 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Creator
-     * @covers FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Nodes\Creator\Node
      */
     public function testCreateFetchingDocument() {
       $_ = new Creator();
       $dom = $_('xml', $_('child'))->document;
-      $this->assertInstanceOf('FluentDOM\Document', $dom);
+      $this->assertInstanceOf(Document::class, $dom);
       $this->assertXmlStringEqualsXmlString(
         '<xml><child/></xml>', $dom->saveXml()
       );
     }
 
     /**
-     * @covers FluentDOM\Nodes\Creator
-     * @covers FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Nodes\Creator\Node
      */
     public function testCreateFetchingDom() {
       $_ = new Creator();
       $dom = $_('xml', $_('child'))->document;
-      $this->assertInstanceOf('FluentDOM\Document', $dom);
+      $this->assertInstanceOf(Document::class, $dom);
       $this->assertXmlStringEqualsXmlString(
         '<xml><child/></xml>', $dom->saveXml()
       );
     }
 
     /**
-     * @covers FluentDOM\Nodes\Creator
-     * @covers FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Nodes\Creator\Node
      */
     public function testCreateFetchingNode() {
       $_ = new Creator();
       $node = $_('xml', $_('child'))->node;
-      $this->assertInstanceOf('FluentDOM\Element', $node);
+      $this->assertInstanceOf(Element::class, $node);
       $this->assertXmlStringEqualsXmlString(
         '<xml><child/></xml>', $node->saveXml()
       );
     }
 
     /**
-     * @covers FluentDOM\Nodes\Creator
-     * @covers FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Nodes\Creator\Node
      */
     public function testElement() {
       $_ = new Creator();
@@ -97,8 +100,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Creator
-     * @covers FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Nodes\Creator\Node
      */
     public function testElementWithAttributes() {
       $_ = new Creator();
@@ -109,8 +112,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Creator
-     * @covers FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Nodes\Creator\Node
      */
     public function testCreateWithTextNode() {
       $_ = new Creator();
@@ -121,8 +124,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Creator
-     * @covers FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Nodes\Creator\Node
      */
     public function testCreateWithSeveralTextNodes() {
       $_ = new Creator();
@@ -133,8 +136,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Creator
-     * @covers FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Nodes\Creator\Node
      */
     public function testCreateWithChildNodes() {
       $_ = new Creator();
@@ -145,8 +148,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Creator
-     * @covers FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Nodes\Creator\Node
      */
     public function testCreateWithCdata() {
       $_ = new Creator();
@@ -157,8 +160,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Creator
-     * @covers FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Nodes\Creator\Node
      */
     public function testCreateWithComment() {
       $_ = new Creator();
@@ -169,8 +172,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Creator
-     * @covers FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Nodes\Creator\Node
      */
     public function testCreateWithProcessingInstruction() {
       $_ = new Creator();
@@ -181,8 +184,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Creator
-     * @covers FluentDOM\Nodes\Creator\Nodes
+     * @covers \FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Nodes\Creator\Nodes
      */
     public function testEach() {
       $_ = new Creator();
@@ -198,8 +201,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Creator
-     * @covers FluentDOM\Nodes\Creator\Nodes
+     * @covers \FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Nodes\Creator\Nodes
      */
     public function testEachWithIterator() {
       $_ = new Creator();
@@ -215,12 +218,12 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Creator
-     * @covers FluentDOM\Nodes\Creator\Nodes
+     * @covers \FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Nodes\Creator\Nodes
      */
     public function testEachWithIteratorAggregate() {
       $_ = new Creator();
-      $mock = $this->getMock('IteratorAggregate');
+      $mock = $this->getMockBuilder(\IteratorAggregate::class)->getMock();
       $mock
         ->expects($this->once())
         ->method('getIterator')
@@ -239,8 +242,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Creator
-     * @covers FluentDOM\Nodes\Creator\Nodes
+     * @covers \FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Nodes\Creator\Nodes
      */
     public function testEachWithMapping() {
       $_ = new Creator();
@@ -259,8 +262,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Creator
-     * @covers FluentDOM\Nodes\Creator\Nodes
+     * @covers \FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Nodes\Creator\Nodes
      */
     public function testEachReturnsIterator() {
       $_ = new Creator();
@@ -274,8 +277,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Creator
-     * @covers FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Nodes\Creator\Node
      */
     public function testCreateWithDOMNode() {
       $dom = new \DOMDocument();
@@ -287,8 +290,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Creator
-     * @covers FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Nodes\Creator\Node
      */
     public function testCreateWithAttributeNode() {
       $dom = new \DOMDocument();
@@ -302,15 +305,15 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Creator
-     * @covers FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Nodes\Creator\Node
      */
     public function testCreateWithAttributeAppendable() {
-      $appendable = $this->getMock('FluentDOM\Appendable');
+      $appendable = $this->getMockBuilder(Appendable::class)->getMock();
       $appendable
         ->expects($this->once())
         ->method('appendTo')
-        ->with($this->isInstanceOf('FluentDOM\Element'));
+        ->with($this->isInstanceOf(Element::class));
       $dom = new \DOMDocument();
       $attribute = $dom->createAttribute('attr');
       $attribute->value = 'value';
@@ -322,7 +325,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Nodes\Creator\Node
      */
     public function testCreateFetchingUnknownPropertyExpectingNull() {
       $_ = new Creator();
@@ -332,16 +335,16 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Nodes\Creator\Node
      */
     public function testCreateSetPropertyOnResultExpectingException() {
       $_ = new Creator();
-      $this->setExpectedException('LogicException');
+      $this->setExpectedException(\LogicException::class);
       $_('foo')->document = 'bar';
     }
 
     /**
-     * @covers FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Nodes\Creator
      */
     public function testCreatorGetFormatOutputAfterSet() {
       $_ = new Creator();
@@ -351,7 +354,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Nodes\Creator
      */
     public function testCreatorGetUnknownPropertyExpectingNull() {
       $_ = new Creator();
@@ -360,7 +363,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Nodes\Creator
      */
     public function testCreatorGetUnknownPropertyAfterSet() {
       $_ = new Creator();

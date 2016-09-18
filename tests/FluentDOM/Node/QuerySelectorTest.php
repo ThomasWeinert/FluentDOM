@@ -4,6 +4,7 @@ namespace FluentDOM\Node {
 
   use FluentDOM\Document;
   use FluentDOM\TestCase;
+  use FluentDOM\Xpath\Transformer;
 
   require_once(__DIR__.'/../TestCase.php');
 
@@ -13,7 +14,7 @@ namespace FluentDOM\Node {
      * @cover FluentDOM\Node\QuerySelector\Implementation
      */
     public function testQuerySelector() {
-      $transformer = $this->getMock('FluentDOM\\Xpath\\Transformer');
+      $transformer = $this->getMockBuilder(Transformer::class)->getMock();
       $transformer
         ->expects($this->once())
         ->method('toXpath')
@@ -33,7 +34,7 @@ namespace FluentDOM\Node {
      * @cover FluentDOM\Node\QuerySelector\Implementation
      */
     public function testQuerySelectorAll() {
-      $transformer = $this->getMock('FluentDOM\\Xpath\\Transformer');
+      $transformer = $this->getMockBuilder(Transformer::class)->getMock();
       $transformer
         ->expects($this->once())
         ->method('toXpath')

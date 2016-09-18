@@ -8,7 +8,7 @@ namespace FluentDOM\Serializer\Json {
   class RayfishTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Serializer\Json\Rayfish
+     * @covers \FluentDOM\Serializer\Json\Rayfish
      * @dataProvider provideExamples
      * @param string $expected
      * @param string $xml
@@ -24,7 +24,7 @@ namespace FluentDOM\Serializer\Json {
     }
 
     /**
-     * @covers FluentDOM\Serializer\Json\Rayfish
+     * @covers \FluentDOM\Serializer\Json\Rayfish
      */
     public function testIntegrationWithEmptyDocument() {
       $serializer = new Rayfish(new \DOMDocument());

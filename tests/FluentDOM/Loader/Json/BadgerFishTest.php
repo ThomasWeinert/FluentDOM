@@ -12,7 +12,7 @@ namespace FluentDOM\Loader\Json {
      * Test against the examples from the BadgerFish webpage
      * http://badgerfish.ning.com/
      *
-     * @covers FluentDOM\Loader\Json\BadgerFish
+     * @covers \FluentDOM\Loader\Json\BadgerFish
      * @dataProvider provideExamples
      * @param string $json
      * @param string $xml
@@ -26,7 +26,7 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * @covers FluentDOM\Loader\Json\BadgerFish
+     * @covers \FluentDOM\Loader\Json\BadgerFish
      */
     public function testLoadWithInvalidSourceExpectingNull() {
       $loader = new BadgerFish();

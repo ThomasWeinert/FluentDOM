@@ -12,7 +12,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFilter
-     * @covers FluentDOM\Query::is
+     * @covers \FluentDOM\Query::is
      */
     public function testIs() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//*');
@@ -24,7 +24,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFilter
-     * @covers FluentDOM\Query::is
+     * @covers \FluentDOM\Query::is
      */
     public function testIsOnEmptyList() {
       $fd = $this->getQueryFixtureFromString(self::XML);

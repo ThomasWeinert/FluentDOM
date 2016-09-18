@@ -8,7 +8,7 @@ namespace FluentDOM\Exceptions {
   class InvalidArgumentTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Exceptions\InvalidArgument
+     * @covers \FluentDOM\Exceptions\InvalidArgument
      */
     public function testConstructor() {
       $exception = new InvalidArgument('test');
@@ -16,7 +16,7 @@ namespace FluentDOM\Exceptions {
     }
 
     /**
-     * @covers FluentDOM\Exceptions\InvalidArgument
+     * @covers \FluentDOM\Exceptions\InvalidArgument
      */
     public function testConstructorWithSingleType() {
       $exception = new InvalidArgument('test', 'int');
@@ -24,7 +24,7 @@ namespace FluentDOM\Exceptions {
     }
 
     /**
-     * @covers FluentDOM\Exceptions\InvalidArgument
+     * @covers \FluentDOM\Exceptions\InvalidArgument
      */
     public function testConstructorWithArrayOfTypes() {
       $exception = new InvalidArgument('test', ['int', 'string']);

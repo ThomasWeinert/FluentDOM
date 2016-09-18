@@ -9,10 +9,10 @@ namespace FluentDOM {
      * @group Utility
      * @group Constraints
      * @dataProvider provideValidNodes
-     * @covers FluentDOM\Constraints::isNode
+     * @covers \FluentDOM\Constraints::isNode
      */
     public function testIsNodeExpectingNode($node) {
-      $this->assertInstanceOf('DOMNode', Constraints::isNode($node));
+      $this->assertInstanceOf(\DOMNode::class, Constraints::isNode($node));
     }
 
     public static function provideValidNodes() {
@@ -27,7 +27,7 @@ namespace FluentDOM {
     /**
      * @group Utility
      * @group Constraints
-     * @covers FluentDOM\Constraints::isNode
+     * @covers \FluentDOM\Constraints::isNode
      * @dataProvider provideInvalidNodes
      */
     public function testIsNodeExpectingNull($node, $ignoreTextNodes = FALSE) {
@@ -47,7 +47,7 @@ namespace FluentDOM {
      * @group Utility
      * @group Constraints
      * @dataProvider provideValidNodes
-     * @covers FluentDOM\Constraints::assertNode
+     * @covers \FluentDOM\Constraints::assertNode
      */
     public function testAssertNodeExpectingNode($node) {
       $this->assertTrue(Constraints::assertNode($node));
@@ -56,7 +56,7 @@ namespace FluentDOM {
     /**
      * @group Utility
      * @group Constraints
-     * @covers FluentDOM\Constraints::assertNode
+     * @covers \FluentDOM\Constraints::assertNode
      */
     public function testAssertNodeExpectingException() {
       $this->setExpectedException(
@@ -69,7 +69,7 @@ namespace FluentDOM {
     /**
      * @group Utility
      * @group Constraints
-     * @covers FluentDOM\Constraints::assertNode
+     * @covers \FluentDOM\Constraints::assertNode
      */
     public function testAssertNodeExpectingExceptionWithModifiedMessage() {
       $this->setExpectedException(
@@ -84,14 +84,14 @@ namespace FluentDOM {
      * @group Utility
      * @group Constraints
      * @dataProvider provideNodeLists
-     * @covers FluentDOM\Constraints::isNodeList
+     * @covers \FluentDOM\Constraints::isNodeList
      */
     public function testIsNodeListExpectingList($list) {
       $this->assertThat(
         Constraints::isNodeList($list),
         $this->logicalOr(
           $this->isType('array'),
-          $this->isInstanceOf('Traversable')
+          $this->isInstanceOf(\Traversable::class)
         )
       );
     }
@@ -107,7 +107,7 @@ namespace FluentDOM {
     /**
      * @group Utility
      * @group Constraints
-     * @covers FluentDOM\Constraints::isNodeList
+     * @covers \FluentDOM\Constraints::isNodeList
      */
     public function testIsNodeListExpectingNull() {
       $this->assertNull(Constraints::isNodeList('string'));
@@ -117,8 +117,8 @@ namespace FluentDOM {
      * @group Utility
      * @group Constraints
      * @dataProvider provideCallables
-     * @covers FluentDOM\Constraints::isCallable
-     * @covers FluentDOM\Constraints::isCallableArray
+     * @covers \FluentDOM\Constraints::isCallable
+     * @covers \FluentDOM\Constraints::isCallableArray
      */
     public function testIsCallable($callable) {
       $this->assertInternalType(
@@ -136,7 +136,7 @@ namespace FluentDOM {
     /**
      * @group Utility
      * @group Constraints
-     * @covers FluentDOM\Constraints::isCallable
+     * @covers \FluentDOM\Constraints::isCallable
      */
     public function testIsCallableWithGlobalFunctionExpectingCallable() {
       $this->assertInternalType(
@@ -147,7 +147,7 @@ namespace FluentDOM {
     /**
      * @group Utility
      * @group Constraints
-     * @covers FluentDOM\Constraints::isCallable
+     * @covers \FluentDOM\Constraints::isCallable
      */
     public function testIsCallableWithGlobalFunctionExpectingNull() {
       $this->assertNull(Constraints::isCallable('strpos', FALSE));
@@ -157,8 +157,8 @@ namespace FluentDOM {
      * @group Utility
      * @group Constraints
      * @dataProvider provideInvalidCallables
-     * @covers FluentDOM\Constraints::isCallable
-     * @covers FluentDOM\Constraints::isCallableArray
+     * @covers \FluentDOM\Constraints::isCallable
+     * @covers \FluentDOM\Constraints::isCallableArray
      */
     public function testIsCallableExpectingNull($callable) {
       $this->assertNull(Constraints::isCallable(NULL));
@@ -175,17 +175,17 @@ namespace FluentDOM {
     /**
      * @group Utility
      * @group Constraints
-     * @covers FluentDOM\Constraints::isCallable
+     * @covers \FluentDOM\Constraints::isCallable
      */
     public function testIsCallableExpectingException() {
-      $this->setExpectedException('InvalidArgumentException');
+      $this->setExpectedException(\InvalidArgumentException::class);
       Constraints::isCallable(NULL, FALSE, FALSE);
     }
 
     /**
      * @group Utility
      * @group Constraints
-     * @covers FluentDOM\Constraints::hasOption
+     * @covers \FluentDOM\Constraints::hasOption
      */
     public function testHasOptionExpectingTrue() {
       $this->assertTrue(
@@ -196,7 +196,7 @@ namespace FluentDOM {
     /**
      * @group Utility
      * @group Constraints
-     * @covers FluentDOM\Constraints::hasOption
+     * @covers \FluentDOM\Constraints::hasOption
      */
     public function testHasOptionExpectingFalse() {
       $this->assertFalse(

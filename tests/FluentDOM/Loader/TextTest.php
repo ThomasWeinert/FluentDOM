@@ -1,6 +1,7 @@
 <?php
 namespace FluentDOM\Loader {
 
+  use FluentDOM\Loadable;
   use FluentDOM\TestCase;
 
   require_once(__DIR__.'/../TestCase.php');
@@ -8,7 +9,7 @@ namespace FluentDOM\Loader {
   class TextTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Loader\Text
+     * @covers \FluentDOM\Loader\Text
      * @dataProvider provideSupportedTypes
      */
     public function testSupportsExpectingTrue($mimetype) {
@@ -17,12 +18,12 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @covers FluentDOM\Loader\Text
+     * @covers \FluentDOM\Loader\Text
      * @dataProvider provideSupportedTypes
      */
     public function testGetReturnLoadable($mimetype) {
       $loader = new Text();
-      $this->assertInstanceOf('FluentDOM\Loadable', $loader->get($mimetype));
+      $this->assertInstanceOf(Loadable::class, $loader->get($mimetype));
     }
 
     public static function provideSupportedTypes() {

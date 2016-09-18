@@ -12,7 +12,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationAround
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testWrap() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -25,7 +25,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationAround
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testWrapWithDomelement() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -39,7 +39,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationAround
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testWrapWithNodeList() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -51,10 +51,10 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationAround
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testWrapWithInvalidArgument() {
-      $this->setExpectedException('InvalidArgumentException');
+      $this->setExpectedException(\InvalidArgumentException::class);
       $this->getQueryFixtureFromString(self::XML)
           ->find('//item')
           ->wrap(NULL);
@@ -63,7 +63,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationAround
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testWrapWithArray() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -78,7 +78,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationAround
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testWrapWithCallback() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);

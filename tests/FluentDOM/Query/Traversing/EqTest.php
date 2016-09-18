@@ -13,7 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFilter
-     * @covers FluentDOM\Query::eq
+     * @covers \FluentDOM\Query::eq
      */
     public function testEq() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//*');
@@ -30,7 +30,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFilter
-     * @covers FluentDOM\Query::eq
+     * @covers \FluentDOM\Query::eq
      */
     public function testEqWithNegativeOffset() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('/items/*');

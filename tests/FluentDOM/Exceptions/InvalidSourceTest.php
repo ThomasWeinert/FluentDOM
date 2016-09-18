@@ -8,7 +8,7 @@ namespace FluentDOM\Exceptions {
   class InvalidSourceTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Exceptions\InvalidSource
+     * @covers \FluentDOM\Exceptions\InvalidSource
      */
     public function testConstructor() {
       $exception = new InvalidSource('test', 'type/test');

@@ -7,18 +7,18 @@ namespace FluentDOM {
 
     /**
      * @group MagicFunctions
-     * @covers FluentDOM\Query::__call()
+     * @covers \FluentDOM\Query::__call()
      */
     public function testMagicMethodCallWithUnknownMethodExpectingException() {
       $fd = new Query();
-      $this->setExpectedException('BadMethodCallException');
+      $this->setExpectedException(\BadMethodCallException::class);
       /** @noinspection PhpUndefinedMethodInspection */
       $fd->invalidMethodCall();
     }
 
     /**
      * @group Properties
-     * @covers FluentDOM\Query::__isset
+     * @covers \FluentDOM\Query::__isset
      * @dataProvider providePropertyNames
      */
     public function testIssetPropertyContentType($propertyName) {
@@ -28,7 +28,7 @@ namespace FluentDOM {
 
     /**
      * @group Properties
-     * @covers FluentDOM\Query::__unset
+     * @covers \FluentDOM\Query::__unset
      * @dataProvider providePropertyNames
      */
     public function testUnsetPropertyContentType($propertyName) {

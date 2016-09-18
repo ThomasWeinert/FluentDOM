@@ -8,7 +8,7 @@ namespace FluentDOM\Serializer\Json {
   class RabbitFishTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Serializer\Json\RabbitFish
+     * @covers \FluentDOM\Serializer\Json\RabbitFish
      * @dataProvider provideExamples
      * @param string $expected
      * @param string $xml
@@ -24,7 +24,7 @@ namespace FluentDOM\Serializer\Json {
     }
 
     /**
-     * @covers FluentDOM\Serializer\Json\RabbitFish
+     * @covers \FluentDOM\Serializer\Json\RabbitFish
      */
     public function testIntegrationWithEmptyDocument() {
       $serializer = new RabbitFish(new \DOMDocument());

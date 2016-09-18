@@ -13,7 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationRemove
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testRemove() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -26,7 +26,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationRemove
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testRemoveWithExpression() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -39,7 +39,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationRemove
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testAppendRemovedNodes() {
       $fd = $this->getQueryFixtureFromString(self::XML)

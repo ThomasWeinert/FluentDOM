@@ -12,7 +12,7 @@ namespace FluentDOM {
 
     /**
      * @group Nodes
-     * @covers FluentDOM\Nodes::toArray
+     * @covers \FluentDOM\Nodes::toArray
      */
     public function testToArray() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('/items/*');

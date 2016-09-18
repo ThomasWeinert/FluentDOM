@@ -11,7 +11,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\QualifiedName
+     * @covers \FluentDOM\QualifiedName
      * @dataProvider dataProviderValidQualifiedNames
      */
     public function testIsQualifiedName($name) {
@@ -36,7 +36,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\QualifiedName
+     * @covers \FluentDOM\QualifiedName
      */
     public function testIsQnameWithEmptyNameExpectingException() {
       $this->setExpectedException(
@@ -46,7 +46,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\QualifiedName
+     * @covers \FluentDOM\QualifiedName
      */
     public function testIsNCNameWithEmptyTagnameExpectingException() {
       $this->setExpectedException(
@@ -57,7 +57,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\QualifiedName
+     * @covers \FluentDOM\QualifiedName
      */
     public function testIsNCNameWithInvalidTagnameCharExpectingException() {
       $this->setExpectedException(
@@ -68,7 +68,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\QualifiedName
+     * @covers \FluentDOM\QualifiedName
      */
     public function testIsNCNameWithInvalidPrefixCharExpectingException() {
       $this->setExpectedException(
@@ -79,7 +79,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\QualifiedName
+     * @covers \FluentDOM\QualifiedName
      */
     public function testIsNCNameWithInvalidTagnameStartingCharExpectingException() {
       $this->setExpectedException(
@@ -93,7 +93,7 @@ namespace FluentDOM {
      * This is an integration test for the transparent caching.
      * With the low limit all parts of the logic will be triggered.
      *
-     * @covers FluentDOM\QualifiedName
+     * @covers \FluentDOM\QualifiedName
      */
     public function testCaching() {
       QualifiedName::$cacheLimit = 3;
@@ -104,7 +104,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\QualifiedName
+     * @covers \FluentDOM\QualifiedName
      */
     public function testPropertiesWithNCName() {
       $qualifiedName = new QualifiedName('tag');
@@ -114,7 +114,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\QualifiedName
+     * @covers \FluentDOM\QualifiedName
      */
     public function testPropertiesWithFullName() {
       $qualifiedName = new QualifiedName('ns:tag');
@@ -124,7 +124,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\QualifiedName
+     * @covers \FluentDOM\QualifiedName
      * @dataProvider providePropertyNames
      */
     public function testPropertiesExistsExpectingTrue($property) {
@@ -133,7 +133,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\QualifiedName
+     * @covers \FluentDOM\QualifiedName
      */
     public function testPropertiesExistsExpectingFalse() {
       $qualifiedName = new QualifiedName('ns:tag');
@@ -141,34 +141,34 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\QualifiedName
+     * @covers \FluentDOM\QualifiedName
      */
     public function testPropertyGetWithInvalidPropertyExpectingException() {
       $qualifiedName = new QualifiedName('ns:tag');
-      $this->setExpectedException('LogicException');
+      $this->setExpectedException(\LogicException::class);
       $qualifiedName->invalidPropertyName;
     }
 
     /**
-     * @covers FluentDOM\QualifiedName
+     * @covers \FluentDOM\QualifiedName
      */
     public function testPropertySetExpectingException() {
       $qualifiedName = new QualifiedName('ns:tag');
-      $this->setExpectedException('LogicException');
+      $this->setExpectedException(\LogicException::class);
       $qualifiedName->name = 'foo';
     }
 
     /**
-     * @covers FluentDOM\QualifiedName
+     * @covers \FluentDOM\QualifiedName
      */
     public function testPropertyUnsetExpectingException() {
       $qualifiedName = new QualifiedName('ns:tag');
-      $this->setExpectedException('LogicException');
+      $this->setExpectedException(\LogicException::class);
       unset($qualifiedName->name);
     }
 
     /**
-     * @covers FluentDOM\QualifiedName
+     * @covers \FluentDOM\QualifiedName
      * @dataProvider provideQualifiedNamesForSplit
      */
     public function testSplit($expected, $name) {
@@ -178,7 +178,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\QualifiedName
+     * @covers \FluentDOM\QualifiedName
      */
     public function testValidateExceptionTrue() {
       $this->assertTrue(
@@ -187,7 +187,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\QualifiedName
+     * @covers \FluentDOM\QualifiedName
      */
     public function testValidateExceptionFalse() {
       $this->assertFalse(
@@ -196,7 +196,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\QualifiedName
+     * @covers \FluentDOM\QualifiedName
      * @dataProvider provideStringsToNormalize
      */
     public function testNormalizeString($expected, $string) {

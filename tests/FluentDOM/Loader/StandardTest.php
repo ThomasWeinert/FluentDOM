@@ -8,7 +8,7 @@ namespace FluentDOM\Loader {
   class StandardTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Loader\Standard
+     * @covers \FluentDOM\Loader\Standard
      * @dataProvider provideSupportedTypes
      */
     public function testSupportsExpectingTrue($mimetype) {

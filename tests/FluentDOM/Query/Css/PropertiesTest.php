@@ -10,7 +10,7 @@ namespace FluentDOM\Query\Css {
   class PropertiesTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Query\Css\Properties::__construct
+     * @covers \FluentDOM\Query\Css\Properties::__construct
      */
     public function testConstructor() {
       $css = new Properties('width: auto;');
@@ -20,7 +20,7 @@ namespace FluentDOM\Query\Css {
     }
 
     /**
-     * @covers FluentDOM\Query\Css\Properties::__toString
+     * @covers \FluentDOM\Query\Css\Properties::__toString
      */
     public function testMagicMethodToString() {
       $css = new Properties('width: auto;');
@@ -30,7 +30,7 @@ namespace FluentDOM\Query\Css {
     }
 
     /**
-     * @covers FluentDOM\Query\Css\Properties::offsetGet
+     * @covers \FluentDOM\Query\Css\Properties::offsetGet
      */
     public function testOffsetGet() {
       $css = new Properties('width: auto;');
@@ -40,7 +40,7 @@ namespace FluentDOM\Query\Css {
     }
 
     /**
-     * @covers FluentDOM\Query\Css\Properties::offsetExists
+     * @covers \FluentDOM\Query\Css\Properties::offsetExists
      */
     public function testOffsetExistsExpectingTrue() {
       $css = new Properties('width: auto;');
@@ -48,7 +48,7 @@ namespace FluentDOM\Query\Css {
     }
 
     /**
-     * @covers FluentDOM\Query\Css\Properties::offsetExists
+     * @covers \FluentDOM\Query\Css\Properties::offsetExists
      */
     public function testOffsetExistsExpectingFalse() {
       $css = new Properties('width: auto;');
@@ -56,8 +56,8 @@ namespace FluentDOM\Query\Css {
     }
 
     /**
-     * @covers FluentDOM\Query\Css\Properties::offsetSet
-     * @covers FluentDOM\Query\Css\Properties::_isCssProperty
+     * @covers \FluentDOM\Query\Css\Properties::offsetSet
+     * @covers \FluentDOM\Query\Css\Properties::_isCssProperty
      */
     public function testOffsetSet() {
       $css = new Properties();
@@ -68,17 +68,17 @@ namespace FluentDOM\Query\Css {
     }
 
     /**
-     * @covers FluentDOM\Query\Css\Properties::offsetSet
-     * @covers FluentDOM\Query\Css\Properties::_isCssProperty
+     * @covers \FluentDOM\Query\Css\Properties::offsetSet
+     * @covers \FluentDOM\Query\Css\Properties::_isCssProperty
      */
     public function testOffsetSetWithInvalidName() {
       $css = new Properties();
-      $this->setExpectedException('InvalidArgumentException');
+      $this->setExpectedException(\InvalidArgumentException::class);
       $css['---'] = 'test';
     }
 
     /**
-     * @covers FluentDOM\Query\Css\Properties::offsetSet
+     * @covers \FluentDOM\Query\Css\Properties::offsetSet
      */
     public function testOffsetSetWithEmptyValue() {
       $css = new Properties('width: auto; height: auto;');
@@ -87,7 +87,7 @@ namespace FluentDOM\Query\Css {
     }
 
     /**
-     * @covers FluentDOM\Query\Css\Properties::offsetUnset
+     * @covers \FluentDOM\Query\Css\Properties::offsetUnset
      */
     public function testOffsetUnset() {
       $css = new Properties('width: auto; height: auto;');
@@ -96,7 +96,7 @@ namespace FluentDOM\Query\Css {
     }
 
     /**
-     * @covers FluentDOM\Query\Css\Properties::offsetUnset
+     * @covers \FluentDOM\Query\Css\Properties::offsetUnset
      */
     public function testOffsetUnsetWithArray() {
       $css = new Properties('width: auto; height: auto;');
@@ -107,7 +107,7 @@ namespace FluentDOM\Query\Css {
     }
 
     /**
-     * @covers FluentDOM\Query\Css\Properties::setStyleString
+     * @covers \FluentDOM\Query\Css\Properties::setStyleString
      * @dataProvider provideStyleStrings
      */
     public function testSetStyleString($expected, $styleString) {
@@ -119,7 +119,7 @@ namespace FluentDOM\Query\Css {
     }
 
     /**
-     * @covers FluentDOM\Query\Css\Properties::getStyleString
+     * @covers \FluentDOM\Query\Css\Properties::getStyleString
      * @dataProvider providePropertyArrays
      */
     public function testGetStyleString($expected, $propertyArray) {
@@ -133,7 +133,7 @@ namespace FluentDOM\Query\Css {
     }
 
     /**
-     * @covers FluentDOM\Query\Css\Properties::getIterator
+     * @covers \FluentDOM\Query\Css\Properties::getIterator
      */
     public function testGetIterator() {
       $css = new Properties('width: auto; height: auto;');
@@ -144,7 +144,7 @@ namespace FluentDOM\Query\Css {
     }
 
     /**
-     * @covers FluentDOM\Query\Css\Properties::count
+     * @covers \FluentDOM\Query\Css\Properties::count
      */
     public function testCountExpectingZero() {
       $css = new Properties('');
@@ -154,7 +154,7 @@ namespace FluentDOM\Query\Css {
     }
 
     /**
-     * @covers FluentDOM\Query\Css\Properties::count
+     * @covers \FluentDOM\Query\Css\Properties::count
      */
     public function testCountExpectingTwo() {
       $css = new Properties('width: auto; height: auto;');
@@ -164,7 +164,7 @@ namespace FluentDOM\Query\Css {
     }
 
     /**
-     * @covers FluentDOM\Query\Css\Properties::compileValue
+     * @covers \FluentDOM\Query\Css\Properties::compileValue
      */
     public function testCompileValueWithIntegerExpectingString() {
       $dom = new \DOMDocument();
@@ -182,7 +182,7 @@ namespace FluentDOM\Query\Css {
     }
 
     /**
-     * @covers FluentDOM\Query\Css\Properties::compileValue
+     * @covers \FluentDOM\Query\Css\Properties::compileValue
      */
     public function testCompileValueWithCallback() {
       $dom = new \DOMDocument();
@@ -200,7 +200,7 @@ namespace FluentDOM\Query\Css {
     }
 
     public function callbackForCompileValue($node, $index, $value) {
-      $this->assertInstanceOf('DOMElement', $node);
+      $this->assertInstanceOf(\DOMElement::class, $node);
       $this->assertEquals(23, $index);
       return $value;
     }

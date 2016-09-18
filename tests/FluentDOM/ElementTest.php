@@ -7,7 +7,7 @@ namespace FluentDOM {
   class ElementTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Element::__toString
+     * @covers \FluentDOM\Element::__toString
      */
     public function testMagicMethodToString() {
       $dom = new Document();
@@ -19,7 +19,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::__get
+     * @covers \FluentDOM\Element::__get
      */
     public function testGetPropertyFirstElementChild() {
       $dom = new Document();
@@ -31,7 +31,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::__get
+     * @covers \FluentDOM\Element::__get
      */
     public function testGetPropertyLastElementChild() {
       $dom = new Document();
@@ -43,7 +43,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::__get
+     * @covers \FluentDOM\Element::__get
      */
     public function testGetPropertyNextElementSibling() {
       $dom = new Document();
@@ -55,7 +55,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::__get
+     * @covers \FluentDOM\Element::__get
      */
     public function testGetPropertyPreviousElementSibling() {
       $dom = new Document();
@@ -67,18 +67,18 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::__get
+     * @covers \FluentDOM\Element::__get
      */
     public function testGetInvalidProperty() {
       $dom = new Document();
       $dom->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
-      $this->setExpectedException('PHPUnit_Framework_Error_Notice');
+      $this->setExpectedException(\PHPUnit_Framework_Error_Notice::class);
       $dom->documentElement->INVALID_PROPERTY;
     }
 
     /**
-     * @covers FluentDOM\Element::__get
-     * @covers FluentDOM\Element::__set
+     * @covers \FluentDOM\Element::__get
+     * @covers \FluentDOM\Element::__set
      */
     public function testGetUnknownPropertyAfterSet() {
       if (defined('HHVM_VERSION')) {
@@ -95,17 +95,17 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::__set
+     * @covers \FluentDOM\Element::__set
      */
     public function testSetPropertyExpectingException() {
       $dom = new Document();
       $dom->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
-      $this->setExpectedException('BadMethodCallException');
+      $this->setExpectedException(\BadMethodCallException::class);
       $dom->documentElement->firstElementChild = $dom->createElement('test');
     }
 
     /**
-     * @covers FluentDOM\Element::getAttribute
+     * @covers \FluentDOM\Element::getAttribute
      */
     public function testGetAttribute() {
       $dom = new Document();
@@ -117,7 +117,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::getAttribute
+     * @covers \FluentDOM\Element::getAttribute
      */
     public function testGetAttributeWithNamespace() {
       $dom = new Document();
@@ -130,7 +130,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::getAttributeNode
+     * @covers \FluentDOM\Element::getAttributeNode
      */
     public function testGetAttributeNode() {
       $dom = new Document();
@@ -142,7 +142,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::getAttributeNode
+     * @covers \FluentDOM\Element::getAttributeNode
      */
     public function testGetAttributeNodeWithNamespace() {
       $dom = new Document();
@@ -155,7 +155,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::setAttribute
+     * @covers \FluentDOM\Element::setAttribute
      */
     public function testSetAttribute() {
       $dom = new Document();
@@ -168,7 +168,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::setAttribute
+     * @covers \FluentDOM\Element::setAttribute
      */
     public function testSetAttributeWithNamespace() {
       $dom = new Document();
@@ -182,7 +182,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::setIdAttribute
+     * @covers \FluentDOM\Element::setIdAttribute
      */
     public function testSetIdAttribute() {
       $dom = new Document();
@@ -195,7 +195,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::setIdAttribute
+     * @covers \FluentDOM\Element::setIdAttribute
      */
     public function testSetIdAttributeWithNamespace() {
       $dom = new Document();
@@ -209,7 +209,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::setAttribute
+     * @covers \FluentDOM\Element::setAttribute
      */
     public function testSetAttributeXmlAttribute() {
       $dom = new Document();
@@ -223,7 +223,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::setAttribute
+     * @covers \FluentDOM\Element::setAttribute
      */
     public function testSetAttributeXmlnsAttribute() {
       $dom = new Document();
@@ -236,7 +236,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::removeAttribute
+     * @covers \FluentDOM\Element::removeAttribute
      */
     public function testRemoveAttribute() {
       $dom = new Document();
@@ -249,7 +249,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::removeAttribute
+     * @covers \FluentDOM\Element::removeAttribute
      */
     public function testRemoveAttributeWithNamespace() {
       $dom = new Document();
@@ -263,8 +263,8 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::hasAttribute
-     * @covers FluentDOM\Element::resolveTagName
+     * @covers \FluentDOM\Element::hasAttribute
+     * @covers \FluentDOM\Element::resolveTagName
      */
     public function testHasAttributeExpectingTrue() {
       $dom = new Document();
@@ -275,8 +275,8 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::hasAttribute
-     * @covers FluentDOM\Element::resolveTagName
+     * @covers \FluentDOM\Element::hasAttribute
+     * @covers \FluentDOM\Element::resolveTagName
      */
     public function testHasAttributeExpectingFalse() {
       $dom = new Document();
@@ -287,8 +287,8 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::hasAttribute
-     * @covers FluentDOM\Element::resolveTagName
+     * @covers \FluentDOM\Element::hasAttribute
+     * @covers \FluentDOM\Element::resolveTagName
      */
     public function testHasAttributeWithNamespaceExpectingTrue() {
       $dom = new Document();
@@ -300,8 +300,8 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::hasAttribute
-     * @covers FluentDOM\Element::resolveTagName
+     * @covers \FluentDOM\Element::hasAttribute
+     * @covers \FluentDOM\Element::resolveTagName
      */
     public function testHasAttributeWithNamespaceExpectingFalse() {
       $dom = new Document();
@@ -313,9 +313,9 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::applyNamespaces
-     * @covers FluentDOM\Element::isCurrentNamespace
-     * @covers FluentDOM\Element::getDocument
+     * @covers \FluentDOM\Element::applyNamespaces
+     * @covers \FluentDOM\Element::isCurrentNamespace
+     * @covers \FluentDOM\Element::getDocument
      */
     public function testApplyNamespaces() {
       $dom = new Document();
@@ -329,9 +329,9 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::applyNamespaces
-     * @covers FluentDOM\Element::isCurrentNamespace
-     * @covers FluentDOM\Element::getDocument
+     * @covers \FluentDOM\Element::applyNamespaces
+     * @covers \FluentDOM\Element::isCurrentNamespace
+     * @covers \FluentDOM\Element::getDocument
      */
     public function testApplyNamespacesWithTwoNamespaces() {
       $dom = new Document();
@@ -345,9 +345,9 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::applyNamespaces
-     * @covers FluentDOM\Element::isCurrentNamespace
-     * @covers FluentDOM\Element::getDocument
+     * @covers \FluentDOM\Element::applyNamespaces
+     * @covers \FluentDOM\Element::isCurrentNamespace
+     * @covers \FluentDOM\Element::getDocument
      */
     public function testApplyNamespacesWithOneOfTwoNamespaces() {
       $dom = new Document();
@@ -361,9 +361,9 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::applyNamespaces
-     * @covers FluentDOM\Element::isCurrentNamespace
-     * @covers FluentDOM\Element::getDocument
+     * @covers \FluentDOM\Element::applyNamespaces
+     * @covers \FluentDOM\Element::isCurrentNamespace
+     * @covers \FluentDOM\Element::getDocument
      */
     public function testApplyNamespacesWithTwoOfThreeNamespaces() {
       $dom = new Document();
@@ -378,7 +378,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element
+     * @covers \FluentDOM\Element
      */
     public function testAppendChildReturnsAppendedNode() {
       $dom = new Document();
@@ -387,14 +387,14 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::append
+     * @covers \FluentDOM\Element::append
      */
     public function testAppend() {
-      $object = $this->getMock('FluentDOM\\Appendable');
+      $object = $this->getMockBuilder(Appendable::class)->getMock();
       $object
         ->expects($this->once())
         ->method('appendTo')
-        ->with($this->isInstanceOf('FluentDOM\\Element'))
+        ->with($this->isInstanceOf(Element::class))
         ->will(
           $this->returnCallback(
             function(Element $parentNode) {
@@ -412,7 +412,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::append
+     * @covers \FluentDOM\Element::append
      */
     public function testAppendWithText() {
       $dom = new Document();
@@ -425,7 +425,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::append
+     * @covers \FluentDOM\Element::append
      */
     public function testAppendWithArraySetsAttributes() {
       $dom = new Document();
@@ -438,7 +438,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::append
+     * @covers \FluentDOM\Element::append
      */
     public function testAppendWithNode() {
       $dom = new Document();
@@ -453,7 +453,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::append
+     * @covers \FluentDOM\Element::append
      */
     public function testAppendWithNodeAppendsClone() {
       $dom = new Document();
@@ -468,7 +468,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::append
+     * @covers \FluentDOM\Element::append
      */
     public function testAppendWithAttributeNode() {
       $dom = new Document();
@@ -483,7 +483,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::append
+     * @covers \FluentDOM\Element::append
      */
     public function testAppendWithDocument() {
       $import = new \DOMDocument();
@@ -500,7 +500,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::append
+     * @covers \FluentDOM\Element::append
      */
     public function testAppendWithEmptyDocument() {
       $import = new \DOMDocument();
@@ -516,7 +516,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::append
+     * @covers \FluentDOM\Element::append
      */
     public function testAppendWithNodeFromOtherDocument() {
       $import = new \DOMDocument();
@@ -533,7 +533,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::append
+     * @covers \FluentDOM\Element::append
      */
     public function testAppendWithNodeListFromOtherDocument() {
       $import = new Document();
@@ -550,7 +550,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::append
+     * @covers \FluentDOM\Element::append
      */
     public function testAppendWithArrayContainingNodes() {
       $dom = new Document();
@@ -570,7 +570,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::append
+     * @covers \FluentDOM\Element::append
      */
     public function testAppendWithAttributeNodeFromOtherDocument() {
       $import = new \DOMDocument();
@@ -587,7 +587,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::append
+     * @covers \FluentDOM\Element::append
      */
     public function testAppendWithClosure() {
       $dom = new Document();
@@ -605,7 +605,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::appendElement
+     * @covers \FluentDOM\Element::appendElement
      */
     public function testAppendElement() {
       $dom = new Document();
@@ -618,7 +618,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::appendXml
+     * @covers \FluentDOM\Element::appendXml
      */
     public function testAppendXml() {
       $dom = new Document();
@@ -633,7 +633,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::appendXml
+     * @covers \FluentDOM\Element::appendXml
      */
     public function testAppendXmlWithNamespace() {
       $dom = new Document();
@@ -648,7 +648,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::saveXml
+     * @covers \FluentDOM\Element::saveXml
      */
     public function testSaveXml() {
       $dom = new Document();
@@ -657,7 +657,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::saveXmlFragment
+     * @covers \FluentDOM\Element::saveXmlFragment
      */
     public function testSaveXmlFragment() {
       $dom = new Document();
@@ -668,7 +668,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::saveHtml
+     * @covers \FluentDOM\Element::saveHtml
      */
     public function testSaveHtml() {
       $dom = new Document();
@@ -677,8 +677,8 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element
-     * @covers FluentDOM\Node\Xpath
+     * @covers \FluentDOM\Element
+     * @covers \FluentDOM\Node\Xpath
      */
     public function testEvaluate() {
       $dom = new Document();
@@ -689,8 +689,8 @@ namespace FluentDOM {
       );
     }
     /**
-     * @covers FluentDOM\Element
-     * @covers FluentDOM\Node\Xpath
+     * @covers \FluentDOM\Element
+     * @covers \FluentDOM\Node\Xpath
      */
     public function testMagicMethodInvoke() {
       $dom = new Document();
@@ -709,7 +709,7 @@ namespace FluentDOM {
       $dom = new Document();
       $dom->loadXML('<foo><bar/></foo>');
       $fd = $dom->documentElement->find('bar');
-      $this->assertInstanceOf('FluentDOM\Query', $fd);
+      $this->assertInstanceOf(Query::class, $fd);
       $this->assertSame(
         $dom->documentElement->firstChild,
         $fd[0]
@@ -742,7 +742,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element
+     * @covers \FluentDOM\Element
      * @dataProvider provideExistingOffsets
      */
     public function testArrayAccessOffsetExistsExpectingTrue($offset) {
@@ -760,7 +760,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element
+     * @covers \FluentDOM\Element
      * @dataProvider provideMissingOffsets
      */
     public function testArrayAccessOffsetExistsExpectingFalse($offset) {
@@ -777,7 +777,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element
+     * @covers \FluentDOM\Element
      */
     public function testArrayAccessOffsetExistsExpectingException() {
       $dom = new Document();
@@ -790,7 +790,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element
+     * @covers \FluentDOM\Element
      */
     public function testArrayAccessOffsetGetWithItem() {
       $dom = new Document();
@@ -802,7 +802,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element
+     * @covers \FluentDOM\Element
      */
     public function testArrayAccessOffsetGetWithAttribute() {
       $dom = new Document();
@@ -814,7 +814,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element
+     * @covers \FluentDOM\Element
      */
     public function testArrayAccessOffsetGetWithChaining() {
       $dom = new Document();
@@ -826,7 +826,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element
+     * @covers \FluentDOM\Element
      */
     public function testArrayAccessOffsetSetAppendChild() {
       $dom = new Document();
@@ -839,7 +839,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element
+     * @covers \FluentDOM\Element
      */
     public function testArrayAccessOffsetSetReplaceChild() {
       $dom = new Document();
@@ -854,7 +854,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element
+     * @covers \FluentDOM\Element
      */
     public function testArrayAccessOffsetSetWithInvalidChildExpectingException() {
       $dom = new Document();
@@ -867,7 +867,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element
+     * @covers \FluentDOM\Element
      */
     public function testArrayAccessOffsetSetWriteAttribute() {
       $dom = new Document();
@@ -881,7 +881,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element
+     * @covers \FluentDOM\Element
      */
     public function testArrayAccessOffsetUnsetRemoveChild() {
       $dom = new Document();
@@ -894,7 +894,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element
+     * @covers \FluentDOM\Element
      */
     public function testArrayAccessOffsetUnsetRemoveAttribute() {
       $dom = new Document();
@@ -907,7 +907,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::getIterator
+     * @covers \FluentDOM\Element::getIterator
      */
     public function testGetIterator() {
       $dom = new Document();
@@ -924,7 +924,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Element::count
+     * @covers \FluentDOM\Element::count
      */
     public function testCountable() {
       $dom = new Document();

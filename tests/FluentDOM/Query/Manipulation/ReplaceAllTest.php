@@ -12,7 +12,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationReplace
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testReplaceAll() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -25,7 +25,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationReplace
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testReplaceAllWithNode() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -40,10 +40,10 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationReplace
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testReplaceAllWithInvalidArgument() {
-      $this->setExpectedException('InvalidArgumentException');
+      $this->setExpectedException(\InvalidArgumentException::class);
       $this->getQueryFixtureFromString(self::XML)
         ->add('<b id="sample">Paragraph. </b>')
         ->replaceAll(

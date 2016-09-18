@@ -13,7 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingChaining
-     * @covers FluentDOM\Query::reverse
+     * @covers \FluentDOM\Query::reverse
      */
     public function testReverse() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//item')->reverse();

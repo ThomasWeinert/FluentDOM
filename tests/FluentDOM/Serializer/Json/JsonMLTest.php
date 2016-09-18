@@ -8,7 +8,7 @@ namespace FluentDOM\Serializer\Json {
   class JsonMLTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Serializer\Json\JsonML
+     * @covers \FluentDOM\Serializer\Json\JsonML
      * @dataProvider provideExamples
      * @param string $expected
      * @param string $xml
@@ -24,7 +24,7 @@ namespace FluentDOM\Serializer\Json {
     }
 
     /**
-     * @covers FluentDOM\Serializer\Json\JsonML
+     * @covers \FluentDOM\Serializer\Json\JsonML
      */
     public function testIntegrationWithEmptyDocument() {
       $serializer = new JsonML(new \DOMDocument());

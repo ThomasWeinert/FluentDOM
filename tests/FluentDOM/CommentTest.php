@@ -7,7 +7,7 @@ namespace FluentDOM {
   class CommentTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Comment
+     * @covers \FluentDOM\Comment
      */
     public function testMagicMethodToString() {
       $dom = new Document();

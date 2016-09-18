@@ -13,7 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFilter
-     * @covers FluentDOM\Query::not
+     * @covers \FluentDOM\Query::not
      */
     public function testNot() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//*');
@@ -26,7 +26,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFilter
-     * @covers FluentDOM\Query::not
+     * @covers \FluentDOM\Query::not
      */
     public function testNotWithFunction() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//*');

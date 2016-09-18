@@ -13,14 +13,14 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Query::next
+     * @covers \FluentDOM\Query::next
      */
     public function testNext() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd ->find('//button[@disabled]')
         ->next()
         ->text('This button is disabled.');
-      $this->assertInstanceOf('FluentDOM\\Query', $fd);
+      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
   }

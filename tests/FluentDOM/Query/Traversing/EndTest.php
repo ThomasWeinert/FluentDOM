@@ -13,7 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingChaining
-     * @covers FluentDOM\Query::end
+     * @covers \FluentDOM\Query::end
      */
     public function testEnd() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('/items')->find('.//item');

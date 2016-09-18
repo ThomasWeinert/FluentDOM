@@ -12,11 +12,11 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Query::parents
+     * @covers \FluentDOM\Query::parents
      */
     public function testParents() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
-      $this->assertInstanceOf('FluentDOM\\Query', $fd);
+      $this->assertInstanceOf(Query::class, $fd);
       $parents = $fd
         ->find('//b')
         ->parents()
@@ -35,7 +35,7 @@ namespace FluentDOM\Query {
       $doc = $fd
         ->find('//b')
         ->append('<strong>'.htmlspecialchars($parents).'</strong>');
-      $this->assertInstanceOf('FluentDOM\\Query', $doc);
+      $this->assertInstanceOf(Query::class, $doc);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $doc);
     }
   }

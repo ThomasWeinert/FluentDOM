@@ -13,7 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Query::closest
+     * @covers \FluentDOM\Query::closest
      */
     public function testClosest() {
       $attribute = $this->getQueryFixtureFromString(self::XML)
@@ -26,7 +26,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Query::closest
+     * @covers \FluentDOM\Query::closest
      */
     public function testClosestWithContext() {
       $fd = $this->getQueryFixtureFromString(self::XML);
@@ -42,7 +42,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Query::closest
+     * @covers \FluentDOM\Query::closest
      */
     public function testClosestWithContextExpectingNull() {
       $fd = $this->getQueryFixtureFromString(self::XML);
@@ -58,7 +58,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Query::closest
+     * @covers \FluentDOM\Query::closest
      */
     public function testClosestIsCurrentNode() {
       $attribute = $this->getQueryFixtureFromString(self::XML)

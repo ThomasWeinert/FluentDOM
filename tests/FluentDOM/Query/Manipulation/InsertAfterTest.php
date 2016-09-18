@@ -13,14 +13,14 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationOutside
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testInsertAfter() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->find('//p')
         ->insertAfter('//div[@id = "foo"]');
-      $this->assertInstanceOf('FluentDOM\\Query', $fd);
+      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
   }

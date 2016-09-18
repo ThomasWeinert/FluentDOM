@@ -2,6 +2,7 @@
 namespace FluentDOM\Loader {
 
   use FluentDOM\Document;
+  use FluentDOM\Loadable;
   use FluentDOM\TestCase;
 
   require_once(__DIR__.'/../TestCase.php');
@@ -9,7 +10,7 @@ namespace FluentDOM\Loader {
   class JsonTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Loader\Json
+     * @covers \FluentDOM\Loader\Json
      * @dataProvider provideSupportedTypes
      */
     public function testSupportsExpectingTrue($mimetype) {
@@ -18,12 +19,12 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @covers FluentDOM\Loader\Json
+     * @covers \FluentDOM\Loader\Json
      * @dataProvider provideSupportedTypes
      */
     public function testGetReturnLoadable($mimetype) {
       $loader = new Json();
-      $this->assertInstanceOf('FluentDOM\Loadable', $loader->get($mimetype));
+      $this->assertInstanceOf(Loadable::class, $loader->get($mimetype));
     }
 
     public static function provideSupportedTypes() {

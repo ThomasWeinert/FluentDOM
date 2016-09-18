@@ -6,10 +6,10 @@ namespace FluentDOM {
   class XpathTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Xpath
+     * @covers \FluentDOM\Xpath
      */
     public function testRegisterNamespaceRegistersOnDocument() {
-      $dom = $this->getMock('FluentDOM\\Document');
+      $dom = $this->getMockBuilder(Document::class)->getMock();
       $dom
         ->expects($this->once())
         ->method('registerNamespace')
@@ -19,7 +19,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Xpath
+     * @covers \FluentDOM\Xpath
      */
     public function testEvaluateDoesNotRegisterNodeNamespaces() {
       $dom = new \DOMDocument();
@@ -39,7 +39,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Xpath
+     * @covers \FluentDOM\Xpath
      */
     public function testEvaluateRegisterNodeNamespaces() {
       $dom = new \DOMDocument();
@@ -59,7 +59,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Xpath
+     * @covers \FluentDOM\Xpath
      */
     public function testEvaluateDisableRegisterNodeNamespacesWithArgument() {
       $dom = new \DOMDocument();
@@ -79,7 +79,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Xpath
+     * @covers \FluentDOM\Xpath
      */
     public function testMagicMethodInvoke() {
       $dom = new \DOMDocument();
@@ -89,7 +89,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Xpath
+     * @covers \FluentDOM\Xpath
      */
     public function testMagicMethodInvokeWithContext() {
       $dom = new \DOMDocument();
@@ -99,7 +99,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Xpath
+     * @covers \FluentDOM\Xpath
      */
     public function testQueryDoesNotRegisterNodeNamespaces() {
       $dom = new \DOMDocument();
@@ -119,7 +119,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Xpath
+     * @covers \FluentDOM\Xpath
      */
     public function testQueryRegisterNodeNamespaces() {
       $dom = new \DOMDocument();
@@ -139,7 +139,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Xpath
+     * @covers \FluentDOM\Xpath
      */
     public function testQueryGeneratesDeprecatedError() {
       $current = error_reporting();
@@ -148,13 +148,13 @@ namespace FluentDOM {
       }
       $dom = new \DOMDocument();
       $xpath = new Xpath($dom);
-      $this->setExpectedException('PHPUnit_Framework_Error_Deprecated');
+      $this->setExpectedException(\PHPUnit_Framework_Error_Deprecated::class);
       $xpath->query('*');
       error_reporting($current);
     }
 
     /**
-     * @covers FluentDOM\Xpath
+     * @covers \FluentDOM\Xpath
      */
     public function testFirstOfMatchingNode() {
       $dom = new \DOMDocument();
@@ -167,7 +167,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Xpath
+     * @covers \FluentDOM\Xpath
      */
     public function testFirstOfMatchingNothingExpectingNull() {
       $dom = new \DOMDocument();
@@ -179,7 +179,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Xpath
+     * @covers \FluentDOM\Xpath
      */
     public function testFirstOfMatchingScalarExpectingNull() {
       $dom = new \DOMDocument();
@@ -191,7 +191,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Xpath
+     * @covers \FluentDOM\Xpath
      * @dataProvider provideValuesForQuote
      * @param string $expected
      * @param string $value
@@ -206,7 +206,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Xpath
+     * @covers \FluentDOM\Xpath
      */
     public function testPropertyRegisterNodeNamespacesIsset() {
       $dom = new \DOMDocument();
@@ -215,7 +215,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Xpath
+     * @covers \FluentDOM\Xpath
      */
     public function testPropertyRegisterNodeNamespacesGetAfterSet() {
       $dom = new \DOMDocument();
@@ -226,7 +226,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Xpath
+     * @covers \FluentDOM\Xpath
      */
     public function testPropertyRegisterNodeNamespacesGetAfterUnset() {
       $dom = new \DOMDocument();
@@ -237,7 +237,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Xpath
+     * @covers \FluentDOM\Xpath
      */
     public function testDynamicProperty() {
       $dom = new \DOMDocument();
@@ -251,13 +251,13 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Xpath
+     * @covers \FluentDOM\Xpath
      */
     public function testPropertyGetWithUnknownPropertyExpectingPHPError() {
       $errors = error_reporting(E_ALL);
       $dom = new \DOMDocument();
       $xpath = new Xpath($dom);
-      $this->setExpectedException('PHPUnit_Framework_Error_Notice');
+      $this->setExpectedException(\PHPUnit_Framework_Error_Notice::class);
       $xpath->someUnknownProperty;
       error_reporting($errors);
     }

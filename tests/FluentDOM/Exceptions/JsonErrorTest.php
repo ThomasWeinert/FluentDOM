@@ -8,7 +8,7 @@ namespace FluentDOM\Exceptions {
   class JsonErrorTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Exceptions\JsonError
+     * @covers \FluentDOM\Exceptions\JsonError
      */
     public function testWithValidErrorCode() {
       $exception = new JsonError(1);
@@ -17,7 +17,7 @@ namespace FluentDOM\Exceptions {
     }
 
     /**
-     * @covers FluentDOM\Exceptions\JsonError
+     * @covers \FluentDOM\Exceptions\JsonError
      */
     public function testWithInvalidErrorCodeExpectingUnknonwError() {
       $exception = new JsonError(-42);

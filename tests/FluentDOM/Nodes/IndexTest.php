@@ -12,7 +12,7 @@ namespace FluentDOM {
 
     /**
      * @group Nodes
-     * @covers FluentDOM\Nodes::index
+     * @covers \FluentDOM\Nodes::index
      */
     public function testIndex() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//item[@index >= 1]');
@@ -24,7 +24,7 @@ namespace FluentDOM {
 
     /**
      * @group Nodes
-     * @covers FluentDOM\Nodes::index
+     * @covers \FluentDOM\Nodes::index
      */
     public function testIndexWithExpression() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//item');
@@ -36,7 +36,7 @@ namespace FluentDOM {
 
     /**
      * @group Nodes
-     * @covers FluentDOM\Nodes::index
+     * @covers \FluentDOM\Nodes::index
      */
     public function testIndexWithNonMatchingExpression() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//item');
@@ -48,7 +48,7 @@ namespace FluentDOM {
 
     /**
      * @group Nodes
-     * @covers FluentDOM\Nodes::index
+     * @covers \FluentDOM\Nodes::index
      */
     public function testIndexWithNode() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//item');
@@ -61,7 +61,7 @@ namespace FluentDOM {
 
     /**
      * @group Nodes
-     * @covers FluentDOM\Nodes::index
+     * @covers \FluentDOM\Nodes::index
      */
     public function testIndexOnEmptyList() {
       $fd = new Query();

@@ -11,7 +11,7 @@ namespace FluentDOM {
 
     /**
      * @group Nodes
-     * @covers FluentDOM\Query::each
+     * @covers \FluentDOM\Query::each
      */
     public function testEach() {
       $data = array();
@@ -31,7 +31,7 @@ namespace FluentDOM {
 
     /**
      * @group Nodes
-     * @covers FluentDOM\Query::each
+     * @covers \FluentDOM\Query::each
      */
     public function testEachIgnoringTextNodes() {
       $data = array();
@@ -48,7 +48,7 @@ namespace FluentDOM {
 
     /**
      * @group Nodes
-     * @covers FluentDOM\Query::each
+     * @covers \FluentDOM\Query::each
      */
     public function testEachWithFilterFunction() {
       $data = array();

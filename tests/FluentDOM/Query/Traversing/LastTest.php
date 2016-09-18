@@ -13,7 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFilter
-     * @covers FluentDOM\Query::last
+     * @covers \FluentDOM\Query::last
      */
     public function testLast() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//item');

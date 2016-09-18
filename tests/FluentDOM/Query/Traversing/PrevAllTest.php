@@ -13,7 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Query::prevAll
+     * @covers \FluentDOM\Query::prevAll
      */
     public function testPrevAll() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -27,7 +27,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Query::prevAll
+     * @covers \FluentDOM\Query::prevAll
      */
     public function testPrevAllExpression() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);

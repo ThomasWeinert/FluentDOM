@@ -8,7 +8,7 @@ namespace FluentDOM\Loader\Json {
   class SimpleXMLTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Loader\Json\SimpleXML
+     * @covers \FluentDOM\Loader\Json\SimpleXML
      * @dataProvider provideExamples
      * @param string $xmlInput
      * @param string $expectedXml
@@ -23,7 +23,7 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * @covers FluentDOM\Loader\Json\SimpleXML
+     * @covers \FluentDOM\Loader\Json\SimpleXML
      */
     public function testLoadWithInvalidSourceExpectingNull() {
       $loader = new SimpleXML();

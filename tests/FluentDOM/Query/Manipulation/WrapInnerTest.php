@@ -13,7 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationAround
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testWrapInner() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -26,7 +26,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationAround
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testWrapInnerWithCallback() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);

@@ -13,7 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFilter
-     * @covers FluentDOM\Query::filter
+     * @covers \FluentDOM\Query::filter
      */
     public function testFilter() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//*');
@@ -26,7 +26,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFilter
-     * @covers FluentDOM\Query::filter
+     * @covers \FluentDOM\Query::filter
      */
     public function testFilterWithFunction() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//*');

@@ -13,7 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testXmlRead() {
       $expect = '<item index="0">text1</item>'.
@@ -26,7 +26,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testXmlReadWithTextNodes() {
       $expect = 'text1';
@@ -39,7 +39,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testXmlReadEmpty() {
       $xml = $this->getQueryFixtureFromString('<items/>')->find('/items/*')->xml();
@@ -49,35 +49,35 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testXmlWrite() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->find('//p[position() = last()]')
         ->xml('<b>New</b>World');
-      $this->assertInstanceOf('FluentDOM\\Query', $fd);
+      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
 
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testXmlWriteEmpty() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->find('//p')
         ->xml('');
-      $this->assertInstanceOf('FluentDOM\\Query', $fd);
+      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
 
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testXmlWriteWithCallback() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -92,18 +92,18 @@ namespace FluentDOM\Query {
             }
           }
         );
-      $this->assertInstanceOf('FluentDOM\\Query', $fd);
+      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
 
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testXmlWriteWithInvalidDataExpectingException() {
       $fd = new Query();
-      $this->setExpectedException('UnexpectedValueException');
+      $this->setExpectedException(\UnexpectedValueException::class);
       @$fd->xml(new \stdClass());
     }
   }

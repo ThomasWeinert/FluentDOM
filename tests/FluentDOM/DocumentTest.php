@@ -7,7 +7,7 @@ namespace FluentDOM {
   class DocumentTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Document::__construct
+     * @covers \FluentDOM\Document::__construct
      */
     public function testDocumentRegistersNodeClass() {
       $dom = new Document();
@@ -19,7 +19,7 @@ namespace FluentDOM {
       );
     }
     /**
-     * @covers FluentDOM\Document::__construct
+     * @covers \FluentDOM\Document::__construct
      */
     public function testDocumentRegistersNodeClassLoadingXml() {
       $dom = new Document();
@@ -32,7 +32,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Document::xpath
+     * @covers \FluentDOM\Document::xpath
      */
     public function testXpathImplicitCreate() {
       $dom = new Document();
@@ -42,7 +42,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Document::xpath
+     * @covers \FluentDOM\Document::xpath
      */
     public function testXpathImplicitCreateAfterDocumentLoad() {
       if (defined('HHVM_VERSION')) {
@@ -58,8 +58,8 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Document::registerNamespace
-     * @covers FluentDOM\Document::xpath
+     * @covers \FluentDOM\Document::registerNamespace
+     * @covers \FluentDOM\Document::xpath
      */
     public function testNamespaceIsRegisteredOnExistingXpath() {
       $dom = new Document();
@@ -72,8 +72,8 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Document::registerNamespace
-     * @covers FluentDOM\Document::xpath
+     * @covers \FluentDOM\Document::registerNamespace
+     * @covers \FluentDOM\Document::xpath
      */
     public function testNamespaceIsRegisteredOnNewXpath() {
       $dom = new Document();
@@ -85,9 +85,9 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Document::registerNamespace
-     * @covers FluentDOM\Document::getNamespace
-     * @covers FluentDOM\Document::validatePrefix
+     * @covers \FluentDOM\Document::registerNamespace
+     * @covers \FluentDOM\Document::getNamespace
+     * @covers \FluentDOM\Document::validatePrefix
      */
     public function testGetNamespaceAfterRegister() {
       $dom = new Document();
@@ -99,9 +99,9 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Document::registerNamespace
-     * @covers FluentDOM\Document::getNamespace
-     * @covers FluentDOM\Document::validatePrefix
+     * @covers \FluentDOM\Document::registerNamespace
+     * @covers \FluentDOM\Document::getNamespace
+     * @covers \FluentDOM\Document::validatePrefix
      */
     public function testGetDefaultNamespaceAfterRegister() {
       $dom = new Document();
@@ -113,9 +113,9 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Document::registerNamespace
-     * @covers FluentDOM\Document::getNamespace
-     * @covers FluentDOM\Document::validatePrefix
+     * @covers \FluentDOM\Document::registerNamespace
+     * @covers \FluentDOM\Document::getNamespace
+     * @covers \FluentDOM\Document::validatePrefix
      */
     public function testGetDefaultNamespaceWithoutRegister() {
       $dom = new Document();
@@ -126,9 +126,9 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Document::registerNamespace
-     * @covers FluentDOM\Document::getNamespace
-     * @covers FluentDOM\Document::validatePrefix
+     * @covers \FluentDOM\Document::registerNamespace
+     * @covers \FluentDOM\Document::getNamespace
+     * @covers \FluentDOM\Document::validatePrefix
      */
     public function testRegisterReservedNamespaceExpectingException() {
       $dom = new Document();
@@ -140,8 +140,8 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Document::getNamespace
-     * @covers FluentDOM\Document::validatePrefix
+     * @covers \FluentDOM\Document::getNamespace
+     * @covers \FluentDOM\Document::validatePrefix
      */
     public function testGetReservedNamespace() {
       $dom = new Document();
@@ -152,8 +152,8 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Document::getNamespace
-     * @covers FluentDOM\Document::validatePrefix
+     * @covers \FluentDOM\Document::getNamespace
+     * @covers \FluentDOM\Document::validatePrefix
      */
     public function testGetNamespaceWithoutRegisterExpectingException() {
       $dom = new Document();
@@ -165,7 +165,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Document::namespaces
+     * @covers \FluentDOM\Document::namespaces
      */
     public function testNamespacesGet() {
       $dom = new Document();
@@ -181,7 +181,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Document::namespaces
+     * @covers \FluentDOM\Document::namespaces
      */
     public function testNamespacesSet() {
       $dom = new Document();
@@ -202,9 +202,9 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Document::createElement
-     * @covers FluentDOM\Document::appendContent
-     * @covers FluentDOM\Document::appendAttributes
+     * @covers \FluentDOM\Document::createElement
+     * @covers \FluentDOM\Document::appendContent
+     * @covers \FluentDOM\Document::appendAttributes
      */
     public function testCreateElementWithoutNamespace() {
       $dom = new Document();
@@ -217,9 +217,9 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Document::createElement
-     * @covers FluentDOM\Document::appendContent
-     * @covers FluentDOM\Document::appendAttributes
+     * @covers \FluentDOM\Document::createElement
+     * @covers \FluentDOM\Document::appendContent
+     * @covers \FluentDOM\Document::appendAttributes
      */
     public function testCreateElementWithContent() {
       $dom = new Document();
@@ -231,9 +231,9 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Document::createElement
-     * @covers FluentDOM\Document::appendContent
-     * @covers FluentDOM\Document::appendAttributes
+     * @covers \FluentDOM\Document::createElement
+     * @covers \FluentDOM\Document::appendContent
+     * @covers \FluentDOM\Document::appendAttributes
      */
     public function testCreateElementWithZeroContent() {
       $dom = new Document();
@@ -245,9 +245,9 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Document::createElement
-     * @covers FluentDOM\Document::appendContent
-     * @covers FluentDOM\Document::appendAttributes
+     * @covers \FluentDOM\Document::createElement
+     * @covers \FluentDOM\Document::appendContent
+     * @covers \FluentDOM\Document::appendAttributes
      */
     public function testCreateElementWithContentAndAttribute() {
       $dom = new Document();
@@ -261,9 +261,9 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Document::createElement
-     * @covers FluentDOM\Document::appendContent
-     * @covers FluentDOM\Document::appendAttributes
+     * @covers \FluentDOM\Document::createElement
+     * @covers \FluentDOM\Document::appendContent
+     * @covers \FluentDOM\Document::appendAttributes
      */
     public function testCreateElementWithAttributeAsSecondArgument() {
       $dom = new Document();
@@ -277,9 +277,9 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Document::createElement
-     * @covers FluentDOM\Document::appendContent
-     * @covers FluentDOM\Document::appendAttributes
+     * @covers \FluentDOM\Document::createElement
+     * @covers \FluentDOM\Document::appendContent
+     * @covers \FluentDOM\Document::appendAttributes
      */
     public function testCreateElementWithAttributeAsSecondAndThirdArgument() {
       $dom = new Document();
@@ -293,9 +293,9 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Document::createElement
-     * @covers FluentDOM\Document::appendContent
-     * @covers FluentDOM\Document::appendAttributes
+     * @covers \FluentDOM\Document::createElement
+     * @covers \FluentDOM\Document::appendContent
+     * @covers \FluentDOM\Document::appendAttributes
      */
     public function testCreateElementWithNamespace() {
       $dom = new Document();
@@ -308,9 +308,9 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Document::createElement
-     * @covers FluentDOM\Document::appendContent
-     * @covers FluentDOM\Document::appendAttributes
+     * @covers \FluentDOM\Document::createElement
+     * @covers \FluentDOM\Document::appendContent
+     * @covers \FluentDOM\Document::appendAttributes
      */
     public function testCreateElementWithXmlNamespacePrefixExpectingException() {
       $dom = new Document();
@@ -322,8 +322,8 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Document::createElementNs
-     * @covers FluentDOM\Document::appendContent
+     * @covers \FluentDOM\Document::createElementNs
+     * @covers \FluentDOM\Document::appendContent
      */
     public function testCreateElementNsWithContent() {
       $dom = new Document();
@@ -337,7 +337,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Document::createAttribute
+     * @covers \FluentDOM\Document::createAttribute
      */
     public function testCreateAttribute() {
       $dom = new Document();
@@ -350,7 +350,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Document::createAttribute
+     * @covers \FluentDOM\Document::createAttribute
      */
     public function testCreateAttributeWithNamespace() {
       $dom = new Document();
@@ -364,9 +364,9 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Document::__construct
-     * @covers FluentDOM\Document::createElement
-     * @covers FluentDOM\Document::appendElement
+     * @covers \FluentDOM\Document::__construct
+     * @covers \FluentDOM\Document::createElement
+     * @covers \FluentDOM\Document::appendElement
      */
     public function testAppendElement() {
       $dom = new Document();
@@ -378,9 +378,9 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Document::__construct
-     * @covers FluentDOM\Document::createElement
-     * @covers FluentDOM\Document::appendElement
+     * @covers \FluentDOM\Document::__construct
+     * @covers \FluentDOM\Document::createElement
+     * @covers \FluentDOM\Document::appendElement
      */
     public function testAppendElementWithNamespace() {
       $dom = new Document();
@@ -393,7 +393,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Document::evaluate
+     * @covers \FluentDOM\Document::evaluate
      */
     public function testEvaluate() {
       $dom = new Document();
@@ -405,7 +405,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Document::evaluate
+     * @covers \FluentDOM\Document::evaluate
      */
     public function testEvaluateWithContext() {
       $dom = new Document();
@@ -423,7 +423,7 @@ namespace FluentDOM {
       $dom = new Document();
       $dom->loadXML('<foo><bar/></foo>');
       $fd = $dom->find('/foo/bar');
-      $this->assertInstanceOf('FluentDOM\Query', $fd);
+      $this->assertInstanceOf(Query::class, $fd);
       $this->assertSame(
         $dom->documentElement->firstChild,
         $fd[0]

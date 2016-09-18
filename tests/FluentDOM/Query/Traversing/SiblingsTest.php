@@ -13,7 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Query::siblings
+     * @covers \FluentDOM\Query::siblings
      */
     public function testSiblings() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -21,7 +21,7 @@ namespace FluentDOM\Query {
         ->find('//li[@class = "hilite"]')
         ->siblings()
         ->addClass('before');
-      $this->assertInstanceOF('FluentDOM\Query', $fd);
+      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
   }

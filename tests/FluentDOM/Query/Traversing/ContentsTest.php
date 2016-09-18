@@ -13,7 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Query::contents
+     * @covers \FluentDOM\Query::contents
      */
     public function testContents() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__)

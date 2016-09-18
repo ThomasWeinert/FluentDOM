@@ -12,7 +12,7 @@ namespace FluentDOM\Query {
 
     /**
      * @group Traversing
-     * @covers FluentDOM\Query::each
+     * @covers \FluentDOM\Query::each
      */
     public function testEach() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);

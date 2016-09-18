@@ -8,7 +8,7 @@ namespace FluentDOM\Loader\PHP {
   class PDOTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Loader\PHP\PDO
+     * @covers \FluentDOM\Loader\PHP\PDO
      */
     public function testSupportsExpectingTrue() {
       $loader = new PDO();
@@ -16,7 +16,7 @@ namespace FluentDOM\Loader\PHP {
     }
 
     /**
-     * @covers FluentDOM\Loader\PHP\PDO
+     * @covers \FluentDOM\Loader\PHP\PDO
      */
     public function testSupportsExpectingFalse() {
       $loader = new PDO();
@@ -24,7 +24,7 @@ namespace FluentDOM\Loader\PHP {
     }
 
     /**
-     * @covers FluentDOM\Loader\PHP\PDO
+     * @covers \FluentDOM\Loader\PHP\PDO
      */
     public function testLoad() {
       if (!(extension_loaded('pdo') && extension_loaded('pdo_sqlite'))) {
@@ -48,7 +48,7 @@ namespace FluentDOM\Loader\PHP {
     }
 
     /**
-     * @covers FluentDOM\Loader\PHP\PDO
+     * @covers \FluentDOM\Loader\PHP\PDO
      */
     public function testLoadWithInvalidSourceExpectingNull() {
       $loader = new PDO();

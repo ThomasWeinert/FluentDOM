@@ -8,7 +8,7 @@ namespace FluentDOM\Loader\Text {
   class CSVTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Loader\Text\CSV
+     * @covers \FluentDOM\Loader\Text\CSV
      */
     public function testSupportsExpectingTrue() {
       $loader = new CSV();
@@ -16,7 +16,7 @@ namespace FluentDOM\Loader\Text {
     }
 
     /**
-     * @covers FluentDOM\Loader\Text\CSV
+     * @covers \FluentDOM\Loader\Text\CSV
      */
     public function testSupportsExpectingFalse() {
       $loader = new CSV();
@@ -24,7 +24,7 @@ namespace FluentDOM\Loader\Text {
     }
 
     /**
-     * @covers FluentDOM\Loader\Text\CSV
+     * @covers \FluentDOM\Loader\Text\CSV
      */
     public function testLoad() {
       $loader = new CSV();
@@ -43,7 +43,7 @@ namespace FluentDOM\Loader\Text {
     }
 
     /**
-     * @covers FluentDOM\Loader\Text\CSV
+     * @covers \FluentDOM\Loader\Text\CSV
      */
     public function testLoadFromFile() {
       $loader = new CSV();
@@ -62,7 +62,7 @@ namespace FluentDOM\Loader\Text {
     }
 
     /**
-     * @covers FluentDOM\Loader\Text\CSV
+     * @covers \FluentDOM\Loader\Text\CSV
      */
     public function testLoadFromArray() {
       $loader = new CSV();
@@ -81,7 +81,7 @@ namespace FluentDOM\Loader\Text {
     }
 
     /**
-     * @covers FluentDOM\Loader\Text\CSV
+     * @covers \FluentDOM\Loader\Text\CSV
      */
     public function testLoadFromTraversable() {
       $loader = new CSV();
@@ -100,7 +100,7 @@ namespace FluentDOM\Loader\Text {
     }
 
     /**
-     * @covers FluentDOM\Loader\Text\CSV
+     * @covers \FluentDOM\Loader\Text\CSV
      */
     public function testLoadWithDefinedFields() {
       $loader = new CSV();
@@ -130,7 +130,7 @@ namespace FluentDOM\Loader\Text {
     }
 
     /**
-     * @covers FluentDOM\Loader\Text\CSV
+     * @covers \FluentDOM\Loader\Text\CSV
      */
     public function testLoadNormalizesNames() {
       $loader = new CSV();
@@ -149,7 +149,7 @@ namespace FluentDOM\Loader\Text {
     }
 
     /**
-     * @covers FluentDOM\Loader\Text\CSV
+     * @covers \FluentDOM\Loader\Text\CSV
      */
     public function testLoadWithoutColumnNames() {
       $loader = new CSV();
@@ -173,7 +173,7 @@ namespace FluentDOM\Loader\Text {
     }
 
     /**
-     * @covers FluentDOM\Loader\Text\CSV
+     * @covers \FluentDOM\Loader\Text\CSV
      */
     public function testLoadWithInvalidSourceExpectingNull() {
       $loader = new CSV();

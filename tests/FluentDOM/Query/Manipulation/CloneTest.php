@@ -13,7 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationCopy
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testClone() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//item');

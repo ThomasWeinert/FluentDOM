@@ -13,7 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFilter
-     * @covers FluentDOM\Query::get
+     * @covers \FluentDOM\Query::get
      */
     public function testGet() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('/items/*');
@@ -29,7 +29,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFilter
-     * @covers FluentDOM\Query::get
+     * @covers \FluentDOM\Query::get
      */
     public function testGetWithPosition() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//*');
@@ -44,7 +44,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFilter
-     * @covers FluentDOM\Query::get
+     * @covers \FluentDOM\Query::get
      */
     public function testGetWithNegativePosition() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('/items/*');
@@ -59,7 +59,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFilter
-     * @covers FluentDOM\Query::get
+     * @covers \FluentDOM\Query::get
      */
     public function testGetWithInvalidPosition() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('/*');

@@ -13,7 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testHtmlRead() {
       $query = $this
@@ -30,7 +30,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testHtmlReadEmpty() {
       $query = $this
@@ -42,7 +42,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testHtmlWrite() {
       $query = $this
@@ -51,7 +51,7 @@ namespace FluentDOM\Query {
         )
         ->find('//body')
         ->html('Hello <b>World!</b>');
-      $this->assertInstanceOf('FluentDOM\\Query', $query);
+      $this->assertInstanceOf(Query::class, $query);
       $this->assertEquals(
         '<html><body>Hello <b>World!</b></body></html>'."\n",
         $query->document->saveHtml()
@@ -61,7 +61,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testHtmlWriteUsingCallback() {
       $query = $this
@@ -74,7 +74,7 @@ namespace FluentDOM\Query {
             return '<b>'.$node->nodeValue.'</b>';
           }
         );
-      $this->assertInstanceOf('FluentDOM\\Query', $query);
+      $this->assertInstanceOf(Query::class, $query);
       $this->assertEquals(
         '<html><body><p><b>Paragraph One</b></p><p><b>Paragraph Two</b></p></body></html>'."\n",
         $query->document->saveHtml()

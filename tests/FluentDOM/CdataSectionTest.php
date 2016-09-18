@@ -7,7 +7,7 @@ namespace FluentDOM {
   class CdataSectionTest extends TestCase {
 
     /**
-     * @covers FluentDOM\CdataSection
+     * @covers \FluentDOM\CdataSection
      */
     public function testMagicMethodToString() {
       $dom = new Document();

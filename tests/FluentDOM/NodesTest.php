@@ -1,6 +1,8 @@
 <?php
 namespace FluentDOM {
 
+  use FluentDOM\Iterators\NodesIterator;
+
   require_once(__DIR__.'/TestCase.php');
 
   class Nodes_TestProxy extends Nodes {
@@ -14,7 +16,7 @@ namespace FluentDOM {
     public static $_fd;
 
     /**
-     * @covers FluentDOM\Nodes::__construct
+     * @covers \FluentDOM\Nodes::__construct
      */
     public function testConstructorWithXml() {
       $dom = new \DOMDocument();
@@ -27,7 +29,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Nodes::__construct
+     * @covers \FluentDOM\Nodes::__construct
      */
     public function testConstructorWithHtml() {
       $dom = new \DOMDocument();
@@ -40,7 +42,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Nodes::__construct
+     * @covers \FluentDOM\Nodes::__construct
      */
     public function testConstructorWithHtmlFragment() {
       $fd = new Nodes('<label>Test</label><input>', 'html-fragment');
@@ -52,7 +54,7 @@ namespace FluentDOM {
 
     /**
      * @group Load
-     * @covers FluentDOM\Nodes::load
+     * @covers \FluentDOM\Nodes::load
      */
     public function testLoadWithNodes() {
       $fdOne = new Nodes();
@@ -63,7 +65,7 @@ namespace FluentDOM {
 
     /**
      * @group Load
-     * @covers FluentDOM\Nodes::load
+     * @covers \FluentDOM\Nodes::load
      */
     public function testLoadWithDocument() {
       $fd = new Nodes();
@@ -76,7 +78,7 @@ namespace FluentDOM {
 
     /**
      * @group Load
-     * @covers FluentDOM\Nodes::load
+     * @covers \FluentDOM\Nodes::load
      */
     public function testLoadWithDomNode() {
       $dom = new \DOMDocument();
@@ -89,10 +91,10 @@ namespace FluentDOM {
 
     /**
      * @group Load
-     * @covers FluentDOM\Nodes::load
+     * @covers \FluentDOM\Nodes::load
      */
     public function testLoadWithCustomLoader() {
-      $loader = $this->getMock('FluentDOM\Loadable');
+      $loader = $this->getMockBuilder(Loadable::class)->getMock();
       $loader
         ->expects($this->once())
         ->method('supports')
@@ -114,8 +116,8 @@ namespace FluentDOM {
 
     /**
      * @group Load
-     * @covers FluentDOM\Nodes::load
-     * @covers FluentDOM\Nodes::setContentType
+     * @covers \FluentDOM\Nodes::load
+     * @covers \FluentDOM\Nodes::setContentType
      */
     public function testLoadWithUnknownContentType() {
       $dom = new Document();
@@ -126,10 +128,10 @@ namespace FluentDOM {
 
     /**
      * @group Load
-     * @covers FluentDOM\Nodes::loaders
+     * @covers \FluentDOM\Nodes::loaders
      */
     public function testLoadersGetAfterSet() {
-      $loader = $this->getMock('FluentDOM\Loadable');
+      $loader = $this->getMockBuilder(Loadable::class)->getMock();
       $fd = new Nodes();
       $fd->loaders($loader);
       $this->assertSame($loader, $fd->loaders());
@@ -137,37 +139,37 @@ namespace FluentDOM {
 
     /**
      * @group Load
-     * @covers FluentDOM\Nodes::loaders
+     * @covers \FluentDOM\Nodes::loaders
      */
     public function testLoadersGetImplicitCreate() {
       $fd = new Nodes();
-      $this->assertInstanceOf('FluentDOM\Loadable', $fd->loaders());
+      $this->assertInstanceOf(Loadable::class, $fd->loaders());
     }
 
     /**
      * @group Load
-     * @covers FluentDOM\Nodes::loaders
+     * @covers \FluentDOM\Nodes::loaders
      */
     public function testLoadersGetCreateFromArray() {
       $fd = new Nodes();
-      $fd->loaders([$loader = $this->getMock('FluentDOM\Loadable')]);
-      $this->assertInstanceOf('FluentDOM\Loadable', $fd->loaders());
+      $fd->loaders([$loader = $this->getMockBuilder(Loadable::class)->getMock()]);
+      $this->assertInstanceOf(Loadable::class, $fd->loaders());
       $this->assertSame([$loader], iterator_to_array($fd->loaders()));
     }
 
     /**
      * @group Load
-     * @covers FluentDOM\Nodes::loaders
+     * @covers \FluentDOM\Nodes::loaders
      */
     public function testLoadersGetWithInvalidLoaderExpectingException() {
       $fd = new Nodes();
-      $this->setExpectedException('InvalidArgumentException');
+      $this->setExpectedException(\InvalidArgumentException::class);
       $fd->loaders('FOO');
     }
 
     /**
      * @group Load
-     * @covers FluentDOM\Nodes::push
+     * @covers \FluentDOM\Nodes::push
      */
     public function testPushWithNode() {
       $fd = new Nodes();
@@ -178,7 +180,7 @@ namespace FluentDOM {
 
     /**
      * @group Load
-     * @covers FluentDOM\Nodes::push
+     * @covers \FluentDOM\Nodes::push
      */
     public function testPushWithTraversable() {
       $fd = new Nodes();
@@ -189,41 +191,41 @@ namespace FluentDOM {
 
     /**
      * @group Load
-     * @covers FluentDOM\Nodes::push
+     * @covers \FluentDOM\Nodes::push
      */
     public function testPushWithInvalidArgumentExpectingException() {
       $fd = new Nodes();
-      $this->setExpectedException('InvalidArgumentException');
+      $this->setExpectedException(\InvalidArgumentException::class);
       $fd->push(FALSE);
     }
 
     /**
      * @group Load
-     * @covers FluentDOM\Nodes::push
+     * @covers \FluentDOM\Nodes::push
      */
     public function testPushNodeFromDifferentDocumentExpectingException() {
       $dom = new Document();
       $dom->appendElement('test');
       $fd = new Nodes();
-      $this->setExpectedException('OutOfBoundsException');
+      $this->setExpectedException(\OutOfBoundsException::class);
       $fd->push($dom->documentElement);
     }
 
     /**
      * @group Load
-     * @covers FluentDOM\Nodes::push
+     * @covers \FluentDOM\Nodes::push
      */
     public function testPushListWithNodesFromDifferentDocumentExpectingException() {
       $dom = new Document();
       $dom->appendElement('test');
       $fd = new Nodes();
-      $this->setExpectedException('OutOfBoundsException');
+      $this->setExpectedException(\OutOfBoundsException::class);
       $fd->push([$dom->documentElement]);
     }
 
     /**
      * @group CoreFunctions
-     * @covers FluentDOM\Nodes::formatOutput
+     * @covers \FluentDOM\Nodes::formatOutput
      */
     public function testFormatOutput() {
       $fd = new Nodes();
@@ -242,7 +244,7 @@ namespace FluentDOM {
 
     /**
      * @group CoreFunctions
-     * @covers FluentDOM\Nodes::formatOutput
+     * @covers \FluentDOM\Nodes::formatOutput
      */
     public function testFormatOutputWithContentTypeHtml() {
       $fd = new Nodes();
@@ -255,7 +257,7 @@ namespace FluentDOM {
 
     /**
      * @group CoreFunctions
-     * @covers FluentDOM\Nodes::item
+     * @covers \FluentDOM\Nodes::item
      */
     public function testItem() {
       $fd = new Nodes();
@@ -265,7 +267,7 @@ namespace FluentDOM {
 
     /**
      * @group CoreFunctions
-     * @covers FluentDOM\Nodes::item
+     * @covers \FluentDOM\Nodes::item
      */
     public function testItemExpectingNull() {
       $fd = new Nodes();
@@ -274,7 +276,7 @@ namespace FluentDOM {
 
     /**
      * @group CoreFunctions
-     * @covers FluentDOM\Nodes::spawn
+     * @covers \FluentDOM\Nodes::spawn
      */
     public function testSpawn() {
       $fdParent = new Nodes;
@@ -288,7 +290,7 @@ namespace FluentDOM {
 
     /**
      * @group CoreFunctions
-     * @covers FluentDOM\Nodes::spawn
+     * @covers \FluentDOM\Nodes::spawn
      */
     public function testSpawnWithElements() {
       $dom = new \DOMDocument;
@@ -305,7 +307,7 @@ namespace FluentDOM {
 
     /**
      * @group CoreFunctions
-     * @covers FluentDOM\Nodes::unique
+     * @covers \FluentDOM\Nodes::unique
      */
     public function testUnique() {
       $fd = new Nodes();
@@ -318,7 +320,7 @@ namespace FluentDOM {
 
     /**
      * @group CoreFunctions
-     * @covers FluentDOM\Nodes::unique
+     * @covers \FluentDOM\Nodes::unique
      */
     public function testUniquewithASingleNode() {
       $fd = new Nodes();
@@ -331,7 +333,7 @@ namespace FluentDOM {
 
     /**
      * @group CoreFunctions
-     * @covers FluentDOM\Nodes::unique
+     * @covers \FluentDOM\Nodes::unique
      */
     public function testUniqueWithUnattachedNodes() {
       $fd = new Nodes();
@@ -342,18 +344,18 @@ namespace FluentDOM {
 
     /**
      * @group CoreFunctions
-     * @covers FluentDOM\Nodes::unique
+     * @covers \FluentDOM\Nodes::unique
      */
     public function testUniqueWithInvalidElementInList() {
       $fd = new Nodes();
-      $this->setExpectedException('InvalidArgumentException');
+      $this->setExpectedException(\InvalidArgumentException::class);
       $fd->unique(['Invalid']);
     }
 
     /**
      * @group CoreFunctions
-     * @covers FluentDOM\Nodes::matches
-     * @covers FluentDOM\Nodes::prepareSelector
+     * @covers \FluentDOM\Nodes::matches
+     * @covers \FluentDOM\Nodes::prepareSelector
      */
     public function testMatchesWithNodeListExpectingTrue() {
       $fd = new Nodes_TestProxy(self::XML);
@@ -362,8 +364,8 @@ namespace FluentDOM {
 
     /**
      * @group CoreFunctions
-     * @covers FluentDOM\Nodes::matches
-     * @covers FluentDOM\Nodes::prepareSelector
+     * @covers \FluentDOM\Nodes::matches
+     * @covers \FluentDOM\Nodes::prepareSelector
      */
     public function testMatchesWithSelectorCallbackExpectingTrue() {
       $fd = new Nodes_TestProxy(self::XML);
@@ -373,8 +375,8 @@ namespace FluentDOM {
 
     /**
      * @group CoreFunctions
-     * @covers FluentDOM\Nodes::matches
-     * @covers FluentDOM\Nodes::prepareSelector
+     * @covers \FluentDOM\Nodes::matches
+     * @covers \FluentDOM\Nodes::prepareSelector
      */
     public function testMatchesWithNodeListExpectingFalse() {
       $fd = new Nodes_TestProxy(self::XML);
@@ -383,8 +385,8 @@ namespace FluentDOM {
 
     /**
      * @group CoreFunctions
-     * @covers FluentDOM\Nodes::matches
-     * @covers FluentDOM\Nodes::prepareSelector
+     * @covers \FluentDOM\Nodes::matches
+     * @covers \FluentDOM\Nodes::prepareSelector
      */
     public function testMatchesWithScalarExpectingTrue() {
       $fd = new Nodes_TestProxy(self::XML);
@@ -395,8 +397,8 @@ namespace FluentDOM {
 
     /**
      * @group CoreFunctions
-     * @covers FluentDOM\Nodes::matches
-     * @covers FluentDOM\Nodes::prepareSelector
+     * @covers \FluentDOM\Nodes::matches
+     * @covers \FluentDOM\Nodes::prepareSelector
      */
     public function testMatchesWithScalarAndContextExpectingTrue() {
       $fd = new Nodes_TestProxy(self::XML);
@@ -410,8 +412,8 @@ namespace FluentDOM {
 
     /**
      * @group CoreFunctions
-     * @covers FluentDOM\Nodes::matches
-     * @covers FluentDOM\Nodes::prepareSelector
+     * @covers \FluentDOM\Nodes::matches
+     * @covers \FluentDOM\Nodes::prepareSelector
      */
     public function testMatchesWithScalarExpectingFalse() {
       $fd = new Nodes_TestProxy(self::XML);
@@ -422,8 +424,8 @@ namespace FluentDOM {
 
     /**
      * @group CoreFunctions
-     * @covers FluentDOM\Nodes::matches
-     * @covers FluentDOM\Nodes::prepareSelector
+     * @covers \FluentDOM\Nodes::matches
+     * @covers \FluentDOM\Nodes::prepareSelector
      */
     public function testMatchesWithPreparedSelectorExpectingTrue() {
       $fd = new Nodes_TestProxy(self::XML);
@@ -437,8 +439,8 @@ namespace FluentDOM {
 
     /**
      * @group CoreFunctions
-     * @covers FluentDOM\Nodes::matches
-     * @covers FluentDOM\Nodes::prepareSelector
+     * @covers \FluentDOM\Nodes::matches
+     * @covers \FluentDOM\Nodes::prepareSelector
      */
     public function testMatchesWithPreparedSelectorExpectingFalse() {
       $fd = new Nodes_TestProxy(self::XML);
@@ -452,8 +454,8 @@ namespace FluentDOM {
 
     /**
      * @group CoreFunctions
-     * @covers FluentDOM\Nodes::__get
-     * @covers FluentDOM\Nodes::__set
+     * @covers \FluentDOM\Nodes::__get
+     * @covers \FluentDOM\Nodes::__set
      */
     public function testGetAfterSetOnPrepareSelector() {
       $fd = new Nodes();
@@ -465,30 +467,30 @@ namespace FluentDOM {
 
     /**
      * @group CoreFunctions
-     * @covers FluentDOM\Nodes::__set
+     * @covers \FluentDOM\Nodes::__set
      */
     public function testSetOnPrepareSelectorExpectingException() {
       $fd = new Nodes();
-      $this->setExpectedException('InvalidArgumentException');
+      $this->setExpectedException(\InvalidArgumentException::class);
       $fd->onPrepareSelector = FALSE;
     }
 
     /**
      * @group Interfaces
      * @group IteratorAggregate
-     * @covers FluentDOM\Nodes::getIterator
+     * @covers \FluentDOM\Nodes::getIterator
      */
     public function testIterator() {
       $fd = new Nodes(self::XML);
       $fd = $fd->find('//item');
-      $this->assertInstanceOf('FluentDOM\Iterators\NodesIterator', $fd->getIterator());
-      $this->assertcount(3, iterator_to_array($fd));
+      $this->assertInstanceOf(NodesIterator::class, $fd->getIterator());
+      $this->assertCount(3, $fd);
     }
 
     /**
      * @group Interfaces
      * @group ArrayAccess
-     * @covers FluentDOM\Nodes::offsetExists
+     * @covers \FluentDOM\Nodes::offsetExists
      *
      */
     public function testOffsetExistsExpectingTrue() {
@@ -500,7 +502,7 @@ namespace FluentDOM {
     /**
      * @group Interfaces
      * @group ArrayAccess
-     * @covers FluentDOM\Nodes::offsetExists
+     * @covers \FluentDOM\Nodes::offsetExists
      *
      */
     public function testOffsetExistsExpectingFalse() {
@@ -512,7 +514,7 @@ namespace FluentDOM {
     /**
      * @group Interfaces
      * @group ArrayAccess
-     * @covers FluentDOM\Nodes::offsetGet
+     * @covers \FluentDOM\Nodes::offsetGet
      */
     public function testOffsetGet() {
       $fd = new Nodes(self::XML);
@@ -523,31 +525,31 @@ namespace FluentDOM {
     /**
      * @group Interfaces
      * @group ArrayAccess
-     * @covers FluentDOM\Nodes::offsetSet
+     * @covers \FluentDOM\Nodes::offsetSet
      */
     public function testOffsetSetExpectingException() {
       $fd = new Nodes(self::XML);
       $fd = $fd->find('//item');
-      $this->setExpectedException('BadMethodCallException');
+      $this->setExpectedException(\BadMethodCallException::class);
       $fd[2] = '123';
     }
 
     /**
      * @group Interfaces
      * @group ArrayAccess
-     * @covers FluentDOM\Nodes::offsetUnset
+     * @covers \FluentDOM\Nodes::offsetUnset
      */
     public function testOffsetUnsetExpectingException() {
       $fd = new Nodes();
       $fd = $fd->find('//item');
-      $this->setExpectedException('BadMethodCallException');
+      $this->setExpectedException(\BadMethodCallException::class);
       unset($fd[2]);
     }
 
     /**
      * @group Interfaces
      * @group Countable
-     * @covers FluentDOM\Nodes::count
+     * @covers \FluentDOM\Nodes::count
      */
     public function testInterfaceCountableExpecting3() {
       $fd = new Nodes(self::XML);
@@ -558,7 +560,7 @@ namespace FluentDOM {
     /**
      * @group Interfaces
      * @group Countable
-     * @covers FluentDOM\Nodes::count
+     * @covers \FluentDOM\Nodes::count
      */
     public function testInterfaceCountableExpectingZero() {
       $fd = new Nodes(self::XML);
@@ -567,10 +569,10 @@ namespace FluentDOM {
 
     /**
      * @group Properties
-     * @covers FluentDOM\Nodes::__isset
-     * @covers FluentDOM\Nodes::__get
-     * @covers FluentDOM\Nodes::__set
-     * @covers FluentDOM\Nodes::__unset
+     * @covers \FluentDOM\Nodes::__isset
+     * @covers \FluentDOM\Nodes::__get
+     * @covers \FluentDOM\Nodes::__set
+     * @covers \FluentDOM\Nodes::__unset
      */
     public function testDynamicProperty() {
       $fd = new Nodes();
@@ -584,26 +586,26 @@ namespace FluentDOM {
 
     /**
      * @group Properties
-     * @covers FluentDOM\Nodes::__unset
+     * @covers \FluentDOM\Nodes::__unset
      */
     public function testDynamicPropertyUnsetOnNonExistingPropertyExpectingException() {
       $fd = new Nodes();
-      $this->setExpectedException('BadMethodCallException');
+      $this->setExpectedException(\BadMethodCallException::class);
       unset($fd->dynamicProperty);
     }
 
     /**
-     * @covers FluentDOM\Nodes::__set
+     * @covers \FluentDOM\Nodes::__set
      */
     public function testSetPropertyXpath() {
       $fd = new Nodes(self::XML);;
-      $this->setExpectedException('BadMethodCallException');
+      $this->setExpectedException(\BadMethodCallException::class);
       $fd->xpath = $fd->xpath();
     }
 
     /**
      * @group CoreFunctions
-     * @covers FluentDOM\Nodes::xpath
+     * @covers \FluentDOM\Nodes::xpath
      */
     public function testUseXpathToCallEvaluate() {
       $fd = new Nodes_TestProxy(self::XML);
@@ -615,7 +617,7 @@ namespace FluentDOM {
 
     /**
      * @group Properties
-     * @covers FluentDOM\Nodes::__isset
+     * @covers \FluentDOM\Nodes::__isset
      */
     public function testIssetPropertyLength() {
       $fd = new Nodes();
@@ -624,7 +626,7 @@ namespace FluentDOM {
 
     /**
      * @group Properties
-     * @covers FluentDOM\Nodes::__get
+     * @covers \FluentDOM\Nodes::__get
      */
     public function testGetPropertyLength() {
       $fd = new Nodes(self::XML);
@@ -634,27 +636,27 @@ namespace FluentDOM {
 
     /**
      * @group Properties
-     * @covers FluentDOM\Nodes::__set
+     * @covers \FluentDOM\Nodes::__set
      */
     public function testSetPropertyLength() {
       $fd = new Nodes();
-      $this->setExpectedException('BadMethodCallException');
+      $this->setExpectedException(\BadMethodCallException::class);
       $fd->length = 50;
     }
 
     /**
      * @group Properties
-     * @covers FluentDOM\Nodes::__unset
+     * @covers \FluentDOM\Nodes::__unset
      */
     public function testUnsetPropertyLength() {
       $fd = new Nodes;
-      $this->setExpectedException('BadMethodCallException');
+      $this->setExpectedException(\BadMethodCallException::class);
       unset($fd->length);
     }
 
     /**
      * @group Properties
-     * @covers FluentDOM\Nodes::__isset
+     * @covers \FluentDOM\Nodes::__isset
      */
     public function testIssetPropertyDocumentExpectingFalse() {
       $fd = new Nodes();
@@ -663,7 +665,7 @@ namespace FluentDOM {
 
     /**
      * @group Properties
-     * @covers FluentDOM\Nodes::__isset
+     * @covers \FluentDOM\Nodes::__isset
      */
     public function testIssetPropertyDocumentExpectingTrue() {
       $fd = new Nodes();
@@ -673,19 +675,19 @@ namespace FluentDOM {
 
     /**
      * @group Properties
-     * @covers FluentDOM\Nodes::__get
-     * @covers FluentDOM\Nodes::getDocument
+     * @covers \FluentDOM\Nodes::__get
+     * @covers \FluentDOM\Nodes::getDocument
      */
     public function testGetPropertyDocumentImplicitCreate() {
       $fd = new Nodes;
       $document = $fd->document;
-      $this->assertInstanceOf('FluentDOM\\Document', $document);
+      $this->assertInstanceOf(Document::class, $document);
       $this->assertSame($document, $fd->document);
     }
 
     /**
      * @group Properties
-     * @covers FluentDOM\Nodes::__isset
+     * @covers \FluentDOM\Nodes::__isset
      */
     public function testIssetPropertyContentType() {
       $fd = new Nodes();
@@ -694,7 +696,7 @@ namespace FluentDOM {
 
     /**
      * @group Properties
-     * @covers FluentDOM\Nodes::__get
+     * @covers \FluentDOM\Nodes::__get
      */
     public function testGetPropertyContentType() {
       $fd = new Nodes();
@@ -703,8 +705,8 @@ namespace FluentDOM {
 
     /**
      * @group Properties
-     * @covers FluentDOM\Nodes::__set
-     * @covers FluentDOM\Nodes::setContentType
+     * @covers \FluentDOM\Nodes::__set
+     * @covers \FluentDOM\Nodes::setContentType
      * @dataProvider getContentTypeSamples
      */
     public function testSetPropertyContentType($contentType, $expected) {
@@ -728,8 +730,8 @@ namespace FluentDOM {
 
     /**
      * @group Properties
-     * @covers FluentDOM\Nodes::__set
-     * @covers FluentDOM\Nodes::setContentType
+     * @covers \FluentDOM\Nodes::__set
+     * @covers \FluentDOM\Nodes::setContentType
      */
     public function testSetPropertyContentTypeChaining() {
       $fdParent = new Nodes();
@@ -743,17 +745,17 @@ namespace FluentDOM {
 
     /**
      * @group Properties
-     * @covers FluentDOM\Nodes::__get
+     * @covers \FluentDOM\Nodes::__get
      */
     public function testGetPropertyXpath() {
       $fd = new Nodes();
-      $this->assertInstanceOf('FluentDOM\Xpath', $fd->xpath);
+      $this->assertInstanceOf(Xpath::class, $fd->xpath);
     }
 
     /**
      * @group MagicFunctions
      * @group StringCastable
-     * @covers FluentDOM\Nodes::__toString
+     * @covers \FluentDOM\Nodes::__toString
      */
     public function testMagicToString() {
       $fd = new Nodes(self::XML);;
@@ -763,7 +765,7 @@ namespace FluentDOM {
     /**
      * @group MagicFunctions
      * @group StringCastable
-     * @covers FluentDOM\Nodes::__toString
+     * @covers \FluentDOM\Nodes::__toString
      */
     public function testMagicToStringHtml() {
       $dom = new \DOMDocument();
@@ -778,8 +780,8 @@ namespace FluentDOM {
 
     /**
      * @group Core
-     * @covers FluentDOM\Nodes::xpath()
-     * @covers FluentDOM\Nodes::getXpath()
+     * @covers \FluentDOM\Nodes::xpath()
+     * @covers \FluentDOM\Nodes::getXpath()
      */
     public function testXpathGetFromDocument() {
       $dom = new Document();
@@ -792,8 +794,8 @@ namespace FluentDOM {
 
     /**
      * @group Core
-     * @covers FluentDOM\Nodes::xpath()
-     * @covers FluentDOM\Nodes::getXpath()
+     * @covers \FluentDOM\Nodes::xpath()
+     * @covers \FluentDOM\Nodes::getXpath()
      */
     public function testXpathGetImplicitCreate() {
       $dom = new \DOMDocument();
@@ -807,10 +809,10 @@ namespace FluentDOM {
 
     /**
      * @group Core
-     * @covers FluentDOM\Nodes::xpath()
-     * @covers FluentDOM\Nodes::getXpath()
-     * @covers FluentDOM\Nodes::registerNamespace()
-     * @covers FluentDOM\Nodes::applyNamespaces
+     * @covers \FluentDOM\Nodes::xpath()
+     * @covers \FluentDOM\Nodes::getXpath()
+     * @covers \FluentDOM\Nodes::registerNamespace()
+     * @covers \FluentDOM\Nodes::applyNamespaces
      */
     public function testXpathGetImplicitCreateWithNamespace() {
       $dom = new \DOMDocument();
@@ -825,8 +827,8 @@ namespace FluentDOM {
 
     /**
      * @group Core
-     * @covers FluentDOM\Nodes::registerNamespace
-     * @covers FluentDOM\Nodes::applyNamespaces
+     * @covers \FluentDOM\Nodes::registerNamespace
+     * @covers \FluentDOM\Nodes::applyNamespaces
      */
     public function testRegisterNamespaceBeforeLoad() {
       $fd = new Nodes();
@@ -837,8 +839,8 @@ namespace FluentDOM {
 
     /**
      * @group Core
-     * @covers FluentDOM\Nodes::registerNamespace
-     * @covers FluentDOM\Nodes::applyNamespaces
+     * @covers \FluentDOM\Nodes::registerNamespace
+     * @covers \FluentDOM\Nodes::applyNamespaces
      */
     public function testRegisterNamespaceAfterLoad() {
       $fd = new Nodes();
@@ -849,8 +851,8 @@ namespace FluentDOM {
 
     /**
      * @group Core
-     * @covers FluentDOM\Nodes::registerNamespace
-     * @covers FluentDOM\Nodes::applyNamespaces
+     * @covers \FluentDOM\Nodes::registerNamespace
+     * @covers \FluentDOM\Nodes::applyNamespaces
      */
     public function testRegisterNamespaceAfterLoadOnCreatedXpath() {
       $dom = new \DOMDocument();
@@ -863,7 +865,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Nodes::getSelectorCallback
+     * @covers \FluentDOM\Nodes::getSelectorCallback
      */
     public function testGetSelectorCallbackWithNullExpectingNull() {
       $fd = new Nodes(self::XML);
@@ -873,7 +875,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Nodes::getSelectorCallback
+     * @covers \FluentDOM\Nodes::getSelectorCallback
      */
     public function testGetSelectorCallbackWithStringExpectingTrue() {
       $fd = new Nodes(self::XML);
@@ -887,7 +889,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Nodes::getSelectorCallback
+     * @covers \FluentDOM\Nodes::getSelectorCallback
      */
     public function testGetSelectorCallbackWithNodeExpectingTrue() {
       $fd = new Nodes(self::XML);
@@ -901,7 +903,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Nodes::getSelectorCallback
+     * @covers \FluentDOM\Nodes::getSelectorCallback
      */
     public function testGetSelectorCallbackWithNodeArrayExpectingTrue() {
       $fd = new Nodes(self::XML);
@@ -917,7 +919,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Nodes::getSelectorCallback
+     * @covers \FluentDOM\Nodes::getSelectorCallback
      */
     public function testGetSelectorCallbackWithCallableExpectingTrue() {
       $fd = new Nodes(self::XML);
@@ -935,7 +937,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Nodes::getSelectorCallback
+     * @covers \FluentDOM\Nodes::getSelectorCallback
      */
     public function testGetSelectorCallbackWithEmptyArrayExpectingFalse() {
       $fd = new Nodes(self::XML);
@@ -951,7 +953,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Nodes::getSelectorCallback
+     * @covers \FluentDOM\Nodes::getSelectorCallback
      */
     public function testGetSelectorCallbackWithInvalidSelectorExpectingException() {
       $fd = new Nodes(self::XML);

@@ -10,7 +10,7 @@ namespace FluentDOM\Loader\PHP {
   class SimpleXmlTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Loader\PHP\SimpleXml
+     * @covers \FluentDOM\Loader\PHP\SimpleXml
      */
     public function testSupportsExpectingTrue() {
       $loader = new SimpleXml();
@@ -18,7 +18,7 @@ namespace FluentDOM\Loader\PHP {
     }
 
     /**
-     * @covers FluentDOM\Loader\PHP\SimpleXml
+     * @covers \FluentDOM\Loader\PHP\SimpleXml
      */
     public function testSupportsExpectingFalse() {
       $loader = new SimpleXml();
@@ -26,7 +26,7 @@ namespace FluentDOM\Loader\PHP {
     }
 
     /**
-     * @covers FluentDOM\Loader\PHP\SimpleXml
+     * @covers \FluentDOM\Loader\PHP\SimpleXml
      */
     public function testLoadWithValidXml() {
       $loader = new SimpleXml();
@@ -40,7 +40,7 @@ namespace FluentDOM\Loader\PHP {
     }
 
     /**
-     * @covers FluentDOM\Loader\PHP\SimpleXml
+     * @covers \FluentDOM\Loader\PHP\SimpleXml
      */
     public function testLoadSelectingChildNode() {
       $loader = new SimpleXml();
@@ -57,7 +57,7 @@ namespace FluentDOM\Loader\PHP {
     }
 
     /**
-     * @covers FluentDOM\Loader\PHP\SimpleXml
+     * @covers \FluentDOM\Loader\PHP\SimpleXml
      */
     public function testLoadWithInvalidSourceExpectingNull() {
       $loader = new SimpleXml();
@@ -85,7 +85,7 @@ namespace FluentDOM\Loader\PHP {
     }
 
     /**
-     * @covers FluentDOM\Loader\PHP\SimpleXml
+     * @covers \FluentDOM\Loader\PHP\SimpleXml
      */
     public function testLoadFragmentWithTypeExpectingNull() {
       $loader = new SimpleXml();
@@ -95,7 +95,7 @@ namespace FluentDOM\Loader\PHP {
     }
 
     /**
-     * @covers FluentDOM\Loader\PHP\SimpleXml
+     * @covers \FluentDOM\Loader\PHP\SimpleXml
      */
     public function testLoadFragmentWithInvalidSourceExpectingException() {
       $loader = new SimpleXml();

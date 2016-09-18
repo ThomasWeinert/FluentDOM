@@ -11,10 +11,10 @@ namespace FluentDOM\Query {
     protected $_directory = __DIR__;
 
     /**
-     * @covers FluentDOM\Query\Attributes::__construct
+     * @covers \FluentDOM\Query\Attributes::__construct
      */
     public function testConstructor() {
-      $fd = $this->getMock('FluentDOM\Query');
+      $fd = $this->getMockBuilder(Query::class)->getMock();
       $attr = new Attributes($fd);
       $this->assertAttributeSame(
         $fd, '_fd', $attr
@@ -22,7 +22,7 @@ namespace FluentDOM\Query {
     }
 
     /**
-     * @covers FluentDOM\Query\Attributes::toArray
+     * @covers \FluentDOM\Query\Attributes::toArray
      */
     public function testToArray() {
       $fd = $this->getFluentDOMWithNodeFixture(
@@ -36,7 +36,7 @@ namespace FluentDOM\Query {
     }
 
     /**
-     * @covers FluentDOM\Query\Attributes::offsetExists
+     * @covers \FluentDOM\Query\Attributes::offsetExists
      */
     public function testOffsetExistsExpectingTrue() {
       $fd = $this->getFluentDOMWithNodeFixture(
@@ -47,7 +47,7 @@ namespace FluentDOM\Query {
     }
 
     /**
-     * @covers FluentDOM\Query\Attributes::offsetExists
+     * @covers \FluentDOM\Query\Attributes::offsetExists
      */
     public function testOffsetExistsExpectingFalse() {
       $fd = $this->getFluentDOMWithNodeFixture(
@@ -58,10 +58,10 @@ namespace FluentDOM\Query {
     }
 
     /**
-     * @covers FluentDOM\Query\Attributes::offsetExists
+     * @covers \FluentDOM\Query\Attributes::offsetExists
      */
     public function testOffsetExistsWithoutSelectionExpectingFalse() {
-      $fd = $this->getMock('FluentDOM\Query');
+      $fd = $this->getMockBuilder(Query::class)->getMock();
       $fd
         ->expects($this->any())
         ->method('offsetExists')
@@ -72,10 +72,10 @@ namespace FluentDOM\Query {
     }
 
     /**
-     * @covers FluentDOM\Query\Attributes::offsetGet
+     * @covers \FluentDOM\Query\Attributes::offsetGet
      */
     public function testOffsetGet() {
-      $fd = $this->getMock('FluentDOM\Query');
+      $fd = $this->getMockBuilder(Query::class)->getMock();
       $fd
         ->expects($this->once())
         ->method('attr')
@@ -86,10 +86,10 @@ namespace FluentDOM\Query {
     }
 
     /**
-     * @covers FluentDOM\Query\Attributes::offsetSet
+     * @covers \FluentDOM\Query\Attributes::offsetSet
      */
     public function testOffsetSet() {
-      $fd = $this->getMock('FluentDOM\Query');
+      $fd = $this->getMockBuilder(Query::class)->getMock();
       $fd
         ->expects($this->once())
         ->method('attr')
@@ -99,10 +99,10 @@ namespace FluentDOM\Query {
     }
 
     /**
-     * @covers FluentDOM\Query\Attributes::offsetUnset
+     * @covers \FluentDOM\Query\Attributes::offsetUnset
      */
     public function testOffsetUnset() {
-      $fd = $this->getMock('FluentDOM\Query');
+      $fd = $this->getMockBuilder(Query::class)->getMock();
       $fd
         ->expects($this->once())
         ->method('removeAttr')
@@ -112,8 +112,8 @@ namespace FluentDOM\Query {
     }
 
     /**
-     * @covers FluentDOM\Query\Attributes::count
-     * @covers FluentDOM\Query\Attributes::getFirstElement
+     * @covers \FluentDOM\Query\Attributes::count
+     * @covers \FluentDOM\Query\Attributes::getFirstElement
      */
     public function testCountExpectingTwo() {
       $fd = $this->getFluentDOMWithNodeFixture(
@@ -126,11 +126,11 @@ namespace FluentDOM\Query {
     }
 
     /**
-     * @covers FluentDOM\Query\Attributes::count
-     * @covers FluentDOM\Query\Attributes::getFirstElement
+     * @covers \FluentDOM\Query\Attributes::count
+     * @covers \FluentDOM\Query\Attributes::getFirstElement
      */
     public function testCountExpectingZero() {
-      $fd = $this->getMock('FluentDOM\Query');
+      $fd = $this->getMockBuilder(Query::class)->getMock();
       $fd
         ->expects($this->any())
         ->method('offsetExists')
@@ -143,7 +143,7 @@ namespace FluentDOM\Query {
     }
 
     /**
-     * @covers FluentDOM\Query\Attributes::getIterator
+     * @covers \FluentDOM\Query\Attributes::getIterator
      */
     public function testGetIterator() {
       $fd = $this->getFluentDOMWithNodeFixture(
@@ -159,10 +159,14 @@ namespace FluentDOM\Query {
 
     /********************
      * Fixtures
-     ********************/
+     *******************/
 
-    public function getFluentDOMWithNodeFixture($node) {
-      $fd = $this->getMock('FluentDOM\Query');
+    /**
+     * @param \DOMNode $node
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    public function getFluentDOMWithNodeFixture(\DOMNode $node) {
+      $fd = $this->getMockBuilder(Query::class)->getMock();
       $fd
         ->expects($this->any())
         ->method('offsetExists')

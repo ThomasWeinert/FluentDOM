@@ -13,7 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingChaining
-     * @covers FluentDOM\Query::addBack
+     * @covers \FluentDOM\Query::addBack
      */
     public function testAddBack() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('/items')->find('.//item');

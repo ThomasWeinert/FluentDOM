@@ -7,7 +7,7 @@ namespace FluentDOM {
   class DocumentFragmentTest extends TestCase {
 
      /**
-     * @covers FluentDOM\DocumentFragment
+     * @covers \FluentDOM\DocumentFragment
      */
     public function testMagicMethodToString() {
       $dom = new Document();
@@ -20,7 +20,7 @@ namespace FluentDOM {
     }
 
      /**
-     * @covers FluentDOM\DocumentFragment
+     * @covers \FluentDOM\DocumentFragment
      */
     public function testFirstElementChild() {
       $dom = new Document();
@@ -35,7 +35,7 @@ namespace FluentDOM {
     }
 
      /**
-     * @covers FluentDOM\DocumentFragment
+     * @covers \FluentDOM\DocumentFragment
      */
     public function testLastElementChild() {
       $dom = new Document();
@@ -50,7 +50,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\DocumentFragment
+     * @covers \FluentDOM\DocumentFragment
      */
     public function testGetIterator() {
       $dom = new Document();
@@ -63,7 +63,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\DocumentFragment
+     * @covers \FluentDOM\DocumentFragment
      */
     public function testCount() {
       $dom = new Document();
@@ -77,7 +77,7 @@ namespace FluentDOM {
     }
 
      /**
-     * @covers FluentDOM\DocumentFragment
+     * @covers \FluentDOM\DocumentFragment
      */
     public function testSaveFragment() {
       $dom = new Document();
@@ -90,7 +90,7 @@ namespace FluentDOM {
     }
 
      /**
-     * @covers FluentDOM\DocumentFragment
+     * @covers \FluentDOM\DocumentFragment
      */
     public function testSaveFragmentAddsNamespaces() {
       $dom = new Document();
@@ -103,7 +103,7 @@ namespace FluentDOM {
     }
 
      /**
-     * @covers FluentDOM\DocumentFragment
+     * @covers \FluentDOM\DocumentFragment
      */
     public function testWithoutNamespaces() {
       $dom = new Document();
@@ -119,7 +119,7 @@ namespace FluentDOM {
     }
 
      /**
-     * @covers FluentDOM\DocumentFragment
+     * @covers \FluentDOM\DocumentFragment
      */
     public function testWithNamespacesFromDocument() {
       $dom = new Document();
@@ -134,7 +134,7 @@ namespace FluentDOM {
     }
 
      /**
-     * @covers FluentDOM\DocumentFragment
+     * @covers \FluentDOM\DocumentFragment
      */
     public function testWithDefaultNamespace() {
       $dom = new Document();
@@ -149,7 +149,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\DocumentFragment
+     * @covers \FluentDOM\DocumentFragment
      */
     public function testWithNamespacesFromElementNode() {
       $dom = new Document();
@@ -165,7 +165,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\DocumentFragment
+     * @covers \FluentDOM\DocumentFragment
      */
     public function testWithDefaultNamespaceFromElementNode() {
       $dom = new Document();
@@ -181,7 +181,7 @@ namespace FluentDOM {
     }
 
      /**
-     * @covers FluentDOM\DocumentFragment
+     * @covers \FluentDOM\DocumentFragment
      */
     public function testWithNamespacesList() {
       $dom = new Document();
@@ -195,7 +195,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\DocumentFragment
+     * @covers \FluentDOM\DocumentFragment
      */
     public function testWithInvalidNamespacesExpectingException() {
       $dom = new Document();
@@ -207,7 +207,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\DocumentFragment
+     * @covers \FluentDOM\DocumentFragment
      */
     public function testWithInvalidFragmentReturningFalse() {
       $dom = new Document();

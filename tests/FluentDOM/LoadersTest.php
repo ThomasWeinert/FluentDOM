@@ -6,37 +6,37 @@ namespace FluentDOM {
   class LoadersTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Loaders
+     * @covers \FluentDOM\Loaders
      */
     public function testConstructorWithTwoLoaders() {
       $loaders = new Loaders(
         $list = [
-          $this->getMock('FluentDOM\Loadable'),
-          $this->getMock('FluentDOM\Loadable')
+          $this->getMockBuilder(Loadable::class)->getMock(),
+          $this->getMockBuilder(Loadable::class)->getMock()
         ]
       );
       $this->assertSame($list, iterator_to_array($loaders));
     }
 
     /**
-     * @covers FluentDOM\Loaders
+     * @covers \FluentDOM\Loaders
      */
     public function testAdd() {
       $loaders = new Loaders();
       $loaders->add(
-        $loader = $this->getMock('FluentDOM\Loadable')
+        $loader = $this->getMockBuilder(Loadable::class)->getMock()
       );
       $this->assertSame([$loader], iterator_to_array($loaders));
     }
 
     /**
-     * @covers FluentDOM\Loaders
+     * @covers \FluentDOM\Loaders
      */
     public function testRemove() {
       $loaders = new Loaders(
         [
-          $loaderOne = $this->getMock('FluentDOM\Loadable'),
-          $loaderTwo = $this->getMock('FluentDOM\Loadable')
+          $loaderOne = $this->getMockBuilder(Loadable::class)->getMock(),
+          $loaderTwo = $this->getMockBuilder(Loadable::class)->getMock()
         ]
       );
       $loaders->remove($loaderOne);
@@ -44,10 +44,10 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Loaders
+     * @covers \FluentDOM\Loaders
      */
     public function testSupportsExpectingTrue() {
-      $loader = $this->getMock('FluentDOM\Loadable');
+      $loader = $this->getMockBuilder(Loadable::class)->getMock();
       $loader
         ->expects($this->once())
         ->method('supports')
@@ -58,10 +58,10 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Loaders
+     * @covers \FluentDOM\Loaders
      */
     public function testSupportsExpectingFalse() {
-      $loader = $this->getMock('FluentDOM\Loadable');
+      $loader = $this->getMockBuilder(Loadable::class)->getMock();
       $loader
         ->expects($this->once())
         ->method('supports')
@@ -72,16 +72,16 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers FluentDOM\Loaders
+     * @covers \FluentDOM\Loaders
      */
     public function testLoadUsesSecondLoader() {
-      $loaderOne = $this->getMock('FluentDOM\Loadable');
+      $loaderOne = $this->getMockBuilder(Loadable::class)->getMock();
       $loaderOne
         ->expects($this->once())
         ->method('supports')
         ->with('text/xml')
         ->will($this->returnValue(FALSE));
-      $loaderTwo = $this->getMock('FluentDOM\Loadable');
+      $loaderTwo = $this->getMockBuilder(Loadable::class)->getMock();
       $loaderTwo
         ->expects($this->once())
         ->method('supports')

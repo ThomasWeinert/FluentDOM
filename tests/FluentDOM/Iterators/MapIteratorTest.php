@@ -8,7 +8,7 @@ namespace FluentDOM\Iterators {
   class MapIteratorTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Iterators\MapIterator
+     * @covers \FluentDOM\Iterators\MapIterator
      */
     public function testIterator() {
       $iterator = new MapIterator(

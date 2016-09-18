@@ -7,7 +7,7 @@ namespace FluentDOM {
   class ProcessingInstructionTest extends TestCase {
 
     /**
-     * @covers FluentDOM\ProcessingInstruction
+     * @covers \FluentDOM\ProcessingInstruction
      */
     public function testMagicMethodToString() {
       $dom = new Document();

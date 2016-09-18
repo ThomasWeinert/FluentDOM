@@ -11,7 +11,7 @@ namespace FluentDOM\Nodes {
     protected $_directory = __DIR__;
 
     /**
-     * @covers FluentDOM\Nodes\Fetcher
+     * @covers \FluentDOM\Nodes\Fetcher
      */
     public function testFetchDocumentNode() {
       $fd = new Nodes(self::XML);
@@ -30,7 +30,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Fetcher
+     * @covers \FluentDOM\Nodes\Fetcher
      */
     public function testFetchWithFilter() {
       $fd = (new Nodes(self::XML))->find('/items/group');
@@ -48,7 +48,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Fetcher
+     * @covers \FluentDOM\Nodes\Fetcher
      */
     public function testFetchReverse() {
       $fd = (new Nodes(self::XML))->find('/items/group');
@@ -69,7 +69,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Fetcher
+     * @covers \FluentDOM\Nodes\Fetcher
      */
     public function testFetchUnique() {
       $fd = (new Nodes(self::XML))->find('/items/group/item');
@@ -85,7 +85,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Fetcher
+     * @covers \FluentDOM\Nodes\Fetcher
      */
     public function testFetchUntil() {
       $fd = (new Nodes(self::XML))->find('/items/group');
@@ -103,7 +103,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Fetcher
+     * @covers \FluentDOM\Nodes\Fetcher
      */
     public function testFetchUntilIncludingStop() {
       $fd = (new Nodes(self::XML))->find('/items/group');
@@ -123,7 +123,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Fetcher
+     * @covers \FluentDOM\Nodes\Fetcher
      */
     public function testFetchUntilWithFilter() {
       $fd = (new Nodes(self::XML))->find('/items/group');
@@ -142,7 +142,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Fetcher
+     * @covers \FluentDOM\Nodes\Fetcher
      */
     public function testFetchWithInvalidExpressionExpectingException() {
       $fd = (new Nodes(self::XML))->find('/items/group');
@@ -155,7 +155,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOM\Nodes\Fetcher
+     * @covers \FluentDOM\Nodes\Fetcher
      */
     public function testFetchWithScalarExpressionExpectingException() {
       $fd = (new Nodes(self::XML))->find('/items/group');

@@ -10,7 +10,7 @@ namespace FluentDOM\Nodes {
   class CompareTest extends TestCase {
 
     /**
-     * @covers FluentDOm\Nodes\Compare
+     * @covers \FluentDOM\Nodes\Compare
      */
     public function testCompareDocumentElementWithChildNode() {
       $dom = new Document();
@@ -26,7 +26,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOm\Nodes\Compare
+     * @covers \FluentDOM\Nodes\Compare
      */
     public function testCompareChildNodeWithDocumentElement() {
       $dom = new Document();
@@ -42,7 +42,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOm\Nodes\Compare
+     * @covers \FluentDOM\Nodes\Compare
      */
     public function testCompareDocumentElementWithItself() {
       $dom = new Document();
@@ -58,7 +58,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOm\Nodes\Compare
+     * @covers \FluentDOM\Nodes\Compare
      */
     public function testCompareParentNodeWithChildNode() {
       $dom = new Document();
@@ -74,7 +74,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOm\Nodes\Compare
+     * @covers \FluentDOM\Nodes\Compare
      */
     public function testCompareChildNodeWithParentNode() {
       $dom = new Document();
@@ -90,7 +90,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOm\Nodes\Compare
+     * @covers \FluentDOM\Nodes\Compare
      */
     public function testCompareNodeWithPreviousSibling() {
       $dom = new Document();
@@ -106,7 +106,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOm\Nodes\Compare
+     * @covers \FluentDOM\Nodes\Compare
      */
     public function testCompareNodeWithNextNode() {
       $dom = new Document();
@@ -122,7 +122,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers FluentDOm\Nodes\Compare
+     * @covers \FluentDOM\Nodes\Compare
      */
     public function testCompareNodesByPositionUsingXpath() {
       $dom = new Document();

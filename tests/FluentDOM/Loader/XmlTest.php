@@ -8,7 +8,7 @@ namespace FluentDOM\Loader {
   class XmlTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Loader\Xml
+     * @covers \FluentDOM\Loader\Xml
      */
     public function testSupportsExpectingTrue() {
       $loader = new Xml();
@@ -16,7 +16,7 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @covers FluentDOM\Loader\Xml
+     * @covers \FluentDOM\Loader\Xml
      */
     public function testSupportsExpectingFalse() {
       $loader = new Xml();
@@ -24,8 +24,8 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @covers FluentDOM\Loader\Xml
-     * @covers FluentDOM\Loader\Supports
+     * @covers \FluentDOM\Loader\Xml
+     * @covers \FluentDOM\Loader\Supports
      */
     public function testLoadWithValidXml() {
       $loader = new Xml();
@@ -40,8 +40,8 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @covers FluentDOM\Loader\Xml
-     * @covers FluentDOM\Loader\Supports
+     * @covers \FluentDOM\Loader\Xml
+     * @covers \FluentDOM\Loader\Supports
      */
     public function testLoadReplacingCdataInXml() {
       $loader = new Xml();
@@ -59,8 +59,8 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @covers FluentDOM\Loader\Xml
-     * @covers FluentDOM\Loader\Supports
+     * @covers \FluentDOM\Loader\Xml
+     * @covers \FluentDOM\Loader\Supports
      */
     public function testLoadWithValidXmlFile() {
       $loader = new Xml();
@@ -74,7 +74,7 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @covers FluentDOM\Loader\Xml
+     * @covers \FluentDOM\Loader\Xml
      */
     public function testLoadWithUnsupportType() {
       $loader = new Xml();
@@ -87,8 +87,8 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @covers FluentDOM\Loader\Xml
-     * @covers FluentDOM\Loader\Supports
+     * @covers \FluentDOM\Loader\Xml
+     * @covers \FluentDOM\Loader\Supports
      */
     public function testLoadFragmentWithValidXml() {
       $loader = new Xml();

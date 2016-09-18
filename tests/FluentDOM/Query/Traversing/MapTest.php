@@ -13,7 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFilter
-     * @covers FluentDOM\Query::map
+     * @covers \FluentDOM\Query::map
      */
     public function testMap() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -32,14 +32,14 @@ namespace FluentDOM\Query {
               )
           )
         );
-      $this->assertInstanceOf('FluentDOM\\Query', $fd);
+      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
 
     /**
      * @group Traversing
      * @group TraversingFilter
-     * @covers FluentDOM\Query::map
+     * @covers \FluentDOM\Query::map
      */
     public function testMapMixedResult() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -64,7 +64,7 @@ namespace FluentDOM\Query {
               )
           )
         );
-      $this->assertInstanceOf('FluentDOM\\Query', $fd);
+      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
   }

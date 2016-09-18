@@ -13,7 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingChaining
-     * @covers FluentDOM\Query::andSelf
+     * @covers \FluentDOM\Query::andSelf
      */
     public function testAndSelf() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('/items')->find('.//item');

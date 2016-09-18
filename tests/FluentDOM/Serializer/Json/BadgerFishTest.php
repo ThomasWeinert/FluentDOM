@@ -11,7 +11,7 @@ namespace FluentDOM\Serializer\Json {
      * Test against the examples from the BadgerFish webpage
      * http://badgerfish.ning.com/
      *
-     * @covers FluentDOM\Serializer\Json\BadgerFish
+     * @covers \FluentDOM\Serializer\Json\BadgerFish
      * @dataProvider provideExamples
      * @param string $expected
      * @param string $xml
@@ -27,7 +27,7 @@ namespace FluentDOM\Serializer\Json {
     }
 
     /**
-     * @covers FluentDOM\Serializer\Json\BadgerFish
+     * @covers \FluentDOM\Serializer\Json\BadgerFish
      */
     public function testIntegrationWithEmptyDocument() {
       $serializer = new BadgerFish(new \DOMDocument());

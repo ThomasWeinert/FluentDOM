@@ -7,7 +7,7 @@ namespace FluentDOM {
   class TextTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Text
+     * @covers \FluentDOM\Text
      */
     public function testMagicMethodToString() {
       $dom = new Document();

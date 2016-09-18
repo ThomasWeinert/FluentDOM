@@ -10,7 +10,7 @@ namespace FluentDOM\Node {
   class ChildNodeTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Node\ChildNode\Implementation
+     * @covers \FluentDOM\Node\ChildNode\Implementation
      */
     public function testRemoveWithElementNode() {
       $dom = new Document();
@@ -23,7 +23,7 @@ namespace FluentDOM\Node {
     }
 
     /**
-     * @covers FluentDOM\Node\ChildNode\Implementation
+     * @covers \FluentDOM\Node\ChildNode\Implementation
      */
     public function testBeforeInsertStringAsTextNodeBeforeElementNode() {
       $dom = new Document();
@@ -36,7 +36,7 @@ namespace FluentDOM\Node {
     }
 
     /**
-     * @covers FluentDOM\Node\ChildNode\Implementation
+     * @covers \FluentDOM\Node\ChildNode\Implementation
      */
     public function testAfterAppendsStringAsTextNode() {
       $dom = new Document();
@@ -49,7 +49,7 @@ namespace FluentDOM\Node {
     }
 
     /**
-     * @covers FluentDOM\Node\ChildNode\Implementation
+     * @covers \FluentDOM\Node\ChildNode\Implementation
      */
     public function testAfterAppendsStringAsTextNodeBeforeElementNode() {
       $dom = new Document();
@@ -62,7 +62,7 @@ namespace FluentDOM\Node {
     }
 
     /**
-     * @covers FluentDOM\Node\ChildNode\Implementation
+     * @covers \FluentDOM\Node\ChildNode\Implementation
      */
     public function testReplaceWithElementNode() {
       $dom = new Document();

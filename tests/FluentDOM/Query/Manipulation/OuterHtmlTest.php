@@ -13,7 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationReplace
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testOuterHtmlRead() {
       $expect = '<p>Paragraph One</p>';
@@ -27,7 +27,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationReplace
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testOuterHtmlReadWithTextNodes() {
       $expect = 'Paragraph One';
@@ -41,7 +41,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationReplace
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testOuterHtmlReadEmpty() {
       $html = $this
@@ -54,35 +54,35 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationReplace
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testOuterHtmlWrite() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->find('//p[position() = last()]')
         ->outerHtml('<b>New</b>World');
-      $this->assertInstanceOf('FluentDOM\\Query', $fd);
+      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
 
     /**
      * @group Manipulation
      * @group ManipulationReplace
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testOuterHtmlWriteEmpty() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->find('//p')
         ->outerHtml('');
-      $this->assertInstanceOf('FluentDOM\\Query', $fd);
+      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
 
     /**
      * @group Manipulation
      * @group ManipulationReplace
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testOuterHtmlWriteWithCallback() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -97,18 +97,18 @@ namespace FluentDOM\Query {
             }
           }
         );
-      $this->assertInstanceOf('FluentDOM\\Query', $fd);
+      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
 
     /**
      * @group Manipulation
      * @group ManipulationReplace
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testOuterHtmlWriteWithInvalidDataExpectingException() {
       $fd = new Query();
-      $this->setExpectedException('UnexpectedValueException');
+      $this->setExpectedException(\UnexpectedValueException::class);
       $fd->outerHtml(new \stdClass());
     }
   }

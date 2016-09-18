@@ -13,7 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Query::parent
+     * @covers \FluentDOM\Query::parent
      */
     public function testParent() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -30,7 +30,7 @@ namespace FluentDOM\Query {
              );
           }
         );
-      $this->assertInstanceOf('FluentDOM\\Query', $fd);
+      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
   }

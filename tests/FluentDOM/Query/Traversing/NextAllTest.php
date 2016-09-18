@@ -12,7 +12,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFind
-     * @covers FluentDOM\Query::nextAll
+     * @covers \FluentDOM\Query::nextAll
      */
     public function testNextAll() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -20,7 +20,7 @@ namespace FluentDOM\Query {
         ->find('//div[position() = 1]')
         ->nextAll()
         ->addClass('after');
-      $this->assertInstanceOf('FluentDOM\\Query', $fd);
+      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
   }

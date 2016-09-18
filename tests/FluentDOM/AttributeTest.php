@@ -7,7 +7,7 @@ namespace FluentDOM {
   class AttributeTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Attribute::__toString
+     * @covers \FluentDOM\Attribute::__toString
      */
     public function testMagicMethodToString() {
       $dom = new Document();

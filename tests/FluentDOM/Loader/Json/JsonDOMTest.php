@@ -8,7 +8,7 @@ namespace FluentDOM\Loader\Json {
   class JsonDOMTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Loader\Json\JsonDOM
+     * @covers \FluentDOM\Loader\Json\JsonDOM
      */
     public function testSupportsExpectingTrue() {
       $loader = new JsonDOM();
@@ -16,7 +16,7 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * @covers FluentDOM\Loader\Json\JsonDOM
+     * @covers \FluentDOM\Loader\Json\JsonDOM
      */
     public function testSupportsExpectingFalse() {
       $loader = new JsonDOM();
@@ -24,7 +24,7 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * @covers FluentDOM\Loader\Json\JsonDOM
+     * @covers \FluentDOM\Loader\Json\JsonDOM
      */
     public function testLoadWithValidJsonDOM() {
       $loader = new JsonDOM();
@@ -45,7 +45,7 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * @covers FluentDOM\Loader\Json\JsonDOM
+     * @covers \FluentDOM\Loader\Json\JsonDOM
      */
     public function testLoadWithValidFile() {
       $loader = new JsonDOM();
@@ -66,7 +66,7 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * @covers FluentDOM\Loader\Json\JsonDOM
+     * @covers \FluentDOM\Loader\Json\JsonDOM
      */
     public function testLoadWithValidStructure() {
       $loader = new JsonDOM();
@@ -88,7 +88,7 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * @covers FluentDOM\Loader\Json\JsonDOM
+     * @covers \FluentDOM\Loader\Json\JsonDOM
      */
     public function testLoadWithValidJsonVerbose() {
       $loader = new JsonDOM(JsonDOM::OPTION_VERBOSE);
@@ -110,7 +110,7 @@ namespace FluentDOM\Loader\Json {
       );
     }
     /**
-     * @covers FluentDOM\Loader\Json\JsonDOM
+     * @covers \FluentDOM\Loader\Json\JsonDOM
      */
     public function testLoadWithDifferentDataTypes() {
       $loader = new JsonDOM();
@@ -144,7 +144,7 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * @covers FluentDOM\Loader\Json\JsonDOM
+     * @covers \FluentDOM\Loader\Json\JsonDOM
      */
     public function testLoadWithAssociativeArray() {
       $loader = new JsonDOM();
@@ -165,7 +165,7 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * @covers FluentDOM\Loader\Json\JsonDOM
+     * @covers \FluentDOM\Loader\Json\JsonDOM
      */
     public function testLoadWithInvalidSourceExpectingNull() {
       $loader = new JsonDOM();
@@ -178,11 +178,11 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * @covers FluentDOM\Loader\Json\JsonDOM
+     * @covers \FluentDOM\Loader\Json\JsonDOM
      */
     public function testLoadWithInvalidJsonStringExpectingException() {
       $loader = new JsonDOM();
-      $this->setExpectedException('UnexpectedValueException');
+      $this->setExpectedException(\UnexpectedValueException::class);
       $loader->load(
         '{foo}}',
         'json'
@@ -190,7 +190,7 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * @covers FluentDOM\Loader\Json\JsonDOM
+     * @covers \FluentDOM\Loader\Json\JsonDOM
      */
     public function testLoadStoppingAtMaxDepth() {
       $loader = new JsonDOM(0, 1);
@@ -204,7 +204,7 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * @covers FluentDOM\Loader\Json\JsonDOM
+     * @covers \FluentDOM\Loader\Json\JsonDOM
      */
     public function testLoadWithEmptyArray() {
       $loader = new JsonDOM(0, 1);
@@ -218,7 +218,7 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * @covers FluentDOM\Loader\Json\JsonDOM
+     * @covers \FluentDOM\Loader\Json\JsonDOM
      */
     public function testLoadWithArrayMappingTagName() {
       $loader = new JsonDOM();

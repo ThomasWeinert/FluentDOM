@@ -15,7 +15,7 @@ namespace FluentDOM\Transformer\Namespaces {
   class ReplaceTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Transformer\Namespaces\Replace
+     * @covers \FluentDOM\Transformer\Namespaces\Replace
      * @dataProvider provideOptimizeExamples
      */
     public function testReplace($expected, $xml, $namespaces) {

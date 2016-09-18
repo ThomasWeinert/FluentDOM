@@ -9,7 +9,7 @@ namespace FluentDOM\Loader\Json {
 
 
     /**
-     * @covers FluentDOM\Loader\Json\Rayfish
+     * @covers \FluentDOM\Loader\Json\Rayfish
      * @dataProvider provideExamples
      * @param string $json
      * @param string $xml
@@ -23,7 +23,7 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * @covers FluentDOM\Loader\Json\Rayfish
+     * @covers \FluentDOM\Loader\Json\Rayfish
      */
     public function testLoadWithInvalidSourceExpectingNull() {
       $loader = new Rayfish();

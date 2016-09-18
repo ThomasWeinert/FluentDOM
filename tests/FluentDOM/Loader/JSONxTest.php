@@ -12,7 +12,7 @@ namespace FluentDOM\Loader {
      * Test against the examples from the BadgerFish webpage
      * http://badgerfish.ning.com/
      *
-     * @covers FluentDOM\Loader\JSONx
+     * @covers \FluentDOM\Loader\JSONx
      * @dataProvider provideExamples
      * @param string $JsonDOM
      * @param string $JSONx
@@ -26,7 +26,7 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @covers FluentDOM\Loader\JSONx
+     * @covers \FluentDOM\Loader\JSONx
      */
     public function testLoadWithInvalidSourceExpectingNull() {
       $loader = new JSONx();
@@ -39,7 +39,7 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @covers FluentDOM\Loader\JSONx
+     * @covers \FluentDOM\Loader\JSONx
      */
     public function testLoadFromFileConvertToJson() {
       $loader = new JSONx();

@@ -10,7 +10,7 @@ namespace FluentDOM\Query\Css {
   class PropertyCompareTest extends TestCase {
 
     /**
-     * @covers FluentDOM\Query\Css\PropertyCompare
+     * @covers \FluentDOM\Query\Css\PropertyCompare
      * @dataProvider providePropertyNames
      * @param int $expected
      * @param string $nameOne

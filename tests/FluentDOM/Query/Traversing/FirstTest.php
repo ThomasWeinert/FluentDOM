@@ -13,7 +13,7 @@ namespace FluentDOM\Query {
     /**
      * @group Traversing
      * @group TraversingFilter
-     * @covers FluentDOM\Query::first
+     * @covers \FluentDOM\Query::first
      */
     public function testFirst() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//item');

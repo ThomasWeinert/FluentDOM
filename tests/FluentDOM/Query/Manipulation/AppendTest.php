@@ -13,21 +13,21 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testAppend() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->find('//p')
         ->append('<strong>Hello</strong>');
-      $this->assertInstanceOf('FluentDOM\\Query', $fd);
+      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
 
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testAppendXmlString() {
       $fd = new Query();
@@ -38,7 +38,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testAppendDomElement() {
       $fd = new Query();
@@ -49,23 +49,23 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testAppendDomnodelist() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $items = $fd->find('//item');
-      $this->assertInstanceOf('FluentDOM\\Query', $fd);
+      $this->assertInstanceOf(Query::class, $fd);
       $doc = $fd
         ->find('//html/div')
         ->append($items);
-      $this->assertInstanceOf('FluentDOM\\Query', $doc);
+      $this->assertInstanceOf(Query::class, $doc);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
 
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testAppendWithCallback() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
@@ -82,7 +82,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testAppendOnEmptyDocumentWithCallback() {
       $fd = new Query();
@@ -100,7 +100,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testAppendNodeWithCallback() {
       $fd = (new Query('<sample/>'))
@@ -119,7 +119,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testAppendFragmentWithMultipleNodesToDocument() {
       $fd = new Query();
@@ -133,7 +133,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testAppendWithMultipleNodesFromOtherDomToDocument() {
       $dom = new \DOMDocument();
@@ -153,7 +153,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testAppendWithElementFromOtherDocument() {
       $dom = new \DOMDocument();
@@ -168,7 +168,7 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testAppendWithTextNodeFromOtherDocument() {
       $dom = new \DOMDocument();
@@ -185,22 +185,22 @@ namespace FluentDOM\Query {
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testAppendWithInvalidArgumentExpectingException() {
       $fd = new Query();
-      $this->setExpectedException('InvalidArgumentException');
+      $this->setExpectedException(\InvalidArgumentException::class);
       $fd->append(new \stdClass());
     }
 
     /**
      * @group Manipulation
      * @group ManipulationInside
-     * @covers FluentDOM\Query
+     * @covers \FluentDOM\Query
      */
     public function testAppendWithEmptyArgumentExpectingException() {
       $fd = new Query();
-      $this->setExpectedException('InvalidArgumentException');
+      $this->setExpectedException(\InvalidArgumentException::class);
       $fd->append([]);
     }
   }

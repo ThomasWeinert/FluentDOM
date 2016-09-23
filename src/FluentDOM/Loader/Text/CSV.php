@@ -48,27 +48,11 @@ namespace FluentDOM\Loader\Text {
       $hasHeaderLine = isset($options['HEADER']) ? (bool)$options['HEADER'] : !isset($options['FIELDS']);
       $this->configure($options);
       if ($this->supports($contentType) && ($lines = $this->getLines($source))) {
-        $dom = new Document('1.0', 'UTF-8');
-        $dom->appendChild($list = $dom->createElementNS(self::XMLNS, 'json:json'));
+        $document = new Document('1.0', 'UTF-8');
+        $document->appendChild($list = $document->createElementNS(self::XMLNS, 'json:json'));
         $list->setAttributeNS(self::XMLNS, 'json:type', 'array');
-        $headers = NULL;
-        foreach ($lines as $line) {
-          if ($headers === NULL) {
-            $headers = $this->getHeaders(
-              $line, $hasHeaderLine, isset($options['FIELDS']) ? $options['FIELDS'] : NULL
-            );
-            if ($hasHeaderLine) {
-              continue;
-            }
-          }
-          $list->appendChild($node =  $dom->createElement(self::DEFAULT_QNAME));
-          foreach ($line as $index => $field) {
-            if (isset($headers[$index])) {
-              $this->appendField($node, $headers[$index], $field);
-            }
-          }
-        }
-        return $dom;
+        $this->appendLines($list, $lines, $hasHeaderLine, isset($options['FIELDS']) ? $options['FIELDS'] : NULL);
+        return $document;
       }
       return NULL;
     }
@@ -82,8 +66,44 @@ namespace FluentDOM\Loader\Text {
      * @return DocumentFragment|NULL
      */
     public function loadFragment($source, $contentType, array $options = []) {
-      // TODO: Implement loadFragment() method.
-      throw new InvalidFragmentLoader(self::class);
+      $hasHeaderLine = isset($options['FIELDS']) ? FALSE : (isset($options['HEADER']) && $options['HEADER']);
+      $this->configure($options);
+      if ($this->supports($contentType) && ($lines = $this->getLines($source))) {
+        $document = new Document('1.0', 'UTF-8');
+        $fragment = $document->createDocumentFragment();
+        $this->appendLines($fragment, $lines, $hasHeaderLine, isset($options['FIELDS']) ? $options['FIELDS'] : NULL);
+        return $fragment;
+      }
+      return NULL;
+    }
+
+    /**
+     * Append the provided lines to the parent.
+     *
+     * @param \DOMNode $parent
+     * @param $lines
+     * @param $hasHeaderLine
+     * @param array $fields
+     */
+    private function appendLines(\DOMNode $parent, $lines, $hasHeaderLine, array $fields = NULL) {
+      $document = $parent instanceof \DOMDocument ? $parent : $parent->ownerDocument;
+      $headers = NULL;
+      foreach ($lines as $line) {
+        if ($headers === NULL) {
+          $headers = $this->getHeaders(
+            $line, $hasHeaderLine, $fields
+          );
+          if ($hasHeaderLine) {
+            continue;
+          }
+        }
+        $parent->appendChild($node = $document->createElement(self::DEFAULT_QNAME));
+        foreach ($line as $index => $field) {
+          if (isset($headers[$index])) {
+            $this->appendField($node, $headers[$index], $field);
+          }
+        }
+      }
     }
 
     /**

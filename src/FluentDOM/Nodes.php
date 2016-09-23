@@ -79,6 +79,11 @@ namespace FluentDOM {
     protected $_useDocumentContext = TRUE;
 
     /**
+     * @var array $_loadingContext store the loaded content type and options
+     */
+    private $_loadingContext = [];
+
+    /**
      * @param mixed $source
      * @param null|string $contentType
      */
@@ -112,7 +117,11 @@ namespace FluentDOM {
         $this->_nodes = array($source);
         $this->_useDocumentContext = FALSE;
       } elseif ($this->loaders()->supports($contentType)) {
-        $loaded = $this->loaders()->load($source, $contentType);
+        $loaded = $this->loaders()->load($source, $contentType, $options);
+        $this->_loadingContext = [
+          'contentType' => $contentType,
+          'options' => $options
+        ];
       }
       if ($loaded instanceof Loader\Result || $loaded instanceof \DOMDocument) {
         if ($loaded instanceof Loader\Result) {
@@ -154,6 +163,26 @@ namespace FluentDOM {
         $this->_loaders = \FluentDOM::getDefaultLoaders();
       }
       return $this->_loaders;
+    }
+
+    /**
+     * Return the options from the original loading action, but only if the
+     * content type equals the loaded content type.
+     *
+     * @param null|string $contentType
+     * @return array|mixed
+     */
+    public function getLoadingOptions($contentType = NULL) {
+      $contentType = $contentType ?: $this->_contentType;
+      if (
+        isset($this->_loadingContext) &&
+        isset($this->_loadingContext['contentType']) &&
+        $this->_loadingContext['contentType'] == $contentType
+      ) {
+        return $this->_loadingContext['options'];
+      } else {
+        return [];
+      }
     }
 
     /**
@@ -280,7 +309,6 @@ namespace FluentDOM {
      * Setter for Nodes::_contentType property
      *
      * @param string $value
-     * @param bool $silentFallback
      */
     private function setContentType($value) {
       switch (strtolower($value)) {
@@ -296,7 +324,7 @@ namespace FluentDOM {
         $newContentType = 'text/html';
         break;
       default :
-        $this->_contentType = $newContentType = $value;
+        $newContentType = $value;
       }
       if (isset($this->_parent) && $this->_contentType != $newContentType) {
         $this->_parent->contentType = $newContentType;
@@ -607,6 +635,7 @@ namespace FluentDOM {
       $result->_document = $this->getDocument();
       $result->_xpath = $this->getXpath();
       $result->_nodes = array();
+      $result->_loadingContext = $this->_loadingContext;
       if (isset($elements)) {
         $result->push($elements);
       }

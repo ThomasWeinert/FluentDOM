@@ -38,8 +38,13 @@ namespace FluentDOM\Loader\Supports {
      * @return DocumentFragment|NULL
      */
     public function loadFragment($source, $contentType, array $options = []) {
-      // TODO: Implement loadFragment() method.
-      throw new InvalidFragmentLoader(self::class);
+      if (FALSE !== ($json = $this->getJson($source, $contentType))) {
+        $document = new Document('1.0', 'UTF-8');
+        $fragment = $document->createDocumentFragment();
+        $this->transferTo($fragment, $json);
+        return $fragment;
+      }
+      return NULL;
     }
 
     /**

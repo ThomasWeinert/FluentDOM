@@ -181,5 +181,63 @@ namespace FluentDOM\Loader\Text {
         $loader->load(FALSE, 'text/csv')
       );
     }
+
+    /**
+     * @covers \FluentDOM\Loader\Text\CSV
+     */
+    public function testLoadFragment() {
+      $loader = new CSV();
+      $this->assertXmlStringEqualsXmlString(
+        '<fragment>
+          <_>
+            <_ xmlns:json="urn:carica-json-dom.2013" json:name="0">1</_>
+            <_ xmlns:json="urn:carica-json-dom.2013" json:name="1">2</_>
+            <_ xmlns:json="urn:carica-json-dom.2013" json:name="2">3</_>
+          </_>
+          <_>
+            <_ xmlns:json="urn:carica-json-dom.2013" json:name="0">4</_>
+            <_ xmlns:json="urn:carica-json-dom.2013" json:name="1">5</_>
+            <_ xmlns:json="urn:carica-json-dom.2013" json:name="2">6</_>
+          </_>
+        </fragment>',
+        '<fragment>'.
+        $loader->loadFragment("1,2,3\n4,5,6", 'text/csv')->saveXmlFragment().
+        '</fragment>'
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\Loader\Text\CSV
+     */
+    public function testLoadFragmentWithColumnNames() {
+      $loader = new CSV();
+      $this->assertXmlStringEqualsXmlString(
+        '<fragment>
+          <_>
+            <a>1</a>
+            <b>2</b>
+            <c>3</c>
+          </_>
+          <_>
+            <a>4</a>
+            <b>5</b>
+            <c>6</c>
+          </_>
+        </fragment>',
+        '<fragment>'.
+        $loader->loadFragment("1,2,3\n4,5,6", 'text/csv', ['FIELDS' => ['a', 'b', 'c']])->saveXmlFragment().
+        '</fragment>'
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\Loader\Text\CSV
+     */
+    public function testLoadFragmentWithInvalidContentTypeExpectingNull() {
+      $loader = new CSV();
+      $this->assertNull(
+        $loader->loadFragment("1,2,3\n4,5,6", 'INVALID', ['FIELDS' => ['a', 'b', 'c']])
+      );
+    }
   }
 }

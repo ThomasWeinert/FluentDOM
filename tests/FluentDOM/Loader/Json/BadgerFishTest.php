@@ -38,6 +38,20 @@ namespace FluentDOM\Loader\Json {
       );
     }
 
+    /**
+     * @covers \FluentDOM\Loader\Json\BadgerFish
+     */
+    public function testLoadFragment() {
+      $loader = new BadgerFish();
+      $this->assertXmlStringEqualsXmlString(
+        '<alice>bob</alice>',
+        $loader->loadFragment(
+          '{"alice":{"$":"bob"}}',
+          'badgerfish'
+        )->saveXmlFragment()
+      );
+    }
+
     public  static function provideExamples() {
       return [
         'Text content of elements goes in the $ property of an object.' => [

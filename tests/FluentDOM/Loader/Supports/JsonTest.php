@@ -25,7 +25,8 @@ namespace FluentDOM\Loader\Supports {
     }
 
     protected function transferTo(\DOMNode $node, $json) {
-      $node->appendChild($node->createElement('success'));
+      $document = $node->ownerDocument ?: $node;
+      $node->appendChild($document->createElement('success'));
     }
 
     public function getNamespace($nodeName, $namespaces, $parent) {
@@ -115,6 +116,31 @@ namespace FluentDOM\Loader\Supports {
       $loader = new Json_TestProxy();
       $this->assertNull(
         $loader->load(NULL, 'json')
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\Loader\Supports\Json
+     */
+    public function testLoadFragment() {
+      $json = new \stdClass();
+      $json->foo = 'bar';
+      $loader = new Json_TestProxy();
+      $fragment = $loader->loadFragment($json, 'json');
+      $this->assertXmlStringEqualsXmlString(
+        '<success/>', $fragment->saveXmlFragment()
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\Loader\Supports\Json
+     */
+    public function testLoadFragmentExpectingNull() {
+      $json = new \stdClass();
+      $json->foo = 'bar';
+      $loader = new Json_TestProxy();
+      $this->assertNull(
+        $loader->loadFragment(NULL, 'json')
       );
     }
 

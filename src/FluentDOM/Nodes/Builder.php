@@ -9,8 +9,8 @@
 namespace FluentDOM\Nodes {
 
   use FluentDOM\Constraints;
-  use FluentDOM\Document;
   use FluentDOM\Nodes;
+  use FluentDOM\Exceptions;
 
   /**
     * Create list of nodes for a FluentDOM\Nodes object from different values
@@ -143,13 +143,15 @@ namespace FluentDOM\Nodes {
       $xml = $this->getContentAsString($xml);
       $loader = $this->getOwner()->loaders();
       if (!$loader->supports($contentType)) {
-        throw new \FluentDOM\Exceptions\InvalidFragmentLoader();
+        throw new Exceptions\InvalidFragmentLoader(get_class($loader));
       }
       if (!$xml) {
         return array();
       }
       $result = array();
-      $fragment = $loader->loadFragment($xml, $contentType);
+      $fragment = $loader->loadFragment(
+        $xml, $contentType, $this->getOwner()->getLoadingOptions($contentType)
+      );
       if ($fragment) {
         $fragment = $this->getOwner()->document->importNode($fragment, TRUE);
         for ($i = $fragment->childNodes->length - 1; $i >= 0; $i--) {

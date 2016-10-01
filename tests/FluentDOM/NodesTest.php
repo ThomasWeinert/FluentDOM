@@ -55,6 +55,7 @@ namespace FluentDOM {
     /**
      * @group Load
      * @covers \FluentDOM\Nodes::load
+     * @covers \FluentDOM\Nodes::prepareSource
      */
     public function testLoadWithNodes() {
       $fdOne = new Nodes();
@@ -66,6 +67,7 @@ namespace FluentDOM {
     /**
      * @group Load
      * @covers \FluentDOM\Nodes::load
+     * @covers \FluentDOM\Nodes::prepareSource
      */
     public function testLoadWithDocument() {
       $fd = new Nodes();
@@ -79,6 +81,7 @@ namespace FluentDOM {
     /**
      * @group Load
      * @covers \FluentDOM\Nodes::load
+     * @covers \FluentDOM\Nodes::prepareSource
      */
     public function testLoadWithDomNode() {
       $dom = new \DOMDocument();
@@ -92,6 +95,7 @@ namespace FluentDOM {
     /**
      * @group Load
      * @covers \FluentDOM\Nodes::load
+     * @covers \FluentDOM\Nodes::prepareSource
      */
     public function testLoadWithCustomLoader() {
       $loader = $this->getMockBuilder(Loadable::class)->getMock();
@@ -117,6 +121,7 @@ namespace FluentDOM {
     /**
      * @group Load
      * @covers \FluentDOM\Nodes::load
+     * @covers \FluentDOM\Nodes::prepareSource
      */
     public function testLoadWithCustomLoaderReturningLoaderResult() {
       $document = new Document();
@@ -163,6 +168,7 @@ namespace FluentDOM {
     /**
      * @group Load
      * @covers \FluentDOM\Nodes::load
+     * @covers \FluentDOM\Nodes::prepareSource
      */
     public function testLoadWithCustomLoaderReturningLoaderResultWithSelection() {
       $document = new Document();
@@ -210,6 +216,7 @@ namespace FluentDOM {
     /**
      * @group Load
      * @covers \FluentDOM\Nodes::load
+     * @covers \FluentDOM\Nodes::prepareSource
      * @covers \FluentDOM\Nodes::setContentType
      */
     public function testLoadWithUnknownContentType() {

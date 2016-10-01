@@ -106,6 +106,32 @@ namespace FluentDOM {
      * @return $this
      */
     public function load($source, $contentType = 'text/xml', array $options = []) {
+      $loaded = $this->prepareSource($source, $contentType, $options);
+      if ($loaded instanceof Loader\Result || $loaded instanceof \DOMDocument) {
+        if ($loaded instanceof Loader\Result) {
+          $this->_document = $loaded->getDocument();
+          $this->setContentType($loaded->getContentType());
+          if ($selection = $loaded->getSelection()) {
+            $this->push($selection);
+          }
+        } else {
+          $this->_document = $loaded;
+          $this->setContentType($contentType);
+        }
+        $this->_xpath = NULL;
+        $this->applyNamespaces();
+        return $this;
+      }
+      throw new Exceptions\InvalidSource($source, $contentType);
+    }
+
+    /**
+     * @param mixed $source
+     * @param string $contentType
+     * @param array $options
+     * @return bool|\DOMDocument|Document|NULL
+     */
+    private function prepareSource($source, $contentType, array $options) {
       $loaded = FALSE;
       $this->_useDocumentContext = TRUE;
       if ($source instanceof Nodes) {
@@ -123,22 +149,7 @@ namespace FluentDOM {
           'options' => $options
         ];
       }
-      if ($loaded instanceof Loader\Result || $loaded instanceof \DOMDocument) {
-        if ($loaded instanceof Loader\Result) {
-          $this->_document = $loaded->getDocument();
-          $this->setContentType($loaded->getContentType());
-          if ($selection = $loaded->getSelection()) {
-            $this->push($selection);
-          }
-        } else {
-          $this->_document = $loaded;
-          $this->setContentType($contentType);
-        }
-        $this->_xpath = NULL;
-        $this->applyNamespaces();
-        return $this;
-      }
-      throw new Exceptions\InvalidSource($source, $contentType);
+      return $loaded;
     }
 
     /**
@@ -311,19 +322,19 @@ namespace FluentDOM {
      * @param string $value
      */
     private function setContentType($value) {
-      switch (strtolower($value)) {
-      case 'xml' :
-      case 'application/xml' :
-      case 'text/xml' :
-        $newContentType = 'text/xml';
-        break;
-      case 'html-fragment' :
-      case 'text/html-fragment' :
-      case 'html' :
-      case 'text/html' :
-        $newContentType = 'text/html';
-        break;
-      default :
+      $mapping = [
+        'text/xml' => 'text/xml',
+        'xml' => 'text/xml',
+        'application/xml' => 'text/xml',
+        'html-fragment' => 'text/html',
+        'text/html-fragment' => 'text/html',
+        'html' => 'text/html',
+        'text/html' => 'text/html'
+      ];
+      $normalizedValue = strtolower($value);
+      if (array_key_exists($normalizedValue, $mapping)) {
+        $newContentType = $mapping[$normalizedValue];
+      } else {
         $newContentType = $value;
       }
       if (isset($this->_parent) && $this->_contentType != $newContentType) {

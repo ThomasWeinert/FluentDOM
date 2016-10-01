@@ -117,6 +117,99 @@ namespace FluentDOM {
     /**
      * @group Load
      * @covers \FluentDOM\Nodes::load
+     */
+    public function testLoadWithCustomLoaderReturningLoaderResult() {
+      $document = new Document();
+      $document->appendElement('dummy');
+      $result = $this
+        ->getMockBuilder(Loader\Result::class)
+        ->disableOriginalConstructor()
+        ->getMock();
+      $result
+        ->expects($this->once())
+        ->method('getDocument')
+        ->willReturn($document);
+      $result
+        ->expects($this->once())
+        ->method('getSelection')
+        ->willReturn(FALSE);
+      $result
+        ->expects($this->once())
+        ->method('getContentType')
+        ->willReturn('text/xml');
+      $loader = $this->getMockBuilder(Loadable::class)->getMock();
+      $loader
+        ->expects($this->once())
+        ->method('supports')
+        ->with('text/xml')
+        ->will($this->returnValue(TRUE));
+      $loader
+        ->expects($this->once())
+        ->method('load')
+        ->with('DATA', 'text/xml')
+        ->willReturn($result);
+      $fd = new Nodes();
+      $fd->loaders($loader);
+      $fd->load('DATA');
+      $this->assertSame(
+        $document,
+        $fd->document
+      );
+      $this->assertCount(
+        0, $fd
+      );
+    }
+
+    /**
+     * @group Load
+     * @covers \FluentDOM\Nodes::load
+     */
+    public function testLoadWithCustomLoaderReturningLoaderResultWithSelection() {
+      $document = new Document();
+      $document->appendElement('dummy');
+      $result = $this
+        ->getMockBuilder(Loader\Result::class)
+        ->disableOriginalConstructor()
+        ->getMock();
+      $result
+        ->expects($this->once())
+        ->method('getDocument')
+        ->willReturn($document);
+      $result
+        ->expects($this->once())
+        ->method('getSelection')
+        ->willReturn($document->documentElement);
+      $result
+        ->expects($this->once())
+        ->method('getContentType')
+        ->willReturn('text/xml');
+      $loader = $this->getMockBuilder(Loadable::class)->getMock();
+      $loader
+        ->expects($this->once())
+        ->method('supports')
+        ->with('text/xml')
+        ->will($this->returnValue(TRUE));
+      $loader
+        ->expects($this->once())
+        ->method('load')
+        ->with('DATA', 'text/xml')
+        ->willReturn($result);
+      $fd = new Nodes();
+      $fd->loaders($loader);
+      $fd->load('DATA');
+      $this->assertSame(
+        $document,
+        $fd->document
+      );
+      $this->assertSame(
+        $document->documentElement,
+        $fd[0]
+      );
+    }
+
+    /**
+     * @group Load
+     * @covers \FluentDOM\Nodes::load
      * @covers \FluentDOM\Nodes::setContentType
      */
     public function testLoadWithUnknownContentType() {

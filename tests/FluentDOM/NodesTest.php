@@ -122,6 +122,33 @@ namespace FluentDOM {
      * @group Load
      * @covers \FluentDOM\Nodes::load
      * @covers \FluentDOM\Nodes::prepareSource
+     * @covers \FluentDOM\Nodes::getLoadingOptions
+     */
+    public function testLoadWithCustomLoaderAndOptions() {
+      $loader = $this->getMockBuilder(Loadable::class)->getMock();
+      $loader
+        ->expects($this->once())
+        ->method('supports')
+        ->with('text/xml')
+        ->will($this->returnValue(TRUE));
+      $loader
+        ->expects($this->once())
+        ->method('load')
+        ->with('DATA', 'text/xml', ['foo' => 'bar'])
+        ->will($this->returnValue($dom = new \DOMDocument()));
+      $fd = new Nodes();
+      $fd->loaders($loader);
+      $fd->load('DATA', 'text/xml', ['foo' => 'bar']);
+      $this->assertSame(
+        $dom, $fd->document
+      );
+      $this->assertEquals(['foo' => 'bar'], $fd->getLoadingOptions('text/xml'));
+    }
+
+    /**
+     * @group Load
+     * @covers \FluentDOM\Nodes::load
+     * @covers \FluentDOM\Nodes::prepareSource
      */
     public function testLoadWithCustomLoaderReturningLoaderResult() {
       $document = new Document();

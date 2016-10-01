@@ -228,6 +228,18 @@ namespace FluentDOM {
 
     /**
      * @group Load
+     * @covers \FluentDOM\Nodes::load
+     * @covers \FluentDOM\Nodes::prepareSource
+     * @covers \FluentDOM\Nodes::setContentType
+     */
+    public function testLoadWithInvalidSourceExpectingException() {
+      $fd = new Nodes();
+      $this->setExpectedException(Exceptions\InvalidSource::class);
+      $fd->load(NULL, 'text');
+    }
+
+    /**
+     * @group Load
      * @covers \FluentDOM\Nodes::loaders
      */
     public function testLoadersGetAfterSet() {

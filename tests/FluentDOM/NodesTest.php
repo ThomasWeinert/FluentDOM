@@ -923,6 +923,24 @@ namespace FluentDOM {
     /**
      * @group MagicFunctions
      * @group StringCastable
+     * @covers \FluentDOM\Nodes::toString
+     * @covers \FluentDOM\Nodes::__toString
+     */
+    public function testMagicToStringWithSerializerFactoryReturningNull() {
+      $factory = $this->getMockBuilder(Serializer\Factory\Group::class)->getMock();
+      $factory
+        ->expects($this->once())
+        ->method('createSerializer')
+        ->willReturn(NULL);
+
+      $fd = new Nodes(self::XML);
+      $fd->serializerFactories($factory);
+      $this->assertXmlStringEqualsXmlString(self::XML, (string)$fd);
+    }
+
+    /**
+     * @group MagicFunctions
+     * @group StringCastable
      * @covers \FluentDOM\Nodes::__toString
      */
     public function testMagicToStringHtml() {

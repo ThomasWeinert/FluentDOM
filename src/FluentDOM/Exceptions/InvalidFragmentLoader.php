@@ -10,8 +10,7 @@ namespace FluentDOM\Exceptions {
      * @param string $className
      */
     public function __construct($className) {
-      $message = sprintf('Loader "%s" can not load fragments.');
-      parent::__construct($message);
+      parent::__construct(sprintf('Loader "%s" can not load fragments.', $className));
     }
   }
 }

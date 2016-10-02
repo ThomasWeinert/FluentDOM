@@ -891,7 +891,7 @@ namespace FluentDOM {
 
     /**
      * @param Serializer\Factory\Group|NULL $factories
-     * @return Serializer\Factory\Group|Serializer\Factory\Group
+     * @return Serializer\Factory\Group
      */
     public function serializerFactories(Serializer\Factory\Group $factories = NULL) {
       if (isset($factories)) {

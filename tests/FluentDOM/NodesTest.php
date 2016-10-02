@@ -1141,7 +1141,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers \FluentDOM\Serializer\Factory\Group
+     * @covers \FluentDOM\Nodes::serializerFactories
      */
     public function testGetSerializerFactoriesAfterSet() {
       $factory = $this->getMockBuilder(Serializer\Factory\Group::class)->getMock();
@@ -1152,7 +1152,7 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers \FluentDOM\Serializer\Factory\Group
+     * @covers \FluentDOM\Nodes::serializerFactories
      */
     public function testGetSerializerFactoriesInitializesFromStaticClass() {
       $fd = new Nodes();

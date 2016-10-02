@@ -25,6 +25,7 @@ namespace FluentDOM\Loader {
     public function __construct(\DOMDocument $document, $contentType, $selection = NULL) {
       $this->_document = $document;
       $this->_contentType = (string)$contentType;
+      $this->_selection = $selection;
     }
 
     public function getDocument() {

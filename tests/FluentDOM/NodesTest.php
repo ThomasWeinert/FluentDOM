@@ -737,7 +737,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::__set
      */
     public function testSetPropertyXpath() {
-      $fd = new Nodes(self::XML);;
+      $fd = new Nodes(self::XML);
       $this->setExpectedException(\BadMethodCallException::class);
       $fd->xpath = $fd->xpath();
     }
@@ -894,11 +894,30 @@ namespace FluentDOM {
     /**
      * @group MagicFunctions
      * @group StringCastable
+     * @covers \FluentDOM\Nodes::toString
      * @covers \FluentDOM\Nodes::__toString
      */
     public function testMagicToString() {
-      $fd = new Nodes(self::XML);;
+      $fd = new Nodes(self::XML);
       $this->assertEquals($fd->document->saveXML(), (string)$fd);
+    }
+
+    /**
+     * @group MagicFunctions
+     * @group StringCastable
+     * @covers \FluentDOM\Nodes::toString
+     * @covers \FluentDOM\Nodes::__toString
+     */
+    public function testMagicToStringWithExceptionInSerializerFactory() {
+      $factory = $this->getMockBuilder(Serializer\Factory\Group::class)->getMock();
+      $factory
+        ->expects($this->once())
+        ->method('createSerializer')
+        ->willThrowException(new \LogicException);
+
+      $fd = new Nodes(self::XML);
+      $fd->serializerFactories($factory);
+      $this->assertEquals('', (string)$fd);
     }
 
     /**
@@ -1103,5 +1122,25 @@ namespace FluentDOM {
       $fd->getSelectorCallback('');
     }
 
+    /**
+     * @covers \FluentDOM\Serializer\Factory\Group
+     */
+    public function testGetSerializerFactoriesAfterSet() {
+      $factory = $this->getMockBuilder(Serializer\Factory\Group::class)->getMock();
+      $fd = new Nodes();
+      $this->assertSame(
+        $factory, $fd->serializerFactories($factory)
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\Serializer\Factory\Group
+     */
+    public function testGetSerializerFactoriesInitializesFromStaticClass() {
+      $fd = new Nodes();
+      $this->assertSame(
+        \FluentDOM::getSerializerFactories(), $fd->serializerFactories()
+      );
+    }
   }
 }

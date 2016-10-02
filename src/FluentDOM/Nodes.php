@@ -8,6 +8,7 @@
 
 namespace FluentDOM {
   use FluentDOM\Xpath\Transformer;
+  use FluentDOM\Serializer;
 
   /**
    * Implements an extended replacement for DOMNodeList.
@@ -82,6 +83,11 @@ namespace FluentDOM {
      * @var array $_loadingContext store the loaded content type and options
      */
     private $_loadingContext = [];
+
+    /**
+     * @var Serializer\Factory\Group
+     */
+    private $_serializerFactories = NULL;
 
     /**
      * @param mixed $source
@@ -609,7 +615,7 @@ namespace FluentDOM {
      * @return string
      */
     public function toString() {
-      if ($serializer = \FluentDOM::getSerializerFactories()->createSerializer($this->contentType, $this->document)) {
+      if ($serializer = $this->serializerFactories()->createSerializer($this->contentType, $this->document)) {
         return (string)$serializer;
       } else {
         return $this->document->saveXML();
@@ -881,6 +887,19 @@ namespace FluentDOM {
       $result = array_values($sortable);
       array_splice($result, count($result), 0, array_values($unsortable));
       return $result;
+    }
+
+    /**
+     * @param Serializer\Factory\Group|NULL $factories
+     * @return Serializer\Factory\Group|Serializer\Factory\Group
+     */
+    public function serializerFactories(Serializer\Factory\Group $factories = NULL) {
+      if (isset($factories)) {
+        $this->_serializerFactories = $factories;
+      } elseif (NULL === $this->_serializerFactories) {
+        $this->_serializerFactories = \FluentDOM::getSerializerFactories();
+      }
+      return $this->_serializerFactories;
     }
   }
 }

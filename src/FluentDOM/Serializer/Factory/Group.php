@@ -10,7 +10,7 @@ namespace FluentDOM\Serializer\Factory {
     private $_factories = [];
 
     public function __construct(array $factories = []) {
-      foreach ($factories as $contentType=>$factory) {
+      foreach ($factories as $contentType => $factory) {
         $this->offsetSet($contentType, $factory);
       }
     }
@@ -19,7 +19,7 @@ namespace FluentDOM\Serializer\Factory {
       $serializer = NULL;
       if ($this->offsetExists($contentType)) {
         $factory = $this->offsetGet($contentType);
-        if ($factory instanceof Factory) {
+        if ($factory instanceof SerializerFactory) {
           $serializer = $factory->createSerializer($contentType, $node);
         } elseif (is_callable($factory)) {
           $serializer = $factory($contentType, $node);
@@ -42,7 +42,7 @@ namespace FluentDOM\Serializer\Factory {
 
     public function offsetSet($contentType, $factory) {
       $contentType = $this->normalizeContentType($contentType);
-      if (!($factory instanceOf Factory || is_callable($factory))) {
+      if (!($factory instanceOf SerializerFactory || is_callable($factory))) {
         throw new Exceptions\InvalidArgument(
           'factory', 'FluentDOM\Serializer\Factory, callable'
         );

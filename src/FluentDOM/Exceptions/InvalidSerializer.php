@@ -8,7 +8,11 @@ namespace FluentDOM\Exceptions {
 
     public function __construct($contentType, $class) {
       parent::__construct(
-        sprintf('Invalid serializer for content type %s, instances of %s are not castable to string.')
+        sprintf(
+          'Invalid serializer for content type %s, instances of %s are not castable to string.',
+          $contentType,
+          $class
+        )
       );
     }
   }

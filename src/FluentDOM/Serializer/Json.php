@@ -64,7 +64,7 @@ namespace FluentDOM\Serializer {
     private $_useDepth = FALSE;
 
     /**
-     * @param \DOMDocument $document
+     * @param \DOMNode $node
      * @param int $options
      * @param int $depth
      */

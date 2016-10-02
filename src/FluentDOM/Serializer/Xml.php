@@ -16,7 +16,6 @@ namespace FluentDOM\Serializer {
 
     /**
      * @param \DOMNode $node
-     * @param int $options
      */
     public function __construct(\DOMNode $node) {
       $this->_node = $node;

@@ -11,7 +11,6 @@ namespace FluentDOM\Loader {
   use FluentDOM\Document;
   use FluentDOM\DocumentFragment;
   use FluentDOM\Element;
-  use FluentDOM\Exceptions\InvalidFragmentLoader;
   use FluentDOM\Loadable;
   use FluentDOM\QualifiedName;
 
@@ -48,7 +47,7 @@ namespace FluentDOM\Loader {
         $dom->preserveWhiteSpace = FALSE;
         $dom->registerNamespace('jx', self::XMLNS_JSONX);
         if ($this->startsWith($source, '<')) {
-          $dom->loadXml($source);
+          $dom->loadXML($source);
         } else {
           $dom->load($source);
         }

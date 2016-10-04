@@ -6,7 +6,7 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
 
   /**
    * @group FactoryFunctions
-   * @covers FluentDOM::Query
+   * @covers FluentDOM
    */
   public function testQuery() {
     $query = FluentDOM::Query();
@@ -15,7 +15,7 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
 
   /**
    * @group FactoryFunctions
-   * @covers FluentDOM::Query
+   * @covers FluentDOM
    */
   public function testQueryWithNode() {
     $dom = new DOMDocument();
@@ -27,7 +27,7 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
 
   /**
    * @group FactoryFunctions
-   * @covers FluentDOM::create
+   * @covers FluentDOM
    */
   public function testCreator() {
     $write = FluentDOM::create();
@@ -40,7 +40,7 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
 
   /**
    * @group FactoryFunctions
-   * @covers FluentDOM::create
+   * @covers FluentDOM
    */
   public function testCreatorWithArguments() {
     $write = FluentDOM::create('2.0', 'ASCII');
@@ -53,8 +53,7 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
 
   /**
    * @group FactoryFunctions
-   * @covers FluentDOM::setLoader
-   * @covers FluentDOM::load
+   * @covers FluentDOM
    */
   public function testLoadWithDefaultLoader() {
     FluentDOM::setLoader(NULL);
@@ -64,8 +63,7 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
 
   /**
    * @group FactoryFunctions
-   * @covers FluentDOM::setLoader
-   * @covers FluentDOM::load
+   * @covers FluentDOM
    */
   public function testLoadWithDefinedLoader() {
     $loader = $this->getMockBuilder(\FluentDOM\Loadable::class)->getMock();
@@ -80,7 +78,7 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
 
   /**
    * @group FactoryFunctions
-   * @covers FluentDOM::setLoader
+   * @covers FluentDOM
    */
   public function testSetLoaderWithInvalidObject() {
     $this->setExpectedException(\FluentDOM\Exception::class);
@@ -90,8 +88,7 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
   /**
    * @group FactoryFunctions
    * @group Plugins
-   * @covers FluentDOM::registerLoader
-   * @covers FluentDOM::getDefaultLoaders
+   * @covers FluentDOM
    */
   public function testRegisterLoader() {
     $dom = new \FluentDOM\Document();
@@ -116,8 +113,7 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
   /**
    * @group FactoryFunctions
    * @group Plugins
-   * @covers FluentDOM::registerLoader
-   * @covers FluentDOM::getDefaultLoaders
+   * @covers FluentDOM
    */
   public function testRegisterLoaderWithContentTypes() {
     $dom = new \FluentDOM\Document();
@@ -142,8 +138,7 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
   /**
    * @group FactoryFunctions
    * @group Plugins
-   * @covers FluentDOM::registerLoader
-   * @covers FluentDOM::getDefaultLoaders
+   * @covers FluentDOM
    */
   public function testRegisterLoaderWithCallable() {
     $dom = new \FluentDOM\Document();
@@ -168,8 +163,7 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
   /**
    * @group FactoryFunctions
    * @group Plugins
-   * @covers FluentDOM::registerXPathTransformer
-   * @covers FluentDOM::getXPathTransformer
+   * @covers FluentDOM
    */
   public function testGetXPathTransformerAfterRegister() {
     $transformer = $this->getMockBuilder(FluentDOM\Xpath\Transformer::class)->getMock();
@@ -183,8 +177,7 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
   /**
    * @group FactoryFunctions
    * @group Plugins
-   * @covers FluentDOM::registerXPathTransformer
-   * @covers FluentDOM::getXPathTransformer
+   * @covers FluentDOM
    */
   public function testGetXPathTransformerAfterRegisterWithCallback() {
     $transformer = $this->getMockBuilder(\FluentDOM\Xpath\Transformer::class)->getMock();
@@ -203,8 +196,7 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
   /**
    * @group FactoryFunctions
    * @group Plugins
-   * @covers FluentDOM::registerXPathTransformer
-   * @covers FluentDOM::getXPathTransformer
+   * @covers FluentDOM
    */
   public function testGetXPathTransformerAfterRegisterwithClassName() {
     FluentDOM::registerXpathTransformer(
@@ -220,8 +212,7 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
   /**
    * @group FactoryFunctions
    * @group Plugins
-   * @covers FluentDOM::registerXPathTransformer
-   * @covers FluentDOM::getXPathTransformer
+   * @covers FluentDOM
    */
   public function testGetXPathTransformerExpectingException() {
     FluentDOM::registerXpathTransformer('', TRUE);
@@ -232,13 +223,25 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
   /**
    * @group FactoryFunction
    * @group Plugins
-   * @covers FluentDOM::registerSerializerFactory
-   * @covers FluentDOM::getSerializerFactories
+   * @covers FluentDOM
    */
   public function testRegisterSerializerFactory() {
     $factory = function() {};
     FluentDOM::registerSerializerFactory($factory, 'example/type');
     $this->assertSame($factory, FluentDOM::getSerializerFactories()['example/type']);
+  }
+
+  /**
+   * @group FactoryFunction
+   * @group Plugins
+   * @covers FluentDOM
+   */
+  public function testGetSerializerFactories() {
+    $document = new \FluentDOM\Document();
+    $serializers = FluentDOM::getSerializerFactories();
+    $this->assertInstanceOf(FluentDOM\Serializer\Xml::class, $serializers->createSerializer('xml', $document));
+    $this->assertInstanceOf(FluentDOM\Serializer\Html::class, $serializers->createSerializer('html', $document));
+    $this->assertInstanceOf(FluentDOM\Serializer\Json::class, $serializers->createSerializer('json', $document));
   }
 }
 

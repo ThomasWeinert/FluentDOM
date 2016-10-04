@@ -1,6 +1,7 @@
 <?php
 namespace FluentDOM\Loader\PHP {
 
+  use FluentDOM\Exceptions\InvalidFragmentLoader;
   use FluentDOM\TestCase;
 
   require_once(__DIR__ . '/../../TestCase.php');
@@ -55,6 +56,15 @@ namespace FluentDOM\Loader\PHP {
       $this->assertNull(
         $loader->load(new \stdClass(), 'php/pdo')
       );
+    }
+
+    /**
+     * @covers \FluentDOM\Loader\PHP\PDO
+     */
+    public function testLoadFragmentExpectingException() {
+      $loader = new PDO();
+      $this->setExpectedException(InvalidFragmentLoader::class);
+      $loader->loadFragment(NULL, 'php/pdo');
     }
 
     private function getExampleDatabase() {

@@ -148,5 +148,17 @@ namespace FluentDOM\Loader {
         $fragment->ownerDocument->saveHtml($fragment)
       );
     }
+
+    /**
+     * @covers \FluentDOM\Loader\Html
+     */
+    public function testLoadFragmentWithUnsupportedType() {
+      $loader = new Html();
+      $this->assertNull(
+        $loader->loadFragment(
+          '', 'text/xml'
+        )
+      );
+    }
   }
 }

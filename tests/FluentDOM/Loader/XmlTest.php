@@ -76,7 +76,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Xml
      */
-    public function testLoadWithUnsupportType() {
+    public function testLoadWithUnsupportedType() {
       $loader = new Xml();
       $this->assertNull(
         $loader->load(
@@ -99,6 +99,19 @@ namespace FluentDOM\Loader {
       $this->assertEquals(
         'TEXT<xml><![CDATA[Test]]></xml>',
         $fragment->ownerDocument->saveXml($fragment)
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\Loader\Xml
+     */
+    public function testLoadFragmentWithUnsupportedType() {
+      $loader = new Xml();
+      $this->assertNull(
+        $loader->loadFragment(
+          '',
+          'text/html'
+        )
       );
     }
   }

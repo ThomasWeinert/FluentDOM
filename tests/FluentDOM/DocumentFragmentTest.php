@@ -216,5 +216,16 @@ namespace FluentDOM {
         @$fragment->appendXml('<test success</test>', ['foo' => 'urn:bar'])
       );
     }
+
+    public function testAppendElement() {
+      $document = new Document();
+      $fragment = $document->createDocumentFragment();
+      $fragment->appendElement('name', 'content', ['attribute' => 'value']);
+      $this->assertXmlStringEqualsXmlString(
+        '<name attribute="value">content</name>',
+        $fragment->saveXmlFragment()
+      );
+
+    }
   }
 }

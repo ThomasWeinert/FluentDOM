@@ -139,6 +139,22 @@ namespace FluentDOM {
     }
 
     /**
+     * Append an child element
+     *
+     * @param string $name
+     * @param string $content
+     * @param array $attributes
+     * @return Element
+     */
+    public function appendElement($name, $content = '', array $attributes = NULL) {
+      $this->appendChild(
+        $node = $this->ownerDocument->createElement($name, $content, $attributes)
+      );
+      return $node;
+    }
+
+
+    /**
      * Save as XML string
      *
      * @return string

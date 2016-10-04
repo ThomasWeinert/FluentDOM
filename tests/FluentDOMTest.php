@@ -116,6 +116,58 @@ class FluentDOMTest extends \PHPUnit_Framework_TestCase {
   /**
    * @group FactoryFunctions
    * @group Plugins
+   * @covers FluentDOM::registerLoader
+   * @covers FluentDOM::getDefaultLoaders
+   */
+  public function testRegisterLoaderWithContentTypes() {
+    $dom = new \FluentDOM\Document();
+    $dom->loadXML('<success/>');
+    $mockLoader = $this->getMockBuilder(\FluentDOM\Loadable::class)->getMock();
+    $mockLoader
+      ->expects($this->any())
+      ->method('supports')
+      ->will($this->returnValue(['one', 'two']));
+    $mockLoader
+      ->expects($this->any())
+      ->method('load')
+      ->with('test.xml', 'two')
+      ->will($this->returnValue($dom));
+    FluentDOM::registerLoader($mockLoader, 'one', 'two');
+    $this->assertEquals(
+      $dom,
+      FluentDOM::load('test.xml', "two")
+    );
+  }
+
+  /**
+   * @group FactoryFunctions
+   * @group Plugins
+   * @covers FluentDOM::registerLoader
+   * @covers FluentDOM::getDefaultLoaders
+   */
+  public function testRegisterLoaderWithCallable() {
+    $dom = new \FluentDOM\Document();
+    $dom->loadXML('<success/>');
+    $mockLoader = $this->getMockBuilder(\FluentDOM\Loadable::class)->getMock();
+    $mockLoader
+      ->expects($this->any())
+      ->method('supports')
+      ->will($this->returnValue(['some/type']));
+    $mockLoader
+      ->expects($this->any())
+      ->method('load')
+      ->with('test.xml', 'some/type')
+      ->will($this->returnValue($dom));
+    FluentDOM::registerLoader(function() use ($mockLoader) { return $mockLoader; });
+    $this->assertEquals(
+      $dom,
+      FluentDOM::load('test.xml', 'some/type')
+    );
+  }
+
+  /**
+   * @group FactoryFunctions
+   * @group Plugins
    * @covers FluentDOM::registerXPathTransformer
    * @covers FluentDOM::getXPathTransformer
    */

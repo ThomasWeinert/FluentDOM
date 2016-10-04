@@ -148,7 +148,7 @@ namespace FluentDOM\Loader\Json {
      * The $recursions parameter is used to limit the recursion depth of this function.
      *
      * @param \DOMElement|\DOMNode $target
-     * @param $value
+     * @param mixed $value
      * @param int $recursions
      */
     protected function transferTo(\DOMNode $target, $value, $recursions = 100) {
@@ -203,8 +203,8 @@ namespace FluentDOM\Loader\Json {
     /**
      * Get a valid qualified name (tag name) using the property name/key.
      *
-     * @param $key
-     * @param $default
+     * @param string $key
+     * @param string $default
      * @param bool $isArrayElement
      * @return string
      */
@@ -264,7 +264,7 @@ namespace FluentDOM\Loader\Json {
      * If the normalized NCName is different from the property name or verbose is TRUE, a json:name attribute
      * with the property name will be added.
      *
-     * @param \DOMElement|\DOMDocumentFragment $target
+     * @param \DOMNode|\DOMElement|\DOMDocumentFragment $target
      * @param object $value
      * @param int $recursions
      */

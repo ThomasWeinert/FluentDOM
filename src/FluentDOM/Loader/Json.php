@@ -21,6 +21,7 @@ namespace FluentDOM\Loader {
     ];
 
     public function __construct() {
+      parent::__construct();
       $this->addClasses($this->_loaders, __NAMESPACE__);
     }
   }

@@ -9,17 +9,17 @@
 namespace FluentDOM\Loader\Json {
 
   use FluentDOM\Document;
-  use FluentDOM\DocumentFragment;
   use FluentDOM\Loadable;
-  use FluentDOM\Loader\Supports;
+  use FluentDOM\Loader\Result;
   use FluentDOM\QualifiedName;
+  use FluentDOM\Loader\Supports\Json as SupportsJson;
 
   /**
    * Load a DOM document from a json string or file
    */
   class JsonDOM implements Loadable {
 
-    use Supports\Json;
+    use SupportsJson;
 
     const ON_MAP_KEY = 'onMapKey';
 
@@ -84,7 +84,7 @@ namespace FluentDOM\Loader\Json {
      * @param mixed $source
      * @param string $contentType
      * @param array $options
-     * @return Document|NULL
+     * @return Document|Result|NULL
      */
     public function load($source, $contentType, array $options = []) {
       if (FALSE !== ($json = $this->getJson($source, $contentType))) {

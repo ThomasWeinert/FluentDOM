@@ -7,7 +7,10 @@
  */
 
 namespace FluentDOM\Loader {
+
+  use FluentDOM\DocumentFragment;
   use FluentDOM\Loadable;
+  use FluentDOM\Document;
 
   /**
    * A list of lazy initialized loaders.
@@ -112,7 +115,7 @@ namespace FluentDOM\Loader {
      * @param string $source
      * @param mixed $contentType
      * @param array $options
-     * @return \DOMDocument|NULL|void
+     * @return Document|Result|NULL
      */
     public function load($source, $contentType, array $options = []) {
       $contentType = $this->normalizeContentType($contentType);
@@ -126,7 +129,7 @@ namespace FluentDOM\Loader {
      * @param string $source
      * @param mixed $contentType
      * @param array $options
-     * @return \DOMDocument|NULL|void
+     * @return DocumentFragment|NULL
      */
     public function loadFragment($source, $contentType, array $options = []) {
       $contentType = $this->normalizeContentType($contentType);

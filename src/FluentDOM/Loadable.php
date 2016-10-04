@@ -32,7 +32,7 @@ namespace FluentDOM {
      * @param mixed $source
      * @param string $contentType
      * @param array $options Optional options for the loader
-     * @return NULL|Document
+     * @return \FluentDOM\Document|\FluentDOM\Loader\Result|NULL
      */
     function load($source, $contentType, array $options = []);
 

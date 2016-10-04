@@ -11,10 +11,10 @@ namespace FluentDOM\Loader\Text {
   use FluentDOM\Document;
   use FluentDOM\DocumentFragment;
   use FluentDOM\Element;
-  use FluentDOM\Exceptions\InvalidFragmentLoader;
   use FluentDOM\Loadable;
   use FluentDOM\Loader\Supports;
   use FluentDOM\QualifiedName;
+  use FluentDOM\Loader\Result;
 
   /**
    * Load a iCalendar (*.ics) file
@@ -42,7 +42,7 @@ namespace FluentDOM\Loader\Text {
      * @param mixed $source
      * @param string $contentType
      * @param array $options
-     * @return Document|NULL
+     * @return Document|Result|NULL
      */
     public function load($source, $contentType, array $options = []) {
       $hasHeaderLine = isset($options['HEADER']) ? (bool)$options['HEADER'] : !isset($options['FIELDS']);

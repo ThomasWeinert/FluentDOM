@@ -4,9 +4,9 @@ namespace FluentDOM\Loader\Supports {
 
   use FluentDOM\Document;
   use FluentDOM\DocumentFragment;
-  use FluentDOM\Exceptions\InvalidFragmentLoader;
   use FluentDOM\Exceptions\JsonError;
   use FluentDOM\Loader\Supports;
+  use FluentDOM\Loader\Result;
 
   trait Json {
 
@@ -18,7 +18,7 @@ namespace FluentDOM\Loader\Supports {
      * @param mixed $source
      * @param string $contentType
      * @param array $options
-     * @return Document|NULL
+     * @return Document|Result|NULL
      */
     public function load($source, $contentType, array $options = []) {
       if (FALSE !== ($json = $this->getJson($source, $contentType))) {

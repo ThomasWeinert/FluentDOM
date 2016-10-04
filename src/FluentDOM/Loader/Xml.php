@@ -33,7 +33,7 @@ namespace FluentDOM\Loader {
      * @param string $source
      * @param string $contentType
      * @param array $options
-     * @return Document|NULL
+     * @return Document|Result|NULL
      */
     public function load($source, $contentType, array $options = []) {
       if ($this->supports($contentType)) {

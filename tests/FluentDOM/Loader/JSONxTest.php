@@ -67,6 +67,38 @@ namespace FluentDOM\Loader {
       );
     }
 
+    /**
+     * @covers \FluentDOM\Loader\JSONx
+     */
+    public function testLoadFragment() {
+      $loader = new JSONx();
+      $fragment = $loader->loadFragment(
+        '<json:object xmlns:json="http://www.ibm.com/xmlns/prod/2009/jsonx" name="Example">
+             <json:string name="Ticker">IBM</json:string>
+           </json:object>',
+        'jsonx'
+      );
+      $this->assertXmlStringEqualsXmlString(
+        '<Example>
+             <Ticker>IBM</Ticker>
+           </Example>',
+        $fragment->saveXmlFragment()
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\Loader\JSONx
+     */
+    public function testLoadFragmentWithInvalidSourceExpectingNull() {
+      $loader = new JSONx();
+      $this->assertNull(
+        $loader->loadFragment(
+          NULL,
+          'jsonx'
+        )
+      );
+    }
+
     public  static function provideExamples() {
       return [
         'object as root' => [

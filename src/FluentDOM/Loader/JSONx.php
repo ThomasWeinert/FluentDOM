@@ -71,15 +71,28 @@ namespace FluentDOM\Loader {
       * @return DocumentFragment|NULL
       */
     public function loadFragment($source, $contentType, array $options = []) {
-      // TODO: Implement loadFragment() method.
-      throw new InvalidFragmentLoader(self::class);
+      if ($this->supports($contentType) && !empty($source)) {
+        $document = new Document();
+        $document->preserveWhiteSpace = FALSE;
+        $document->registerNamespace('jx', self::XMLNS_JSONX);
+        $sourceFragment = $document->createDocumentFragment();
+        $sourceFragment->appendXml($source);
+        $target = new Document();
+        $target->registerNamespace('json', self::XMLNS_JSONDOM);
+        $targetFragment = $target->createDocumentFragment();
+        foreach ($sourceFragment->childNodes as $node) {
+          $this->transferNode($node, $targetFragment);
+        }
+        return $targetFragment;
+      }
+      return NULL;
     }
 
     /**
-     * @param Element $node
+     * @param \DOMNode|Element $node
      * @param \DOMNode|Document|Element $target
      */
-    private function transferNode(Element $node, \DOMNode $target) {
+    private function transferNode(\DOMNode $node, \DOMNode $target) {
       if ($node->namespaceURI === self::XMLNS_JSONX) {
         if ($target instanceOf Document) {
           $normalizedName = $name = 'json:json';

@@ -2,6 +2,7 @@
 namespace FluentDOM\Loader {
 
   use FluentDOM\Document;
+  use FluentDOM\DocumentFragment;
   use FluentDOM\Loadable;
   use FluentDOM\TestCase;
 
@@ -139,12 +140,42 @@ namespace FluentDOM\Loader {
       );
       $this->assertInstanceOf(Document::class, $loader->load('data', 'type'));
     }
+
     /**
      * @covers \FluentDOM\Loader\Lazy
      */
     public function testLoadWithUnsupportedTypeExpectingNull() {
       $loader = $this->getLoaderFixture();
       $this->assertNull($loader->load('', 'non-existing'));
+    }
+
+    /**
+     * @covers \FluentDOM\Loader\Lazy
+     */
+    public function testLoadFragment() {
+      $document = new Document();
+      $loaderMock = $this->getMockBuilder(Loadable::class)->getMock();
+      $loaderMock
+        ->expects($this->once())
+        ->method('loadFragment')
+        ->with('data', 'type', [])
+        ->willReturn($document->createDocumentFragment());
+      $loader = new Lazy(
+        [
+          'type' => function() use ($loaderMock) {
+            return $loaderMock;
+          }
+        ]
+      );
+      $this->assertInstanceOf(DocumentFragment::class, $loader->loadFragment('data', 'type'));
+    }
+
+    /**
+     * @covers \FluentDOM\Loader\Lazy
+     */
+    public function testLoadFragmentWithUnsupportedTypeExpectingNul() {
+      $loader = new Lazy();
+      $this->assertNull($loader->loadFragment('', 'non-existing'));
     }
 
     private function getLoaderFixture() {
@@ -159,5 +190,6 @@ namespace FluentDOM\Loader {
       );
       return $loader;
     }
+
   }
 }

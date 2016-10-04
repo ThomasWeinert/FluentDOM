@@ -2,6 +2,7 @@
 namespace FluentDOM\Nodes {
 
   use FluentDOM\Document;
+  use FluentDOM\Exceptions\InvalidFragmentLoader;
   use FluentDOM\TestCase;
   use FluentDOM\Nodes;
 
@@ -315,10 +316,22 @@ namespace FluentDOM\Nodes {
       $nodes = new Nodes();
       $builder = new Builder($nodes);
       $this->setExpectedException(
-        'UnexpectedValueException',
+        \UnexpectedValueException::class,
         'Invalid document fragment'
       );
       $builder->getFragment(NULL, 'text/xml');
+    }
+
+    /**
+     * @covers \FluentDOM\Nodes\Builder
+     */
+    public function testGetXmlFragmentWithInvalidContentType() {
+      $nodes = new Nodes();
+      $builder = new Builder($nodes);
+      $this->setExpectedException(
+        InvalidFragmentLoader::class
+      );
+      $builder->getFragment('', 'invalid');
     }
 
     /**

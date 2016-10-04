@@ -1,5 +1,4 @@
 <?php
-
 namespace FluentDOM\Nodes {
 
   use FluentDOM\Appendable;

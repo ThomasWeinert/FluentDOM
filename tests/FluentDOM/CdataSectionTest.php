@@ -21,5 +21,31 @@ namespace FluentDOM {
         $dom->saveXML($dom->documentElement)
       );
     }
+
+    /**
+     * @covers \FluentDOM\Node\WholeText
+     * @covers \FluentDOM\Text
+     */
+    public function testReplaceWholeText() {
+      $document = new Document();
+      $document->loadXML(
+        '<p>'.
+        'one<!-- start -->'.
+        '<![CDATA[two]]>'.
+        'three'.
+        '<![CDATA[four]]>'.
+        'five'.
+        '<![CDATA[six]]><!-- end -->'.
+        'seven'.
+        '</p>'
+      );
+      /** @var CdataSection $textFour */
+      $textFour = $document->documentElement->childNodes[4];
+      $textFour->replaceWholeText('42');
+      $this->assertEquals(
+        '<p>one<!-- start --><![CDATA[42]]><!-- end -->seven</p>',
+        $document->documentElement->saveXml()
+      );
+    }
   }
 }

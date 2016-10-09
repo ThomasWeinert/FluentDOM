@@ -1,9 +1,10 @@
 <?php
 /**
- * Cast a DOMNode into a string
+ * Add a `evaluate()` method to execute an Xpath expression in the context of the node and
+ * make the node a functor.
  *
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
+ * @copyright Copyright (c) 2009-2016 Bastian Feder, Thomas Weinert
  */
 
 namespace FluentDOM\Node {
@@ -11,9 +12,9 @@ namespace FluentDOM\Node {
   use FluentDOM\Document;
 
   /**
-   * Cast a DOMNode into a string
+   * Add a `evaluate()` method to execute an Xpath expression in the context of the node and
+   * make the node a functor.
    *
-   * @property string $nodeValue
    * @property Document $ownerDocument
    */
   trait Xpath {

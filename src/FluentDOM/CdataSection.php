@@ -22,6 +22,7 @@ namespace FluentDOM {
     use Node\ChildNode\Implementation;
     use Node\NonDocumentTypeChildNode\Properties;
     use Node\StringCast;
+    use Node\WholeText;
     use Node\Xpath;
   }
 }

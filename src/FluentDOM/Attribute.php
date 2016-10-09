@@ -14,7 +14,7 @@ namespace FluentDOM {
    * @property Document $ownerDocument
    */
   class Attribute
-    extends \DOMAttr  {
+    extends \DOMAttr {
 
     use Node\Xpath;
 

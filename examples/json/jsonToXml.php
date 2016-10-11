@@ -18,5 +18,5 @@ $options = array(
 $json = file_get_contents($url, NULL, stream_context_create($options));
 
 header('Content-type: text/xml');
-echo FluentDOM($json, "text/json")->formatOutput();
+echo FluentDOM($json, "text/json")->formatOutput('text/xml');
 

@@ -2,15 +2,21 @@ Version 6.0
 -----------
 
 - Changed: minimum PHP version is now 5.6
+- Refactored: Replace func_get_args() with variadics
 - Added: HTML loader now supports 'html-fragment' and 'text/html-fragment'
 - Added: XML/HTML loaders now support libxml options for the load methods
 - Added: JsonDOM loader supports a callback for mapping keys to tag names
    The callback can be set using an option or JsonDOM::onMapKey().
-- Refactored: Replace func_get_args() with variadics
 - Changed: string arguments to methods like FluentDOM\Query::append() are now parsed as
     HTML fragments if the content type of the FluentDOM\Query instance is a HTML type.
 - Changed: NULL values can now be set using FluentDOM\Query::attr(), FluentDOM\Query::css()
     and FluentDOM\Query::data() methods.
+- Changed: FluentDOM\Nodes()/FluentDOM\Query() now keeps the content type used to load the
+    document and use it for parsing fragments and serializing the document.
+- Added: FluentDOM\Loadable::loadFragment() 
+- Added: FluentDOM\Text::replaceWholeText() and FluentDOM\CdataSection::replaceWholeText()
+- Added: FluentDOM::registerSerializerFactory(), register function/factory to create
+    a serializer for a node.
 
 Version 5.3
 -----------

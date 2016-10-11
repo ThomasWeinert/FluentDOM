@@ -236,4 +236,39 @@ The old loaders are gone and replaced with the new FluentDOM\Loadable interface.
 The registerNamespaces() method was replaced with a registerNamespace() method,
 having the same arguments like DOMXpath::registerNamespace().
 
+### From 5 to 6
+
+Serializer factories can now be registered on the FluentDOM class. Loaders implement
+an additional method to parse a fragment. This allows the FluentDOM\Nodes() class
+to keep the content type used to load a source. Methods like `append()` now parse
+a string as a fragment of the current content type. Casting the FluentDOM\Nodes()
+instance to a string serializes it to the current content type.
+
+```php
+$fd = FluentDOM('{"firstName": "John"}', 'text/json');
+echo $fd->find('/*')->append('{"lastName": "Smith"}');
+/*
+ {"firstName":"John","lastName":"Smith"}
+ */
+```
+
+To get the previous behaviour you will have to change the content type to 'text/xml' after
+loading a source.
+
+```php
+$fd = FluentDOM('{"firstName": "John"}', 'text/json');
+$fd->contentType = 'text/xml';
+echo $fd->find('/*')->append('<lastName>Smith</lastName>');
+
+/* 
+  <json:json xmlns:json="urn:carica-json-dom.2013">
+    <firstName>John</firstName>
+    <lastName>Smith</lastName>
+  </json:json>
+ */
+```
+
+Loaders have an additional method loadFragment(). Serializers are now expected to be able to 
+serialize a node (not only a document).
+
 

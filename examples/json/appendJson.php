@@ -8,10 +8,9 @@ $json = <<<JSON
 JSON;
 
 $fd = FluentDOM($json, 'text/json');
-$fd->find('/*')->append(
-  '{"lastName": "Smith"}'
-);
-echo $fd;
+echo $fd->find('/*')->append('{"lastName": "Smith"}');
+
+
 $fd = FluentDOM('{"firstName": "John"}', 'text/json');
 $fd->contentType = 'text/xml';
 echo $fd->find('/*')->append('<lastName>Smith</lastName>');

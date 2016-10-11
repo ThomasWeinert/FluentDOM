@@ -1,18 +1,17 @@
 <?php
-
 namespace FluentDOM\Exceptions {
 
   use FluentDOM\TestCase;
 
   require_once(__DIR__.'/../TestCase.php');
 
-
-  class InvalidFragmentLoaderTest extends TestCase  {
+  class NoSerializerTest extends TestCase  {
 
     public function testConstructor() {
-      $exception = new InvalidFragmentLoader('LoaderClass');
+      $exception = new NoSerializer('some/type');
       $this->assertEquals(
-        'Loader "LoaderClass" can not load fragments.', $exception->getMessage()
+        'No serializer for content type some/type available.',
+        $exception->getMessage()
       );
     }
   }

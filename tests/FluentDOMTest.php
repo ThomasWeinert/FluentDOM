@@ -1,8 +1,8 @@
 <?php
 
-require_once(__DIR__.'/../vendor/autoload.php');
+require_once(__DIR__.'/FluentDOM/TestCase.php');
 
-class FluentDOMTest extends \PHPUnit_Framework_TestCase {
+class FluentDOMTest extends \FluentDOM\TestCase  {
 
   /**
    * @group FactoryFunctions

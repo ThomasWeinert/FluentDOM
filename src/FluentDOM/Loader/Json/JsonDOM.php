@@ -9,6 +9,7 @@
 namespace FluentDOM\Loader\Json {
 
   use FluentDOM\Document;
+  use FluentDOM\Element;
   use FluentDOM\Loadable;
   use FluentDOM\Loader\Result;
   use FluentDOM\QualifiedName;
@@ -237,13 +238,16 @@ namespace FluentDOM\Loader\Json {
      * Transfer an array value into a target element node. Sets the json:type attribute to 'array' and
      * creates child element nodes for each array element using the default QName.
      *
-     * @param \DOMElement $target
+     * @param \DOMNode|\DOMElement|\DOMDocumentFragment $target
      * @param array $value
      * @param int $recursions
      */
-    private function transferArrayTo(\DOMElement $target, array $value, $recursions) {
-      $target->setAttributeNS(self::XMLNS, 'json:type', 'array');
-      $parentName = $target->getAttributeNS(self::XMLNS, 'name') ?: $target->localName;
+    private function transferArrayTo(\DOMNode $target, array $value, $recursions) {
+      $parentName = '';
+      if ($target instanceof Element) {
+        $target->setAttributeNS(self::XMLNS, 'json:type', 'array');
+        $parentName = $target->getAttributeNS(self::XMLNS, 'name') ?: $target->localName;
+      }
       foreach ($value as $item) {
         $target->appendChild(
           $child = $target->ownerDocument->createElement(

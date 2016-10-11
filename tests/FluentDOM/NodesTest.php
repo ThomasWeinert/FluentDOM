@@ -935,7 +935,26 @@ namespace FluentDOM {
 
       $fd = new Nodes(self::XML);
       $fd->serializerFactories($factory);
-      $this->assertXmlStringEqualsXmlString(self::XML, (string)$fd);
+      $this->assertEquals('', (string)$fd);
+    }
+
+    /**
+     * @group MagicFunctions
+     * @group StringCastable
+     * @covers \FluentDOM\Nodes::toString
+     * @covers \FluentDOM\Nodes::__toString
+     */
+    public function testStringWithSerializerFactoryExpectingException() {
+      $factory = $this->getMockBuilder(Serializer\Factory\Group::class)->getMock();
+      $factory
+        ->expects($this->once())
+        ->method('createSerializer')
+        ->willReturn(NULL);
+
+      $fd = new Nodes(self::XML);
+      $fd->serializerFactories($factory);
+      $this->setExpectedException(Exceptions\NoSerializer::class);
+      $fd->toString();
     }
 
     /**

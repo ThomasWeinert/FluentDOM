@@ -7,6 +7,8 @@
  */
 
 namespace FluentDOM {
+
+  use FluentDOM\Exceptions\InvalidSerializer;
   use FluentDOM\Xpath\Transformer;
   use FluentDOM\Serializer;
 
@@ -618,7 +620,7 @@ namespace FluentDOM {
       if ($serializer = $this->serializerFactories()->createSerializer($this->contentType, $this->document)) {
         return (string)$serializer;
       } else {
-        return $this->document->saveXML();
+        throw new Exceptions\NoSerializer($this->contentType);
       }
     }
 
@@ -631,6 +633,8 @@ namespace FluentDOM {
       try {
         return $this->toString();
       } catch (\Exception $e) {
+        return '';
+      } catch (\Throwable $e) {
         return '';
       }
     }

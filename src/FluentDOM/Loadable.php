@@ -45,6 +45,6 @@ namespace FluentDOM {
      * @param array $options Optional options for the loader
      * @return NULL|\FluentDOM\DocumentFragment
      */
-    public function loadFragment($source, $contentType, array $options = []);
+    function loadFragment($source, $contentType, array $options = []);
   }
 }

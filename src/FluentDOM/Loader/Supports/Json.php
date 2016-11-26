@@ -56,10 +56,10 @@ namespace FluentDOM\Loader\Supports {
       if ($this->supports($contentType)) {
         if (is_string($source)) {
           $json = FALSE;
-          if (!$this->startsWith($source, '{[')) {
+          if (!$this->startsWith($source, '{') && !$this->startsWith($source, '[')) {
             $source = file_get_contents($source);
           }
-          if ($this->startsWith($source, '{[')) {
+          if ($this->startsWith($source, '{') || $this->startsWith($source, '[')) {
             $json = json_decode($source);
             if (!($json || is_array($json))) {
               throw new JsonError(

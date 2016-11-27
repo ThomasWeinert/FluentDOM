@@ -17,10 +17,10 @@ namespace FluentDOM\Loader\Supports {
      *
      * @param mixed $source
      * @param string $contentType
-     * @param array $options
+     * @param array|\Traversable|Options $options
      * @return Document|Result|NULL
      */
-    public function load($source, $contentType, array $options = []) {
+    public function load($source, $contentType, $options = []) {
       if (FALSE !== ($json = $this->getJson($source, $contentType))) {
         $dom = new Document('1.0', 'UTF-8');
         $this->transferTo($dom, $json);
@@ -34,10 +34,10 @@ namespace FluentDOM\Loader\Supports {
      *
      * @param string $source
      * @param string $contentType
-     * @param array $options
+     * @param array|\Traversable|Options $options
      * @return DocumentFragment|NULL
      */
-    public function loadFragment($source, $contentType, array $options = []) {
+    public function loadFragment($source, $contentType, $options = []) {
       if (FALSE !== ($json = $this->getJson($source, $contentType))) {
         $document = new Document('1.0', 'UTF-8');
         $fragment = $document->createDocumentFragment();

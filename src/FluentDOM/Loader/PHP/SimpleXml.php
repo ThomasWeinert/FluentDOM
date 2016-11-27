@@ -41,10 +41,10 @@ namespace FluentDOM\Loader\PHP {
      * @see Loadable::load
      * @param \SimpleXMLElement $source
      * @param string $contentType
-     * @param array $options
+     * @param array|\Traversable|Options $options
      * @return Document|Result|NULL
      */
-    public function load($source, $contentType, array $options = []) {
+    public function load($source, $contentType, $options = []) {
       if ($source instanceof \SimpleXMLElement) {
         $document = new Document();
         $document->appendChild($document->importNode(dom_import_simplexml($source), TRUE));
@@ -58,10 +58,10 @@ namespace FluentDOM\Loader\PHP {
      *
      * @param mixed $source
      * @param string $contentType
-     * @param array $options
+     * @param array|\Traversable|Options $options
      * @return DocumentFragment|NULL
      */
-    public function loadFragment($source, $contentType, array $options = []) {
+    public function loadFragment($source, $contentType, $options = []) {
       if (!$this->supports($contentType)) {
         return NULL;
       } elseif (is_string($source)) {

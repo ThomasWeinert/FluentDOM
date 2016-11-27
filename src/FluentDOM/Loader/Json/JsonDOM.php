@@ -84,10 +84,10 @@ namespace FluentDOM\Loader\Json {
      *
      * @param mixed $source
      * @param string $contentType
-     * @param array $options
+     * @param array|\Traversable|Options $options
      * @return Document|Result|NULL
      */
-    public function load($source, $contentType, array $options = []) {
+    public function load($source, $contentType, $options = []) {
       if (FALSE !== ($json = $this->getJson($source, $contentType))) {
         $dom = new Document('1.0', 'UTF-8');
         $dom->appendChild(
@@ -107,10 +107,10 @@ namespace FluentDOM\Loader\Json {
     /**
      * @param string $source
      * @param string $contentType
-     * @param array $options
+     * @param array|\Traversable|Options $options
      * @return \FluentDOM\DocumentFragment|null
      */
-    public function loadFragment($source, $contentType, array $options = []) {
+    public function loadFragment($source, $contentType, $options = []) {
       if ($this->supports($contentType)) {
         $dom = new Document('1.0', 'UTF-8');
         $fragment = $dom->createDocumentFragment();

@@ -114,10 +114,10 @@ namespace FluentDOM\Loader {
     /**
      * @param string $source
      * @param mixed $contentType
-     * @param array $options
+     * @param array|\Traversable|Options $options
      * @return Document|Result|NULL
      */
-    public function load($source, $contentType, array $options = []) {
+    public function load($source, $contentType, $options = []) {
       $contentType = $this->normalizeContentType($contentType);
       if ($loader = $this->get($contentType)) {
         return $loader->load($source, $contentType, $options);
@@ -128,10 +128,10 @@ namespace FluentDOM\Loader {
     /**
      * @param string $source
      * @param mixed $contentType
-     * @param array $options
+     * @param array|\Traversable|Options $options
      * @return DocumentFragment|NULL
      */
-    public function loadFragment($source, $contentType, array $options = []) {
+    public function loadFragment($source, $contentType, $options = []) {
       $contentType = $this->normalizeContentType($contentType);
       if ($loader = $this->get($contentType)) {
         return $loader->loadFragment($source, $contentType, $options);

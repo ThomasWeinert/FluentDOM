@@ -9,6 +9,8 @@
 
 namespace FluentDOM {
 
+  use FluentDOM\Loader\Options;
+
   /**
    * FluentDOM\Loadable describes an interface for loader objects that can be used to load
    * a data source into a DOM document.
@@ -31,10 +33,10 @@ namespace FluentDOM {
      *
      * @param mixed $source
      * @param string $contentType
-     * @param array $options Optional options for the loader
+     * @param array|\Traversable|Options $options Optional options for the loader
      * @return \FluentDOM\Document|\FluentDOM\Loader\Result|NULL
      */
-    function load($source, $contentType, array $options = []);
+    function load($source, $contentType, $options = []);
 
     /**
      * Load the data source and return the new DOM document. Return NULL if
@@ -42,9 +44,9 @@ namespace FluentDOM {
      *
      * @param mixed $source
      * @param string $contentType
-     * @param array $options Optional options for the loader
+     * @param array|\Traversable|Options $options Optional options for the loader
      * @return NULL|\FluentDOM\DocumentFragment
      */
-    function loadFragment($source, $contentType, array $options = []);
+    function loadFragment($source, $contentType, $options = []);
   }
 }

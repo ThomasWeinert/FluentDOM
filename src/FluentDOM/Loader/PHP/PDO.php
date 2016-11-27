@@ -30,10 +30,10 @@ namespace FluentDOM\Loader\PHP {
      * @see Loadable::load
      * @param \PDOStatement $source
      * @param string $contentType
-     * @param array $options
+     * @param array|\Traversable|Options $options
      * @return Document|Result|NULL
      */
-    public function load($source, $contentType, array $options = []) {
+    public function load($source, $contentType, $options = []) {
       if ($source instanceof \PDOStatement) {
         $document = new Document('1.0', 'UTF-8');
         $document->registerNamespace('json', self::XMLNS);
@@ -53,10 +53,10 @@ namespace FluentDOM\Loader\PHP {
      *
      * @param string $source
      * @param string $contentType
-     * @param array $options
+     * @param array|\Traversable|Options $options
      * @return DocumentFragment|NULL
      */
-    public function loadFragment($source, $contentType, array $options = []) {
+    public function loadFragment($source, $contentType, $options = []) {
       throw new InvalidFragmentLoader(self::class);
     }
   }

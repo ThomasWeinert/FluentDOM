@@ -41,10 +41,10 @@ namespace FluentDOM\Loader\Text {
      * @see Loadable::load
      * @param mixed $source
      * @param string $contentType
-     * @param array $options
+     * @param array|\Traversable|Options $options
      * @return Document|Result|NULL
      */
-    public function load($source, $contentType, array $options = []) {
+    public function load($source, $contentType, $options = []) {
       $hasHeaderLine = isset($options['HEADER']) ? (bool)$options['HEADER'] : !isset($options['FIELDS']);
       $this->configure($options);
       if ($this->supports($contentType) && ($lines = $this->getLines($source))) {
@@ -62,10 +62,10 @@ namespace FluentDOM\Loader\Text {
      *
      * @param string $source
      * @param string $contentType
-     * @param array $options
+     * @param array|\Traversable|Options $options
      * @return DocumentFragment|NULL
      */
-    public function loadFragment($source, $contentType, array $options = []) {
+    public function loadFragment($source, $contentType, $options = []) {
       $hasHeaderLine = isset($options['FIELDS']) ? FALSE : (isset($options['HEADER']) && $options['HEADER']);
       $this->configure($options);
       if ($this->supports($contentType) && ($lines = $this->getLines($source))) {
@@ -167,9 +167,9 @@ namespace FluentDOM\Loader\Text {
     }
 
     /**
-     * @param array $options
+     * @param array|\Traversable|Options $options
      */
-    private function configure(array $options) {
+    private function configure($options) {
       $this->_delimiter = isset($options['DELIMITER']) ? $options['DELIMITER'] : $this->_delimiter;
       $this->_enclosure = isset($options['ENCLOSURE']) ? $options['ENCLOSURE'] : $this->_enclosure;
       $this->_escape = isset($options['ESCAPE']) ? $options['ESCAPE'] : $this->_escape;

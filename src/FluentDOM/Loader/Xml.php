@@ -32,10 +32,10 @@ namespace FluentDOM\Loader {
      * @see Loadable::load
      * @param string $source
      * @param string $contentType
-     * @param array $options
+     * @param array|\Traversable|Options $options
      * @return Document|Result|NULL
      */
-    public function load($source, $contentType, array $options = []) {
+    public function load($source, $contentType, $options = []) {
       if ($this->supports($contentType)) {
         $dom = new Document();
         $dom->preserveWhiteSpace = FALSE;
@@ -54,10 +54,10 @@ namespace FluentDOM\Loader {
      * @see LoadableFragment::loadFragment
      * @param string $source
      * @param string $contentType
-     * @param array $options
+     * @param array|\Traversable|Options $options
      * @return DocumentFragment|NULL
      */
-    public function loadFragment($source, $contentType, array $options = []) {
+    public function loadFragment($source, $contentType, $options = []) {
       if ($this->supports($contentType)) {
         $dom = new Document();
         $fragment = $dom->createDocumentFragment();

@@ -89,10 +89,10 @@ namespace FluentDOM {
      *
      * @param mixed $source
      * @param string $contentType
-     * @param array $options
+     * @param array|\Traversable|Options $options
      * @return \DOMDocument|Result|NULL
      */
-    public function load($source, $contentType, array $options = []) {
+    public function load($source, $contentType, $options = []) {
       $dom = NULL;
       foreach ($this as $loader) {
         /**
@@ -111,10 +111,10 @@ namespace FluentDOM {
      *
      * @param mixed $source
      * @param string $contentType
-     * @param array $options
+     * @param array|\Traversable|Options $options
      * @return \DOMDocumentFragment|NULL
      */
-    public function loadFragment($source, $contentType, array $options = []) {
+    public function loadFragment($source, $contentType, $options = []) {
       $fragment = NULL;
       foreach ($this as $loader) {
         /**

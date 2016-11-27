@@ -9,6 +9,7 @@
 namespace FluentDOM {
 
   use FluentDOM\Exceptions\InvalidSerializer;
+  use FluentDOM\Loader\Options;
   use FluentDOM\Xpath\Transformer;
   use FluentDOM\Serializer;
 
@@ -109,11 +110,11 @@ namespace FluentDOM {
      *
      * @param mixed $source
      * @param string $contentType optional, default value 'text/xml'
-     * @param array $options
+     * @param array|\Traversable|Options $options
      * @throws \InvalidArgumentException
      * @return $this
      */
-    public function load($source, $contentType = 'text/xml', array $options = []) {
+    public function load($source, $contentType = 'text/xml', $options = []) {
       $loaded = $this->prepareSource($source, $contentType, $options);
       if ($loaded instanceof Loader\Result || $loaded instanceof \DOMDocument) {
         if ($loaded instanceof Loader\Result) {
@@ -136,10 +137,10 @@ namespace FluentDOM {
     /**
      * @param mixed $source
      * @param string $contentType
-     * @param array $options
+     * @param array|\Traversable|Options $options
      * @return bool|\DOMDocument|Document|NULL
      */
-    private function prepareSource($source, $contentType, array $options) {
+    private function prepareSource($source, $contentType, $options) {
       $loaded = FALSE;
       $this->_useDocumentContext = TRUE;
       if ($source instanceof Nodes) {

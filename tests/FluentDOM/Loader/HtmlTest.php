@@ -2,6 +2,7 @@
 namespace FluentDOM\Loader {
 
   use FluentDOM\TestCase;
+  use Symfony\Component\Console\Exception\LogicException;
 
   require_once(__DIR__.'/../TestCase.php');
 
@@ -49,9 +50,10 @@ namespace FluentDOM\Loader {
         '<div/>',
         'text/html'
       );
+      $document = $result->getDocument();
       $this->assertEquals(
         '<html><body><div/></body></html>',
-        $result->getDocument()->documentElement->saveXML()
+        $document->saveXML($document->documentElement)
       );
     }
 
@@ -106,14 +108,48 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Html
      */
-    public function testLoadWithValidHtmlFile() {
+    public function testLoadWithValidHtmlFileAllowFile() {
       $loader = new Html();
       $this->assertInstanceOf(
         Result::class,
-        $loader->load(
+        $result = $loader->load(
           __DIR__.'/TestData/loader.html',
-          'text/html'
+          'text/html',
+          [Options::ALLOW_FILE => TRUE]
         )
+      );
+      $this->assertEquals(
+        'html', $result->getDocument()->documentElement->localName
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\Loader\Html
+     */
+    public function testLoadWithValidHtmlFileForceFile() {
+      $loader = new Html();
+      $this->assertInstanceOf(
+        Result::class,
+        $result = $loader->load(
+          __DIR__.'/TestData/loader.html',
+          'text/html',
+          [Options::IS_FILE => TRUE]
+        )
+      );
+      $this->assertEquals(
+        'html', $result->getDocument()->documentElement->localName
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\Loader\Html
+     */
+    public function testLoadWithFileExpectingException() {
+      $loader = new Html();
+      $this->setExpectedException(\LogicException::class);
+      $loader->load(
+        __DIR__.'/TestData/loader.html',
+        'text/html'
       );
     }
 

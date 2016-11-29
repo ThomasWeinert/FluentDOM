@@ -16,7 +16,8 @@ namespace FluentDOM\Loader {
   class Options implements \IteratorAggregate, \ArrayAccess {
 
     const IS_FILE = 'is_file';
-    const ALLOW_FILES = 'allow_files';
+    const IS_STRING = 'is_string';
+    const ALLOW_FILE = 'allow_files';
 
     private $_options = [];
     private $_callbacks = [
@@ -45,13 +46,13 @@ namespace FluentDOM\Loader {
       $this->_callbacks[$name] = $callback;
     }
 
-    private function executeCallback($name, ...$arguments) {
+    private function executeCallback($name, $default, ...$arguments) {
       if (array_key_exists($name, $this->_callbacks)) {
         $callback = $this->_callbacks[$name];
         if (is_callable($callback)) {
-          return NULL;
+          return $callback(...$arguments);
         } else {
-          $callback($arguments);
+          return $default;
         }
       } else {
         throw new \InvalidArgumentException(
@@ -80,26 +81,37 @@ namespace FluentDOM\Loader {
       $this->_options[$offset] = NULL;
     }
 
-    public function isStringSource($source) {
-      $isString = $this->executeCallback('identifyStringSource', $source);
-      if ($isString && $this[self::IS_FILE]) {
-        // define and throw specific exception
-        throw new \LogicException(
-          'Given source seems to be an fragment but file expected.'
-        );
+    public function getSourceType($source) {
+      $isStringSource = $this->executeCallback('identifyStringSource', TRUE, $source);
+      if ($isStringSource || $this[self::IS_STRING]) {
+        return self::IS_STRING;
+      } elseif (!$isStringSource || $this[self::IS_FILE]) {
+        return self::IS_FILE;
       }
-      return TRUE;
+      return NULL;
     }
 
-    public function isFile($source) {
-      $isFile = (FALSE === $this->executeCallback('identifyStringSource', $source));
-      if ($isFile && ($this[self::ALLOW_FILES] || $this[self::IS_FILE])) {
-        return TRUE;
+    public function isAllowed($sourceType, $throwException = TRUE) {
+      try {
+        switch ($sourceType) {
+        case self::IS_FILE :
+          if (!($this[self::IS_FILE] || $this[self::ALLOW_FILE])) {
+            throw new \LogicException('File source not allowed.');
+          }
+          break;
+        case self::IS_STRING :
+          if ($this[self::IS_FILE]) {
+            throw new \LogicException('File source expected.');
+          }
+          break;
+        }
+      } catch (\LogicException $e) {
+        if ($throwException) {
+          throw $e;
+        }
+        return FALSE;
       }
-      // define and throw specific exception
-      throw new \LogicException(
-        'Given source seems to be an file but expected a  fragment.'
-      );
+      return TRUE;
     }
   }
 }

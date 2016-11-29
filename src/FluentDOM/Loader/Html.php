@@ -47,10 +47,17 @@ namespace FluentDOM\Loader {
             if ($this->isFragment($contentType, $options)) {
               $this->loadFragmentIntoDom($document, $source, $loadOptions);
               $selection = $document->evaluate('/*');
-            } elseif ($options->isStringSource($source)) {
-              $document->loadHTML($source, $loadOptions);
-            } elseif ($options->isFile($source)) {
-              $document->loadHTMLFile($source, $loadOptions);
+            } else {
+              $options->isAllowed($sourceType = $options->getSourceType($source));
+              switch ($sourceType) {
+              case Options::IS_FILE :
+                $document->loadHTMLFile($source, $loadOptions);
+                break;
+              case Options::IS_STRING :
+              default :
+                $document->loadHTML($source, $loadOptions);
+                break;
+              }
             }
             return new Result($document, 'text/html', $selection);
           }
@@ -99,7 +106,6 @@ namespace FluentDOM\Loader {
             return $fragment;
           }
         );
-        return $fragment;
       }
       return NULL;
     }

@@ -2,7 +2,7 @@
 namespace FluentDOM\Loader {
 
   use FluentDOM\TestCase;
-  use Symfony\Component\Console\Exception\LogicException;
+  use FluentDOM\Exceptions\InvalidSource;
 
   require_once(__DIR__.'/../TestCase.php');
 
@@ -146,7 +146,7 @@ namespace FluentDOM\Loader {
      */
     public function testLoadWithFileExpectingException() {
       $loader = new Html();
-      $this->setExpectedException(\LogicException::class);
+      $this->setExpectedException(InvalidSource\TypeFile::class);
       $loader->load(
         __DIR__.'/TestData/loader.html',
         'text/html'

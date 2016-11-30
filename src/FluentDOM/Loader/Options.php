@@ -8,7 +8,7 @@
 
 namespace FluentDOM\Loader {
 
-  use FluentDOM\Exceptions\InvalidArgument;
+  use FluentDOM\Exceptions\InvalidSource;
 
   /**
    * Generalized option handling for loaders
@@ -96,12 +96,12 @@ namespace FluentDOM\Loader {
         switch ($sourceType) {
         case self::IS_FILE :
           if (!($this[self::IS_FILE] || $this[self::ALLOW_FILE])) {
-            throw new \LogicException('File source not allowed.');
+            throw new InvalidSource\TypeFile('File source not allowed.');
           }
           break;
         case self::IS_STRING :
           if ($this[self::IS_FILE]) {
-            throw new \LogicException('File source expected.');
+            throw new InvalidSource\TypeString('File source expected.');
           }
           break;
         }

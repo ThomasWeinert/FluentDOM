@@ -17,7 +17,7 @@ namespace FluentDOM\Loader {
 
     const IS_FILE = 'is_file';
     const IS_STRING = 'is_string';
-    const ALLOW_FILE = 'allow_files';
+    const ALLOW_FILE = 'allow_file';
 
     private $_options = [];
     private $_callbacks = [

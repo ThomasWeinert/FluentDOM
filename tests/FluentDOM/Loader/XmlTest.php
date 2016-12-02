@@ -2,6 +2,7 @@
 namespace FluentDOM\Loader {
 
   use FluentDOM\TestCase;
+  use FluentDOM\Exceptions\InvalidSource;
 
   require_once(__DIR__.'/../TestCase.php');
 
@@ -62,14 +63,47 @@ namespace FluentDOM\Loader {
      * @covers \FluentDOM\Loader\Xml
      * @covers \FluentDOM\Loader\Supports
      */
-    public function testLoadWithValidXmlFile() {
+    public function testLoadWithValidXmlFileAllowFile() {
       $loader = new Xml();
       $this->assertInstanceOf(
         'DOMDocument',
         $loader->load(
           __DIR__.'/TestData/loader.xml',
-          'text/xml'
+          'text/xml',
+          [
+            Options::ALLOW_FILE => TRUE
+          ]
         )
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\Loader\Xml
+     * @covers \FluentDOM\Loader\Supports
+     */
+    public function testLoadWithValidXmlFileForceFile() {
+      $loader = new Xml();
+      $this->assertInstanceOf(
+        'DOMDocument',
+        $loader->load(
+          __DIR__.'/TestData/loader.xml',
+          'text/xml',
+          [
+            Options::IS_FILE => TRUE
+          ]
+        )
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\Loader\Html
+     */
+    public function testLoadWithFileExpectingException() {
+      $loader = new Xml();
+      $this->setExpectedException(InvalidSource\TypeFile::class);
+      $loader->load(
+        __DIR__.'/TestData/loader.xml',
+        'text/xml'
       );
     }
 

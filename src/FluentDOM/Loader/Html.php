@@ -38,7 +38,7 @@ namespace FluentDOM\Loader {
      */
     public function load($source, $contentType, $options = []) {
       if ($this->supports($contentType)) {
-        return $this->captureLibxmlErrors(
+        return (new Libxml\Errors())->capture(
           function() use ($source, $contentType, $options) {
             $selection = false;
             $document = new Document();
@@ -67,23 +67,6 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @param array|\Traversable|Options $options
-     * @return Options
-     */
-    public function getOptions($options) {
-      $result = new Options(
-        $options,
-        [
-          'identifyStringSource' => function($source) {
-             return $this->startsWith($source, '<');
-          }
-        ]
-      );
-      $result[self::LIBXML_OPTIONS] = (int)$result[self::LIBXML_OPTIONS];
-      return $result;
-    }
-
-    /**
      * @see LoadableFragment::loadFragment
      * @param string $source
      * @param string $contentType
@@ -94,7 +77,7 @@ namespace FluentDOM\Loader {
       if ($this->supports($contentType)) {
         $options = $this->getOptions($options);
         $loadOptions = (int)$options[self::LIBXML_OPTIONS];
-        return $this->captureLibxmlErrors(
+        return (new Libxml\Errors())->capture(
           function() use ($source, $loadOptions) {
             $document = new Document();
             $fragment = $document->createDocumentFragment();
@@ -129,11 +112,20 @@ namespace FluentDOM\Loader {
       }
     }
 
-    private function captureLibxmlErrors(callable $callback) {
-      $errorSetting = libxml_use_internal_errors(TRUE);
-      $result = $callback();
-      libxml_clear_errors();
-      libxml_use_internal_errors($errorSetting);
+    /**
+     * @param array|\Traversable|Options $options
+     * @return Options
+     */
+    public function getOptions($options) {
+      $result = new Options(
+        $options,
+        [
+          'identifyStringSource' => function($source) {
+            return $this->startsWith($source, '<');
+          }
+        ]
+      );
+      $result[self::LIBXML_OPTIONS] = (int)$result[self::LIBXML_OPTIONS];
       return $result;
     }
   }

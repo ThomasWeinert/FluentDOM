@@ -37,15 +37,25 @@ namespace FluentDOM\Loader {
      */
     public function load($source, $contentType, $options = []) {
       if ($this->supports($contentType)) {
-        $dom = new Document();
-        $dom->preserveWhiteSpace = FALSE;
-        $loadOptions = isset($options[self::LIBXML_OPTIONS]) ? (int)$options[self::LIBXML_OPTIONS] : 0;
-        if ($this->startsWith($source, '<')) {
-          $dom->loadXml($source, $loadOptions);
-        } else {
-          $dom->load($source, $loadOptions);
-        }
-        return $dom;
+        return (new Libxml\Errors())->capture(
+          function() use ($source, $contentType, $options) {
+            $document = new Document();
+            $document->preserveWhiteSpace = FALSE;
+            $options = $this->getOptions($options);
+            $loadOptions = (int)$options[self::LIBXML_OPTIONS];
+            $options->isAllowed($sourceType = $options->getSourceType($source));
+            switch ($sourceType) {
+            case Options::IS_FILE :
+              $document->load($source, $loadOptions);
+              break;
+            case Options::IS_STRING :
+            default :
+              $document->loadXML($source, $loadOptions);
+              break;
+            }
+            return $document;
+          }
+        );
       }
       return NULL;
     }
@@ -59,12 +69,33 @@ namespace FluentDOM\Loader {
      */
     public function loadFragment($source, $contentType, $options = []) {
       if ($this->supports($contentType)) {
-        $dom = new Document();
-        $fragment = $dom->createDocumentFragment();
-        $fragment->appendXml($source);
-        return $fragment;
+        return (new Libxml\Errors())->capture(
+          function() use ($source, $contentType, $options) {
+            $dom = new Document();
+            $fragment = $dom->createDocumentFragment();
+            $fragment->appendXml($source);
+            return $fragment;
+          }
+        );
       }
       return NULL;
+    }
+
+    /**
+     * @param array|\Traversable|Options $options
+     * @return Options
+     */
+    public function getOptions($options) {
+      $result = new Options(
+        $options,
+        [
+          'identifyStringSource' => function($source) {
+            return $this->startsWith($source, '<');
+          }
+        ]
+      );
+      $result[self::LIBXML_OPTIONS] = (int)$result[self::LIBXML_OPTIONS];
+      return $result;
     }
   }
 }

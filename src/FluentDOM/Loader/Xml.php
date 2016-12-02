@@ -17,7 +17,7 @@ namespace FluentDOM\Loader {
    */
   class Xml implements Loadable {
 
-    use Supports;
+    use Supports\Libxml;
 
     const LIBXML_OPTIONS = 'libxml';
 
@@ -42,15 +42,14 @@ namespace FluentDOM\Loader {
             $document = new Document();
             $document->preserveWhiteSpace = FALSE;
             $options = $this->getOptions($options);
-            $loadOptions = (int)$options[self::LIBXML_OPTIONS];
             $options->isAllowed($sourceType = $options->getSourceType($source));
             switch ($sourceType) {
             case Options::IS_FILE :
-              $document->load($source, $loadOptions);
+              $document->load($source, $options[Options::LIBXML_OPTIONS]);
               break;
             case Options::IS_STRING :
             default :
-              $document->loadXML($source, $loadOptions);
+              $document->loadXML($source, $options[Options::LIBXML_OPTIONS]);
               break;
             }
             return $document;
@@ -79,23 +78,6 @@ namespace FluentDOM\Loader {
         );
       }
       return NULL;
-    }
-
-    /**
-     * @param array|\Traversable|Options $options
-     * @return Options
-     */
-    public function getOptions($options) {
-      $result = new Options(
-        $options,
-        [
-          'identifyStringSource' => function($source) {
-            return $this->startsWith($source, '<');
-          }
-        ]
-      );
-      $result[self::LIBXML_OPTIONS] = (int)$result[self::LIBXML_OPTIONS];
-      return $result;
     }
   }
 }

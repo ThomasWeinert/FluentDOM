@@ -21,7 +21,7 @@ namespace FluentDOM\Loader {
    */
   class JSONx implements Loadable {
 
-    use Supports;
+    use Supports\Libxml;
 
     const XMLNS_JSONX = 'http://www.ibm.com/xmlns/prod/2009/jsonx';
     const XMLNS_JSONDOM = 'urn:carica-json-dom.2013';
@@ -43,18 +43,29 @@ namespace FluentDOM\Loader {
      */
     public function load($source, $contentType, $options = []) {
       if ($this->supports($contentType) && !empty($source)) {
-        $dom = new Document();
-        $dom->preserveWhiteSpace = FALSE;
-        $dom->registerNamespace('jx', self::XMLNS_JSONX);
-        if ($this->startsWith($source, '<')) {
-          $dom->loadXML($source);
-        } else {
-          $dom->load($source);
-        }
+        $document = (new Libxml\Errors())->capture(
+          function() use ($source, $contentType, $options) {
+            $document = new Document();
+            $document->preserveWhiteSpace = FALSE;
+            $document->registerNamespace('jx', self::XMLNS_JSONX);
+            $options = $this->getOptions($options);
+            $options->isAllowed($sourceType = $options->getSourceType($source));
+            switch ($sourceType) {
+            case Options::IS_FILE :
+              $document->load($source, $options[Options::LIBXML_OPTIONS]);
+              break;
+            case Options::IS_STRING :
+            default :
+              $document->loadXML($source, $options[Options::LIBXML_OPTIONS]);
+              break;
+            }
+            return $document;
+          }
+        );
         $target = new Document();
         $target->registerNamespace('json', self::XMLNS_JSONDOM);
-        if (isset($dom->documentElement)) {
-          $this->transferNode($dom->documentElement, $target);
+        if (isset($document->documentElement)) {
+          $this->transferNode($document->documentElement, $target);
         }
         return $target;
       }

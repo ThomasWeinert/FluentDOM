@@ -17,10 +17,9 @@ namespace FluentDOM\Loader {
    */
   class Html implements Loadable {
 
-    use Supports;
+    use Supports\Libxml;
 
-    const IS_FRAGMENT = 'fragment';
-    const LIBXML_OPTIONS = 'libxml';
+    const IS_FRAGMENT = 'is_fragment';
 
     /**
      * @return string[]
@@ -43,19 +42,18 @@ namespace FluentDOM\Loader {
             $selection = false;
             $document = new Document();
             $options = $this->getOptions($options);
-            $loadOptions = $options[self::LIBXML_OPTIONS];
             if ($this->isFragment($contentType, $options)) {
-              $this->loadFragmentIntoDom($document, $source, $loadOptions);
+              $this->loadFragmentIntoDom($document, $source, $options[Options::LIBXML_OPTIONS]);
               $selection = $document->evaluate('/*');
             } else {
               $options->isAllowed($sourceType = $options->getSourceType($source));
               switch ($sourceType) {
               case Options::IS_FILE :
-                $document->loadHTMLFile($source, $loadOptions);
+                $document->loadHTMLFile($source, $options[Options::LIBXML_OPTIONS]);
                 break;
               case Options::IS_STRING :
               default :
-                $document->loadHTML($source, $loadOptions);
+                $document->loadHTML($source, $options[Options::LIBXML_OPTIONS]);
                 break;
               }
             }
@@ -76,12 +74,11 @@ namespace FluentDOM\Loader {
     public function loadFragment($source, $contentType, $options = []) {
       if ($this->supports($contentType)) {
         $options = $this->getOptions($options);
-        $loadOptions = (int)$options[self::LIBXML_OPTIONS];
         return (new Libxml\Errors())->capture(
-          function() use ($source, $loadOptions) {
+          function() use ($source, $options) {
             $document = new Document();
             $fragment = $document->createDocumentFragment();
-            $document->loadHTML('<html-fragment>'.$source.'</html-fragment>', $loadOptions);
+            $document->loadHTML('<html-fragment>'.$source.'</html-fragment>', $options[Options::LIBXML_OPTIONS]);
             $nodes = $document->evaluate('//html-fragment[1]/node()');
             foreach ($nodes as $node) {
               $fragment->append($node);
@@ -110,23 +107,6 @@ namespace FluentDOM\Loader {
           $document->appendChild($importedNode);
         }
       }
-    }
-
-    /**
-     * @param array|\Traversable|Options $options
-     * @return Options
-     */
-    public function getOptions($options) {
-      $result = new Options(
-        $options,
-        [
-          'identifyStringSource' => function($source) {
-            return $this->startsWith($source, '<');
-          }
-        ]
-      );
-      $result[self::LIBXML_OPTIONS] = (int)$result[self::LIBXML_OPTIONS];
-      return $result;
     }
   }
 }

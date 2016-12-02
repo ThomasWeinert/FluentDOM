@@ -19,6 +19,8 @@ namespace FluentDOM\Loader {
     const IS_STRING = 'is_string';
     const ALLOW_FILE = 'allow_file';
 
+    const LIBXML_OPTIONS = 'libxml';
+
     private $_options = [];
     private $_callbacks = [
       'identifyStringSource' => false

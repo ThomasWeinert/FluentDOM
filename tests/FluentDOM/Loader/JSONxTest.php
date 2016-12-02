@@ -43,7 +43,7 @@ namespace FluentDOM\Loader {
      */
     public function testLoadFromFileConvertToJson() {
       $loader = new JSONx();
-      $fd = $loader->load(__DIR__.'/TestData/jsonx.xml', 'jsonx');
+      $fd = $loader->load(__DIR__.'/TestData/jsonx.xml', 'jsonx', [Options::IS_FILE => TRUE]);
       $this->assertXmlStringEqualsXmlString(
         '<?xml version="1.0"?>
           <json:json xmlns:json="urn:carica-json-dom.2013">

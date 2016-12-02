@@ -77,7 +77,7 @@ namespace FluentDOM\Loader {
         '<div/>',
         'text/html',
         [
-          Html::LIBXML_OPTIONS => LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED
+          Options::LIBXML_OPTIONS => LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED
         ]
       );
       $this->assertEquals(

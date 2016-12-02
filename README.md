@@ -46,6 +46,10 @@ If you find a bug or have a feature request please report it in the [issue track
 
 You can check out the [![Gitter chat](https://img.shields.io/badge/gitter-join--chat-blue.svg)](https://gitter.im/FluentDOM/FluentDOM), too.
 
+### Security Issues
+
+If you find a bug that has security implications, you can send an email directly to `thomas@weinert.info`.
+
 ## Requirements
 
 ### PHP
@@ -271,4 +275,9 @@ echo $fd->find('/*')->append('<lastName>Smith</lastName>');
 Loaders have an additional method loadFragment(). Serializers are now expected to be able to 
 serialize a node (not only a document).
 
+You will now have to explicitly allow loaders to load a file. 
 
+```php
+$fd = FluentDOM('...', '...', [FluentDOM\Loader\Options::ALLOW_FILE => TRUE]);
+$fd = FluentDOM('...', '...', [FluentDOM\Loader\Options::IS_FILE => TRUE]);
+```

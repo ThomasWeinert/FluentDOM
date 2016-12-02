@@ -2,6 +2,9 @@ Version 6.0
 -----------
 
 - Changed: minimum PHP version is now 5.6
+- Changed: you might now need to set an option to load files (security)
+   - `[\FluentDOM\Options\ALLOW_FILE => TRUE]`
+   - `[\FluentDOM\Options\IS_FILE => TRUE]`
 - Refactored: Replace func_get_args() with variadics
 - Added: HTML loader now supports 'html-fragment' and 'text/html-fragment'
 - Added: XML/HTML loaders now support libxml options for the load methods
@@ -17,6 +20,8 @@ Version 6.0
 - Added: FluentDOM\Text::replaceWholeText() and FluentDOM\CdataSection::replaceWholeText()
 - Added: FluentDOM::registerSerializerFactory(), register function/factory to create
     a serializer for a node.
+- Added: FluentDOM\Loader\Options generic options for loaders (source type) 
+- Added: FluentDOM\Exceptions\LoadingError exception interface 
 
 Version 5.3
 -----------

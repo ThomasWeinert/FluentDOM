@@ -2,9 +2,9 @@
 
 namespace FluentDOM\Exceptions\LoadingError {
 
-  use FluentDOM\Exception;
+  use FluentDOM\Exceptions;
 
-  class Json extends \UnexpectedValueException implements Exception {
+  class Json extends \UnexpectedValueException implements Exceptions\LoadingError {
 
     /**
      * JSON errors

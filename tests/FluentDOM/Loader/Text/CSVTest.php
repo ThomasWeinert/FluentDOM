@@ -1,6 +1,7 @@
 <?php
 namespace FluentDOM\Loader\Text {
 
+  use FluentDOM\Loader\Options;
   use FluentDOM\TestCase;
 
   require_once(__DIR__ . '/../../TestCase.php');
@@ -56,7 +57,7 @@ namespace FluentDOM\Loader\Text {
           </_>
         </json:json>',
         $loader->load(
-          __DIR__.'/TestData/example.csv', 'text/csv'
+          __DIR__.'/TestData/example.csv', 'text/csv', [Options::IS_FILE => TRUE]
         )->saveXML()
       );
     }

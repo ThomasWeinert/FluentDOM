@@ -76,6 +76,25 @@ namespace FluentDOM\Loader {
     }
 
     public function offsetSet($offset, $value) {
+      switch ($offset) {
+      case self::IS_STRING :
+        if ($value) {
+          $this->_options[self::IS_FILE] = FALSE;
+          $this->_options[self::ALLOW_FILE] = FALSE;
+        }
+        break;
+      case self::IS_FILE :
+        if ($value) {
+          $this->_options[self::IS_STRING] = FALSE;
+          $this->_options[self::ALLOW_FILE] = TRUE;
+        }
+        break;
+      case self::ALLOW_FILE :
+        if (!$value) {
+          $this->_options[self::IS_FILE] = FALSE;
+        }
+        break;
+      }
       $this->_options[$offset] = $value;
     }
 

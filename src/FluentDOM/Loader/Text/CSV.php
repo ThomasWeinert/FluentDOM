@@ -12,6 +12,7 @@ namespace FluentDOM\Loader\Text {
   use FluentDOM\DocumentFragment;
   use FluentDOM\Element;
   use FluentDOM\Loadable;
+  use FluentDOM\Loader\Options;
   use FluentDOM\Loader\Supports;
   use FluentDOM\QualifiedName;
   use FluentDOM\Loader\Result;
@@ -45,9 +46,10 @@ namespace FluentDOM\Loader\Text {
      * @return Document|Result|NULL
      */
     public function load($source, $contentType, $options = []) {
+      $options = $this->getOptions($options);
       $hasHeaderLine = isset($options['HEADER']) ? (bool)$options['HEADER'] : !isset($options['FIELDS']);
       $this->configure($options);
-      if ($this->supports($contentType) && ($lines = $this->getLines($source))) {
+      if ($this->supports($contentType) && ($lines = $this->getLines($source, $options))) {
         $document = new Document('1.0', 'UTF-8');
         $document->appendChild($list = $document->createElementNS(self::XMLNS, 'json:json'));
         $list->setAttributeNS(self::XMLNS, 'json:type', 'array');
@@ -66,9 +68,11 @@ namespace FluentDOM\Loader\Text {
      * @return DocumentFragment|NULL
      */
     public function loadFragment($source, $contentType, $options = []) {
+      $options = $this->getOptions($options);
+      $options[Options::ALLOW_FILE] = FALSE;
       $hasHeaderLine = isset($options['FIELDS']) ? FALSE : (isset($options['HEADER']) && $options['HEADER']);
       $this->configure($options);
-      if ($this->supports($contentType) && ($lines = $this->getLines($source))) {
+      if ($this->supports($contentType) && ($lines = $this->getLines($source, $options))) {
         $document = new Document('1.0', 'UTF-8');
         $fragment = $document->createDocumentFragment();
         $this->appendLines($fragment, $lines, $hasHeaderLine, isset($options['FIELDS']) ? $options['FIELDS'] : NULL);
@@ -140,12 +144,15 @@ namespace FluentDOM\Loader\Text {
       }
     }
 
-    private function getLines($source) {
+    private function getLines($source, Options $options) {
       $result = null;
       if (is_string($source)) {
-        if ($this->isFile($source)) {
+        $options->isAllowed($sourceType = $options->getSourceType($source));
+        switch ($sourceType) {
+        case Options::IS_FILE :
           $result = new \SplFileObject($source);
-        } elseif (is_string($source)) {
+          break;
+        default :
           $result = new \SplFileObject('data://text/csv;base64,'.base64_encode($source));
         }
         $result->setFlags(\SplFileObject::READ_CSV);
@@ -173,6 +180,22 @@ namespace FluentDOM\Loader\Text {
       $this->_delimiter = isset($options['DELIMITER']) ? $options['DELIMITER'] : $this->_delimiter;
       $this->_enclosure = isset($options['ENCLOSURE']) ? $options['ENCLOSURE'] : $this->_enclosure;
       $this->_escape = isset($options['ESCAPE']) ? $options['ESCAPE'] : $this->_escape;
+    }
+
+    /**
+     * @param array|\Traversable|Options $options
+     * @return Options
+     */
+    public function getOptions($options) {
+      $result = new Options(
+        $options,
+        [
+          'identifyStringSource' => function($source) {
+            return (is_string($source) && (FALSE !== strpos($source, "\n")));
+          }
+        ]
+      );
+      return $result;
     }
   }
 }

@@ -1,17 +1,17 @@
 <?php
-namespace FluentDOM\Exceptions {
+namespace FluentDOM\Exceptions\LoadingError {
 
   use FluentDOM\TestCase;
 
-  require_once(__DIR__.'/../TestCase.php');
+  require_once(__DIR__.'/../../TestCase.php');
 
-  class JsonErrorTest extends TestCase {
+  class JsonTest extends TestCase {
 
     /**
      * @covers \FluentDOM\Exceptions\JsonError
      */
     public function testWithValidErrorCode() {
-      $exception = new JsonError(1);
+      $exception = new Json(1);
       $this->assertEquals(1, $exception->getCode());
       $this->assertEquals('The maximum stack depth has been exceeded', $exception->getMessage());
     }
@@ -20,7 +20,7 @@ namespace FluentDOM\Exceptions {
      * @covers \FluentDOM\Exceptions\JsonError
      */
     public function testWithInvalidErrorCodeExpectingUnknonwError() {
-      $exception = new JsonError(-42);
+      $exception = new Json(-42);
       $this->assertEquals(-42, $exception->getCode());
       $this->assertEquals('Unknown error has occurred', $exception->getMessage());
     }

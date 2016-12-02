@@ -1,10 +1,10 @@
 <?php
 
-namespace FluentDOM\Exceptions {
+namespace FluentDOM\Exceptions\LoadingError {
 
   use FluentDOM\Exception;
 
-  class JsonError extends \UnexpectedValueException implements Exception {
+  class Json extends \UnexpectedValueException implements Exception {
 
     /**
      * JSON errors

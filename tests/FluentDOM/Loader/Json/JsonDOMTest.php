@@ -1,6 +1,8 @@
 <?php
 namespace FluentDOM\Loader\Json {
 
+  use FluentDOM\Exceptions\InvalidSource;
+  use FluentDOM\Loader\Options;
   use FluentDOM\TestCase;
 
   require_once(__DIR__ . '/../../TestCase.php');
@@ -47,13 +49,16 @@ namespace FluentDOM\Loader\Json {
     /**
      * @covers \FluentDOM\Loader\Json\JsonDOM
      */
-    public function testLoadWithValidFile() {
+    public function testLoadWithValidFileAllowFile() {
       $loader = new JsonDOM();
       $this->assertInstanceOf(
         'DOMDocument',
         $dom = $loader->load(
           __DIR__.'/TestData/loader.json',
-          'json'
+          'json',
+          [
+            Options::ALLOW_FILE => TRUE
+          ]
         )
       );
       $this->assertXmlStringEqualsXmlString(
@@ -62,6 +67,18 @@ namespace FluentDOM\Loader\Json {
         '<foo>bar</foo>'.
         '</json:json>',
         $dom->saveXml()
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\Loader\Json\JsonDOM
+     */
+    public function testLoadWithValidFileExpectingException() {
+      $loader = new JsonDOM();
+      $this->setExpectedException(InvalidSource\TypeFile::class);
+      $loader->load(
+        __DIR__.'/TestData/loader.json',
+        'json'
       );
     }
 

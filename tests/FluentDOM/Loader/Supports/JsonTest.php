@@ -3,7 +3,9 @@
 
 namespace FluentDOM\Loader\Supports {
 
-  use FluentDOM\Exceptions\JsonError;
+  use FluentDOM\Exceptions\InvalidSource;
+  use FluentDOM\Exceptions\LoadingError;
+  use FluentDOM\Loader\Options;
   use FluentDOM\TestCase;
 
   require_once(__DIR__.'/../../TestCase.php');
@@ -16,8 +18,8 @@ namespace FluentDOM\Loader\Supports {
       return ['json'];
     }
 
-    public function getSource($source, $type = 'json') {
-      return $this->getJson($source, $type);
+    public function getSource($source, $type = 'json', $options = []) {
+      return $this->getJson($source, $type, $options);
     }
 
     public function getValue($json) {
@@ -68,11 +70,23 @@ namespace FluentDOM\Loader\Supports {
     /**
      * @covers \FluentDOM\Loader\Supports\Json
      */
-    public function testGetSourceWithFile() {
+    public function testGetSourceWithFileAllowFile() {
       $json = new \stdClass();
       $json->foo = 'bar';
       $loader = new Json_TestProxy();
-      $this->assertEquals($json, $loader->getSource(__DIR__.'/TestData/loader.json'));
+      $this->assertEquals(
+        $json,
+        $loader->getSource(__DIR__.'/TestData/loader.json', 'json', [ Options::ALLOW_FILE => TRUE ])
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\Loader\Json\JsonDOM
+     */
+    public function testGetSourceWithFileExpectingException() {
+      $loader = new Json_TestProxy();
+      $this->setExpectedException(InvalidSource\TypeFile::class);
+      $loader->getSource(__DIR__.'/TestData/loader.json');
     }
 
     /**
@@ -90,7 +104,7 @@ namespace FluentDOM\Loader\Supports {
      */
     public function testGetSourceWithInvalidJsonExpectingException() {
       $loader = new Json_TestProxy();
-      $this->setExpectedException(JsonError::class);
+      $this->setExpectedException(LoadingError\Json::class);
       $loader->getSource('{invalid');
     }
 

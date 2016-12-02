@@ -4,7 +4,8 @@ namespace FluentDOM\Loader\Supports {
 
   use FluentDOM\Document;
   use FluentDOM\DocumentFragment;
-  use FluentDOM\Exceptions\JsonError;
+  use FluentDOM\Exceptions\LoadingError;
+  use FluentDOM\Loader\Options;
   use FluentDOM\Loader\Supports;
   use FluentDOM\Loader\Result;
 
@@ -21,7 +22,7 @@ namespace FluentDOM\Loader\Supports {
      * @return Document|Result|NULL
      */
     public function load($source, $contentType, $options = []) {
-      if (FALSE !== ($json = $this->getJson($source, $contentType))) {
+      if (FALSE !== ($json = $this->getJson($source, $contentType, $options))) {
         $dom = new Document('1.0', 'UTF-8');
         $this->transferTo($dom, $json);
         return $dom;
@@ -38,7 +39,7 @@ namespace FluentDOM\Loader\Supports {
      * @return DocumentFragment|NULL
      */
     public function loadFragment($source, $contentType, $options = []) {
-      if (FALSE !== ($json = $this->getJson($source, $contentType))) {
+      if (FALSE !== ($json = $this->getJson($source, $contentType, $options))) {
         $document = new Document('1.0', 'UTF-8');
         $fragment = $document->createDocumentFragment();
         $this->transferTo($fragment, $json);
@@ -50,21 +51,25 @@ namespace FluentDOM\Loader\Supports {
     /**
      * @param mixed $source
      * @param string $contentType
+     * @param array $options
      * @return mixed
      */
-    private function getJson($source, $contentType)  {
+    private function getJson($source, $contentType, $options)  {
       if ($this->supports($contentType)) {
         if (is_string($source)) {
           $json = FALSE;
-          if (!$this->startsWith($source, '{') && !$this->startsWith($source, '[')) {
-            $source = file_get_contents($source);
-          }
-          if ($this->startsWith($source, '{') || $this->startsWith($source, '[')) {
-            $json = json_decode($source);
-            if (!($json || is_array($json))) {
-              throw new JsonError(
-                is_callable('json_last_error') ? json_last_error() : -1
-              );
+          $options = $this->getOptions($options);
+          if ($options->isAllowed($sourceType = $options->getSourceType($source))) {
+            switch ($sourceType) {
+            case Options::IS_FILE :
+              $source = file_get_contents($source);
+            case Options::IS_STRING :
+              $json = json_decode($source);
+              if (!($json || is_array($json))) {
+                throw new LoadingError\Json(
+                  is_callable('json_last_error') ? json_last_error() : -1
+                );
+              }
             }
           }
         } else {
@@ -73,6 +78,22 @@ namespace FluentDOM\Loader\Supports {
         return ($json || is_array($json)) ? $json : FALSE;
       }
       return FALSE;
+    }
+
+    /**
+     * @param array|\Traversable|Options $options
+     * @return Options
+     */
+    public function getOptions($options) {
+      $result = new Options(
+        $options,
+        [
+          'identifyStringSource' => function($source) {
+            return $this->startsWith($source, '{') || $this->startsWith($source, '[');
+          }
+        ]
+      );
+      return $result;
     }
 
     /**

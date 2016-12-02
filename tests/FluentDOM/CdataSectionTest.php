@@ -40,7 +40,7 @@ namespace FluentDOM {
         '</p>'
       );
       /** @var CdataSection $textFour */
-      $textFour = $document->documentElement->childNodes[4];
+      $textFour = $document->documentElement->childNodes->item(4);
       $textFour->replaceWholeText('42');
       $this->assertEquals(
         '<p>one<!-- start --><![CDATA[42]]><!-- end -->seven</p>',

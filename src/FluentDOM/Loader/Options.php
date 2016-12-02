@@ -8,6 +8,7 @@
 
 namespace FluentDOM\Loader {
 
+  use FluentDOM\Exceptions\InvalidArgument;
   use FluentDOM\Exceptions\InvalidSource;
 
   /**

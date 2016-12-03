@@ -20,18 +20,24 @@ namespace FluentDOM\Loader\Libxml {
     ];
 
     public function capture(callable $callback, $errorLevel = self::ERROR_FATAL) {
+      $exception = FALSE;
       $errorSetting = libxml_use_internal_errors(TRUE);
+      libxml_clear_errors();
       $result = $callback();
       if ($errorLevel != self::ERROR_NONE) {
         foreach (libxml_get_errors() as $error) {
           $severity = $this->_errorMapping[$error->level];
           if (($errorLevel & $severity) == $severity) {
-            throw new LoadingError\Libxml($error);
+            $exception = new LoadingError\Libxml($error);
+            break;
           }
         }
       }
       libxml_clear_errors();
       libxml_use_internal_errors($errorSetting);
+      if ($exception instanceof LoadingError\Libxml) {
+        throw $exception;
+      }
       return $result;
     }
   }

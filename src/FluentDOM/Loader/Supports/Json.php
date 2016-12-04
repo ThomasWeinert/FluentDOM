@@ -88,7 +88,7 @@ namespace FluentDOM\Loader\Supports {
       $result = new Options(
         $options,
         [
-          'identifyStringSource' => function($source) {
+          Options::CB_IDENTIFY_STRING_SOURCE => function($source) {
             return $this->startsWith($source, '{') || $this->startsWith($source, '[');
           }
         ]

@@ -190,7 +190,7 @@ namespace FluentDOM\Loader\Text {
       $result = new Options(
         $options,
         [
-          'identifyStringSource' => function($source) {
+          Options::CB_IDENTIFY_STRING_SOURCE => function($source) {
             return (is_string($source) && (FALSE !== strpos($source, "\n")));
           }
         ]

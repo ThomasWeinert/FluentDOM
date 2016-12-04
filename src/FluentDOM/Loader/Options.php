@@ -22,9 +22,11 @@ namespace FluentDOM\Loader {
 
     const LIBXML_OPTIONS = 'libxml';
 
+    const CB_IDENTIFY_STRING_SOURCE = 'identifyStringSource';
+
     private $_options = [];
-    private $_callbacks = [
-      'identifyStringSource' => false
+    protected $_callbacks = [
+      self::CB_IDENTIFY_STRING_SOURCE => false
     ];
 
     public function __construct($options = [], $callbacks = []) {
@@ -104,7 +106,9 @@ namespace FluentDOM\Loader {
     }
 
     public function getSourceType($source) {
-      $isStringSource = $this->executeCallback('identifyStringSource', TRUE, $source);
+      $isStringSource = $this->executeCallback(
+        Options::CB_IDENTIFY_STRING_SOURCE, TRUE, $source
+      );
       if ($isStringSource || $this[self::IS_STRING]) {
         return self::IS_STRING;
       } elseif (!$isStringSource || $this[self::IS_FILE]) {

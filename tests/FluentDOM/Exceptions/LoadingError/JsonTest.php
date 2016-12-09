@@ -8,7 +8,7 @@ namespace FluentDOM\Exceptions\LoadingError {
   class JsonTest extends TestCase {
 
     /**
-     * @covers \FluentDOM\Exceptions\JsonError
+     * @covers \FluentDOM\Exceptions\LoadingError\Json
      */
     public function testWithValidErrorCode() {
       $exception = new Json(1);
@@ -17,9 +17,9 @@ namespace FluentDOM\Exceptions\LoadingError {
     }
 
     /**
-     * @covers \FluentDOM\Exceptions\JsonError
+     * @covers \FluentDOM\Exceptions\LoadingError\Json
      */
-    public function testWithInvalidErrorCodeExpectingUnknonwError() {
+    public function testWithInvalidErrorCodeExpectingUnknownError() {
       $exception = new Json(-42);
       $this->assertEquals(-42, $exception->getCode());
       $this->assertEquals('Unknown error has occurred', $exception->getMessage());

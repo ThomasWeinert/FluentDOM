@@ -81,7 +81,7 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
    * @covers FluentDOM
    */
   public function testSetLoaderWithInvalidObject() {
-    $this->setExpectedException(\FluentDOM\Exception::class);
+    $this->expectException(\FluentDOM\Exception::class);
     FluentDOM::setLoader(new stdClass());
   }
 
@@ -216,7 +216,7 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
    */
   public function testGetXPathTransformerExpectingException() {
     FluentDOM::registerXpathTransformer('', TRUE);
-    $this->setExpectedException(\LogicException::class, 'No CSS selector support installed');
+    $this->expectException(\LogicException::class, 'No CSS selector support installed');
     FluentDOM::getXPathTransformer();
   }
 

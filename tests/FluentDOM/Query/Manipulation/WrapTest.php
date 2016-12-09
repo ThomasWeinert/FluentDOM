@@ -54,7 +54,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query
      */
     public function testWrapWithInvalidArgument() {
-      $this->setExpectedException(\InvalidArgumentException::class);
+      $this->expectException(\InvalidArgumentException::class);
       $this->getQueryFixtureFromString(self::XML)
           ->find('//item')
           ->wrap(NULL);

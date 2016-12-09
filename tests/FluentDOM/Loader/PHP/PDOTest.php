@@ -63,7 +63,7 @@ namespace FluentDOM\Loader\PHP {
      */
     public function testLoadFragmentExpectingException() {
       $loader = new PDO();
-      $this->setExpectedException(InvalidFragmentLoader::class);
+      $this->expectException(InvalidFragmentLoader::class);
       $loader->loadFragment(NULL, 'php/pdo');
     }
 

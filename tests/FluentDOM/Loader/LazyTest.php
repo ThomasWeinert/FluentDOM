@@ -46,7 +46,7 @@ namespace FluentDOM\Loader {
      * @covers \FluentDOM\Loader\Lazy
      */
     public function testGetWithCallableThatDoesNotReturnALoadableExpectingException() {
-      $this->setExpectedException(\UnexpectedValueException::class);
+      $this->expectException(\UnexpectedValueException::class);
       $loader = new Lazy(
         [
           'type' => function() { return FALSE; }
@@ -80,8 +80,8 @@ namespace FluentDOM\Loader {
         ],
         __NAMESPACE__
       );
-      $this->setExpectedException(
-        'LogicException',
+      $this->expectException(
+        \LogicException::class,
         'Loader class "FluentDOM\Loader\NonExistingClassName" not found.'
       );
       $this->assertInstanceOf(Xml::class, $loader->get('test/unittest'));
@@ -113,7 +113,7 @@ namespace FluentDOM\Loader {
      * @covers \FluentDOM\Loader\Lazy
      */
     public function testAddWithInvalidLoaderExpectingException() {
-      $this->setExpectedException(\UnexpectedValueException::class);
+      $this->expectException(\UnexpectedValueException::class);
       new Lazy(
         [
           'type' => new \stdClass()

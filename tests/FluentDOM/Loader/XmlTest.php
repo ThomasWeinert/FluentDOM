@@ -101,7 +101,7 @@ namespace FluentDOM\Loader {
      */
     public function testLoadWithFileExpectingException() {
       $loader = new Xml();
-      $this->setExpectedException(InvalidSource\TypeFile::class);
+      $this->expectException(InvalidSource\TypeFile::class);
       $loader->load(
         __DIR__.'/TestData/loader.xml',
         'text/xml'
@@ -152,7 +152,7 @@ namespace FluentDOM\Loader {
 
     public function testLoadWithInvalidXmlExpectingException() {
       $loader = new Xml();
-      $this->setExpectedException(
+      $this->expectException(
         LoadingError\Libxml::class,
         'Libxml fatal error in line 1 at character 12: Premature end of data in tag foo line 1.'
       );

@@ -147,8 +147,8 @@ namespace FluentDOM\Nodes {
     public function testFetchWithInvalidExpressionExpectingException() {
       $fd = (new Nodes(self::XML))->find('/items/group');
       $fetcher = new Fetcher($fd);
-      $this->setExpectedException(
-        'InvalidArgumentException',
+      $this->expectException(
+        \InvalidArgumentException::class,
         'Invalid selector/expression.'
       );
       $fetcher->fetch('');
@@ -160,8 +160,8 @@ namespace FluentDOM\Nodes {
     public function testFetchWithScalarExpressionExpectingException() {
       $fd = (new Nodes(self::XML))->find('/items/group');
       $fetcher = new Fetcher($fd);
-      $this->setExpectedException(
-        'InvalidArgumentException',
+      $this->expectException(
+        \InvalidArgumentException::class,
         'Given selector/expression did not return a node list.'
       );
       $fetcher->fetch('count(*)');

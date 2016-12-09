@@ -112,7 +112,7 @@ namespace FluentDOM\Query {
      */
     public function testOuterXmlWriteWithInvalidDataExpectingException() {
       $fd = new Query();
-      $this->setExpectedException(\UnexpectedValueException::class);
+      $this->expectException(\UnexpectedValueException::class);
       @$fd->outerXml(new \stdClass());
     }
   }

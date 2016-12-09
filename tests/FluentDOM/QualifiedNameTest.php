@@ -39,8 +39,8 @@ namespace FluentDOM {
      * @covers \FluentDOM\QualifiedName
      */
     public function testIsQnameWithEmptyNameExpectingException() {
-      $this->setExpectedException(
-        'UnexpectedValueException'
+      $this->expectException(
+        \UnexpectedValueException::class
       );
       new QualifiedName('');
     }
@@ -49,8 +49,8 @@ namespace FluentDOM {
      * @covers \FluentDOM\QualifiedName
      */
     public function testIsNCNameWithEmptyTagnameExpectingException() {
-      $this->setExpectedException(
-        'UnexpectedValueException',
+      $this->expectException(
+        \UnexpectedValueException::class,
         'Invalid QName "nc:": Missing QName part.'
       );
       new QualifiedName('nc:');
@@ -60,8 +60,8 @@ namespace FluentDOM {
      * @covers \FluentDOM\QualifiedName
      */
     public function testIsNCNameWithInvalidTagnameCharExpectingException() {
-      $this->setExpectedException(
-        'UnexpectedValueException',
+      $this->expectException(
+        \UnexpectedValueException::class,
         'Invalid QName "nc:ta<g>": Invalid character at index 5.'
       );
       new QualifiedName('nc:ta<g>');
@@ -71,8 +71,8 @@ namespace FluentDOM {
      * @covers \FluentDOM\QualifiedName
      */
     public function testIsNCNameWithInvalidPrefixCharExpectingException() {
-      $this->setExpectedException(
-        'UnexpectedValueException',
+      $this->expectException(
+        \UnexpectedValueException::class,
         'Invalid QName "n<c>:tag": Invalid character at index 1.'
       );
       new QualifiedName('n<c>:tag');
@@ -82,8 +82,8 @@ namespace FluentDOM {
      * @covers \FluentDOM\QualifiedName
      */
     public function testIsNCNameWithInvalidTagnameStartingCharExpectingException() {
-      $this->setExpectedException(
-        'UnexpectedValueException',
+      $this->expectException(
+        \UnexpectedValueException::class,
         'Invalid QName "nc:1tag": Invalid character at index 3.'
       );
       new QualifiedName('nc:1tag');
@@ -145,7 +145,7 @@ namespace FluentDOM {
      */
     public function testPropertyGetWithInvalidPropertyExpectingException() {
       $qualifiedName = new QualifiedName('ns:tag');
-      $this->setExpectedException(\LogicException::class);
+      $this->expectException(\LogicException::class);
       $qualifiedName->invalidPropertyName;
     }
 
@@ -154,7 +154,7 @@ namespace FluentDOM {
      */
     public function testPropertySetExpectingException() {
       $qualifiedName = new QualifiedName('ns:tag');
-      $this->setExpectedException(\LogicException::class);
+      $this->expectException(\LogicException::class);
       $qualifiedName->name = 'foo';
     }
 
@@ -163,7 +163,7 @@ namespace FluentDOM {
      */
     public function testPropertyUnsetExpectingException() {
       $qualifiedName = new QualifiedName('ns:tag');
-      $this->setExpectedException(\LogicException::class);
+      $this->expectException(\LogicException::class);
       unset($qualifiedName->name);
     }
 

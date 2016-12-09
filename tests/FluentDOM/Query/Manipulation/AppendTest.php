@@ -189,7 +189,7 @@ namespace FluentDOM\Query {
      */
     public function testAppendWithInvalidArgumentExpectingException() {
       $fd = new Query();
-      $this->setExpectedException(\InvalidArgumentException::class);
+      $this->expectException(\InvalidArgumentException::class);
       $fd->append(new \stdClass());
     }
 
@@ -200,7 +200,7 @@ namespace FluentDOM\Query {
      */
     public function testAppendWithEmptyArgumentExpectingException() {
       $fd = new Query();
-      $this->setExpectedException(\InvalidArgumentException::class);
+      $this->expectException(\InvalidArgumentException::class);
       $fd->append([]);
     }
   }

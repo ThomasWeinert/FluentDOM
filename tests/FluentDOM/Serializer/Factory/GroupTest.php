@@ -46,7 +46,7 @@ namespace FluentDOM\Serializer\Factory {
      */
     public function testFactorSetWithInvalidFactoryExpectingException() {
       $group = new Group();
-      $this->setExpectedException(InvalidArgument::class);
+      $this->expectException(InvalidArgument::class);
       $group['type'] = 'INVALID';
     }
 
@@ -107,7 +107,7 @@ namespace FluentDOM\Serializer\Factory {
         ->method('createSerializer')
         ->willReturn($serializer);
       $group = new Group(['some/type' => $factory]);
-      $this->setExpectedException(InvalidSerializer::class);
+      $this->expectException(InvalidSerializer::class);
       $group->createSerializer('some/type', $document->documentElement);
     }
 

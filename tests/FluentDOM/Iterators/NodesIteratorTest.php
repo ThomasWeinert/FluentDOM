@@ -57,7 +57,7 @@ namespace FluentDOM\Iterators {
         ->method('count')
         ->will($this->returnValue(1));
       $fdi = new NodesIterator($fd);
-      $this->setExpectedException(
+      $this->expectException(
         \InvalidArgumentException::class,
         'Unknown position 1, only 1 items'
       );

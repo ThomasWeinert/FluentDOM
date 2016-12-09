@@ -339,7 +339,7 @@ namespace FluentDOM\Nodes {
      */
     public function testCreateSetPropertyOnResultExpectingException() {
       $_ = new Creator();
-      $this->setExpectedException(\LogicException::class);
+      $this->expectException(\LogicException::class);
       $_('foo')->document = 'bar';
     }
 

@@ -335,7 +335,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::getSetterValues
      */
     public function testCssWriteWithInvalidPropertySyntax() {
-      $this->setExpectedException(\InvalidArgumentException::class);
+      $this->expectException(\InvalidArgumentException::class);
       $this->getQueryFixtureFromString(self::HTML, '//div')->css('---', '');
     }
 
@@ -345,7 +345,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::getSetterValues
      */
     public function testCssWriteWithInvalidPropertyType() {
-      $this->setExpectedException(\InvalidArgumentException::class);
+      $this->expectException(\InvalidArgumentException::class);
       $this->getQueryFixtureFromString(self::HTML, '//div')->css(23, '');
     }
 
@@ -355,7 +355,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::getSetterValues
      */
     public function testCssWriteWithInvalidPropertyInArray() {
-      $this->setExpectedException(\InvalidArgumentException::class);
+      $this->expectException(\InvalidArgumentException::class);
       $this->getQueryFixtureFromString(self::HTML, '//div')->css(array('---' => ''));
     }
 

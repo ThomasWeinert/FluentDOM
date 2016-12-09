@@ -11,7 +11,7 @@ namespace FluentDOM {
      */
     public function testMagicMethodCallWithUnknownMethodExpectingException() {
       $fd = new Query();
-      $this->setExpectedException(\BadMethodCallException::class);
+      $this->expectException(\BadMethodCallException::class);
       /** @noinspection PhpUndefinedMethodInspection */
       $fd->invalidMethodCall();
     }
@@ -33,8 +33,8 @@ namespace FluentDOM {
      */
     public function testUnsetPropertyContentType($propertyName) {
       $fd = new Query();
-      $this->setExpectedException(
-        'BadMethodCallException',
+      $this->expectException(
+        \BadMethodCallException::class,
         'Can not unset property FluentDOM\Query::$'.$propertyName
       );
       unset($fd->$propertyName);

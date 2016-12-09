@@ -55,8 +55,8 @@ namespace FluentDOM\Node {
     public function testSetFirstElementChildExpectingException() {
       $dom = new Document();
       $dom->loadXML('<foo>TEXT</foo>');
-      $this->setExpectedException(
-        'BadMethodCallException'
+      $this->expectException(
+        \BadMethodCallException::class
       );
       $dom->firstElementChild = $dom->createElement('dummy');
     }
@@ -107,8 +107,8 @@ namespace FluentDOM\Node {
     public function testSetLastElementChildExpectingException() {
       $dom = new Document();
       $dom->loadXML('<foo>TEXT</foo>');
-      $this->setExpectedException(
-        'BadMethodCallException'
+      $this->expectException(
+        \BadMethodCallException::class
       );
       $dom->lastElementChild = $dom->createElement('dummy');
     }

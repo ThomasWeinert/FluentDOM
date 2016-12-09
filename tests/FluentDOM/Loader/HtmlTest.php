@@ -146,7 +146,7 @@ namespace FluentDOM\Loader {
      */
     public function testLoadWithFileExpectingException() {
       $loader = new Html();
-      $this->setExpectedException(InvalidSource\TypeFile::class);
+      $this->expectException(InvalidSource\TypeFile::class);
       $loader->load(
         __DIR__.'/TestData/loader.html',
         'text/html'

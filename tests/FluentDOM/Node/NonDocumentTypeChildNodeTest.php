@@ -109,7 +109,7 @@ namespace FluentDOM\Node {
     public function testSetNextElementChildExpectingException() {
       $dom = new Document();
       $dom->loadXML('<foo><!--comment--></foo>');
-      $this->setExpectedException(\BadMethodCallException::class);
+      $this->expectException(\BadMethodCallException::class);
       $dom->documentElement->firstChild->nextElementSibling = $dom->createElement('foo');
     }
 
@@ -120,7 +120,7 @@ namespace FluentDOM\Node {
     public function testSetPreviousElementChildExpectingException() {
       $dom = new Document();
       $dom->loadXML('<foo><!--comment--></foo>');
-      $this->setExpectedException(\BadMethodCallException::class);
+      $this->expectException(\BadMethodCallException::class);
       $dom->documentElement->firstChild->previousElementSibling = $dom->createElement('foo');
     }
 
@@ -154,7 +154,7 @@ namespace FluentDOM\Node {
       $dom = new Document();
       $dom->loadXML('<foo><!--comment--></foo>');
       $node = $dom->documentElement->firstChild;
-      $this->setExpectedException(\PHPUnit_Framework_Error_Notice::class);
+      $this->expectException(\PHPUnit_Framework_Error_Notice::class);
       $node->SOME_PROPERTY;
     }
   }

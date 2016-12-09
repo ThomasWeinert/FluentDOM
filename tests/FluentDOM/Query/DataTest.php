@@ -340,7 +340,7 @@ namespace FluentDOM\Query {
       $fd = $this->getQueryFixtureFromString(
         '<sample data-foo="bar" data-bar="foo"/>'
       )->find('//sample');
-      $this->setExpectedException(\InvalidArgumentException::class);
+      $this->expectException(\InvalidArgumentException::class);
       $fd->removeData('');
     }
 
@@ -409,7 +409,7 @@ namespace FluentDOM\Query {
      */
     public function testDataPropertyReadOnEmptyListExpectingException() {
       $fd = new Query();
-      $this->setExpectedException(\UnexpectedValueException::class);
+      $this->expectException(\UnexpectedValueException::class);
       $fd->data;
     }
 

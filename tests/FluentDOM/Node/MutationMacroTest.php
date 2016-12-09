@@ -45,7 +45,7 @@ namespace FluentDOM\Node {
      */
     public function testExpandFromInvalidArgumentExpectingException() {
       $dom = new Document();
-      $this->setExpectedException(\InvalidArgumentException::class);
+      $this->expectException(\InvalidArgumentException::class);
       MutationMacro::expand($dom, [new \stdClass()]);
     }
 

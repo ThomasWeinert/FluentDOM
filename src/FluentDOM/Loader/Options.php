@@ -52,17 +52,11 @@ namespace FluentDOM\Loader {
     }
 
     private function executeCallback($name, $default, ...$arguments) {
-      if (array_key_exists($name, $this->_callbacks)) {
-        $callback = $this->_callbacks[$name];
-        if (is_callable($callback)) {
-          return $callback(...$arguments);
-        } else {
-          return $default;
-        }
+      $callback = $this->_callbacks[$name];
+      if (is_callable($callback)) {
+        return $callback(...$arguments);
       } else {
-        throw new \InvalidArgumentException(
-          sprintf('Unknown callback specifier "%s".', $name)
-        );
+        return $default;
       }
     }
 
@@ -106,15 +100,15 @@ namespace FluentDOM\Loader {
     }
 
     public function getSourceType($source) {
+      if ($this[self::IS_FILE]) {
+        return self::IS_FILE;
+      } elseif ($this[self::IS_STRING]) {
+        return self::IS_STRING;
+      }
       $isStringSource = $this->executeCallback(
         Options::CB_IDENTIFY_STRING_SOURCE, TRUE, $source
       );
-      if ($isStringSource || $this[self::IS_STRING]) {
-        return self::IS_STRING;
-      } elseif (!$isStringSource || $this[self::IS_FILE]) {
-        return self::IS_FILE;
-      }
-      return NULL;
+      return ($isStringSource) ? self::IS_STRING : self::IS_FILE;
     }
 
     public function isAllowed($sourceType, $throwException = TRUE) {

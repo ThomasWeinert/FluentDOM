@@ -32,6 +32,26 @@ namespace FluentDOM {
     protected $_directory = __DIR__;
 
     /**
+     * setExpectedException() is deprecated, add a wrapper for forward compatibility
+     * extend expectedException to allow for the optional arguments (message and code)
+     *
+     * @param string $exception
+     */
+    public function expectException($exception, $message = NULL, $code = NULL) {
+      if (method_exists($this, 'expectException')) {
+        parent::expectException($exception);
+        if ($message !== NULL) {
+          parent::expectExceptionMessage($message);
+        }
+        if ($code !== NULL) {
+          parent::expectExceptionCode($code);
+        }
+      } else {
+        parent::setExpectedException($exception, $message, $code);
+      }
+    }
+
+    /**
      * Tests, if the content of a file equals the given string
      *
      * The the file to be compared is identified by the given function name.

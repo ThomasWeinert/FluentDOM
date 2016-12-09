@@ -261,7 +261,7 @@ namespace FluentDOM {
      */
     public function testLoadWithInvalidSourceExpectingException() {
       $fd = new Nodes();
-      $this->setExpectedException(Exceptions\InvalidSource::class);
+      $this->expectException(Exceptions\InvalidSource::class);
       $fd->load(NULL, 'text');
     }
 
@@ -302,7 +302,7 @@ namespace FluentDOM {
      */
     public function testLoadersGetWithInvalidLoaderExpectingException() {
       $fd = new Nodes();
-      $this->setExpectedException(\InvalidArgumentException::class);
+      $this->expectException(\InvalidArgumentException::class);
       $fd->loaders('FOO');
     }
 
@@ -334,7 +334,7 @@ namespace FluentDOM {
      */
     public function testPushWithInvalidArgumentExpectingException() {
       $fd = new Nodes();
-      $this->setExpectedException(\InvalidArgumentException::class);
+      $this->expectException(\InvalidArgumentException::class);
       $fd->push(FALSE);
     }
 
@@ -346,7 +346,7 @@ namespace FluentDOM {
       $dom = new Document();
       $dom->appendElement('test');
       $fd = new Nodes();
-      $this->setExpectedException(\OutOfBoundsException::class);
+      $this->expectException(\OutOfBoundsException::class);
       $fd->push($dom->documentElement);
     }
 
@@ -358,7 +358,7 @@ namespace FluentDOM {
       $dom = new Document();
       $dom->appendElement('test');
       $fd = new Nodes();
-      $this->setExpectedException(\OutOfBoundsException::class);
+      $this->expectException(\OutOfBoundsException::class);
       $fd->push([$dom->documentElement]);
     }
 
@@ -487,7 +487,7 @@ namespace FluentDOM {
      */
     public function testUniqueWithInvalidElementInList() {
       $fd = new Nodes();
-      $this->setExpectedException(\InvalidArgumentException::class);
+      $this->expectException(\InvalidArgumentException::class);
       $fd->unique(['Invalid']);
     }
 
@@ -610,7 +610,7 @@ namespace FluentDOM {
      */
     public function testSetOnPrepareSelectorExpectingException() {
       $fd = new Nodes();
-      $this->setExpectedException(\InvalidArgumentException::class);
+      $this->expectException(\InvalidArgumentException::class);
       $fd->onPrepareSelector = FALSE;
     }
 
@@ -669,7 +669,7 @@ namespace FluentDOM {
     public function testOffsetSetExpectingException() {
       $fd = new Nodes(self::XML);
       $fd = $fd->find('//item');
-      $this->setExpectedException(\BadMethodCallException::class);
+      $this->expectException(\BadMethodCallException::class);
       $fd[2] = '123';
     }
 
@@ -681,7 +681,7 @@ namespace FluentDOM {
     public function testOffsetUnsetExpectingException() {
       $fd = new Nodes();
       $fd = $fd->find('//item');
-      $this->setExpectedException(\BadMethodCallException::class);
+      $this->expectException(\BadMethodCallException::class);
       unset($fd[2]);
     }
 
@@ -729,7 +729,7 @@ namespace FluentDOM {
      */
     public function testDynamicPropertyUnsetOnNonExistingPropertyExpectingException() {
       $fd = new Nodes();
-      $this->setExpectedException(\BadMethodCallException::class);
+      $this->expectException(\BadMethodCallException::class);
       unset($fd->dynamicProperty);
     }
 
@@ -738,7 +738,7 @@ namespace FluentDOM {
      */
     public function testSetPropertyXpath() {
       $fd = new Nodes(self::XML);
-      $this->setExpectedException(\BadMethodCallException::class);
+      $this->expectException(\BadMethodCallException::class);
       $fd->xpath = $fd->xpath();
     }
 
@@ -779,7 +779,7 @@ namespace FluentDOM {
      */
     public function testSetPropertyLength() {
       $fd = new Nodes();
-      $this->setExpectedException(\BadMethodCallException::class);
+      $this->expectException(\BadMethodCallException::class);
       $fd->length = 50;
     }
 
@@ -789,7 +789,7 @@ namespace FluentDOM {
      */
     public function testUnsetPropertyLength() {
       $fd = new Nodes;
-      $this->setExpectedException(\BadMethodCallException::class);
+      $this->expectException(\BadMethodCallException::class);
       unset($fd->length);
     }
 
@@ -953,7 +953,7 @@ namespace FluentDOM {
 
       $fd = new Nodes(self::XML);
       $fd->serializerFactories($factory);
-      $this->setExpectedException(Exceptions\NoSerializer::class);
+      $this->expectException(Exceptions\NoSerializer::class);
       $fd->toString();
     }
 
@@ -1152,8 +1152,8 @@ namespace FluentDOM {
      */
     public function testGetSelectorCallbackWithInvalidSelectorExpectingException() {
       $fd = new Nodes(self::XML);
-      $this->setExpectedException(
-        'InvalidArgumentException',
+      $this->expectException(
+        \InvalidArgumentException::class,
         'Invalid selector argument.'
       );
       $fd->getSelectorCallback('');

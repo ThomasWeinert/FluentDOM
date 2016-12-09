@@ -105,8 +105,8 @@ namespace FluentDOM\Nodes {
     public function testGetTargetNodesUsingSelectorReturningScalarExpectingException() {
       $nodes = new Nodes(self::XML);
       $builder = new Builder($nodes);
-      $this->setExpectedException(
-        'InvalidArgumentException',
+      $this->expectException(
+        \InvalidArgumentException::class,
         'Given selector did not return an node list'
       );
       $builder->getTargetNodes('count(//item)');
@@ -118,8 +118,8 @@ namespace FluentDOM\Nodes {
     public function testGetTargetNodesUsingInvalidSelectorExpectingException() {
       $nodes = new Nodes(self::XML);
       $builder = new Builder($nodes);
-      $this->setExpectedException(
-        'InvalidArgumentException',
+      $this->expectException(
+        \InvalidArgumentException::class,
         'Invalid selector'
       );
       $builder->getTargetNodes(NULL);
@@ -157,8 +157,8 @@ namespace FluentDOM\Nodes {
       $nodes = new Nodes(self::XML);
       $node = $nodes->document->createTextNode("success");
       $builder = new Builder($nodes);
-      $this->setExpectedException(
-        'InvalidArgumentException',
+      $this->expectException(
+        \InvalidArgumentException::class,
         'Invalid/empty content parameter.'
       );
       $this->assertSame(
@@ -251,8 +251,8 @@ namespace FluentDOM\Nodes {
       $dom = new Document();
       $nodes = new Nodes();
       $builder = new Builder($nodes);
-      $this->setExpectedException(
-        'InvalidArgumentException',
+      $this->expectException(
+        \InvalidArgumentException::class,
         'Invalid/empty content parameter.'
       );
       $builder->getContentNodes($dom->xpath()->evaluate('//item'));
@@ -265,8 +265,8 @@ namespace FluentDOM\Nodes {
       $dom = new Document();
       $nodes = new Nodes();
       $builder = new Builder($nodes);
-      $this->setExpectedException(
-        'InvalidArgumentException',
+      $this->expectException(
+        \InvalidArgumentException::class,
         'Invalid/empty content parameter.'
       );
       $builder->getContentNodes('');
@@ -315,7 +315,7 @@ namespace FluentDOM\Nodes {
     public function testGetXmlFragmentWithInvalidFragment() {
       $nodes = new Nodes();
       $builder = new Builder($nodes);
-      $this->setExpectedException(
+      $this->expectException(
         \UnexpectedValueException::class,
         'Invalid document fragment'
       );
@@ -328,7 +328,7 @@ namespace FluentDOM\Nodes {
     public function testGetXmlFragmentWithInvalidContentType() {
       $nodes = new Nodes();
       $builder = new Builder($nodes);
-      $this->setExpectedException(
+      $this->expectException(
         InvalidFragmentLoader::class
       );
       $builder->getFragment('', 'invalid');
@@ -375,8 +375,8 @@ namespace FluentDOM\Nodes {
     public function testGetHtmlFragmentWithInvalidFragment() {
       $nodes = new Nodes();
       $builder = new Builder($nodes);
-      $this->setExpectedException(
-        'UnexpectedValueException',
+      $this->expectException(
+        \UnexpectedValueException::class,
         'Invalid document fragment'
       );
       $builder->getFragment(NULL, 'text/html');

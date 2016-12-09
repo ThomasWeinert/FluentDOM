@@ -200,8 +200,8 @@ namespace FluentDOM {
     public function testWithInvalidNamespacesExpectingException() {
       $dom = new Document();
       $fragment = $dom->createDocumentFragment();
-      $this->setExpectedException(
-        "InvalidArgumentException"
+      $this->expectException(
+        \InvalidArgumentException::class
       );
       $fragment->appendXml('<foo:test>success</foo:test>', FALSE);
     }

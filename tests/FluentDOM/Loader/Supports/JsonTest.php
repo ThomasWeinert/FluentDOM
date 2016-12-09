@@ -85,7 +85,7 @@ namespace FluentDOM\Loader\Supports {
      */
     public function testGetSourceWithFileExpectingException() {
       $loader = new Json_TestProxy();
-      $this->setExpectedException(InvalidSource\TypeFile::class);
+      $this->expectException(InvalidSource\TypeFile::class);
       $loader->getSource(__DIR__.'/TestData/loader.json');
     }
 
@@ -104,7 +104,7 @@ namespace FluentDOM\Loader\Supports {
      */
     public function testGetSourceWithInvalidJsonExpectingException() {
       $loader = new Json_TestProxy();
-      $this->setExpectedException(LoadingError\Json::class);
+      $this->expectException(LoadingError\Json::class);
       $loader->getSource('{invalid');
     }
 

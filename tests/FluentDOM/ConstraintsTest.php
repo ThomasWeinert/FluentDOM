@@ -59,8 +59,8 @@ namespace FluentDOM {
      * @covers \FluentDOM\Constraints::assertNode
      */
     public function testAssertNodeExpectingException() {
-      $this->setExpectedException(
-        'InvalidArgumentException',
+      $this->expectException(
+        \InvalidArgumentException::class,
         'DOMNode expected, got: boolean.'
       );
       Constraints::assertNode(FALSE);
@@ -72,8 +72,8 @@ namespace FluentDOM {
      * @covers \FluentDOM\Constraints::assertNode
      */
     public function testAssertNodeExpectingExceptionWithModifiedMessage() {
-      $this->setExpectedException(
-        'InvalidArgumentException',
+      $this->expectException(
+        \InvalidArgumentException::class,
         'Not a node but a stdClass.'
       );
       Constraints::assertNode(new \stdClass, 'Not a node but a %s.');
@@ -178,7 +178,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Constraints::isCallable
      */
     public function testIsCallableExpectingException() {
-      $this->setExpectedException(\InvalidArgumentException::class);
+      $this->expectException(\InvalidArgumentException::class);
       Constraints::isCallable(NULL, FALSE, FALSE);
     }
 

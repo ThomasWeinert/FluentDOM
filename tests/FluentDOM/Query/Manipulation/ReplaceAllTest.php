@@ -43,7 +43,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query
      */
     public function testReplaceAllWithInvalidArgument() {
-      $this->setExpectedException(\InvalidArgumentException::class);
+      $this->expectException(\InvalidArgumentException::class);
       $this->getQueryFixtureFromString(self::XML)
         ->add('<b id="sample">Paragraph. </b>')
         ->replaceAll(

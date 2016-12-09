@@ -46,8 +46,8 @@ namespace FluentDOM\Element {
       $dom->loadXML('<items>ONE<two><three/></two></items>');
       /** @var Iterator $iterator */
       $iterator = $dom->documentElement->getIterator();
-      $this->setExpectedException(
-        'InvalidArgumentException',
+      $this->expectException(
+        \InvalidArgumentException::class,
         'Unknown position 99, only 2 items'
       );
       $iterator->seek(99);
@@ -79,8 +79,8 @@ namespace FluentDOM\Element {
       $dom = new Document();
       $dom->loadXML('<items>ONE<two><three/></two></items>');
       $iterator = $dom->documentElement->getIterator();
-      $this->setExpectedException(
-        'UnexpectedValueException',
+      $this->expectException(
+        \UnexpectedValueException::class,
         'Called FluentDOM\Iterators\ElementIterator::getChildren with invalid current element.'
       );
       $iterator->getChildren();

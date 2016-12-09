@@ -75,7 +75,7 @@ namespace FluentDOM\Loader\Json {
      */
     public function testLoadWithValidFileExpectingException() {
       $loader = new JsonDOM();
-      $this->setExpectedException(InvalidSource\TypeFile::class);
+      $this->expectException(InvalidSource\TypeFile::class);
       $loader->load(
         __DIR__.'/TestData/loader.json',
         'json'
@@ -199,7 +199,7 @@ namespace FluentDOM\Loader\Json {
      */
     public function testLoadWithInvalidJsonStringExpectingException() {
       $loader = new JsonDOM();
-      $this->setExpectedException(\UnexpectedValueException::class);
+      $this->expectException(\UnexpectedValueException::class);
       $loader->load(
         '{foo}}',
         'json'

@@ -40,7 +40,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::getFirstElement
      */
     public function testAttrReadInvalid() {
-      $this->setExpectedException(\UnexpectedValueException::class);
+      $this->expectException(\UnexpectedValueException::class);
       $this->getQueryFixtureFromString(self::XML)
         ->find('//item')
         ->attr('');
@@ -244,7 +244,7 @@ namespace FluentDOM\Query {
      */
     public function testRemoveAttrWithInvalidParameter() {
       $fd = new Query();
-      $this->setExpectedException(\InvalidArgumentException::class);
+      $this->expectException(\InvalidArgumentException::class);
       $fd->removeAttr(1);
     }
 

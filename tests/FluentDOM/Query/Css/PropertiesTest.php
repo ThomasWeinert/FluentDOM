@@ -73,7 +73,7 @@ namespace FluentDOM\Query\Css {
      */
     public function testOffsetSetWithInvalidName() {
       $css = new Properties();
-      $this->setExpectedException(\InvalidArgumentException::class);
+      $this->expectException(\InvalidArgumentException::class);
       $css['---'] = 'test';
     }
 

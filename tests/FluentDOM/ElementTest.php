@@ -72,7 +72,7 @@ namespace FluentDOM {
     public function testGetInvalidProperty() {
       $dom = new Document();
       $dom->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
-      $this->setExpectedException(\PHPUnit_Framework_Error_Notice::class);
+      $this->expectException(\PHPUnit_Framework_Error_Notice::class);
       $dom->documentElement->INVALID_PROPERTY;
     }
 
@@ -100,7 +100,7 @@ namespace FluentDOM {
     public function testSetPropertyExpectingException() {
       $dom = new Document();
       $dom->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
-      $this->setExpectedException(\BadMethodCallException::class);
+      $this->expectException(\BadMethodCallException::class);
       $dom->documentElement->firstElementChild = $dom->createElement('test');
     }
 
@@ -782,8 +782,8 @@ namespace FluentDOM {
     public function testArrayAccessOffsetExistsExpectingException() {
       $dom = new Document();
       $dom->loadXML(self::XML);
-      $this->setExpectedException(
-        'InvalidArgumentException',
+      $this->expectException(
+        \InvalidArgumentException::class,
         'Invalid offset. Use integer for child nodes and strings for attributes.'
       );
       $dom->documentElement[NULL];
@@ -859,8 +859,8 @@ namespace FluentDOM {
     public function testArrayAccessOffsetSetWithInvalidChildExpectingException() {
       $dom = new Document();
       $dom->appendChild($dom->createElement('root'));
-      $this->setExpectedException(
-        'InvalidArgumentException',
+      $this->expectException(
+        \InvalidArgumentException::class,
         '$value is not a valid \DOMNode'
       );
       $dom->documentElement[0] = NULL;

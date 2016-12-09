@@ -132,8 +132,8 @@ namespace FluentDOM {
      */
     public function testRegisterReservedNamespaceExpectingException() {
       $dom = new Document();
-      $this->setExpectedException(
-        'LogicException',
+      $this->expectException(
+        \LogicException::class,
         'Can not register reserved namespace prefix "xml".'
       );
       $dom->registerNamespace('xml', 'urn:fail');
@@ -157,8 +157,8 @@ namespace FluentDOM {
      */
     public function testGetNamespaceWithoutRegisterExpectingException() {
       $dom = new Document();
-      $this->setExpectedException(
-        'LogicException',
+      $this->expectException(
+        \LogicException::class,
         'Unknown namespace prefix "test".'
       );
       $dom->getNamespace('test');
@@ -314,8 +314,8 @@ namespace FluentDOM {
      */
     public function testCreateElementWithXmlNamespacePrefixExpectingException() {
       $dom = new Document();
-      $this->setExpectedException(
-        'LogicException',
+      $this->expectException(
+        \LogicException::class,
         'Can not use reserved namespace prefix "xml" in element name'
       );
       $dom->appendChild($dom->createElement('xml:example'));

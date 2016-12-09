@@ -195,8 +195,8 @@ namespace FluentDOM {
      */
     public function testFindWithExpressionThatReturnsScalarExpectingException() {
       $fd = new Nodes(self::XML);
-      $this->setExpectedException(
-        'InvalidArgumentException',
+      $this->expectException(
+        \InvalidArgumentException::class,
         'Given selector/expression did not return a node list.'
       );
       $fd->find('count(*)');
@@ -212,8 +212,8 @@ namespace FluentDOM {
      */
     public function testFindWithInvalidSelectorExpectingException() {
       $fd = new Nodes(self::XML);
-      $this->setExpectedException(
-        'InvalidArgumentException',
+      $this->expectException(
+        \InvalidArgumentException::class,
         'Invalid selector/expression.'
       );
       $fd->find(NULL);

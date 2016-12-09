@@ -125,7 +125,7 @@ namespace FluentDOM\Loader {
           }
           break;
         }
-      } catch (\LogicException $e) {
+      } catch (InvalidSource $e) {
         if ($throwException) {
           throw $e;
         }

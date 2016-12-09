@@ -261,7 +261,7 @@ namespace FluentDOM {
      */
     public function testLoadWithInvalidSourceExpectingException() {
       $fd = new Nodes();
-      $this->expectException(Exceptions\InvalidSource::class);
+      $this->expectException(Exceptions\InvalidSource\Variable::class);
       $fd->load(NULL, 'text');
     }
 

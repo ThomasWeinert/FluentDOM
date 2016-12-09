@@ -1,6 +1,7 @@
 <?php
 namespace FluentDOM\Loader {
 
+  use FluentDOM\Exceptions\InvalidArgument;
   use FluentDOM\TestCase;
   use FluentDOM\Exceptions\InvalidSource;
 
@@ -35,6 +36,14 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Options
      */
+    public function testConstructorWithOptionsExpectingException() {
+      $this->expectException(InvalidArgument::class);
+      new Options('No STRING ALLOWED');
+    }
+
+    /**
+     * @covers \FluentDOM\Loader\Options
+     */
     public function testConstructorWithCallback() {
       $options = new Options(
         [],
@@ -43,6 +52,14 @@ namespace FluentDOM\Loader {
         ]
       );
       $this->assertEquals(Options::IS_FILE, $options->getSourceType(''));
+    }
+
+    /**
+     * @covers \FluentDOM\Loader\Options
+     */
+    public function testConstructorWithCallbackExpectingException() {
+      $this->expectException(\InvalidArgumentException::class);
+      new Options([], ['UnknownCallback' => function() {} ]);
     }
 
     /**
@@ -178,12 +195,66 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Options
      */
+    public function testGetSourceTypeForcingIsString() {
+      $options = new Options(
+        [Options::IS_STRING => TRUE],
+        [
+          Options::CB_IDENTIFY_STRING_SOURCE => function() { return FALSE; }
+        ]
+      );
+      $this->assertEquals(Options::IS_STRING, $options->getSourceType(''));
+    }
+
+    /**
+     * @covers \FluentDOM\Loader\Options
+     */
+    public function testIsAllowedFileExpectingTrue() {
+      $options = new Options(
+        [Options::IS_FILE => TRUE]
+      );
+      $this->assertTrue($options->isAllowed(Options::IS_FILE));
+    }
+
+    /**
+     * @covers \FluentDOM\Loader\Options
+     */
     public function testIsAllowedFileExpectingException() {
       $options = new Options(
         [Options::IS_FILE => FALSE]
       );
       $this->expectException(InvalidSource\TypeFile::class);
       $options->isAllowed(Options::IS_FILE);
+    }
+
+    /**
+     * @covers \FluentDOM\Loader\Options
+     */
+    public function testIsAllowedStringExpectingException() {
+      $options = new Options(
+        [Options::IS_FILE => TRUE]
+      );
+      $this->expectException(InvalidSource\TypeString::class);
+      $options->isAllowed(Options::IS_STRING);
+    }
+
+    /**
+     * @covers \FluentDOM\Loader\Options
+     */
+    public function testIsAllowedFileExpectingFalse() {
+      $options = new Options(
+        [Options::IS_FILE => FALSE]
+      );
+      $this->assertFalse($options->isAllowed(Options::IS_FILE, FALSE));
+    }
+
+    /**
+     * @covers \FluentDOM\Loader\Options
+     */
+    public function testIsAllowedStringExpectingFalse() {
+      $options = new Options(
+        [Options::IS_FILE => TRUE]
+      );
+      $this->assertFalse($options->isAllowed(Options::IS_STRING, FALSE));
     }
 
   }

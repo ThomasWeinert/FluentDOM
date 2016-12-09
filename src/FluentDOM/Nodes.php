@@ -131,7 +131,7 @@ namespace FluentDOM {
         $this->applyNamespaces();
         return $this;
       }
-      throw new Exceptions\InvalidSource($source, $contentType);
+      throw new Exceptions\InvalidSource\Variable($source, $contentType);
     }
 
     /**

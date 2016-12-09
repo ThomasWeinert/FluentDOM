@@ -1,9 +1,9 @@
 <?php
 namespace FluentDOM\Exceptions\InvalidSource {
 
-  use FluentDOM\Exception;
+  use FluentDOM\Exceptions;
 
-  class TypeString extends \UnexpectedValueException implements Exception {
+  class TypeString extends \InvalidArgumentException implements Exceptions\InvalidSource {
 
   }
 }

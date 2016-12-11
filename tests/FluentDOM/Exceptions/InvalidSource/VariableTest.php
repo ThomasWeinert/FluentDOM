@@ -8,7 +8,7 @@ namespace FluentDOM\Exceptions\InvalidSource {
   class VariableTest extends TestCase {
 
     /**
-     * @covers \FluentDOM\Exceptions\InvalidSource
+     * @covers \FluentDOM\Exceptions\InvalidSource\Variable
      */
     public function testConstructor() {
       $exception = new Variable('test', 'type/test');

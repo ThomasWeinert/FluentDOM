@@ -38,27 +38,20 @@ namespace FluentDOM\Node {
       /** @var \FluentDOM\Text|\FluentDOM\CdataSection $this */
       $text = (string)$text;
       $canReplaceEntity = function(\DOMEntityReference $reference) use (&$canReplaceEntity) {
-        if (
-          $reference->firstChild instanceof \DOMEntity &&
-          $reference->firstChild->hasChildNodes()
-        ) {
-          foreach ($reference->firstChild->childNodes as $childNode) {
-            $canReplace = FALSE;
-            if ($childNode instanceof \DOMEntityReference) {
-              $canReplace = $canReplaceEntity($childNode);
-            } elseif (
-              $childNode instanceof \DOMCharacterData
-            ) {
-              $canReplace = TRUE;
-            }
-            if (!$canReplace) {
-              return FALSE;
-            }
+        foreach ($reference->firstChild->childNodes as $childNode) {
+          $canReplace = FALSE;
+          if ($childNode instanceof \DOMEntityReference) {
+            $canReplace = $canReplaceEntity($childNode);
+          } elseif (
+            $childNode instanceof \DOMCharacterData
+          ) {
+            $canReplace = TRUE;
           }
-          return TRUE;
-        } else {
-          return FALSE;
+          if (!$canReplace) {
+            return FALSE;
+          }
         }
+        return TRUE;
       };
       $replaceNode = function(\DOMNode $node = NULL) use ($canReplaceEntity) {
         if (

@@ -1,7 +1,7 @@
 <?php
 namespace FluentDOM\Query {
 
-  use FluentDOM\Query;
+  use FluentDOM\Exceptions;
   use FluentDOM\TestCase;
 
   require_once(__DIR__.'/../../TestCase.php');
@@ -54,7 +54,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query
      */
     public function testWrapWithInvalidArgument() {
-      $this->expectException(\InvalidArgumentException::class);
+      $this->expectException(Exceptions\LoadingError::class);
       $this->getQueryFixtureFromString(self::XML)
           ->find('//item')
           ->wrap(NULL);

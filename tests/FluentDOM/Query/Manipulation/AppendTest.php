@@ -2,6 +2,7 @@
 namespace FluentDOM\Query {
 
   use FluentDOM\Query;
+  use FluentDOM\Exceptions;
   use FluentDOM\TestCase;
 
   require_once(__DIR__.'/../../TestCase.php');
@@ -189,7 +190,7 @@ namespace FluentDOM\Query {
      */
     public function testAppendWithInvalidArgumentExpectingException() {
       $fd = new Query();
-      $this->expectException(\InvalidArgumentException::class);
+      $this->expectException(Exceptions\LoadingError::class);
       $fd->append(new \stdClass());
     }
 
@@ -200,7 +201,7 @@ namespace FluentDOM\Query {
      */
     public function testAppendWithEmptyArgumentExpectingException() {
       $fd = new Query();
-      $this->expectException(\InvalidArgumentException::class);
+      $this->expectException(Exceptions\LoadingError::class);
       $fd->append([]);
     }
   }

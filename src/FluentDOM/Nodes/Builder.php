@@ -93,8 +93,7 @@ namespace FluentDOM\Nodes {
      * @param mixed $content
      * @param boolean $includeTextNodes
      * @param integer $limit
-     * @throws \UnexpectedValueException
-     * @throws \InvalidArgumentException
+     * @throws Exceptions\LoadingError\EmptyResult
      * @return array
      */
     public function getContentNodes($content, $includeTextNodes = TRUE, $limit = -1) {
@@ -105,7 +104,7 @@ namespace FluentDOM\Nodes {
         $result = $this->getFragment($content, $this->getOwner()->contentType, $includeTextNodes, $limit);
       }
       if (!is_array($result) || empty($result)) {
-        throw new \InvalidArgumentException('Invalid/empty content parameter.');
+        throw new Exceptions\LoadingError\EmptyResult();
       } else {
         //if a node is not in the current document import it
         $document = $this->getOwner()->getDocument();
@@ -136,7 +135,7 @@ namespace FluentDOM\Nodes {
      * @param string $contentType
      * @param boolean $includeTextNodes
      * @param integer $limit
-     * @throws \UnexpectedValueException
+     * @throws Exceptions\InvalidFragmentLoader
      * @return array
      */
     public function getFragment($xml, $contentType = 'text/xml', $includeTextNodes = TRUE, $limit = -1) {
@@ -172,11 +171,11 @@ namespace FluentDOM\Nodes {
      * @throws \UnexpectedValueException
      */
     private function getContentAsString($content) {
-      if (is_string($content) || method_exists($content, '__toString')) {
+      if (is_scalar($content) || method_exists($content, '__toString')) {
         $content = (string)$content;
-        return empty($content) ? FALSE : $content;
+        return ($content === '') ? FALSE : $content;
       }
-      throw new \UnexpectedValueException('Invalid document fragment');
+      throw new Exceptions\LoadingError\EmptySource('Invalid document fragment');
     }
 
     /**

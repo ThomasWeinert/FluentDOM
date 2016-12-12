@@ -2,7 +2,7 @@
 namespace FluentDOM\Nodes {
 
   use FluentDOM\Document;
-  use FluentDOM\Exceptions\InvalidFragmentLoader;
+  use FluentDOM\Exceptions;
   use FluentDOM\TestCase;
   use FluentDOM\Nodes;
 
@@ -158,8 +158,7 @@ namespace FluentDOM\Nodes {
       $node = $nodes->document->createTextNode("success");
       $builder = new Builder($nodes);
       $this->expectException(
-        \InvalidArgumentException::class,
-        'Invalid/empty content parameter.'
+        \FluentDOM\Exceptions\LoadingError::class
       );
       $this->assertSame(
         [$node],
@@ -252,8 +251,7 @@ namespace FluentDOM\Nodes {
       $nodes = new Nodes();
       $builder = new Builder($nodes);
       $this->expectException(
-        \InvalidArgumentException::class,
-        'Invalid/empty content parameter.'
+        \FluentDOM\Exceptions\LoadingError::class
       );
       $builder->getContentNodes($dom->xpath()->evaluate('//item'));
     }
@@ -266,8 +264,7 @@ namespace FluentDOM\Nodes {
       $nodes = new Nodes();
       $builder = new Builder($nodes);
       $this->expectException(
-        \InvalidArgumentException::class,
-        'Invalid/empty content parameter.'
+        \FluentDOM\Exceptions\LoadingError::class
       );
       $builder->getContentNodes('');
     }
@@ -316,8 +313,7 @@ namespace FluentDOM\Nodes {
       $nodes = new Nodes();
       $builder = new Builder($nodes);
       $this->expectException(
-        \UnexpectedValueException::class,
-        'Invalid document fragment'
+        Exceptions\LoadingError\EmptySource::class
       );
       $builder->getFragment(NULL, 'text/xml');
     }
@@ -329,7 +325,7 @@ namespace FluentDOM\Nodes {
       $nodes = new Nodes();
       $builder = new Builder($nodes);
       $this->expectException(
-        InvalidFragmentLoader::class
+        Exceptions\InvalidFragmentLoader::class
       );
       $builder->getFragment('', 'invalid');
     }
@@ -376,8 +372,7 @@ namespace FluentDOM\Nodes {
       $nodes = new Nodes();
       $builder = new Builder($nodes);
       $this->expectException(
-        \UnexpectedValueException::class,
-        'Invalid document fragment'
+        Exceptions\LoadingError\EmptySource::class
       );
       $builder->getFragment(NULL, 'text/html');
     }

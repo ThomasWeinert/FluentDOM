@@ -1,9 +1,9 @@
 <?php
 /**
- * Load a iCalendar (*.ics) file
+ * Load a CSV file
  *
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
+ * @copyright Copyright (c) 2009-2016 Bastian Feder, Thomas Weinert
  */
 
 namespace FluentDOM\Loader\Text {
@@ -18,7 +18,7 @@ namespace FluentDOM\Loader\Text {
   use FluentDOM\Loader\Result;
 
   /**
-   * Load a iCalendar (*.ics) file
+   * Load a CSV file
    */
   class CSV implements Loadable {
 
@@ -167,10 +167,6 @@ namespace FluentDOM\Loader\Text {
         $result = $source;
       }
       return (empty($result)) ? NULL : $result;
-    }
-
-    private function isFile($source) {
-      return (is_string($source) && (FALSE === strpos($source, "\n")));
     }
 
     /**

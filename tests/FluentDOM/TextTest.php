@@ -86,5 +86,27 @@ namespace FluentDOM {
       $this->setExpectedException(\DOMException::class);
       $text->replaceWholeText('42');
     }
+
+    /**
+     * @covers \FluentDOM\Node\WholeText
+     * @covers \FluentDOM\Text
+     */
+    public function testReplaceWholeTextWithEntityReferenceRecursion() {
+      $document = new Document();
+      $document->loadXML(
+        '<!DOCTYPE p ['."\n".
+        '  <!ENTITY one "&two;">'."\n".
+        '  <!ENTITY two "21">'."\n".
+        ']>'."\n".
+        '<p>bar&one;</p>'
+      );
+      /** @var CdataSection $text */
+      $text = $document->documentElement->firstChild;
+      $text->replaceWholeText('42');
+      $this->assertXmlStringEqualsXmlString(
+        '<p>42</p>',
+        $document->saveXml()
+      );
+    }
   }
 }

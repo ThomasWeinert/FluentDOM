@@ -175,7 +175,7 @@ namespace FluentDOM\Nodes {
         $content = (string)$content;
         return ($content === '') ? FALSE : $content;
       }
-      throw new Exceptions\LoadingError\EmptySource('Invalid document fragment');
+      throw new Exceptions\LoadingError\EmptySource();
     }
 
     /**

@@ -29,6 +29,10 @@ namespace FluentDOM\Loader {
       self::CB_IDENTIFY_STRING_SOURCE => false
     ];
 
+    /**
+     * @param array|\Traversable|Options $options
+     * @param array $callbacks
+     */
     public function __construct($options = [], $callbacks = []) {
       if (is_array($options)) {
         $this->_options = $options;
@@ -42,6 +46,10 @@ namespace FluentDOM\Loader {
       }
     }
 
+    /**
+     * @param string $name
+     * @param callable $callback
+     */
     public function setCallback($name, callable $callback) {
       if (!array_key_exists($name, $this->_callbacks)) {
         throw new \InvalidArgumentException(
@@ -51,6 +59,12 @@ namespace FluentDOM\Loader {
       $this->_callbacks[$name] = $callback;
     }
 
+    /**
+     * @param string $name
+     * @param mixed $default
+     * @param mixed ...$arguments
+     * @return mixed
+     */
     private function executeCallback($name, $default, ...$arguments) {
       $callback = $this->_callbacks[$name];
       if (is_callable($callback)) {
@@ -60,18 +74,33 @@ namespace FluentDOM\Loader {
       }
     }
 
+    /**
+     * @return \Iterator
+     */
     public function getIterator() {
       return new \ArrayIterator($this->_options);
     }
 
+    /**
+     * @param mixed $offset
+     * @return bool
+     */
     public function offsetExists($offset) {
       return array_key_exists($offset, $this->_options);
     }
 
+    /**
+     * @param mixed $offset
+     * @return mixed|null
+     */
     public function offsetGet($offset) {
       return array_key_exists($offset, $this->_options) ? $this->_options[$offset] : NULL;
     }
 
+    /**
+     * @param mixed $offset
+     * @param mixed $value
+     */
     public function offsetSet($offset, $value) {
       switch ($offset) {
       case self::IS_STRING :
@@ -95,10 +124,17 @@ namespace FluentDOM\Loader {
       $this->_options[$offset] = $value;
     }
 
+    /**
+     * @param mixed $offset
+     */
     public function offsetUnset($offset) {
       $this->_options[$offset] = NULL;
     }
 
+    /**
+     * @param mixed $source
+     * @return string
+     */
     public function getSourceType($source) {
       if ($this[self::IS_FILE]) {
         return self::IS_FILE;
@@ -111,6 +147,12 @@ namespace FluentDOM\Loader {
       return ($isStringSource) ? self::IS_STRING : self::IS_FILE;
     }
 
+    /**
+     * @param string $sourceType
+     * @param bool $throwException
+     * @return bool
+     * @throws \Exception
+     */
     public function isAllowed($sourceType, $throwException = TRUE) {
       try {
         switch ($sourceType) {

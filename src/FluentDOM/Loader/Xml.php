@@ -41,15 +41,15 @@ namespace FluentDOM\Loader {
           function() use ($source, $contentType, $options) {
             $document = new Document();
             $document->preserveWhiteSpace = FALSE;
-            $options = $this->getOptions($options);
-            $options->isAllowed($sourceType = $options->getSourceType($source));
+            $settings = $this->getOptions($options);
+            $settings->isAllowed($sourceType = $settings->getSourceType($source));
             switch ($sourceType) {
             case Options::IS_FILE :
-              $document->load($source, $options[Options::LIBXML_OPTIONS]);
+              $document->load($source, $settings[Options::LIBXML_OPTIONS]);
               break;
             case Options::IS_STRING :
             default :
-              $document->loadXML($source, $options[Options::LIBXML_OPTIONS]);
+              $document->loadXML($source, $settings[Options::LIBXML_OPTIONS]);
               break;
             }
             return $document;

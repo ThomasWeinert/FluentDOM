@@ -12,9 +12,11 @@ namespace FluentDOM\Node {
 
   use FluentDOM\Document;
 
+  // @codeCoverageIgnoreStart
   if (!defined('LIBXML_NO_MODIFICATION_ALLOWED_ERR')) {
     define('LIBXML_NO_MODIFICATION_ALLOWED_ERR',  7);
   }
+  // @codeCoverageIgnoreEnd
 
   /**
    * Add the `replaceWholeText()` method. To the text node classes.

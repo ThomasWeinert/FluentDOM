@@ -635,11 +635,11 @@ namespace FluentDOM {
         return $this->toString();
       } catch (\Exception $e) {
         return '';
-        /** @codeCoverageIgnoreStart */
+        // @codeCoverageIgnoreStart
       } catch (\Throwable $e) {
         return '';
       }
-      /** @codeCoverageIgnoreEnd */
+      // @codeCoverageIgnoreEnd
     }
 
     /***************************

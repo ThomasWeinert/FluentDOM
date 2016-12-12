@@ -41,19 +41,19 @@ namespace FluentDOM\Loader {
           function() use ($source, $contentType, $options) {
             $selection = false;
             $document = new Document();
-            $options = $this->getOptions($options);
-            if ($this->isFragment($contentType, $options)) {
-              $this->loadFragmentIntoDom($document, $source, $options[Options::LIBXML_OPTIONS]);
+            $settings = $this->getOptions($options);
+            if ($this->isFragment($contentType, $settings)) {
+              $this->loadFragmentIntoDom($document, $source, $settings[Options::LIBXML_OPTIONS]);
               $selection = $document->evaluate('/*');
             } else {
-              $options->isAllowed($sourceType = $options->getSourceType($source));
+              $settings->isAllowed($sourceType = $settings->getSourceType($source));
               switch ($sourceType) {
               case Options::IS_FILE :
-                $document->loadHTMLFile($source, $options[Options::LIBXML_OPTIONS]);
+                $document->loadHTMLFile($source, $settings[Options::LIBXML_OPTIONS]);
                 break;
               case Options::IS_STRING :
               default :
-                $document->loadHTML($source, $options[Options::LIBXML_OPTIONS]);
+                $document->loadHTML($source, $settings[Options::LIBXML_OPTIONS]);
                 break;
               }
             }

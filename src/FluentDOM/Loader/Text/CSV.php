@@ -194,4 +194,5 @@ namespace FluentDOM\Loader\Text {
       return $result;
     }
   }
+
 }

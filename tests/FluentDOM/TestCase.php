@@ -38,7 +38,7 @@ namespace FluentDOM {
      * @param string $exception
      */
     public function expectException($exception, $message = NULL, $code = NULL) {
-      if (method_exists($this, 'expectException')) {
+      if (array_key_exists('expectException', get_class_methods(\PHPUnit_Framework_TestCase::class))) {
         parent::expectException($exception);
         if ($message !== NULL) {
           parent::expectExceptionMessage($message);

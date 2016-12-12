@@ -61,6 +61,7 @@ namespace FluentDOM\Loader\Supports {
           $settings = $this->getOptions($options);
           if ($settings->isAllowed($sourceType = $settings->getSourceType($source))) {
             switch ($sourceType) {
+              /** @noinspection PhpMissingBreakStatementInspection */
             case Options::IS_FILE :
               $source = file_get_contents($source);
             case Options::IS_STRING :

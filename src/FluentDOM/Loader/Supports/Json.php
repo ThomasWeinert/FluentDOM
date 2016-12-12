@@ -51,15 +51,15 @@ namespace FluentDOM\Loader\Supports {
     /**
      * @param mixed $source
      * @param string $contentType
-     * @param array $options
+     * @param array|\Traversable|Options $options
      * @return mixed
      */
     private function getJson($source, $contentType, $options)  {
       if ($this->supports($contentType)) {
         if (is_string($source)) {
           $json = FALSE;
-          $options = $this->getOptions($options);
-          if ($options->isAllowed($sourceType = $options->getSourceType($source))) {
+          $settings = $this->getOptions($options);
+          if ($settings->isAllowed($sourceType = $settings->getSourceType($source))) {
             switch ($sourceType) {
             case Options::IS_FILE :
               $source = file_get_contents($source);

@@ -50,7 +50,6 @@ namespace FluentDOM\Loader {
             case Options::IS_STRING :
             default :
               $document->loadXML($source, $settings[Options::LIBXML_OPTIONS]);
-              break;
             }
             return $document;
           }

@@ -54,7 +54,6 @@ namespace FluentDOM\Loader {
               case Options::IS_STRING :
               default :
                 $document->loadHTML($source, $settings[Options::LIBXML_OPTIONS]);
-                break;
               }
             }
             return new Result($document, 'text/html', $selection);

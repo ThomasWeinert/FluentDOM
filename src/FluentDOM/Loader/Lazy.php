@@ -29,7 +29,7 @@ namespace FluentDOM\Loader {
      * Add a loader to the list
      *
      * @param string $contentType
-     * @param Loadable|\callable $loader
+     * @param Loadable|callable $loader
      * @throws \UnexpectedValueException
      */
     public function add($contentType, $loader) {

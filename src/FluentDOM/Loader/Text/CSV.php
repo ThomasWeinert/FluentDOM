@@ -101,6 +101,7 @@ namespace FluentDOM\Loader\Text {
             continue;
           }
         }
+        /** @var Element $node */
         $parent->appendChild($node = $document->createElement(self::DEFAULT_QNAME));
         foreach ($line as $index => $field) {
           if (isset($headers[$index])) {

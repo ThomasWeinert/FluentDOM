@@ -12,6 +12,7 @@ namespace FluentDOM\Loader\Json {
   use FluentDOM\Element;
   use FluentDOM\Loadable;
   use FluentDOM\Loader\Result;
+  use FluentDOM\Loader\Options;
   use FluentDOM\QualifiedName;
   use FluentDOM\Loader\Supports\Json as SupportsJson;
 
@@ -93,10 +94,7 @@ namespace FluentDOM\Loader\Json {
         $dom->appendChild(
           $root = $dom->createElementNS(self::XMLNS, 'json:json')
         );
-        $onMapKey = $this->_onMapKey;
-        if (isset($options[self::ON_MAP_KEY]) && is_callable($options[self::ON_MAP_KEY])) {
-          $this->onMapKey($options[self::ON_MAP_KEY]);
-        }
+        $onMapKey = $this->prepareOnMapKey($options);
         $this->transferTo($root, $json, $this->_recursions);
         $this->_onMapKey = $onMapKey;
         return $dom;
@@ -114,15 +112,20 @@ namespace FluentDOM\Loader\Json {
       if ($this->supports($contentType)) {
         $dom = new Document('1.0', 'UTF-8');
         $fragment = $dom->createDocumentFragment();
-        $onMapKey = $this->_onMapKey;
-        if (isset($options[self::ON_MAP_KEY]) && is_callable($options[self::ON_MAP_KEY])) {
-          $this->onMapKey($options[self::ON_MAP_KEY]);
-        }
+        $onMapKey = $this->prepareOnMapKey($options);
         $this->transferTo($fragment, json_decode($source), $this->_recursions);
         $this->_onMapKey = $onMapKey;
         return $fragment;
       }
       return NULL;
+    }
+
+    private function prepareOnMapKey($options) {
+      $onMapKey = $this->_onMapKey;
+      if (isset($options[self::ON_MAP_KEY]) && is_callable($options[self::ON_MAP_KEY])) {
+        $this->onMapKey($options[self::ON_MAP_KEY]);
+      }
+      return $onMapKey;
     }
 
     /**
@@ -165,7 +168,7 @@ namespace FluentDOM\Loader\Json {
           $this->transferObjectTo($target, $value, $this->_recursions - 1);
           break;
         default :
-          if ($this->_verbose || $type != self::TYPE_STRING) {
+          if ($target instanceof \DOMElement && ($this->_verbose || $type != self::TYPE_STRING)) {
             $target->setAttributeNS(self::XMLNS, 'json:type', $type);
           }
           $string = $this->getValueAsString($type, $value);

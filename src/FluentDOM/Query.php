@@ -1333,7 +1333,7 @@ namespace FluentDOM {
      *
      * @example attr.php Usage Example: FluentDOM\Query::attr() Read an attribute value.
      * @param string|array $attribute attribute name or attribute list
-     * @param [callable|string] $arguments
+     * @param array ...$arguments
      * @return Query|string attribute value or $this
      */
     public function attr($attribute, ...$arguments) {
@@ -1541,7 +1541,7 @@ namespace FluentDOM {
      * get or set CSS values in style attributes
      *
      * @param string|array $property
-     * @param [string|object|callable] $arguments
+     * @param array ...$arguments
      * @throws \InvalidArgumentException
      * @return string|NULL|$this
      */

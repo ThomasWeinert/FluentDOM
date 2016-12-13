@@ -3,11 +3,9 @@
 namespace FluentDOM\Loader\Supports {
 
   use FluentDOM\Document;
-  use FluentDOM\DocumentFragment;
-  use FluentDOM\Exceptions\LoadingError;
   use FluentDOM\Loader\Options;
   use FluentDOM\Loader\Supports;
-  use FluentDOM\Loader\Result;
+  use FluentDOM\Loader\Libxml\Errors;
 
   trait Libxml {
 
@@ -28,6 +26,32 @@ namespace FluentDOM\Loader\Supports {
       );
       $result['libxml'] = (int)$result['libxml'];
       return $result;
+    }
+
+    /**
+     * @param string $source
+     * @param string $contentType
+     * @param array|\Traversable|Options $options
+     * @return Document
+     */
+    private function loadXmlDocument($source, $contentType, $options) {
+      return (new Errors())->capture(
+        function () use ($source, $contentType, $options) {
+          $document = new Document();
+          $document->preserveWhiteSpace = FALSE;
+          $settings = $this->getOptions($options);
+          $settings->isAllowed($sourceType = $settings->getSourceType($source));
+          switch ($sourceType) {
+          case Options::IS_FILE :
+            $document->load($source, $settings[Options::LIBXML_OPTIONS]);
+            break;
+          case Options::IS_STRING :
+          default :
+            $document->loadXML($source, $settings[Options::LIBXML_OPTIONS]);
+          }
+          return $document;
+        }
+      );
     }
   }
 }

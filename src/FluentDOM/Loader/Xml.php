@@ -37,23 +37,7 @@ namespace FluentDOM\Loader {
      */
     public function load($source, $contentType, $options = []) {
       if ($this->supports($contentType)) {
-        return (new Libxml\Errors())->capture(
-          function() use ($source, $contentType, $options) {
-            $document = new Document();
-            $document->preserveWhiteSpace = FALSE;
-            $settings = $this->getOptions($options);
-            $settings->isAllowed($sourceType = $settings->getSourceType($source));
-            switch ($sourceType) {
-            case Options::IS_FILE :
-              $document->load($source, $settings[Options::LIBXML_OPTIONS]);
-              break;
-            case Options::IS_STRING :
-            default :
-              $document->loadXML($source, $settings[Options::LIBXML_OPTIONS]);
-            }
-            return $document;
-          }
-        );
+        return $this->loadXmlDocument($source, $contentType, $options);
       }
       return NULL;
     }

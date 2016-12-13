@@ -43,24 +43,7 @@ namespace FluentDOM\Loader {
      */
     public function load($source, $contentType, $options = []) {
       if ($this->supports($contentType) && !empty($source)) {
-        $document = (new Libxml\Errors())->capture(
-          function() use ($source, $contentType, $options) {
-            $document = new Document();
-            $document->preserveWhiteSpace = FALSE;
-            $document->registerNamespace('jx', self::XMLNS_JSONX);
-            $settings = $this->getOptions($options);
-            $settings->isAllowed($sourceType = $settings->getSourceType($source));
-            switch ($sourceType) {
-            case Options::IS_FILE :
-              $document->load($source, $settings[Options::LIBXML_OPTIONS]);
-              break;
-            case Options::IS_STRING :
-            default :
-              $document->loadXML($source, $settings[Options::LIBXML_OPTIONS]);
-            }
-            return $document;
-          }
-        );
+        $document = $this->loadXmlDocument($source, $contentType, $options);
         $target = new Document();
         $target->registerNamespace('json', self::XMLNS_JSONDOM);
         if (isset($document->documentElement)) {

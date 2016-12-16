@@ -63,14 +63,15 @@ var_dump($links);
 $_ = FluentDOM::create();
 $_->formatOutput = TRUE;
 echo $_(
-  'ul',
+  'select',
+  ['name' => 'example'],
   $_->each(
     ['One', 'Two', 'Three'],
-    function($text) use ($_) {
-      return $_('li', $text);
+    function($text, $index) use ($_) {
+      return $_('option', ['value' => $index], $text);
     }
   )
-);
+)->document->saveHTML();
 ```
 
 

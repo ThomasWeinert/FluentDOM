@@ -38,6 +38,42 @@ variadics syntax.
 * jQuery Similarities & Differences
 * Backwards Compatibility Breaks
 
+## Examples
+
+### Read All Links in a HTML File
+
+```php
+$document = FluentDOM::load(
+  $htmlFile,
+  'text/html',
+  [FluentDOM\Loader\Options::ALLOW_FILE => TRUE]
+);
+foreach ($document('//a[@href]') as $a) {
+  $links[] = [
+    'caption' => (string)$a,
+    'href' => $a['href']
+  ];
+}
+var_dump($links);
+```
+
+### Create a Select From an Array
+
+```php
+$_ = FluentDOM::create();
+$_->formatOutput = TRUE;
+echo $_(
+  'ul',
+  $_->each(
+    ['One', 'Two', 'Three'],
+    function($text) use ($_) {
+      return $_('li', $text);
+    }
+  )
+);
+```
+
+
 ## Support
 
 The [wiki](https://github.com/FluentDOM/FluentDOM/wiki) provides information and usage examples.

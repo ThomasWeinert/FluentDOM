@@ -1,4 +1,7 @@
 <?php
+/**
+ * The example compares the FluentDOM\Query Api with the extended DOM classes
+ */
 
 require(__DIR__.'/../../vendor/autoload.php');
 
@@ -10,7 +13,8 @@ function benchmark(callable $callback, $callCount) {
   return microtime(true) - $start;
 }
 
-$fd = FluentDOM('test.html', 'text/html');
+// FluentDOM\Query
+$fd = FluentDOM('test.html', 'text/html', [FluentDOM\Loader\Options::IS_FILE => TRUE]);
 echo benchmark(
   function() use ($fd) {
     $fd->find('//div[@class="test"]')->text();
@@ -18,8 +22,8 @@ echo benchmark(
   100000
 ), "\n";
 
-// FluentDOM >= 5.2 only
-$fd = FluentDOM::load('test.html', 'text/html');
+// extended DOM (FluentDOM >= 5.2), this is faster
+$fd = FluentDOM::load('test.html', 'text/html', [FluentDOM\Loader\Options::IS_FILE => TRUE]);
 echo benchmark(
   function() use ($fd) {
     $fd('string(//div[@class="test"])');

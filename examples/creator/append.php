@@ -1,5 +1,5 @@
 <?php
-require(dirname(__FILE__).'/../../vendor/autoload.php');
+require(__DIR__.'/../../vendor/autoload.php');
 
 $_ = FluentDOM::create();
 $_->formatOutput = TRUE;

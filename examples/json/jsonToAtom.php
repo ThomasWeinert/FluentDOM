@@ -2,7 +2,7 @@
 /**
 * Loads the FluentDOM github timeline and output it as an Atom feed.
 */
-require_once(dirname(__FILE__).'/../../vendor/autoload.php');
+require_once(__DIR__.'/../../vendor/autoload.php');
 
 $url = 'https://api.github.com/repos/FluentDOM/FluentDOM/commits?per_page=5';
 $options = array(

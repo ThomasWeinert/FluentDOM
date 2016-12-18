@@ -1,5 +1,5 @@
 <?php
-require(dirname(__FILE__).'/../../vendor/autoload.php');
+require(__DIR__.'/../../vendor/autoload.php');
 
 $file = 'data://text/xml;base64,'.base64_encode('<foo/>');
 $string = '<foo/>';

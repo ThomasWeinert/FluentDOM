@@ -1,5 +1,5 @@
 <?php
-require(dirname(__FILE__).'/../../vendor/autoload.php');
+require(__DIR__.'/../../vendor/autoload.php');
 
 $xml = <<<'XML'
 <?xml version="1.0" encoding="UTF-8"?>

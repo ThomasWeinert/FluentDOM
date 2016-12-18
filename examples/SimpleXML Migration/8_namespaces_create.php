@@ -1,5 +1,5 @@
 <?php
-require(dirname(__FILE__).'/../../vendor/autoload.php');
+require(__DIR__.'/../../vendor/autoload.php');
 
 /*
  * The third argument of SimpleXMLElement::addChild() is the namespace URI.

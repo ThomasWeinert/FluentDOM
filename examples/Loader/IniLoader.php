@@ -1,22 +1,18 @@
 <?php
 
-require_once(dirname(__FILE__).'/../../src/_require.php');
-
 class IniLoader implements FluentDOM\Loadable {
 
   public function supports($contentType) {
     return in_array($contentType, array('ini', 'text/ini'));
   }
 
-  public function load($source, $contentType = 'text/ini', array $options = []) {
+  public function load($source, $contentType = 'text/ini', $options = []) {
     if (is_string($source) && $this->supports($contentType)) {
-
       if (!file_exists($source)) {
         throw new InvalidArgumentException('File not found: '. $source);
       }
-
       if ($iniFile = parse_ini_file($source)) {
-        $dom = new DOMDocument();
+        $dom = new FluentDOM\Document();
         $root = $dom->appendChild($dom->createElement('ini'));
         $this->_arrayToNodes($dom, $root, $iniFile);
         return $dom;
@@ -25,7 +21,11 @@ class IniLoader implements FluentDOM\Loadable {
     return FALSE;
   }
 
-  private function _arrayToNodes(DOMDocument $dom, DOMNode $node, $data) {
+  public function loadFragment($source, $contentType = 'text/ini', $options = []) {
+    throw new \FluentDOM\Exceptions\InvalidFragmentLoader(self::class);
+  }
+
+  private function _arrayToNodes(FluentDOM\Document $dom, DOMNode $node, $data) {
     if (is_array($data)) {
       foreach ($data as $key => $val) {
         if (preg_match('(^\d+$)', $key)) {

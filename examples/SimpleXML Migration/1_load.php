@@ -16,8 +16,8 @@ echo $element->saveXML();
 $document = FluentDOM::load($string);
 echo $document->saveXML();
 
-/* FluentDOM load xml from string */
-$document = FluentDOM::load($file);
+/* FluentDOM load xml from file */
+$document = FluentDOM::load($file, 'xml', [FluentDOM\Loader\Options::IS_FILE => TRUE]);
 echo $document->saveXML();
 
 /* FluentDOM load html from string */

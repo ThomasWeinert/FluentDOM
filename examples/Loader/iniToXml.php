@@ -24,8 +24,7 @@ echo 'URL: ', $fd->find('//URL')->text(), "\n\n";
  * Or as a DOM document
  */
 $document = FluentDOM::load($iniFile, 'text/ini');
-echo 'URL: ', $document->evaluate('string(//URL)'), "\n\n";
-
+echo 'URL: ', $document('string(//URL)'), "\n\n";
 
 $document->formatOutput = TRUE;
 echo $document->saveXml();

@@ -13,7 +13,7 @@ $options = array(
 );
 
 $json = file_get_contents($url, NULL, stream_context_create($options));
-$commits = FluentDOM($json, "text/json")->find('/*/*');
+$commits = FluentDOM::load($json, "text/json")('/*/*');
 
 $_ = FluentDOM::create();
 $_->formatOutput = TRUE;

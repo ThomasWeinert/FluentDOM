@@ -3,9 +3,9 @@
 require('../../vendor/autoload.php');
 
 //load data from an url
-$html = file_get_contents('http://www.papaya-cms.com/');
+$html = file_get_contents('https://www.heise.de/');
 
-$links = FluentDOM($html, 'html')
+$links = FluentDOM($html, 'text/html')
   // find links
   ->find('//a[@href]')
   // map nodes to array elements

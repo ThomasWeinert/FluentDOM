@@ -2,7 +2,7 @@
 require_once(__DIR__.'/../../vendor/autoload.php');
 
 $xml = <<<'XML'
-<person created="2006-11-11T19:23" modified="2006-12-31T23:59">
+<person xmlns="urn:data" created="2006-11-11T19:23" modified="2006-12-31T23:59">
     <firstName>Robert</firstName>
     <lastName>Smith</lastName>
     <address type="home">
@@ -15,14 +15,14 @@ $xml = <<<'XML'
 </person>
 XML;
 
-$dom = new DOMDocument();
-$dom->preserveWhiteSpace = FALSE;
-$dom->loadXML($xml);
+$document = new DOMDocument();
+$document->preserveWhiteSpace = FALSE;
+$document->loadXML($xml);
 
-echo "XML -> RabbitFish\n\n";
+echo "XML -> Rayfish\n\n";
 
 $json = json_encode(
-  new FluentDOM\Serializer\Json\RabbitFish($dom), JSON_PRETTY_PRINT
+  new FluentDOM\Serializer\Json\Rayfish($document), JSON_PRETTY_PRINT
 );
 echo $json;
 

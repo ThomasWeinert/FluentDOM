@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__.'/../../vendor/autoload.php');
+require_once(__DIR__.'/../../../vendor/autoload.php');
 
 $xml = <<<'XML'
 <person created="2006-11-11T19:23" modified="2006-12-31T23:59" xmlns="foo:bar" xmlns:bar="urn:oasis:names:tc:entity:xmlns:xml:catalog">
@@ -14,20 +14,20 @@ $xml = <<<'XML'
 </person>
 XML;
 
-$dom = new DOMDocument();
-$dom->preserveWhiteSpace = FALSE;
-$dom->loadXML($xml);
+$document = FluentDOM::load($xml);
 
 echo "XML -> JsonML\n\n";
 
 $json = json_encode(
-  new FluentDOM\Serializer\Json\JsonML($dom), JSON_PRETTY_PRINT
+  new FluentDOM\Serializer\Json\JsonML($document), JSON_PRETTY_PRINT
 );
 echo $json;
 
 echo "\n\nJsonML -> XML\n\n";
 
-echo FluentDOM($json, 'application/jsonml+json')->formatOutput();
+$document = FluentDOM::load($json, 'application/jsonml+json');
+$document->formatOutput = TRUE;
+echo $document->saveXMl();
 
 
 

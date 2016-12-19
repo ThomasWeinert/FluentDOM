@@ -1,5 +1,11 @@
 <?php
-require_once(__DIR__.'/../../../../vendor/autoload.php');
+require_once(__DIR__.'/../../../vendor/autoload.php');
+
+/*
+ * Teh replace namespace transformer replaces namespaces. It basically
+ * recreates the nodes for the new namespace. This will not directly
+ * affect the namespace prefixes.
+ */
 
 $dom = new FluentDOM\Document();
 $dom->preserveWhiteSpace = FALSE;
@@ -16,26 +22,25 @@ $dom->loadXml(
   </atom:feed>'
 );
 
-$transformer = new FluentDOM\Transformer\Namespaces\Optimize(
+$transformer = new FluentDOM\Transformer\Namespaces\Replace(
   $dom,
   [
-    'http://www.w3.org/2005/Atom' => 'feed',
     'http://www.w3.org/1999/xhtml' => ''
   ]
 );
 $target = $transformer->getDocument();
 $target->formatOutput = TRUE;
-echo "\nWith optimization, change atom to feed, set xhtml as default namespace:\n\n";
+echo "\nRemove the xhtml namespace:\n\n";
 echo $target->saveXML();
 
-$transformer = new FluentDOM\Transformer\Namespaces\Optimize(
+$transformer = new FluentDOM\Transformer\Namespaces\Replace(
   $dom,
   [
-    'http://www.w3.org/2005/Atom' => '',
-    'http://www.w3.org/1999/xhtml' => ''
+    'http://www.w3.org/2005/Atom' => 'urn:atom',
+    'http://www.w3.org/1999/xhtml' => 'urn:xhtml'
   ]
 );
 $target = $transformer->getDocument();
 $target->formatOutput = TRUE;
-echo "\nWith optimization, no namespace prefixes:\n\n";
+echo "\nReplace namespaces:\n\n";
 echo $target->saveXML();

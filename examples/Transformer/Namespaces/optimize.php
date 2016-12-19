@@ -1,6 +1,13 @@
 <?php
 require_once(__DIR__.'/../../../vendor/autoload.php');
 
+/*
+ * The Optimize namespace transformer tries to reduce the namespace
+ * definitions by moving them into ancestor nodes.
+ *
+ * It allows you to change the prefix for namespaces, too.
+ */
+
 $dom = new FluentDOM\Document();
 $dom->preserveWhiteSpace = FALSE;
 $dom->loadXml(
@@ -16,25 +23,34 @@ $dom->loadXml(
   </atom:feed>'
 );
 
-$transformer = new FluentDOM\Transformer\Namespaces\Replace(
+/*
+ * use the 'feed' prefix for the Atom namespace and no prefix
+ * for XHTML.
+ */
+$transformer = new FluentDOM\Transformer\Namespaces\Optimize(
   $dom,
   [
+    'http://www.w3.org/2005/Atom' => 'feed',
     'http://www.w3.org/1999/xhtml' => ''
   ]
 );
 $target = $transformer->getDocument();
 $target->formatOutput = TRUE;
-echo "\nRemove the xhtml namespace:\n\n";
+echo "\nWith optimization, change atom to feed, set xhtml as default namespace:\n\n";
 echo $target->saveXML();
 
-$transformer = new FluentDOM\Transformer\Namespaces\Replace(
+
+/*
+ * Use no prefix for any namespace.
+ */
+$transformer = new FluentDOM\Transformer\Namespaces\Optimize(
   $dom,
   [
-    'http://www.w3.org/2005/Atom' => 'urn:atom',
-    'http://www.w3.org/1999/xhtml' => 'urn:xhtml'
+    'http://www.w3.org/2005/Atom' => '',
+    'http://www.w3.org/1999/xhtml' => ''
   ]
 );
 $target = $transformer->getDocument();
 $target->formatOutput = TRUE;
-echo "\nReplace namespaces:\n\n";
+echo "\nWith optimization, no namespace prefixes:\n\n";
 echo $target->saveXML();

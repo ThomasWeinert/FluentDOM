@@ -1,4 +1,5 @@
 <?php
+require_once(__DIR__.'/../../vendor/autoload.php');
 
 $xml = <<<'XML'
 <?xml version="1.0" encoding="UTF-8"?>
@@ -20,13 +21,16 @@ $xml = <<<'XML'
 </feed>
 XML;
 
-require_once(__DIR__.'/../../vendor/autoload.php');
+/*
+ * Element nodes use the childNodes property node list for iteration,
+ * but FluentDOM implements the iterator on the element node itself.
+ */
 
-$dom = new FluentDOM\Document();
-$dom->preserveWhiteSpace = FALSE;
-$dom->loadXML($xml);
+$document = new FluentDOM\Document();
+$document->preserveWhiteSpace = FALSE;
+$document->loadXML($xml);
 
-foreach ($dom->documentElement as $node) {
+foreach ($document->documentElement as $node) {
   echo get_class($node), " ";
   if ($node instanceof DOMElement) {
     echo ' - ', $node->nodeName;

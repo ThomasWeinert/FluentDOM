@@ -1,4 +1,5 @@
 <?php
+require_once(__DIR__.'/../../vendor/autoload.php');
 
 $xml = <<<'XML'
 <?xml version="1.0" encoding="UTF-8"?>
@@ -20,13 +21,25 @@ $xml = <<<'XML'
 </feed>
 XML;
 
-require_once(__DIR__.'/../../vendor/autoload.php');
+/*
+ * Exactly what it sounds like, it allows recursive iteration on
+ * the element nodes.
+ */
 
-$dom = new FluentDOM\Document();
-$dom->preserveWhiteSpace = FALSE;
-$dom->loadXML($xml);
-$dom->registerNamespace('atom', 'http://www.w3.org/2005/Atom');
+$document = new FluentDOM\Document();
+$document->preserveWhiteSpace = FALSE;
+$document->loadXML($xml);
 
-foreach ($dom->evaluate('//atom:entry/atom:link') as $entry) {
-  echo $entry['href'], "\n";
+$iterator = new RecursiveIteratorIterator(
+  $document->documentElement, RecursiveIteratorIterator::SELF_FIRST
+);
+
+foreach ($iterator as $node) {
+  echo get_class($node), " ";
+  if ($node instanceof DOMElement) {
+    echo ' - ', $node->nodeName;
+  } elseif ($node instanceof DOMText) {
+    echo ': ', $node->nodeValue;
+  }
+  echo "\n";
 }

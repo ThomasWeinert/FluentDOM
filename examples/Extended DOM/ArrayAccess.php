@@ -1,4 +1,5 @@
 <?php
+require_once(__DIR__.'/../../vendor/autoload.php');
 
 $xml = <<<'XML'
 <?xml version="1.0" encoding="UTF-8"?>
@@ -20,22 +21,20 @@ $xml = <<<'XML'
 </feed>
 XML;
 
-require_once(__DIR__.'/../../vendor/autoload.php');
+/*
+ * FluentDOM allows you to use array syntax on the element nodes.
+ *
+ * If the offset is an integer or (a string that contains only digits) it
+ * will return the child node with that offset.
+ *
+ * Otherwise it will return the attribute value.
+ */
 
 $dom = new FluentDOM\Document();
 $dom->preserveWhiteSpace = FALSE;
 $dom->loadXML($xml);
+$dom->registerNamespace('atom', 'http://www.w3.org/2005/Atom');
 
-$iterator = new RecursiveIteratorIterator(
-  $dom->documentElement, RecursiveIteratorIterator::SELF_FIRST
-);
-
-foreach ($iterator as $node) {
-  echo get_class($node), " ";
-  if ($node instanceof DOMElement) {
-    echo ' - ', $node->nodeName;
-  } elseif ($node instanceof DOMText) {
-    echo ': ', $node->nodeValue;
-  }
-  echo "\n";
+foreach ($dom->evaluate('//atom:entry/atom:link') as $entry) {
+  echo $entry['href'], "\n";
 }

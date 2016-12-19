@@ -1,6 +1,12 @@
 <?php
-
 require('../../vendor/autoload.php');
+
+/*
+ * Atom is an XML format that uses namespaces, if you
+ * register the namespace on the creator it will be resolved by it.
+ *
+ * The result is a syntax that is nearly exclusively content.
+ */
 
 $_ = FluentDOM::create();
 $_->registerNamespace('atom', 'http://www.w3.org/2005/Atom');

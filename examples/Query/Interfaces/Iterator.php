@@ -14,7 +14,7 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../../vendor/autoload.php');
+require_once('../../../vendor/autoload.php');
 
 foreach (FluentDOM($xml)->find('//p') as $key => $value) {
   echo $key, ': ', $value, "\n";

@@ -83,6 +83,10 @@ If you find a bug or have a feature request please report it in the [issue track
 
 You can check out the [![Gitter chat](https://img.shields.io/badge/gitter-join--chat-blue.svg)](https://gitter.im/FluentDOM/FluentDOM), too.
 
+Be ware that the release packages (downloads) do not include the examples or tests. They are not needed
+to use the library. If you clone the repository, they will be included.
+
+
 ### Security Issues
 
 If you find a bug that has security implications, you can send an email directly to `thomas@weinert.info`.

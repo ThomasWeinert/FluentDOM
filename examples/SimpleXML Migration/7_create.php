@@ -2,7 +2,7 @@
 require(__DIR__.'/../../vendor/autoload.php');
 
 /*
- * SimpleXML has some limit functionality for this, basically you
+ * SimpleXML has some limited functionality for this, basically you
  * can add child elements.
  */
 $element = simplexml_load_string('<ul/>');

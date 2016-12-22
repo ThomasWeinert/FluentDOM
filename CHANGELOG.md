@@ -5,6 +5,7 @@ Version 6.0
 - Changed: you might now need to set an option to load files (security)
    - `[\FluentDOM\Options\ALLOW_FILE => TRUE]`
    - `[\FluentDOM\Options\IS_FILE => TRUE]`
+- Changed: major cleanup/overhaul of the examples
 - Refactored: Replace func_get_args() with variadics
 - Added: HTML loader now supports 'html-fragment' and 'text/html-fragment'
 - Added: XML/HTML loaders now support libxml options for the load methods

@@ -116,7 +116,7 @@ just add the dependency to your composer.json.
 ```javascript
 {
   "require" : {
-    "fluentdom/fluentdom": "^5.3"
+    "fluentdom/fluentdom": "^6.0"
   }
 }
 ```

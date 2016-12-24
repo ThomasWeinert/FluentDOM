@@ -1,5 +1,10 @@
-Version 6.0
------------
+Version 6.0.1
+-------------
+
+- Fixed #57: FluentDOM\Text::replaceWholeText() removed entity
+
+Version 6.0.0
+-------------
 
 - Changed: minimum PHP version is now 5.6
 - Changed: you might now need to set an option to load files (security)

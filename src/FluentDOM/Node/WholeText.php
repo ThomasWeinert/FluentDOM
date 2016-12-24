@@ -67,17 +67,27 @@ namespace FluentDOM\Node {
           ) {
             throw new \DOMException(LIBXML_NO_MODIFICATION_ALLOWED_ERR);
           }
-          $node->parentNode->removeChild($node);
           return TRUE;
         }
         return FALSE;
       };
-      do {
-        $previous = $this->previousSibling;
-      } while ($replaceNode($previous));
-      do {
-        $next = $this->nextSibling;
-      } while ($replaceNode($next));
+      $fragment = $this->ownerDocument->createDocumentFragment();
+      $iterate = function($start, callable $getNext) use ($fragment, $replaceNode) {
+        if (!($parent = $this->parentNode)) {
+          return;
+        };
+        $current = $getNext($start);
+        while (($current instanceof \DOMNode) && $replaceNode($current)) {
+          if ($current instanceof \DOMEntityReference) {
+            $fragment->appendChild($current);
+          } else {
+            $parent->removeChild($current);
+          }
+          $current = $getNext($start);
+        }
+      };
+      $iterate($this, function(\DOMNode $node) { return $node->previousSibling; } );
+      $iterate($this, function(\DOMNode $node) { return $node->nextSibling; } );
       if ($text === '') {
         if ($this->parentNode instanceof \DOMNode) {
           $this->parentNode->removeChild($this);

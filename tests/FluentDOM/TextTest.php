@@ -108,5 +108,30 @@ namespace FluentDOM {
         $document->saveXml()
       );
     }
+
+    /**
+     * @covers \FluentDOM\Node\WholeText
+     * @covers \FluentDOM\Text
+     */
+    public function testReplaceWholeTextRemovesEntity() {
+      $document = new Document();
+      $document->loadXML(
+        '<!DOCTYPE p ['."\n".
+        '  <!ENTITY t "world">'."\n".
+        ']>'."\n".
+        '<p>Hello &t;<br/>, nice to see you &t;.</p>'
+      );
+      /** @var \FluentDOM\Text $text */
+      $text = $document->documentElement->firstChild;
+      $text->replaceWholeText('Hi universe');
+      $this->assertEquals(
+        '<?xml version="1.0"?>'."\n".
+        '<!DOCTYPE p ['."\n".
+        '<!ENTITY t "world">'."\n".
+        ']>'."\n".
+        '<p>Hi universe<br/>, nice to see you &t;.</p>'."\n",
+        $document->saveXML()
+      );
+    }
   }
 }

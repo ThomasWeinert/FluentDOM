@@ -1,3 +1,9 @@
+Version 6.1.0
+-------------
+
+- Added: FluentDOM\Nodes\Creator::$optimizeNamespaces (default TRUE) optimizes
+  namespace definitions on the created document.
+
 Version 6.0.1
 -------------
 

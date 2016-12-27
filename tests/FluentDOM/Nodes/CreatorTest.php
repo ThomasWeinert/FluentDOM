@@ -356,6 +356,16 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Creator
      */
+    public function testCreatorGetOptimizeNamespacesAfterSet() {
+      $_ = new Creator();
+      $_->optimizeNamespaces = FALSE;
+      $this->assertTrue(isset($_->optimizeNamespaces));
+      $this->assertFalse($_->optimizeNamespaces);
+    }
+
+    /**
+     * @covers \FluentDOM\Nodes\Creator
+     */
     public function testCreatorGetUnknownPropertyExpectingNull() {
       $_ = new Creator();
       $this->assertFalse(isset($_->unkown));
@@ -369,6 +379,37 @@ namespace FluentDOM\Nodes {
       $_ = new Creator();
       $_->unkown = TRUE;
       $this->assertTrue($_->unkown);
+    }
+
+    /**
+     * @covers \FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Nodes\Creator\Node
+     */
+    public function testCreatorOptimizesNamespacesByDefault() {
+      $_ = new Creator();
+      $_->registerNamespace('foo', 'urn:foo');
+      $document = $_(
+        'root',
+        $_('foo:child')
+      )->document;
+      $this->assertEquals('urn:foo', $document->documentElement->getAttribute('xmlns:foo'));
+      $this->assertEquals('', $document->documentElement->firstChild->getAttribute('xmlns:foo'));
+    }
+
+    /**
+     * @covers \FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Nodes\Creator\Node
+     */
+    public function testCreatorOptimizeNamespacesCanBeDisabled() {
+      $_ = new Creator();
+      $_->registerNamespace('foo', 'urn:foo');
+      $_->optimizeNamespaces = FALSE;
+      $document = $_(
+        'root',
+        $_('foo:child')
+      )->document;
+      $this->assertEquals('urn:foo', $document->documentElement->getAttribute('xmlns:foo'));
+      $this->assertEquals('urn:foo', $document->documentElement->firstChild->getAttribute('xmlns:foo'));
     }
   }
 }

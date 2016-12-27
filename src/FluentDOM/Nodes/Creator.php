@@ -7,6 +7,7 @@ namespace FluentDOM\Nodes {
 
   /**
    * @property bool $formatOutput
+   * @property bool $optimizeNamespaces
    */
   class Creator {
 
@@ -14,6 +15,11 @@ namespace FluentDOM\Nodes {
      * @var Document
      */
     private $_document = NULL;
+
+    /**
+     * @var bool
+     */
+    private $_optimizeNamespaces = TRUE;
 
     /**
      * @param string $version
@@ -31,6 +37,8 @@ namespace FluentDOM\Nodes {
       switch ($name) {
       case 'formatOutput' :
         return isset($this->_document->{$name});
+      case 'optimizeNamespaces' :
+        return TRUE;
       }
       return FALSE;
     }
@@ -43,6 +51,8 @@ namespace FluentDOM\Nodes {
       switch ($name) {
       case 'formatOutput' :
         return $this->_document->{$name};
+      case 'optimizeNamespaces' :
+        return $this->_optimizeNamespaces;
       }
       return NULL;
     }
@@ -55,6 +65,9 @@ namespace FluentDOM\Nodes {
       switch ($name) {
       case 'formatOutput' :
         $this->_document->{$name} = $value;
+        return;
+      case 'optimizeNamespaces' :
+        $this->_optimizeNamespaces = (bool)$value;
         return;
       }
       $this->{$name} = $value;
@@ -83,6 +96,7 @@ namespace FluentDOM\Nodes {
      */
     public function __invoke($name, ...$parameters) {
       return new Creator\Node(
+        $this,
         $this->_document,
         $this->element($name, ...$parameters)
       );
@@ -152,6 +166,8 @@ namespace FluentDOM\Nodes\Creator {
   use FluentDOM\Appendable;
   use FluentDOM\Document;
   use FluentDOM\Element;
+  use FluentDOM\Nodes\Creator;
+  use FluentDOM\Transformer\Namespaces\Optimize;
 
   /**
    * @property-read Document $document
@@ -171,10 +187,16 @@ namespace FluentDOM\Nodes\Creator {
     private $_node = NULL;
 
     /**
+     * @var Creator
+     */
+    private $_creator;
+
+    /**
      * @param Document $document
      * @param \DOMElement $node
      */
-    public function __construct($document, \DOMElement $node) {
+    public function __construct(Creator $creator, Document $document, \DOMElement $node) {
+      $this->_creator = $creator;
       $this->_document = $document;
       $this->_node = $node;
     }
@@ -211,6 +233,10 @@ namespace FluentDOM\Nodes\Creator {
     public function getDocument() {
       $document = clone $this->_document;
       $document->appendChild($document->importNode($this->_node, TRUE));
+      if ($this->_creator->optimizeNamespaces) {
+        $document = (new Optimize($document))->getDocument();
+        $document->formatOutput = $this->_document->formatOutput;
+      }
       return $document;
     }
 

@@ -8,6 +8,8 @@
 
 namespace FluentDOM\Transformer\Namespaces {
 
+  use FluentDOM\Document;
+
   /**
    * Replace namespaces in a document, prefixes are copied, but might be optimized by
    * libxml.
@@ -48,7 +50,7 @@ namespace FluentDOM\Transformer\Namespaces {
      * Create a document with the replaced namespaces.
      */
     public function getDocument() {
-      $result = new \DOMDocument();
+      $result = new Document($this->_document->version, $this->_document->encoding);
       foreach ($this->_document->childNodes as $childNode) {
          $this->importNode($result, $childNode);
       }

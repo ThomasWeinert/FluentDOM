@@ -52,14 +52,15 @@ namespace FluentDOM {
      * @var array
      */
     private $_classes = [
-      'DOMDocument' => '\\Document',
-      'DOMAttr' => '\\Attribute',
-      'DOMCdataSection'=> '\\CdataSection',
-      'DOMComment'=> '\\Comment',
-      'DOMElement'=> '\\Element',
-      'DOMProcessingInstruction'=> '\\ProcessingInstruction',
-      'DOMText'=> '\\Text',
-      'DOMDocumentFragment'=> '\\DocumentFragment'
+      'DOMDocument' => Document::class,
+      'DOMAttr' => Attribute::class,
+      'DOMCdataSection' => CdataSection::class,
+      'DOMComment' => Comment::class,
+      'DOMElement' => Element::class,
+      'DOMProcessingInstruction' => ProcessingInstruction::class,
+      'DOMText' => Text::class,
+      'DOMDocumentFragment' => DocumentFragment::class,
+      'DOMEntityReference' => EntityReference::class
     ];
 
     /**
@@ -69,7 +70,7 @@ namespace FluentDOM {
     public function __construct($version = '1.0', $encoding = 'UTF-8') {
       parent::__construct($version, $encoding);
       foreach ($this->_classes as $superClass => $className) {
-        $this->registerNodeClass($superClass, __NAMESPACE__.$className);
+        $this->registerNodeClass($superClass, $className);
       }
     }
 

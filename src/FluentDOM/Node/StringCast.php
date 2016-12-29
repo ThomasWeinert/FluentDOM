@@ -22,7 +22,7 @@ namespace FluentDOM\Node {
      */
     public function __toString() {
       /** @var \DOMNode $this */
-      return ($this instanceof \DOMNode) ? (string)$this->nodeValue : '';
+      return ($this instanceof \DOMNode) ? (string)$this->textContent : '';
     }
   }
 }

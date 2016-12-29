@@ -243,6 +243,70 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
     $this->assertInstanceOf(FluentDOM\Serializer\Html::class, $serializers->createSerializer('html', $document));
     $this->assertInstanceOf(FluentDOM\Serializer\Json::class, $serializers->createSerializer('json', $document));
   }
+
+  /**
+   * @group FactoryFunction
+   * @group Plugins
+   * @covers FluentDOM
+   */
+  public function testSave() {
+    $document = new \FluentDOM\Document();
+    $document->appendElement('foo');
+    $this->assertXmlStringEqualsXmlString(
+      '<foo/>', FluentDOM::save($document)
+    );
+  }
+
+  /**
+   * @group FactoryFunction
+   * @group Plugins
+   * @covers FluentDOM
+   */
+  public function testSaveWithChildNode() {
+    $document = new \FluentDOM\Document();
+    $document->appendElement('foo')->appendElement('bar');
+    $this->assertXmlStringEqualsXmlString(
+      '<bar/>', FluentDOM::save($document->documentElement->firstChild)
+    );
+  }
+
+  /**
+   * @group FactoryFunction
+   * @group Plugins
+   * @covers FluentDOM
+   */
+  public function testSaveWithQueryObject() {
+    $document = new \FluentDOM\Document();
+    $document->appendElement('foo');
+    $this->assertXmlStringEqualsXmlString(
+      '<foo/>', FluentDOM::save(FluentDOM($document->documentElement))
+    );
+  }
+
+  /**
+   * @group FactoryFunction
+   * @group Plugins
+   * @covers FluentDOM
+   */
+  public function testSaveWithContentTypeHTML() {
+    $document = new \FluentDOM\Document();
+    $document->appendElement('input');
+    $this->assertEquals(
+      "<input>\n", FluentDOM::save($document, 'text/html')
+    );
+  }
+
+  /**
+   * @group FactoryFunction
+   * @group Plugins
+   * @covers FluentDOM
+   */
+  public function testSaveWithInvalidContentType() {
+    $this->expectException(\FluentDOM\Exceptions\NoSerializer::class);
+    $this->assertEquals(
+      "<input>\n", FluentDOM::save(new \FluentDOM\Document(), 'type/invalid')
+    );
+  }
 }
 
 class FluentDOMXpathTransformer_TestProxy implements \FluentDOM\Xpath\Transformer {

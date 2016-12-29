@@ -55,6 +55,21 @@ abstract class FluentDOM {
   }
 
   /**
+   * @param \DOMNode|\FluentDOM\Query $node
+   * @param string $contentType
+   * @return string
+   */
+  public static function save($node, $contentType = 'text/xml') {
+    if ($node instanceof \FluentDOM\Query) {
+      $node = $node->document;
+    }
+    if ($serializer = self::getSerializerFactories()->createSerializer($contentType, $node)) {
+      return (string)$serializer;
+    }
+    throw new \FluentDOM\Exceptions\NoSerializer($contentType);
+  }
+
+  /**
    * Create an FluentDOM::Query instance and load the source into it.
    *
    * @param mixed $source

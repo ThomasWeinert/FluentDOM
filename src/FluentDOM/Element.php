@@ -327,7 +327,6 @@ namespace FluentDOM {
     /**
      * @param int|string $offset
      * @param \DOMNode|string $value
-     * @return \DOMAttr|\DOMNode|void
      * @throws \LogicException
      */
     public function offsetSet($offset, $value) {
@@ -338,14 +337,14 @@ namespace FluentDOM {
           );
         }
         if (NULL === $offset) {
-          return $this->appendChild($value);
+          $this->appendChild($value);
         } else {
-          return $this->replaceChild(
+          $this->replaceChild(
             $value, $this->childNodes->item((int)$offset)
           );
         }
       } else {
-        return $this->setAttribute($offset, (string)$value);
+        $this->setAttribute($offset, (string)$value);
       }
     }
 
@@ -429,7 +428,7 @@ namespace FluentDOM {
       if (empty($prefix)) {
         return array('', $localName);
       } else {
-        $namespace = $this->getDocument()->getNamespace($prefix);
+        $namespace = $this->getDocument()->namespaces()->resolveNamespace($prefix);
         return array($namespace, $localName);
       }
     }

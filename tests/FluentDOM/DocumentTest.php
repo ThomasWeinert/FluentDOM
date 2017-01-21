@@ -7,6 +7,20 @@ namespace FluentDOM {
   class DocumentTest extends TestCase {
 
     /**
+     * @covers \FluentDOM\Document
+     */
+    public function testClone() {
+      $document = new Document();
+      $document->registerNamespace('foo', 'urn:foo');
+      $clone = clone $document;
+      $this->assertNotSame($document->namespaces(), $clone->namespaces());
+      $this->assertEquals(
+        ['foo' => 'urn:foo'],
+        iterator_to_array($clone->namespaces())
+      );
+    }
+
+    /**
      * @covers \FluentDOM\Document::__construct
      */
     public function testDocumentRegistersNodeClass() {
@@ -85,86 +99,6 @@ namespace FluentDOM {
     }
 
     /**
-     * @covers \FluentDOM\Document::registerNamespace
-     * @covers \FluentDOM\Document::getNamespace
-     * @covers \FluentDOM\Document::validatePrefix
-     */
-    public function testGetNamespaceAfterRegister() {
-      $dom = new Document();
-      $dom->registerNamespace('test', 'urn:success');
-      $this->assertEquals(
-        'urn:success',
-        $dom->getNamespace('test')
-      );
-    }
-
-    /**
-     * @covers \FluentDOM\Document::registerNamespace
-     * @covers \FluentDOM\Document::getNamespace
-     * @covers \FluentDOM\Document::validatePrefix
-     */
-    public function testGetDefaultNamespaceAfterRegister() {
-      $dom = new Document();
-      $dom->registerNamespace('#default', 'urn:success');
-      $this->assertEquals(
-        'urn:success',
-        $dom->getNamespace('')
-      );
-    }
-
-    /**
-     * @covers \FluentDOM\Document::registerNamespace
-     * @covers \FluentDOM\Document::getNamespace
-     * @covers \FluentDOM\Document::validatePrefix
-     */
-    public function testGetDefaultNamespaceWithoutRegister() {
-      $dom = new Document();
-      $this->assertEquals(
-        '',
-        $dom->getNamespace('#default')
-      );
-    }
-
-    /**
-     * @covers \FluentDOM\Document::registerNamespace
-     * @covers \FluentDOM\Document::getNamespace
-     * @covers \FluentDOM\Document::validatePrefix
-     */
-    public function testRegisterReservedNamespaceExpectingException() {
-      $dom = new Document();
-      $this->expectException(
-        \LogicException::class,
-        'Can not register reserved namespace prefix "xml".'
-      );
-      $dom->registerNamespace('xml', 'urn:fail');
-    }
-
-    /**
-     * @covers \FluentDOM\Document::getNamespace
-     * @covers \FluentDOM\Document::validatePrefix
-     */
-    public function testGetReservedNamespace() {
-      $dom = new Document();
-      $this->assertEquals(
-        'http://www.w3.org/XML/1998/namespace',
-        $dom->getNamespace('xml')
-      );
-    }
-
-    /**
-     * @covers \FluentDOM\Document::getNamespace
-     * @covers \FluentDOM\Document::validatePrefix
-     */
-    public function testGetNamespaceWithoutRegisterExpectingException() {
-      $dom = new Document();
-      $this->expectException(
-        \LogicException::class,
-        'Unknown namespace prefix "test".'
-      );
-      $dom->getNamespace('test');
-    }
-
-    /**
      * @covers \FluentDOM\Document::namespaces
      */
     public function testNamespacesGet() {
@@ -176,7 +110,7 @@ namespace FluentDOM {
           '#default' => 'urn:default',
           'foo' => 'urn:foo'
         ],
-        $dom->namespaces()
+        iterator_to_array($dom->namespaces())
       );
     }
 
@@ -197,7 +131,7 @@ namespace FluentDOM {
           '#default' => 'urn:default',
           'bar' => 'urn:bar'
         ],
-        $dom->namespaces()
+        iterator_to_array($dom->namespaces())
       );
     }
 
@@ -341,6 +275,7 @@ namespace FluentDOM {
      */
     public function testCreateAttribute() {
       $dom = new Document();
+      /** @var Element $node */
       $node = $dom->appendChild($dom->createElement('example'));
       $node->appendChild($dom->createAttribute('attribute'));
       $this->assertXmlStringEqualsXmlString(
@@ -355,6 +290,7 @@ namespace FluentDOM {
     public function testCreateAttributeWithNamespace() {
       $dom = new Document();
       $dom->registerNamespace('test', 'urn:success');
+      /** @var Element $node */
       $node = $dom->appendChild($dom->createElement('example'));
       $node->appendChild($dom->createAttribute('test:attribute', 'success'));
       $this->assertXmlStringEqualsXmlString(

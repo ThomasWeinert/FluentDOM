@@ -3,11 +3,16 @@ Version 6.1.0
 
 - Added #58: FluentDOM\Nodes\Creator::$optimizeNamespaces (default TRUE) optimizes
   namespace definitions on the created document.
+- Added: FluentDOM\NamespaceResolver interface
+- Added: FluentDOM\Namespaces namespace resolver implementation
+- Refactored: FluentDOM\Document::namespaces() now returns a FluentDOM\Namespaces instance
+- Removed: FluentDOM\Document::getNamespace() - use FluentDOM\Document::namespaces() object
+- Added #62: FluentDOM\XMLReader extend XMLReader with namespace registration 
 
 Version 6.0.1
 -------------
 
-- Fixed #57: FluentDOM\Text::replaceWholeText() removed entity
+- Fixed #57: FluentDOM\Text::replaceWholeText() should not remove entity definition
 
 Version 6.0.0
 -------------

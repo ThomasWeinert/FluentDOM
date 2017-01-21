@@ -9,7 +9,17 @@ namespace FluentDOM {
      * @covers \FluentDOM\Xpath
      */
     public function testRegisterNamespaceRegistersOnDocument() {
+      $namespaces = $this->getMockBuilder(Namespaces::class)->getMock();
+      $namespaces
+        ->expects($this->once())
+        ->method('offsetExists')
+        ->with("bar")
+        ->willReturn(FALSE);
       $dom = $this->getMockBuilder(Document::class)->getMock();
+      $dom
+        ->expects($this->once())
+        ->method('namespaces')
+        ->willReturn($namespaces);
       $dom
         ->expects($this->once())
         ->method('registerNamespace')

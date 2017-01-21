@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root xmlns="urn:foo" bar:attribute="value" xmlns:bar="urn:bar">
+  <child name="one">
+    <child name="one.one"/>
+  </child>
+  <child xmlns="urn:bar" name="two"/>
+  <child name="three"/>
+</root>

@@ -53,8 +53,13 @@ namespace FluentDOM {
      * @return bool
      */
     public function registerNamespace($prefix, $namespace) {
-      if ($this->_documentReference instanceOf Document &&
-          $this->_documentReference->getNamespace($prefix) !== $namespace) {
+      if (
+        $this->_documentReference instanceOf Document &&
+        (
+          !$this->_documentReference->namespaces()->offsetExists($prefix) ||
+          $this->_documentReference->namespaces()->offsetGet($prefix) !== $namespace
+        )
+      ) {
         $this->_documentReference->registerNameSpace($prefix, $namespace);
       }
       return parent::registerNamespace($prefix, $namespace);

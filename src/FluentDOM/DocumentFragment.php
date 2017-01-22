@@ -30,7 +30,10 @@ namespace FluentDOM {
       Node\QuerySelector\Implementation,
       Node\Xpath;
 
-    private $_namespaces = [];
+    /**
+     * @var Namespaces
+     */
+    private $_namespaces;
 
     /**
      * Casting the fragment to string will return the text content of all nodes
@@ -63,15 +66,17 @@ namespace FluentDOM {
      * Get/Set the namespace definition used for the fragment strings.
      *
      * You can use an array(prefix => $namespace, ...) or an element node
-     * to set the namespaces. If the list is empty the document, the namespaces from
+     * to set the namespaces. If the list is empty, the namespaces from
      * the document object will be used.
      *
      * @param null|array|\Traversable|\DOMElement $namespaces
-     * @return array
+     * @return Namespaces
      */
     public function namespaces($namespaces = NULL) {
+      if (isset($namespaces) || (!$this->_namespaces instanceof Namespaces)) {
+        $this->_namespaces = new Namespaces();
+      }
       if (isset($namespaces)) {
-        $this->_namespaces = [];
         if ($namespaces instanceof \DOMElement) {
           $xpath = new Xpath($namespaces->ownerDocument);
           $namespaces = $xpath('namespace::*', $namespaces);
@@ -94,7 +99,7 @@ namespace FluentDOM {
           );
         }
       }
-      return empty($this->_namespaces) ? $this->ownerDocument->namespaces() : $this->_namespaces;
+      return count($this->_namespaces) > 0 ? $this->_namespaces : $this->ownerDocument->namespaces();
     }
 
     /**
@@ -104,7 +109,7 @@ namespace FluentDOM {
      * @param $namespace
      */
     public function registerNamespace($prefix, $namespace) {
-      $this->_namespaces[empty($prefix) ? '#default' : $prefix] = $namespace;
+      $this->namespaces()[empty($prefix) ? '#default' : $prefix] = $namespace;
     }
 
     /**
@@ -116,7 +121,7 @@ namespace FluentDOM {
      */
     public function appendXml($data, $namespaces = NULL) {
       $namespaces = $this->namespaces($namespaces);
-      if (empty($namespaces)) {
+      if (count($namespaces) == 0) {
         return parent::appendXml($data);
       } else {
         $fragment = '<fragment';

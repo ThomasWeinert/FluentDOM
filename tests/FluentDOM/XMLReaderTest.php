@@ -47,6 +47,27 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\XMLReader
      */
+    public function testTraverseAllSiblings() {
+      $reader = new XMLReader();
+      $reader->open(__DIR__.'/TestData/xmlreader-1.xml');
+
+      $result = [];
+      $found = $reader->read('child');
+      while ($found) {
+        if ($reader->nodeType === XML_ELEMENT_NODE) {
+          $result[] = $reader->getAttribute('name');
+        }
+        $found = $reader->next();
+      }
+
+      $this->assertEquals(
+        ['one', 'two', 'three'], $result
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\XMLReader
+     */
     public function testTraverseDescendantsWithRegisteredNamespace() {
       $reader = new XMLReader();
       $reader->open(__DIR__.'/TestData/xmlreader-1.xml');

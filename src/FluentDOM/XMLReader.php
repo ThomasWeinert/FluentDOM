@@ -43,14 +43,14 @@ namespace FluentDOM {
     public function next($name = NULL) {
       if (isset($name)) {
         list($prefix, $localName) = QualifiedName::split($name);
-        $namespaceUri = $this->_namespaces->resolveNamespace($prefix);
+        $namespaceUri = $prefix ? $this->_namespaces->resolveNamespace($prefix) : '';
         $ignoreNamespace = ($prefix === FALSE && $namespaceUri === '');
       } else {
         $ignoreNamespace = TRUE;
         $namespaceUri = '';
       }
       if ($ignoreNamespace) {
-        return parent::next($name);
+        return isset($name) ? parent::next($name) : parent::next();
       } else {
         while (parent::next($localName)) {
           if ($this->namespaceURI === $namespaceUri) {
@@ -71,7 +71,7 @@ namespace FluentDOM {
     public function read($name = NULL) {
       if (isset($name)) {
         list($prefix, $localName) = QualifiedName::split($name);
-        $namespaceUri = $this->_namespaces->resolveNamespace($prefix);
+        $namespaceUri = $prefix ? $this->_namespaces->resolveNamespace($prefix) : '';
         $ignoreNamespace = ($prefix === FALSE && $namespaceUri === '');
         while (parent::read()) {
           if (

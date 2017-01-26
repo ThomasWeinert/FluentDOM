@@ -55,12 +55,14 @@ namespace FluentDOM\Node {
       };
       $replaceNode = function(\DOMNode $node = NULL) use ($canReplaceEntity) {
         if (
-          $node instanceof \DOMElement ||
-          $node instanceof \DOMComment ||
-          $node instanceof \DOMProcessingInstruction
+          $node instanceof \DOMNode &&
+          !(
+            $node instanceof \DOMElement ||
+            $node instanceof \DOMComment ||
+            $node instanceof \DOMProcessingInstruction
+          ) &&
+          $node->parentNode instanceof \DOMNode
         ) {
-          return FALSE;
-        } elseif ($node instanceof \DOMNode && $node->parentNode instanceof \DOMNode) {
           if (
             $node instanceof \DOMEntityReference &&
             !$canReplaceEntity($node)
@@ -73,17 +75,16 @@ namespace FluentDOM\Node {
       };
       $fragment = $this->ownerDocument->createDocumentFragment();
       $iterate = function($start, callable $getNext) use ($fragment, $replaceNode) {
-        if (!($parent = $this->parentNode)) {
-          return;
-        };
-        $current = $getNext($start);
-        while (($current instanceof \DOMNode) && $replaceNode($current)) {
-          if ($current instanceof \DOMEntityReference) {
-            $fragment->appendChild($current);
-          } else {
-            $parent->removeChild($current);
-          }
+        if ($parent = $this->parentNode) {
           $current = $getNext($start);
+          while (($current instanceof \DOMNode) && $replaceNode($current)) {
+            if ($current instanceof \DOMEntityReference) {
+              $fragment->appendChild($current);
+            } else {
+              $parent->removeChild($current);
+            }
+            $current = $getNext($start);
+          }
         }
       };
       $iterate($this, function(\DOMNode $node) { return $node->previousSibling; } );

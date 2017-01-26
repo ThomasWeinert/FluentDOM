@@ -31,6 +31,34 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\Xpath
      */
+    public function testRegisterNamespaceRegistersOverwritesExisting() {
+      $namespaces = $this->getMockBuilder(Namespaces::class)->getMock();
+      $namespaces
+        ->expects($this->once())
+        ->method('offsetExists')
+        ->with("bar")
+        ->willReturn(TRUE);
+      $namespaces
+        ->expects($this->once())
+        ->method('offsetGet')
+        ->with("bar")
+        ->willReturn("urn:bar");
+      $dom = $this->getMockBuilder(Document::class)->getMock();
+      $dom
+        ->expects($this->any())
+        ->method('namespaces')
+        ->willReturn($namespaces);
+      $dom
+        ->expects($this->once())
+        ->method('registerNamespace')
+        ->with("bar", "urn:foo");
+      $xpath = new Xpath($dom);
+      $this->assertTrue($xpath->registerNamespace("bar", "urn:foo"));
+    }
+
+    /**
+     * @covers \FluentDOM\Xpath
+     */
     public function testEvaluateDoesNotRegisterNodeNamespaces() {
       $dom = new \DOMDocument();
       $dom->loadXml(

@@ -47,6 +47,7 @@ namespace FluentDOM {
         $ignoreNamespace = ($prefix === FALSE && $namespaceUri === '');
       } else {
         $ignoreNamespace = TRUE;
+        $localName = $name;
         $namespaceUri = '';
       }
       if ($ignoreNamespace) {
@@ -72,14 +73,13 @@ namespace FluentDOM {
       if (isset($name)) {
         list($prefix, $localName) = QualifiedName::split($name);
         $namespaceUri = $prefix ? $this->_namespaces->resolveNamespace($prefix) : '';
-        $ignoreNamespace = ($prefix === FALSE && $namespaceUri === '');
+        $ignoreNamespace = (($prefix === FALSE) && ($namespaceUri === ''));
         while (parent::read()) {
           if (
             $this->nodeType === XML_ELEMENT_NODE &&
             $this->localName === $localName &&
             (
-              $ignoreNamespace ||
-              $this->namespaceURI === $namespaceUri
+              $ignoreNamespace || ($this->namespaceURI === $namespaceUri)
             )
           ) {
             return TRUE;

@@ -186,7 +186,7 @@ namespace FluentDOM {
       }
       $dom = new \DOMDocument();
       $xpath = new Xpath($dom);
-      $this->setExpectedException(\PHPUnit_Framework_Error_Deprecated::class);
+      $this->expectError(E_DEPRECATED);
       $xpath->query('*');
       error_reporting($current);
     }
@@ -295,7 +295,7 @@ namespace FluentDOM {
       $errors = error_reporting(E_ALL);
       $dom = new \DOMDocument();
       $xpath = new Xpath($dom);
-      $this->setExpectedException(\PHPUnit_Framework_Error_Notice::class);
+      $this->expectError(E_NOTICE);
       $xpath->someUnknownProperty;
       error_reporting($errors);
     }

@@ -40,7 +40,7 @@ namespace FluentDOM {
      */
     public function testGetXmlWithoutInterfaceExpectingException() {
       $object = $this->getMockBuilder(XmlSerialize_TestProxyInvalid::class)->getMockForAbstractClass();
-      $this->setExpectedException(\LogicException::class);
+      $this->expectException(\LogicException::class);
       $object->getXml();
     }
   }

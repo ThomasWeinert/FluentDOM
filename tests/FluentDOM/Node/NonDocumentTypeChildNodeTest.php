@@ -154,7 +154,7 @@ namespace FluentDOM\Node {
       $dom = new Document();
       $dom->loadXML('<foo><!--comment--></foo>');
       $node = $dom->documentElement->firstChild;
-      $this->expectException(\PHPUnit_Framework_Error_Notice::class);
+      $this->expectError(E_NOTICE);
       $node->SOME_PROPERTY;
     }
   }

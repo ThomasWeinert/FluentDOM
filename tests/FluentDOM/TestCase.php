@@ -3,7 +3,13 @@ namespace FluentDOM {
 
   require_once(__DIR__.'/../../vendor/autoload.php');
 
-  abstract class TestCase extends \PHPUnit_Framework_TestCase {
+  if (!class_exists('PHPUnit_Framework_TestCase')) {
+     class PHPUnit_TestCase extends \PHPUnit\Framework\TestCase {}
+  } else {
+     class PHPUnit_TestCase extends \PHPUnit_Framework_TestCase {}
+  }
+
+  abstract class TestCase extends PHPUnit_TestCase {
 
     const XML = '
       <items version="1.0">
@@ -38,7 +44,11 @@ namespace FluentDOM {
      * @param string $exception
      */
     public function expectException($exception, $message = NULL, $code = NULL) {
-      if (array_key_exists('expectException', get_class_methods(\PHPUnit_Framework_TestCase::class))) {
+      static $useBC = NULL;
+      if (NULL === $useBC) {
+        $useBC = FALSE !== array_search('expectException', get_class_methods(PHPUnit_TestCase::class));
+      }
+      if ($useBC) {
         parent::expectException($exception);
         if ($message !== NULL) {
           parent::expectExceptionMessage($message);
@@ -48,6 +58,23 @@ namespace FluentDOM {
         }
       } else {
         parent::setExpectedException($exception, $message, $code);
+      }
+    }
+
+    public function expectError($severity) {
+      $levels = [
+        E_NOTICE => ['PHPUnit_Framework_Error_Notice', 'PHPUnit\\Framework\\Error\\Notice'],
+        E_DEPRECATED => ['PHPUnit_Framework_Error_Deprecated', 'PHPUnit\\Framework\\Error\\Deprecated']
+      ];
+      if ($levels[$severity]) {
+        foreach ($levels[$severity] as $class) {
+          if (class_exists($class)) {
+            $this->expectException($class);
+            break;
+          }
+        }
+      } else {
+        throw new \InvalidArgumentException('Can not map severity to exception class.');
       }
     }
 

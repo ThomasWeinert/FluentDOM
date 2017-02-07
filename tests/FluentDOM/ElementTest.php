@@ -72,7 +72,7 @@ namespace FluentDOM {
     public function testGetInvalidProperty() {
       $dom = new Document();
       $dom->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
-      $this->expectException(\PHPUnit_Framework_Error_Notice::class);
+      $this->expectError(E_NOTICE);
       $dom->documentElement->INVALID_PROPERTY;
     }
 

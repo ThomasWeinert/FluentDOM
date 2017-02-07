@@ -114,13 +114,10 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::getSetterValues
      */
     public function testAttrWriteWithInvalidNames($attrName) {
-      try {
-        $this->getQueryFixtureFromString(self::XML)
-          ->find('//item')
-          ->attr($attrName, '');
-        $this->fail('An expected exception has not been raised.');
-      } catch (\UnexpectedValueException $expected) {
-      }
+      $this->expectException(\UnexpectedValueException::class);
+      $this->getQueryFixtureFromString(self::XML)
+        ->find('//item')
+        ->attr($attrName, '');
     }
 
     public static function dataProviderInvalidAttributeNames() {

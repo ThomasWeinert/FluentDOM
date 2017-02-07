@@ -43,7 +43,7 @@ namespace FluentDOM\Transformer\Namespaces {
      * @param array $namespaces
      */
     public function __construct(\DOMDocument $document, array $namespaces = []) {
-      $this->_document = new Document($document->version, $document->encoding);
+      $this->_document = new Document($document->xmlVersion, $document->xmlEncoding);
       foreach ($document->childNodes as $node) {
         $this->_document->appendChild(
           $this->_document->importNode($node, TRUE)
@@ -67,7 +67,7 @@ namespace FluentDOM\Transformer\Namespaces {
      * @return Document
      */
     public function getDocument() {
-      $document = new Document($this->_document->version, $this->_document->encoding);
+      $document = new Document($this->_document->xmlVersion, $this->_document->xmlEncoding);
       foreach ($this->_document->childNodes as $node) {
         $this->addNode($document, $node);
       }

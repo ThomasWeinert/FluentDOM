@@ -50,7 +50,7 @@ namespace FluentDOM\Transformer\Namespaces {
      * Create a document with the replaced namespaces.
      */
     public function getDocument() {
-      $result = new Document($this->_document->version, $this->_document->encoding);
+      $result = new Document($this->_document->xmlVersion, $this->_document->xmlEncoding);
       foreach ($this->_document->childNodes as $childNode) {
          $this->importNode($result, $childNode);
       }

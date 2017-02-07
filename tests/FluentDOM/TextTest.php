@@ -83,7 +83,7 @@ namespace FluentDOM {
       );
       /** @var CdataSection $text */
       $text = $document->documentElement->firstChild;
-      $this->setExpectedException(\DOMException::class);
+      $this->expectException(\DOMException::class);
       $text->replaceWholeText('42');
     }
 

@@ -34,7 +34,7 @@ namespace FluentDOM {
     private $_xpath = NULL;
 
     /**
-     * @var NamespaceResolver
+     * @var Namespaces
      */
     private $_namespaces = NULL;
 
@@ -60,7 +60,7 @@ namespace FluentDOM {
      * @param string $encoding
      */
     public function __construct($version = '1.0', $encoding = 'UTF-8') {
-      parent::__construct($version, $encoding);
+      parent::__construct($version, $encoding ?: 'UTF-8');
       foreach ($this->_classes as $superClass => $className) {
         $this->registerNodeClass($superClass, $className);
       }

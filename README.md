@@ -23,7 +23,6 @@ development. You will find the PHPUnit test in the "tests" subdirectory.
 * Requirements
 * Packagist
 * Usage
-* jQuery Similarities & Differences
 * Backwards Compatibility Breaks
 
 ## Examples

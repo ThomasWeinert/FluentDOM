@@ -19,6 +19,7 @@ FluentDOM is a test driven project. We write tests before and during the
 development. You will find the PHPUnit test in the "tests" subdirectory.
 
 ## Table Of Contents
+* Examples
 * Support
 * Requirements
 * Packagist

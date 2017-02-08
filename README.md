@@ -9,33 +9,21 @@
 [![Latest Stable Version](https://img.shields.io/packagist/v/fluentdom/fluentdom.svg)](https://packagist.org/packages/fluentdom/fluentdom)
 [![Latest Unstable Version](https://img.shields.io/packagist/vpre/fluentdom/fluentdom.svg)](https://packagist.org/packages/fluentdom/fluentdom)
 
-  Copyright: 2009-2016 Bastian Feder, Thomas Weinert <br />
+  Copyright: 2009-2017 Bastian Feder, Thomas Weinert <br />
   Licence: [The MIT License](http://www.opensource.org/licenses/mit-license.php) <br />
 
 FluentDOM provides an easy to use fluent interface for DOMDocument. We tried to
 keep the jQuery API but adapted it to PHP and the server environment.
 
-The idea was born in a workshop of Tobias Schlitt (http://schlitt.info) about
-the PHP XML extensions at the IPC Spring in Berlin. He used this idea to show
-XPath samples in the session. Since then he contributed several ideas and hints.
-The basic loader concept was his idea, too.
-
 FluentDOM is a test driven project. We write tests before and during the
 development. You will find the PHPUnit test in the "tests" subdirectory.
 
-Version 5 was a complete rewrite. It is updated to the new PHP 5.4 syntax. It
-now provides classes that extend PHPs DOMDocument. Another focus was
-XML namespace support for document creation.
-
-Version 6 bumps the minimum required PHP version to 5.6. Mostly to make use of the
-variadics syntax.
-
 ## Table Of Contents
+* Examples
 * Support
 * Requirements
 * Packagist
 * Usage
-* jQuery Similarities & Differences
 * Backwards Compatibility Breaks
 
 ## Examples
@@ -197,47 +185,6 @@ you can register XML namespaces on the document and methods without direct names
 
 Check the Wiki for an [example](https://github.com/FluentDOM/FluentDOM/wiki/Creating-XML-with-Namespaces-%28Atom%29).
 
-## jQuery
-
-### Similarities
-
-FluentDOM was created after the jQuery API and concepts. You will notice that
-the most method names and parameters are the same.
-
-Many thanks to the jQuery (jquery.com) people for their work, who did an
-exceptional job describing their interfaces and providing examples. This saved
-us a lot of work. We implemented most of the jQuery methods into FluentDOM
-
-To be able to write PHPUnit Tests and develop FluentDOM a lot of examples were
-written. Most of them are copied and adapted from or are deeply inspired by the
-jQuery documentation. They are located in the 'examples' folder.
-Once again many thanks to the jQuery team.
-
-### Differences
-
-#### XPath selectors
-
-By default every method that supports a selector uses XPath not CSS selectors.
-Since XPath is supported by the ext/dom extension, no extra parsing need to be
-done. This should be faster processing the selectors and was easier to implement.
-
-But FluentDOM can use CSS selectors with the help of a converter library.
-
-#### Text nodes
-
-With a few exceptions FluentDOM handles text nodes just like element nodes.
-You can select, traverse and manipulate them.
-
-#### Extensions to PHPs DOM classes
-
-FluentDOM provides extended variants of some of the DOM classes. Most of
-it is dedicated to improve namespace handling, some works around known problems
-and some is just for comfort.
-
-You can register namespaces on the document. They will be used if elements
-or attributes are created/updated and no explicit namespace is provided. You can
-even register a default namespace for elements.
-
 ## Backwards Compatibility Breaks
 
 ### From 5.3 to 6.0
@@ -297,27 +244,5 @@ $fd = FluentDOM('...', '...', [FluentDOM\Loader\Options::ALLOW_FILE => TRUE]);
 $fd = FluentDOM('...', '...', [FluentDOM\Loader\Options::IS_FILE => TRUE]);
 ```
 
-### From 5.2 To 5.3
-
-CSS Selectors are now provided by separate packages. If you like to use them
-you will need to require the connector package now.
-
-### From 5.1 To 5.2
-
-The `FluentDOM\Loadable::load()` method now has a third argument $options. The
-FluentDOM\Nodes method and the FluentDOM function that load data sources got this
-argument, too. It allows to specify additional, loader specific options. The
-values are only used inside the loader. This change affects the implementation of
-loaders, but not the use. 
- 
-### From 4 To 5
-
-Version 5 is a major rewrite. It now uses php namespaces. The original FluentDOM
-classes (`FluentDOM`, `FluentDOMCore` and `FluentDOMStyle`) are merged into the new
-`FluentDOM\Query` class.
-
-The old loaders are gone and replaced with the new FluentDOM\Loadable interface.
-
-The registerNamespaces() method was replaced with a registerNamespace() method,
-having the same arguments like DOMXpath::registerNamespace().
+[Previous BC breaks](https://github.com/FluentDOM/FluentDOM/wiki/Backwards-Compatibility) are documented in the Wiki.
 

@@ -297,27 +297,5 @@ $fd = FluentDOM('...', '...', [FluentDOM\Loader\Options::ALLOW_FILE => TRUE]);
 $fd = FluentDOM('...', '...', [FluentDOM\Loader\Options::IS_FILE => TRUE]);
 ```
 
-### From 5.2 To 5.3
-
-CSS Selectors are now provided by separate packages. If you like to use them
-you will need to require the connector package now.
-
-### From 5.1 To 5.2
-
-The `FluentDOM\Loadable::load()` method now has a third argument $options. The
-FluentDOM\Nodes method and the FluentDOM function that load data sources got this
-argument, too. It allows to specify additional, loader specific options. The
-values are only used inside the loader. This change affects the implementation of
-loaders, but not the use. 
- 
-### From 4 To 5
-
-Version 5 is a major rewrite. It now uses php namespaces. The original FluentDOM
-classes (`FluentDOM`, `FluentDOMCore` and `FluentDOMStyle`) are merged into the new
-`FluentDOM\Query` class.
-
-The old loaders are gone and replaced with the new FluentDOM\Loadable interface.
-
-The registerNamespaces() method was replaced with a registerNamespace() method,
-having the same arguments like DOMXpath::registerNamespace().
+[Previous BC breaks](https://github.com/FluentDOM/FluentDOM/wiki/Backwards-Compatibility) are document in the Wiki.
 

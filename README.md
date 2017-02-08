@@ -297,5 +297,5 @@ $fd = FluentDOM('...', '...', [FluentDOM\Loader\Options::ALLOW_FILE => TRUE]);
 $fd = FluentDOM('...', '...', [FluentDOM\Loader\Options::IS_FILE => TRUE]);
 ```
 
-[Previous BC breaks](https://github.com/FluentDOM/FluentDOM/wiki/Backwards-Compatibility) are document in the Wiki.
+[Previous BC breaks](https://github.com/FluentDOM/FluentDOM/wiki/Backwards-Compatibility) are documented in the Wiki.
 

@@ -27,7 +27,10 @@ namespace FluentDOM\Node\ChildNode {
     public function before($nodes) {
       /** @var \DOMNode|Implementation $this */
       if (
-        $this->parentNode instanceof \DOMElement &&
+        (
+          $this->parentNode instanceof \DOMElement ||
+          $this->parentNode instanceof \DOMDocument
+        ) &&
         ($nodes = MutationMacro::expand($this->ownerDocument, $nodes))
       ) {
         $this->parentNode->insertBefore($nodes, $this);
@@ -42,7 +45,10 @@ namespace FluentDOM\Node\ChildNode {
     public function after($nodes) {
       /** @var \DOMNode|Implementation $this */
       if (
-        $this->parentNode instanceof \DOMElement &&
+        (
+          $this->parentNode instanceof \DOMElement ||
+          $this->parentNode instanceof \DOMDocument
+        ) &&
         ($nodes = MutationMacro::expand($this->ownerDocument, $nodes))
       ) {
         if ($this->nextSibling instanceof \DOMNode) {

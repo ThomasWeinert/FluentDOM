@@ -74,5 +74,19 @@ namespace FluentDOM\Node {
         $dom->saveXML()
       );
     }
+
+    /**
+     * @covers \FluentDOM\Node\ChildNode\Implementation
+     */
+    public function testReplaceWithDocumentElement() {
+      $dom = new Document();
+      $dom->loadXML('<foo><bar/></foo>');
+      $newNode = $dom->createElement('replaced');
+      $dom('/foo')->item(0)->replace($newNode);
+      $this->assertXmlStringEqualsXmlString(
+        '<replaced/>',
+        $dom->saveXML()
+      );
+    }
   }
 }

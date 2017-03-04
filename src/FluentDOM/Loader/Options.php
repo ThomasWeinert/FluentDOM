@@ -21,6 +21,8 @@ namespace FluentDOM\Loader {
     const ALLOW_FILE = 'allow_file';
 
     const LIBXML_OPTIONS = 'libxml';
+    const ENCODING = 'encoding';
+    const FORCE_ENCODING = 'force-encoding';
 
     const CB_IDENTIFY_STRING_SOURCE = 'identifyStringSource';
 

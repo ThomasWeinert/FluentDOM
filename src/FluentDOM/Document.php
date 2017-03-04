@@ -307,6 +307,16 @@ namespace FluentDOM {
           $result .= parent::saveHTML($node);
         }
         return $result;
+      } elseif (!isset($context)) {
+        $result = '';
+        foreach ($this->childNodes as $node) {
+          if ($node instanceof \DOMDocumentType) {
+            $result .= parent::saveXML($node);
+          } else {
+            $result .= parent::saveHTML($node);
+          }
+        }
+        return $result."\n";
       }
       return parent::saveHTML($context);
     }

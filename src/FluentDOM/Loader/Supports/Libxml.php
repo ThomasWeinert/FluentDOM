@@ -25,6 +25,7 @@ namespace FluentDOM\Loader\Supports {
         ]
       );
       $result['libxml'] = (int)$result['libxml'];
+      $result['encoding'] = empty($result['encoding']) ? 'utf-8' : $result['encoding'];
       return $result;
     }
 

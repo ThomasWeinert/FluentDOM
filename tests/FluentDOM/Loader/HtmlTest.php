@@ -196,5 +196,23 @@ namespace FluentDOM\Loader {
         )
       );
     }
+
+    /**
+     * @covers \FluentDOM\Loader\Html
+     * @covers \FluentDOM\Loader\Supports
+     */
+    public function testLoadWithMultiByteHtml() {
+      $loader = new Html();
+      $result = $loader->load(
+        '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'.
+        '<html><body>你好，世界</body></html>',
+        'text/html'
+      );
+      $this->assertEquals(
+        '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'.
+        '<html><body>你好，世界</body></html>'."\n",
+        $result->getDocument()->saveHTML()
+      );
+    }
   }
 }

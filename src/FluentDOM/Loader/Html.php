@@ -11,6 +11,7 @@ namespace FluentDOM\Loader {
   use FluentDOM\Document;
   use FluentDOM\DocumentFragment;
   use FluentDOM\Loadable;
+  use FluentDOM\ProcessingInstruction;
 
   /**
    * Load a DOM document from a xml string
@@ -43,7 +44,11 @@ namespace FluentDOM\Loader {
             $document = new Document();
             $settings = $this->getOptions($options);
             if ($this->isFragment($contentType, $settings)) {
-              $this->loadFragmentIntoDom($document, $source, $settings[Options::LIBXML_OPTIONS]);
+              $this->loadFragmentIntoDom(
+                $document,
+                $this->ensureEncodingPI($source, $settings[Options::ENCODING], $settings[Options::FORCE_ENCODING]),
+                $settings[Options::LIBXML_OPTIONS]
+              );
               $selection = $document->evaluate('/*');
             } else {
               $settings->isAllowed($sourceType = $settings->getSourceType($source));
@@ -53,14 +58,31 @@ namespace FluentDOM\Loader {
                 break;
               case Options::IS_STRING :
               default :
-                $document->loadHTML($source, $settings[Options::LIBXML_OPTIONS]);
+                $document->loadHTML(
+                  $this->ensureEncodingPI($source, $settings[Options::ENCODING], $settings[Options::FORCE_ENCODING]),
+                  $settings[Options::LIBXML_OPTIONS]
+                );
               }
+            }
+            /** @var ProcessingInstruction $pi */
+            if ($pi = $document->xpath()->firstOf('//processing-instruction()')) {
+              $pi->remove();
             }
             return new Result($document, 'text/html', $selection);
           }
         );
       }
       return NULL;
+    }
+
+    private function ensureEncodingPI($source, $encoding, $force = FALSE) {
+      $pi = '<?xml version="1.0" encoding="'.htmlspecialchars($encoding).'"?>';
+      if (!preg_match('(<\\?xml\\s)', $source)) {
+        return $pi.$source;
+      } elseif ($force) {
+        return preg_replace('(<\\?xml\\s[^?>]*?>)', $pi, $source, 1);
+      }
+      return $source;
     }
 
     /**

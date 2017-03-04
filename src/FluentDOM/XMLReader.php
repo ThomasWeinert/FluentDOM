@@ -2,8 +2,6 @@
 
 namespace FluentDOM {
 
-  use DOMNode;
-
   class XMLReader extends \XMLReader {
 
     /**
@@ -106,7 +104,7 @@ namespace FluentDOM {
       }
     }
 
-    public function expand(DOMNode $baseNode = NULL) {
+    public function expand(\DOMNode $baseNode = NULL) {
       if (isset($baseNode)) {
         return parent::expand($baseNode);
       } else {

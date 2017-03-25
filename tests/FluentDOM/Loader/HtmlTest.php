@@ -214,5 +214,58 @@ namespace FluentDOM\Loader {
         $result->getDocument()->saveHTML()
       );
     }
+
+    /**
+     * @covers \FluentDOM\Loader\Html
+     * @covers \FluentDOM\Loader\Supports
+     */
+    public function testLoadWithMultiByteHtmlDefinedByMetaTag() {
+      $loader = new Html();
+      $result = $loader->load(
+        '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'.
+        '<html>'.
+        '<head><meta charset="utf-8"></head>'.
+        '<body>你好，世界</body>'.
+        '</html>',
+        'text/html',
+        [
+          Options::ENCODING => 'ascii'
+        ]
+      );
+      $this->assertEquals(
+        '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'.
+        '<html>'."\n".
+        '<head><meta charset="utf-8"></head>'."\n".
+        '<body>你好，世界</body>'."\n".
+        '</html>'."\n",
+        $result->getDocument()->saveHTML()
+      );
+    }
+    /**
+     * @covers \FluentDOM\Loader\Html
+     * @covers \FluentDOM\Loader\Supports
+     */
+    public function testLoadWithMultiByteHtmlDefinedByDeprectatedMetaTag() {
+      $loader = new Html();
+      $result = $loader->load(
+        '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'.
+        '<html>'.
+        '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head>'.
+        '<body>你好，世界</body>'.
+        '</html>',
+        'text/html',
+        [
+          Options::ENCODING => 'ascii'
+        ]
+      );
+      $this->assertEquals(
+        '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'.
+        '<html>'."\n".
+        '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head>'."\n".
+        '<body>你好，世界</body>'."\n".
+        '</html>'."\n",
+        $result->getDocument()->saveHTML()
+      );
+    }
   }
 }

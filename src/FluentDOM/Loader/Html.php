@@ -76,13 +76,45 @@ namespace FluentDOM\Loader {
     }
 
     private function ensureEncodingPI($source, $encoding, $force = FALSE) {
+      $hasXmlPi = preg_match('(<\\?xml\\s)', $source);
+      if (!$force) {
+        if ($charset = $this->getCharsetFromMetaTag($source)) {
+          $encoding = $charset;
+        }
+      }
       $pi = '<?xml version="1.0" encoding="'.htmlspecialchars($encoding).'"?>';
-      if (!preg_match('(<\\?xml\\s)', $source)) {
+      if (!$hasXmlPi) {
         return $pi.$source;
       } elseif ($force) {
         return preg_replace('(<\\?xml\\s[^?>]*?>)', $pi, $source, 1);
       }
       return $source;
+    }
+
+    private function getCharsetFromMetaTag($source) {
+      $hasMetaTag = preg_match(
+        '(<\\meta\\s+[^>]*charset=["\']\s*(?<charset>[^\S\'">]+)\s*["\'])i',
+        $source,
+        $match
+      );
+      if ($hasMetaTag) {
+        return $match['charset'];
+      } else {
+        $hasMetaTag = preg_match(
+          '(<\\meta\\s+[^>]*http-equiv=["\']content-type["\'][^>]*>)i',
+          $source,
+          $match
+        );
+        if ($hasMetaTag) {
+          preg_match(
+            '(content=["\']\s*[^#\']+;\s*charset\s*=\s*(?<encoding>[^\S\'">]+))',
+            $match[0],
+            $match
+          );
+          return isset($match['encoding']) ? $match['encoding'] : FALSE;
+        }
+      }
+      return false;
     }
 
     /**

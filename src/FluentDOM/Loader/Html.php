@@ -44,11 +44,7 @@ namespace FluentDOM\Loader {
             $document = new Document();
             $settings = $this->getOptions($options);
             if ($this->isFragment($contentType, $settings)) {
-              $this->loadFragmentIntoDom(
-                $document,
-                $this->ensureEncodingPI($source, $settings[Options::ENCODING], $settings[Options::FORCE_ENCODING]),
-                $settings[Options::LIBXML_OPTIONS]
-              );
+              $this->loadFragmentIntoDom($document, $source, $settings);
               $selection = $document->evaluate('/*');
             } else {
               $settings->isAllowed($sourceType = $settings->getSourceType($source));
@@ -151,9 +147,16 @@ namespace FluentDOM\Loader {
       );
     }
 
-    private function loadFragmentIntoDom(\DOMDocument $document, $source, $loadOptions) {
+    private function loadFragmentIntoDom(\DOMDocument $document, $source, $settings) {
       $htmlDom = new Document();
-      $htmlDom->loadHTML('<html-fragment>'.$source.'</html-fragment>', $loadOptions);
+      $htmlDom->loadHTML(
+        $this->ensureEncodingPI(
+          '<html-fragment>'.$source.'</html-fragment>',
+          $settings[Options::ENCODING],
+          $settings[Options::FORCE_ENCODING]
+        ),
+        $settings[Options::LIBXML_OPTIONS]
+      );
       $nodes = $htmlDom->evaluate('//html-fragment[1]/node()');
       foreach ($nodes as $node) {
         if ($importedNode = $document->importNode($node, TRUE)) {

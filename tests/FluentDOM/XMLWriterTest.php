@@ -53,5 +53,42 @@ namespace FluentDOM {
         $_->outputMemory()
       );
     }
+
+    public function testWriteXmlWithAttributesInNamespace() {
+      $_ = new XMLWriter();
+      $_->registerNamespace('', 'http://example.org/xmlns/2002/document');
+      $_->registerNamespace('xlink', 'http://www.w3.org/1999/xlink');
+      $_->openMemory();
+      $_->startDocument();
+
+      $_->startElement('document');
+        $_->applyNamespaces();
+        $_->startElement('heading');
+          $_->writeAttribute('id', 'someHeading');
+          $_->text('Some Document');
+        $_->endElement();
+        $_->startElement('para');
+          $_->text('Here is ');
+          $_->startElement('anchor');
+            $_->writeAttribute('xlink:href', '#someHeading');
+            $_->writeAttribute('xlink:type', 'simple');
+            $_->text('a link');
+          $_->endElement();
+          $_->text(' to the header.');
+        $_->endElement();
+      $_->endElement();
+
+      $_->endDocument();
+
+      $this->assertXmlStringEqualsXmlString(
+        '<?xml version="1.0"?>'.
+        '<document xmlns="http://example.org/xmlns/2002/document" xmlns:xlink="http://www.w3.org/1999/xlink">'.
+        '<heading id="someHeading">Some Document</heading>'.
+        '<para>Here is <anchor xlink:type="simple" xlink:href="#someHeading">a link</anchor>'.
+        ' to the header.</para>'.
+        '</document>',
+        $_->outputMemory()
+      );
+    }
   }
 }

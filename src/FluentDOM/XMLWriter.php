@@ -34,6 +34,17 @@ namespace FluentDOM {
       $this->_namespaces[$prefix] = $namespace;
     }
 
+    /**
+     * Add the current namespace configuration as xmlns* attributes to the element node.
+     */
+    public function applyNamespaces() {
+      foreach ($this->_namespaces as $prefix => $namespaceUri) {
+        $this->writeAttribute(
+          empty($prefix) || $prefix == '#default' ? 'xmlns' : 'xmlns:'.$prefix, $namespaceUri
+        );
+      }
+    }
+
     public function startElement($name) {
       list($prefix, $localName) = QualifiedName::split($name);
       $namespaceUri = $this->_namespaces->resolveNamespace($prefix);
@@ -49,22 +60,18 @@ namespace FluentDOM {
     public function startElementNS($prefix, $name, $namespaceUri) {
       $this->_xmlnsStack->push();
       if ($this->_xmlnsStack->isDefined($prefix, $namespaceUri)) {
-        parent::startElement(
-          empty($prefix) ? $name : $prefix.':'.$name
-        );
+        parent::startElement(empty($prefix) ? $name : $prefix.':'.$name);
       } else {
-        parent::startElementNS($prefix, $name, $namespaceUri);
+        parent::startElementNS(empty($prefix) ? NULL : $prefix, $name, $namespaceUri);
         $this->_xmlnsStack->add($prefix, $namespaceUri);
       }
     }
 
     public function writeElementNS($prefix, $name, $uri, $content = NULL) {
       if ($this->_xmlnsStack->isDefined($prefix, $uri)) {
-        parent::writeElement(
-          empty($prefix) ? $name : $prefix.':'.$name, $content
-        );
+        parent::writeElement(empty($prefix) ? $name : $prefix.':'.$name, $content);
       } else {
-        parent::writeElementNS($prefix, $name, $uri, $content);
+        parent::writeElementNS(empty($prefix) ? NULL : $prefix, $name, $uri, $content);
       }
     }
 
@@ -74,13 +81,13 @@ namespace FluentDOM {
     }
 
     public function startAttribute($name) {
-      list($prefix) = QualifiedName::split($name);
-      $this->startAttributeNS($prefix, $name, $this->_namespaces->resolveNamespace($prefix));
+      list($prefix, $localName) = QualifiedName::split($name);
+      $this->startAttributeNS($prefix, $localName, $this->_namespaces->resolveNamespace($prefix));
     }
 
     public function writeAttribute($name, $value) {
-      list($prefix) = QualifiedName::split($name);
-      $this->writeAttributeNS($prefix, $name, $this->_namespaces->resolveNamespace($prefix), $value);
+      list($prefix, $localName) = QualifiedName::split($name);
+      $this->writeAttributeNS($prefix, $localName, $this->_namespaces->resolveNamespace($prefix), $value);
     }
 
     public function startAttributeNS($prefix, $name, $uri) {
@@ -93,103 +100,20 @@ namespace FluentDOM {
       }
     }
 
-    public function writeAttributeNS($prefix, $name, $uri, $content) {
-      if (empty($prefix)) {
-        parent::writeAttribute($name, $content);
+    public function writeAttributeNS($prefix, $localName, $uri, $content) {
+      if ((empty($prefix) && $localName == 'xmlns') || $prefix == 'xmlns') {
+        $namespacePrefix = empty($prefix) ? '' : $localName;
+        $namespaceUri = $content;
+        if (!$this->_xmlnsStack->isDefined($namespacePrefix, $namespaceUri)) {
+          parent::writeAttribute(empty($prefix) ? 'xmlns' : 'xmlns:'.$localName, $namespaceUri);
+          $this->_xmlnsStack->add($namespacePrefix, $namespaceUri);
+        }
+      } elseif (empty($prefix)) {
+        parent::writeAttribute($localName, $content);
       } elseif ($this->_xmlnsStack->isDefined($prefix, $uri)) {
-        parent::writeAttribute($prefix.':'.$name, $content);
+        parent::writeAttribute($prefix.':'.$localName, $content);
       } else {
-        parent::writeAttributeNS($prefix, $name, $uri, $content);
-      }
-    }
-  }
-}
-
-namespace FluentDOM\XMLWriter {
-
-  class NamespaceStack {
-
-    private $_stack = [];
-
-    /**
-     * @var NamespaceDefinition
-     */
-    private $_current;
-
-    public function __construct() {
-      $this->clear();
-    }
-
-    public function clear() {
-      $this->_stack = [];
-      $this->_current = new NamespaceDefinition();
-    }
-
-    public function push() {
-      $this->_current->increaseDepth();
-    }
-
-    public function pop() {
-      if ($this->_current->getDepth() < 1) {
-        $this->_current = end($this->_stack);
-      } else {
-        $this->_current->decreaseDepth();
-      }
-    }
-
-    public function isDefined($prefix, $namespaceUri) {
-      return ($this->_current->resolveNamespace((string)$prefix) === $namespaceUri);
-    }
-
-    public function add($prefix, $namespaceUri) {
-      if ($this->_current->getDepth() > 0) {
-        $this->_stack[] = $this->_current;
-        $this->_current = new NamespaceDefinition($this->_current);
-      }
-      $this->_current->registerNamespace($prefix, $namespaceUri);
-    }
-  }
-
-  class NamespaceDefinition {
-
-    /**
-     * @var int
-     */
-    private $_indent;
-    /**
-     * @var \FluentDOM\Namespaces
-     */
-    private $_namespaces;
-
-    public function __construct($inherit = NULL) {
-      $this->_indent = 0;
-      $this->_namespaces = new \FluentDOM\Namespaces($inherit);
-    }
-
-    public function getDepth() {
-      return $this->_indent;
-    }
-
-    public function increaseDepth() {
-      return ++$this->_indent;
-    }
-
-    public function decreaseDepth() {
-      if ($this->_indent > 0) {
-        return --$this->_indent;
-      }
-      throw new \LogicException('Did not resolve namespace levels properly.');
-    }
-
-    public function registerNamespace($prefix, $namespaceUri) {
-      $this->_namespaces[$prefix] = $namespaceUri;
-    }
-
-    public function resolveNamespace($prefix) {
-      try {
-        return $this->_namespaces->resolveNamespace($prefix);
-      } catch (\LogicException $e) {
-        return '';
+        parent::writeAttributeNS($prefix, $localName, $uri, $content);
       }
     }
   }

@@ -127,7 +127,14 @@ namespace FluentDOM\Loader {
           function() use ($source, $options) {
             $document = new Document();
             $fragment = $document->createDocumentFragment();
-            $document->loadHTML('<html-fragment>'.$source.'</html-fragment>', $options[Options::LIBXML_OPTIONS]);
+            $document->loadHTML(
+              $this->ensureEncodingPI(
+                '<html-fragment>'.$source.'</html-fragment>',
+                $options[Options::ENCODING],
+                $options[Options::FORCE_ENCODING]
+              ),
+              $options[Options::LIBXML_OPTIONS]
+            );
             $nodes = $document->evaluate('//html-fragment[1]/node()');
             foreach ($nodes as $node) {
               $fragment->append($node);

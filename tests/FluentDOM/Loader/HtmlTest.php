@@ -219,7 +219,7 @@ namespace FluentDOM\Loader {
      * @covers \FluentDOM\Loader\Html
      * @covers \FluentDOM\Loader\Supports
      */
-    public function testLoadFragmentWithMultiByteHtml() {
+    public function testLoadWithMultiByteHtmlFragment() {
       $loader = new Html();
       $result = $loader->load(
         '<div>你好，世界</div>',
@@ -228,6 +228,22 @@ namespace FluentDOM\Loader {
       $this->assertEquals(
         '<div>你好，世界</div>'."\n",
         $result->getDocument()->saveHTML()
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\Loader\Html
+     * @covers \FluentDOM\Loader\Supports
+     */
+    public function testLoadFragmentWithMultiByteHtml() {
+      $loader = new Html();
+      $result = $loader->loadFragment(
+        '<div>你好，世界</div>',
+        'text/html-fragment'
+      );
+      $this->assertEquals(
+        '<div>你好，世界</div>',
+        $result->ownerDocument->saveHtml($result)
       );
     }
 

@@ -4,6 +4,8 @@ filter:
     paths: [src/*]
 tools:
     php_code_coverage: true
+    php_sim:
+        min_mass: 30 # Defaults to 16
 build:
     tests:
         override:

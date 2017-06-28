@@ -2,9 +2,6 @@
 
 namespace FluentDOM {
 
-  use FluentDOM\XMLWriter\NamespaceDefinition;
-  use FluentDOM\XMLWriter\NamespaceStack;
-
   class XMLWriter extends \XMLWriter {
 
     /**
@@ -45,75 +42,130 @@ namespace FluentDOM {
       }
     }
 
+    /**
+     * @param string $name
+     * @return bool
+     */
     public function startElement($name) {
       list($prefix, $localName) = QualifiedName::split($name);
-      $namespaceUri = $this->_namespaces->resolveNamespace($prefix);
+      $namespaceUri = $this->_namespaces->resolveNamespace((string)$prefix);
       return $this->startElementNS((string)$prefix, $localName, $namespaceUri);
     }
 
+    /**
+     * @param string $name
+     * @param null|string $content
+     * @return bool
+     */
     public function writeElement($name, $content = NULL) {
       list($prefix, $localName) = QualifiedName::split($name);
-      $namespaceUri = $this->_namespaces->resolveNamespace($prefix);
+      $namespaceUri = $this->_namespaces->resolveNamespace((string)$prefix);
       return $this->writeElementNS((string)$prefix, $localName, $namespaceUri, $content);
     }
 
+    /**
+     * @param string $prefix
+     * @param string $name
+     * @param string $namespaceUri
+     * @return bool
+     */
     public function startElementNS($prefix, $name, $namespaceUri) {
       $this->_xmlnsStack->push();
       if ($this->_xmlnsStack->isDefined($prefix, $namespaceUri)) {
-        parent::startElement(empty($prefix) ? $name : $prefix.':'.$name);
+        $result = parent::startElement(empty($prefix) ? $name : $prefix.':'.$name);
       } else {
-        parent::startElementNS(empty($prefix) ? NULL : $prefix, $name, $namespaceUri);
+        $result = parent::startElementNS(empty($prefix) ? NULL : $prefix, $name, $namespaceUri);
         $this->_xmlnsStack->add($prefix, $namespaceUri);
       }
+      return $result;
     }
 
+    /**
+     * @param string $prefix
+     * @param string $name
+     * @param string $uri
+     * @param null|string $content
+     * @return bool
+     */
     public function writeElementNS($prefix, $name, $uri, $content = NULL) {
       if ($this->_xmlnsStack->isDefined($prefix, $uri)) {
-        parent::writeElement(empty($prefix) ? $name : $prefix.':'.$name, $content);
+        return parent::writeElement(empty($prefix) ? $name : $prefix.':'.$name, $content);
       } else {
-        parent::writeElementNS(empty($prefix) ? NULL : $prefix, $name, $uri, $content);
+        return parent::writeElementNS(empty($prefix) ? NULL : $prefix, $name, $uri, $content);
       }
     }
 
+    /**
+     * @return bool
+     */
     public function endElement() {
       $this->_xmlnsStack->pop();
-      parent::endElement();
+      return parent::endElement();
     }
 
+    /**
+     * @param string $name
+     * @return bool
+     */
     public function startAttribute($name) {
       list($prefix, $localName) = QualifiedName::split($name);
-      $this->startAttributeNS($prefix, $localName, $this->_namespaces->resolveNamespace($prefix));
+      return $this->startAttributeNS(
+        $prefix, $localName, $this->_namespaces->resolveNamespace((string)$prefix)
+      );
     }
 
+    /**
+     * @param string $name
+     * @param string $value
+     * @return bool
+     */
     public function writeAttribute($name, $value) {
       list($prefix, $localName) = QualifiedName::split($name);
-      $this->writeAttributeNS($prefix, $localName, $this->_namespaces->resolveNamespace($prefix), $value);
+      return $this->writeAttributeNS(
+        $prefix, $localName, $this->_namespaces->resolveNamespace((string)$prefix), $value
+      );
     }
 
+    /**
+     * @param string $prefix
+     * @param string $name
+     * @param string $uri
+     * @return bool
+     */
     public function startAttributeNS($prefix, $name, $uri) {
       if (empty($prefix)) {
-        parent::startAttribute($name);
+        return parent::startAttribute($name);
       } elseif ($this->_xmlnsStack->isDefined($prefix, $uri)) {
-        parent::startAttribute($prefix.':'.$name);
+        return parent::startAttribute($prefix.':'.$name);
       } else {
-        parent::startAttributeNS($prefix, $name, $uri);
+        return parent::startAttributeNS($prefix, $name, $uri);
       }
     }
 
+    /**
+     * @param string $prefix
+     * @param string $localName
+     * @param string $uri
+     * @param string $content
+     * @return bool
+     */
     public function writeAttributeNS($prefix, $localName, $uri, $content) {
       if ((empty($prefix) && $localName == 'xmlns') || $prefix == 'xmlns') {
         $namespacePrefix = empty($prefix) ? '' : $localName;
         $namespaceUri = $content;
         if (!$this->_xmlnsStack->isDefined($namespacePrefix, $namespaceUri)) {
-          parent::writeAttribute(empty($prefix) ? 'xmlns' : 'xmlns:'.$localName, $namespaceUri);
+          $result = parent::writeAttribute(empty($prefix) ? 'xmlns' : 'xmlns:'.$localName, $namespaceUri);
           $this->_xmlnsStack->add($namespacePrefix, $namespaceUri);
+          return $result;
+        } else {
+          return false;
         }
       } elseif (empty($prefix)) {
-        parent::writeAttribute($localName, $content);
+        return parent::writeAttribute($localName, $content);
       } elseif ($this->_xmlnsStack->isDefined($prefix, $uri)) {
-        parent::writeAttribute($prefix.':'.$localName, $content);
+        return parent::writeAttribute($prefix.':'.$localName, $content);
       } else {
-        parent::writeAttributeNS($prefix, $localName, $uri, $content);
+        return parent::writeAttributeNS($prefix, $localName, $uri, $content);
       }
     }
   }

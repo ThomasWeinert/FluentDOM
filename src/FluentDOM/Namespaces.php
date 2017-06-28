@@ -19,7 +19,7 @@ namespace FluentDOM {
 
     /**
      * Namespaces constructor.
-     * @param null|array|\Traversable $namespaces
+     * @param NULL|array|\Traversable $namespaces
      */
     public function __construct($namespaces = NULL) {
       if (isset($namespaces)) {
@@ -27,18 +27,35 @@ namespace FluentDOM {
       }
     }
 
+    /**
+     * @param string $prefix
+     * @return string|NULL
+     */
     public function resolveNamespace($prefix) {
-      return $this[$prefix];
+      return $this[(string)$prefix];
     }
 
+    /**
+     * @param string $prefix
+     * @return bool
+     */
     public function isReservedPrefix($prefix) {
       return array_key_exists($prefix, $this->_reserved);
     }
 
+    /**
+     * @param string $prefix
+     * @return bool
+     */
     public function offsetExists($prefix) {
       return array_key_exists($prefix, $this->_reserved) || array_key_exists($prefix, $this->_namespaces);
     }
 
+    /**
+     * @param string $prefix
+     * @param string $namespaceUri
+     * @return bool
+     */
     public function offsetSet($prefix, $namespaceUri) {
       $prefix = $this->validatePrefix($prefix);
       if (isset($this->_reserved[$prefix])) {
@@ -49,6 +66,10 @@ namespace FluentDOM {
       $this->_namespaces[$prefix] = $namespaceUri;
     }
 
+    /**
+     * @param string $prefix
+     * @return string
+     */
     public function offsetGet($prefix) {
       $prefix = $this->validatePrefix($prefix);
       if (array_key_exists($prefix, $this->_reserved)) {
@@ -63,6 +84,9 @@ namespace FluentDOM {
       );
     }
 
+    /**
+     * @param string $prefix
+     */
     public function offsetUnset($prefix) {
       $prefix = $this->validatePrefix($prefix);
       if (array_key_exists($prefix, $this->_namespaces)) {
@@ -70,10 +94,16 @@ namespace FluentDOM {
       }
     }
 
+    /**
+     * @return \ArrayIterator
+     */
     public function getIterator() {
       return new \ArrayIterator($this->_namespaces);
     }
 
+    /**
+     * @return int
+     */
     public function count() {
       return count($this->_namespaces);
     }

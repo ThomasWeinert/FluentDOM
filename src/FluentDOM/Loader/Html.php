@@ -45,7 +45,7 @@ namespace FluentDOM\Loader {
             $settings = $this->getOptions($options);
             if ($this->isFragment($contentType, $settings)) {
               $this->loadFragmentIntoDom($document, $source, $settings);
-              $selection = $document->evaluate('/*');
+              $selection = $document->evaluate('/node()');
             } else {
               $settings->isAllowed($sourceType = $settings->getSourceType($source));
               switch ($sourceType) {

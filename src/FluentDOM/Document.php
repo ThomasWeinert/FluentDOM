@@ -309,14 +309,18 @@ namespace FluentDOM {
         return $result;
       } elseif (!isset($context)) {
         $result = '';
+        $textOnly = TRUE;
+        $elementCount = 0;
         foreach ($this->childNodes as $node) {
+          $textOnly = $textOnly && $node instanceof \DOMText;
+          $elementCount += $node instanceof \DOMElement ? 1 : 0;
           if ($node instanceof \DOMDocumentType) {
             $result .= parent::saveXML($node);
           } else {
             $result .= parent::saveHTML($node);
           }
         }
-        return $result."\n";
+        return $textOnly || $elementCount > 1 ? $result : $result."\n";
       }
       return parent::saveHTML($context);
     }

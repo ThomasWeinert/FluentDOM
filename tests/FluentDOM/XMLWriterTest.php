@@ -7,6 +7,8 @@ namespace FluentDOM {
 
     /**
      * @covers \FluentDOM\XMLWriter
+     * @covers \FluentDOM\XMLWriter\NamespaceDefinition
+     * @covers \FluentDOM\XMLWriter\NamespaceStack
      */
     public function testWriteSomeHtmlWithoutNamespacs() {
       $_ = new XMLWriter();
@@ -34,6 +36,8 @@ namespace FluentDOM {
 
     /**
      * @covers \FluentDOM\XMLWriter
+     * @covers \FluentDOM\XMLWriter\NamespaceDefinition
+     * @covers \FluentDOM\XMLWriter\NamespaceStack
      */
     public function testWriteAtom() {
       $_ = new XMLWriter();
@@ -62,6 +66,8 @@ namespace FluentDOM {
 
     /**
      * @covers \FluentDOM\XMLWriter
+     * @covers \FluentDOM\XMLWriter\NamespaceDefinition
+     * @covers \FluentDOM\XMLWriter\NamespaceStack
      */
     public function testWriteXmlWithAttributesInNamespace() {
       $_ = new XMLWriter();
@@ -102,6 +108,8 @@ namespace FluentDOM {
 
     /**
      * @covers \FluentDOM\XMLWriter
+     * @covers \FluentDOM\XMLWriter\NamespaceDefinition
+     * @covers \FluentDOM\XMLWriter\NamespaceStack
      */
     public function testWriteElementAddingNamespace() {
       $_ = new XMLWriter();
@@ -120,6 +128,8 @@ namespace FluentDOM {
 
     /**
      * @covers \FluentDOM\XMLWriter
+     * @covers \FluentDOM\XMLWriter\NamespaceDefinition
+     * @covers \FluentDOM\XMLWriter\NamespaceStack
      */
     public function testStartAttributeWithoutNamespace() {
       $_ = new XMLWriter();
@@ -142,6 +152,8 @@ namespace FluentDOM {
 
     /**
      * @covers \FluentDOM\XMLWriter
+     * @covers \FluentDOM\XMLWriter\NamespaceDefinition
+     * @covers \FluentDOM\XMLWriter\NamespaceStack
      */
     public function testStartAttributeAddingNamespace() {
       $_ = new XMLWriter();
@@ -164,6 +176,8 @@ namespace FluentDOM {
 
     /**
      * @covers \FluentDOM\XMLWriter
+     * @covers \FluentDOM\XMLWriter\NamespaceDefinition
+     * @covers \FluentDOM\XMLWriter\NamespaceStack
      */
     public function testStartAttributeForAddedNamespace() {
       $_ = new XMLWriter();
@@ -186,6 +200,8 @@ namespace FluentDOM {
 
     /**
      * @covers \FluentDOM\XMLWriter
+     * @covers \FluentDOM\XMLWriter\NamespaceDefinition
+     * @covers \FluentDOM\XMLWriter\NamespaceStack
      */
     public function testWritettributeNSAddingNamespace() {
       $_ = new XMLWriter();

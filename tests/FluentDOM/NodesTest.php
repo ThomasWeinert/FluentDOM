@@ -47,7 +47,7 @@ namespace FluentDOM {
     public function testConstructorWithHtmlFragment() {
       $fd = new Nodes('<label>Test</label><input>', 'html-fragment');
       $this->assertEquals(
-        '<label>Test</label><input>'."\n",
+        '<label>Test</label><input>',
         (string)$fd
       );
     }

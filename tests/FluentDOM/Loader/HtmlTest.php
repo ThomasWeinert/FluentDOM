@@ -101,7 +101,7 @@ namespace FluentDOM\Loader {
         )
       );
       $this->assertEquals(
-        "<div>Test</div>Text<input>\n",
+        "<div>Test</div>Text<input>",
         $result->getDocument()->saveHtml()
       );
     }

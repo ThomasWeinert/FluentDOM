@@ -104,7 +104,11 @@ namespace FluentDOM {
       }
     }
 
-    public function expand(\DOMNode $baseNode = NULL) {
+    /**
+     * @param \DOMNode $baseNode
+     * @return \DOMNode
+     */
+    public function expand($baseNode = NULL) {
       if (isset($baseNode)) {
         return parent::expand($baseNode);
       } else {

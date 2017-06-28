@@ -8,6 +8,8 @@ Version 6.1.0
 - Refactored: FluentDOM\Document::namespaces() now returns a FluentDOM\Namespaces instance
 - Removed: FluentDOM\Document::getNamespace() - use FluentDOM\Document::namespaces() object
 - Added #62: FluentDOM\XMLReader extend XMLReader with namespace registration 
+- Added #63: FluentDOM\XMLWriter extend XMLWriter with namespace registration, 
+    workaround for repeated namespace definitions 
 
 Version 6.0.1
 -------------

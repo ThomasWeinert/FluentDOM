@@ -110,7 +110,7 @@ namespace FluentDOM {
     public function startAttribute($name) {
       list($prefix, $localName) = QualifiedName::split($name);
       return $this->startAttributeNS(
-        $prefix, $localName, $this->_namespaces->resolveNamespace((string)$prefix)
+        (string)$prefix, $localName, $this->_namespaces->resolveNamespace((string)$prefix)
       );
     }
 
@@ -122,7 +122,7 @@ namespace FluentDOM {
     public function writeAttribute($name, $value) {
       list($prefix, $localName) = QualifiedName::split($name);
       return $this->writeAttributeNS(
-        $prefix, $localName, $this->_namespaces->resolveNamespace((string)$prefix), $value
+        (string)$prefix, $localName, $this->_namespaces->resolveNamespace((string)$prefix), $value
       );
     }
 

@@ -89,7 +89,7 @@ namespace FluentDOM\Loader {
 
     private function getCharsetFromMetaTag($source) {
       $hasMetaTag = preg_match(
-        '(<\\meta\\s+[^>]*charset=["\']\s*(?<charset>[^\S\'">]+)\s*["\'])i',
+        '(<meta\\s+[^>]*charset=["\']\s*(?<charset>[^\\s\'">]+)\s*["\'])i',
         $source,
         $match
       );
@@ -97,7 +97,7 @@ namespace FluentDOM\Loader {
         return $match['charset'];
       } else {
         $hasMetaTag = preg_match(
-          '(<\\meta\\s+[^>]*http-equiv=["\']content-type["\'][^>]*>)i',
+          '(<meta\\s+[^>]*http-equiv=["\']content-type["\'][^>]*>)i',
           $source,
           $match
         );

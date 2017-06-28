@@ -80,9 +80,10 @@ namespace FluentDOM\Loader {
           Options::LIBXML_OPTIONS => LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED
         ]
       );
+      $document = $result->getDocument();
       $this->assertEquals(
         '<div/>',
-        $result->getDocument()->documentElement->saveXML()
+        $document->saveXML($document->documentElement)
       );
     }
 
@@ -273,11 +274,12 @@ namespace FluentDOM\Loader {
         $result->getDocument()->saveHTML()
       );
     }
+
     /**
      * @covers \FluentDOM\Loader\Html
      * @covers \FluentDOM\Loader\Supports
      */
-    public function testLoadWithMultiByteHtmlDefinedByDeprectatedMetaTag() {
+    public function testLoadWithMultiByteHtmlDefinedByDeprecatedMetaTag() {
       $loader = new Html();
       $result = $loader->load(
         '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'.
@@ -294,6 +296,56 @@ namespace FluentDOM\Loader {
         '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'.
         '<html>'."\n".
         '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head>'."\n".
+        '<body>你好，世界</body>'."\n".
+        '</html>'."\n",
+        $result->getDocument()->saveHTML()
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\Loader\Html
+     * @covers \FluentDOM\Loader\Supports
+     */
+    public function testLoadWithMultiByteHtmlUseExistingPi() {
+      $loader = new Html();
+      $result = $loader->load(
+        '<?xml encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'.
+        '<html>'.
+        '<body>你好，世界</body>'.
+        '</html>',
+        'text/html'
+      );
+      $this->assertEquals(
+        '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'.
+        '<html>'.
+        '<body>你好，世界</body>'.
+        '</html>'."\n",
+        $result->getDocument()->saveHTML()
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\Loader\Html
+     * @covers \FluentDOM\Loader\Supports
+     */
+    public function testLoadWithMultiByteHtmlReplaceExistingPi() {
+      $loader = new Html();
+      $result = $loader->load(
+        '<?xml encoding="ASCII"?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'.
+        '<html>'.
+        '<head><meta charset="utf-8"></head>'.
+        '<body>你好，世界</body>'.
+        '</html>',
+        'text/html',
+        [
+          Options::ENCODING => 'UTF-8',
+          Options::FORCE_ENCODING => true
+        ]
+      );
+      $this->assertEquals(
+        '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'.
+        '<html>'."\n".
+        '<head><meta charset="utf-8"></head>'."\n".
         '<body>你好，世界</body>'."\n".
         '</html>'."\n",
         $result->getDocument()->saveHTML()

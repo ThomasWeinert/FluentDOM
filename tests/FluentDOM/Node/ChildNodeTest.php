@@ -64,6 +64,19 @@ namespace FluentDOM\Node {
     /**
      * @covers \FluentDOM\Node\ChildNode\Implementation
      */
+    public function testAfterAppendsCommentAfterDocumentElement() {
+      $document = new Document();
+      $document->loadXML('<foo/>');
+      $document('/foo')->item(0)->after($document->createComment('ABC'));
+      $this->assertEquals(
+        "<?xml version=\"1.0\"?>\n<foo/>\n<!--ABC-->\n",
+        $document->saveXML()
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\Node\ChildNode\Implementation
+     */
     public function testReplaceWithElementNode() {
       $dom = new Document();
       $dom->loadXML('<foo><bar/></foo>');

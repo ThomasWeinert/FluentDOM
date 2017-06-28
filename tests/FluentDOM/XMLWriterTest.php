@@ -5,6 +5,9 @@ namespace FluentDOM {
 
   class XMLWriterTest extends TestCase {
 
+    /**
+     * @covers \FluentDOM\XMLWriter
+     */
     public function testWriteSomeHtmlWithoutNamespacs() {
       $_ = new XMLWriter();
       $_->openMemory();
@@ -29,6 +32,9 @@ namespace FluentDOM {
       );
     }
 
+    /**
+     * @covers \FluentDOM\XMLWriter
+     */
     public function testWriteAtom() {
       $_ = new XMLWriter();
       $_->registerNamespace('atom', 'http://www.w3.org/2005/Atom');
@@ -38,7 +44,7 @@ namespace FluentDOM {
 
       $_->startElement('atom:feed');
         $_->writeElement('atom:title', 'Example Feed');
-        $_->startElement('atom:link', 'Example Feed');
+        $_->startElement('atom:link');
           $_->writeAttribute('href', 'http://example.org/');
         $_->endElement();
       $_->endElement();
@@ -54,6 +60,9 @@ namespace FluentDOM {
       );
     }
 
+    /**
+     * @covers \FluentDOM\XMLWriter
+     */
     public function testWriteXmlWithAttributesInNamespace() {
       $_ = new XMLWriter();
       $_->registerNamespace('', 'http://example.org/xmlns/2002/document');
@@ -87,6 +96,110 @@ namespace FluentDOM {
         '<para>Here is <anchor xlink:type="simple" xlink:href="#someHeading">a link</anchor>'.
         ' to the header.</para>'.
         '</document>',
+        $_->outputMemory()
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\XMLWriter
+     */
+    public function testWriteElementAddingNamespace() {
+      $_ = new XMLWriter();
+      $_->registerNamespace('example', 'http://example.org/xmlns/2002/document');
+      $_->openMemory();
+      $_->startDocument();
+      $_->writeElement('example:document');
+      $_->endDocument();
+
+      $this->assertXmlStringEqualsXmlString(
+        '<?xml version="1.0"?>'.
+        '<example:document xmlns:example="http://example.org/xmlns/2002/document"/>',
+        $_->outputMemory()
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\XMLWriter
+     */
+    public function testStartAttributeWithoutNamespace() {
+      $_ = new XMLWriter();
+      $_->registerNamespace('example', 'http://example.org/xmlns/2002/document');
+      $_->openMemory();
+      $_->startDocument();
+      $_->startElement('document');
+      $_->startAttribute('test');
+      $_->text('success');
+      $_->endAttribute();
+      $_->endElement();
+      $_->endDocument();
+
+      $this->assertXmlStringEqualsXmlString(
+        '<?xml version="1.0"?>'.
+        '<document test="success"/>',
+        $_->outputMemory()
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\XMLWriter
+     */
+    public function testStartAttributeAddingNamespace() {
+      $_ = new XMLWriter();
+      $_->registerNamespace('example', 'http://example.org/xmlns/2002/document');
+      $_->openMemory();
+      $_->startDocument();
+      $_->startElement('document');
+      $_->startAttribute('example:test');
+      $_->text('success');
+      $_->endAttribute();
+      $_->endElement();
+      $_->endDocument();
+
+      $this->assertXmlStringEqualsXmlString(
+        '<?xml version="1.0"?>'.
+        '<document xmlns:example="http://example.org/xmlns/2002/document" example:test="success"/>',
+        $_->outputMemory()
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\XMLWriter
+     */
+    public function testStartAttributeForAddedNamespace() {
+      $_ = new XMLWriter();
+      $_->registerNamespace('example', 'http://example.org/xmlns/2002/document');
+      $_->openMemory();
+      $_->startDocument();
+      $_->startElement('example:document');
+      $_->startAttribute('example:test');
+      $_->text('success');
+      $_->endAttribute();
+      $_->endElement();
+      $_->endDocument();
+
+      $this->assertXmlStringEqualsXmlString(
+        '<?xml version="1.0"?>'.
+        '<example:document xmlns:example="http://example.org/xmlns/2002/document" example:test="success"/>',
+        $_->outputMemory()
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\XMLWriter
+     */
+    public function testWritettributeNSAddingNamespace() {
+      $_ = new XMLWriter();
+      $_->registerNamespace('example', 'http://example.org/xmlns/2002/document');
+      $_->openMemory();
+      $_->startDocument();
+      $_->startElement('document');
+      $_->writeAttribute('example:test', 'success');
+      $_->endElement();
+      $_->endDocument();
+
+      $this->assertXmlStringEqualsXmlString(
+        '<?xml version="1.0"?>'.
+        '<document xmlns:example="http://example.org/xmlns/2002/document" example:test="success"/>',
         $_->outputMemory()
       );
     }

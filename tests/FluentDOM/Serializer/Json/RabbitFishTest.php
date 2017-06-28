@@ -14,9 +14,9 @@ namespace FluentDOM\Serializer\Json {
      * @param string $xml
      */
     public function testIntegration($expected, $xml) {
-      $dom = new \DOMDocument();
-      $dom->loadXML($xml);
-      $serializer = new RabbitFish($dom);
+      $document = new \DOMDocument();
+      $document->loadXML($xml);
+      $serializer = new RabbitFish($document);
       $this->assertJsonStringEqualsJsonString(
         $expected,
         (string)$serializer
@@ -71,7 +71,7 @@ namespace FluentDOM\Serializer\Json {
           '{"alice":["bob",{"charlie":"david"},"edgar"]}',
           '<alice>bob<charlie>david</charlie>edgar</alice>'
         ],
-        'Mixed content (element and text nodes) at the same level become array elements.' => [
+        'Mixed content (element and text nodes) at the same level become array elements 2.' => [
           '{"alice":[{"@attribute":"yes"},"bob",{"charlie":"david"},"edgar"]}',
           '<alice attribute="yes">bob<charlie>david</charlie>edgar</alice>'
         ]

@@ -94,9 +94,9 @@ namespace FluentDOM\Serializer {
      * @covers \FluentDOM\Serializer\Json
      */
     public function testJsonSerializeCallingGetNode() {
-      $dom = new Document();
-      $dom->appendElement('success');
-      $serializer = new Json_TestProxy($dom);
+      $document = new Document();
+      $document->appendElement('success');
+      $serializer = new Json_TestProxy($document);
       $this->assertEquals(
         '["success"]', json_encode($serializer)
       );
@@ -116,20 +116,20 @@ namespace FluentDOM\Serializer {
      * @covers \FluentDOM\Serializer\Json
      */
     public function testGetNamespaces() {
-      $dom = new Document();
-      $dom->loadXml(
+      $document = new Document();
+      $document->loadXml(
         '<xml xmlns="urn:1" xmlns:foo="urn:bar">'.
         '<xml xmlns="urn:2" xmlns:foo="urn:foo" xmlns:bar="urn:bar"/>'.
         '</xml>'
       );
-      $serializer = new Json_TestProxy($dom);
+      $serializer = new Json_TestProxy($document);
       $this->assertEquals(
         [
           'xmlns:bar' => 'urn:bar',
           'xmlns:foo' => 'urn:foo',
           'xmlns' => 'urn:2'
         ],
-        $serializer->getNamespaces($dom->documentElement->firstChild)
+        $serializer->getNamespaces($document->documentElement->firstChild)
       );
     }
 
@@ -147,9 +147,9 @@ namespace FluentDOM\Serializer {
      * @param string $xml
      */
     public function testIntegration($expected, $xml) {
-      $dom = new \DOMDocument();
-      $dom->loadXML($xml);
-      $serializer = new Json($dom);
+      $document = new \DOMDocument();
+      $document->loadXML($xml);
+      $serializer = new Json($document);
       $this->assertJsonStringEqualsJsonString(
         $expected,
         (string)$serializer

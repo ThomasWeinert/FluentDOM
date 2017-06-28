@@ -10,15 +10,15 @@ namespace FluentDOM {
      * @covers \FluentDOM\Text
      */
     public function testMagicMethodToString() {
-      $dom = new Document();
-      $dom->appendElement('test')->appendChild($dom->createTextNode('success'));
+      $document = new Document();
+      $document->appendElement('test')->appendChild($document->createTextNode('success'));
       $this->assertEquals(
         'success',
-        (string)$dom->documentElement->childNodes->item(0)
+        (string)$document->documentElement->childNodes->item(0)
       );
       $this->assertEquals(
         '<test>success</test>',
-        $dom->saveXML($dom->documentElement)
+        $document->saveXML($document->documentElement)
       );
     }
 

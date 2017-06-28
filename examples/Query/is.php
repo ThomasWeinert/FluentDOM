@@ -18,9 +18,9 @@ $html = <<<HTML
 </html>
 HTML;
 
-$dom = FluentDOM($html, 'text/html');
+$fd = FluentDOM($html, 'text/html');
 var_dump(
-  $dom
+  $fd
     ->find('//input[@type = "checkbox"]')
     ->parent()
     ->is('name() = "form"')

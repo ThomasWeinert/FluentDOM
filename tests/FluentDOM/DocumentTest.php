@@ -24,8 +24,8 @@ namespace FluentDOM {
      * @covers \FluentDOM\Document::__construct
      */
     public function testDocumentRegistersNodeClass() {
-      $dom = new Document();
-      $node = $dom->appendElement('test');
+      $document = new Document();
+      $node = $document->appendElement('test');
       $this->assertInstanceOf(
         'FluentDOM\\Element',
         $node,
@@ -36,11 +36,11 @@ namespace FluentDOM {
      * @covers \FluentDOM\Document::__construct
      */
     public function testDocumentRegistersNodeClassLoadingXml() {
-      $dom = new Document();
-      $dom->appendElement('test');
+      $document = new Document();
+      $document->appendElement('test');
       $this->assertInstanceOf(
         'FluentDOM\\Element',
-        $dom->documentElement,
+        $document->documentElement,
         "Node class registration failed."
       );
     }
@@ -49,10 +49,10 @@ namespace FluentDOM {
      * @covers \FluentDOM\Document::xpath
      */
     public function testXpathImplicitCreate() {
-      $dom = new Document();
-      $xpath = $dom->xpath();
+      $document = new Document();
+      $xpath = $document->xpath();
       $this->assertInstanceOf(__NAMESPACE__.'\\Xpath', $xpath);
-      $this->assertSame($xpath, $dom->xpath());
+      $this->assertSame($xpath, $document->xpath());
     }
 
     /**
@@ -64,11 +64,11 @@ namespace FluentDOM {
           'HHVM does not need to recreate the Xpath instance.'
         );
       }
-      $dom = new Document();
-      $xpath = $dom->xpath();
-      $dom->loadXML('<test/>');
+      $document = new Document();
+      $xpath = $document->xpath();
+      $document->loadXML('<test/>');
       $this->assertInstanceOf(__NAMESPACE__.'\\Xpath', $xpath);
-      $this->assertNotSame($xpath, $dom->xpath());
+      $this->assertNotSame($xpath, $document->xpath());
     }
 
     /**
@@ -76,10 +76,10 @@ namespace FluentDOM {
      * @covers \FluentDOM\Document::xpath
      */
     public function testNamespaceIsRegisteredOnExistingXpath() {
-      $dom = new Document();
-      $dom->loadXML('<test xmlns:foo="urn:foo" foo:result="success"/>');
-      $xpath = $dom->xpath();
-      $dom->registerNamespace('bar', 'urn:foo');
+      $document = new Document();
+      $document->loadXML('<test xmlns:foo="urn:foo" foo:result="success"/>');
+      $xpath = $document->xpath();
+      $document->registerNamespace('bar', 'urn:foo');
       $this->assertEquals(
         'success', $xpath->evaluate('string(/test/@bar:result)')
       );
@@ -90,11 +90,11 @@ namespace FluentDOM {
      * @covers \FluentDOM\Document::xpath
      */
     public function testNamespaceIsRegisteredOnNewXpath() {
-      $dom = new Document();
-      $dom->loadXML('<test xmlns:foo="urn:foo" foo:result="success"/>');
-      $dom->registerNamespace('bar', 'urn:foo');
+      $document = new Document();
+      $document->loadXML('<test xmlns:foo="urn:foo" foo:result="success"/>');
+      $document->registerNamespace('bar', 'urn:foo');
       $this->assertEquals(
-        'success', $dom->xpath()->evaluate('string(/test/@bar:result)')
+        'success', $document->xpath()->evaluate('string(/test/@bar:result)')
       );
     }
 
@@ -102,15 +102,15 @@ namespace FluentDOM {
      * @covers \FluentDOM\Document::namespaces
      */
     public function testNamespacesGet() {
-      $dom = new Document();
-      $dom->registerNamespace('#default', 'urn:default');
-      $dom->registerNamespace('foo', 'urn:foo');
+      $document = new Document();
+      $document->registerNamespace('#default', 'urn:default');
+      $document->registerNamespace('foo', 'urn:foo');
       $this->assertEquals(
         [
           '#default' => 'urn:default',
           'foo' => 'urn:foo'
         ],
-        iterator_to_array($dom->namespaces())
+        iterator_to_array($document->namespaces())
       );
     }
 
@@ -118,9 +118,9 @@ namespace FluentDOM {
      * @covers \FluentDOM\Document::namespaces
      */
     public function testNamespacesSet() {
-      $dom = new Document();
-      $dom->registerNamespace('foo', 'urn:foo');
-      $dom->namespaces(
+      $document = new Document();
+      $document->registerNamespace('foo', 'urn:foo');
+      $document->namespaces(
         [
           '#default' => 'urn:default',
           'bar' => 'urn:bar',
@@ -131,7 +131,7 @@ namespace FluentDOM {
           '#default' => 'urn:default',
           'bar' => 'urn:bar'
         ],
-        iterator_to_array($dom->namespaces())
+        iterator_to_array($document->namespaces())
       );
     }
 
@@ -141,12 +141,12 @@ namespace FluentDOM {
      * @covers \FluentDOM\Document::appendAttributes
      */
     public function testCreateElementWithoutNamespace() {
-      $dom = new Document();
-      $dom->registerNamespace('#default', 'urn:default');
-      $dom->appendChild($dom->createElement(':example'));
+      $document = new Document();
+      $document->registerNamespace('#default', 'urn:default');
+      $document->appendChild($document->createElement(':example'));
       $this->assertXmlStringEqualsXmlString(
         '<example xmlns=""/>',
-        $dom->saveXml($dom->documentElement)
+        $document->saveXml($document->documentElement)
       );
     }
 
@@ -156,11 +156,11 @@ namespace FluentDOM {
      * @covers \FluentDOM\Document::appendAttributes
      */
     public function testCreateElementWithContent() {
-      $dom = new Document();
-      $dom->appendChild($dom->createElement('example', 'Content & More'));
+      $document = new Document();
+      $document->appendChild($document->createElement('example', 'Content & More'));
       $this->assertXmlStringEqualsXmlString(
         '<example>Content &amp; More</example>',
-        $dom->saveXml($dom->documentElement)
+        $document->saveXml($document->documentElement)
       );
     }
 
@@ -170,11 +170,11 @@ namespace FluentDOM {
      * @covers \FluentDOM\Document::appendAttributes
      */
     public function testCreateElementWithZeroContent() {
-      $dom = new Document();
-      $dom->appendChild($dom->createElement('example', '0'));
+      $document = new Document();
+      $document->appendChild($document->createElement('example', '0'));
       $this->assertXmlStringEqualsXmlString(
         '<example>0</example>',
-        $dom->saveXml($dom->documentElement)
+        $document->saveXml($document->documentElement)
       );
     }
 
@@ -184,13 +184,13 @@ namespace FluentDOM {
      * @covers \FluentDOM\Document::appendAttributes
      */
     public function testCreateElementWithContentAndAttribute() {
-      $dom = new Document();
-      $dom->appendChild(
-        $dom->createElement('example', 'Content & More', ['attr' => 'value'])
+      $document = new Document();
+      $document->appendChild(
+        $document->createElement('example', 'Content & More', ['attr' => 'value'])
       );
       $this->assertXmlStringEqualsXmlString(
         '<example attr="value">Content &amp; More</example>',
-        $dom->saveXml($dom->documentElement)
+        $document->saveXml($document->documentElement)
       );
     }
 
@@ -200,13 +200,13 @@ namespace FluentDOM {
      * @covers \FluentDOM\Document::appendAttributes
      */
     public function testCreateElementWithAttributeAsSecondArgument() {
-      $dom = new Document();
-      $dom->appendChild(
-        $dom->createElement('example', ['attr' => 'value'])
+      $document = new Document();
+      $document->appendChild(
+        $document->createElement('example', ['attr' => 'value'])
       );
       $this->assertXmlStringEqualsXmlString(
         '<example attr="value"/>',
-        $dom->saveXml($dom->documentElement)
+        $document->saveXml($document->documentElement)
       );
     }
 
@@ -216,13 +216,13 @@ namespace FluentDOM {
      * @covers \FluentDOM\Document::appendAttributes
      */
     public function testCreateElementWithAttributeAsSecondAndThirdArgument() {
-      $dom = new Document();
-      $dom->appendChild(
-        $dom->createElement('example', ['attr1' => 'one'], ['attr2' => 'two'])
+      $document = new Document();
+      $document->appendChild(
+        $document->createElement('example', ['attr1' => 'one'], ['attr2' => 'two'])
       );
       $this->assertXmlStringEqualsXmlString(
         '<example attr1="one" attr2="two"/>',
-        $dom->saveXml($dom->documentElement)
+        $document->saveXml($document->documentElement)
       );
     }
 
@@ -232,12 +232,12 @@ namespace FluentDOM {
      * @covers \FluentDOM\Document::appendAttributes
      */
     public function testCreateElementWithNamespace() {
-      $dom = new Document();
-      $dom->registerNamespace('test', 'urn:success');
-      $dom->appendChild($dom->createElement('test:example'));
+      $document = new Document();
+      $document->registerNamespace('test', 'urn:success');
+      $document->appendChild($document->createElement('test:example'));
       $this->assertXmlStringEqualsXmlString(
         '<test:example xmlns:test="urn:success"/>',
-        $dom->saveXml($dom->documentElement)
+        $document->saveXml($document->documentElement)
       );
     }
 
@@ -247,12 +247,12 @@ namespace FluentDOM {
      * @covers \FluentDOM\Document::appendAttributes
      */
     public function testCreateElementWithXmlNamespacePrefixExpectingException() {
-      $dom = new Document();
+      $document = new Document();
       $this->expectException(
         \LogicException::class,
         'Can not use reserved namespace prefix "xml" in element name'
       );
-      $dom->appendChild($dom->createElement('xml:example'));
+      $document->appendChild($document->createElement('xml:example'));
     }
 
     /**
@@ -260,13 +260,13 @@ namespace FluentDOM {
      * @covers \FluentDOM\Document::appendContent
      */
     public function testCreateElementNsWithContent() {
-      $dom = new Document();
-      $dom->appendChild(
-        $dom->createElementNs('urn:default', 'example', 'Content & More')
+      $document = new Document();
+      $document->appendChild(
+        $document->createElementNs('urn:default', 'example', 'Content & More')
       );
       $this->assertXmlStringEqualsXmlString(
         '<example xmlns="urn:default">Content &amp; More</example>',
-        $dom->saveXml($dom->documentElement)
+        $document->saveXml($document->documentElement)
       );
     }
 
@@ -274,10 +274,10 @@ namespace FluentDOM {
      * @covers \FluentDOM\Document::createAttribute
      */
     public function testCreateAttribute() {
-      $dom = new Document();
+      $document = new Document();
       /** @var Element $node */
-      $node = $dom->appendChild($dom->createElement('example'));
-      $node->appendChild($dom->createAttribute('attribute'));
+      $node = $document->appendChild($document->createElement('example'));
+      $node->appendChild($document->createAttribute('attribute'));
       $this->assertXmlStringEqualsXmlString(
         '<example attribute=""/>',
         $node->saveXml()
@@ -288,11 +288,11 @@ namespace FluentDOM {
      * @covers \FluentDOM\Document::createAttribute
      */
     public function testCreateAttributeWithNamespace() {
-      $dom = new Document();
-      $dom->registerNamespace('test', 'urn:success');
+      $document = new Document();
+      $document->registerNamespace('test', 'urn:success');
       /** @var Element $node */
-      $node = $dom->appendChild($dom->createElement('example'));
-      $node->appendChild($dom->createAttribute('test:attribute', 'success'));
+      $node = $document->appendChild($document->createElement('example'));
+      $node->appendChild($document->createAttribute('test:attribute', 'success'));
       $this->assertXmlStringEqualsXmlString(
         '<example xmlns:test="urn:success" test:attribute="success"/>',
         $node->saveXml()
@@ -305,11 +305,11 @@ namespace FluentDOM {
      * @covers \FluentDOM\Document::appendElement
      */
     public function testAppendElement() {
-      $dom = new Document();
-      $dom->appendElement('test', 'text', array('attribute' => 'value'));
+      $document = new Document();
+      $document->appendElement('test', 'text', array('attribute' => 'value'));
       $this->assertXmlStringEqualsXmlString(
         '<test attribute="value">text</test>',
-        $dom->saveXML($dom->documentElement)
+        $document->saveXML($document->documentElement)
       );
     }
 
@@ -319,12 +319,12 @@ namespace FluentDOM {
      * @covers \FluentDOM\Document::appendElement
      */
     public function testAppendElementWithNamespace() {
-      $dom = new Document();
-      $dom->registerNamespace('foo', 'urn:foo');
-      $dom->appendElement('foo:test', 'text', array('foo:attribute' => 'value'));
+      $document = new Document();
+      $document->registerNamespace('foo', 'urn:foo');
+      $document->appendElement('foo:test', 'text', array('foo:attribute' => 'value'));
       $this->assertXmlStringEqualsXmlString(
         '<foo:test xmlns:foo="urn:foo" foo:attribute="value">text</foo:test>',
-        $dom->saveXML($dom->documentElement)
+        $document->saveXML($document->documentElement)
       );
     }
 
@@ -332,11 +332,11 @@ namespace FluentDOM {
      * @covers \FluentDOM\Document::evaluate
      */
     public function testEvaluate() {
-      $dom = new Document();
-      $dom->loadXml('<foo>success</foo>');
+      $document = new Document();
+      $document->loadXml('<foo>success</foo>');
       $this->assertEquals(
         'success',
-        $dom->evaluate('string(/foo)')
+        $document->evaluate('string(/foo)')
       );
     }
 
@@ -344,11 +344,11 @@ namespace FluentDOM {
      * @covers \FluentDOM\Document::evaluate
      */
     public function testEvaluateWithContext() {
-      $dom = new Document();
-      $dom->loadXml('<foo>success</foo>');
+      $document = new Document();
+      $document->loadXml('<foo>success</foo>');
       $this->assertEquals(
         'success',
-        $dom->evaluate('string(.)', $dom->documentElement)
+        $document->evaluate('string(.)', $document->documentElement)
       );
     }
 
@@ -356,12 +356,12 @@ namespace FluentDOM {
      * @cover FluentDOM\Document:find
      */
     public function testFind() {
-      $dom = new Document();
-      $dom->loadXML('<foo><bar/></foo>');
-      $fd = $dom->find('/foo/bar');
+      $document = new Document();
+      $document->loadXML('<foo><bar/></foo>');
+      $fd = $document->find('/foo/bar');
       $this->assertInstanceOf(Query::class, $fd);
       $this->assertSame(
-        $dom->documentElement->firstChild,
+        $document->documentElement->firstChild,
         $fd[0]
       );
     }
@@ -370,11 +370,11 @@ namespace FluentDOM {
      * @cover FluentDOM\Document:toXml
      */
     public function testToXmlWithoutContext() {
-      $dom = new Document();
-      $dom->loadXML('<foo><bar/></foo>');
+      $document = new Document();
+      $document->loadXML('<foo><bar/></foo>');
       $this->assertXmlStringEqualsXmlString(
         '<?xml version="1.0"?>'."\n".'<foo><bar/></foo>'."\n",
-        $dom->toXml()
+        $document->toXml()
       );
     }
 
@@ -382,11 +382,11 @@ namespace FluentDOM {
      * @cover FluentDOM\Document:toXml
      */
     public function testToXmlWithNodeContext() {
-      $dom = new Document();
-      $dom->loadXML('<foo><bar/></foo>');
+      $document = new Document();
+      $document->loadXML('<foo><bar/></foo>');
       $this->assertEquals(
         '<foo><bar/></foo>',
-        $dom->toXml($dom->documentElement)
+        $document->toXml($document->documentElement)
       );
     }
 
@@ -394,11 +394,11 @@ namespace FluentDOM {
      * @cover FluentDOM\Document:toXml
      */
     public function testToXmlWithNodeListContext() {
-      $dom = new Document();
-      $dom->loadXML('<foo>TEXT<bar/></foo>');
+      $document = new Document();
+      $document->loadXML('<foo>TEXT<bar/></foo>');
       $this->assertEquals(
         'TEXT<bar/>',
-        $dom->toXml($dom->documentElement->childNodes)
+        $document->toXml($document->documentElement->childNodes)
       );
     }
 
@@ -406,11 +406,11 @@ namespace FluentDOM {
      * @cover FluentDOM\Document:toHtml
      */
     public function testToHtmlWithoutContext() {
-      $dom = new Document();
-      $dom->loadXML('<div>TEXT</div>');
+      $document = new Document();
+      $document->loadXML('<div>TEXT</div>');
       $this->assertEquals(
         "<div>TEXT</div>\n",
-        $dom->toHtml()
+        $document->toHtml()
       );
     }
 
@@ -418,11 +418,11 @@ namespace FluentDOM {
      * @cover FluentDOM\Document:toHtml
      */
     public function testToHtmlWithNodeContext() {
-      $dom = new Document();
-      $dom->loadXML('<div>TEXT<br/></div>');
+      $document = new Document();
+      $document->loadXML('<div>TEXT<br/></div>');
       $this->assertEquals(
         "<div>TEXT<br>\n</div>",
-        $dom->toHtml($dom->firstChild)
+        $document->toHtml($document->firstChild)
       );
     }
 
@@ -430,11 +430,11 @@ namespace FluentDOM {
      * @cover FluentDOM\Document:toHtml
      */
     public function testToHtmlWithNodeListContext() {
-      $dom = new Document();
-      $dom->loadXML('<div>TEXT<br/></div>');
+      $document = new Document();
+      $document->loadXML('<div>TEXT<br/></div>');
       $this->assertEquals(
         "TEXT<br>",
-        $dom->toHtml($dom->firstChild->childNodes)
+        $document->toHtml($document->firstChild->childNodes)
       );
     }
 
@@ -442,11 +442,11 @@ namespace FluentDOM {
      * @cover FluentDOM\Document:saveHTML
      */
     public function testSaveHtmlWithNodeListContext() {
-      $dom = new Document();
-      $dom->loadXML('<div>TEXT<br/></div>');
+      $document = new Document();
+      $document->loadXML('<div>TEXT<br/></div>');
       $this->assertEquals(
         "TEXT<br>",
-        $dom->saveHtml($dom->firstChild->childNodes)
+        $document->saveHtml($document->firstChild->childNodes)
       );
     }
 
@@ -469,12 +469,12 @@ namespace FluentDOM {
      * @cover FluentDOM\Document:getElementsByTagName
      */
     public function testGetElementsByTagNameWithNamespace() {
-      $dom = new Document();
-      $dom->loadXML('<foo:bar xmlns:foo="urn:foo"/>');
-      $dom->registerNamespace('f', 'urn:foo');
+      $document = new Document();
+      $document->loadXML('<foo:bar xmlns:foo="urn:foo"/>');
+      $document->registerNamespace('f', 'urn:foo');
       $this->assertEquals(
-        [$dom->documentElement],
-        iterator_to_array($dom->getElementsByTagName('f:bar'), FALSE)
+        [$document->documentElement],
+        iterator_to_array($document->getElementsByTagName('f:bar'), FALSE)
       );
     }
 
@@ -482,11 +482,11 @@ namespace FluentDOM {
      * @cover FluentDOM\Document:getElementsByTagName
      */
     public function testGetElementsByTagName() {
-      $dom = new Document();
-      $dom->loadXML('<foo/>');
+      $document = new Document();
+      $document->loadXML('<foo/>');
       $this->assertEquals(
-        [$dom->documentElement],
-        iterator_to_array($dom->getElementsByTagName('foo'), FALSE)
+        [$document->documentElement],
+        iterator_to_array($document->getElementsByTagName('foo'), FALSE)
       );
     }
   }

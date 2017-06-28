@@ -15,16 +15,16 @@ namespace FluentDOM {
         ->method('offsetExists')
         ->with("bar")
         ->willReturn(FALSE);
-      $dom = $this->getMockBuilder(Document::class)->getMock();
-      $dom
+      $document = $this->getMockBuilder(Document::class)->getMock();
+      $document
         ->expects($this->once())
         ->method('namespaces')
         ->willReturn($namespaces);
-      $dom
+      $document
         ->expects($this->once())
         ->method('registerNamespace')
         ->with("bar", "urn:foo");
-      $xpath = new Xpath($dom);
+      $xpath = new Xpath($document);
       $this->assertTrue($xpath->registerNamespace("bar", "urn:foo"));
     }
 
@@ -43,16 +43,16 @@ namespace FluentDOM {
         ->method('offsetGet')
         ->with("bar")
         ->willReturn("urn:bar");
-      $dom = $this->getMockBuilder(Document::class)->getMock();
-      $dom
+      $document = $this->getMockBuilder(Document::class)->getMock();
+      $document
         ->expects($this->any())
         ->method('namespaces')
         ->willReturn($namespaces);
-      $dom
+      $document
         ->expects($this->once())
         ->method('registerNamespace')
         ->with("bar", "urn:foo");
-      $xpath = new Xpath($dom);
+      $xpath = new Xpath($document);
       $this->assertTrue($xpath->registerNamespace("bar", "urn:foo"));
     }
 
@@ -60,14 +60,14 @@ namespace FluentDOM {
      * @covers \FluentDOM\Xpath
      */
     public function testEvaluateDoesNotRegisterNodeNamespaces() {
-      $dom = new \DOMDocument();
-      $dom->loadXml(
+      $document = new \DOMDocument();
+      $document->loadXml(
         '<foo:root xmlns:foo="urn:foo">
           <foo:child>found urn:foo</foo:child>
           <bar:child xmlns:bar="urn:bar">found urn:bar</bar:child>
         </foo:root>'
       );
-      $xpath = new Xpath($dom);
+      $xpath = new Xpath($document);
       $xpath->registerNodeNamespaces = FALSE;
       $xpath->registerNamespace('foo', 'urn:bar');
       $this->assertEquals(
@@ -80,14 +80,14 @@ namespace FluentDOM {
      * @covers \FluentDOM\Xpath
      */
     public function testEvaluateRegisterNodeNamespaces() {
-      $dom = new \DOMDocument();
-      $dom->loadXml(
+      $document = new \DOMDocument();
+      $document->loadXml(
         '<foo:root xmlns:foo="urn:foo">
           <foo:child>found urn:foo</foo:child>
           <bar:child xmlns:bar="urn:bar">found urn:bar</bar:child>
         </foo:root>'
       );
-      $xpath = new Xpath($dom);
+      $xpath = new Xpath($document);
       $xpath->registerNodeNamespaces = TRUE;
       $xpath->registerNamespace('foo', 'urn:bar');
       $this->assertEquals(
@@ -100,14 +100,14 @@ namespace FluentDOM {
      * @covers \FluentDOM\Xpath
      */
     public function testEvaluateDisableRegisterNodeNamespacesWithArgument() {
-      $dom = new \DOMDocument();
-      $dom->loadXml(
+      $document = new \DOMDocument();
+      $document->loadXml(
         '<foo:root xmlns:foo="urn:foo">
           <foo:child>found urn:foo</foo:child>
           <bar:child xmlns:bar="urn:bar">found urn:bar</bar:child>
         </foo:root>'
       );
-      $xpath = new Xpath($dom);
+      $xpath = new Xpath($document);
       $xpath->registerNodeNamespaces = TRUE;
       $xpath->registerNamespace('foo', 'urn:bar');
       $this->assertEquals(
@@ -120,9 +120,9 @@ namespace FluentDOM {
      * @covers \FluentDOM\Xpath
      */
     public function testMagicMethodInvoke() {
-      $dom = new \DOMDocument();
-      $dom->loadXml(self::XML);
-      $xpath = new Xpath($dom);
+      $document = new \DOMDocument();
+      $document->loadXml(self::XML);
+      $xpath = new Xpath($document);
       $this->assertEquals('1st', $xpath('string(//group/@id)'));
     }
 
@@ -130,24 +130,24 @@ namespace FluentDOM {
      * @covers \FluentDOM\Xpath
      */
     public function testMagicMethodInvokeWithContext() {
-      $dom = new \DOMDocument();
-      $dom->loadXml(self::XML);
-      $xpath = new Xpath($dom);
-      $this->assertEquals('items', $xpath('name()', $dom->documentElement));
+      $document = new \DOMDocument();
+      $document->loadXml(self::XML);
+      $xpath = new Xpath($document);
+      $this->assertEquals('items', $xpath('name()', $document->documentElement));
     }
 
     /**
      * @covers \FluentDOM\Xpath
      */
     public function testQueryDoesNotRegisterNodeNamespaces() {
-      $dom = new \DOMDocument();
-      $dom->loadXml(
+      $document = new \DOMDocument();
+      $document->loadXml(
         '<foo:root xmlns:foo="urn:foo">
           <foo:child>found urn:foo</foo:child>
           <bar:child xmlns:bar="urn:bar">found urn:bar</bar:child>
         </foo:root>'
       );
-      $xpath = new Xpath($dom);
+      $xpath = new Xpath($document);
       $xpath->registerNodeNamespaces = FALSE;
       $xpath->registerNamespace('foo', 'urn:bar');
       $this->assertEquals(
@@ -160,14 +160,14 @@ namespace FluentDOM {
      * @covers \FluentDOM\Xpath
      */
     public function testQueryRegisterNodeNamespaces() {
-      $dom = new \DOMDocument();
-      $dom->loadXml(
+      $document = new \DOMDocument();
+      $document->loadXml(
         '<foo:root xmlns:foo="urn:foo">
           <foo:child>found urn:foo</foo:child>
           <bar:child xmlns:bar="urn:bar">found urn:bar</bar:child>
         </foo:root>'
       );
-      $xpath = new Xpath($dom);
+      $xpath = new Xpath($document);
       $xpath->registerNodeNamespaces = TRUE;
       $xpath->registerNamespace('foo', 'urn:bar');
       $this->assertEquals(
@@ -184,8 +184,8 @@ namespace FluentDOM {
       if (($current & E_USER_DEPRECATED) != E_USER_DEPRECATED) {
         error_reporting($current | E_USER_DEPRECATED);
       }
-      $dom = new \DOMDocument();
-      $xpath = new Xpath($dom);
+      $document = new \DOMDocument();
+      $xpath = new Xpath($document);
       $this->expectError(E_DEPRECATED);
       $xpath->query('*');
       error_reporting($current);
@@ -195,11 +195,11 @@ namespace FluentDOM {
      * @covers \FluentDOM\Xpath
      */
     public function testFirstOfMatchingNode() {
-      $dom = new \DOMDocument();
-      $dom->loadXml('<foo/>');
-      $xpath = new Xpath($dom);
+      $document = new \DOMDocument();
+      $document->loadXml('<foo/>');
+      $xpath = new Xpath($document);
       $this->assertSame(
-        $dom->documentElement,
+        $document->documentElement,
         $xpath->firstOf('//foo')
       );
     }
@@ -208,9 +208,9 @@ namespace FluentDOM {
      * @covers \FluentDOM\Xpath
      */
     public function testFirstOfMatchingNothingExpectingNull() {
-      $dom = new \DOMDocument();
-      $dom->loadXml('<foo/>');
-      $xpath = new Xpath($dom);
+      $document = new \DOMDocument();
+      $document->loadXml('<foo/>');
+      $xpath = new Xpath($document);
       $this->assertNull(
         $xpath->firstOf('//bar')
       );
@@ -220,9 +220,9 @@ namespace FluentDOM {
      * @covers \FluentDOM\Xpath
      */
     public function testFirstOfMatchingScalarExpectingNull() {
-      $dom = new \DOMDocument();
-      $dom->loadXml('<foo>bar</foo>');
-      $xpath = new Xpath($dom);
+      $document = new \DOMDocument();
+      $document->loadXml('<foo>bar</foo>');
+      $xpath = new Xpath($document);
       $this->assertNull(
         $xpath->firstOf('string(//foo)')
       );
@@ -235,8 +235,8 @@ namespace FluentDOM {
      * @param string $value
      */
     public function testQuote($expected, $value) {
-      $dom = new \DOMDocument();
-      $xpath = new Xpath($dom);
+      $document = new \DOMDocument();
+      $xpath = new Xpath($document);
       $this->assertEquals(
         $expected,
         $xpath->quote($value)
@@ -247,8 +247,8 @@ namespace FluentDOM {
      * @covers \FluentDOM\Xpath
      */
     public function testPropertyRegisterNodeNamespacesIsset() {
-      $dom = new \DOMDocument();
-      $xpath = new Xpath($dom);
+      $document = new \DOMDocument();
+      $xpath = new Xpath($document);
       $this->assertTrue(isset($xpath->registerNodeNamespaces));
     }
 
@@ -256,8 +256,8 @@ namespace FluentDOM {
      * @covers \FluentDOM\Xpath
      */
     public function testPropertyRegisterNodeNamespacesGetAfterSet() {
-      $dom = new \DOMDocument();
-      $xpath = new Xpath($dom);
+      $document = new \DOMDocument();
+      $xpath = new Xpath($document);
       $this->assertFalse($xpath->registerNodeNamespaces);
       $xpath->registerNodeNamespaces = TRUE;
       $this->assertTrue($xpath->registerNodeNamespaces);
@@ -267,8 +267,8 @@ namespace FluentDOM {
      * @covers \FluentDOM\Xpath
      */
     public function testPropertyRegisterNodeNamespacesGetAfterUnset() {
-      $dom = new \DOMDocument();
-      $xpath = new Xpath($dom);
+      $document = new \DOMDocument();
+      $xpath = new Xpath($document);
       $xpath->registerNodeNamespaces = TRUE;
       unset($xpath->registerNodeNamespaces);
       $this->assertFalse($xpath->registerNodeNamespaces);
@@ -278,8 +278,8 @@ namespace FluentDOM {
      * @covers \FluentDOM\Xpath
      */
     public function testDynamicProperty() {
-      $dom = new \DOMDocument();
-      $xpath = new Xpath($dom);
+      $document = new \DOMDocument();
+      $xpath = new Xpath($document);
       $this->assertFalse(isset($xpath->foo));
       $xpath->foo = 'bar';
       $this->assertTrue(isset($xpath->foo));
@@ -293,8 +293,8 @@ namespace FluentDOM {
      */
     public function testPropertyGetWithUnknownPropertyExpectingPHPError() {
       $errors = error_reporting(E_ALL);
-      $dom = new \DOMDocument();
-      $xpath = new Xpath($dom);
+      $document = new \DOMDocument();
+      $xpath = new Xpath($document);
       $this->expectError(E_NOTICE);
       $xpath->someUnknownProperty;
       error_reporting($errors);

@@ -16,9 +16,9 @@ namespace FluentDOM\Serializer {
      * @param string $JSONx
      */
     public function testIntegeration($JsonDOM, $JSONx) {
-      $dom = new Document();
-      $dom->loadXml($JsonDOM);
-      $transformer = new JSONx($dom);
+      $document = new Document();
+      $document->loadXml($JsonDOM);
+      $transformer = new JSONx($document);
       $this->assertXmlStringEqualsXmlString(
         $JSONx, (string)$transformer
       );

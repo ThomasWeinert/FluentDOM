@@ -33,28 +33,28 @@ namespace FluentDOM\Loader\Json {
      */
     protected function transferTo(\DOMNode $node, $json) {
       if (is_object($json)) {
-        /** @var Document $dom */
-        $dom = $node->ownerDocument ?: $node;
+        /** @var Document $document */
+        $document = $node->ownerDocument ?: $node;
         $nodeName = $json->{'#name'};
         list($attributes, $namespaces) = $this->getAttributes($json);
-        $child = $dom->createElementNS(
+        $child = $document->createElementNS(
           $this->getNamespaceForNode($nodeName, $namespaces, $node),
           $nodeName
         );
         $node->appendChild($child);
-        $this->transferText($dom, $child, $json);
+        $this->transferText($document, $child, $json);
         $this->transferChildren($child, $json, $namespaces, $attributes);
       }
     }
 
     /**
-     * @param \DOMDocument $dom
+     * @param \DOMDocument $document
      * @param \DOMElement $target
      * @param \stdClass $json
      */
-    private function transferText(\DOMDocument $dom, \DOMElement $target, $json) {
+    private function transferText(\DOMDocument $document, \DOMElement $target, $json) {
       if (isset($json->{'#text'})) {
-        $target->appendChild($dom->createTextNode($json->{'#text'}));
+        $target->appendChild($document->createTextNode($json->{'#text'}));
       }
     }
 

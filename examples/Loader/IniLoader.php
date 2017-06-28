@@ -12,10 +12,10 @@ class IniLoader implements FluentDOM\Loadable {
         throw new InvalidArgumentException('File not found: '. $source);
       }
       if ($iniFile = parse_ini_file($source)) {
-        $dom = new FluentDOM\Document();
-        $root = $dom->appendChild($dom->createElement('ini'));
-        $this->_arrayToNodes($dom, $root, $iniFile);
-        return $dom;
+        $document = new FluentDOM\Document();
+        $root = $document->appendChild($document->createElement('ini'));
+        $this->_arrayToNodes($document, $root, $iniFile);
+        return $document;
       }
     }
     return FALSE;
@@ -25,7 +25,7 @@ class IniLoader implements FluentDOM\Loadable {
     throw new \FluentDOM\Exceptions\InvalidFragmentLoader(self::class);
   }
 
-  private function _arrayToNodes(FluentDOM\Document $dom, DOMNode $node, $data) {
+  private function _arrayToNodes(FluentDOM\Document $document, DOMNode $node, $data) {
     if (is_array($data)) {
       foreach ($data as $key => $val) {
         if (preg_match('(^\d+$)', $key)) {
@@ -33,24 +33,24 @@ class IniLoader implements FluentDOM\Loadable {
           if (substr($nodeName, -1) == 's') {
             $nodeName = substr($nodeName, 0, -1);
           }
-          $childNode = $dom->createElement($nodeName);
-          $this->_arrayToNodes($dom, $childNode, $val);
+          $childNode = $document->createElement($nodeName);
+          $this->_arrayToNodes($document, $childNode, $val);
           $node->appendChild($childNode);
         } elseif (is_array($val)) {
-          $childNode = $dom->createElement($key);
-          $this->_arrayToNodes($dom, $childNode, $val);
+          $childNode = $document->createElement($key);
+          $this->_arrayToNodes($document, $childNode, $val);
           $node->appendChild($childNode);
         } elseif (preg_match('([\r\n\t])', $val)) {
-          $childNode = $dom->createElement($key);
-          $textNode = $dom->createTextNode($val);
+          $childNode = $document->createElement($key);
+          $textNode = $document->createTextNode($val);
           $childNode->appendChild($textNode);
           $node->appendChild($childNode);
         } else {
-          $node->appendChild($dom->createElement($key, $val));
+          $node->appendChild($document->createElement($key, $val));
         }
       }
     } elseif (!empty($data)) {
-      $textNode = $dom->createTextNode($data);
+      $textNode = $document->createTextNode($data);
       $node->appendChild($textNode);
     }
   }

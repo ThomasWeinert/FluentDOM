@@ -23,16 +23,16 @@ $html = <<<HTML
 </html>
 HTML;
 
-$dom = FluentDOM($html);
+$fd = FluentDOM($html);
 $parents = implode(
   ', ',
-  $dom
+  $fd
     ->find('//b')
     ->parents()
     ->map(
         create_function('$node', 'return $node->tagName;')
       )
 );
-echo $dom
+echo $fd
   ->find('//b')
   ->append('<strong>'.htmlspecialchars($parents).'</strong>');

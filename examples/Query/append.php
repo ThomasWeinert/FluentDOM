@@ -35,9 +35,9 @@ echo FluentDOM($html)
 
 echo "\n\n";
 
-$dom = FluentDOM($html);
-$items = $dom->find('//group/item');
-echo $dom
+$fd = FluentDOM($html);
+$items = $fd->find('//group/item');
+echo $fd
   ->find('//html/div')
   ->append($items)
   ->formatOutput();

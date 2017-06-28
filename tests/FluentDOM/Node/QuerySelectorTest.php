@@ -22,11 +22,11 @@ namespace FluentDOM\Node {
         ->will($this->returnValue('//p'));
 
       \FluentDOM::registerXpathTransformer($transformer, TRUE);
-      $dom = new Document();
-      $dom->loadHTML(self::HTML);
+      $document = new Document();
+      $document->loadHTML(self::HTML);
       $this->assertEquals(
         '<p>Paragraph One</p>',
-        $dom->querySelector('p')->saveHtml()
+        $document->querySelector('p')->saveHtml()
       );
     }
 
@@ -42,11 +42,11 @@ namespace FluentDOM\Node {
         ->will($this->returnValue('//p'));
 
       \FluentDOM::registerXpathTransformer($transformer, TRUE);
-      $dom = new Document();
-      $dom->loadHTML(self::HTML);
+      $document = new Document();
+      $document->loadHTML(self::HTML);
       $this->assertEquals(
         '<p>Paragraph One</p><p>Paragraph Two</p>',
-        $dom->toHtml($dom->querySelectorAll('p'))
+        $document->toHtml($document->querySelectorAll('p'))
       );
     }
   }

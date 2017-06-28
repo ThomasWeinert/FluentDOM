@@ -10,15 +10,15 @@ namespace FluentDOM {
      * @covers \FluentDOM\CdataSection
      */
     public function testMagicMethodToString() {
-      $dom = new Document();
-      $dom->appendElement('test')->appendChild($dom->createCDATASection('success'));
+      $document = new Document();
+      $document->appendElement('test')->appendChild($document->createCDATASection('success'));
       $this->assertEquals(
         'success',
-        (string)$dom->documentElement->childNodes->item(0)
+        (string)$document->documentElement->childNodes->item(0)
       );
       $this->assertEquals(
         '<test><![CDATA[success]]></test>',
-        $dom->saveXML($dom->documentElement)
+        $document->saveXML($document->documentElement)
       );
     }
 

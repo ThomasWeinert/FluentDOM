@@ -20,8 +20,8 @@ $xml = <<<XML
 XML;
 
 require('../../vendor/autoload.php');
-$dom = FluentDOM($xml);
-echo $dom
+$fd = FluentDOM($xml);
+echo $fd
   ->find('//p')
   ->find('.//b')
   ->addBack()
@@ -29,11 +29,11 @@ echo $dom
 
 echo "\n\n";
 
-$dom = FluentDOM($xml);
-echo $dom
+$fd = FluentDOM($xml);
+echo $fd
   ->find('//p')
   ->find(
-    $dom->find('//div')
+    $fd->find('//div')
   )
   ->addBack()
   ->toggleClass('inB');

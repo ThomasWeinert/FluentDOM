@@ -115,9 +115,9 @@ namespace FluentDOM\Loader\Supports {
       $json = new \stdClass();
       $json->foo = 'bar';
       $loader = new Json_TestProxy();
-      $dom = $loader->load($json, 'json');
+      $document = $loader->load($json, 'json');
       $this->assertXmlStringEqualsXmlString(
-        '<success/>', $dom->saveXml()
+        '<success/>', $document->saveXml()
       );
     }
 
@@ -162,13 +162,13 @@ namespace FluentDOM\Loader\Supports {
      * @covers \FluentDOM\Loader\Supports\Json
      */
     public function testGetNamespaceForNodeFromNode() {
-      $dom = new \DOMDocument();
-      $dom->loadXml('<foo:foo xmlns:foo="urn:foo"/>');
+      $document = new \DOMDocument();
+      $document->loadXml('<foo:foo xmlns:foo="urn:foo"/>');
       $loader = new Json_TestProxy();
       $this->assertEquals(
         'urn:foo',
         $loader->getNamespace(
-          'foo:bar', new \stdClass(), $dom->documentElement
+          'foo:bar', new \stdClass(), $document->documentElement
         )
       );
     }
@@ -177,15 +177,15 @@ namespace FluentDOM\Loader\Supports {
      * @covers \FluentDOM\Loader\Supports\Json
      */
     public function testGetNamespaceForNodeFromJsonProperties() {
-      $dom = new \DOMDocument();
-      $dom->loadXml('<foo:foo xmlns:foo="urn:foo"/>');
+      $document = new \DOMDocument();
+      $document->loadXml('<foo:foo xmlns:foo="urn:foo"/>');
       $properties = new \stdClass();
       $properties->{'xmlns:foo'} = 'urn:bar';
       $loader = new Json_TestProxy();
       $this->assertEquals(
         'urn:bar',
         $loader->getNamespace(
-          'foo:bar', $properties, $dom->documentElement
+          'foo:bar', $properties, $document->documentElement
         )
       );
     }

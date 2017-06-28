@@ -181,11 +181,11 @@ namespace FluentDOM\Query {
     }
 
     public function getSimpleDocumentNodeFixture() {
-      $dom = new \DOMDocument;
-      $node = $dom->createElement('sample');
+      $document = new \DOMDocument;
+      $node = $document->createElement('sample');
       $node->setAttribute('foo', 1);
       $node->setAttribute('bar', 2);
-      $dom->appendChild($node);
+      $document->appendChild($node);
       return $node;
     }
 

@@ -6,9 +6,9 @@ require_once(__DIR__.'/../../vendor/autoload.php');
  * from a location path. It allows you to fetch a single node
  * result as a node (or null).
  */
-$dom = new FluentDOM\Document();
-$dom->loadXml('<xml>Hello World</xml>');
-$xpath = new FluentDOM\Xpath($dom);
+$document = new FluentDOM\Document();
+$document->loadXml('<xml>Hello World</xml>');
+$xpath = new FluentDOM\Xpath($document);
 echo $xpath->firstOf('//xml');
 
 /*
@@ -17,9 +17,9 @@ echo $xpath->firstOf('//xml');
  * the string contains both types of quote characters.
  */
 $value = "World";
-$dom = new FluentDOM\Document();
-$dom->loadXml('<xml>Hello World</xml>');
-$xpath = new FluentDOM\Xpath($dom);
+$document = new FluentDOM\Document();
+$document->loadXml('<xml>Hello World</xml>');
+$xpath = new FluentDOM\Xpath($document);
 echo $xpath->evaluate(
   'string(//xml[contains(., '.$xpath->quote($value).')])'
 );

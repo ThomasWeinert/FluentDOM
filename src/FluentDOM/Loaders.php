@@ -9,6 +9,7 @@
 
 namespace FluentDOM {
 
+  use FluentDOM\Loader\Options;
   use FluentDOM\Loader\Result;
 
   /**
@@ -93,16 +94,16 @@ namespace FluentDOM {
      * @return \DOMDocument|Result|NULL
      */
     public function load($source, $contentType, $options = []) {
-      $dom = NULL;
+      $result = NULL;
       foreach ($this as $loader) {
         /**
          * @var Loadable $loader
          */
-        if ($loader->supports($contentType) && ($dom = $loader->load($source, $contentType, $options))) {
+        if ($loader->supports($contentType) && ($result = $loader->load($source, $contentType, $options))) {
           break;
         }
       }
-      return ($dom instanceOf \DOMDocument || $dom instanceof Result) ? $dom : NULL;
+      return ($result instanceOf \DOMDocument || $result instanceof Result) ? $result : NULL;
     }
 
     /**

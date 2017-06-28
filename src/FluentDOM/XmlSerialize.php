@@ -30,11 +30,11 @@ namespace FluentDOM {
           )
         );
       }
-      $dom = new Document();
-      $fragment = $dom->appendElement('fragment');
+      $document = new Document();
+      $fragment = $document->appendElement('fragment');
       $this->appendTo($fragment);
       $xml = '';
-      foreach ($dom->documentElement->childNodes as $node) {
+      foreach ($document->documentElement->childNodes as $node) {
         $xml .= $node->ownerDocument->saveXml($node);
       }
       return $xml;

@@ -18,9 +18,9 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
    * @covers FluentDOM
    */
   public function testQueryWithNode() {
-    $dom = new DOMDocument();
-    $dom->appendChild($dom->createElement('test'));
-    $query = FluentDOM::Query($dom->documentElement);
+    $document = new DOMDocument();
+    $document->appendChild($document->createElement('test'));
+    $query = FluentDOM::Query($document->documentElement);
     $this->assertCount(1, $query);
     $this->assertXmlStringEqualsXmlString("<?xml version=\"1.0\"?>\n<test/>\n", (string)$query);
   }
@@ -91,8 +91,8 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
    * @covers FluentDOM
    */
   public function testRegisterLoader() {
-    $dom = new \FluentDOM\Document();
-    $dom->loadXML('<success/>');
+    $document = new \FluentDOM\Document();
+    $document->loadXML('<success/>');
     $mockLoader = $this->getMockBuilder(\FluentDOM\Loadable::class)->getMock();
     $mockLoader
       ->expects($this->any())
@@ -102,10 +102,10 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
       ->expects($this->any())
       ->method('load')
       ->with('test.xml', 'mock/loader')
-      ->will($this->returnValue($dom));
+      ->will($this->returnValue($document));
     FluentDOM::registerLoader($mockLoader);
     $this->assertEquals(
-      $dom,
+      $document,
       FluentDOM::load('test.xml', "mock/loader")
     );
   }
@@ -116,8 +116,8 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
    * @covers FluentDOM
    */
   public function testRegisterLoaderWithContentTypes() {
-    $dom = new \FluentDOM\Document();
-    $dom->loadXML('<success/>');
+    $document = new \FluentDOM\Document();
+    $document->loadXML('<success/>');
     $mockLoader = $this->getMockBuilder(\FluentDOM\Loadable::class)->getMock();
     $mockLoader
       ->expects($this->any())
@@ -127,10 +127,10 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
       ->expects($this->any())
       ->method('load')
       ->with('test.xml', 'two')
-      ->will($this->returnValue($dom));
+      ->will($this->returnValue($document));
     FluentDOM::registerLoader($mockLoader, 'one', 'two');
     $this->assertEquals(
-      $dom,
+      $document,
       FluentDOM::load('test.xml', "two")
     );
   }
@@ -141,8 +141,8 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
    * @covers FluentDOM
    */
   public function testRegisterLoaderWithCallable() {
-    $dom = new \FluentDOM\Document();
-    $dom->loadXML('<success/>');
+    $document = new \FluentDOM\Document();
+    $document->loadXML('<success/>');
     $mockLoader = $this->getMockBuilder(\FluentDOM\Loadable::class)->getMock();
     $mockLoader
       ->expects($this->any())
@@ -152,10 +152,10 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
       ->expects($this->any())
       ->method('load')
       ->with('test.xml', 'some/type')
-      ->will($this->returnValue($dom));
+      ->will($this->returnValue($document));
     FluentDOM::registerLoader(function() use ($mockLoader) { return $mockLoader; });
     $this->assertEquals(
-      $dom,
+      $document,
       FluentDOM::load('test.xml', 'some/type')
     );
   }

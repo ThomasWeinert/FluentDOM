@@ -32,8 +32,8 @@ namespace FluentDOM\Loader\Json {
      */
     protected function transferTo(\DOMNode $node, $json) {
       if (is_object($json)) {
-        /** @var Document $dom */
-        $dom = $node->ownerDocument ?: $node;
+        /** @var Document $document */
+        $document = $node->ownerDocument ?: $node;
         if (is_object($json)) {
           foreach ($json as $name => $data) {
             if ($name === '@xmlns') {
@@ -41,7 +41,7 @@ namespace FluentDOM\Loader\Json {
             } elseif ($name === '$') {
               // text content
               $node->appendChild(
-                $dom->createTextNode($this->getValueAsString($data))
+                $document->createTextNode($this->getValueAsString($data))
               );
             } elseif (substr($name, 0, 1) === '@') {
               $this->transferAttributeTo($node, $name, $data);
@@ -86,13 +86,13 @@ namespace FluentDOM\Loader\Json {
      * @return array
      */
     protected function transferAttributeTo(\DOMElement $node, $name, $data) {
-      /** @var Document $dom */
-      $dom = $node->ownerDocument ?: $node;
+      /** @var Document $document */
+      $document = $node->ownerDocument ?: $node;
       $name = substr($name, 1);
       $namespace = $this->getNamespaceForNode($name, new \stdClass(), $node);
       $attribute = empty($namespace)
-        ? $dom->createAttribute($name)
-        : $dom->createAttributeNS($namespace, $name);
+        ? $document->createAttribute($name)
+        : $document->createAttributeNS($namespace, $name);
       $attribute->value = $this->getValueAsString($data);
       $node->setAttributeNode($attribute);
     }
@@ -104,19 +104,19 @@ namespace FluentDOM\Loader\Json {
      * @return array
      */
     protected function transferChildTo(\DOMNode $node, $name, $data) {
-      /** @var Document $dom */
-      $dom = $node->ownerDocument ?: $node;
+      /** @var Document $document */
+      $document = $node->ownerDocument ?: $node;
       $namespace = $this->getNamespaceForNode(
         $name,
         isset($data->{'@xmlns'}) ? $data->{'@xmlns'} : new \stdClass(),
-        $dom
+        $document
       );
       if (!is_array($data)) {
         $data = [$data];
       }
       foreach ($data as $dataChild) {
         $child = $node->appendChild(
-          empty($namespace) ? $dom->createElement($name) : $dom->createElementNS($namespace, $name)
+          empty($namespace) ? $document->createElement($name) : $document->createElementNS($namespace, $name)
         );
         $this->transferTo($child, $dataChild);
       }

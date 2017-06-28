@@ -1,8 +1,8 @@
 <?php
 require('../../../vendor/autoload.php');
 
-$dom = new FluentDOM\Document();
-$dom->loadXml(
+$document = new FluentDOM\Document();
+$document->loadXml(
   '<div>
     <ul>
       <li><a href="http://fluentdom.org">FluentDOM</a></li>
@@ -14,4 +14,4 @@ $dom->loadXml(
 $_ = FluentDOM::create();
 $_->formatOutput = TRUE;
 
-echo $_('p', $dom('//a'));
+echo $_('p', $document('//a'));

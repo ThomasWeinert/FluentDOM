@@ -186,13 +186,13 @@ namespace FluentDOM\Nodes {
      */
     public function getInnerXml($context) {
       $result = '';
-      $dom = $this->getOwner()->getDocument();
+      $document = $this->getOwner()->getDocument();
       $nodes = $this->getOwner()->xpath(
         '*|text()[normalize-space(.) != ""]|self::text()[normalize-space(.) != ""]',
         $context
       );
       foreach ($nodes as $child) {
-        $result .= $dom->saveXML($child);
+        $result .= $document->saveXML($child);
       }
       return $result;
     }

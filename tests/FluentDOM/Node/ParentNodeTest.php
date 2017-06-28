@@ -14,12 +14,12 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\Node\ParentNode\Properties
      */
     public function testGetFirstElementChild() {
-      $dom = new Document();
-      $dom->loadXML('<foo>TEXT<bar/><foobar/></foo>');
-      $node = $dom->documentElement->firstElementChild;
+      $document = new Document();
+      $document->loadXML('<foo>TEXT<bar/><foobar/></foo>');
+      $node = $document->documentElement->firstElementChild;
       $this->assertXmlStringEqualsXmlString(
         '<bar/>',
-        $dom->saveXML($node)
+        $document->saveXML($node)
       );
     }
 
@@ -28,11 +28,11 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\Node\ParentNode\Properties
      */
     public function testGetFirstElementChildOnDocument() {
-      $dom = new Document();
-      $dom->loadXML('<foo/>');
+      $document = new Document();
+      $document->loadXML('<foo/>');
       $this->assertSame(
-        $dom->documentElement,
-        $dom->firstElementChild
+        $document->documentElement,
+        $document->firstElementChild
       );
     }
 
@@ -41,10 +41,10 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\Node\ParentNode\Properties
      */
     public function testGetFirstElementChildExpectingNull() {
-      $dom = new Document();
-      $dom->loadXML('<foo>TEXT</foo>');
+      $document = new Document();
+      $document->loadXML('<foo>TEXT</foo>');
       $this->assertNull(
-        $dom->documentElement->firstElementChild
+        $document->documentElement->firstElementChild
       );
     }
 
@@ -53,12 +53,12 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\Node\ParentNode\Properties
      */
     public function testSetFirstElementChildExpectingException() {
-      $dom = new Document();
-      $dom->loadXML('<foo>TEXT</foo>');
+      $document = new Document();
+      $document->loadXML('<foo>TEXT</foo>');
       $this->expectException(
         \BadMethodCallException::class
       );
-      $dom->firstElementChild = $dom->createElement('dummy');
+      $document->firstElementChild = $document->createElement('dummy');
     }
 
     /**
@@ -66,12 +66,12 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\Node\ParentNode\Properties
      */
     public function testGetLastElementChild() {
-      $dom = new Document();
-      $dom->loadXML('<foo>TEXT<bar/><foobar/>TEXT</foo>');
-      $node = $dom->documentElement->lastElementChild;
+      $document = new Document();
+      $document->loadXML('<foo>TEXT<bar/><foobar/>TEXT</foo>');
+      $node = $document->documentElement->lastElementChild;
       $this->assertXmlStringEqualsXmlString(
         '<foobar/>',
-        $dom->saveXML($node)
+        $document->saveXML($node)
       );
     }
 
@@ -80,11 +80,11 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\Node\ParentNode\Properties
      */
     public function testGetLastElementChildOnDocument() {
-      $dom = new Document();
-      $dom->loadXML('<foo/>');
+      $document = new Document();
+      $document->loadXML('<foo/>');
       $this->assertSame(
-        $dom->documentElement,
-        $dom->lastElementChild
+        $document->documentElement,
+        $document->lastElementChild
       );
     }
 
@@ -93,10 +93,10 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\Node\ParentNode\Properties
      */
     public function testGetLastElementChildExpectingNull() {
-      $dom = new Document();
-      $dom->loadXML('<foo>TEXT</foo>');
+      $document = new Document();
+      $document->loadXML('<foo>TEXT</foo>');
       $this->assertNull(
-        $dom->documentElement->lastElementChild
+        $document->documentElement->lastElementChild
       );
     }
 
@@ -105,12 +105,12 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\Node\ParentNode\Properties
      */
     public function testSetLastElementChildExpectingException() {
-      $dom = new Document();
-      $dom->loadXML('<foo>TEXT</foo>');
+      $document = new Document();
+      $document->loadXML('<foo>TEXT</foo>');
       $this->expectException(
         \BadMethodCallException::class
       );
-      $dom->lastElementChild = $dom->createElement('dummy');
+      $document->lastElementChild = $document->createElement('dummy');
     }
 
     /**
@@ -118,12 +118,12 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\Node\ParentNode\Properties
      */
     public function testPrepend() {
-      $dom = new Document();
-      $dom->loadXML('<foo><bar/></foo>');
-      $dom->documentElement->prepend('INSERTED');
+      $document = new Document();
+      $document->loadXML('<foo><bar/></foo>');
+      $document->documentElement->prepend('INSERTED');
       $this->assertXmlStringEqualsXmlString(
         '<foo>INSERTED<bar/></foo>',
-        $dom->saveXML()
+        $document->saveXML()
       );
     }
 
@@ -132,12 +132,12 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\Node\ParentNode\Properties
      */
     public function testPrependToNodeWithoutChildren() {
-      $dom = new Document();
-      $dom->loadXML('<foo></foo>');
-      $dom->documentElement->prepend('INSERTED');
+      $document = new Document();
+      $document->loadXML('<foo></foo>');
+      $document->documentElement->prepend('INSERTED');
       $this->assertXmlStringEqualsXmlString(
         '<foo>INSERTED</foo>',
-        $dom->saveXML()
+        $document->saveXML()
       );
     }
 
@@ -146,12 +146,12 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\Node\ParentNode\Properties
      */
     public function testAppend() {
-      $dom = new Document();
-      $dom->loadXML('<foo><bar/></foo>');
-      $dom->documentElement->append('APPENDED');
+      $document = new Document();
+      $document->loadXML('<foo><bar/></foo>');
+      $document->documentElement->append('APPENDED');
       $this->assertXmlStringEqualsXmlString(
         '<foo><bar/>APPENDED</foo>',
-        $dom->saveXML()
+        $document->saveXML()
       );
     }
   }

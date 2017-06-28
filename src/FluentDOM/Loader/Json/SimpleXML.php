@@ -12,6 +12,7 @@ namespace FluentDOM\Loader\Json {
   use FluentDOM\Document;
   use FluentDOM\Element;
   use FluentDOM\Loadable;
+  use FluentDOM\Loader\Options;
   use FluentDOM\Loader\Result;
   use FluentDOM\Loader\Supports;
 
@@ -24,13 +25,6 @@ namespace FluentDOM\Loader\Json {
     use Supports\Json;
 
     const XMLNS = 'urn:carica-json-dom.2013';
-
-    /**
-     * Maximum recursions
-     *
-     * @var int
-     */
-    private $_recursions = 100;
 
     /**
      * @return string[]
@@ -64,8 +58,8 @@ namespace FluentDOM\Loader\Json {
      * @param mixed $json
      */
     protected function transferTo(\DOMNode $node, $json) {
-      /** @var Document $dom */
-      $dom = $node->ownerDocument ?: $node;
+      /** @var Document $document */
+      $document = $node->ownerDocument ?: $node;
       if ($json instanceof \stdClass) {
         foreach ($json as $name => $data) {
           if ($name == '@attributes') {
@@ -80,7 +74,7 @@ namespace FluentDOM\Loader\Json {
         }
       } elseif (is_scalar($json)) {
         $node->appendChild(
-          $dom->createTextNode($this->getValueAsString($json))
+          $document->createTextNode($this->getValueAsString($json))
         );
       }
     }
@@ -92,13 +86,13 @@ namespace FluentDOM\Loader\Json {
      * @return array
      */
     protected function transferChildTo(\DOMNode $node, $name, $data) {
-      /** @var Document $dom */
-      $dom = $node->ownerDocument ?: $node;
+      /** @var Document $document */
+      $document = $node->ownerDocument ?: $node;
       if (!is_array($data)) {
         $data = [$data];
       }
       foreach ($data as $dataChild) {
-        $child = $node->appendChild($dom->createElement($name));
+        $child = $node->appendChild($document->createElement($name));
         $this->transferTo($child, $dataChild);
       }
       return $data;

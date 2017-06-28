@@ -7,9 +7,9 @@ require_once(__DIR__.'/../../../vendor/autoload.php');
  * affect the namespace prefixes.
  */
 
-$dom = new FluentDOM\Document();
-$dom->preserveWhiteSpace = FALSE;
-$dom->loadXml(
+$document = new FluentDOM\Document();
+$document->preserveWhiteSpace = FALSE;
+$document->loadXml(
   '<?xml version="1.0" encoding="UTF-8"?>
   <atom:feed xmlns:atom="http://www.w3.org/2005/Atom">
     <atom:title>Example Feed</atom:title>
@@ -23,7 +23,7 @@ $dom->loadXml(
 );
 
 $transformer = new FluentDOM\Transformer\Namespaces\Replace(
-  $dom,
+  $document,
   [
     'http://www.w3.org/1999/xhtml' => ''
   ]
@@ -34,7 +34,7 @@ echo "\nRemove the xhtml namespace:\n\n";
 echo $target->saveXML();
 
 $transformer = new FluentDOM\Transformer\Namespaces\Replace(
-  $dom,
+  $document,
   [
     'http://www.w3.org/2005/Atom' => 'urn:atom',
     'http://www.w3.org/1999/xhtml' => 'urn:xhtml'

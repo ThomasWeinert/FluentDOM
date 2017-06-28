@@ -19,9 +19,9 @@ namespace FluentDOM\Loader\Json {
      */
     public function testIntegeration($json, $xml) {
       $loader = new BadgerFish();
-      $dom = $loader->load($json, 'badgerfish');
+      $document = $loader->load($json, 'badgerfish');
       $this->assertXmlStringEqualsXmlString(
-        $xml, $dom->saveXml()
+        $xml, $document->saveXml()
       );
     }
 

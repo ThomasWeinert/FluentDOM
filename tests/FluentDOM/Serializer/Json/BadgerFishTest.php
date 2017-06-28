@@ -17,9 +17,9 @@ namespace FluentDOM\Serializer\Json {
      * @param string $xml
      */
     public function testIntegration($expected, $xml) {
-      $dom = new \DOMDocument();
-      $dom->loadXML($xml);
-      $serializer = new BadgerFish($dom);
+      $document = new \DOMDocument();
+      $document->loadXML($xml);
+      $serializer = new BadgerFish($document);
       $this->assertJsonStringEqualsJsonString(
         $expected,
         (string)$serializer

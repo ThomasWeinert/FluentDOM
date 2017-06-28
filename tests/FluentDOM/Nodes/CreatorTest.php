@@ -5,7 +5,6 @@ namespace FluentDOM\Nodes {
   use FluentDOM\Document;
   use FluentDOM\Element;
   use FluentDOM\TestCase;
-  use FluentDOM\Nodes;
 
   require_once(__DIR__.'/../TestCase.php');
 
@@ -54,10 +53,10 @@ namespace FluentDOM\Nodes {
      */
     public function testCreateFetchingDocument() {
       $_ = new Creator();
-      $dom = $_('xml', $_('child'))->document;
-      $this->assertInstanceOf(Document::class, $dom);
+      $document = $_('xml', $_('child'))->document;
+      $this->assertInstanceOf(Document::class, $document);
       $this->assertXmlStringEqualsXmlString(
-        '<xml><child/></xml>', $dom->saveXml()
+        '<xml><child/></xml>', $document->saveXml()
       );
     }
 
@@ -67,10 +66,10 @@ namespace FluentDOM\Nodes {
      */
     public function testCreateFetchingDom() {
       $_ = new Creator();
-      $dom = $_('xml', $_('child'))->document;
-      $this->assertInstanceOf(Document::class, $dom);
+      $document = $_('xml', $_('child'))->document;
+      $this->assertInstanceOf(Document::class, $document);
       $this->assertXmlStringEqualsXmlString(
-        '<xml><child/></xml>', $dom->saveXml()
+        '<xml><child/></xml>', $document->saveXml()
       );
     }
 
@@ -281,11 +280,11 @@ namespace FluentDOM\Nodes {
      * @covers \FluentDOM\Nodes\Creator\Node
      */
     public function testCreateWithDOMNode() {
-      $dom = new \DOMDocument();
+      $document = new \DOMDocument();
       $_ = new Creator();
       $this->assertXmlStringEqualsXmlString(
         '<xml><child/></xml>',
-        $_->element('xml', $dom->createElement('child'))->saveXml()
+        $_->element('xml', $document->createElement('child'))->saveXml()
       );
     }
 
@@ -294,8 +293,8 @@ namespace FluentDOM\Nodes {
      * @covers \FluentDOM\Nodes\Creator\Node
      */
     public function testCreateWithAttributeNode() {
-      $dom = new \DOMDocument();
-      $attribute = $dom->createAttribute('attr');
+      $document = new \DOMDocument();
+      $attribute = $document->createAttribute('attr');
       $attribute->value = 'value';
       $_ = new Creator();
       $this->assertXmlStringEqualsXmlString(
@@ -314,8 +313,8 @@ namespace FluentDOM\Nodes {
         ->expects($this->once())
         ->method('appendTo')
         ->with($this->isInstanceOf(Element::class));
-      $dom = new \DOMDocument();
-      $attribute = $dom->createAttribute('attr');
+      $document = new \DOMDocument();
+      $attribute = $document->createAttribute('attr');
       $attribute->value = 'value';
       $_ = new Creator();
       $this->assertXmlStringEqualsXmlString(

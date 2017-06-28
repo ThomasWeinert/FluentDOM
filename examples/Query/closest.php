@@ -31,8 +31,8 @@ $xml = <<<HTML
 </html>
 HTML;
 
-$dom = FluentDOM($xml, 'text/html');
-echo $dom
+$fd = FluentDOM($xml, 'text/html');
+echo $fd
   ->find('//u')
   ->closest('self::li')
   ->addClass('foundIt');

@@ -8,9 +8,9 @@ require_once(__DIR__.'/../../../vendor/autoload.php');
  * It allows you to change the prefix for namespaces, too.
  */
 
-$dom = new FluentDOM\Document();
-$dom->preserveWhiteSpace = FALSE;
-$dom->loadXml(
+$document = new FluentDOM\Document();
+$document->preserveWhiteSpace = FALSE;
+$document->loadXml(
   '<?xml version="1.0" encoding="UTF-8"?>
   <atom:feed xmlns:atom="http://www.w3.org/2005/Atom">
     <atom:title>Example Feed</atom:title>
@@ -28,7 +28,7 @@ $dom->loadXml(
  * for XHTML.
  */
 $transformer = new FluentDOM\Transformer\Namespaces\Optimize(
-  $dom,
+  $document,
   [
     'http://www.w3.org/2005/Atom' => 'feed',
     'http://www.w3.org/1999/xhtml' => ''
@@ -44,7 +44,7 @@ echo $target->saveXML();
  * Use no prefix for any namespace.
  */
 $transformer = new FluentDOM\Transformer\Namespaces\Optimize(
-  $dom,
+  $document,
   [
     'http://www.w3.org/2005/Atom' => '',
     'http://www.w3.org/1999/xhtml' => ''

@@ -25,8 +25,8 @@ XML;
 
 
 echo "Example for function 'attr' using XML namespaces:\n\n";
-$dom = FluentDOM($xml);
-$dom->registerNamespace('h', 'http://www.w3.org/1999/xhtml');
-echo $dom
+$fd = FluentDOM($xml);
+$fd->registerNamespace('h', 'http://www.w3.org/1999/xhtml');
+echo $fd
   ->find('//h:a')
   ->attr('href');

@@ -19,9 +19,9 @@ namespace FluentDOM\Loader {
      */
     public function testIntegeration($JsonDOM, $JSONx) {
       $loader = new JSONx();
-      $dom = $loader->load($JSONx, 'jsonx');
+      $document = $loader->load($JSONx, 'jsonx');
       $this->assertXmlStringEqualsXmlString(
-        $JsonDOM, $dom->saveXml()
+        $JsonDOM, $document->saveXml()
       );
     }
 

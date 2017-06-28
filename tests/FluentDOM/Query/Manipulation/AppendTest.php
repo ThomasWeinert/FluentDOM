@@ -70,7 +70,7 @@ namespace FluentDOM\Query {
      */
     public function testAppendWithCallback() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
-      $doc = $fd
+      $fd
         ->find('//p')
         ->append(
           function ($node, $index, $content) {
@@ -137,12 +137,12 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query
      */
     public function testAppendWithMultipleNodesFromOtherDomToDocument() {
-      $dom = new \DOMDocument();
+      $document = new \DOMDocument();
       $fd = new Query();
       $fd->append(
         [
-          $dom->createElement('first'),
-          $dom->createElement('second')
+          $document->createElement('first'),
+          $document->createElement('second')
         ]
       );
       $this->assertXmlStringEqualsXmlString(
@@ -157,9 +157,9 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query
      */
     public function testAppendWithElementFromOtherDocument() {
-      $dom = new \DOMDocument();
+      $document = new \DOMDocument();
       $fd = new Query();
-      $fd->append($dom->createElement('first'));
+      $fd->append($document->createElement('first'));
       $this->assertXmlStringEqualsXmlString(
         '<?xml version="1.0"?>'."\n".'<first/>',
         (string)$fd
@@ -172,11 +172,11 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query
      */
     public function testAppendWithTextNodeFromOtherDocument() {
-      $dom = new \DOMDocument();
+      $document = new \DOMDocument();
       $fd = new Query();
       $fd
         ->append('<first/>')
-        ->append($dom->createTextNode('text'));
+        ->append($document->createTextNode('text'));
       $this->assertXmlStringEqualsXmlString(
         '<?xml version="1.0"?>'."\n".'<first>text</first>',
         (string)$fd

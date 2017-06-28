@@ -19,9 +19,9 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::__construct
      */
     public function testConstructorWithXml() {
-      $dom = new \DOMDocument();
-      $dom->appendChild($dom->createElement('xml'));
-      $fd = new Nodes($dom);
+      $document = new \DOMDocument();
+      $document->appendChild($document->createElement('xml'));
+      $fd = new Nodes($document);
       $this->assertEquals(
         '<?xml version="1.0"?>'."\n".'<xml/>'."\n",
         (string)$fd
@@ -32,9 +32,9 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::__construct
      */
     public function testConstructorWithHtml() {
-      $dom = new \DOMDocument();
-      $dom->appendChild($dom->createElement('html'));
-      $fd = new Nodes($dom, 'html');
+      $document = new \DOMDocument();
+      $document->appendChild($document->createElement('html'));
+      $fd = new Nodes($document, 'html');
       $this->assertEquals(
         '<html></html>'."\n",
         (string)$fd
@@ -71,9 +71,9 @@ namespace FluentDOM {
      */
     public function testLoadWithDocument() {
       $fd = new Nodes();
-      $fd->load($dom = new \DOMDocument());
+      $fd->load($document = new \DOMDocument());
       $this->assertSame(
-        $dom,
+        $document,
         $fd->document
       );
     }
@@ -84,11 +84,11 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::prepareSource
      */
     public function testLoadWithDomNode() {
-      $dom = new \DOMDocument();
-      $dom->appendChild($dom->createElement('test'));
+      $document = new \DOMDocument();
+      $document->appendChild($document->createElement('test'));
       $fd = new Nodes();
-      $fd->load($dom->documentElement);
-      $this->assertSame($dom, $fd->document);
+      $fd->load($document->documentElement);
+      $this->assertSame($document, $fd->document);
       $this->assertCount(1, $fd);
     }
 
@@ -108,12 +108,12 @@ namespace FluentDOM {
         ->expects($this->once())
         ->method('load')
         ->with('DATA', 'text/xml')
-        ->will($this->returnValue($dom = new \DOMDocument()));
+        ->will($this->returnValue($document = new \DOMDocument()));
       $fd = new Nodes();
       $fd->loaders($loader);
       $fd->load('DATA');
       $this->assertSame(
-        $dom,
+        $document,
         $fd->document
       );
     }
@@ -135,12 +135,12 @@ namespace FluentDOM {
         ->expects($this->once())
         ->method('load')
         ->with('DATA', 'text/xml', ['foo' => 'bar'])
-        ->will($this->returnValue($dom = new \DOMDocument()));
+        ->will($this->returnValue($document = new \DOMDocument()));
       $fd = new Nodes();
       $fd->loaders($loader);
       $fd->load('DATA', 'text/xml', ['foo' => 'bar']);
       $this->assertSame(
-        $dom, $fd->document
+        $document, $fd->document
       );
       $this->assertEquals(['foo' => 'bar'], $fd->getLoadingOptions('text/xml'));
     }
@@ -247,9 +247,9 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::setContentType
      */
     public function testLoadWithUnknownContentType() {
-      $dom = new Document();
+      $document = new Document();
       $fd = new Nodes();
-      $fd->load($dom, 'unknown');
+      $fd->load($document, 'unknown');
       $this->assertEquals('unknown', $fd->contentType);
     }
 
@@ -343,11 +343,11 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::push
      */
     public function testPushNodeFromDifferentDocumentExpectingException() {
-      $dom = new Document();
-      $dom->appendElement('test');
+      $document = new Document();
+      $document->appendElement('test');
       $fd = new Nodes();
       $this->expectException(\OutOfBoundsException::class);
-      $fd->push($dom->documentElement);
+      $fd->push($document->documentElement);
     }
 
     /**
@@ -355,11 +355,11 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::push
      */
     public function testPushListWithNodesFromDifferentDocumentExpectingException() {
-      $dom = new Document();
-      $dom->appendElement('test');
+      $document = new Document();
+      $document->appendElement('test');
       $fd = new Nodes();
       $this->expectException(\OutOfBoundsException::class);
-      $fd->push([$dom->documentElement]);
+      $fd->push([$document->documentElement]);
     }
 
     /**
@@ -432,11 +432,11 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::spawn
      */
     public function testSpawnWithElements() {
-      $dom = new \DOMDocument;
-      $node = $dom->createElement('test');
-      $dom->appendChild($node);
+      $document = new \DOMDocument;
+      $node = $document->createElement('test');
+      $document->appendChild($node);
       $fdParent = new Nodes();
-      $fdParent->load($dom);
+      $fdParent->load($document);
       $fdChild = $fdParent->spawn($node);
       $this->assertSame(
         array($node),
@@ -963,12 +963,12 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::__toString
      */
     public function testMagicToStringHtml() {
-      $dom = new \DOMDocument();
-      $dom->loadHTML(self::HTML);
+      $document = new \DOMDocument();
+      $document->loadHTML(self::HTML);
       $fd = new Nodes();
-      $fd = $fd->load($dom);
+      $fd = $fd->load($document);
       $fd->contentType = 'html';
-      $this->assertEquals($dom->saveHTML(), (string)$fd);
+      $this->assertEquals($document->saveHTML(), (string)$fd);
     }
 
 
@@ -979,11 +979,11 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::getXpath()
      */
     public function testXpathGetFromDocument() {
-      $dom = new Document();
+      $document = new Document();
       $fd = new Nodes();
-      $fd = $fd->load($dom);
+      $fd = $fd->load($document);
       $this->assertSame(
-        $dom->xpath(), $fd->xpath()
+        $document->xpath(), $fd->xpath()
       );
     }
 
@@ -993,9 +993,9 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::getXpath()
      */
     public function testXpathGetImplicitCreate() {
-      $dom = new \DOMDocument();
+      $document = new \DOMDocument();
       $fd = new Nodes();
-      $fd = $fd->load($dom);
+      $fd = $fd->load($document);
       $xpath = $fd->xpath();
       $this->assertSame(
         $xpath, $fd->xpath()
@@ -1010,9 +1010,9 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::applyNamespaces
      */
     public function testXpathGetImplicitCreateWithNamespace() {
-      $dom = new \DOMDocument();
+      $document = new \DOMDocument();
       $fd = new Nodes();
-      $fd = $fd->load($dom);
+      $fd = $fd->load($document);
       $fd->registerNamespace('foo', 'urn:foo');
       $xpath = $fd->xpath();
       $this->assertSame(
@@ -1050,10 +1050,10 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::applyNamespaces
      */
     public function testRegisterNamespaceAfterLoadOnCreatedXpath() {
-      $dom = new \DOMDocument();
-      $dom->loadXML('<foo:foo xmlns:foo="urn:foo"/>');
+      $document = new \DOMDocument();
+      $document->loadXML('<foo:foo xmlns:foo="urn:foo"/>');
       $fd = new Nodes();
-      $fd->load($dom, 'text/xml');
+      $fd->load($document, 'text/xml');
       $fd->xpath();
       $fd->registerNamespace('f', 'urn:foo');
       $this->assertEquals(1, $fd->xpath()->evaluate('count(/f:foo)'));

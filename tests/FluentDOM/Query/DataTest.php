@@ -13,11 +13,11 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query\Data::__construct
      */
     public function testConstructor() {
-      $dom = new \DOMDocument();
-      $dom->appendChild($dom->createElement('sample'));
-      $data = new Data($dom->documentElement);
+      $document = new \DOMDocument();
+      $document->appendChild($document->createElement('sample'));
+      $data = new Data($document->documentElement);
       $this->assertAttributeSame(
-        $dom->documentElement, '_node', $data
+        $document->documentElement, '_node', $data
       );
     }
 
@@ -26,13 +26,13 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query\Data::isDataProperty
      */
     public function testToArrayWithSeveralAttributes() {
-      $dom = new \DOMDocument();
-      $dom->loadXML(
+      $document = new \DOMDocument();
+      $document->loadXML(
         '<div data-role="page" data-hidden="true" data-options=\'{"name":"John"}\'></div>'
       );
       $options = new \stdClass();
       $options->name = 'John';
-      $data = new Data($dom->documentElement);
+      $data = new Data($document->documentElement);
       $this->assertEquals(
         array(
           'role' => 'page',
@@ -48,11 +48,11 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query\Data::decodeName
      */
     public function testToArrayWithComplexAttribute() {
-      $dom = new \DOMDocument();
-      $dom->loadXML(
+      $document = new \DOMDocument();
+      $document->loadXML(
         '<div data-options-name="John"></div>'
       );
-      $data = new Data($dom->documentElement);
+      $data = new Data($document->documentElement);
       $this->assertEquals(
         array(
           'optionsName' => 'John'
@@ -65,11 +65,11 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query\Data::getIterator
      */
     public function testGetIterator() {
-      $dom = new \DOMDocument();
-      $dom->loadXML(
+      $document = new \DOMDocument();
+      $document->loadXML(
         '<div data-role="page" data-hidden="true"></div>'
       );
-      $data = new Data($dom->documentElement);
+      $data = new Data($document->documentElement);
       $this->assertEquals(
         array(
           'role' => 'page',
@@ -83,11 +83,11 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query\Data::count
      */
     public function testCountExpectingZero() {
-      $dom = new \DOMDocument();
-      $dom->loadXML(
+      $document = new \DOMDocument();
+      $document->loadXML(
         '<div></div>'
       );
-      $data = new Data($dom->documentElement);
+      $data = new Data($document->documentElement);
       $this->assertEquals(
         0, count($data)
       );
@@ -97,11 +97,11 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query\Data::count
      */
     public function testCountExpectingTwo() {
-      $dom = new \DOMDocument();
-      $dom->loadXML(
+      $document = new \DOMDocument();
+      $document->loadXML(
         '<div data-role="page" data-hidden="true"></div>'
       );
-      $data = new Data($dom->documentElement);
+      $data = new Data($document->documentElement);
       $this->assertEquals(
         2, count($data)
       );
@@ -111,9 +111,9 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query\Data::__isset
      */
     public function testMagicMethodIssetExpectingTrue() {
-      $dom = new \DOMDocument();
-      $dom->loadXML('<node data-truth="true"/>');
-      $data = new Data($dom->documentElement);
+      $document = new \DOMDocument();
+      $document->loadXML('<node data-truth="true"/>');
+      $data = new Data($document->documentElement);
       $this->assertTrue(isset($data->truth));
     }
 
@@ -121,9 +121,9 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query\Data::__isset
      */
     public function testMagicMethodIssetExpectingFalse() {
-      $dom = new \DOMDocument();
-      $dom->loadXML('<node data-truth="true"/>');
-      $data = new Data($dom->documentElement);
+      $document = new \DOMDocument();
+      $document->loadXML('<node data-truth="true"/>');
+      $data = new Data($document->documentElement);
       $this->assertFalse(isset($data->lie));
     }
 
@@ -134,9 +134,9 @@ namespace FluentDOM\Query {
      * @dataProvider provideDataAttributes
      */
     public function testMagicMethodGet($expected, $name, $xml) {
-      $dom = new \DOMDocument();
-      $dom->loadXML($xml);
-      $data = new Data($dom->documentElement);
+      $document = new \DOMDocument();
+      $document->loadXML($xml);
+      $data = new Data($document->documentElement);
       $this->assertEquals(
         $expected,
         $data->$name
@@ -150,12 +150,12 @@ namespace FluentDOM\Query {
      * @dataProvider provideDataValues
      */
     public function testMagicMethodSet($expectedXml, $name, $value) {
-      $dom = new \DOMDocument();
-      $dom->appendChild($dom->createElement('node'));
-      $data = new Data($dom->documentElement);
+      $document = new \DOMDocument();
+      $document->appendChild($document->createElement('node'));
+      $data = new Data($document->documentElement);
       $data->$name = $value;
       $this->assertEquals(
-        $expectedXml, $dom->saveXml($dom->documentElement)
+        $expectedXml, $document->saveXml($document->documentElement)
       );
     }
 
@@ -165,12 +165,12 @@ namespace FluentDOM\Query {
      * @dataProvider provideDataValues
      */
     public function testMagicMethodUnset() {
-      $dom = new \DOMDocument();
-      $dom->loadXml('<node data-truth="true"/>');
-      $data = new Data($dom->documentElement);
+      $document = new \DOMDocument();
+      $document->loadXml('<node data-truth="true"/>');
+      $data = new Data($document->documentElement);
       unset($data->truth);
       $this->assertEquals(
-        '<node/>', $dom->saveXml($dom->documentElement)
+        '<node/>', $document->saveXml($document->documentElement)
       );
     }
 

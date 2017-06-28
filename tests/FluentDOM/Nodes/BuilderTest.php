@@ -231,11 +231,11 @@ namespace FluentDOM\Nodes {
      * @covers \FluentDOM\Nodes\Builder
      */
     public function testGetContentNodesImportingNodes() {
-      $dom = new Document();
-      $dom->loadXml(self::XML);
+      $document = new Document();
+      $document->loadXml(self::XML);
       $nodes = new Nodes();
       $builder = new Builder($nodes);
-      $array = $builder->getContentNodes($dom->xpath()->evaluate('//item'), TRUE, 1);
+      $array = $builder->getContentNodes($document->xpath()->evaluate('//item'), TRUE, 1);
       $nodes->document->appendChild($array[0]);
       $this->assertXmlStringEqualsXmlString(
         '<item index="0">text1</item>',
@@ -247,20 +247,20 @@ namespace FluentDOM\Nodes {
      * @covers \FluentDOM\Nodes\Builder
      */
     public function testGetContentNodesFromEmptyArrayExpectingException() {
-      $dom = new Document();
+      $document = new Document();
       $nodes = new Nodes();
       $builder = new Builder($nodes);
       $this->expectException(
         \FluentDOM\Exceptions\LoadingError::class
       );
-      $builder->getContentNodes($dom->xpath()->evaluate('//item'));
+      $builder->getContentNodes($document->xpath()->evaluate('//item'));
     }
 
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
     public function testGetContentNodesFromEmptyStringExpectingException() {
-      $dom = new Document();
+      $document = new Document();
       $nodes = new Nodes();
       $builder = new Builder($nodes);
       $this->expectException(

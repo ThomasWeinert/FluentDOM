@@ -29,8 +29,8 @@ namespace FluentDOM\Query {
      */
     public function testWrapWithDomelement() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
-      $dom = $fd->document;
-      $div = $dom->createElement('div');
+      $document = $fd->document;
+      $div = $document->createElement('div');
       $div->setAttribute('class', 'wrapper');
       $fd->find('//p')->wrap($div);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
@@ -67,10 +67,10 @@ namespace FluentDOM\Query {
      */
     public function testWrapWithArray() {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
-      $dom = $fd->document;
-      $divs[0] = $dom->createElement('div');
+      $document = $fd->document;
+      $divs[0] = $document->createElement('div');
       $divs[0]->setAttribute('class', 'wrapper');
-      $divs[1] = $dom->createElement('div');
+      $divs[1] = $document->createElement('div');
       $fd->find('//p')->wrap($divs);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }

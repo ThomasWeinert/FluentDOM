@@ -20,34 +20,34 @@ $xml = <<<XML
 XML;
 
 require('../../vendor/autoload.php');
-$dom = FluentDOM($xml);
-echo $dom
+$fd = FluentDOM($xml);
+echo $fd
   ->find('//p')
   ->add('//p/b')
   ->toggleClass('inB');
 
 echo "\n\n";
 
-$dom = FluentDOM($xml);
-echo $dom
+$fd = FluentDOM($xml);
+echo $fd
   ->find('//p')
   ->add(
-    $dom->find('//div')
+    $fd->find('//div')
   )
   ->toggleClass('inB');
 
 echo "\n\n";
 
-$dom = FluentDOM($xml);
-echo $dom
+$fd = FluentDOM($xml);
+echo $fd
   ->add(
-    $dom->find('//div')
+    $fd->find('//div')
   )
   ->toggleClass('inB');
 
 echo "\n\n";
 
-$dom = FluentDOM($xml);
-echo $dom
+$fd = FluentDOM($xml);
+echo $fd
   ->add('//div')
   ->toggleClass('inB');

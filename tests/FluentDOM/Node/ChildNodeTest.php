@@ -13,12 +13,12 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\Node\ChildNode\Implementation
      */
     public function testRemoveWithElementNode() {
-      $dom = new Document();
-      $dom->loadXML('<foo><bar/></foo>');
-      $dom('/foo/bar')->item(0)->remove();
+      $document = new Document();
+      $document->loadXML('<foo><bar/></foo>');
+      $document('/foo/bar')->item(0)->remove();
       $this->assertXmlStringEqualsXmlString(
         '<foo/>',
-        $dom->saveXML()
+        $document->saveXML()
       );
     }
 
@@ -26,12 +26,12 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\Node\ChildNode\Implementation
      */
     public function testBeforeInsertStringAsTextNodeBeforeElementNode() {
-      $dom = new Document();
-      $dom->loadXML('<foo><bar/></foo>');
-      $dom('/foo/bar')->item(0)->before('INSERTED');
+      $document = new Document();
+      $document->loadXML('<foo><bar/></foo>');
+      $document('/foo/bar')->item(0)->before('INSERTED');
       $this->assertXmlStringEqualsXmlString(
         '<foo>INSERTED<bar/></foo>',
-        $dom->saveXML()
+        $document->saveXML()
       );
     }
 
@@ -39,12 +39,12 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\Node\ChildNode\Implementation
      */
     public function testAfterAppendsStringAsTextNode() {
-      $dom = new Document();
-      $dom->loadXML('<foo><bar/></foo>');
-      $dom('/foo/bar')->item(0)->after('APPENDED');
+      $document = new Document();
+      $document->loadXML('<foo><bar/></foo>');
+      $document('/foo/bar')->item(0)->after('APPENDED');
       $this->assertXmlStringEqualsXmlString(
         '<foo><bar/>APPENDED</foo>',
-        $dom->saveXML()
+        $document->saveXML()
       );
     }
 
@@ -52,12 +52,12 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\Node\ChildNode\Implementation
      */
     public function testAfterAppendsStringAsTextNodeBeforeElementNode() {
-      $dom = new Document();
-      $dom->loadXML('<foo><bar/><bar/></foo>');
-      $dom('/foo/bar')->item(0)->after('APPENDED');
+      $document = new Document();
+      $document->loadXML('<foo><bar/><bar/></foo>');
+      $document('/foo/bar')->item(0)->after('APPENDED');
       $this->assertXmlStringEqualsXmlString(
         '<foo><bar/>APPENDED<bar/></foo>',
-        $dom->saveXML()
+        $document->saveXML()
       );
     }
 
@@ -78,13 +78,13 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\Node\ChildNode\Implementation
      */
     public function testReplaceWithElementNode() {
-      $dom = new Document();
-      $dom->loadXML('<foo><bar/></foo>');
-      $newNode = $dom->createElement('replaced');
-      $dom('/foo/bar')->item(0)->replace($newNode);
+      $document = new Document();
+      $document->loadXML('<foo><bar/></foo>');
+      $newNode = $document->createElement('replaced');
+      $document('/foo/bar')->item(0)->replace($newNode);
       $this->assertXmlStringEqualsXmlString(
         '<foo><replaced/></foo>',
-        $dom->saveXML()
+        $document->saveXML()
       );
     }
 
@@ -92,13 +92,13 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\Node\ChildNode\Implementation
      */
     public function testReplaceWithDocumentElement() {
-      $dom = new Document();
-      $dom->loadXML('<foo><bar/></foo>');
-      $newNode = $dom->createElement('replaced');
-      $dom('/foo')->item(0)->replace($newNode);
+      $document = new Document();
+      $document->loadXML('<foo><bar/></foo>');
+      $newNode = $document->createElement('replaced');
+      $document('/foo')->item(0)->replace($newNode);
       $this->assertXmlStringEqualsXmlString(
         '<replaced/>',
-        $dom->saveXML()
+        $document->saveXML()
       );
     }
   }

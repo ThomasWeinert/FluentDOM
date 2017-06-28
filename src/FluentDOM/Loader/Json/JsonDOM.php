@@ -90,14 +90,14 @@ namespace FluentDOM\Loader\Json {
      */
     public function load($source, $contentType, $options = []) {
       if (FALSE !== ($json = $this->getJson($source, $contentType, $options))) {
-        $dom = new Document('1.0', 'UTF-8');
-        $dom->appendChild(
-          $root = $dom->createElementNS(self::XMLNS, 'json:json')
+        $document = new Document('1.0', 'UTF-8');
+        $document->appendChild(
+          $root = $document->createElementNS(self::XMLNS, 'json:json')
         );
         $onMapKey = $this->prepareOnMapKey($options);
         $this->transferTo($root, $json, $this->_recursions);
         $this->_onMapKey = $onMapKey;
-        return $dom;
+        return $document;
       }
       return NULL;
     }
@@ -110,8 +110,8 @@ namespace FluentDOM\Loader\Json {
      */
     public function loadFragment($source, $contentType, $options = []) {
       if ($this->supports($contentType)) {
-        $dom = new Document('1.0', 'UTF-8');
-        $fragment = $dom->createDocumentFragment();
+        $document = new Document('1.0', 'UTF-8');
+        $fragment = $document->createDocumentFragment();
         $onMapKey = $this->prepareOnMapKey($options);
         $this->transferTo($fragment, json_decode($source), $this->_recursions);
         $this->_onMapKey = $onMapKey;

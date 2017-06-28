@@ -31,15 +31,15 @@ namespace FluentDOM {
      * HHVM and some old PHP versions do not have a $document property by default
      * Add it is added if it was not found after executing parent constructor.
      *
-     * @param \DOMDocument $dom
+     * @param \DOMDocument $document
      */
-    public function __construct(\DOMDocument $dom) {
-      parent::__construct($dom);
+    public function __construct(\DOMDocument $document) {
+      parent::__construct($document);
       // store the document reference to avoid optimization to DOMDocument
-      $this->_documentReference = $dom;
+      $this->_documentReference = $document;
       // @codeCoverageIgnoreStart
       if (!isset($this->document)) {
-        $this->document = $dom;
+        $this->document = $document;
       }
       // @codeCoverageIgnoreEnd
     }

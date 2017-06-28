@@ -22,13 +22,13 @@ $html = <<<HTML
 </html>
 HTML;
 
-$dom = FluentDOM($html);
-echo $dom
+$fd = FluentDOM($html);
+echo $fd
   ->find('//p')
   ->append(
     implode(
       ', ',
-      $dom
+      $fd
         ->find('//input')
         ->map(
           function($node, $index) {

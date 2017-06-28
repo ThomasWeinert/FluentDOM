@@ -32,7 +32,7 @@ namespace FluentDOM\Loader\Json {
       $loader = new JsonDOM();
       $this->assertInstanceOf(
         'DOMDocument',
-        $dom = $loader->load(
+        $document = $loader->load(
           '{"foo":"bar"}',
           'json'
         )
@@ -42,7 +42,7 @@ namespace FluentDOM\Loader\Json {
         '<json:json xmlns:json="urn:carica-json-dom.2013">'.
         '<foo>bar</foo>'.
         '</json:json>',
-        $dom->saveXml()
+        $document->saveXml()
       );
     }
 
@@ -53,7 +53,7 @@ namespace FluentDOM\Loader\Json {
       $loader = new JsonDOM();
       $this->assertInstanceOf(
         'DOMDocument',
-        $dom = $loader->load(
+        $document = $loader->load(
           __DIR__.'/TestData/loader.json',
           'json',
           [
@@ -66,7 +66,7 @@ namespace FluentDOM\Loader\Json {
         '<json:json xmlns:json="urn:carica-json-dom.2013">'.
         '<foo>bar</foo>'.
         '</json:json>',
-        $dom->saveXml()
+        $document->saveXml()
       );
     }
 
@@ -91,7 +91,7 @@ namespace FluentDOM\Loader\Json {
       $json->foo = 'bar';
       $this->assertInstanceOf(
         'DOMDocument',
-        $dom = $loader->load(
+        $document = $loader->load(
           $json, 'json'
         )
       );
@@ -100,7 +100,7 @@ namespace FluentDOM\Loader\Json {
         '<json:json xmlns:json="urn:carica-json-dom.2013">'.
         '<foo>bar</foo>'.
         '</json:json>',
-        $dom->saveXml()
+        $document->saveXml()
       );
     }
 
@@ -111,7 +111,7 @@ namespace FluentDOM\Loader\Json {
       $loader = new JsonDOM(JsonDOM::OPTION_VERBOSE);
       $this->assertInstanceOf(
         'DOMDocument',
-        $dom = $loader->load(
+        $document = $loader->load(
           '{"foo":"bar"}',
           'json'
         )
@@ -123,7 +123,7 @@ namespace FluentDOM\Loader\Json {
         ' json:type="object">'.
         '<foo json:name="foo" json:type="string">bar</foo>'.
         '</json:json>',
-        $dom->saveXml()
+        $document->saveXml()
       );
     }
     /**
@@ -131,7 +131,7 @@ namespace FluentDOM\Loader\Json {
      */
     public function testLoadWithDifferentDataTypes() {
       $loader = new JsonDOM();
-      $dom = $loader->load(
+      $document = $loader->load(
         json_encode(
           array(
             'boolean' => TRUE,
@@ -156,7 +156,7 @@ namespace FluentDOM\Loader\Json {
            </array>
            <object json:type="object"/>
          </json:json>',
-        $dom->saveXml()
+        $document->saveXml()
       );
     }
 
@@ -168,7 +168,7 @@ namespace FluentDOM\Loader\Json {
       $json = ['foo' => 'bar'];
       $this->assertInstanceOf(
         'DOMDocument',
-        $dom = $loader->load(
+        $document = $loader->load(
           $json, 'json'
         )
       );
@@ -177,7 +177,7 @@ namespace FluentDOM\Loader\Json {
         '<json:json xmlns:json="urn:carica-json-dom.2013">'.
         '<foo>bar</foo>'.
         '</json:json>',
-        $dom->saveXml()
+        $document->saveXml()
       );
     }
 
@@ -242,7 +242,7 @@ namespace FluentDOM\Loader\Json {
       $json = [
         'numbers' => [21, 42]
       ];
-      $dom = $loader->load(
+      $document = $loader->load(
         $json,
         'json',
         [
@@ -259,7 +259,7 @@ namespace FluentDOM\Loader\Json {
           '<number json:type="number">42</number>'.
         '</numbers>'.
         '</json:json>',
-        $dom->saveXml()
+        $document->saveXml()
       );
     }
 

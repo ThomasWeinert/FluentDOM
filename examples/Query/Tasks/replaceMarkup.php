@@ -1,6 +1,6 @@
 <?php
 
-require('../../vendor/autoload.php');
+require('../../../vendor/autoload.php');
 $markup = new FluentDOMMarkupReplacer();
 
 $html = <<<HTML
@@ -124,14 +124,14 @@ class FluentDOMMarkupReplacer {
   /**
   * Create nodes for the given string
   *
-  * @param DOMDocument $dom
+  * @param DOMDocument $document
   * @param string $string
-  * @return DOMElement
+  * @return DOMElement|DOMText
   */
-  private function createNodes($dom, $string) {
+  private function createNodes($document, $string) {
     foreach ($this->_replacements as $pattern => $replacement) {
       if (preg_match($pattern, $string)) {
-        $node = $dom->createElement($replacement[0]);
+        $node = $document->createElement($replacement[0]);
         foreach ($replacement[1] as $attributeName => $attributePattern) {
           $node->setAttribute(
             $attributeName,
@@ -140,7 +140,7 @@ class FluentDOMMarkupReplacer {
             )
           );
         }
-        $text = $dom->createTextNode(
+        $text = $document->createTextNode(
           preg_replace(
             $pattern, $replacement[2], $string
           )
@@ -149,7 +149,7 @@ class FluentDOMMarkupReplacer {
         return $node;
       }
     }
-    return $dom->createTextNode(
+    return $document->createTextNode(
       strtr($string, $this->_escapings)
     );
   }

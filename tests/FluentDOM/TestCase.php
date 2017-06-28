@@ -104,10 +104,10 @@ namespace FluentDOM {
       if (!file_exists($fileName)) {
         throw new \UnexpectedValueException('File Not Found: '. $fileName);
       }
-      $dom = new \DOMDocument();
-      $dom->load($fileName);
+      $document = new \DOMDocument();
+      $document->load($fileName);
       $fd = new Query();
-      return $fd->load($dom);
+      return $fd->load($document);
     }
 
     /**
@@ -118,11 +118,11 @@ namespace FluentDOM {
     protected function getQueryFixtureFromString($string = NULL, $xpath = NULL) {
       $fd = new Query();
       if (!empty($string)) {
-        $dom = new \DOMDocument();
-        $dom->loadXML($string);
-        $fd->load($dom);
+        $document = new \DOMDocument();
+        $document->loadXML($string);
+        $fd->load($document);
         if (!empty($xpath)) {
-          $query = new Xpath($dom);
+          $query = new Xpath($document);
           $nodes = $query->evaluate($xpath);
           $fd = $fd->spawn();
           $fd->push($nodes);

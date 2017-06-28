@@ -16,9 +16,9 @@ namespace FluentDOM\Loader\Json {
      */
     public function testIntegeration($json, $xml) {
       $loader = new Rayfish();
-      $dom = $loader->load($json, 'Rayfish');
+      $document = $loader->load($json, 'Rayfish');
       $this->assertXmlStringEqualsXmlString(
-        $xml, $dom->saveXml()
+        $xml, $document->saveXml()
       );
     }
 

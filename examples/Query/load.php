@@ -2,10 +2,10 @@
 
 require_once('../../vendor/autoload.php');
 
-$dom = new DOMDocument();
-$dom->loadXML('<message>Hello World!</message>');
+$document = new DOMDocument();
+$document->loadXML('<message>Hello World!</message>');
 $fd = new FluentDOM\Nodes();
-$fd->load($dom);
+$fd->load($document);
 
 foreach ($fd->find('//message') as $message) {
   echo $message->nodeValue;

@@ -1,7 +1,6 @@
 <?php
 namespace FluentDOM\Element {
 
-  use FluentDOM\Element;
   use FluentDOM\Document;
   use FluentDOM\TestCase;
 
@@ -13,14 +12,14 @@ namespace FluentDOM\Element {
      * @covers \FluentDOM\Iterators\ElementIterator
      */
     public function testIterator() {
-      $dom = new Document();
-      $dom->loadXML('<items>ONE<two><three/></two></items>');
+      $document = new Document();
+      $document->loadXML('<items>ONE<two><three/></two></items>');
       $this->assertSame(
         array(
-          $dom->documentElement->firstChild,
-          $dom->documentElement->lastChild,
+          $document->documentElement->firstChild,
+          $document->documentElement->lastChild,
         ),
-        iterator_to_array($dom->documentElement)
+        iterator_to_array($document->documentElement)
       );
     }
 
@@ -28,10 +27,9 @@ namespace FluentDOM\Element {
      * @covers \FluentDOM\Iterators\ElementIterator
      */
     public function testSeek() {
-      $dom = new Document();
-      $dom->loadXML('<items>ONE<two><three/></two></items>');
-      /** @var Iterator $iterator */
-      $iterator = $dom->documentElement->getIterator();
+      $document = new Document();
+      $document->loadXML('<items>ONE<two><three/></two></items>');
+      $iterator = $document->documentElement->getIterator();
       $iterator->seek(1);
       $this->assertEquals(
         'two', $iterator->current()->nodeName
@@ -42,10 +40,9 @@ namespace FluentDOM\Element {
      * @covers \FluentDOM\Iterators\ElementIterator
      */
     public function testSeekWithInvalidPositionExpectingException() {
-      $dom = new Document();
-      $dom->loadXML('<items>ONE<two><three/></two></items>');
-      /** @var Iterator $iterator */
-      $iterator = $dom->documentElement->getIterator();
+      $document = new Document();
+      $document->loadXML('<items>ONE<two><three/></two></items>');
+      $iterator = $document->documentElement->getIterator();
       $this->expectException(
         \InvalidArgumentException::class,
         'Unknown position 99, only 2 items'
@@ -57,16 +54,16 @@ namespace FluentDOM\Element {
      * @covers \FluentDOM\Iterators\ElementIterator
      */
     public function testRecursiveIterator() {
-      $dom = new Document();
-      $dom->loadXML('<items>ONE<two><three/></two></items>');
+      $document = new Document();
+      $document->loadXML('<items>ONE<two><three/></two></items>');
       $iterator = new \RecursiveIteratorIterator(
-        $dom->documentElement, \RecursiveIteratorIterator::SELF_FIRST
+        $document->documentElement, \RecursiveIteratorIterator::SELF_FIRST
       );
       $this->assertSame(
         array(
-          $dom->documentElement->firstChild,
-          $dom->documentElement->lastChild,
-          $dom->documentElement->lastChild->lastChild
+          $document->documentElement->firstChild,
+          $document->documentElement->lastChild,
+          $document->documentElement->lastChild->lastChild
         ),
         iterator_to_array($iterator, FALSE)
       );
@@ -76,9 +73,9 @@ namespace FluentDOM\Element {
      * @covers \FluentDOM\Iterators\ElementIterator
      */
     public function testGetChildrenOnTextNodeExpectingException() {
-      $dom = new Document();
-      $dom->loadXML('<items>ONE<two><three/></two></items>');
-      $iterator = $dom->documentElement->getIterator();
+      $document = new Document();
+      $document->loadXML('<items>ONE<two><three/></two></items>');
+      $iterator = $document->documentElement->getIterator();
       $this->expectException(
         \UnexpectedValueException::class,
         'Called FluentDOM\Iterators\ElementIterator::getChildren with invalid current element.'

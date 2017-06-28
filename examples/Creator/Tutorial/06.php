@@ -2,14 +2,14 @@
 <?php
 require(__DIR__.'/../../../vendor/autoload.php');
 
-$dom = new FluentDOM\Document();
-$dom->loadHtml(
+$document = new FluentDOM\Document();
+$document->loadHtml(
   '<!DOCTYPE html>
    <html><body><div id="navigation"/></body></html>'
 );
 
 $_ = FluentDOM::create();
-$dom
+$document
   ->getElementById('navigation')
   ->append(
     $_(
@@ -22,4 +22,4 @@ $dom
     )
   );
 
-echo $dom->saveHtml();
+echo $document->saveHtml();

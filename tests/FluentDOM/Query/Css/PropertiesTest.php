@@ -1,8 +1,6 @@
 <?php
 namespace FluentDOM\Query\Css {
 
-  use FluentDOM\Query;
-  use FluentDOM\Query\Css;
   use FluentDOM\TestCase;
 
   require_once(__DIR__.'/../../TestCase.php');
@@ -128,7 +126,7 @@ namespace FluentDOM\Query\Css {
         $css[$name] = $value;
       }
       $this->assertEquals(
-        $expected, $css->getStyleString($propertyArray)
+        $expected, $css->getStyleString()
       );
     }
 
@@ -167,14 +165,14 @@ namespace FluentDOM\Query\Css {
      * @covers \FluentDOM\Query\Css\Properties::compileValue
      */
     public function testCompileValueWithIntegerExpectingString() {
-      $dom = new \DOMDocument();
-      $dom->appendChild($dom->createElement('sample'));
+      $document = new \DOMDocument();
+      $document->appendChild($document->createElement('sample'));
       $css = new Properties('');
       $this->assertSame(
         '42',
         $css->compileValue(
           42,
-          $dom->documentElement,
+          $document->documentElement,
           23,
           'success'
         )
@@ -185,14 +183,14 @@ namespace FluentDOM\Query\Css {
      * @covers \FluentDOM\Query\Css\Properties::compileValue
      */
     public function testCompileValueWithCallback() {
-      $dom = new \DOMDocument();
-      $dom->appendChild($dom->createElement('sample'));
+      $document = new \DOMDocument();
+      $document->appendChild($document->createElement('sample'));
       $css = new Properties('');
       $this->assertSame(
         'success',
         $css->compileValue(
           array($this, 'callbackForCompileValue'),
-          $dom->documentElement,
+          $document->documentElement,
           23,
           'success'
         )

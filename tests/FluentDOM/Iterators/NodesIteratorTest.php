@@ -1,6 +1,7 @@
 <?php
 namespace FluentDOM\Iterators {
 
+  use FluentDOM\Document;
   use FluentDOM\Query;
   use FluentDOM\TestCase;
 
@@ -9,13 +10,15 @@ namespace FluentDOM\Iterators {
   class QueryIteratorTest extends TestCase {
 
     public function testIteratorCurrent() {
+      $document = new Document();
+
       $fd = $this->getMockBuilder(Query::class)->getMock();
       $fd->expects($this->once())
         ->method('item')
         ->with($this->equalTo(0))
-        ->will($this->returnValue(TRUE));
+        ->will($this->returnValue($document->createElement('test')));
       $fdi = new NodesIterator($fd);
-      $this->assertTrue($fdi->current());
+      $this->assertInstanceOf(\DOMNode::class, $fdi->current());
     }
 
     public function testIteratorKey() {
@@ -76,9 +79,9 @@ namespace FluentDOM\Iterators {
     public function testGetChildren() {
       $fdSource = $this->getMockBuilder(Query::class)->getMock();
       $fdSpawn = $this->getMockBuilder(Query::class)->getMock();
-      $dom = new \DOMDocument();
-      $node = $dom->creatEelement('parent');
-      $node->appendChild($dom->createElement('child'));
+      $document = new \DOMDocument();
+      $node = $document->creatEelement('parent');
+      $node->appendChild($document->createElement('child'));
       $fdSource
         ->expects($this->once())
         ->method('spawn')

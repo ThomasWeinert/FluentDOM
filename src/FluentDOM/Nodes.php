@@ -255,9 +255,9 @@ namespace FluentDOM {
      */
     public function registerNamespace($prefix, $namespace) {
       $this->_namespaces[$prefix] = $namespace;
-      $dom = $this->getDocument();
-      if ($dom instanceOf Document) {
-        $dom->registerNamespace($prefix, $namespace);
+      $document = $this->getDocument();
+      if ($document instanceOf Document) {
+        $document->registerNamespace($prefix, $namespace);
       } elseif (isset($this->_xpath)) {
         $this->_xpath->registerNamespace($prefix, $namespace);
       }
@@ -267,10 +267,10 @@ namespace FluentDOM {
      * apply stored namespaces to attached document or xpath object
      */
     private function applyNamespaces() {
-      $dom = $this->getDocument();
-      if ($dom instanceof Document) {
+      $document = $this->getDocument();
+      if ($document instanceof Document) {
         foreach ($this->_namespaces as $prefix => $namespace) {
-          $dom->registerNamespace($prefix, $namespace);
+          $document->registerNamespace($prefix, $namespace);
         }
       } elseif (isset($this->_xpath)) {
         foreach ($this->_namespaces as $prefix => $namespace) {

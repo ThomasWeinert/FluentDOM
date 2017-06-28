@@ -30,11 +30,11 @@ XML;
  * Otherwise it will return the attribute value.
  */
 
-$dom = new FluentDOM\Document();
-$dom->preserveWhiteSpace = FALSE;
-$dom->loadXML($xml);
-$dom->registerNamespace('atom', 'http://www.w3.org/2005/Atom');
+$document = new FluentDOM\Document();
+$document->preserveWhiteSpace = FALSE;
+$document->loadXML($xml);
+$document->registerNamespace('atom', 'http://www.w3.org/2005/Atom');
 
-foreach ($dom->evaluate('//atom:entry/atom:link') as $entry) {
+foreach ($document->evaluate('//atom:entry/atom:link') as $entry) {
   echo $entry['href'], "\n";
 }

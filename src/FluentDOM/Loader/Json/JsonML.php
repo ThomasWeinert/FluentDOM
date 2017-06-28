@@ -33,9 +33,9 @@ namespace FluentDOM\Loader\Json {
       if (is_array($json) && count($json) > 0) {
         $this->transferToElement($node, $json);
       } elseif (is_scalar($json)) {
-        $dom = $node instanceof \DOMDocument ? $node : $node->ownerDocument;
+        $document = $node instanceof \DOMDocument ? $node : $node->ownerDocument;
         $node->appendChild(
-          $dom->createTextNode($this->getValueAsString($json))
+          $document->createTextNode($this->getValueAsString($json))
         );
       }
     }
@@ -62,13 +62,13 @@ namespace FluentDOM\Loader\Json {
      * @param \stdClass $properties
      */
     private function addAttributes(\DOMElement $node, $properties) {
-      $dom = $node instanceof \DOMDocument ? $node : $node->ownerDocument;
+      $document = $node instanceof \DOMDocument ? $node : $node->ownerDocument;
       foreach ($properties as $name => $value) {
         if (!($name === 'xmlns' || substr($name, 0, 6) === 'xmlns:')) {
           $namespace = $this->getNamespaceForNode($name, $properties, $node);
           $attribute = empty($namespace)
-            ? $dom->createAttribute($name)
-            : $dom->createAttributeNS($namespace, $name);
+            ? $document->createAttribute($name)
+            : $document->createAttributeNS($namespace, $name);
           $attribute->value = $this->getValueAsString($value);
           $node->setAttributeNode($attribute);
         }
@@ -80,15 +80,15 @@ namespace FluentDOM\Loader\Json {
      * @param $json
      */
     private function transferToElement(\DOMNode $node, $json) {
-      $dom = $node instanceof \DOMDocument ? $node : $node->ownerDocument;
+      $document = $node instanceof \DOMDocument ? $node : $node->ownerDocument;
       $nodeName = $json[0];
       $length = count($json);
       $hasProperties = $length > 1 && is_object($json[1]);
       $properties = $hasProperties ? $json[1] : new \stdClass;
       $namespace = $this->getNamespaceForNode($nodeName, $properties, $node);
       $element = empty($namespace)
-        ? $dom->createElement($nodeName)
-        : $dom->createElementNS($namespace, $nodeName);
+        ? $document->createElement($nodeName)
+        : $document->createElementNS($namespace, $nodeName);
       $node->appendChild($element);
       $this->addNamespaceAttributes($element, $properties);
       $this->addAttributes($element, $properties);

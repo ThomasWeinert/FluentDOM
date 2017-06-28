@@ -10,19 +10,19 @@ namespace FluentDOM {
      * @covers \FluentDOM\ProcessingInstruction
      */
     public function testMagicMethodToString() {
-      $dom = new Document();
-      $dom
+      $document = new Document();
+      $document
         ->appendElement('test')
         ->appendChild(
-          $dom->createProcessingInstruction('php', 'echo "Hello World!";')
+          $document->createProcessingInstruction('php', 'echo "Hello World!";')
         );
       $this->assertEquals(
         'echo "Hello World!";',
-        (string)$dom->documentElement->childNodes->item(0)
+        (string)$document->documentElement->childNodes->item(0)
       );
       $this->assertEquals(
         '<test><?php echo "Hello World!";?></test>',
-        $dom->saveXML($dom->documentElement)
+        $document->saveXML($document->documentElement)
       );
     }
   }

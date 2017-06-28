@@ -53,8 +53,8 @@ namespace FluentDOM\Loader {
       if ($this->supports($contentType)) {
         return (new Libxml\Errors())->capture(
           function() use ($source, $contentType, $options) {
-            $dom = new Document();
-            $fragment = $dom->createDocumentFragment();
+            $document = new Document();
+            $fragment = $document->createDocumentFragment();
             $fragment->appendXml($source);
             return $fragment;
           }

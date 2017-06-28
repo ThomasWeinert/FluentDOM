@@ -10,11 +10,11 @@ namespace FluentDOM {
      * @covers \FluentDOM\Attribute::__toString
      */
     public function testMagicMethodToString() {
-      $dom = new Document();
-      $dom->appendElement('test', array('attr' => 'success'));
+      $document = new Document();
+      $document->appendElement('test', array('attr' => 'success'));
       $this->assertEquals(
         'success',
-        (string)$dom->documentElement->attributes->getNamedItem('attr')
+        (string)$document->documentElement->attributes->getNamedItem('attr')
       );
     }
   }

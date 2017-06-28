@@ -16,11 +16,11 @@ namespace FluentDOM {
     }
 
     public static function provideValidNodes() {
-      $dom = new \DOMDocument();
+      $document = new \DOMDocument();
       return array(
-        array($dom->createElement('element')),
-        array($dom->createTextNode('text')),
-        array($dom->createCDATASection('text'))
+        array($document->createElement('element')),
+        array($document->createTextNode('text')),
+        array($document->createCDATASection('text'))
       );
     }
 
@@ -35,11 +35,11 @@ namespace FluentDOM {
     }
 
     public static function provideInvalidNodes() {
-      $dom = new \DOMDocument();
+      $document = new \DOMDocument();
       return array(
         array('string'),
-        array($dom->createTextNode('text'), TRUE),
-        array($dom->createCDATASection('text'), TRUE)
+        array($document->createTextNode('text'), TRUE),
+        array($document->createCDATASection('text'), TRUE)
       );
     }
 
@@ -97,10 +97,10 @@ namespace FluentDOM {
     }
 
     public static function provideNodeLists() {
-      $dom = new \DOMDocument();
+      $document = new \DOMDocument();
       return array(
-        array(array($dom->createElement('element'))),
-        array($dom->getElementsByTagName('text'))
+        array(array($document->createElement('element'))),
+        array($document->getElementsByTagName('text'))
       );
     }
 

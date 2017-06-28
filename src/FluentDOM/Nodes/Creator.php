@@ -172,7 +172,7 @@ namespace FluentDOM\Nodes\Creator {
   /**
    * @property-read Document $document
    * @property-read Document $dom
-   * @property-read \DOMElement $node
+   * @property-read Element $node
    */
   class Node implements Appendable {
 

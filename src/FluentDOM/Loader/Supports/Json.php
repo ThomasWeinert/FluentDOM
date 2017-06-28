@@ -23,9 +23,9 @@ namespace FluentDOM\Loader\Supports {
      */
     public function load($source, $contentType, $options = []) {
       if (FALSE !== ($json = $this->getJson($source, $contentType, $options))) {
-        $dom = new Document('1.0', 'UTF-8');
-        $this->transferTo($dom, $json);
-        return $dom;
+        $document = new Document('1.0', 'UTF-8');
+        $this->transferTo($document, $json);
+        return $document;
       }
       return NULL;
     }

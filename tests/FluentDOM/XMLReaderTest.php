@@ -24,6 +24,24 @@ namespace FluentDOM {
         ['one', 'three'], $result
       );
     }
+    /**
+     * @covers \FluentDOM\XMLReader
+     */
+    public function testTraverseSiblingsWithNamespace() {
+      $reader = new XMLReader();
+      $reader->open(__DIR__.'/TestData/xmlreader-1.xml');
+
+      $result = [];
+      $found = $reader->read('child', 'urn:foo');
+      while ($found) {
+        $result[] = $reader->getAttribute('name');
+        $found = $reader->next('child', 'urn:foo');
+      }
+
+      $this->assertEquals(
+        ['one', 'three'], $result
+      );
+    }
 
     /**
      * @covers \FluentDOM\XMLReader
@@ -86,6 +104,23 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\XMLReader
      */
+    public function testTraverseDescendantsWithNamespace() {
+      $reader = new XMLReader();
+      $reader->open(__DIR__.'/TestData/xmlreader-1.xml');
+
+      $result = [];
+      while ($reader->read('child', 'urn:foo')) {
+        $result[] = $reader->getAttribute('name');
+      }
+
+      $this->assertEquals(
+        ['one', 'one.one', 'three'], $result
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\XMLReader
+     */
     public function testTraverseDescendantsWithoutNamespace() {
       $reader = new XMLReader();
       $reader->open(__DIR__.'/TestData/xmlreader-1.xml');
@@ -123,6 +158,7 @@ namespace FluentDOM {
       $reader->registerNamespace('foo', 'urn:foo');
       $reader->read();
       $node = $reader->expand();
+      /** @var Document $document */
       $document = $node->ownerDocument;
       $this->assertInstanceOf(Element::class, $node);
       $this->assertEquals(

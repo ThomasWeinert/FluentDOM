@@ -36,13 +36,12 @@ namespace FluentDOM {
      * a namespace prefix it will be resolved using the registered namespaces.
      *
      * @param null|string $name The name of the next node to move to.
+     * @param null|string $namespaceUri
      * @return bool
      */
-    public function next($name = NULL) {
+    public function next($name = NULL, $namespaceUri = NULL) {
       if (isset($name)) {
-        list($prefix, $localName) = QualifiedName::split($name);
-        $namespaceUri = $prefix ? $this->_namespaces->resolveNamespace($prefix) : '';
-        $ignoreNamespace = ($prefix === FALSE && $namespaceUri === '');
+        list($localName, $namespaceUri, $ignoreNamespace) = $this->prepareCondition($name, $namespaceUri);
       } else {
         $ignoreNamespace = TRUE;
         $localName = $name;
@@ -65,13 +64,12 @@ namespace FluentDOM {
      * a namespace prefix it will be resolved using the registered namespaces.
      *
      * @param null|string $name The name of the next node to move to.
+     * @param null|string $namespaceUri
      * @return bool
      */
-    public function read($name = NULL) {
+    public function read($name = NULL, $namespaceUri = NULL) {
       if (isset($name)) {
-        list($prefix, $localName) = QualifiedName::split($name);
-        $namespaceUri = $prefix ? $this->_namespaces->resolveNamespace($prefix) : '';
-        $ignoreNamespace = (($prefix === FALSE) && ($namespaceUri === ''));
+        list($localName, $namespaceUri, $ignoreNamespace) = $this->prepareCondition($name, $namespaceUri);
         while (parent::read()) {
           if (
             $this->nodeType === XML_ELEMENT_NODE &&
@@ -116,6 +114,24 @@ namespace FluentDOM {
         $document->namespaces($this->_namespaces);
         return parent::expand($document);
       }
+    }
+
+    /**
+     * @param $name
+     * @param $namespaceUri
+     * @return array
+     */
+    private function prepareCondition($name, $namespaceUri) {
+      if (isset($namespaceUri)) {
+        $localName = $name;
+        $namespaceUri = (string)$namespaceUri;
+        $ignoreNamespace = FALSE;
+      } else {
+        list($prefix, $localName) = QualifiedName::split($name);
+        $namespaceUri = $prefix ? $this->_namespaces->resolveNamespace($prefix) : '';
+        $ignoreNamespace = ($prefix === FALSE && $namespaceUri === '');
+      }
+      return [$localName, $namespaceUri, $ignoreNamespace];
     }
   }
 }

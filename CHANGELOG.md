@@ -10,6 +10,10 @@ Version 6.1.0
 - Added #62: FluentDOM\XMLReader extend XMLReader with namespace registration 
 - Added #63: FluentDOM\XMLWriter extend XMLWriter with namespace registration, 
     workaround for repeated namespace definitions 
+- Added: FluentDOM\XMLReader::read() supports optional $namespaceUri parameter
+- Added: FluentDOM\XMLReader::next() supports optional $name and $namespaceUri parameters
+- Fixed #66: Improved Multibyte handling for HTML loader/serializer
+- Added #60: FluentDOM\EntityReference
 
 Version 6.0.1
 -------------

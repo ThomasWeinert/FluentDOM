@@ -2,6 +2,8 @@ Version 6.2.0
 -------------
 
 - Added: $filter argument (callable) to XMLReader::next() and XMLReader::read()
+- Added: FluentDOM\XMLReader\Iterator
+- Added: FluentDOM\XMLReader\SiblingIterator
 
 Version 6.1.0
 -------------

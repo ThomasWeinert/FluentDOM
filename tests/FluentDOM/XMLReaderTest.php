@@ -24,6 +24,7 @@ namespace FluentDOM {
         ['one', 'three'], $result
       );
     }
+
     /**
      * @covers \FluentDOM\XMLReader
      */
@@ -36,6 +37,28 @@ namespace FluentDOM {
       while ($found) {
         $result[] = $reader->getAttribute('name');
         $found = $reader->next('child', 'urn:foo');
+      }
+
+      $this->assertEquals(
+        ['one', 'three'], $result
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\XMLReader
+     */
+    public function testTraverseSiblingsWithFilter() {
+      $reader = new XMLReader();
+      $reader->open(__DIR__.'/TestData/xmlreader-1.xml');
+
+      $result = [];
+      $filter = function(XMLReader $reader) {
+        return $reader->localName == "child" && $reader->namespaceURI == 'urn:foo';
+      };
+      $found = $reader->read(NULL, NULL, $filter);
+      while ($found) {
+        $result[] = $reader->getAttribute('name');
+        $found = $reader->next(NULL, NULL, $filter);
       }
 
       $this->assertEquals(
@@ -110,6 +133,24 @@ namespace FluentDOM {
 
       $result = [];
       while ($reader->read('child', 'urn:foo')) {
+        $result[] = $reader->getAttribute('name');
+      }
+
+      $this->assertEquals(
+        ['one', 'one.one', 'three'], $result
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\XMLReader
+     */
+    public function testTraverseDescendantsWithFilterFunction() {
+      $reader = new XMLReader();
+      $reader->open(__DIR__.'/TestData/xmlreader-1.xml');
+
+      $result = [];
+      $filter = function(XMLReader $reader) { return $reader->namespaceURI == 'urn:foo'; };
+      while ($reader->read('child', NULL, $filter)) {
         $result[] = $reader->getAttribute('name');
       }
 

@@ -37,23 +37,29 @@ namespace FluentDOM {
      *
      * @param null|string $name The name of the next node to move to.
      * @param null|string $namespaceUri
+     * @param callable|null $filter
      * @return bool
      */
-    public function next($name = NULL, $namespaceUri = NULL) {
+    public function next($name = NULL, $namespaceUri = NULL, callable $filter = NULL) {
       if (isset($name)) {
         list($localName, $namespaceUri, $ignoreNamespace) = $this->prepareCondition($name, $namespaceUri);
       } else {
-        $ignoreNamespace = TRUE;
+        $ignoreNamespace = empty($namespaceUri);
         $localName = $name;
         $namespaceUri = '';
       }
-      if ($ignoreNamespace) {
+      if ($ignoreNamespace && !$filter) {
         return isset($name) ? parent::next($name) : parent::next();
       } else {
-        while (parent::next($localName)) {
-          if ($this->namespaceURI === $namespaceUri) {
+        $found = empty($localName) ? parent::next() : parent::next($localName);
+        while ($found) {
+          if (
+            ($ignoreNamespace || $this->namespaceURI === $namespaceUri) &&
+            (!$filter || $filter($this))
+          ) {
             return TRUE;
           }
+          $found = empty($localName) ? parent::next() : parent::next($localName);
         }
         return FALSE;
       }
@@ -65,9 +71,10 @@ namespace FluentDOM {
      *
      * @param null|string $name The name of the next node to move to.
      * @param null|string $namespaceUri
+     * @param callable|null $filter
      * @return bool
      */
-    public function read($name = NULL, $namespaceUri = NULL) {
+    public function read($name = NULL, $namespaceUri = NULL, callable $filter = NULL) {
       if (isset($name)) {
         list($localName, $namespaceUri, $ignoreNamespace) = $this->prepareCondition($name, $namespaceUri);
         while (parent::read()) {
@@ -75,9 +82,17 @@ namespace FluentDOM {
             $this->nodeType === XML_ELEMENT_NODE &&
             $this->localName === $localName &&
             (
-              $ignoreNamespace || ($this->namespaceURI === $namespaceUri)
+              ($ignoreNamespace || ($this->namespaceURI === $namespaceUri)) &&
+              (!$filter || $filter($this))
             )
           ) {
+            return TRUE;
+          }
+        }
+        return FALSE;
+      } elseif ($filter) {
+        while (parent::read()) {
+          if ($filter($this)) {
             return TRUE;
           }
         }

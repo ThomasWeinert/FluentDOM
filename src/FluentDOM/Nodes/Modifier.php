@@ -52,7 +52,7 @@ namespace FluentDOM\Nodes {
       if ($this->_node instanceof \DOMElement) {
         foreach ($contentNodes as $contentNode) {
           /** @var \DOMNode $contentNode */
-          if (Constraints::isNode($contentNode)) {
+          if (Constraints::filterNode($contentNode)) {
             $result[] = $this->_node->appendChild($contentNode->cloneNode(TRUE));
           }
         }

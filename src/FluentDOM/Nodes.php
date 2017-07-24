@@ -388,7 +388,7 @@ namespace FluentDOM {
      * @return callable|null
      */
     public function getSelectorCallback($selector) {
-      if (NULL === $selector || Constraints::isCallable($selector)) {
+      if (NULL === $selector || Constraints::filterCallable($selector)) {
         return $selector;
       } elseif ($selector instanceof \DOMNode) {
         return function(\DOMNode $node) use ($selector) {
@@ -569,7 +569,7 @@ namespace FluentDOM {
         $this->setContentType($value);
         break;
       case 'onPrepareSelector' :
-        if ($callback = Constraints::isCallable($value, TRUE, FALSE)) {
+        if ($callback = Constraints::filterCallable($value, TRUE, FALSE)) {
           $this->_onPrepareSelector = $callback;
         }
         break;
@@ -690,14 +690,14 @@ namespace FluentDOM {
      * @return $this
      */
     public function push($elements, $ignoreTextNodes = FALSE) {
-      if (Constraints::isNode($elements, $ignoreTextNodes)) {
+      if (Constraints::filterNode($elements, $ignoreTextNodes)) {
         if ($elements->ownerDocument !== $this->_document) {
           throw new \OutOfBoundsException(
             'Node is not a part of this document'
           );
         }
         $this->_nodes[] = $elements;
-      } elseif ($nodes = Constraints::isNodeList($elements)) {
+      } elseif ($nodes = Constraints::filterNodeList($elements)) {
         $this->_useDocumentContext = FALSE;
         foreach ($nodes as $index => $node) {
           if ($node->ownerDocument !== $this->_document) {
@@ -731,7 +731,7 @@ namespace FluentDOM {
           return $node instanceof \DOMElement;
         };
       } else {
-        $filter = Constraints::isCallable($elementsFilter);
+        $filter = Constraints::filterCallable($elementsFilter);
       }
       foreach ($this->_nodes as $index => $node) {
         if (NULL === $filter || $filter($node, $index)) {

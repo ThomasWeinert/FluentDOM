@@ -31,7 +31,7 @@ namespace FluentDOM\Utility {
      * @param string $prefix
      * @return string|NULL
      */
-    public function resolveNamespace($prefix) {
+    public function resolveNamespace(string $prefix) {
       return $this[(string)$prefix];
     }
 

@@ -47,14 +47,14 @@ namespace FluentDOM\Nodes {
       $includeTextNodes = TRUE,
       $limit = -1
     ) {
-      if ($callback = Constraints::isCallable($content)) {
+      if ($callback = Constraints::filterCallable($content)) {
         $content = $callback();
       }
       if ($content instanceof \DOMElement) {
         return array($content);
-      } elseif ($includeTextNodes && Constraints::isNode($content)) {
+      } elseif ($includeTextNodes && Constraints::filterNode($content)) {
         return array($content);
-      } elseif (Constraints::isNodeList($content)) {
+      } elseif (Constraints::filterNodeList($content)) {
         return $this->getLimitedArray($content, $limit);
       }
       return NULL;
@@ -156,7 +156,7 @@ namespace FluentDOM\Nodes {
         for ($i = $fragment->childNodes->length - 1; $i >= 0; $i--) {
           $element = $fragment->childNodes->item($i);
           if ($element instanceof \DOMElement ||
-            ($includeTextNodes && Constraints::isNode($element))) {
+            ($includeTextNodes && Constraints::filterNode($element))) {
             array_unshift($result, $element);
             $element->parentNode->removeChild($element);
           }

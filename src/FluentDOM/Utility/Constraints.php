@@ -22,7 +22,7 @@ namespace FluentDOM\Utility {
      * @param boolean $ignoreTextNodes
      * @return \DOMElement|\DOMText|\DOMCdataSection
      */
-    public static function isNode($node, $ignoreTextNodes = FALSE) {
+    public static function filterNode($node, $ignoreTextNodes = FALSE) {
       if (
         (
           $node instanceof \DOMElement ||
@@ -48,7 +48,7 @@ namespace FluentDOM\Utility {
      * @param string $message
      * @return bool
      */
-    public static function assertNode($node, $message = 'DOMNode expected, got: %s.') {
+    public static function assertNode($node, $message = 'DOMNode expected, got: %s.'):bool {
       if (!($node instanceof \DOMNode)) {
         throw new \InvalidArgumentException(
           sprintf(
@@ -67,7 +67,7 @@ namespace FluentDOM\Utility {
      * @param mixed $elements
      * @return \Traversable|array
      */
-    public static function isNodeList($elements) {
+    public static function filterNodeList($elements) {
       if ($elements instanceof \Traversable ||
           is_array($elements)) {
         return empty($elements) ? new \EmptyIterator() : $elements;
@@ -87,12 +87,12 @@ namespace FluentDOM\Utility {
      * @throws \InvalidArgumentException
      * @return callable|NULL
      */
-    public static function isCallable($callback, $allowGlobalFunctions = FALSE, $silent = TRUE) {
+    public static function filterCallable($callback, $allowGlobalFunctions = FALSE, $silent = TRUE) {
       if ($callback instanceof \Closure) {
         return $callback;
       } elseif (
         (is_string($callback) && $allowGlobalFunctions) ||
-        self::isCallableArray($callback)
+        self::filterCallableArray($callback)
       ) {
         return is_callable($callback) ? $callback : NULL;
       } elseif ($silent) {
@@ -107,7 +107,7 @@ namespace FluentDOM\Utility {
      * @param mixed $callback
      * @return bool
      */
-    private static function isCallableArray($callback) {
+    private static function filterCallableArray($callback) {
       return (
        is_array($callback) &&
        count($callback) === 2 &&
@@ -123,7 +123,7 @@ namespace FluentDOM\Utility {
      * @param int $option
      * @return bool
      */
-    public static function hasOption($options, $option) {
+    public static function hasOption($options, $option):bool {
       return ($options & $option) === $option;
     }
   }

@@ -6,8 +6,8 @@ namespace FluentDOM\Utility {
 
     /**
      * @param string $prefix
-     * @return string
+     * @return string|NULL
      */
-    function resolveNamespace($prefix);
+    function resolveNamespace(string $prefix);
   }
 }

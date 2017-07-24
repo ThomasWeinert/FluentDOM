@@ -23,7 +23,10 @@ namespace FluentDOM\Utility {
     private $_prefix = '';
     private $_localName = '';
 
-    public function __construct($name) {
+    /**
+     * @param string $name
+     */
+    public function __construct(string $name) {
       $this->setQName($name);
     }
 
@@ -33,7 +36,7 @@ namespace FluentDOM\Utility {
      * @param string $name
      * @throws \UnexpectedValueException
      */
-    private function setQName($name) {
+    private function setQName(string $name) {
       if (empty($name)) {
         throw new \UnexpectedValueException('Invalid QName: QName is empty.');
       } elseif (isset(self::$_cache[$name])) {
@@ -65,7 +68,7 @@ namespace FluentDOM\Utility {
      * @throws \UnexpectedValueException
      * @return boolean
      */
-    private function isNCName($name, $offset = 0, $fullName = NULL) {
+    private function isNCName(string $name, int $offset = 0, string $fullName = NULL) {
       $nameStartChar =
         'A-Z_a-z'.
         '\\x{C0}-\\x{D6}\\x{D8}-\\x{F6}\\x{F8}-\\x{2FF}\\x{370}-\\x{37D}'.
@@ -112,10 +115,10 @@ namespace FluentDOM\Utility {
     /**
      * Define dynamic properties, return false for all other
      *
-     * @param $property
+     * @param string $property
      * @return bool
      */
-    public function __isset($property) {
+    public function __isset(string $property) {
       switch ($property) {
       case 'name' :
       case 'localName' :
@@ -128,11 +131,11 @@ namespace FluentDOM\Utility {
     /**
      * Read dynamic property, throw exception for invalid properties.
      *
-     * @param $property
+     * @param string $property
      * @return string
      * @throws \LogicException
      */
-    public function __get($property) {
+    public function __get(string $property) {
       switch ($property) {
       case 'name' :
         return empty($this->_prefix) ? $this->_localName : $this->_prefix.':'.$this->_localName;
@@ -149,11 +152,11 @@ namespace FluentDOM\Utility {
     /**
      * Block changes
      *
-     * @param $property
-     * @param $value
+     * @param string $property
+     * @param mixed $value
      * @throws \LogicException
      */
-    public function __set($property, $value) {
+    public function __set(string $property, $value) {
       throw new \LogicException(
         sprintf('%s is immutable.', get_class($this))
       );
@@ -162,10 +165,10 @@ namespace FluentDOM\Utility {
     /**
      * Block changes
      *
-     * @param $property
+     * @param string $property
      * @throws \LogicException
      */
-    public function __unset($property) {
+    public function __unset(string $property) {
       throw new \LogicException(
         sprintf('%s is immutable.', get_class($this))
       );
@@ -177,7 +180,7 @@ namespace FluentDOM\Utility {
      * @param string $name
      * @return array
      */
-    public static function split($name) {
+    public static function split(string $name):array {
       if (FALSE !== ($position = strpos($name, ':'))) {
         $prefix = substr($name, 0, $position);
         $localName = substr($name, $position + 1);
@@ -197,7 +200,7 @@ namespace FluentDOM\Utility {
      * @param string $name
      * @return bool
      */
-    public static function validate($name) {
+    public static function validate(string $name) {
       try {
         new QualifiedName($name);
       } catch (\UnexpectedValueException $e) {
@@ -217,7 +220,7 @@ namespace FluentDOM\Utility {
      * @param string $default
      * @return string
      */
-    public static function normalizeString($string, $default = '_') {
+    public static function normalizeString(string $string, string $default = '_'):string {
       $nameStartChar =
         'A-Z_a-z'.
         '\\x{C0}-\\x{D6}\\x{D8}-\\x{F6}\\x{F8}-\\x{2FF}\\x{370}-\\x{37D}'.

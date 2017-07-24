@@ -3,7 +3,7 @@
  * Encapsulates the standard loaders (html, xml, json)
  *
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
+ * @copyright Copyright (c) 2009-2017 Bastian Feder, Thomas Weinert
  */
 
 namespace FluentDOM\Loader {

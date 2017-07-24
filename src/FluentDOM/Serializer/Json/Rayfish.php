@@ -3,7 +3,7 @@
  * Serialize a DOM to Rayfish Json: http://www.bramstein.com/projects/xsltjson/
  *
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
+ * @copyright Copyright (c) 2009-2017 Bastian Feder, Thomas Weinert
  */
 
 namespace FluentDOM\Serializer\Json {
@@ -14,7 +14,7 @@ namespace FluentDOM\Serializer\Json {
    * Serialize a DOM to Rayfish Json: http://www.bramstein.com/projects/xsltjson/
    *
    * @license http://www.opensource.org/licenses/mit-license.php The MIT License
-   * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
+   * @copyright Copyright (c) 2009-2017 Bastian Feder, Thomas Weinert
    */
   class Rayfish extends Json {
 

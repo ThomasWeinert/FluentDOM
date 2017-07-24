@@ -3,6 +3,7 @@
 namespace FluentDOM {
 
   use FluentDOM\DOM\Document;
+  use FluentDOM\DOM\Node;
   use FluentDOM\Utility\Namespaces;
   use FluentDOM\Utility\QualifiedName;
 
@@ -123,7 +124,7 @@ namespace FluentDOM {
 
     /**
      * @param \DOMNode $baseNode
-     * @return \DOMNode
+     * @return Node|\DOMNode
      */
     public function expand($baseNode = NULL) {
       if (isset($baseNode)) {

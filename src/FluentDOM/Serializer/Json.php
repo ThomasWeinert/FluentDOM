@@ -3,7 +3,7 @@
  * Serialize a DOM into a Json structure.
  *
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
+ * @copyright Copyright (c) 2009-2017 Bastian Feder, Thomas Weinert
  */
 
 namespace FluentDOM\Serializer {
@@ -39,7 +39,7 @@ namespace FluentDOM\Serializer {
    * </json:json>
    *
    * @license http://www.opensource.org/licenses/mit-license.php The MIT License
-   * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
+   * @copyright Copyright (c) 2009-2017 Bastian Feder, Thomas Weinert
    */
   class Json implements \JsonSerializable {
 

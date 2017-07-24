@@ -5,7 +5,7 @@
  * https://www.w3.org/TR/DOM-Level-3-Core/core.html#Text3-replaceWholeText
  *
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2016 Bastian Feder, Thomas Weinert
+ * @copyright Copyright (c) 2009-2017 Bastian Feder, Thomas Weinert
  */
 
 namespace FluentDOM\DOM\Node {

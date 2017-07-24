@@ -3,7 +3,7 @@
  * Serialize a DOM into an Xml string.
  *
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2016 Bastian Feder, Thomas Weinert
+ * @copyright Copyright (c) 2009-2017 Bastian Feder, Thomas Weinert
  */
 
 namespace FluentDOM\Serializer {

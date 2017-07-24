@@ -27,7 +27,7 @@ $reader->registerNamespace('v', 'http://www.google.com/schemas/sitemap-video/1.1
 
 if ($reader->read('s:url')) {
   do {
-    /** @var FALSE|FluentDOM\Element $url */
+    /** @var \FluentDOM\DOM\Element $url */
     $url = $reader->expand();
     var_dump(
       [

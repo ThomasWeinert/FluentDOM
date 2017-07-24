@@ -3,7 +3,7 @@
  * FluentDOM\DOM\DocumentFragment extends PHPs DOMDocumentFragment class. It adds some namespace handling.
  *
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
+ * @copyright Copyright (c) 2009-2017 Bastian Feder, Thomas Weinert
  */
 
 namespace FluentDOM\DOM {
@@ -11,7 +11,7 @@ namespace FluentDOM\DOM {
   use FluentDOM\Utility\Namespaces;
 
   /**
-   * FluentDOM\DOM\DocumentFrag,ent extends PHPs DOMDocumentFragment class. It adds some namespace handling and
+   * FluentDOM\DOM\DocumentFragment extends PHPs DOMDocumentFragment class. It adds some namespace handling and
    * some standard interfaces for convenience.
    *
    * Be aware that a fragment is empty after it was appended.

@@ -1,3 +1,8 @@
+Version 7.0.0
+-------------
+
+- Refactored: Moved extended DOM classes to FluentDOM\DOM\*
+
 Version 6.2.0
 -------------
 

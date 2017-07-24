@@ -8,7 +8,7 @@
 
 namespace FluentDOM\Serializer\Json {
 
-  use FluentDOM\Xpath;
+  use FluentDOM\DOM\Xpath;
 
   /**
    * Serialize a DOM to RabbitFish Json: http://www.bramstein.com/projects/xsltjson/

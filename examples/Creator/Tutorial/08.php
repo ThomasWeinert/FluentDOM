@@ -1,7 +1,7 @@
 <?php
 require('../../../vendor/autoload.php');
 
-$document = new FluentDOM\Document();
+$document = new FluentDOM\DOM\Document();
 $document->loadXml(
   '<div>
     <ul>

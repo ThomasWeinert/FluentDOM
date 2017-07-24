@@ -8,7 +8,7 @@ require_once(__DIR__.'/../../vendor/autoload.php');
  * createElement().
  */
 
-$document = new FluentDOM\Document();
+$document = new FluentDOM\DOM\Document();
 $document->appendChild($document->createElement('div'));
 $document->documentElement->appendElement(
   'span', 'Hello World!', ['class' => 'message']

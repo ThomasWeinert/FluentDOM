@@ -9,7 +9,7 @@
 
 namespace FluentDOM\Transformer\Namespaces {
 
-  use FluentDOM\Document;
+  use FluentDOM\DOM\Document;
 
   class Optimize {
 

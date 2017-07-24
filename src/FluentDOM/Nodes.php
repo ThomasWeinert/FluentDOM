@@ -8,10 +8,12 @@
 
 namespace FluentDOM {
 
-  use FluentDOM\Exceptions\InvalidSerializer;
   use FluentDOM\Loader\Options;
-  use FluentDOM\Xpath\Transformer;
   use FluentDOM\Serializer;
+  use FluentDOM\DOM\Document;
+  use FluentDOM\DOM\Xpath;
+  use FluentDOM\DOM\Xpath\Transformer;
+  use FluentDOM\Utility\Constraints;
 
   /**
    * Implements an extended replacement for DOMNodeList.

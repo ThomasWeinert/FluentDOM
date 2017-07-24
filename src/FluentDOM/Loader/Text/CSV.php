@@ -8,13 +8,13 @@
 
 namespace FluentDOM\Loader\Text {
 
-  use FluentDOM\Document;
-  use FluentDOM\DocumentFragment;
-  use FluentDOM\Element;
+  use FluentDOM\DOM\Document;
+  use FluentDOM\DOM\DocumentFragment;
+  use FluentDOM\DOM\Element;
   use FluentDOM\Loadable;
   use FluentDOM\Loader\Options;
   use FluentDOM\Loader\Supports;
-  use FluentDOM\QualifiedName;
+  use FluentDOM\Utility\QualifiedName;
   use FluentDOM\Loader\Result;
 
   /**

@@ -8,8 +8,8 @@
 
 namespace FluentDOM\Loader\Json {
 
-  use FluentDOM\Document;
-  use FluentDOM\Element;
+  use FluentDOM\DOM\Document;
+  use FluentDOM\DOM\Element;
   use FluentDOM\Loadable;
   use FluentDOM\Loader\Supports;
 

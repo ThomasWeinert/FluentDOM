@@ -8,7 +8,7 @@ require_once(__DIR__.'/../../../vendor/autoload.php');
  * It allows you to change the prefix for namespaces, too.
  */
 
-$document = new FluentDOM\Document();
+$document = new FluentDOM\DOM\Document();
 $document->preserveWhiteSpace = FALSE;
 $document->loadXml(
   '<?xml version="1.0" encoding="UTF-8"?>

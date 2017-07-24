@@ -2,7 +2,7 @@
 
 namespace FluentDOM\Loader\Supports {
 
-  use FluentDOM\Document;
+  use FluentDOM\DOM\Document;
   use FluentDOM\Loader\Options;
   use FluentDOM\Loader\Supports;
   use FluentDOM\Loader\Libxml\Errors;

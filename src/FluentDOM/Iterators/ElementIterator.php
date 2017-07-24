@@ -1,6 +1,6 @@
 <?php
 /**
- * Iterator class for FluentDOM\Element objects
+ * Iterator class for FluentDOM\DOM\Element objects
  *
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  * @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
@@ -8,10 +8,10 @@
 
 namespace FluentDOM\Iterators {
 
-  use FluentDOM\Element as Element;
+  use FluentDOM\DOM\Element as Element;
 
   /**
-   * Iterator class for FluentDOM\Element objects
+   * Iterator class for FluentDOM\DOM\Element objects
    *
    * @method \DOMElement getOwner()
    */

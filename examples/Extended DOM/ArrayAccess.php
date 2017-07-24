@@ -30,7 +30,7 @@ XML;
  * Otherwise it will return the attribute value.
  */
 
-$document = new FluentDOM\Document();
+$document = new FluentDOM\DOM\Document();
 $document->preserveWhiteSpace = FALSE;
 $document->loadXML($xml);
 $document->registerNamespace('atom', 'http://www.w3.org/2005/Atom');

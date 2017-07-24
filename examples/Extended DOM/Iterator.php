@@ -26,7 +26,7 @@ XML;
  * but FluentDOM implements the iterator on the element node itself.
  */
 
-$document = new FluentDOM\Document();
+$document = new FluentDOM\DOM\Document();
 $document->preserveWhiteSpace = FALSE;
 $document->loadXML($xml);
 

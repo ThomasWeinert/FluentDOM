@@ -71,9 +71,9 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
       ->expects($this->once())
       ->method('load')
       ->with('source', 'type')
-      ->will($this->returnValue(new FluentDOM\Document()));
+      ->will($this->returnValue(new FluentDOM\DOM\Document()));
     FluentDOM::setLoader($loader);
-    $this->assertInstanceOf(FluentDOM\Document::class, FluentDOM::load('source', 'type'));
+    $this->assertInstanceOf(FluentDOM\DOM\Document::class, FluentDOM::load('source', 'type'));
   }
 
   /**
@@ -91,7 +91,7 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
    * @covers FluentDOM
    */
   public function testRegisterLoader() {
-    $document = new \FluentDOM\Document();
+    $document = new \FluentDOM\DOM\Document();
     $document->loadXML('<success/>');
     $mockLoader = $this->getMockBuilder(\FluentDOM\Loadable::class)->getMock();
     $mockLoader
@@ -116,7 +116,7 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
    * @covers FluentDOM
    */
   public function testRegisterLoaderWithContentTypes() {
-    $document = new \FluentDOM\Document();
+    $document = new \FluentDOM\DOM\Document();
     $document->loadXML('<success/>');
     $mockLoader = $this->getMockBuilder(\FluentDOM\Loadable::class)->getMock();
     $mockLoader
@@ -141,7 +141,7 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
    * @covers FluentDOM
    */
   public function testRegisterLoaderWithCallable() {
-    $document = new \FluentDOM\Document();
+    $document = new \FluentDOM\DOM\Document();
     $document->loadXML('<success/>');
     $mockLoader = $this->getMockBuilder(\FluentDOM\Loadable::class)->getMock();
     $mockLoader
@@ -166,7 +166,7 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
    * @covers FluentDOM
    */
   public function testGetXPathTransformerAfterRegister() {
-    $transformer = $this->getMockBuilder(FluentDOM\Xpath\Transformer::class)->getMock();
+    $transformer = $this->getMockBuilder(FluentDOM\DOM\Xpath\Transformer::class)->getMock();
     FluentDOM::registerXpathTransformer($transformer, TRUE);
     $this->assertSame(
       $transformer,
@@ -180,7 +180,7 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
    * @covers FluentDOM
    */
   public function testGetXPathTransformerAfterRegisterWithCallback() {
-    $transformer = $this->getMockBuilder(\FluentDOM\Xpath\Transformer::class)->getMock();
+    $transformer = $this->getMockBuilder(\FluentDOM\DOM\Xpath\Transformer::class)->getMock();
     FluentDOM::registerXpathTransformer(
       function() use ($transformer) {
         return $transformer;
@@ -237,7 +237,7 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
    * @covers FluentDOM
    */
   public function testGetSerializerFactories() {
-    $document = new \FluentDOM\Document();
+    $document = new \FluentDOM\DOM\Document();
     $serializers = FluentDOM::getSerializerFactories();
     $this->assertInstanceOf(FluentDOM\Serializer\Xml::class, $serializers->createSerializer('xml', $document));
     $this->assertInstanceOf(FluentDOM\Serializer\Html::class, $serializers->createSerializer('html', $document));
@@ -250,7 +250,7 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
    * @covers FluentDOM
    */
   public function testSave() {
-    $document = new \FluentDOM\Document();
+    $document = new \FluentDOM\DOM\Document();
     $document->appendElement('foo');
     $this->assertXmlStringEqualsXmlString(
       '<foo/>', FluentDOM::save($document)
@@ -263,7 +263,7 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
    * @covers FluentDOM
    */
   public function testSaveWithChildNode() {
-    $document = new \FluentDOM\Document();
+    $document = new \FluentDOM\DOM\Document();
     $document->appendElement('foo')->appendElement('bar');
     $this->assertXmlStringEqualsXmlString(
       '<bar/>', FluentDOM::save($document->documentElement->firstChild)
@@ -276,7 +276,7 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
    * @covers FluentDOM
    */
   public function testSaveWithQueryObject() {
-    $document = new \FluentDOM\Document();
+    $document = new \FluentDOM\DOM\Document();
     $document->appendElement('foo');
     $this->assertXmlStringEqualsXmlString(
       '<foo/>', FluentDOM::save(FluentDOM($document->documentElement))
@@ -289,7 +289,7 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
    * @covers FluentDOM
    */
   public function testSaveWithContentTypeHTML() {
-    $document = new \FluentDOM\Document();
+    $document = new \FluentDOM\DOM\Document();
     $document->appendElement('input');
     $this->assertEquals(
       "<input>\n", FluentDOM::save($document, 'text/html')
@@ -304,13 +304,13 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
   public function testSaveWithInvalidContentType() {
     $this->expectException(\FluentDOM\Exceptions\NoSerializer::class);
     $this->assertEquals(
-      "<input>\n", FluentDOM::save(new \FluentDOM\Document(), 'type/invalid')
+      "<input>\n", FluentDOM::save(new \FluentDOM\DOM\Document(), 'type/invalid')
     );
   }
 }
 
-class FluentDOMXpathTransformer_TestProxy implements \FluentDOM\Xpath\Transformer {
-  public function toXpath($selector, $contextMode = FluentDOM\Xpath\Transformer::CONTEXT_CHILDREN, $isHtml = false) {
+class FluentDOMXpathTransformer_TestProxy implements \FluentDOM\DOM\Xpath\Transformer {
+  public function toXpath($selector, $contextMode = FluentDOM\DOM\Xpath\Transformer::CONTEXT_CHILDREN, $isHtml = false) {
     return null;
   }
 }

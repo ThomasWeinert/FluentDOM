@@ -2,8 +2,8 @@
 
 namespace FluentDOM\Loader\Supports {
 
-  use FluentDOM\Document;
-  use FluentDOM\DocumentFragment;
+  use FluentDOM\DOM\Document;
+  use FluentDOM\DOM\DocumentFragment;
   use FluentDOM\Exceptions\LoadingError;
   use FluentDOM\Loader\Options;
   use FluentDOM\Loader\Supports;

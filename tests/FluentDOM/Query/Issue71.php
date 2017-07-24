@@ -2,7 +2,7 @@
 
 namespace FluentDOM\Query {
 
-  use FluentDOM\Document;
+  use FluentDOM\DOM\Document;
   use FluentDOM\Loader\Html;
   use FluentDOM\Loader\Result;
   use FluentDOM\TestCase;

@@ -8,10 +8,10 @@
 
 namespace FluentDOM\Loader {
 
-  use FluentDOM\Document;
-  use FluentDOM\DocumentFragment;
+  use FluentDOM\DOM\Document;
+  use FluentDOM\DOM\DocumentFragment;
   use FluentDOM\Loadable;
-  use FluentDOM\ProcessingInstruction;
+  use FluentDOM\DOM\ProcessingInstruction;
 
   /**
    * Load a DOM document from a xml string

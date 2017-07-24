@@ -2,6 +2,9 @@
 
 namespace FluentDOM {
 
+  use FluentDOM\Utility\Namespaces;
+  use FluentDOM\Utility\QualifiedName;
+
   class XMLWriter extends \XMLWriter {
 
     /**

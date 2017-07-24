@@ -12,7 +12,7 @@ class IniLoader implements FluentDOM\Loadable {
         throw new InvalidArgumentException('File not found: '. $source);
       }
       if ($iniFile = parse_ini_file($source)) {
-        $document = new FluentDOM\Document();
+        $document = new FluentDOM\DOM\Document();
         $root = $document->appendChild($document->createElement('ini'));
         $this->_arrayToNodes($document, $root, $iniFile);
         return $document;
@@ -25,7 +25,7 @@ class IniLoader implements FluentDOM\Loadable {
     throw new \FluentDOM\Exceptions\InvalidFragmentLoader(self::class);
   }
 
-  private function _arrayToNodes(FluentDOM\Document $document, DOMNode $node, $data) {
+  private function _arrayToNodes(FluentDOM\DOM\Document $document, DOMNode $node, $data) {
     if (is_array($data)) {
       foreach ($data as $key => $val) {
         if (preg_match('(^\d+$)', $key)) {

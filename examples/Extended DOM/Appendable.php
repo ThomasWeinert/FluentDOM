@@ -11,14 +11,14 @@ require_once(__DIR__.'/../../vendor/autoload.php');
 
 class Example implements \FluentDOM\Appendable {
 
-  public function appendTo(\FluentDOM\Element $parent) {
+  public function appendTo(\FluentDOM\DOM\Element $parent) {
     $parent->appendChild(
       $parent->ownerDocument->createTextNode('Hello World!')
     );
   }
 }
 
-$document = new FluentDOM\Document();
+$document = new FluentDOM\DOM\Document();
 $document->appendChild($document->createElement('xml'));
 $document->documentElement->append(new Example());
 

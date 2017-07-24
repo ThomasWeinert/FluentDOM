@@ -9,8 +9,8 @@
 namespace FluentDOM\Loader\PHP {
 
   use Doctrine\Instantiator\Exception\InvalidArgumentException;
-  use FluentDOM\Document;
-  use FluentDOM\DocumentFragment;
+  use FluentDOM\DOM\Document;
+  use FluentDOM\DOM\DocumentFragment;
   use FluentDOM\Exceptions\InvalidArgument;
   use FluentDOM\Exceptions\InvalidFragmentLoader;
   use FluentDOM\Loadable;

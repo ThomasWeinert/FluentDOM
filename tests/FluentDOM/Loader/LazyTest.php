@@ -1,8 +1,8 @@
 <?php
 namespace FluentDOM\Loader {
 
-  use FluentDOM\Document;
-  use FluentDOM\DocumentFragment;
+  use FluentDOM\DOM\Document;
+  use FluentDOM\DOM\DocumentFragment;
   use FluentDOM\Loadable;
   use FluentDOM\TestCase;
 

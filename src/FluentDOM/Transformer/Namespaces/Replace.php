@@ -8,7 +8,7 @@
 
 namespace FluentDOM\Transformer\Namespaces {
 
-  use FluentDOM\Document;
+  use FluentDOM\DOM\Document;
 
   /**
    * Replace namespaces in a document, prefixes are copied, but might be optimized by

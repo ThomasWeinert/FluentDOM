@@ -7,7 +7,7 @@ require_once(__DIR__.'/../../../vendor/autoload.php');
  * affect the namespace prefixes.
  */
 
-$document = new FluentDOM\Document();
+$document = new FluentDOM\DOM\Document();
 $document->preserveWhiteSpace = FALSE;
 $document->loadXml(
   '<?xml version="1.0" encoding="UTF-8"?>

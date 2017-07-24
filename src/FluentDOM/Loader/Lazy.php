@@ -8,9 +8,9 @@
 
 namespace FluentDOM\Loader {
 
-  use FluentDOM\DocumentFragment;
+  use FluentDOM\DOM\DocumentFragment;
   use FluentDOM\Loadable;
-  use FluentDOM\Document;
+  use FluentDOM\DOM\Document;
 
   /**
    * A list of lazy initialized loaders.

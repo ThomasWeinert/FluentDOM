@@ -1,7 +1,7 @@
 <?php
 namespace FluentDOM\Nodes {
 
-  use FluentDOM\Document;
+  use FluentDOM\DOM\Document;
   use FluentDOM\Exceptions;
   use FluentDOM\TestCase;
   use FluentDOM\Nodes;

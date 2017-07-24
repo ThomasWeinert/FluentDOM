@@ -2,7 +2,7 @@
 
 namespace FluentDOM\Nodes {
 
-  use FluentDOM\Document;
+  use FluentDOM\DOM\Document;
   use FluentDOM\TestCase;
 
   require_once(__DIR__.'/../TestCase.php');

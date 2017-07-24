@@ -8,6 +8,8 @@
 
 namespace FluentDOM {
   use FluentDOM\Nodes\Fetcher;
+  use FluentDOM\Utility\Constraints;
+  use FluentDOM\Utility\QualifiedName;
 
   /**
    * FluentDOM\Query implements a jQuery like replacement for DOMNodeList

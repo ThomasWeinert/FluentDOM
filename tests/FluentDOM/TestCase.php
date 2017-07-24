@@ -1,6 +1,8 @@
 <?php
 namespace FluentDOM {
 
+  use FluentDOM\DOM\Xpath;
+
   require_once(__DIR__.'/../../vendor/autoload.php');
 
   if (!class_exists('PHPUnit_Framework_TestCase')) {

@@ -1,7 +1,7 @@
 <?php
 require(__DIR__.'/../../vendor/autoload.php');
 
-$document = new FluentDOM\Document();
+$document = new FluentDOM\DOM\Document();
 $document->registerNamespace('atom', 'http://www.w3.org/2005/Atom');
 $document->formatOutput = TRUE;
 

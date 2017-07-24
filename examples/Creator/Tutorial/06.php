@@ -2,7 +2,7 @@
 <?php
 require(__DIR__.'/../../../vendor/autoload.php');
 
-$document = new FluentDOM\Document();
+$document = new FluentDOM\DOM\Document();
 $document->loadHtml(
   '<!DOCTYPE html>
    <html><body><div id="navigation"/></body></html>'

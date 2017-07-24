@@ -8,7 +8,7 @@
 
 namespace FluentDOM\Nodes {
 
-  use FluentDOM\Constraints;
+  use FluentDOM\Utility\Constraints;
   use FluentDOM\Nodes;
   use FluentDOM\Exceptions;
 

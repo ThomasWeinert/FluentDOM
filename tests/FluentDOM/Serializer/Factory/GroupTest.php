@@ -2,7 +2,7 @@
 
 namespace FluentDOM\Serializer\Factory {
 
-  use FluentDOM\Document;
+  use FluentDOM\DOM\Document;
   use FluentDOM\Exceptions\InvalidArgument;
   use FluentDOM\Exceptions\InvalidSerializer;
   use FluentDOM\Serializer\Factory;

@@ -8,9 +8,9 @@
 
 namespace FluentDOM\Serializer {
 
-  use FluentDOM\Xpath;
-  use FluentDOM\Element;
-  use FluentDOM\Document;
+  use FluentDOM\DOM\Xpath;
+  use FluentDOM\DOM\Element;
+  use FluentDOM\DOM\Document;
 
   /**
    * Serialize a DOM into a Json structure. This loader allows to save an imported Json back as JSON.

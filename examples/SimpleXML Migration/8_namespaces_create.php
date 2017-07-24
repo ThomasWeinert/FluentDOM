@@ -17,7 +17,7 @@ echo $element->saveXml();
  * All the the DOM methods will use it to resolve prefixes. It basically makes all
  * DOM methods namespace aware.
  */
-$document = new FluentDOM\Document();
+$document = new FluentDOM\DOM\Document();
 $document->registerNamespace('atom', 'http://www.w3.org/2005/Atom');
 $document
   ->appendElement('atom:feed')

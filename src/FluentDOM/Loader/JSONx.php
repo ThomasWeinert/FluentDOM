@@ -8,11 +8,11 @@
 
 namespace FluentDOM\Loader {
 
-  use FluentDOM\Document;
-  use FluentDOM\DocumentFragment;
-  use FluentDOM\Element;
+  use FluentDOM\DOM\Document;
+  use FluentDOM\DOM\DocumentFragment;
+  use FluentDOM\DOM\Element;
   use FluentDOM\Loadable;
-  use FluentDOM\QualifiedName;
+  use FluentDOM\Utility\QualifiedName;
 
   /**
    * A lazy load group for php class loaders

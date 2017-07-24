@@ -34,7 +34,7 @@ namespace FluentDOM {
      * @param mixed $source
      * @param string $contentType
      * @param array|\Traversable|Options $options Optional options for the loader
-     * @return \FluentDOM\Document|\FluentDOM\Loader\Result|NULL
+     * @return \FluentDOM\DOM\Document|\FluentDOM\Loader\Result|NULL
      */
     function load($source, $contentType, $options = []);
 
@@ -45,7 +45,7 @@ namespace FluentDOM {
      * @param mixed $source
      * @param string $contentType
      * @param array|\Traversable|Options $options Optional options for the loader
-     * @return NULL|\FluentDOM\DocumentFragment
+     * @return NULL|\FluentDOM\DOM\DocumentFragment
      */
     function loadFragment($source, $contentType, $options = []);
   }

@@ -14,7 +14,7 @@ echo $element->saveXml();
  * FluentDOM extends DOM for that, so you still can use all
  * the DOM methods to create, insert and replace nodes.
  */
-$document = new FluentDOM\Document();
+$document = new FluentDOM\DOM\Document();
 $ul = $document->appendChild($document->createElement('ul'));
 $li = $ul->appendChild($document->createElement('li', 'FluentDOM', ['href' => 'http://fluentdom.org']));
 echo $document->saveHtml();
@@ -22,7 +22,7 @@ echo $document->saveHtml();
 /*
  * But here is a shortcut to add an element child.
  */
-$document = new FluentDOM\Document();
+$document = new FluentDOM\DOM\Document();
 $ul = $document->appendElement('ul');
 $li = $ul->appendElement('li', 'FluentDOM', ['href' => 'http://fluentdom.org']);
 echo $document->saveHtml();

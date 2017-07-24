@@ -2,7 +2,7 @@
 namespace FluentDOM\Nodes {
 
   use FluentDOM\Appendable;
-  use FluentDOM\Document;
+  use FluentDOM\DOM\Document;
   use FluentDOM\Nodes\Creator\Nodes;
 
   /**
@@ -115,7 +115,7 @@ namespace FluentDOM\Nodes {
      *
      * @param string $name
      * @param mixed ...$parameters
-     * @return \FluentDOM\Element
+     * @return \FluentDOM\DOM\Element
      */
     public function element($name, ...$parameters) {
       $node = $this->_document->createElement($name);
@@ -127,7 +127,7 @@ namespace FluentDOM\Nodes {
 
     /**
      * @param string $content
-     * @return \FluentDOM\CdataSection
+     * @return \FluentDOM\DOM\CdataSection
      */
     public function cdata($content) {
       return $this->_document->createCDATASection($content);
@@ -135,7 +135,7 @@ namespace FluentDOM\Nodes {
 
     /**
      * @param string $content
-     * @return \FluentDOM\Comment
+     * @return \FluentDOM\DOM\Comment
      */
     public function comment($content) {
       return $this->_document->createComment($content);
@@ -164,8 +164,8 @@ namespace FluentDOM\Nodes {
 namespace FluentDOM\Nodes\Creator {
 
   use FluentDOM\Appendable;
-  use FluentDOM\Document;
-  use FluentDOM\Element;
+  use FluentDOM\DOM\Document;
+  use FluentDOM\DOM\Element;
   use FluentDOM\Nodes\Creator;
   use FluentDOM\Transformer\Namespaces\Optimize;
 
@@ -192,6 +192,7 @@ namespace FluentDOM\Nodes\Creator {
     private $_creator;
 
     /**
+     * @param Creator $creator
      * @param Document $document
      * @param \DOMElement $node
      */

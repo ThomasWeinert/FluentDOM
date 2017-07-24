@@ -11,7 +11,7 @@ class Example implements \FluentDOM\XmlSerializable {
 
   use \FluentDOM\XmlSerialize;
 
-  public function appendTo(\FluentDOM\Element $parent) {
+  public function appendTo(\FluentDOM\DOM\Element $parent) {
     $parent->appendElement(
       'message',
       'Hello World!'

@@ -8,8 +8,8 @@
 
 namespace FluentDOM\Loader\PHP {
 
-  use FluentDOM\Document;
-  use FluentDOM\DocumentFragment;
+  use FluentDOM\DOM\Document;
+  use FluentDOM\DOM\DocumentFragment;
   use FluentDOM\Exceptions\InvalidFragmentLoader;
   use FluentDOM\Loader\Json\JsonDOM;
   use FluentDOM\Loader\Result;

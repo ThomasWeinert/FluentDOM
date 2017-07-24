@@ -28,12 +28,12 @@ abstract class FluentDOM {
   private static $_serializerFactories = NULL;
 
   /**
-   * Load a data source into a FluentDOM\Document
+   * Load a data source into a FluentDOM\DOM\Document
    *
    * @param mixed $source
    * @param string $contentType
    * @param array $options
-   * @return \FluentDOM\Document
+   * @return \FluentDOM\DOM\Document
    */
   public static function load($source, $contentType = 'text/xml', array $options = []) {
     if (!isset(self::$_loader)) {
@@ -208,7 +208,7 @@ abstract class FluentDOM {
    * Get a xpath expression builder to convert css selectors to xpath
    *
    * @param string $errorMessage
-   * @return \FluentDOM\Xpath\Transformer
+   * @return \FluentDOM\DOM\Xpath\Transformer
    */
   public static function getXPathTransformer($errorMessage = 'No CSS selector support installed') {
     foreach (FluentDOM::$_xpathTransformers as $index => $transformer) {
@@ -217,7 +217,7 @@ abstract class FluentDOM {
       } elseif (is_callable($transformer)) {
         FluentDOM::$_xpathTransformers[$index] = $transformer();
       }
-      if (FluentDOM::$_xpathTransformers[$index] instanceof \FluentDOM\Xpath\Transformer) {
+      if (FluentDOM::$_xpathTransformers[$index] instanceof \FluentDOM\DOM\Xpath\Transformer) {
         return FluentDOM::$_xpathTransformers[$index];
       } else {
         unset(FluentDOM::$_xpathTransformers[$index]);
@@ -227,7 +227,7 @@ abstract class FluentDOM {
   }
 
   /**
-   * @param string|callable|FluentDOM\Xpath\Transformer $transformer
+   * @param string|callable|FluentDOM\DOM\Xpath\Transformer $transformer
    */
   public static function registerXpathTransformer($transformer, $reset = FALSE) {
     if ($reset) {

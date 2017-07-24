@@ -11,7 +11,7 @@ require(__DIR__.'/../../vendor/autoload.php');
 $_ = FluentDOM::create();
 $_->formatOutput = TRUE;
 
-$document = new FluentDOM\Document();
+$document = new FluentDOM\DOM\Document();
 $document
   ->appendElement(
     'root'

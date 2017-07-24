@@ -2,9 +2,9 @@
 
 namespace FluentDOM\Transformer {
 
-  use FluentDOM\Document;
-  use FluentDOM\Element;
-  use FluentDOM\Xpath;
+  use FluentDOM\DOM\Document;
+  use FluentDOM\DOM\Element;
+  use FluentDOM\DOM\Xpath;
 
   class JSONx {
 

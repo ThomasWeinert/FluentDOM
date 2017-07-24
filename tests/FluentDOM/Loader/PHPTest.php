@@ -1,7 +1,7 @@
 <?php
 namespace FluentDOM\Loader {
 
-  use FluentDOM\Document;
+  use FluentDOM\DOM\Document;
   use FluentDOM\Loadable;
   use FluentDOM\TestCase;
 

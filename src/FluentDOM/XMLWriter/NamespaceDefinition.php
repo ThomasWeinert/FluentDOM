@@ -2,7 +2,7 @@
 
 namespace FluentDOM\XMLWriter {
 
-  use FluentDOM\Namespaces;
+  use FluentDOM\Utility\Namespaces;
 
   class NamespaceDefinition {
 

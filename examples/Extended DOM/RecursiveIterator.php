@@ -26,7 +26,7 @@ XML;
  * the element nodes.
  */
 
-$document = new FluentDOM\Document();
+$document = new FluentDOM\DOM\Document();
 $document->preserveWhiteSpace = FALSE;
 $document->loadXML($xml);
 

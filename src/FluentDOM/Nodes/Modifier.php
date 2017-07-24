@@ -8,7 +8,7 @@
 
 namespace FluentDOM\Nodes {
 
-  use FluentDOM\Constraints;
+  use FluentDOM\Utility\Constraints;
 
   /**
    * Provides several extended manipulation functions for a DOMNode/DOMElement.

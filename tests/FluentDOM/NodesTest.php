@@ -2,6 +2,8 @@
 namespace FluentDOM {
 
   use FluentDOM\Iterators\NodesIterator;
+  use FluentDOM\DOM\Document;
+  use FluentDOM\DOM\Xpath;
 
   require_once(__DIR__.'/TestCase.php');
 

@@ -8,12 +8,12 @@
 
 namespace FluentDOM\Loader\Json {
 
-  use FluentDOM\Document;
-  use FluentDOM\Element;
+  use FluentDOM\DOM\Document;
+  use FluentDOM\DOM\Element;
   use FluentDOM\Loadable;
   use FluentDOM\Loader\Result;
   use FluentDOM\Loader\Options;
-  use FluentDOM\QualifiedName;
+  use FluentDOM\Utility\QualifiedName;
   use FluentDOM\Loader\Supports\Json as SupportsJson;
 
   /**
@@ -106,7 +106,7 @@ namespace FluentDOM\Loader\Json {
      * @param string $source
      * @param string $contentType
      * @param array|\Traversable|Options $options
-     * @return \FluentDOM\DocumentFragment|null
+     * @return \FluentDOM\DOM\DocumentFragment|null
      */
     public function loadFragment($source, $contentType, $options = []) {
       if ($this->supports($contentType)) {

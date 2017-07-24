@@ -24,6 +24,7 @@ XML;
  */
 $element = simplexml_load_string($xml);
 foreach ($element->children('http://www.w3.org/2005/Atom')->entry as $entry) {
+  /** @var SimpleXMLElement $entry */
   echo $entry->children('http://www.w3.org/2005/Atom')->title, "\n";
 }
 

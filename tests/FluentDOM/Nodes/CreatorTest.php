@@ -2,8 +2,8 @@
 namespace FluentDOM\Nodes {
 
   use FluentDOM\Appendable;
-  use FluentDOM\Document;
-  use FluentDOM\Element;
+  use FluentDOM\DOM\Document;
+  use FluentDOM\DOM\Element;
   use FluentDOM\TestCase;
 
   require_once(__DIR__.'/../TestCase.php');

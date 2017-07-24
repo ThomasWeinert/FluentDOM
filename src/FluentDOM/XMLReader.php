@@ -2,6 +2,10 @@
 
 namespace FluentDOM {
 
+  use FluentDOM\DOM\Document;
+  use FluentDOM\Utility\Namespaces;
+  use FluentDOM\Utility\QualifiedName;
+
   class XMLReader extends \XMLReader {
 
     /**

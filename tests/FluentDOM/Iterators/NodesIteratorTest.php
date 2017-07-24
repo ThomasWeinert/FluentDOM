@@ -1,7 +1,7 @@
 <?php
 namespace FluentDOM\Iterators {
 
-  use FluentDOM\Document;
+  use FluentDOM\DOM\Document;
   use FluentDOM\Query;
   use FluentDOM\TestCase;
 

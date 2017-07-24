@@ -8,6 +8,10 @@
 
 namespace FluentDOM {
 
+  use FluentDOM\Appendable;
+  use FluentDOM\DOM\Document;
+  use FluentDOM\DOM\Element;
+
   /**
    * Standard implementation for FluentDOM\XmlSerializable
    */

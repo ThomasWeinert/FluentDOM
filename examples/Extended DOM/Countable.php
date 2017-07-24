@@ -14,7 +14,7 @@ XML;
  * Basically a shortcut to DOMNode::$childNodes::$length.
  */
 
-$document = new FluentDOM\Document();
+$document = new FluentDOM\DOM\Document();
 $document->preserveWhiteSpace = FALSE;
 $document->loadXML($xml);
 

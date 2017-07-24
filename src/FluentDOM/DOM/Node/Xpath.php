@@ -10,6 +10,7 @@
 namespace FluentDOM\DOM\Node {
 
   use FluentDOM\DOM\Document;
+  use FluentDOM\DOM\Node;
 
   /**
    * Add a `evaluate()` method to execute an Xpath expression in the context of the node and
@@ -25,7 +26,7 @@ namespace FluentDOM\DOM\Node {
      *
      * @param string $expression
      * @param \DOMNode $context
-     * @return mixed
+     * @return string|float|\DOMNodeList|Node[]
      */
     public function evaluate($expression, \DOMNode $context = NULL) {
       /** @var Document $document */
@@ -41,7 +42,7 @@ namespace FluentDOM\DOM\Node {
      * Allow to call evaluate() by using the node as object
      *
      * @param string $expression
-     * @return mixed
+     * @return string|float|\DOMNodeList|Node[]
      */
     public function __invoke($expression) {
       return $this->evaluate(

@@ -2,11 +2,9 @@
 
 namespace FluentDOM\DOM\Node\ParentNode {
 
-  use FluentDOM\DOM\HHVM\Properties as HHVMProperties;
-
   trait Properties {
 
-    use Implementation, HHVMProperties;
+    use Implementation;
 
     public function __get($name) {
       switch ($name) {
@@ -16,7 +14,7 @@ namespace FluentDOM\DOM\Node\ParentNode {
         return $this->getLastElementChild();
       }
       // @codeCoverageIgnoreStart
-      return $this->getParentProperty($name);
+      return $this->$name;
     }
     // @codeCoverageIgnoreEnd
 
@@ -32,7 +30,7 @@ namespace FluentDOM\DOM\Node\ParentNode {
         );
       }
       // @codeCoverageIgnoreStart
-      $this->setParentProperty($name, $value);
+      $this->$name = $value;
     }
     // @codeCoverageIgnoreEnd
   }

@@ -4,7 +4,6 @@
 [![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/fluentdom/fluentdom.svg)](https://scrutinizer-ci.com/g/FluentDOM/FluentDOM/?branch=master)
 
 [![License](https://img.shields.io/packagist/l/fluentdom/fluentdom.svg)](http://opensource.org/licenses/mit-license.php)
-[![HHVM Status](https://img.shields.io/hhvm/fluentdom/fluentdom.svg)](http://hhvm.h4cc.de/package/fluentdom/fluentdom)
 [![Total Downloads](https://img.shields.io/packagist/dt/fluentdom/fluentdom.svg)](https://packagist.org/packages/fluentdom/fluentdom)
 [![Latest Stable Version](https://img.shields.io/packagist/v/fluentdom/fluentdom.svg)](https://packagist.org/packages/fluentdom/fluentdom)
 [![Latest Unstable Version](https://img.shields.io/packagist/vpre/fluentdom/fluentdom.svg)](https://packagist.org/packages/fluentdom/fluentdom)
@@ -163,7 +162,7 @@ echo FluentDOM('sample.xml')
   ->text('Hello World!');
 ```
 
-### CSS Selectors
+#### CSS Selectors
 
 If you install a CSS selector to Xpath translation library into a project,
 you can use the `FluentDOM::QueryCss()` function. It returns a `FluentDOM\Query` instance
@@ -187,9 +186,19 @@ Check the Wiki for an [example](https://github.com/FluentDOM/FluentDOM/wiki/Crea
 
 ## Backwards Compatibility Breaks
 
+### From 6.2 to 7.0
+
+The minimum required PHP version now is 7.0. Scalar type hints were added.
+
+Moved the extended DOM classes into the `FluentDOM\DOM` namespace. 
+(`FluentDOM\Document` -> `FluentDOM\DOM\Document`)
+
+`FluentDOM\Query::get()` now return a `DOMNode`is the position was provided, not an array
+any more.
+
 ### From 5.3 to 6.0
 
-The minimum required PHP version now is 5.6.
+The minimum required PHP version now is 5.6. HHVM support was removed.
 
 `FluentDOM\Query` now parses fragment arguments depending on the
 content type. It uses the loaders to parse the fragments for methods like

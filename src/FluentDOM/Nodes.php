@@ -238,8 +238,7 @@ namespace FluentDOM {
       if ($this->_document instanceof Document) {
         return $this->_document->xpath();
       } elseif (
-        isset($this->_xpath) &&
-        (\FluentDOM::$isHHVM || $this->_xpath->document === $this->_document)
+        isset($this->_xpath) && ($this->_xpath->document === $this->_document)
       ) {
         return $this->_xpath;
       } else {

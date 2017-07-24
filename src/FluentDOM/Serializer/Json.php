@@ -75,16 +75,13 @@ namespace FluentDOM\Serializer {
       $this->_node = $node;
       $this->_options = (int)$options;
       $this->_depth = (int)$depth;
-      $this->_useDepth = \FluentDOM::$isHHVM || version_compare(PHP_VERSION, '5.5.0', '>=');
     }
 
     /**
      * @return string
      */
     public function __toString() {
-      $json = $this->_useDepth
-        ? json_encode($this, $this->_options, $this->_depth)
-        : json_encode($this, $this->_options);
+      $json = json_encode($this, $this->_options, $this->_depth);
       return ($json) ? $json : '';
     }
 

@@ -82,8 +82,7 @@ namespace FluentDOM\DOM {
      */
     public function xpath() {
       if (
-        isset($this->_xpath) &&
-        (\FluentDOM::$isHHVM || $this->_xpath->document === $this)
+        isset($this->_xpath) && ($this->_xpath->document === $this)
       ) {
         return $this->_xpath;
       }
@@ -309,7 +308,6 @@ namespace FluentDOM\DOM {
      * @return string
      */
     public function saveHTML($context = NULL) {
-      //if (\FluentDOM::$isHHVM && $context instanceof \DOMDocumentFragment) {
       if ($context instanceof \DOMDocumentFragment) {
         $context = $context->childNodes;
       }

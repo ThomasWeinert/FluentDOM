@@ -11,6 +11,7 @@ namespace FluentDOM\DOM {
 
   use FluentDOM\Appendable;
   use FluentDOM\Iterators\ElementIterator;
+  use FluentDOM\Query;
   use FluentDOM\Utility\QualifiedName;
 
   /**
@@ -39,11 +40,11 @@ namespace FluentDOM\DOM {
     use
       Node\ChildNode\Implementation,
       Node\NonDocumentTypeChildNode\Implementation,
-      Node\ParentNode\Implementation,
       Node\QuerySelector\Implementation,
       Node\StringCast,
       Node\Xpath,
-      HHVM\Properties {
+      Node\ParentNode\Implementation
+      {
         Node\ParentNode\Implementation::append as appendToParentNode;
       }
 
@@ -58,7 +59,7 @@ namespace FluentDOM\DOM {
       case 'lastElementChild' :
         return $this->getLastElementChild();
       }
-      return $this->getParentProperty($name);
+      return $this->$name;
     }
 
     public function __set($name, $value) {
@@ -74,7 +75,7 @@ namespace FluentDOM\DOM {
           )
         );
       }
-      $this->setParentProperty($name, $value);
+      $this->$name = $value;
       return TRUE;
     }
 
@@ -115,9 +116,9 @@ namespace FluentDOM\DOM {
      * @return Attribute|\DOMAttr
      */
     public function getAttributeNode($name) {
-      list($namespace, $localName) = $this->resolveTagName($name);
-      if ($namespace != '') {
-        return parent::getAttributeNodeNS($namespace, $localName);
+      list($namespaceURI, $localName) = $this->resolveTagName($name);
+      if ($namespaceURI != '') {
+        return parent::getAttributeNodeNS($namespaceURI, $localName);
       } else {
         return parent::getAttributeNode($name);
       }
@@ -131,10 +132,10 @@ namespace FluentDOM\DOM {
      * @return \DOMAttr
      */
     public function setAttribute($name, $value) {
-      list($namespace) = $this->resolveTagName($name);
-      if ($namespace != '') {
+      list($namespaceURI) = $this->resolveTagName($name);
+      if ($namespaceURI != '') {
         /** @noinspection PhpVoidFunctionResultUsedInspection */
-        return parent::setAttributeNS($namespace, $name, $value);
+        return parent::setAttributeNS($namespaceURI, $name, $value);
       } else {
         return parent::setAttribute($name, $value);
       }
@@ -147,9 +148,9 @@ namespace FluentDOM\DOM {
      * @return bool
      */
     public function removeAttribute($name) {
-      list($namespace, $localName) = $this->resolveTagName($name);
-      if ($namespace != '') {
-        return parent::removeAttributeNS($namespace, $localName);
+      list($namespaceURI, $localName) = $this->resolveTagName($name);
+      if ($namespaceURI != '') {
+        return parent::removeAttributeNS($namespaceURI, $localName);
       } else {
         return parent::removeAttribute($name);
       }
@@ -162,9 +163,9 @@ namespace FluentDOM\DOM {
      * @param bool $isId
      */
     public function setIdAttribute($name, $isId) {
-      list($namespace, $localName) = $this->resolveTagName($name);
-      if ($namespace != '') {
-        parent::setIdAttributeNS($namespace, $localName, $isId);
+      list($namespaceURI, $localName) = $this->resolveTagName($name);
+      if ($namespaceURI != '') {
+        parent::setIdAttributeNS($namespaceURI, $localName, $isId);
       } else {
         parent::setIdAttribute($name, $isId);
       }

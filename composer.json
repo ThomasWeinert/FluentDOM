@@ -2,14 +2,14 @@
     "name": "fluentdom/fluentdom",
     "type": "library",
     "description": "A fluent api for the php dom extension.",
-    "keywords": ["xml", "xpath", "dom", "jquery"],
+    "keywords": ["xml", "xpath", "dom", "jquery", "xmlreader", "xmlwriter"],
     "license": "MIT",
     "homepage": "http://fluentdom.org",
     "authors": [
         {"name": "FluentDOM Contributors", "homepage": "https://github.com/FluentDOM/FluentDOM/contributors"}
     ],
     "require": {
-        "php": ">=5.6.0",
+        "php": ">=7.0",
         "ext-dom": "*"
     },
     "suggest": {

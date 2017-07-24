@@ -3,11 +3,6 @@
 abstract class FluentDOM {
 
   /**
-   * @var bool
-   */
-  public static $isHHVM = FALSE;
-
-  /**
    * @var FluentDOM\Loadable
    */
   private static $_loader = NULL;
@@ -236,7 +231,6 @@ abstract class FluentDOM {
     array_unshift(self::$_xpathTransformers, $transformer);
   }
 }
-FluentDOM::$isHHVM = defined('HHVM_VERSION');
 
 
 /**

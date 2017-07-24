@@ -6,7 +6,7 @@ namespace FluentDOM\DOM\Node\ParentNode {
 
     use Implementation;
 
-    public function __get($name) {
+    public function __get(string $name) {
       switch ($name) {
       case 'firstElementChild' :
         return $this->getFirstElementChild();
@@ -18,7 +18,7 @@ namespace FluentDOM\DOM\Node\ParentNode {
     }
     // @codeCoverageIgnoreEnd
 
-    public function __set($name, $value) {
+    public function __set(string $name, $value) {
       switch ($name) {
       case 'firstElementChild' :
       case 'lastElementChild' :

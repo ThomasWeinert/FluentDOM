@@ -5,7 +5,6 @@ namespace FluentDOM\DOM\Node\ParentNode {
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Element;
   use FluentDOM\DOM\Node\MutationMacro;
-  use FluentDOM\DOM\Node\QuerySelector;
 
   /**
    * @property-read \DOMNode $firstChild
@@ -15,9 +14,18 @@ namespace FluentDOM\DOM\Node\ParentNode {
    */
   trait Implementation {
 
-    abstract public function insertBefore(\DOMNode $newChild, \DOMNode $refChild = NULL);
+    /**
+     * @param \DOMNode $newChild
+     * @param \DOMNode|NULL $refChild
+     * @return \DOMNode
+     */
+    abstract public function insertBefore(\DOMNode $newChild, \DOMNode $refChild = NULL):\DOMNode;
 
-    abstract public function appendChild(\DOMNode $newChild);
+    /**
+     * @param \DOMNode $newChild
+     * @return \DOMNode
+     */
+    abstract public function appendChild(\DOMNode $newChild):\DOMNode;
 
     /**
      * Returns the first element child node

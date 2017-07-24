@@ -6,7 +6,11 @@ namespace FluentDOM\DOM\Node\NonDocumentTypeChildNode {
 
     use Implementation;
 
-    public function __get($name) {
+    /**
+     * @param string $name
+     * @return \DOMNode|null
+     */
+    public function __get(string $name) {
       switch ($name) {
       case 'nextElementSibling' :
         return $this->getNextElementSibling();
@@ -16,7 +20,11 @@ namespace FluentDOM\DOM\Node\NonDocumentTypeChildNode {
       return $this->$name;
     }
 
-    public function __set($name, $value) {
+    /**
+     * @param string $name
+     * @param mixed $value
+     */
+    public function __set(string $name, $value) {
       switch ($name) {
       case 'nextElementSibling' :
       case 'previousElementSibling' :

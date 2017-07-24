@@ -12,6 +12,9 @@ namespace FluentDOM\DOM\Node\NonDocumentTypeChildNode {
    */
   trait Implementation {
 
+    /**
+     * @return \DOMNode|null
+     */
     public function getNextElementSibling() {
       $node = $this->nextSibling;
       do {
@@ -23,6 +26,9 @@ namespace FluentDOM\DOM\Node\NonDocumentTypeChildNode {
       return NULL;
     }
 
+    /**
+     * @return \DOMNode|null
+     */
     public function getPreviousElementSibling() {
       $node = $this->previousSibling;
       do {

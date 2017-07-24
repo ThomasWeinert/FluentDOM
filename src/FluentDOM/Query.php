@@ -451,7 +451,7 @@ namespace FluentDOM {
      * Retrieve the matched DOM elements in an array. A negative position will be counted from the end.
      *
      * @param integer|NULL optional offset of a single element to get.
-     * @return array
+     * @return array|\DOMNode|NULL
      */
     public function get($position = NULL) {
       if (!isset($position)) {
@@ -461,9 +461,9 @@ namespace FluentDOM {
         $position = count($this->_nodes) + $position;
       }
       if (isset($this->_nodes[$position])) {
-        return array($this->_nodes[$position]);
+        return $this->_nodes[$position];
       } else {
-        return array();
+        return NULL;
       }
     }
 

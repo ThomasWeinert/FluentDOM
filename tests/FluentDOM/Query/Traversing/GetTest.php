@@ -34,9 +34,7 @@ namespace FluentDOM\Query {
     public function testGetWithPosition() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//*');
       $this->assertSame(
-        array(
-          $fd[0]
-        ),
+        $fd[0],
         $fd->get(0)
       );
     }
@@ -49,9 +47,7 @@ namespace FluentDOM\Query {
     public function testGetWithNegativePosition() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('/items/*');
       $this->assertSame(
-        array(
-          $fd[0]
-        ),
+        $fd[0],
         $fd->get(-2)
       );
     }
@@ -63,8 +59,7 @@ namespace FluentDOM\Query {
      */
     public function testGetWithInvalidPosition() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('/*');
-      $this->assertSame(
-        array(),
+      $this->assertNull(
         $fd->get(99)
       );
     }

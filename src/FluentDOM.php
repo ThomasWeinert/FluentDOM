@@ -43,10 +43,10 @@ abstract class FluentDOM {
    *
    * @param string $version
    * @param string $encoding
-   * @return FluentDOM\Nodes\Creator
+   * @return FluentDOM\Creator
    */
-  public static function create(string $version = '1.0', string $encoding = 'UTF-8'): \FluentDOM\Nodes\Creator {
-    return new FluentDOM\Nodes\Creator($version, $encoding);
+  public static function create(string $version = '1.0', string $encoding = 'UTF-8'): \FluentDOM\Creator {
+    return new FluentDOM\Creator($version, $encoding);
   }
 
   /**

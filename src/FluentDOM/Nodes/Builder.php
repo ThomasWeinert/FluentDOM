@@ -8,6 +8,7 @@
 
 namespace FluentDOM\Nodes {
 
+  use FluentDOM\DOM\Element;
   use FluentDOM\Utility\Constraints;
   use FluentDOM\Nodes;
   use FluentDOM\Exceptions;
@@ -32,7 +33,7 @@ namespace FluentDOM\Nodes {
     /**
      * @return Nodes
      */
-    public function getOwner() {
+    public function getOwner(): Nodes {
       return $this->_nodes;
     }
 
@@ -44,8 +45,8 @@ namespace FluentDOM\Nodes {
      */
     private function getNodeList(
       $content,
-      $includeTextNodes = TRUE,
-      $limit = -1
+      bool $includeTextNodes = TRUE,
+      int $limit = -1
     ) {
       if ($callback = Constraints::filterCallable($content)) {
         $content = $callback();
@@ -96,7 +97,7 @@ namespace FluentDOM\Nodes {
      * @throws Exceptions\LoadingError\EmptyResult
      * @return array
      */
-    public function getContentNodes($content, $includeTextNodes = TRUE, $limit = -1) {
+    public function getContentNodes($content, bool $includeTextNodes = TRUE, int $limit = -1) {
       $result = FALSE;
       if ($nodes = $this->getNodeList($content, $includeTextNodes, $limit)) {
         $result = $nodes;
@@ -123,7 +124,7 @@ namespace FluentDOM\Nodes {
      * @param mixed $content
      * @return \DOMElement
      */
-    public function getContentElement($content) {
+    public function getContentElement($content): \DOMElement {
       $contentNodes = $this->getContentNodes($content, FALSE, 1);
       return $contentNodes[0];
     }
@@ -131,14 +132,16 @@ namespace FluentDOM\Nodes {
     /**
      * Convert a given content string into and array of nodes
      *
-     * @param string $xml
+     * @param mixed $xml
      * @param string $contentType
      * @param bool $includeTextNodes
      * @param int $limit
      * @throws Exceptions\InvalidFragmentLoader
      * @return array
      */
-    public function getFragment($xml, $contentType = 'text/xml', $includeTextNodes = TRUE, $limit = -1) {
+    public function getFragment(
+      $xml, $contentType = 'text/xml', bool $includeTextNodes = TRUE, int $limit = -1
+    ): array {
       $xml = $this->getContentAsString($xml);
       $loader = $this->getOwner()->loaders();
       if (!$loader->supports($contentType)) {
@@ -166,8 +169,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @param string $content
-     * @return string bool
+     * @param mixed $content
+     * @return string|bool
      * @throws \UnexpectedValueException
      */
     private function getContentAsString($content) {
@@ -184,7 +187,7 @@ namespace FluentDOM\Nodes {
      * @param \DOMNode $context
      * @return string
      */
-    public function getInnerXml($context) {
+    public function getInnerXml(\DOMNode $context): string {
       $result = '';
       $document = $this->getOwner()->getDocument();
       $nodes = $this->getOwner()->xpath(
@@ -205,7 +208,7 @@ namespace FluentDOM\Nodes {
      * @param bool $simple
      * @return \DOMElement[]
      */
-    public function getWrapperNodes($template, &$simple) {
+    public function getWrapperNodes(\DOMElement $template, bool &$simple) {
       $wrapper = $template->cloneNode(TRUE);
       $targets = NULL;
       $target = NULL;
@@ -227,7 +230,7 @@ namespace FluentDOM\Nodes {
      * @param int $limit
      * @return array
      */
-    private function getLimitedArray($nodes, $limit = -1) {
+    private function getLimitedArray($nodes, int $limit = -1): array {
       if ($limit > 0) {
         if (is_array($nodes)) {
           return array_slice($nodes, 0, $limit);

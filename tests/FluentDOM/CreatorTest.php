@@ -1,17 +1,15 @@
 <?php
-namespace FluentDOM\Nodes {
+namespace FluentDOM {
 
-  use FluentDOM\Appendable;
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Element;
-  use FluentDOM\TestCase;
 
-  require_once(__DIR__.'/../TestCase.php');
+  require_once(__DIR__ . '/TestCase.php');
 
   class CreatorTest extends TestCase {
 
     /**
-     * @covers \FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Creator
      */
     public function testClone() {
       $creator = new Creator();
@@ -23,8 +21,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers \FluentDOM\Nodes\Creator
-     * @covers \FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Creator
+     * @covers \FluentDOM\Creator\Node
      */
     public function testCreate() {
       $_ = new Creator();
@@ -35,8 +33,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers \FluentDOM\Nodes\Creator
-     * @covers \FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Creator
+     * @covers \FluentDOM\Creator\Node
      */
     public function testWithNamespace() {
       $_ = new Creator();
@@ -48,8 +46,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers \FluentDOM\Nodes\Creator
-     * @covers \FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Creator
+     * @covers \FluentDOM\Creator\Node
      */
     public function testCreateFetchingDocument() {
       $_ = new Creator();
@@ -61,8 +59,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers \FluentDOM\Nodes\Creator
-     * @covers \FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Creator
+     * @covers \FluentDOM\Creator\Node
      */
     public function testCreateFetchingDom() {
       $_ = new Creator();
@@ -74,8 +72,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers \FluentDOM\Nodes\Creator
-     * @covers \FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Creator
+     * @covers \FluentDOM\Creator\Node
      */
     public function testCreateFetchingNode() {
       $_ = new Creator();
@@ -87,8 +85,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers \FluentDOM\Nodes\Creator
-     * @covers \FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Creator
+     * @covers \FluentDOM\Creator\Node
      */
     public function testElement() {
       $_ = new Creator();
@@ -99,8 +97,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers \FluentDOM\Nodes\Creator
-     * @covers \FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Creator
+     * @covers \FluentDOM\Creator\Node
      */
     public function testElementWithAttributes() {
       $_ = new Creator();
@@ -111,8 +109,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers \FluentDOM\Nodes\Creator
-     * @covers \FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Creator
+     * @covers \FluentDOM\Creator\Node
      */
     public function testCreateWithTextNode() {
       $_ = new Creator();
@@ -123,8 +121,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers \FluentDOM\Nodes\Creator
-     * @covers \FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Creator
+     * @covers \FluentDOM\Creator\Node
      */
     public function testCreateWithSeveralTextNodes() {
       $_ = new Creator();
@@ -135,8 +133,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers \FluentDOM\Nodes\Creator
-     * @covers \FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Creator
+     * @covers \FluentDOM\Creator\Node
      */
     public function testCreateWithChildNodes() {
       $_ = new Creator();
@@ -147,8 +145,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers \FluentDOM\Nodes\Creator
-     * @covers \FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Creator
+     * @covers \FluentDOM\Creator\Node
      */
     public function testCreateWithCdata() {
       $_ = new Creator();
@@ -159,8 +157,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers \FluentDOM\Nodes\Creator
-     * @covers \FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Creator
+     * @covers \FluentDOM\Creator\Node
      */
     public function testCreateWithComment() {
       $_ = new Creator();
@@ -171,8 +169,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers \FluentDOM\Nodes\Creator
-     * @covers \FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Creator
+     * @covers \FluentDOM\Creator\Node
      */
     public function testCreateWithProcessingInstruction() {
       $_ = new Creator();
@@ -183,8 +181,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers \FluentDOM\Nodes\Creator
-     * @covers \FluentDOM\Nodes\Creator\Nodes
+     * @covers \FluentDOM\Creator
+     * @covers \FluentDOM\Creator\Nodes
      */
     public function testEach() {
       $_ = new Creator();
@@ -200,8 +198,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers \FluentDOM\Nodes\Creator
-     * @covers \FluentDOM\Nodes\Creator\Nodes
+     * @covers \FluentDOM\Creator
+     * @covers \FluentDOM\Creator\Nodes
      */
     public function testEachWithIterator() {
       $_ = new Creator();
@@ -217,8 +215,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers \FluentDOM\Nodes\Creator
-     * @covers \FluentDOM\Nodes\Creator\Nodes
+     * @covers \FluentDOM\Creator
+     * @covers \FluentDOM\Creator\Nodes
      */
     public function testEachWithIteratorAggregate() {
       $_ = new Creator();
@@ -241,8 +239,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers \FluentDOM\Nodes\Creator
-     * @covers \FluentDOM\Nodes\Creator\Nodes
+     * @covers \FluentDOM\Creator
+     * @covers \FluentDOM\Creator\Nodes
      */
     public function testEachWithMapping() {
       $_ = new Creator();
@@ -261,14 +259,14 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers \FluentDOM\Nodes\Creator
-     * @covers \FluentDOM\Nodes\Creator\Nodes
+     * @covers \FluentDOM\Creator
+     * @covers \FluentDOM\Creator\Nodes
      */
     public function testEachReturnsIterator() {
       $_ = new Creator();
       $iterator = $_->each(['one', 'two']);
       $this->assertInstanceOf(
-        'FluentDOM\Nodes\Creator\Nodes', $iterator
+        Creator\Nodes::class, $iterator
       );
       $this->assertEquals(
         ['one', 'two'], iterator_to_array($iterator)
@@ -276,8 +274,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers \FluentDOM\Nodes\Creator
-     * @covers \FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Creator
+     * @covers \FluentDOM\Creator\Node
      */
     public function testCreateWithDOMNode() {
       $document = new \DOMDocument();
@@ -289,8 +287,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers \FluentDOM\Nodes\Creator
-     * @covers \FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Creator
+     * @covers \FluentDOM\Creator\Node
      */
     public function testCreateWithAttributeNode() {
       $document = new \DOMDocument();
@@ -304,8 +302,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers \FluentDOM\Nodes\Creator
-     * @covers \FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Creator
+     * @covers \FluentDOM\Creator\Node
      */
     public function testCreateWithAttributeAppendable() {
       $appendable = $this->getMockBuilder(Appendable::class)->getMock();
@@ -324,7 +322,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers \FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Creator\Node
      */
     public function testCreateFetchingUnknownPropertyExpectingNull() {
       $_ = new Creator();
@@ -334,7 +332,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers \FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Creator\Node
      */
     public function testCreateSetPropertyOnResultExpectingException() {
       $_ = new Creator();
@@ -343,7 +341,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers \FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Creator
      */
     public function testCreatorGetFormatOutputAfterSet() {
       $_ = new Creator();
@@ -353,7 +351,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers \FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Creator
      */
     public function testCreatorGetOptimizeNamespacesAfterSet() {
       $_ = new Creator();
@@ -363,7 +361,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers \FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Creator
      */
     public function testCreatorGetUnknownPropertyExpectingNull() {
       $_ = new Creator();
@@ -372,7 +370,7 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers \FluentDOM\Nodes\Creator
+     * @covers \FluentDOM\Creator
      */
     public function testCreatorGetUnknownPropertyAfterSet() {
       $_ = new Creator();
@@ -381,8 +379,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers \FluentDOM\Nodes\Creator
-     * @covers \FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Creator
+     * @covers \FluentDOM\Creator\Node
      */
     public function testCreatorOptimizesNamespacesByDefault() {
       $_ = new Creator();
@@ -396,8 +394,8 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @covers \FluentDOM\Nodes\Creator
-     * @covers \FluentDOM\Nodes\Creator\Node
+     * @covers \FluentDOM\Creator
+     * @covers \FluentDOM\Creator\Node
      */
     public function testCreatorOptimizeNamespacesCanBeDisabled() {
       $_ = new Creator();

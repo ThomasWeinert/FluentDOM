@@ -13,7 +13,7 @@ namespace FluentDOM\Nodes {
       $this->_document = $xpath->document;
     }
 
-    public function __invoke($one, $two) {
+    public function __invoke($one, $two): int {
       if ($one === $two) {
         return 0;
       } elseif (
@@ -31,7 +31,7 @@ namespace FluentDOM\Nodes {
       return $this->getPosition($one) - $this->getPosition($two);
     }
 
-    private function getPosition(\DOMNode $node) {
+    private function getPosition(\DOMNode $node): int {
       $hash = spl_object_hash($node);
       if (!array_key_exists($hash, $this->_cache)) {
         $this->_cache[$hash] = (int)$this->_xpath->evaluate(

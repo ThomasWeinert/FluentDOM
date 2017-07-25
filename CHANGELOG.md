@@ -3,6 +3,7 @@ Version 7.0.0
 
 - Changed: minimum PHP version is now 7.0
 - Changed: Moved extended DOM classes to FluentDOM\DOM\*
+- Changed: FluentDOM\Nodes\Creator to FluentDOM\Creator
 - Changed: Added type hints and return types
 - Removed: Document::find() and Element::find()
 

@@ -1,5 +1,5 @@
 <?php
-namespace FluentDOM\Nodes {
+namespace FluentDOM {
 
   use FluentDOM\Appendable;
   use FluentDOM\DOM\Document;
@@ -156,17 +156,17 @@ namespace FluentDOM\Nodes {
      * @return Appendable
      */
     public function each($traversable, callable $map = NULL) {
-      return new Nodes($traversable, $map);
+      return new Creator\Nodes($traversable, $map);
     }
   }
 }
 
-namespace FluentDOM\Nodes\Creator {
+namespace FluentDOM\Creator {
 
   use FluentDOM\Appendable;
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Element;
-  use FluentDOM\Nodes\Creator;
+  use FluentDOM\Creator;
   use FluentDOM\Transformer\Namespaces\Optimize;
 
   /**

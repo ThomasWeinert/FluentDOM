@@ -23,7 +23,7 @@ echo $_(
     'traversable-mapping',
     // the each method allow you to iterate arrays or objects
     $_->each(
-      // first argument is the iterable
+      // first argument is the traversable/array
       ['one', 'two'],
       // second a function, first argument is the current value, second the key
       // make sure to push the Creator function into it.

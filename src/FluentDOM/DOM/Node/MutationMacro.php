@@ -28,7 +28,7 @@ namespace FluentDOM\DOM\Node {
      * @param mixed $value
      * @return bool
      */
-    private static function isStringCastable($value) {
+    private static function isStringCastable($value):bool {
       return is_scalar($value) || (is_object($value) && method_exists($value, '__toString'));
     }
 
@@ -36,7 +36,7 @@ namespace FluentDOM\DOM\Node {
      * @param mixed $value
      * @return bool
      */
-    private static function isTraversableOfNodes($value) {
+    private static function isTraversableOfNodes($value):bool {
       return (
         !($value instanceof \DOMNode) &&
         ($value instanceof \Traversable || is_array($value))
@@ -47,7 +47,7 @@ namespace FluentDOM\DOM\Node {
      * @param \DOMDocumentFragment $target
      * @param \DOMNode $node
      */
-    private static function add($target, $node) {
+    private static function add(\DOMDocumentFragment $target, \DOMNode $node) {
       if ($node instanceof \DOMDocument) {
         if ($node->documentElement instanceof \DOMElement) {
           $target->appendChild($target->ownerDocument->importNode($node->documentElement, TRUE));

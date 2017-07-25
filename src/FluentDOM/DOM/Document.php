@@ -9,6 +9,7 @@
 
 namespace FluentDOM\DOM {
 
+  use FluentDOM\Query;
   use FluentDOM\Utility\Namespaces;
   use FluentDOM\Utility\QualifiedName;
 
@@ -141,7 +142,7 @@ namespace FluentDOM\DOM {
      * @throws \LogicException
      * @return Element
      */
-    public function createElement($name, $content = NULL, array $attributes = NULL) {
+    public function createElement($name, $content = NULL, array $attributes = NULL):Element {
       list($prefix, $localName) = QualifiedName::split($name);
       $namespace = '';
       if ($prefix !== FALSE) {
@@ -176,7 +177,8 @@ namespace FluentDOM\DOM {
      * @param string|null $content
      * @return Element
      */
-    public function createElementNS($namespaceURI, $qualifiedName, $content = null) {
+    public function createElementNS($namespaceURI, $qualifiedName, $content = null):Element {
+      /** @var Element $node */
       $node = parent::createElementNS($namespaceURI, $qualifiedName);
       $this->appendContent($node, $content);
       return $node;
@@ -190,9 +192,9 @@ namespace FluentDOM\DOM {
      *
      * @param string $name
      * @param string|null $value
-     * @return \DOMAttr
+     * @return Attribute
      */
-    public function createAttribute($name, $value = NULL) {
+    public function createAttribute($name, $value = NULL):Attribute {
       list($prefix) = QualifiedName::split($name);
       if (empty($prefix)) {
         $node = parent::createAttribute($name);
@@ -213,7 +215,7 @@ namespace FluentDOM\DOM {
      * @param array $attributes
      * @return Element
      */
-    public function appendElement($name, $content = '', array $attributes = NULL) {
+    public function appendElement(string $name, $content = '', array $attributes = NULL):Element {
       $this->appendChild(
         $node = $this->createElement($name, $content, $attributes)
       );
@@ -224,10 +226,11 @@ namespace FluentDOM\DOM {
      * Put the document node into a FluentDOM\Query
      * and call find() on it.
      *
+     * @todo remove or replace with DOM LS?
      * @param string $expression
      * @return Query
      */
-    public function find($expression) {
+    public function find(string $expression):Query {
       return \FluentDOM::Query($this)->find($expression);
     }
 
@@ -236,7 +239,7 @@ namespace FluentDOM\DOM {
      * @param string|array|NULL $content
      * @param array|NULL $attributes
      */
-    private function appendAttributes($node, $content = NULL, array $attributes = NULL) {
+    private function appendAttributes(\DOMElement $node, $content = NULL, array $attributes = NULL) {
       if (is_array($content)) {
         $attributes = NULL === $attributes
           ? $content : array_merge($content, $attributes);
@@ -252,7 +255,7 @@ namespace FluentDOM\DOM {
      * @param \DOMElement $node
      * @param string|array|NULL $content
      */
-    private function appendContent($node, $content = NULL) {
+    private function appendContent(\DOMElement $node, $content = NULL) {
       if (!((empty($content) && !is_numeric($content)) || is_array($content) )) {
         $node->appendChild($this->createTextNode($content));
       }
@@ -268,7 +271,7 @@ namespace FluentDOM\DOM {
      * @param int $options
      * @return string
      */
-    public function toXml($context = NULL, $options = 0) {
+    public function toXml($context = NULL, int $options = 0):string {
       if ($context instanceof \DOMNodeList) {
         $result = '';
         foreach ($context as $node) {
@@ -284,7 +287,7 @@ namespace FluentDOM\DOM {
      *
      * @return string
      */
-    public function __toString() {
+    public function __toString():string {
       return $this->saveXML();
     }
 
@@ -297,7 +300,7 @@ namespace FluentDOM\DOM {
      * @param \DOMNode|\DOMNodeList|NULL $context
      * @return string
      */
-    public function toHtml($context = NULL) {
+    public function toHtml($context = NULL):string {
       return $this->saveHtml($context);
     }
 
@@ -307,7 +310,7 @@ namespace FluentDOM\DOM {
      * @param \DOMNode|\DOMNodeList|NULL $context
      * @return string
      */
-    public function saveHTML($context = NULL) {
+    public function saveHTML($context = NULL):string {
       if ($context instanceof \DOMDocumentFragment) {
         $context = $context->childNodes;
       }
@@ -341,7 +344,7 @@ namespace FluentDOM\DOM {
      * @param string $name
      * @return \DOMNodeList
      */
-    public function getElementsByTagName($name) {
+    public function getElementsByTagName($name):\DOMNodeList {
       list($prefix, $localName) = QualifiedName::split($name);
       $namespace = $namespace = $this->namespaces()->resolveNamespace((string)$prefix);
       if ($namespace != '') {

@@ -28,7 +28,7 @@ namespace FluentDOM\DOM\Node {
      * @param \DOMNode $context
      * @return string|float|\DOMNodeList|Node[]
      */
-    public function evaluate($expression, \DOMNode $context = NULL) {
+    public function evaluate(string $expression, \DOMNode $context = NULL) {
       /** @var Document $document */
       $document = $this instanceof Document
         ? $this
@@ -44,7 +44,7 @@ namespace FluentDOM\DOM\Node {
      * @param string $expression
      * @return string|float|\DOMNodeList|Node[]
      */
-    public function __invoke($expression) {
+    public function __invoke(string $expression) {
       return $this->evaluate(
         $expression, $this instanceof \DOMNode ? $this : NULL
       );

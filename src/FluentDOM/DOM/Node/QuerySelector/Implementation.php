@@ -13,7 +13,7 @@ namespace FluentDOM\DOM\Node\QuerySelector {
      * @param string $selector
      * @return Element|null
      */
-    public function querySelector($selector) {
+    public function querySelector(string $selector) {
       $node = $this->querySelectorAll($selector)->item(0);
       return $node instanceof Element ? $node : NULL;
     }
@@ -22,7 +22,7 @@ namespace FluentDOM\DOM\Node\QuerySelector {
      * @param string $selector
      * @return \DOMNodeList
      */
-    public function querySelectorAll($selector) {
+    public function querySelectorAll(string $selector):\DOMNodeList {
       $builder = \FluentDOM::getXPathTransformer();
       /** @var Document|Element $this */
       return $this->evaluate(

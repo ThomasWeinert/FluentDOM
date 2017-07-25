@@ -44,7 +44,7 @@ namespace FluentDOM\DOM {
      * @param string $namespace
      * @return bool
      */
-    public function registerNamespace($prefix, $namespace) {
+    public function registerNamespace($prefix, $namespace):bool {
       if (
         $this->_documentReference instanceOf Document &&
         (
@@ -82,7 +82,7 @@ namespace FluentDOM\DOM {
      * @param \DOMNode $contextNode
      * @return string|float|bool|\DOMNodeList
      */
-    public function __invoke($expression, $contextNode = NULL) {
+    public function __invoke(string $expression, \DOMNode $contextNode = NULL) {
       return $this->evaluate($expression, $contextNode);
     }
 
@@ -114,7 +114,7 @@ namespace FluentDOM\DOM {
      * @param NULL|boolean $registerNodeNS
      * @return \DOMNode|null
      */
-    public function firstOf($expression, \DOMNode $contextNode = NULL, $registerNodeNS = NULL) {
+    public function firstOf(string $expression, \DOMNode $contextNode = NULL, bool $registerNodeNS = NULL) {
       $nodes = $this->evaluate($expression, $contextNode, $registerNodeNS);
       if ($nodes instanceof \DOMNodeList && $nodes->length > 0) {
         return $nodes->item(0);
@@ -135,7 +135,7 @@ namespace FluentDOM\DOM {
      * @param string $string
      * @return string
      */
-    public function quote($string) {
+    public function quote(string $string):string {
       $string = str_replace("\x00", '', $string);
       $hasSingleQuote = FALSE !== strpos($string, "'");
       if ($hasSingleQuote) {
@@ -160,7 +160,7 @@ namespace FluentDOM\DOM {
      * @param string $name
      * @return bool
      */
-    public function __isset($name) {
+    public function __isset(string $name):bool {
       switch ($name) {
       case 'registerNodeNamespaces' :
         return TRUE;
@@ -172,7 +172,7 @@ namespace FluentDOM\DOM {
      * @param string $name
      * @return mixed
      */
-    public function __get($name) {
+    public function __get(string $name) {
       switch ($name) {
       case 'registerNodeNamespaces' :
         return $this->_registerNodeNamespaces;
@@ -185,7 +185,7 @@ namespace FluentDOM\DOM {
      * @param mixed $value
      * @return mixed
      */
-    public function __set($name, $value) {
+    public function __set(string $name, $value) {
       switch ($name) {
       case 'registerNodeNamespaces' :
         $this->_registerNodeNamespaces = (bool)$value;
@@ -197,7 +197,7 @@ namespace FluentDOM\DOM {
     /**
      * @param string $name
      */
-    public function __unset($name) {
+    public function __unset(string $name) {
       switch ($name) {
       case 'registerNodeNamespaces' :
         $this->_registerNodeNamespaces = FALSE;

@@ -17,6 +17,6 @@ namespace FluentDOM\DOM\Xpath {
     const CONTEXT_DOCUMENT = 1;
     const CONTEXT_SELF = 2;
 
-    function toXpath($selector, $contextMode = self::CONTEXT_CHILDREN, $isHtml = FALSE);
+    function toXpath(string $selector, int $contextMode = self::CONTEXT_CHILDREN, bool $isHtml = FALSE);
   }
 }

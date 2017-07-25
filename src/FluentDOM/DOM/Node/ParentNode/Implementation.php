@@ -19,13 +19,13 @@ namespace FluentDOM\DOM\Node\ParentNode {
      * @param \DOMNode|NULL $refChild
      * @return \DOMNode
      */
-    abstract public function insertBefore(\DOMNode $newChild, \DOMNode $refChild = NULL):\DOMNode;
+    abstract public function insertBefore(\DOMNode $newChild,\DOMNode $refChild = NULL);
 
     /**
      * @param \DOMNode $newChild
      * @return \DOMNode
      */
-    abstract public function appendChild(\DOMNode $newChild):\DOMNode;
+    abstract public function appendChild(\DOMNode $newChild);
 
     /**
      * Returns the first element child node

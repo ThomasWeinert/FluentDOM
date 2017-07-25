@@ -310,7 +310,10 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
 }
 
 class FluentDOMXpathTransformer_TestProxy implements \FluentDOM\DOM\Xpath\Transformer {
-  public function toXpath($selector, $contextMode = FluentDOM\DOM\Xpath\Transformer::CONTEXT_CHILDREN, $isHtml = false) {
-    return null;
+  public function toXpath(
+    string $selector,
+    int $contextMode = FluentDOM\DOM\Xpath\Transformer::CONTEXT_CHILDREN,
+    bool $isHtml = false):string {
+    return '';
   }
 }

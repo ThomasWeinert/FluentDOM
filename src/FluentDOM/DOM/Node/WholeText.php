@@ -31,12 +31,12 @@ namespace FluentDOM\DOM\Node {
   trait WholeText {
 
     /**
-     * @param string $text
+     * @param string $content
      * @return $this|NULL
      */
-    public function replaceWholeText($text) {
-      /** @var \FluentDOM\Text|\FluentDOM\CdataSection $this */
-      $text = (string)$text;
+    public function replaceWholeText($content) {
+      /** @var \FluentDOM\DOM\Text|\FluentDOM\DOM\CdataSection $this */
+      $content = (string)$content;
       $canReplaceEntity = function(\DOMEntityReference $reference) use (&$canReplaceEntity) {
         foreach ($reference->firstChild->childNodes as $childNode) {
           $canReplace = FALSE;
@@ -89,14 +89,14 @@ namespace FluentDOM\DOM\Node {
       };
       $iterate($this, function(\DOMNode $node) { return $node->previousSibling; } );
       $iterate($this, function(\DOMNode $node) { return $node->nextSibling; } );
-      if ($text === '') {
+      if ($content === '') {
         if ($this->parentNode instanceof \DOMNode) {
           $this->parentNode->removeChild($this);
         }
         $this->textContent = '';
         return NULL;
       } else {
-        $this->textContent = $text;
+        $this->textContent = $content;
         return $this;
       }
     }

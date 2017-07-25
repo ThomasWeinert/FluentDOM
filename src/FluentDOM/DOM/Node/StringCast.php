@@ -20,7 +20,7 @@ namespace FluentDOM\DOM\Node {
      *
      * @return string
      */
-    public function __toString() {
+    public function __toString():string {
       /** @var \DOMNode $this */
       return ($this instanceof \DOMNode) ? (string)$this->textContent : '';
     }

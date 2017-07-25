@@ -453,7 +453,7 @@ namespace FluentDOM {
      *
      * @return NodesIterator
      */
-    public function getIterator():NodesIterator {
+    public function getIterator(): NodesIterator {
       return new NodesIterator($this);
     }
 

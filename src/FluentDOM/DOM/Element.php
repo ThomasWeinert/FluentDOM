@@ -84,7 +84,7 @@ namespace FluentDOM\DOM {
      * @param string $name
      * @return bool
      */
-    public function hasAttribute($name):bool {
+    public function hasAttribute($name): bool {
       list($namespaceURI, $localName) = $this->resolveTagName($name);
       if ($namespaceURI != '') {
         return parent::hasAttributeNS($namespaceURI, $localName);
@@ -147,7 +147,7 @@ namespace FluentDOM\DOM {
      * @param string $name
      * @return bool
      */
-    public function removeAttribute($name):bool {
+    public function removeAttribute($name): bool {
       list($namespaceURIURI, $localName) = $this->resolveTagName($name);
       if ($namespaceURIURI != '') {
         return (bool)parent::removeAttributeNS($namespaceURIURI, $localName);
@@ -184,7 +184,7 @@ namespace FluentDOM\DOM {
      * @param mixed $value
      * @return $this|Element
      */
-    public function append($value):Element {
+    public function append($value): Element {
       if ($value instanceof \DOMAttr) {
         $this->setAttributeNode(
           $value->ownerDocument === $this->ownerDocument
@@ -220,7 +220,7 @@ namespace FluentDOM\DOM {
      * @param array $attributes
      * @return Element
      */
-    public function appendElement(string $name, $content = '', array $attributes = NULL):Element {
+    public function appendElement(string $name, $content = '', array $attributes = NULL): Element {
       $this->appendChild(
         $node = $this->getDocument()->createElement($name, $content, $attributes)
       );
@@ -243,7 +243,7 @@ namespace FluentDOM\DOM {
      *
      * @return string
      */
-    public function saveXml():string {
+    public function saveXml(): string {
       return $this->getDocument()->saveXML($this);
     }
 
@@ -252,7 +252,7 @@ namespace FluentDOM\DOM {
      *
      * @return string
      */
-    public function saveXmlFragment():string {
+    public function saveXmlFragment(): string {
       $result = '';
       foreach ($this->childNodes as $child) {
         $result .= $this->getDocument()->saveXML($child);
@@ -265,7 +265,7 @@ namespace FluentDOM\DOM {
      *
      * @return string
      */
-    public function saveHtml():string {
+    public function saveHtml(): string {
       return $this->getDocument()->saveHTML($this);
     }
 
@@ -275,7 +275,7 @@ namespace FluentDOM\DOM {
      * @param string $name
      * @return \DOMNodeList
      */
-    public function getElementsByTagName($name):\DOMNodeList {
+    public function getElementsByTagName($name): \DOMNodeList {
       list($namespaceURI, $localName) = $this->resolveTagName($name);
       if ($namespaceURI != '') {
         return parent::getElementsByTagNameNS($namespaceURI, $localName);
@@ -296,7 +296,7 @@ namespace FluentDOM\DOM {
      * @return bool
      * @throws \InvalidArgumentException
      */
-    public function offsetExists($offset):bool {
+    public function offsetExists($offset): bool {
       if ($this->isNodeOffset($offset)) {
         return $this->count() > $offset;
       } else {
@@ -364,7 +364,7 @@ namespace FluentDOM\DOM {
      * @throws \InvalidArgumentException
      * @return bool
      */
-    private function isNodeOffset($offset):bool {
+    private function isNodeOffset($offset): bool {
       if (is_int($offset) || ctype_digit((string)$offset)) {
         return TRUE;
       } elseif ($this->isAttributeOffset($offset)) {
@@ -381,7 +381,7 @@ namespace FluentDOM\DOM {
      * @param mixed $offset
      * @return bool
      */
-    private function isAttributeOffset($offset):bool {
+    private function isAttributeOffset($offset): bool {
       return (is_string($offset) && !ctype_digit((string)$offset));
     }
 
@@ -394,7 +394,7 @@ namespace FluentDOM\DOM {
      *
      * @return \Iterator
      */
-    public function getIterator():\Iterator {
+    public function getIterator(): \Iterator {
       return new ElementIterator($this);
     }
 
@@ -407,7 +407,7 @@ namespace FluentDOM\DOM {
      *
      * @return int
      */
-    public function count():int {
+    public function count(): int {
       $nodes = $this->childNodes;
       return ($nodes instanceOf \DOMNodeList) ? $nodes->length : 0;
     }
@@ -418,7 +418,7 @@ namespace FluentDOM\DOM {
      * @param string $name
      * @return string[]
      */
-    private function resolveTagName(string $name):array {
+    private function resolveTagName(string $name): array {
       list($prefix, $localName) = QualifiedName::split($name);
       if (empty($prefix)) {
         return array('', $localName);
@@ -433,7 +433,7 @@ namespace FluentDOM\DOM {
      *
      * @return Document
      */
-    private function getDocument():Document {
+    private function getDocument(): Document {
       return $this->ownerDocument;
     }
 
@@ -466,7 +466,7 @@ namespace FluentDOM\DOM {
      * @param string $namespaceURI
      * @return bool
      */
-    private function isCurrentNamespace(string $prefix, string $namespaceURI):bool {
+    private function isCurrentNamespace(string $prefix, string $namespaceURI): bool {
       return (
         $namespaceURI === $this->namespaceURI &&
         $prefix === ($this->prefix ?: '#default')

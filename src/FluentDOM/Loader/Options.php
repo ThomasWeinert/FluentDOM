@@ -79,7 +79,7 @@ namespace FluentDOM\Loader {
     /**
      * @return \Iterator
      */
-    public function getIterator():\Iterator {
+    public function getIterator(): \Iterator {
       return new \ArrayIterator($this->_options);
     }
 
@@ -87,7 +87,7 @@ namespace FluentDOM\Loader {
      * @param mixed $offset
      * @return bool
      */
-    public function offsetExists($offset):bool {
+    public function offsetExists($offset): bool {
       return array_key_exists($offset, $this->_options);
     }
 
@@ -137,7 +137,7 @@ namespace FluentDOM\Loader {
      * @param mixed $source
      * @return string
      */
-    public function getSourceType($source):string {
+    public function getSourceType($source): string {
       if ($this[self::IS_FILE]) {
         return self::IS_FILE;
       } elseif ($this[self::IS_STRING]) {
@@ -156,7 +156,7 @@ namespace FluentDOM\Loader {
      * @throws \Exception
      * @throws InvalidSource
      */
-    public function isAllowed(string $sourceType, bool $throwException = TRUE):bool {
+    public function isAllowed(string $sourceType, bool $throwException = TRUE): bool {
       try {
         switch ($sourceType) {
         case self::IS_FILE :

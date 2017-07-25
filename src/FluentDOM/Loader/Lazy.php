@@ -106,7 +106,7 @@ namespace FluentDOM\Loader {
      * @param string $contentType
      * @return bool
      */
-    public function supports(string $contentType):bool {
+    public function supports(string $contentType): bool {
       $contentType = $this->normalizeContentType($contentType);
       return isset($this->_list[$contentType]);
     }

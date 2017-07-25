@@ -69,14 +69,20 @@ namespace FluentDOM\XMLReader {
       }
     }
 
-    protected function move(XMLReader $reader, $name, $filter) {
+    /**
+     * @param XMLReader $reader
+     * @param string|NULL $name
+     * @param callable|NULL $filter
+     * @return bool
+     */
+    protected function move(XMLReader $reader, $name, $filter): bool {
       return $reader->read($name, NULL, $filter);
     }
 
     /**
      * @return bool
      */
-    public function valid() {
+    public function valid(): bool {
       return NULL !== $this->_current;
     }
 
@@ -90,7 +96,7 @@ namespace FluentDOM\XMLReader {
     /**
      * @return int
      */
-    public function key() {
+    public function key(): int {
       return $this->_key;
     }
   }

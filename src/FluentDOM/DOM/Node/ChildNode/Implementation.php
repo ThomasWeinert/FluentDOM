@@ -11,7 +11,7 @@ namespace FluentDOM\DOM\Node\ChildNode {
      *
      * @return $this|\DOMNode
      */
-    public function remove():\DOMNode {
+    public function remove(): \DOMNode {
       /** @var \DOMNode|Implementation $this */
       if ($this->parentNode instanceof \DOMNode) {
         $this->parentNode->removeChild($this);
@@ -66,7 +66,7 @@ namespace FluentDOM\DOM\Node\ChildNode {
      * @param \DOMNode|\DOMNodeList $nodes
      * @return $this|\DOMNode
      */
-    public function replace($nodes):\DOMNode {
+    public function replace($nodes): \DOMNode {
       $this->before($nodes);
       return $this->remove();
     }

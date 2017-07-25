@@ -22,7 +22,7 @@ namespace FluentDOM\DOM\Node\QuerySelector {
      * @param string $selector
      * @return \DOMNodeList
      */
-    public function querySelectorAll(string $selector):\DOMNodeList {
+    public function querySelectorAll(string $selector): \DOMNodeList {
       $builder = \FluentDOM::getXPathTransformer();
       /** @var Document|Element $this */
       return $this->evaluate(

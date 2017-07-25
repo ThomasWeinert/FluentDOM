@@ -48,7 +48,7 @@ namespace FluentDOM\Utility {
      * @param string $message
      * @return bool
      */
-    public static function assertNode($node, $message = 'DOMNode expected, got: %s.'):bool {
+    public static function assertNode($node, $message = 'DOMNode expected, got: %s.'): bool {
       if (!($node instanceof \DOMNode)) {
         throw new \InvalidArgumentException(
           sprintf(
@@ -123,7 +123,7 @@ namespace FluentDOM\Utility {
      * @param int $option
      * @return bool
      */
-    public static function hasOption($options, $option):bool {
+    public static function hasOption($options, $option): bool {
       return ($options & $option) === $option;
     }
   }

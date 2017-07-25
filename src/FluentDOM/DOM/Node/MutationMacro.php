@@ -28,7 +28,7 @@ namespace FluentDOM\DOM\Node {
      * @param mixed $value
      * @return bool
      */
-    private static function isStringCastable($value):bool {
+    private static function isStringCastable($value): bool {
       return is_scalar($value) || (is_object($value) && method_exists($value, '__toString'));
     }
 
@@ -36,7 +36,7 @@ namespace FluentDOM\DOM\Node {
      * @param mixed $value
      * @return bool
      */
-    private static function isTraversableOfNodes($value):bool {
+    private static function isTraversableOfNodes($value): bool {
       return (
         !($value instanceof \DOMNode) &&
         ($value instanceof \Traversable || is_array($value))

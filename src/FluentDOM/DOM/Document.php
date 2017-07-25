@@ -141,7 +141,7 @@ namespace FluentDOM\DOM {
      * @throws \LogicException
      * @return Element
      */
-    public function createElement($name, $content = NULL, array $attributes = NULL):Element {
+    public function createElement($name, $content = NULL, array $attributes = NULL): Element {
       list($prefix, $localName) = QualifiedName::split($name);
       $namespaceURI = '';
       if ($prefix !== FALSE) {
@@ -176,7 +176,7 @@ namespace FluentDOM\DOM {
      * @param string|NULL $content
      * @return Element
      */
-    public function createElementNS($namespaceURI, $qualifiedName, $content = NULL):Element {
+    public function createElementNS($namespaceURI, $qualifiedName, $content = NULL): Element {
       /** @var Element $node */
       $node = parent::createElementNS($namespaceURI, $qualifiedName);
       $this->appendContent($node, $content);
@@ -193,7 +193,7 @@ namespace FluentDOM\DOM {
      * @param string|NULL $value
      * @return Attribute
      */
-    public function createAttribute($name, $value = NULL):Attribute {
+    public function createAttribute($name, $value = NULL): Attribute {
       list($prefix) = QualifiedName::split($name);
       if (empty($prefix)) {
         $node = parent::createAttribute($name);
@@ -214,7 +214,7 @@ namespace FluentDOM\DOM {
      * @param array $attributes
      * @return Element
      */
-    public function appendElement(string $name, $content = '', array $attributes = NULL):Element {
+    public function appendElement(string $name, $content = '', array $attributes = NULL): Element {
       $this->appendChild(
         $node = $this->createElement($name, $content, $attributes)
       );
@@ -258,7 +258,7 @@ namespace FluentDOM\DOM {
      * @param int $options
      * @return string
      */
-    public function toXml($context = NULL, int $options = 0):string {
+    public function toXml($context = NULL, int $options = 0): string {
       if ($context instanceof \DOMNodeList) {
         $result = '';
         foreach ($context as $node) {
@@ -274,7 +274,7 @@ namespace FluentDOM\DOM {
      *
      * @return string
      */
-    public function __toString():string {
+    public function __toString(): string {
       return $this->saveXML();
     }
 
@@ -287,7 +287,7 @@ namespace FluentDOM\DOM {
      * @param \DOMNode|\DOMNodeList|NULL $context
      * @return string
      */
-    public function toHtml($context = NULL):string {
+    public function toHtml($context = NULL): string {
       return $this->saveHtml($context);
     }
 
@@ -297,7 +297,7 @@ namespace FluentDOM\DOM {
      * @param \DOMNode|\DOMNodeList|NULL $context
      * @return string
      */
-    public function saveHTML($context = NULL):string {
+    public function saveHTML($context = NULL): string {
       if ($context instanceof \DOMDocumentFragment) {
         $context = $context->childNodes;
       }
@@ -331,7 +331,7 @@ namespace FluentDOM\DOM {
      * @param string $name
      * @return \DOMNodeList
      */
-    public function getElementsByTagName($name):\DOMNodeList {
+    public function getElementsByTagName($name): \DOMNodeList {
       list($prefix, $localName) = QualifiedName::split($name);
       $namespaceURI = $this->namespaces()->resolveNamespace((string)$prefix);
       if ($namespaceURI != '') {

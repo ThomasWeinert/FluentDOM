@@ -91,7 +91,7 @@ namespace FluentDOM\Loader\Supports {
      * @param array|\Traversable|Options $options
      * @return Options
      */
-    public function getOptions($options):Options {
+    public function getOptions($options): Options {
       $result = new Options(
         $options,
         [

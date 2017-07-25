@@ -180,7 +180,7 @@ namespace FluentDOM\Utility {
      * @param string $name
      * @return array
      */
-    public static function split(string $name):array {
+    public static function split(string $name): array {
       if (FALSE !== ($position = strpos($name, ':'))) {
         $prefix = substr($name, 0, $position);
         $localName = substr($name, $position + 1);
@@ -220,7 +220,7 @@ namespace FluentDOM\Utility {
      * @param string $default
      * @return string
      */
-    public static function normalizeString(string $string, string $default = '_'):string {
+    public static function normalizeString(string $string, string $default = '_'): string {
       $nameStartChar =
         'A-Z_a-z'.
         '\\x{C0}-\\x{D6}\\x{D8}-\\x{F6}\\x{F8}-\\x{2FF}\\x{370}-\\x{37D}'.

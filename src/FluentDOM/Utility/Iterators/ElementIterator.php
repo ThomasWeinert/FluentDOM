@@ -22,7 +22,7 @@ namespace FluentDOM\Utility\Iterators {
      *
      * @return bool
      */
-    public function valid():bool {
+    public function valid(): bool {
       $owner = $this->getOwner();
       return
         NULL !== $owner->childNodes &&
@@ -34,7 +34,7 @@ namespace FluentDOM\Utility\Iterators {
      *
      * @return \DOMNode
      */
-    public function current():\DOMNode {
+    public function current(): \DOMNode {
       return $this->getOwner()->childNodes->item($this->_position);
     }
 
@@ -44,7 +44,7 @@ namespace FluentDOM\Utility\Iterators {
      * @throws \UnexpectedValueException
      * @return \RecursiveIterator
      */
-    public function getChildren():\RecursiveIterator {
+    public function getChildren(): \RecursiveIterator {
       $element = $this->current();
       if ($element instanceof Element) {
         return new self($element);
@@ -59,7 +59,7 @@ namespace FluentDOM\Utility\Iterators {
      *
      * @return bool
      */
-    public function hasChildren():bool {
+    public function hasChildren(): bool {
       return
         $this->valid() &&
         $this->current() instanceof Element &&

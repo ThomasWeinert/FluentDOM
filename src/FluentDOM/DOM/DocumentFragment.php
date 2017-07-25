@@ -43,7 +43,7 @@ namespace FluentDOM\DOM {
      *
      * @return string
      */
-    public function __toString():string {
+    public function __toString(): string {
       $result = '';
       foreach ($this->childNodes as $child) {
         $result .= (string)$child;
@@ -54,14 +54,14 @@ namespace FluentDOM\DOM {
     /**
      * @return int
      */
-    public function count():int {
+    public function count(): int {
       return $this->childNodes->length;
     }
 
     /**
      * @return \Iterator
      */
-    public function getIterator():\Iterator {
+    public function getIterator(): \Iterator {
       return new \ArrayIterator(iterator_to_array($this->childNodes));
     }
 
@@ -75,7 +75,7 @@ namespace FluentDOM\DOM {
      * @param NULL|array|\Traversable|\DOMElement $namespaces
      * @return Namespaces
      */
-    public function namespaces($namespaces = NULL):Namespaces {
+    public function namespaces($namespaces = NULL): Namespaces {
       if (isset($namespaces) || (!$this->_namespaces instanceof Namespaces)) {
         $this->_namespaces = new Namespaces();
       }
@@ -122,7 +122,7 @@ namespace FluentDOM\DOM {
      * @param NULL|array|\Traversable|\DOMElement $namespaces
      * @return bool
      */
-    public function appendXml($data, $namespaces = NULL):bool {
+    public function appendXml($data, $namespaces = NULL): bool {
       $namespaces = $this->namespaces($namespaces);
       if (count($namespaces) == 0) {
         return parent::appendXml($data);
@@ -154,7 +154,7 @@ namespace FluentDOM\DOM {
      * @param array $attributes
      * @return Element
      */
-    public function appendElement(string $name, $content = '', array $attributes = NULL):Element {
+    public function appendElement(string $name, $content = '', array $attributes = NULL): Element {
       $this->appendChild(
         $node = $this->ownerDocument->createElement($name, $content, $attributes)
       );
@@ -167,7 +167,7 @@ namespace FluentDOM\DOM {
      *
      * @return string
      */
-    public function saveXmlFragment():string {
+    public function saveXmlFragment(): string {
       return $this->ownerDocument->saveXML($this);
     }
   }

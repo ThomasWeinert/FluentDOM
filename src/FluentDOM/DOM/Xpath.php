@@ -44,7 +44,7 @@ namespace FluentDOM\DOM {
      * @param string $namespaceURI
      * @return bool
      */
-    public function registerNamespace($prefix, $namespaceURI):bool {
+    public function registerNamespace($prefix, $namespaceURI): bool {
       if (
         $this->_documentReference instanceOf Document &&
         (
@@ -135,7 +135,7 @@ namespace FluentDOM\DOM {
      * @param string $string
      * @return string
      */
-    public function quote(string $string):string {
+    public function quote(string $string): string {
       $string = str_replace("\x00", '', $string);
       $hasSingleQuote = FALSE !== strpos($string, "'");
       if ($hasSingleQuote) {
@@ -160,7 +160,7 @@ namespace FluentDOM\DOM {
      * @param string $name
      * @return bool
      */
-    public function __isset(string $name):bool {
+    public function __isset(string $name): bool {
       switch ($name) {
       case 'registerNodeNamespaces' :
         return TRUE;

@@ -75,7 +75,7 @@ namespace FluentDOM\Loader\Json {
     /**
      * @return string[]
      */
-    public function getSupported():array {
+    public function getSupported(): array {
       return ['json', 'application/json', 'text/json'];
     }
 
@@ -185,7 +185,7 @@ namespace FluentDOM\Loader\Json {
      * @param mixed $value
      * @return string
      */
-    public function getTypeFromValue($value):string {
+    public function getTypeFromValue($value): string {
       if (is_array($value)) {
         if (empty($value) || array_keys($value) === range(0, count($value) - 1)) {
           return self::TYPE_ARRAY;

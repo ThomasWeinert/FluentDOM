@@ -54,7 +54,7 @@ abstract class FluentDOM {
    * @param string $contentType
    * @return string
    */
-  public static function save($node, string $contentType = 'text/xml'):string {
+  public static function save($node, string $contentType = 'text/xml'): string {
     if ($node instanceof FluentDOM\Query) {
       $node = $node->document;
     }
@@ -178,7 +178,7 @@ abstract class FluentDOM {
    *
    * @return FluentDOM\Serializer\Factory\Group
    */
-  public static function getSerializerFactories():FluentDOM\Serializer\Factory\Group {
+  public static function getSerializerFactories(): FluentDOM\Serializer\Factory\Group {
     if (!(self::$_serializerFactories instanceof FluentDOM\Serializer\Factory)) {
       $xml = function($contentType, \DOMNode $node) {
         return new FluentDOM\Serializer\Xml($node);
@@ -211,7 +211,7 @@ abstract class FluentDOM {
    */
   public static function getXPathTransformer(
     string $errorMessage = 'No CSS selector support installed'
-  ):\FluentDOM\DOM\Xpath\Transformer {
+  ): \FluentDOM\DOM\Xpath\Transformer {
     foreach (FluentDOM::$_xpathTransformers as $index => $transformer) {
       if (is_string($transformer) && class_exists($transformer)) {
         FluentDOM::$_xpathTransformers[$index] = new $transformer();

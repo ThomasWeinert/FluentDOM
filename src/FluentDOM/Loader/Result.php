@@ -33,14 +33,14 @@ namespace FluentDOM\Loader {
     /**
      * @return Document
      */
-    public function getDocument():Document {
+    public function getDocument(): Document {
       return $this->_document;
     }
 
     /**
      * @return string
      */
-    public function getContentType():string {
+    public function getContentType(): string {
       return $this->_contentType;
     }
 

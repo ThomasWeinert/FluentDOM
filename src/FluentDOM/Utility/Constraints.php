@@ -19,7 +19,7 @@ namespace FluentDOM\Utility {
      * It returns the node or NULL.
      *
      * @param mixed $node
-     * @param boolean $ignoreTextNodes
+     * @param bool $ignoreTextNodes
      * @return \DOMElement|\DOMText|\DOMCdataSection
      */
     public static function filterNode($node, $ignoreTextNodes = FALSE) {
@@ -82,8 +82,8 @@ namespace FluentDOM\Utility {
      * If $silent is disabled, an exception is thrown for invalid callbacks
      *
      * @param mixed $callback
-     * @param boolean $allowGlobalFunctions
-     * @param boolean $silent (no InvalidArgumentException)
+     * @param bool $allowGlobalFunctions
+     * @param bool $silent (no InvalidArgumentException)
      * @throws \InvalidArgumentException
      * @return callable|NULL
      */

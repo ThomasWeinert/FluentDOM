@@ -11,7 +11,7 @@ namespace FluentDOM\DOM\Node\QuerySelector {
 
     /**
      * @param string $selector
-     * @return Element|null
+     * @return Element|NULL
      */
     public function querySelector(string $selector) {
       $node = $this->querySelectorAll($selector)->item(0);

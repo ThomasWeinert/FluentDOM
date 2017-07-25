@@ -122,9 +122,9 @@ namespace FluentDOM\Serializer {
       case 'number' :
         return (float)$node->nodeValue;
       case 'boolean' :
-        return $node->nodeValue === 'true' ? true : false;
+        return $node->nodeValue === 'true' ? TRUE : FALSE;
       case 'null' :
-        return null;
+        return NULL;
       default :
         return $node->nodeValue;
       }

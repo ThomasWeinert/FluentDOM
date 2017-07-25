@@ -23,7 +23,7 @@ namespace FluentDOM {
      * Validate if the loader supports the given content type
      *
      * @param string $contentType
-     * @return boolean
+     * @return bool
      */
     function supports(string $contentType):bool;
 

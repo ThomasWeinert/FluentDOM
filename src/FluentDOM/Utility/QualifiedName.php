@@ -63,10 +63,10 @@ namespace FluentDOM\Utility {
      * Validate string as qualified node name part (namespace or local name)
      *
      * @param string $name full QName
-     * @param integer $offset Offset of NCName part in QName
+     * @param int $offset Offset of NCName part in QName
      * @param string $fullName full name used in error message
      * @throws \UnexpectedValueException
-     * @return boolean
+     * @return bool
      */
     private function isNCName(string $name, int $offset = 0, string $fullName = NULL) {
       $nameStartChar =
@@ -113,7 +113,7 @@ namespace FluentDOM\Utility {
     }
 
     /**
-     * Define dynamic properties, return false for all other
+     * Define dynamic properties, return FALSE for all other
      *
      * @param string $property
      * @return bool

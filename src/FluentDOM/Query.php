@@ -404,7 +404,7 @@ namespace FluentDOM {
      * Reduce the set of matched elements to a single element.
      *
      * @example eq.php Usage Example: FluentDOM\Query::eq()
-     * @param integer $position Element index (start with 0)
+     * @param int $position Element index (start with 0)
      * @return Query
      */
     public function eq($position) {
@@ -450,7 +450,7 @@ namespace FluentDOM {
     /**
      * Retrieve the matched DOM elements in an array. A negative position will be counted from the end.
      *
-     * @param integer|NULL optional offset of a single element to get.
+     * @param int|NULL optional offset of a single element to get.
      * @return array|\DOMNode|NULL
      */
     public function get($position = NULL) {
@@ -494,12 +494,12 @@ namespace FluentDOM {
     }
 
     /**
-     * Checks the current selection against an expression and returns true,
+     * Checks the current selection against an expression and returns TRUE,
      * if at least one element of the selection fits the given expression.
      *
      * @example is.php Usage Example: FluentDOM\Query::is()
      * @param string $selector selector
-     * @return boolean
+     * @return bool
      */
     public function is($selector) {
       foreach ($this->_nodes as $node) {
@@ -751,8 +751,8 @@ namespace FluentDOM {
      * Selects a subset of the matched elements.
      *
      * @example slice.php Usage Example: FluentDOM\Query::slice()
-     * @param integer $start
-     * @param integer $end
+     * @param int $start
+     * @param int $end
      * @return Query
      */
     public function slice($start, $end = NULL) {
@@ -1370,7 +1370,7 @@ namespace FluentDOM {
     }
 
     /**
-     * Returns true if the specified attribute is present on at least one of
+     * Returns TRUE if the specified attribute is present on at least one of
      * the set of matched elements.
      *
      * @param string $name
@@ -1428,10 +1428,10 @@ namespace FluentDOM {
     }
 
     /**
-     * Returns true if the specified class is present on at least one of the set of matched elements.
+     * Returns TRUE if the specified class is present on at least one of the set of matched elements.
      *
      * @param string $class
-     * @return boolean
+     * @return bool
      */
     public function hasClass($class) {
       foreach ($this->_nodes as $node) {
@@ -1462,7 +1462,7 @@ namespace FluentDOM {
      *
      * @example toggleClass.php Usage Example: FluentDOM\Query::toggleClass()
      * @param string|callable $class
-     * @param NULL|boolean $switch toggle if NULL, add if TRUE, remove if FALSE
+     * @param NULL|bool $switch toggle if NULL, add if TRUE, remove if FALSE
      * @return Query
      */
     public function toggleClass($class, $switch = NULL) {
@@ -1643,7 +1643,7 @@ namespace FluentDOM {
      * actual $element parameter, it will check the first matched node.
      *
      * @param \DOMElement $element
-     * @return boolean
+     * @return bool
      */
     public function hasData(\DOMElement $element = NULL) {
       if ($element || ($element = $this->getFirstElement())) {

@@ -21,7 +21,7 @@ namespace FluentDOM {
    *
    * @property string $contentType Output type - text/xml or text/html
    * @property callable $onPrepareSelector A callback to convert the selector into xpath
-   * @property-read integer $length The amount of elements found by selector.
+   * @property-read int $length The amount of elements found by selector.
    * @property-read Document|\DOMDocument $document Internal DOMDocument object
    * @property-read XPath $xpath Internal XPath object
    */
@@ -81,7 +81,7 @@ namespace FluentDOM {
 
     /**
      * Use document context for expression (not selected nodes).
-     * @var boolean $_useDocumentContext
+     * @var bool $_useDocumentContext
      */
     protected $_useDocumentContext = TRUE;
 
@@ -97,7 +97,7 @@ namespace FluentDOM {
 
     /**
      * @param mixed $source
-     * @param null|string $contentType
+     * @param NULL|string $contentType
      */
     public function __construct($source = NULL, $contentType = 'text/xml') {
       if (isset($source)) {
@@ -192,7 +192,7 @@ namespace FluentDOM {
      * Return the options from the original loading action, but only if the
      * content type equals the loaded content type.
      *
-     * @param null|string $contentType
+     * @param NULL|string $contentType
      * @return array|mixed
      */
     public function getLoadingOptions($contentType = NULL) {
@@ -212,7 +212,7 @@ namespace FluentDOM {
      * The item() method is used to access elements in the node list,
      * like in a DOMNodeList.
      *
-     * @param integer $position
+     * @param int $position
      * @return \DOMElement|\DOMNode
      */
     public function item($position) {
@@ -386,7 +386,7 @@ namespace FluentDOM {
      *
      * @throws \InvalidArgumentException
      * @param NULL|callable|string|array|\DOMNode|\Traversable $selector
-     * @return callable|null
+     * @return callable|NULL
      */
     public function getSelectorCallback($selector) {
       if (NULL === $selector || Constraints::filterCallable($selector)) {
@@ -418,11 +418,11 @@ namespace FluentDOM {
     }
 
     /**
-     * Test that selector matches context and return true/false
+     * Test that selector matches context and return TRUE/FALSE
      *
      * @param string $selector
      * @param \DOMNode $context optional, default value NULL
-     * @return boolean
+     * @return bool
      */
     protected function matches($selector, \DOMNode $context = NULL) {
       $check = $this->xpath->evaluate(
@@ -474,8 +474,8 @@ namespace FluentDOM {
      * Check if index exists in internal array
      *
      * @example interfaces/ArrayAccess.php Usage Example: ArrayAccess Interface
-     * @param integer $offset
-     * @return boolean
+     * @param int $offset
+     * @return bool
      */
     public function offsetExists($offset) {
       return isset($this->_nodes[$offset]);
@@ -485,7 +485,7 @@ namespace FluentDOM {
      * Get element from internal array
      *
      * @example interfaces/ArrayAccess.php Usage Example: ArrayAccess Interface
-     * @param integer $offset
+     * @param int $offset
      * @return \DOMElement|\DOMNode|NULL
      */
     public function offsetGet($offset) {
@@ -496,7 +496,7 @@ namespace FluentDOM {
      * If somebody tries to modify the internal array throw an exception.
      *
      * @example interfaces/ArrayAccess.php Usage Example: ArrayAccess Interface
-     * @param integer $offset
+     * @param int $offset
      * @param mixed $value
      * @throws \BadMethodCallException
      */
@@ -508,7 +508,7 @@ namespace FluentDOM {
      * If somebody tries to remove an element from the internal array throw an exception.
      *
      * @example interfaces/ArrayAccess.php Usage Example: ArrayAccess Interface
-     * @param integer $offset
+     * @param int $offset
      * @throws \BadMethodCallException
      */
     public function offsetUnset($offset) {
@@ -685,7 +685,7 @@ namespace FluentDOM {
      * Push new element(s) an the internal element list
      *
      * @param \DOMNode|\Traversable|array|NULL $elements
-     * @param boolean $ignoreTextNodes ignore text nodes
+     * @param bool $ignoreTextNodes ignore text nodes
      * @throws \OutOfBoundsException
      * @throws \InvalidArgumentException
      * @return $this
@@ -757,7 +757,7 @@ namespace FluentDOM {
      *
      * @example find.php Usage Example: FluentDOM::find()
      * @param mixed $selector selector
-     * @param integer $options FIND_* options CONTEXT_DOCUMENT, FIND_MODE_FILTER, FIND_FORCE_SORT
+     * @param int $options FIND_* options CONTEXT_DOCUMENT, FIND_MODE_FILTER, FIND_FORCE_SORT
      * @return Nodes
      */
     public function find($selector, $options = 0) {
@@ -830,7 +830,7 @@ namespace FluentDOM {
      * Search for a given element from among the matched elements.
      *
      * @param NULL|string|\DOMNode|\Traversable $selector
-     * @return integer
+     * @return int
      */
     public function index($selector = NULL) {
       if (count($this->_nodes) > 0) {

@@ -40,7 +40,7 @@ namespace FluentDOM\Loader {
       if ($this->supports($contentType)) {
         return (new Libxml\Errors())->capture(
           function() use ($source, $contentType, $options) {
-            $selection = false;
+            $selection = FALSE;
             $document = new Document();
             $settings = $this->getOptions($options);
             if ($this->isFragment($contentType, $settings)) {

@@ -70,7 +70,7 @@ namespace FluentDOM {
      * Validate if the list contains a loader that supports the given content type
      *
      * @param string $contentType
-     * @return boolean
+     * @return bool
      */
     public function supports(string $contentType): bool {
       foreach ($this as $loader) {

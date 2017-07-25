@@ -173,10 +173,10 @@ namespace FluentDOM\DOM {
     /**
      * @param string $namespaceURI
      * @param string $qualifiedName
-     * @param string|null $content
+     * @param string|NULL $content
      * @return Element
      */
-    public function createElementNS($namespaceURI, $qualifiedName, $content = null):Element {
+    public function createElementNS($namespaceURI, $qualifiedName, $content = NULL):Element {
       /** @var Element $node */
       $node = parent::createElementNS($namespaceURI, $qualifiedName);
       $this->appendContent($node, $content);
@@ -190,7 +190,7 @@ namespace FluentDOM\DOM {
      * Allow to add a attribute value directly.
      *
      * @param string $name
-     * @param string|null $value
+     * @param string|NULL $value
      * @return Attribute
      */
     public function createAttribute($name, $value = NULL):Attribute {

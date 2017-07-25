@@ -40,9 +40,9 @@ namespace FluentDOM {
      * Positions cursor on the next node skipping all subtrees. If $name contains
      * a namespace prefix it will be resolved using the registered namespaces.
      *
-     * @param null|string $name The name of the next node to move to.
-     * @param null|string $namespaceURI
-     * @param callable|null $filter
+     * @param NULL|string $name The name of the next node to move to.
+     * @param NULL|string $namespaceURI
+     * @param callable|NULL $filter
      * @return bool
      */
     public function next($name = NULL, $namespaceURI = NULL, callable $filter = NULL) {
@@ -74,9 +74,9 @@ namespace FluentDOM {
      * Move to next node in document, including subtrees. If $name contains
      * a namespace prefix it will be resolved using the registered namespaces.
      *
-     * @param null|string $name The name of the next node to move to.
-     * @param null|string $namespaceURI
-     * @param callable|null $filter
+     * @param NULL|string $name The name of the next node to move to.
+     * @param NULL|string $namespaceURI
+     * @param callable|NULL $filter
      * @return bool
      */
     public function read($name = NULL, $namespaceURI = NULL, callable $filter = NULL) {

@@ -268,12 +268,12 @@ namespace FluentDOM\Nodes\Creator {
     private $_traversable = NULL;
 
     /**
-     * @var callable|null
+     * @var callable|NULL
      */
     private $_map = NULL;
 
     /**
-     * @var null|\Iterator
+     * @var NULL|\Iterator
      */
     private $_iterator = NULL;
 

@@ -18,7 +18,7 @@ namespace FluentDOM\Utility\Iterators {
 
     /**
      * internal position pointer variable
-     * @var integer
+     * @var int
      */
     protected $_position  = 0;
 
@@ -47,7 +47,7 @@ namespace FluentDOM\Utility\Iterators {
     /**
      * Get current iterator pointer
      *
-     * @return integer
+     * @return int
      */
     public function key() {
       return $this->_position;
@@ -72,7 +72,7 @@ namespace FluentDOM\Utility\Iterators {
     /**
      * Move iterator pointer to specified element
      *
-     * @param integer $position
+     * @param int $position
      * @throws \InvalidArgumentException
      */
     public function seek($position) {

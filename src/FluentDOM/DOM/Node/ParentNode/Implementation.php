@@ -29,7 +29,7 @@ namespace FluentDOM\DOM\Node\ParentNode {
 
     /**
      * Returns the first element child node
-     * @return Element|null
+     * @return Element|NULL
      */
     public function getFirstElementChild() {
       if ($this instanceof Document) {
@@ -47,7 +47,7 @@ namespace FluentDOM\DOM\Node\ParentNode {
 
     /**
      * Returns the last element child node
-     * @return Element|null
+     * @return Element|NULL
      */
     public function getLastElementChild() {
       if ($this instanceof Document) {

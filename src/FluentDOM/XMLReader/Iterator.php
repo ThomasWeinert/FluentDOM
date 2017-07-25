@@ -15,7 +15,7 @@ namespace FluentDOM\XMLReader {
      */
     private $_reader;
     /**
-     * @var string|null
+     * @var string|NULL
      */
     private $_name;
     /**
@@ -24,12 +24,12 @@ namespace FluentDOM\XMLReader {
     private $_filter;
 
     /**
-     * @var integer
+     * @var int
      */
     private $_key = -1;
 
     /**
-     * @var null|\DOMNode
+     * @var NULL|\DOMNode
      */
     private $_current = NULL;
 
@@ -81,7 +81,7 @@ namespace FluentDOM\XMLReader {
     }
 
     /**
-     * @return \DOMNode|null
+     * @return \DOMNode|NULL
      */
     public function current() {
       return $this->_current;

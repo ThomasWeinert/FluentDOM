@@ -57,7 +57,7 @@ namespace FluentDOM {
 
     /**
      * @param string $name
-     * @param null|string $content
+     * @param NULL|string $content
      * @return bool
      */
     public function writeElement($name, $content = NULL) {
@@ -87,7 +87,7 @@ namespace FluentDOM {
      * @param string $prefix
      * @param string $name
      * @param string $uri
-     * @param null|string $content
+     * @param NULL|string $content
      * @return bool
      */
     public function writeElementNS($prefix, $name, $uri, $content = NULL) {
@@ -161,7 +161,7 @@ namespace FluentDOM {
           $this->_xmlnsStack->add($namespacePrefix, $namespaceURI);
           return $result;
         } else {
-          return false;
+          return FALSE;
         }
       } elseif (empty($prefix)) {
         return parent::writeAttribute($localName, $content);

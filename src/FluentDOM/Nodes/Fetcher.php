@@ -189,7 +189,7 @@ namespace FluentDOM\Nodes {
      * @param int $index
      * @param callable $filter
      * @param callable $stopAt
-     * @return boolean[]
+     * @return bool[]
      */
     private function getNodeStatus(
       \DOMNode $node, $index, callable $filter = NULL, callable $stopAt = NULL

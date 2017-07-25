@@ -91,7 +91,7 @@ namespace FluentDOM\Query\Css {
      * Get the property count of the first selected node
      *
      * @see Countable::count()
-     * @return integer
+     * @return int
      */
     public function count() {
       return count($this->_properties);
@@ -162,7 +162,7 @@ namespace FluentDOM\Query\Css {
      *
      * @param string|Callable $value
      * @param \DOMElement $node
-     * @param integer $index
+     * @param int $index
      * @param string $currentValue
      * @return string
      */
@@ -182,7 +182,7 @@ namespace FluentDOM\Query\Css {
      * Check if string is an valid css property name.
      *
      * @param string $propertyName
-     * @return boolean
+     * @return bool
      */
     private function _isCSSProperty($propertyName) {
       $pattern = '(^-?(?:[a-z]+-)*(?:[a-z]+)$)D';

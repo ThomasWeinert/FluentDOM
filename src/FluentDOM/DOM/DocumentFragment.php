@@ -72,7 +72,7 @@ namespace FluentDOM\DOM {
      * to set the namespaces. If the list is empty, the namespaces from
      * the document object will be used.
      *
-     * @param null|array|\Traversable|\DOMElement $namespaces
+     * @param NULL|array|\Traversable|\DOMElement $namespaces
      * @return Namespaces
      */
     public function namespaces($namespaces = NULL):Namespaces {
@@ -119,7 +119,7 @@ namespace FluentDOM\DOM {
      * Append an xml to the fragment, it can use namespace prefixes defined on the fragment object.
      *
      * @param string $data
-     * @param null|array|\Traversable|\DOMElement $namespaces
+     * @param NULL|array|\Traversable|\DOMElement $namespaces
      * @return bool
      */
     public function appendXml($data, $namespaces = NULL):bool {

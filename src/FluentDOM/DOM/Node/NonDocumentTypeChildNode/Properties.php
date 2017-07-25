@@ -8,7 +8,7 @@ namespace FluentDOM\DOM\Node\NonDocumentTypeChildNode {
 
     /**
      * @param string $name
-     * @return \DOMNode|null
+     * @return \DOMNode|NULL
      */
     public function __get(string $name) {
       switch ($name) {

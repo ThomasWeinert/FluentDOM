@@ -58,7 +58,7 @@ namespace FluentDOM\Query {
      *
      * @see ArrayAccess::offsetExists()
      * @param string $name
-     * @return boolean
+     * @return bool
      */
     public function offsetExists($name) {
       if ($node = $this->getFirstElement()) {
@@ -119,7 +119,7 @@ namespace FluentDOM\Query {
      * Get the attribute count of the first selected node
      *
      * @see Countable::count()
-     * @return integer
+     * @return int
      */
     public function count() {
       if ($node = $this->getFirstElement()) {

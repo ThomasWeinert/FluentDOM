@@ -460,7 +460,7 @@ namespace FluentDOM\DOM {
     }
 
     /**
-     * Return true if the provided namespace is the same as the one on the element
+     * Return TRUE if the provided namespace is the same as the one on the element
      *
      * @param string $prefix
      * @param string $namespaceURI

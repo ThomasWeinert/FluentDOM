@@ -40,7 +40,7 @@ namespace FluentDOM\Nodes {
      * @param mixed $content
      * @param bool $includeTextNodes
      * @param int $limit
-     * @return array|\Traversable null
+     * @return array|\Traversable|NULL
      */
     private function getNodeList(
       $content,
@@ -91,8 +91,8 @@ namespace FluentDOM\Nodes {
      * Convert a given content into and array of nodes
      *
      * @param mixed $content
-     * @param boolean $includeTextNodes
-     * @param integer $limit
+     * @param bool $includeTextNodes
+     * @param int $limit
      * @throws Exceptions\LoadingError\EmptyResult
      * @return array
      */
@@ -133,8 +133,8 @@ namespace FluentDOM\Nodes {
      *
      * @param string $xml
      * @param string $contentType
-     * @param boolean $includeTextNodes
-     * @param integer $limit
+     * @param bool $includeTextNodes
+     * @param int $limit
      * @throws Exceptions\InvalidFragmentLoader
      * @return array
      */

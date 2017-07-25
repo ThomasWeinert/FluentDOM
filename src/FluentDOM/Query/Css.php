@@ -49,7 +49,7 @@ namespace FluentDOM\Query {
     /**
      * Get the style properties from the first node in the Query object
      *
-     * @return Css\Properties|null
+     * @return Css\Properties|NULL
      */
     private function getStyleProperties() {
       if (isset($this->_fd[0]) && ($node = $this->_fd[0]) instanceof \DOMElement) {
@@ -140,7 +140,7 @@ namespace FluentDOM\Query {
      * Get the property count of the first selected node
      *
      * @see Countable::count()
-     * @return integer
+     * @return int
      */
     public function count() {
       if ($properties = $this->getStyleProperties()) {

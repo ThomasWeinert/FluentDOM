@@ -13,7 +13,7 @@ namespace FluentDOM\DOM {
    * FluentDOM\DOM\Xpath extends PHPs DOMXpath class. It disables the
    * automatic namespace registration by default and, throws notices for the query method.
    *
-   * @property boolean registerNodeNamespaces
+   * @property bool registerNodeNamespaces
    */
   class Xpath extends \DOMXPath {
 
@@ -23,7 +23,7 @@ namespace FluentDOM\DOM {
     private $_registerNodeNamespaces = FALSE;
 
     /**
-     * @var \DOMDocument|null
+     * @var \DOMDocument|NULL
      */
     private $_documentReference = NULL;
 
@@ -66,7 +66,7 @@ namespace FluentDOM\DOM {
      *
      * @param string $expression
      * @param \DOMNode $contextNode
-     * @param NULL|boolean $registerNodeNS
+     * @param NULL|bool $registerNodeNS
      * @return string|float|bool|\DOMNodeList
      */
     public function evaluate($expression, \DOMNode $contextNode = NULL, $registerNodeNS = NULL) {
@@ -95,7 +95,7 @@ namespace FluentDOM\DOM {
      * @deprecated
      * @param string $expression
      * @param \DOMNode $contextNode
-     * @param NULL|boolean $registerNodeNS
+     * @param NULL|bool $registerNodeNS
      * @return \DOMNodeList
      */
     public function query($expression, \DOMNode $contextNode = NULL, $registerNodeNS = NULL) {
@@ -111,8 +111,8 @@ namespace FluentDOM\DOM {
      *
      * @param string $expression
      * @param \DOMNode $contextNode
-     * @param NULL|boolean $registerNodeNS
-     * @return \DOMNode|null
+     * @param NULL|bool $registerNodeNS
+     * @return \DOMNode|NULL
      */
     public function firstOf(string $expression, \DOMNode $contextNode = NULL, bool $registerNodeNS = NULL) {
       $nodes = $this->evaluate($expression, $contextNode, $registerNodeNS);

@@ -53,7 +53,7 @@ namespace FluentDOM\Loader\Json {
 
     /**
      * Called to map key names tag names
-     * @var null|callable
+     * @var NULL|callable
      */
     private $_onMapKey = NULL;
 
@@ -106,7 +106,7 @@ namespace FluentDOM\Loader\Json {
      * @param string $source
      * @param string $contentType
      * @param array|\Traversable|Options $options
-     * @return \FluentDOM\DOM\DocumentFragment|null
+     * @return \FluentDOM\DOM\DocumentFragment|NULL
      */
     public function loadFragment($source, string $contentType, $options = []) {
       if ($this->supports($contentType)) {
@@ -132,7 +132,7 @@ namespace FluentDOM\Loader\Json {
      * Get/Set a mapping callback for the tag names. If it is a callable
      * it will be set. FALSE removes the callback.
      *
-     * function callback(string $key, boolean $isArrayElement) {}
+     * function callback(string $key, bool $isArrayElement) {}
      *
      * @param NULL|FALSE|callable $callback
      * @return callable|NULL|FALSE

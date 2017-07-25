@@ -27,7 +27,7 @@ namespace FluentDOM\Loader\PHP {
     use Supports;
 
     /**
-     * @var Xml|null
+     * @var Xml|NULL
      */
     private $_xmlLoader = NULL;
 

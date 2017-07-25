@@ -146,7 +146,7 @@ namespace FluentDOM\Loader\Text {
     }
 
     private function getLines($source, Options $options) {
-      $result = null;
+      $result = NULL;
       if (is_string($source)) {
         $options->isAllowed($sourceType = $options->getSourceType($source));
         switch ($sourceType) {

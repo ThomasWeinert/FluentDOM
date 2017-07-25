@@ -28,7 +28,7 @@ namespace FluentDOM\Loader {
 
     private $_options = [];
     protected $_callbacks = [
-      self::CB_IDENTIFY_STRING_SOURCE => false
+      self::CB_IDENTIFY_STRING_SOURCE => FALSE
     ];
 
     /**
@@ -93,7 +93,7 @@ namespace FluentDOM\Loader {
 
     /**
      * @param mixed $offset
-     * @return mixed|null
+     * @return mixed|NULL
      */
     public function offsetGet($offset) {
       return array_key_exists($offset, $this->_options) ? $this->_options[$offset] : NULL;

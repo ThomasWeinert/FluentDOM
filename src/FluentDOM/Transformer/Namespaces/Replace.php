@@ -22,7 +22,7 @@ namespace FluentDOM\Transformer\Namespaces {
     /**
      * @var \DOMDocument
      */
-    private $_document = null;
+    private $_document = NULL;
 
     /**
      * @var array

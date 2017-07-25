@@ -20,7 +20,7 @@ namespace FluentDOM\Utility\Iterators {
     /**
      * Check if current iterator pointer contains a valid element
      *
-     * @return boolean
+     * @return bool
      */
     public function valid() {
       return is_object($this->getOwner()->item($this->_position));
@@ -50,7 +50,7 @@ namespace FluentDOM\Utility\Iterators {
     /**
      * Check if the current iterator element has children
      *
-     * @return boolean
+     * @return bool
      */
     public function hasChildren() {
       $item = $this->getOwner()->item($this->_position);

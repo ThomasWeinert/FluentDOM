@@ -17,7 +17,7 @@ namespace FluentDOM\Query\Css {
      *
      * @param string $propertyNameOne
      * @param string $propertyNameTwo
-     * @return integer
+     * @return int
      */
     public function __invoke($propertyNameOne, $propertyNameTwo) {
       return $this->compare($propertyNameOne, $propertyNameTwo);
@@ -28,7 +28,7 @@ namespace FluentDOM\Query\Css {
      *
      * @param string $propertyNameOne
      * @param string $propertyNameTwo
-     * @return integer
+     * @return int
      */
     public function compare($propertyNameOne, $propertyNameTwo) {
       $propertyOne = $this->_decodeName($propertyNameOne);

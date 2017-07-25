@@ -60,7 +60,7 @@ namespace FluentDOM\Query {
     /**
      * countable Interface: return the number of data attributes
      *
-     * @return integer
+     * @return int
      */
     public function count() {
       $result = 0;

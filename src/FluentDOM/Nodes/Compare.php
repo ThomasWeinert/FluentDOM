@@ -4,8 +4,8 @@ namespace FluentDOM\Nodes {
 
   class Compare {
 
-    private $_xpath = null;
-    private $_document = null;
+    private $_xpath = NULL;
+    private $_document = NULL;
     private $_cache = [];
 
     public function __construct(\DOMXPath $xpath) {

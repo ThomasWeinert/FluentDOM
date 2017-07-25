@@ -43,8 +43,8 @@ namespace FluentDOM\Query {
      *
      * @return array
      */
-    public function toArray() {
-      $result = array();
+    public function toArray(): array {
+      $result = [];
       if ($node = $this->getFirstElement()) {
         foreach ($node->attributes as $attribute) {
           $result[$attribute->name] = $attribute->value;
@@ -60,7 +60,7 @@ namespace FluentDOM\Query {
      * @param string $name
      * @return bool
      */
-    public function offsetExists($name) {
+    public function offsetExists($name): bool {
       if ($node = $this->getFirstElement()) {
         return $node->hasAttribute($name);
       }
@@ -111,7 +111,7 @@ namespace FluentDOM\Query {
      * @see IteratorAggregate::getIterator()
      * @return \Iterator
      */
-    public function getIterator() {
+    public function getIterator(): \Iterator {
       return new \ArrayIterator($this->toArray());
     }
 
@@ -121,7 +121,7 @@ namespace FluentDOM\Query {
      * @see Countable::count()
      * @return int
      */
-    public function count() {
+    public function count(): int {
       if ($node = $this->getFirstElement()) {
         return $node->attributes->length;
       }

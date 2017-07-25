@@ -19,7 +19,7 @@ namespace FluentDOM\Query\Css {
      * @param string $propertyNameTwo
      * @return int
      */
-    public function __invoke($propertyNameOne, $propertyNameTwo) {
+    public function __invoke(string $propertyNameOne, string $propertyNameTwo) {
       return $this->compare($propertyNameOne, $propertyNameTwo);
     }
 
@@ -30,7 +30,7 @@ namespace FluentDOM\Query\Css {
      * @param string $propertyNameTwo
      * @return int
      */
-    public function compare($propertyNameOne, $propertyNameTwo) {
+    public function compare(string $propertyNameOne, string $propertyNameTwo): int {
       $propertyOne = $this->_decodeName($propertyNameOne);
       $propertyTwo = $this->_decodeName($propertyNameTwo);
       $propertyOneLevels = count($propertyOne);
@@ -68,7 +68,7 @@ namespace FluentDOM\Query\Css {
      * @param string $propertyName
      * @return array
      */
-    private function _decodeName($propertyName) {
+    private function _decodeName(string $propertyName): array {
       if (substr($propertyName, 0, 1) === '-') {
         $pos = strpos($propertyName, '-', 1);
         $items = explode('-', substr($propertyName, $pos + 1));

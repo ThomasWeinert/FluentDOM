@@ -29,11 +29,11 @@ namespace FluentDOM\Query\Css {
      */
     private $_properties = array();
 
-    public function __construct($styleString = '') {
+    public function __construct(string $styleString = '') {
       $this->setStyleString($styleString);
     }
 
-    public function __toString() {
+    public function __toString(): string {
       return $this->getStyleString();
     }
 
@@ -42,7 +42,7 @@ namespace FluentDOM\Query\Css {
      *
      * @param string $styleString
      */
-    public function setStyleString($styleString) {
+    public function setStyleString(string $styleString) {
       $this->_properties = array();
       if (!empty($styleString)) {
         $matches = array();
@@ -64,7 +64,7 @@ namespace FluentDOM\Query\Css {
      *
      * @return string
      */
-    public function getStyleString() {
+    public function getStyleString(): string {
       $result = '';
       if (is_array($this->_properties) && count($this->_properties) > 0) {
         uksort($this->_properties, new PropertyCompare());
@@ -83,7 +83,7 @@ namespace FluentDOM\Query\Css {
      * @see IteratorAggregate::getIterator()
      * @return \Iterator
      */
-    public function getIterator() {
+    public function getIterator(): \Iterator {
       return new \ArrayIterator($this->_properties);
     }
 
@@ -93,7 +93,7 @@ namespace FluentDOM\Query\Css {
      * @see Countable::count()
      * @return int
      */
-    public function count() {
+    public function count(): int {
       return count($this->_properties);
     }
 
@@ -105,7 +105,7 @@ namespace FluentDOM\Query\Css {
      * @param string $name
      * @return bool
      */
-    public function offsetExists($name) {
+    public function offsetExists($name): bool {
       return isset($this->_properties[$name]);
     }
 
@@ -116,7 +116,7 @@ namespace FluentDOM\Query\Css {
      * @param string $name
      * @return string $value
      */
-    public function offsetGet($name) {
+    public function offsetGet($name): string {
       return $this->_properties[$name];
     }
 
@@ -144,7 +144,7 @@ namespace FluentDOM\Query\Css {
      * Remove a css properties if it is set.
      *
      * @see ArrayAccess::offsetUnset()
-     * @param string $names
+     * @param string|array $names
      */
     public function offsetUnset($names) {
       if (!is_array($names)) {
@@ -166,7 +166,7 @@ namespace FluentDOM\Query\Css {
      * @param string $currentValue
      * @return string
      */
-    public function compileValue($value, $node, $index, $currentValue) {
+    public function compileValue($value, \DOMElement $node, int $index, string $currentValue = NULL) {
       if (!is_string($value) && is_callable($value, TRUE)) {
         return (string)call_user_func(
           $value,
@@ -184,7 +184,7 @@ namespace FluentDOM\Query\Css {
      * @param string $propertyName
      * @return bool
      */
-    private function _isCSSProperty($propertyName) {
+    private function _isCSSProperty(string $propertyName): bool {
       $pattern = '(^-?(?:[a-z]+-)*(?:[a-z]+)$)D';
       if (preg_match($pattern, $propertyName)) {
         return TRUE;

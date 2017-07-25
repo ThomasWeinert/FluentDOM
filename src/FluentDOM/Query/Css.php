@@ -69,7 +69,7 @@ namespace FluentDOM\Query {
      * @param string $name
      * @return bool
      */
-    public function offsetExists($name) {
+    public function offsetExists($name): bool {
       if ($properties = $this->getStyleProperties()) {
         return isset($properties[$name]);
       }
@@ -129,7 +129,7 @@ namespace FluentDOM\Query {
      * @see IteratorAggregate::getIterator()
      * @return \Iterator
      */
-    public function getIterator() {
+    public function getIterator(): \Iterator {
       if ($properties = $this->getStyleProperties()) {
         return $properties->getIterator();
       }
@@ -142,7 +142,7 @@ namespace FluentDOM\Query {
      * @see Countable::count()
      * @return int
      */
-    public function count() {
+    public function count(): int {
       if ($properties = $this->getStyleProperties()) {
         return count($properties);
       }

@@ -9,8 +9,6 @@
 
 namespace FluentDOM\Query {
 
-  use FluentDOM\Query as Query;
-
   /**
    * FluentDOM\Data is used for the FluentDOM::data property and FluentDOM::data() method, providing an
    * interface html5 data properties of a node.
@@ -38,7 +36,7 @@ namespace FluentDOM\Query {
      *
      * @return array
      */
-    public function toArray() {
+    public function toArray(): array {
       $result = array();
       foreach ($this->_node->attributes as $attribute) {
         if ($this->isDataProperty($attribute->name)) {
@@ -53,7 +51,7 @@ namespace FluentDOM\Query {
      *
      * @return \Iterator
      */
-    public function getIterator() {
+    public function getIterator(): \Iterator {
       return new \ArrayIterator($this->toArray());
     }
 
@@ -62,7 +60,7 @@ namespace FluentDOM\Query {
      *
      * @return int
      */
-    public function count() {
+    public function count(): int {
       $result = 0;
       foreach ($this->_node->attributes as $attribute) {
         if ($this->isDataProperty($attribute->name)) {
@@ -78,7 +76,7 @@ namespace FluentDOM\Query {
      * @param string $name
      * @return bool
      */
-    public function __isset($name) {
+    public function __isset(string $name): bool {
       return $this->_node->hasAttribute($this->encodeName($name));
     }
 
@@ -88,7 +86,7 @@ namespace FluentDOM\Query {
      * @param string $name
      * @param mixed $value
      */
-    public function __set($name, $value) {
+    public function __set(string $name, $value) {
       $this->_node->setAttribute($this->encodeName($name), $this->encodeValue($value));
     }
 
@@ -98,7 +96,7 @@ namespace FluentDOM\Query {
      * @param string $name
      * @return mixed
      */
-    public function __get($name) {
+    public function __get(string $name) {
       $name = $this->encodeName($name);
       if ($this->_node->hasAttribute($name)) {
         return $this->decodeValue($this->_node->getAttribute($name));
@@ -121,7 +119,7 @@ namespace FluentDOM\Query {
      * @param string $name
      * @return bool
      */
-    private function isDataProperty($name) {
+    private function isDataProperty(string $name): bool {
       return (0 === strpos($name, 'data-') && $name === strtolower($name));
     }
 
@@ -131,7 +129,7 @@ namespace FluentDOM\Query {
      * @param string $name
      * @return string
      */
-    private function encodeName($name) {
+    private function encodeName(string $name): string {
       if (preg_match('(^[a-z][a-z\d]*([A-Z]+[a-z\d]*)+$)DS', $name)) {
         $camelCasePattern = '((?:[a-z][a-z\d]+)|(?:[A-Z][a-z\d]+)|(?:[A-Z]+(?![a-z\d])))S';
         if (preg_match_all($camelCasePattern, $name, $matches)) {
@@ -147,7 +145,7 @@ namespace FluentDOM\Query {
      * @param string $name
      * @return string
      */
-    private function decodeName($name) {
+    private function decodeName(string $name): string {
       $parts = explode('-', strToLower(substr($name, 5)));
       $result = array_shift($parts);
       foreach ($parts as $part) {
@@ -162,7 +160,7 @@ namespace FluentDOM\Query {
      * @param string $value
      * @return mixed
      */
-    private function decodeValue($value) {
+    private function decodeValue(string $value) {
       switch (TRUE) {
       case ($value === 'true') :
         return TRUE;
@@ -186,7 +184,7 @@ namespace FluentDOM\Query {
      * @param mixed $value
      * @return string
      */
-    private function encodeValue($value) {
+    private function encodeValue($value): string {
       if (is_bool($value)) {
         return ($value) ? 'true' : 'false';
       } elseif (is_object($value) || is_array($value)) {

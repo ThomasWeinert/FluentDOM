@@ -11,7 +11,7 @@ namespace FluentDOM\Exceptions\LoadingError {
      * @covers FluentDOM\Exceptions\LoadingError\Libxml
      */
     public function testWithErrorFromString() {
-      $error = new \stdClass();
+      $error = new \LibXMLError();
       $error->level = LIBXML_ERR_FATAL;
       $error->file = '';
       $error->line = 21;
@@ -29,7 +29,7 @@ namespace FluentDOM\Exceptions\LoadingError {
      * @covers FluentDOM\Exceptions\LoadingError\Libxml
      */
     public function testWithErrorFromFile() {
-      $error = new \stdClass();
+      $error = new \LibXMLError();
       $error->level = LIBXML_ERR_FATAL;
       $error->file = 'demo.xml';
       $error->line = 21;

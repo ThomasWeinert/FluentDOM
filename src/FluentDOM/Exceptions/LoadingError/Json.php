@@ -21,7 +21,7 @@ namespace FluentDOM\Exceptions\LoadingError {
     /**
      * @param int $code
      */
-    public function __construct($code) {
+    public function __construct(int $code) {
       parent::__construct(
         isset($this->_jsonErrors[$code]) ? $this->_jsonErrors[$code] : $this->_jsonErrors[-1],
         $code

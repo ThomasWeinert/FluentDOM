@@ -11,7 +11,7 @@ namespace FluentDOM\Exceptions\LoadingError {
       LIBXML_ERR_FATAL => "fatal error"
     ];
 
-    public function __construct($error) {
+    public function __construct(\LibXMLError $error) {
       if (empty($error->file)) {
         $message = 'Libxml %1$s in line %3$d at character %4$d: %5$s.';
       } else {

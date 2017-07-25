@@ -10,8 +10,7 @@
 namespace FluentDOM\DOM {
 
   use FluentDOM\Appendable;
-  use FluentDOM\Iterators\ElementIterator;
-  use FluentDOM\Query;
+  use FluentDOM\Utility\Iterators\ElementIterator;
   use FluentDOM\Utility\QualifiedName;
 
   /**

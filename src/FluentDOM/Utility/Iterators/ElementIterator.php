@@ -6,7 +6,7 @@
  * @copyright Copyright (c) 2009-2017 Bastian Feder, Thomas Weinert
  */
 
-namespace FluentDOM\Iterators {
+namespace FluentDOM\Utility\Iterators {
 
   use FluentDOM\DOM\Element as Element;
 
@@ -22,7 +22,7 @@ namespace FluentDOM\Iterators {
      *
      * @return boolean
      */
-    public function valid() {
+    public function valid():bool {
       $owner = $this->getOwner();
       return
         NULL !== $owner->childNodes &&
@@ -34,7 +34,7 @@ namespace FluentDOM\Iterators {
      *
      * @return \DOMNode
      */
-    public function current() {
+    public function current():\DOMNode {
       return $this->getOwner()->childNodes->item($this->_position);
     }
 
@@ -44,7 +44,7 @@ namespace FluentDOM\Iterators {
      * @throws \UnexpectedValueException
      * @return \RecursiveIterator
      */
-    public function getChildren() {
+    public function getChildren():\RecursiveIterator {
       $element = $this->current();
       if ($element instanceof Element) {
         return new self($element);
@@ -59,7 +59,7 @@ namespace FluentDOM\Iterators {
      *
      * @return boolean
      */
-    public function hasChildren() {
+    public function hasChildren():bool {
       return
         $this->valid() &&
         $this->current() instanceof Element &&

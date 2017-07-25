@@ -14,6 +14,7 @@ namespace FluentDOM {
   use FluentDOM\DOM\Xpath;
   use FluentDOM\DOM\Xpath\Transformer;
   use FluentDOM\Utility\Constraints;
+  use FluentDOM\Utility\Iterators\NodesIterator;
 
   /**
    * Implements an extended replacement for DOMNodeList.
@@ -450,10 +451,10 @@ namespace FluentDOM {
     /**
      * IteratorAggregate interface
      *
-     * @return Iterators\NodesIterator
+     * @return NodesIterator
      */
-    public function getIterator() {
-      return new Iterators\NodesIterator($this);
+    public function getIterator():NodesIterator {
+      return new NodesIterator($this);
     }
 
     /**

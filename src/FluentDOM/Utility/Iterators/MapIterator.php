@@ -5,7 +5,7 @@
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  * @copyright Copyright (c) 2009-2017 Bastian Feder, Thomas Weinert
  */
-namespace FluentDOM\Iterators {
+namespace FluentDOM\Utility\Iterators {
 
   /**
    * An iterator that calls a map function for the current value before returning it.

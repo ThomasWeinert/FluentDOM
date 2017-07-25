@@ -1,15 +1,15 @@
 <?php
-namespace FluentDOM\Element {
+namespace FluentDOM\Utility\Iterators {
 
   use FluentDOM\DOM\Document;
   use FluentDOM\TestCase;
 
-  require_once(__DIR__.'/../TestCase.php');
+  require_once(__DIR__.'/../../TestCase.php');
 
-  class IteratorTest extends TestCase {
+  class ElementIteratorTest extends TestCase {
 
     /**
-     * @covers \FluentDOM\Iterators\ElementIterator
+     * @covers \FluentDOM\Utility\Iterators\ElementIterator
      */
     public function testIterator() {
       $document = new Document();
@@ -24,7 +24,7 @@ namespace FluentDOM\Element {
     }
 
     /**
-     * @covers \FluentDOM\Iterators\ElementIterator
+     * @covers \FluentDOM\Utility\Iterators\ElementIterator
      */
     public function testSeek() {
       $document = new Document();
@@ -37,7 +37,7 @@ namespace FluentDOM\Element {
     }
 
     /**
-     * @covers \FluentDOM\Iterators\ElementIterator
+     * @covers \FluentDOM\Utility\Iterators\ElementIterator
      */
     public function testSeekWithInvalidPositionExpectingException() {
       $document = new Document();
@@ -51,7 +51,7 @@ namespace FluentDOM\Element {
     }
 
     /**
-     * @covers \FluentDOM\Iterators\ElementIterator
+     * @covers \FluentDOM\Utility\Iterators\ElementIterator
      */
     public function testRecursiveIterator() {
       $document = new Document();
@@ -70,7 +70,7 @@ namespace FluentDOM\Element {
     }
 
     /**
-     * @covers \FluentDOM\Iterators\ElementIterator
+     * @covers \FluentDOM\Utility\Iterators\ElementIterator
      */
     public function testGetChildrenOnTextNodeExpectingException() {
       $document = new Document();
@@ -78,7 +78,7 @@ namespace FluentDOM\Element {
       $iterator = $document->documentElement->getIterator();
       $this->expectException(
         \UnexpectedValueException::class,
-        'Called FluentDOM\Iterators\ElementIterator::getChildren with invalid current element.'
+        'Called FluentDOM\Utility\Iterators\ElementIterator::getChildren with invalid current element.'
       );
       $iterator->getChildren();
     }

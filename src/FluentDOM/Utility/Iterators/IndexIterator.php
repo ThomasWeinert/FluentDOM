@@ -7,7 +7,7 @@
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  * @copyright Copyright (c) 2009-2017 Bastian Feder, Thomas Weinert
  */
-namespace FluentDOM\Iterators {
+namespace FluentDOM\Utility\Iterators {
 
   /**
  * A abstract superclass for index based iterators. The object

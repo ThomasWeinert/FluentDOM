@@ -6,7 +6,7 @@
  * @copyright Copyright (c) 2009-2017 Bastian Feder, Thomas Weinert
  */
 
-namespace FluentDOM\Iterators {
+namespace FluentDOM\Utility\Iterators {
 
   use FluentDOM\Nodes as Nodes;
 

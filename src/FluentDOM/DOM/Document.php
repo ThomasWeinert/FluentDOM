@@ -9,7 +9,6 @@
 
 namespace FluentDOM\DOM {
 
-  use FluentDOM\Query;
   use FluentDOM\Utility\Namespaces;
   use FluentDOM\Utility\QualifiedName;
 

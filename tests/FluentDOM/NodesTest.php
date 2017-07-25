@@ -1,7 +1,7 @@
 <?php
 namespace FluentDOM {
 
-  use FluentDOM\Iterators\NodesIterator;
+  use FluentDOM\Utility\Iterators\NodesIterator;
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Xpath;
 

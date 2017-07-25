@@ -1,13 +1,13 @@
 <?php
-namespace FluentDOM\Iterators {
+namespace FluentDOM\Utility\Iterators {
 
   use FluentDOM\DOM\Document;
   use FluentDOM\Query;
   use FluentDOM\TestCase;
 
-  require_once(__DIR__.'/../TestCase.php');
+  require_once(__DIR__.'/../../TestCase.php');
 
-  class QueryIteratorTest extends TestCase {
+  class NodesIteratorTest extends TestCase {
 
     public function testIteratorCurrent() {
       $document = new Document();

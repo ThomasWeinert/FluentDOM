@@ -26,7 +26,7 @@ $reader->registerNamespace('s', 'http://www.sitemaps.org/schemas/sitemap/0.9');
 $reader->registerNamespace('v', 'http://www.google.com/schemas/sitemap-video/1.1');
 
 foreach (new FluentDOM\XMLReader\SiblingIterator($reader, 's:url') as $url) {
-  /** @var FALSE|FluentDOM\Element $url */
+  /** @var FluentDOM\DOM\Element $url */
   var_dump(
     [
       $url('string(v:video/v:title)'),

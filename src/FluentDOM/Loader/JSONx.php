@@ -30,7 +30,7 @@ namespace FluentDOM\Loader {
     /**
      * @return string[]
      */
-    public function getSupported() {
+    public function getSupported(): array {
       return array('jsonx', 'application/xml+jsonx');
     }
 
@@ -41,7 +41,7 @@ namespace FluentDOM\Loader {
      * @param array|\Traversable|Options $options
      * @return Document|Result|NULL
      */
-    public function load($source, $contentType, $options = []) {
+    public function load($source, string $contentType, $options = []) {
       if ($this->supports($contentType) && !empty($source)) {
         $document = $this->loadXmlDocument($source, $contentType, $options);
         $target = new Document();
@@ -62,7 +62,7 @@ namespace FluentDOM\Loader {
       * @param array|\Traversable|Options $options
       * @return DocumentFragment|NULL
       */
-    public function loadFragment($source, $contentType, $options = []) {
+    public function loadFragment($source, string $contentType, $options = []) {
       if ($this->supports($contentType) && !empty($source)) {
         $document = new Document();
         $document->preserveWhiteSpace = FALSE;

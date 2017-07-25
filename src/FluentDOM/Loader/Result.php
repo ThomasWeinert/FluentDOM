@@ -24,7 +24,7 @@ namespace FluentDOM\Loader {
      * @param string $contentType
      * @param \DOMNode|\Traversable|array|NULL $selection
      */
-    public function __construct(Document $document, $contentType, $selection = NULL) {
+    public function __construct(Document $document, string $contentType, $selection = NULL) {
       $this->_document = $document;
       $this->_contentType = (string)$contentType;
       $this->_selection = $selection;

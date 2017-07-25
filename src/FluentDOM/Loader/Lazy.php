@@ -32,7 +32,7 @@ namespace FluentDOM\Loader {
      * @param Loadable|callable $loader
      * @throws \UnexpectedValueException
      */
-    public function add($contentType, $loader) {
+    public function add(string $contentType, $loader) {
       $contentType = $this->normalizeContentType($contentType);
       if ($loader instanceof Loadable || is_callable($loader)) {
         $this->_list[$contentType] = $loader;
@@ -52,7 +52,7 @@ namespace FluentDOM\Loader {
      * @param array[] $classes ['class' => ['type/one', 'type/two'], ...]
      * @param string $namespace
      */
-    public function addClasses($classes, $namespace = '') {
+    public function addClasses($classes, string $namespace = '') {
       $namespace = substr($namespace, -1) === '\\' ? substr($namespace, 0, -1) : $namespace;
       foreach ($classes as $loader => $types) {
         $loader = substr($loader, 0, 1) === '\\' ? $loader : '\\'.$loader;
@@ -82,7 +82,7 @@ namespace FluentDOM\Loader {
      * @param string $contentType
      * @return bool|Loadable
      */
-    public function get($contentType) {
+    public function get(string $contentType) {
       $contentType = $this->normalizeContentType($contentType);
       if (isset($this->_list[$contentType])) {
         if (!($this->_list[$contentType] instanceof Loadable)) {
@@ -106,18 +106,18 @@ namespace FluentDOM\Loader {
      * @param string $contentType
      * @return bool
      */
-    public function supports($contentType) {
+    public function supports(string $contentType):bool {
       $contentType = $this->normalizeContentType($contentType);
       return isset($this->_list[$contentType]);
     }
 
     /**
-     * @param string $source
+     * @param mixed $source
      * @param mixed $contentType
      * @param array|\Traversable|Options $options
      * @return Document|Result|NULL
      */
-    public function load($source, $contentType, $options = []) {
+    public function load($source, string $contentType, $options = []) {
       $contentType = $this->normalizeContentType($contentType);
       if ($loader = $this->get($contentType)) {
         return $loader->load($source, $contentType, $options);
@@ -126,19 +126,19 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @param string $source
-     * @param mixed $contentType
+     * @param mixed $source
+     * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return DocumentFragment|NULL
      */
-    public function loadFragment($source, $contentType, $options = []) {
+    public function loadFragment($source, string $contentType, $options = []) {
       $contentType = $this->normalizeContentType($contentType);
       if ($loader = $this->get($contentType)) {
         return $loader->loadFragment($source, $contentType, $options);
       }
     }
 
-    private function normalizeContentType($contentType) {
+    private function normalizeContentType(string $contentType) {
       return trim(strtolower($contentType));
     }
   }

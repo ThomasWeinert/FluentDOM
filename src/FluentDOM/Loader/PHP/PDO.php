@@ -12,6 +12,7 @@ namespace FluentDOM\Loader\PHP {
   use FluentDOM\DOM\DocumentFragment;
   use FluentDOM\Exceptions\InvalidFragmentLoader;
   use FluentDOM\Loader\Json\JsonDOM;
+  use FluentDOM\Loader\Options;
   use FluentDOM\Loader\Result;
 
   /**
@@ -22,7 +23,7 @@ namespace FluentDOM\Loader\PHP {
     /**
      * @return string[]
      */
-    public function getSupported() {
+    public function getSupported(): array {
       return array('php/pdo', 'pdo');
     }
 
@@ -33,7 +34,7 @@ namespace FluentDOM\Loader\PHP {
      * @param array|\Traversable|Options $options
      * @return Document|Result|NULL
      */
-    public function load($source, $contentType, $options = []) {
+    public function load($source, string $contentType, $options = []) {
       if ($source instanceof \PDOStatement) {
         $document = new Document('1.0', 'UTF-8');
         $document->registerNamespace('json', self::XMLNS);
@@ -56,7 +57,7 @@ namespace FluentDOM\Loader\PHP {
      * @param array|\Traversable|Options $options
      * @return DocumentFragment|NULL
      */
-    public function loadFragment($source, $contentType, $options = []) {
+    public function loadFragment($source, string $contentType, $options = []) {
       throw new InvalidFragmentLoader(self::class);
     }
   }

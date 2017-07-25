@@ -20,8 +20,10 @@ namespace FluentDOM\Loader\Supports {
      * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return Document|Result|NULL
+     * @throws \Exception
+     * @throws \FluentDOM\Exceptions\InvalidSource
      */
-    public function load($source, $contentType, $options = []) {
+    public function load($source, string $contentType, $options = []) {
       if (FALSE !== ($json = $this->getJson($source, $contentType, $options))) {
         $document = new Document('1.0', 'UTF-8');
         $this->transferTo($document, $json);
@@ -37,8 +39,10 @@ namespace FluentDOM\Loader\Supports {
      * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return DocumentFragment|NULL
+     * @throws \Exception
+     * @throws \FluentDOM\Exceptions\InvalidSource
      */
-    public function loadFragment($source, $contentType, $options = []) {
+    public function loadFragment($source, string $contentType, $options = []) {
       if (FALSE !== ($json = $this->getJson($source, $contentType, $options))) {
         $document = new Document('1.0', 'UTF-8');
         $fragment = $document->createDocumentFragment();
@@ -53,8 +57,10 @@ namespace FluentDOM\Loader\Supports {
      * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return mixed
+     * @throws \Exception
+     * @throws \FluentDOM\Exceptions\InvalidSource
      */
-    private function getJson($source, $contentType, $options)  {
+    private function getJson($source, string $contentType, $options)  {
       if ($this->supports($contentType)) {
         if (is_string($source)) {
           $json = FALSE;
@@ -85,7 +91,7 @@ namespace FluentDOM\Loader\Supports {
      * @param array|\Traversable|Options $options
      * @return Options
      */
-    public function getOptions($options) {
+    public function getOptions($options):Options {
       $result = new Options(
         $options,
         [
@@ -107,7 +113,7 @@ namespace FluentDOM\Loader\Supports {
      * @param mixed $value
      * @return string
      */
-    private function getValueAsString($value) {
+    private function getValueAsString($value): string {
       if (is_bool($value)) {
         return $value ? 'true' : 'false';
       } else {
@@ -119,10 +125,10 @@ namespace FluentDOM\Loader\Supports {
      * @param string $nodeName
      * @param \stdClass $properties
      * @param \DOMNode $parent
-     * @return string
+     * @return string|NULL
      */
     private function getNamespaceForNode(
-      $nodeName, \stdClass $properties, \DOMNode $parent
+      string $nodeName, \stdClass $properties, \DOMNode $parent
     ) {
       $prefix = substr($nodeName, 0, strpos($nodeName, ':'));
       $xmlns = $this->getNamespacePropertyName($prefix);
@@ -137,7 +143,7 @@ namespace FluentDOM\Loader\Supports {
      * @param string $prefix
      * @return string
      */
-    private function getNamespacePropertyName($prefix) {
+    protected function getNamespacePropertyName($prefix) {
       return empty($prefix) ? 'xmlns' : 'xmlns:'.$prefix;
     }
   }

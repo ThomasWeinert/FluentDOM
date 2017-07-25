@@ -9,14 +9,14 @@ namespace FluentDOM\Loader {
      * @param string $contentType
      * @return bool
      */
-    public function supports($contentType) {
+    public function supports(string $contentType): bool {
       return (in_array(strtolower($contentType), $this->getSupported()));
     }
 
     /**
      * @return string[]
      */
-    public function getSupported() {
+    public function getSupported(): array {
       return array();
     }
 
@@ -28,7 +28,7 @@ namespace FluentDOM\Loader {
      * @param bool $ignoreWhitespace
      * @return bool
      */
-    private function startsWith($haystack, $needle, $ignoreWhitespace = TRUE) {
+    private function startsWith(string $haystack, string $needle, bool $ignoreWhitespace = TRUE): bool {
       $pattern = $ignoreWhitespace
         ? '(^\s*'.preg_quote($needle).')'
         : '(^'.preg_quote($needle).')';

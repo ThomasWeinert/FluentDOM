@@ -97,7 +97,7 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
     $mockLoader
       ->expects($this->any())
       ->method('supports')
-      ->will($this->returnValue(['mock/loader']));
+      ->will($this->returnValue(TRUE));
     $mockLoader
       ->expects($this->any())
       ->method('load')
@@ -122,7 +122,7 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
     $mockLoader
       ->expects($this->any())
       ->method('supports')
-      ->will($this->returnValue(['one', 'two']));
+      ->will($this->returnValue(TRUE));
     $mockLoader
       ->expects($this->any())
       ->method('load')
@@ -147,7 +147,7 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
     $mockLoader
       ->expects($this->any())
       ->method('supports')
-      ->will($this->returnValue(['some/type']));
+      ->will($this->returnValue(TRUE));
     $mockLoader
       ->expects($this->any())
       ->method('load')

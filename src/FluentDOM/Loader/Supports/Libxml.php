@@ -15,7 +15,7 @@ namespace FluentDOM\Loader\Supports {
      * @param array|\Traversable|Options $options
      * @return Options
      */
-    public function getOptions($options) {
+    public function getOptions($options): Options {
       $result = new Options(
         $options,
         [
@@ -35,7 +35,7 @@ namespace FluentDOM\Loader\Supports {
      * @param array|\Traversable|Options $options
      * @return Document
      */
-    private function loadXmlDocument($source, $contentType, $options) {
+    private function loadXmlDocument(string $source, string $contentType, $options) {
       return (new Errors())->capture(
         function () use ($source, $contentType, $options) {
           $document = new Document();

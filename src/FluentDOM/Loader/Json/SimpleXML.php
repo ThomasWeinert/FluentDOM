@@ -40,8 +40,10 @@ namespace FluentDOM\Loader\Json {
      * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return Document|Result|NULL
+     * @throws \Exception
+     * @throws \FluentDOM\Exceptions\InvalidSource
      */
-    public function load($source, $contentType, $options = []) {
+    public function load($source, string $contentType, $options = []) {
       if (FALSE !== ($json = $this->getJson($source, $contentType, $options))) {
         $document = new Document('1.0', 'UTF-8');
         $document->appendChild(

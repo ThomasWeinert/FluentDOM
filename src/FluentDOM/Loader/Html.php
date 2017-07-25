@@ -25,7 +25,7 @@ namespace FluentDOM\Loader {
     /**
      * @return string[]
      */
-    public function getSupported() {
+    public function getSupported(): array {
       return array('html', 'text/html', 'html-fragment', 'text/html-fragment');
     }
 
@@ -36,7 +36,7 @@ namespace FluentDOM\Loader {
      * @param array|\Traversable|Options $options
      * @return Document|Result|NULL
      */
-    public function load($source, $contentType, $options = []) {
+    public function load($source, string $contentType, $options = []) {
       if ($this->supports($contentType)) {
         return (new Libxml\Errors())->capture(
           function() use ($source, $contentType, $options) {
@@ -71,7 +71,7 @@ namespace FluentDOM\Loader {
       return NULL;
     }
 
-    private function ensureEncodingPI($source, $encoding, $force = FALSE) {
+    private function ensureEncodingPI(string $source, string $encoding = NULL, bool $force = NULL): string {
       $hasXmlPi = preg_match('(<\\?xml\\s)', $source);
       if (!$force) {
         if ($charset = $this->getCharsetFromMetaTag($source)) {
@@ -87,7 +87,7 @@ namespace FluentDOM\Loader {
       return $source;
     }
 
-    private function getCharsetFromMetaTag($source) {
+    private function getCharsetFromMetaTag(string $source) {
       $hasMetaTag = preg_match(
         '(<meta\\s+[^>]*charset=["\']\s*(?<charset>[^\\s\'">]+)\s*["\'])i',
         $source,
@@ -110,7 +110,7 @@ namespace FluentDOM\Loader {
           return isset($match['encoding']) ? $match['encoding'] : FALSE;
         }
       }
-      return false;
+      return FALSE;
     }
 
     /**
@@ -120,7 +120,7 @@ namespace FluentDOM\Loader {
      * @param array|\Traversable|Options $options
      * @return DocumentFragment|NULL
      */
-    public function loadFragment($source, $contentType, $options = []) {
+    public function loadFragment($source, string $contentType, $options = []) {
       if ($this->supports($contentType)) {
         $options = $this->getOptions($options);
         return (new Libxml\Errors())->capture(
@@ -146,7 +146,7 @@ namespace FluentDOM\Loader {
       return NULL;
     }
 
-    private function isFragment($contentType, $options) {
+    private function isFragment(string $contentType, $options) {
       return (
         $contentType == 'html-fragment' ||
         $contentType == 'text/html-fragment' ||
@@ -154,7 +154,7 @@ namespace FluentDOM\Loader {
       );
     }
 
-    private function loadFragmentIntoDom(\DOMDocument $document, $source, $settings) {
+    private function loadFragmentIntoDom(\DOMDocument $document, string $source, $settings) {
       $htmlDom = new Document();
       $htmlDom->loadHTML(
         $this->ensureEncodingPI(

@@ -23,7 +23,7 @@ namespace FluentDOM\Loader\Json {
     /**
      * @return string[]
      */
-    public function getSupported() {
+    public function getSupported(): array {
       return ['rayfish', 'application/rayfish', 'application/rayfish+json'];
     }
 
@@ -65,7 +65,7 @@ namespace FluentDOM\Loader\Json {
      * @param \stdClass $attributes
      */
     private function transferChildren(
-      \DOMElement $target, $json, $namespaces, $attributes
+      \DOMElement $target, \stdClass $json, \stdClass $namespaces, \stdClass $attributes
     ) {
       if (isset($json->{'#children'})) {
         $this->transferAttributes($target, $namespaces, $attributes);
@@ -85,7 +85,7 @@ namespace FluentDOM\Loader\Json {
      * @param \stdClass $namespaces
      * @param \stdClass $attributes
      */
-    private function transferAttributes(Element $node, $namespaces, $attributes) {
+    private function transferAttributes(Element $node, \stdClass $namespaces, \stdClass $attributes) {
       foreach ($namespaces as $name => $value) {
         $node->setAttribute($name, $value);
       }
@@ -98,7 +98,7 @@ namespace FluentDOM\Loader\Json {
      * @param \stdClass $json
      * @return \stdClass[]
      */
-    private function getAttributes($json) {
+    private function getAttributes(\stdClass $json) {
       $attributes = new \stdClass();
       $namespaces = new \stdClass();
       if (isset($json->{'#children'})) {

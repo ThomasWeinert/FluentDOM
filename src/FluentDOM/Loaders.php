@@ -72,7 +72,7 @@ namespace FluentDOM {
      * @param string $contentType
      * @return boolean
      */
-    public function supports($contentType) {
+    public function supports(string $contentType): bool {
       foreach ($this as $loader) {
         /**
          * @var Loadable $loader
@@ -93,7 +93,7 @@ namespace FluentDOM {
      * @param array|\Traversable|Options $options
      * @return \DOMDocument|Result|NULL
      */
-    public function load($source, $contentType, $options = []) {
+    public function load($source, string $contentType, $options = []) {
       $result = NULL;
       foreach ($this as $loader) {
         /**
@@ -115,7 +115,7 @@ namespace FluentDOM {
      * @param array|\Traversable|Options $options
      * @return \DOMDocumentFragment|NULL
      */
-    public function loadFragment($source, $contentType, $options = []) {
+    public function loadFragment($source, string $contentType, $options = []) {
       $fragment = NULL;
       foreach ($this as $loader) {
         /**

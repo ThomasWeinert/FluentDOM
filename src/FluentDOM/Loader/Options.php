@@ -52,7 +52,7 @@ namespace FluentDOM\Loader {
      * @param string $name
      * @param callable $callback
      */
-    public function setCallback($name, callable $callback) {
+    public function setCallback(string $name, callable $callback) {
       if (!array_key_exists($name, $this->_callbacks)) {
         throw new \InvalidArgumentException(
           sprintf('Unknown callback specifier "%s".', $name)
@@ -67,7 +67,7 @@ namespace FluentDOM\Loader {
      * @param mixed ...$arguments
      * @return mixed
      */
-    private function executeCallback($name, $default, ...$arguments) {
+    private function executeCallback(string $name, $default, ...$arguments) {
       $callback = $this->_callbacks[$name];
       if (is_callable($callback)) {
         return $callback(...$arguments);
@@ -79,7 +79,7 @@ namespace FluentDOM\Loader {
     /**
      * @return \Iterator
      */
-    public function getIterator() {
+    public function getIterator():\Iterator {
       return new \ArrayIterator($this->_options);
     }
 
@@ -87,7 +87,7 @@ namespace FluentDOM\Loader {
      * @param mixed $offset
      * @return bool
      */
-    public function offsetExists($offset) {
+    public function offsetExists($offset):bool {
       return array_key_exists($offset, $this->_options);
     }
 
@@ -137,7 +137,7 @@ namespace FluentDOM\Loader {
      * @param mixed $source
      * @return string
      */
-    public function getSourceType($source) {
+    public function getSourceType($source):string {
       if ($this[self::IS_FILE]) {
         return self::IS_FILE;
       } elseif ($this[self::IS_STRING]) {
@@ -154,8 +154,9 @@ namespace FluentDOM\Loader {
      * @param bool $throwException
      * @return bool
      * @throws \Exception
+     * @throws InvalidSource
      */
-    public function isAllowed($sourceType, $throwException = TRUE) {
+    public function isAllowed(string $sourceType, bool $throwException = TRUE):bool {
       try {
         switch ($sourceType) {
         case self::IS_FILE :

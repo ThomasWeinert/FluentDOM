@@ -67,7 +67,7 @@ namespace FluentDOM\Loader\Json {
      * @param int $options
      * @param int $depth
      */
-    public function __construct($options = 0, $depth = 100) {
+    public function __construct(int $options = 0, int $depth = 100) {
       $this->_recursions = (int)$depth;
       $this->_verbose = ($options & self::OPTION_VERBOSE) == self::OPTION_VERBOSE;
     }
@@ -75,7 +75,7 @@ namespace FluentDOM\Loader\Json {
     /**
      * @return string[]
      */
-    public function getSupported() {
+    public function getSupported():array {
       return ['json', 'application/json', 'text/json'];
     }
 
@@ -88,7 +88,7 @@ namespace FluentDOM\Loader\Json {
      * @param array|\Traversable|Options $options
      * @return Document|Result|NULL
      */
-    public function load($source, $contentType, $options = []) {
+    public function load($source, string $contentType, $options = []) {
       if (FALSE !== ($json = $this->getJson($source, $contentType, $options))) {
         $document = new Document('1.0', 'UTF-8');
         $document->appendChild(
@@ -108,7 +108,7 @@ namespace FluentDOM\Loader\Json {
      * @param array|\Traversable|Options $options
      * @return \FluentDOM\DOM\DocumentFragment|null
      */
-    public function loadFragment($source, $contentType, $options = []) {
+    public function loadFragment($source, string $contentType, $options = []) {
       if ($this->supports($contentType)) {
         $document = new Document('1.0', 'UTF-8');
         $fragment = $document->createDocumentFragment();
@@ -135,7 +135,7 @@ namespace FluentDOM\Loader\Json {
      * function callback(string $key, boolean $isArrayElement) {}
      *
      * @param NULL|FALSE|callable $callback
-     * @return callable|null
+     * @return callable|NULL|FALSE
      */
     public function onMapKey($callback = NULL) {
       if (isset($callback)) {
@@ -155,7 +155,7 @@ namespace FluentDOM\Loader\Json {
      * @param mixed $value
      * @param int $recursions
      */
-    protected function transferTo(\DOMNode $target, $value, $recursions = 100) {
+    protected function transferTo(\DOMNode $target, $value, int $recursions = 100) {
       if ($recursions < 1) {
         return;
       } elseif ($target instanceof \DOMElement || $target instanceOf \DOMDocumentFragment) {
@@ -185,7 +185,7 @@ namespace FluentDOM\Loader\Json {
      * @param mixed $value
      * @return string
      */
-    public function getTypeFromValue($value) {
+    public function getTypeFromValue($value):string {
       if (is_array($value)) {
         if (empty($value) || array_keys($value) === range(0, count($value) - 1)) {
           return self::TYPE_ARRAY;
@@ -212,7 +212,7 @@ namespace FluentDOM\Loader\Json {
      * @param bool $isArrayElement
      * @return string
      */
-    private function getQualifiedName($key, $default, $isArrayElement = FALSE) {
+    private function getQualifiedName(string $key, string $default, bool $isArrayElement = FALSE) {
       if ($callback = $this->onMapKey()) {
         $key = $callback($key, $isArrayElement);
       } elseif ($isArrayElement) {
@@ -224,9 +224,9 @@ namespace FluentDOM\Loader\Json {
     /**
      * @param string $type
      * @param mixed $value
-     * @return null|string
+     * @return NULL|string
      */
-    public function getValueAsString($type, $value) {
+    public function getValueAsString(string $type, $value) {
       switch ($type) {
       case self::TYPE_NULL :
         return NULL;
@@ -245,7 +245,7 @@ namespace FluentDOM\Loader\Json {
      * @param array $value
      * @param int $recursions
      */
-    private function transferArrayTo(\DOMNode $target, array $value, $recursions) {
+    private function transferArrayTo(\DOMNode $target, array $value, int $recursions) {
       $parentName = '';
       if ($target instanceof Element) {
         $target->setAttributeNS(self::XMLNS, 'json:type', 'array');
@@ -275,7 +275,7 @@ namespace FluentDOM\Loader\Json {
      * @param object $value
      * @param int $recursions
      */
-    private function transferObjectTo(\DOMNode $target, $value, $recursions) {
+    private function transferObjectTo(\DOMNode $target, $value, int $recursions) {
       $properties = is_array($value) ? $value : get_object_vars($value);
       if ($this->_verbose || empty($properties)) {
         $target->setAttributeNS(self::XMLNS, 'json:type', 'object');

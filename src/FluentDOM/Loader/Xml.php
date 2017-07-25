@@ -24,7 +24,7 @@ namespace FluentDOM\Loader {
     /**
      * @return string[]
      */
-    public function getSupported() {
+    public function getSupported():array {
       return array('xml', 'application/xml', 'text/xml');
     }
 
@@ -35,7 +35,7 @@ namespace FluentDOM\Loader {
      * @param array|\Traversable|Options $options
      * @return Document|Result|NULL
      */
-    public function load($source, $contentType, $options = []) {
+    public function load($source, string $contentType, $options = []) {
       if ($this->supports($contentType)) {
         return $this->loadXmlDocument($source, $contentType, $options);
       }
@@ -49,7 +49,7 @@ namespace FluentDOM\Loader {
      * @param array|\Traversable|Options $options
      * @return DocumentFragment|NULL
      */
-    public function loadFragment($source, $contentType, $options = []) {
+    public function loadFragment($source, string $contentType, $options = []) {
       if ($this->supports($contentType)) {
         return (new Libxml\Errors())->capture(
           function() use ($source, $contentType, $options) {

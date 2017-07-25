@@ -16,6 +16,8 @@ namespace FluentDOM\Loader\Json {
      * @dataProvider provideExamples
      * @param string $json
      * @param string $xml
+     * @throws \Exception
+     * @throws \FluentDOM\Exceptions\InvalidSource
      */
     public function testIntegeration($json, $xml) {
       $loader = new BadgerFish();

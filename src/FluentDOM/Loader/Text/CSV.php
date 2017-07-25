@@ -34,7 +34,7 @@ namespace FluentDOM\Loader\Text {
     /**
      * @return string[]
      */
-    public function getSupported() {
+    public function getSupported(): array {
       return ['text/csv'];
     }
 
@@ -45,7 +45,7 @@ namespace FluentDOM\Loader\Text {
      * @param array|\Traversable|Options $options
      * @return Document|Result|NULL
      */
-    public function load($source, $contentType, $options = []) {
+    public function load($source, string $contentType, $options = []) {
       $options = $this->getOptions($options);
       $hasHeaderLine = isset($options['HEADER']) ? (bool)$options['HEADER'] : !isset($options['FIELDS']);
       $this->configure($options);
@@ -67,7 +67,7 @@ namespace FluentDOM\Loader\Text {
      * @param array|\Traversable|Options $options
      * @return DocumentFragment|NULL
      */
-    public function loadFragment($source, $contentType, $options = []) {
+    public function loadFragment($source, string $contentType, $options = []) {
       $options = $this->getOptions($options);
       $options[Options::ALLOW_FILE] = FALSE;
       $hasHeaderLine = isset($options['FIELDS']) ? FALSE : (isset($options['HEADER']) && $options['HEADER']);

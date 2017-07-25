@@ -19,7 +19,7 @@ namespace FluentDOM\Loader\Libxml {
       LIBXML_ERR_FATAL => self::ERROR_FATAL
     ];
 
-    public function capture(callable $callback, $errorLevel = self::ERROR_FATAL) {
+    public function capture(callable $callback, int $errorLevel = self::ERROR_FATAL) {
       $exception = FALSE;
       $errorSetting = libxml_use_internal_errors(TRUE);
       libxml_clear_errors();

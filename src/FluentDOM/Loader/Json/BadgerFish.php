@@ -22,7 +22,7 @@ namespace FluentDOM\Loader\Json {
     /**
      * @return string[]
      */
-    public function getSupported() {
+    public function getSupported(): array {
       return ['badgerfish', 'application/badgerfish', 'application/badgerfish+json'];
     }
 
@@ -56,10 +56,10 @@ namespace FluentDOM\Loader\Json {
     /**
      * Get the property name for a namespace prefix
      *
-     * @param string|NULL $prefix
+     * @param string $prefix
      * @return string
      */
-    protected function getNamespacePropertyName($prefix) {
+    protected function getNamespacePropertyName(string $prefix):string {
       return empty($prefix) ? '$' : $prefix;
     }
 
@@ -85,7 +85,7 @@ namespace FluentDOM\Loader\Json {
      * @param string|number|boolean|NULL $data
      * @return array
      */
-    protected function transferAttributeTo(\DOMElement $node, $name, $data) {
+    protected function transferAttributeTo(\DOMElement $node, string $name, $data) {
       /** @var Document $document */
       $document = $node->ownerDocument ?: $node;
       $name = substr($name, 1);
@@ -103,7 +103,7 @@ namespace FluentDOM\Loader\Json {
      * @param mixed $data
      * @return array
      */
-    protected function transferChildTo(\DOMNode $node, $name, $data) {
+    protected function transferChildTo(\DOMNode $node, string $name, $data) {
       /** @var Document $document */
       $document = $node->ownerDocument ?: $node;
       $namespace = $this->getNamespaceForNode(

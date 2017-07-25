@@ -21,7 +21,7 @@ namespace FluentDOM\Loader\Json {
     /**
      * @return string[]
      */
-    public function getSupported() {
+    public function getSupported(): array {
       return ['jsonml', 'application/jsonml', 'application/jsonml+json'];
     }
 
@@ -44,7 +44,7 @@ namespace FluentDOM\Loader\Json {
      * @param \DOMElement $node
      * @param \stdClass $properties
      */
-    private function addNamespaceAttributes(\DOMElement $node, $properties) {
+    private function addNamespaceAttributes(\DOMElement $node, \stdClass $properties) {
       foreach ($properties as $name => $value) {
         if ($name === 'xmlns' || substr($name, 0, 6) === 'xmlns:') {
           if ($node instanceof \DOMElement) {
@@ -61,7 +61,7 @@ namespace FluentDOM\Loader\Json {
      * @param \DOMElement $node
      * @param \stdClass $properties
      */
-    private function addAttributes(\DOMElement $node, $properties) {
+    private function addAttributes(\DOMElement $node, \stdClass $properties) {
       $document = $node instanceof \DOMDocument ? $node : $node->ownerDocument;
       foreach ($properties as $name => $value) {
         if (!($name === 'xmlns' || substr($name, 0, 6) === 'xmlns:')) {

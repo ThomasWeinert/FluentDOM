@@ -14,6 +14,7 @@ namespace FluentDOM\Loader\PHP {
   use FluentDOM\Exceptions\InvalidArgument;
   use FluentDOM\Exceptions\InvalidFragmentLoader;
   use FluentDOM\Loadable;
+  use FluentDOM\Loader\Options;
   use FluentDOM\Loader\Result;
   use FluentDOM\Loader\Supports;
   use FluentDOM\Loader\Xml;
@@ -33,7 +34,7 @@ namespace FluentDOM\Loader\PHP {
     /**
      * @return string[]
      */
-    public function getSupported() {
+    public function getSupported(): array {
       return array('simplexml', 'php/simplexml');
     }
 
@@ -44,7 +45,7 @@ namespace FluentDOM\Loader\PHP {
      * @param array|\Traversable|Options $options
      * @return Document|Result|NULL
      */
-    public function load($source, $contentType, $options = []) {
+    public function load($source, string $contentType, $options = []) {
       if ($source instanceof \SimpleXMLElement) {
         $document = new Document();
         $document->appendChild($document->importNode(dom_import_simplexml($source), TRUE));
@@ -61,7 +62,7 @@ namespace FluentDOM\Loader\PHP {
      * @param array|\Traversable|Options $options
      * @return DocumentFragment|NULL
      */
-    public function loadFragment($source, $contentType, $options = []) {
+    public function loadFragment($source, string $contentType, $options = []) {
       if (!$this->supports($contentType)) {
         return NULL;
       } elseif (is_string($source)) {

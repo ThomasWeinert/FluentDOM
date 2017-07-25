@@ -30,7 +30,7 @@ abstract class FluentDOM {
    * @param array $options
    * @return \FluentDOM\DOM\Document
    */
-  public static function load($source, $contentType = 'text/xml', array $options = []) {
+  public static function load($source, string $contentType = 'text/xml', array $options = []) {
     if (!isset(self::$_loader)) {
       self::$_loader = self::getDefaultLoaders();
     }
@@ -43,25 +43,25 @@ abstract class FluentDOM {
    *
    * @param string $version
    * @param string $encoding
-   * @return \FluentDOM\Nodes\Creator
+   * @return FluentDOM\Nodes\Creator
    */
-  public static function create($version = '1.0', $encoding = 'UTF-8') {
-    return new \FluentDOM\Nodes\Creator($version, $encoding);
+  public static function create(string $version = '1.0', string $encoding = 'UTF-8'): \FluentDOM\Nodes\Creator {
+    return new FluentDOM\Nodes\Creator($version, $encoding);
   }
 
   /**
-   * @param \DOMNode|\FluentDOM\Query $node
+   * @param \DOMNode|FluentDOM\Query $node
    * @param string $contentType
    * @return string
    */
-  public static function save($node, $contentType = 'text/xml') {
-    if ($node instanceof \FluentDOM\Query) {
+  public static function save($node, string $contentType = 'text/xml'):string {
+    if ($node instanceof FluentDOM\Query) {
       $node = $node->document;
     }
     if ($serializer = self::getSerializerFactories()->createSerializer($contentType, $node)) {
       return (string)$serializer;
     }
-    throw new \FluentDOM\Exceptions\NoSerializer($contentType);
+    throw new FluentDOM\Exceptions\NoSerializer($contentType);
   }
 
   /**
@@ -70,9 +70,11 @@ abstract class FluentDOM {
    * @param mixed $source
    * @param string $contentType
    * @param array $options
-   * @return \FluentDOM\Query
+   * @return FluentDOM\Query
    */
-  public static function Query($source = NULL, $contentType = 'text/xml', array $options = []) {
+  public static function Query(
+    $source = NULL, string $contentType = 'text/xml', array $options = []
+  ): FluentDOM\Query {
     $query = new FluentDOM\Query();
     if (isset($source)) {
       $query->load($source, $contentType, $options);
@@ -88,10 +90,12 @@ abstract class FluentDOM {
    * @param string $contentType
    * @param array $options
    * @throws \LogicException
-   * @return \FluentDOM\Query
+   * @return FluentDOM\Query
    * @codeCoverageIgnore
    */
-  public static function QueryCss($source = NULL, $contentType = 'text/xml', array $options = []) {
+  public static function QueryCss(
+    $source = NULL, string $contentType = 'text/xml', array $options = []
+  ): FluentDOM\Query {
     $builder = self::getXPathTransformer();
     $query = self::Query($source, $contentType, $options);
     $isHtml = ($query->contentType === 'text/html');
@@ -108,12 +112,12 @@ abstract class FluentDOM {
    * @param FluentDOM\Loadable|NULL $loader
    */
   public static function setLoader($loader) {
-    if ($loader instanceof \FluentDOM\Loadable) {
+    if ($loader instanceof FluentDOM\Loadable) {
       self::$_loader = $loader;
     } elseif (NULL === $loader) {
       self::$_loader = NULL;
     } else {
-      throw new \FluentDOM\Exceptions\InvalidArgument(
+      throw new FluentDOM\Exceptions\InvalidArgument(
         'loader', ['FluentDOM\Loadable']
       );
     }
@@ -122,11 +126,11 @@ abstract class FluentDOM {
   /**
    * Register an additional default loader
    *
-   * @param \FluentDOM\Loadable|callable $loader
-   * @param [string] ...$contentTypes
-   * @return \FluentDOM\Loaders
+   * @param FluentDOM\Loadable|callable $loader
+   * @param string[] $contentTypes
+   * @return FluentDOM\Loaders
    */
-  public static function registerLoader($loader, ...$contentTypes) {
+  public static function registerLoader($loader, string ...$contentTypes): FluentDOM\Loaders {
     $loaders = self::getDefaultLoaders();
     if (count($contentTypes) > 0) {
       $lazyLoader = new \FluentDOM\Loader\Lazy();
@@ -146,10 +150,10 @@ abstract class FluentDOM {
   /**
    * Standard loader + any registered loader.
    *
-   * @return \FluentDOM\Loaders
+   * @return FluentDOM\Loaders
    * @codeCoverageIgnore
    */
-  public static function getDefaultLoaders() {
+  public static function getDefaultLoaders(): FluentDOM\Loaders {
     if (!(self::$_defaultLoaders instanceof FluentDOM\Loaders)) {
       self::$_defaultLoaders = new FluentDOM\Loaders(new FluentDOM\Loader\Standard());
     }
@@ -161,9 +165,9 @@ abstract class FluentDOM {
    * a callable returning the create serializer.
    *
    * @param \FluentDOM\Serializer\Factory|callable $factory
-   * @param [string] ...$contentTypes
+   * @param string[] $contentTypes
    */
-  public static function registerSerializerFactory($factory, ...$contentTypes) {
+  public static function registerSerializerFactory($factory, string ...$contentTypes) {
     foreach ($contentTypes as $contentType) {
       self::getSerializerFactories()[$contentType] = $factory;
     }
@@ -172,9 +176,9 @@ abstract class FluentDOM {
   /**
    * Return registered serializer factories
    *
-   * @return \FluentDOM\Serializer\Factory\Group
+   * @return FluentDOM\Serializer\Factory\Group
    */
-  public static function getSerializerFactories() {
+  public static function getSerializerFactories():FluentDOM\Serializer\Factory\Group {
     if (!(self::$_serializerFactories instanceof FluentDOM\Serializer\Factory)) {
       $xml = function($contentType, \DOMNode $node) {
         return new FluentDOM\Serializer\Xml($node);
@@ -205,7 +209,9 @@ abstract class FluentDOM {
    * @param string $errorMessage
    * @return \FluentDOM\DOM\Xpath\Transformer
    */
-  public static function getXPathTransformer($errorMessage = 'No CSS selector support installed') {
+  public static function getXPathTransformer(
+    string $errorMessage = 'No CSS selector support installed'
+  ):\FluentDOM\DOM\Xpath\Transformer {
     foreach (FluentDOM::$_xpathTransformers as $index => $transformer) {
       if (is_string($transformer) && class_exists($transformer)) {
         FluentDOM::$_xpathTransformers[$index] = new $transformer();
@@ -223,8 +229,9 @@ abstract class FluentDOM {
 
   /**
    * @param string|callable|FluentDOM\DOM\Xpath\Transformer $transformer
+   * @param bool $reset
    */
-  public static function registerXpathTransformer($transformer, $reset = FALSE) {
+  public static function registerXpathTransformer($transformer, bool $reset = FALSE) {
     if ($reset) {
       self::$_xpathTransformers = [];
     }
@@ -240,9 +247,9 @@ abstract class FluentDOM {
  * @param mixed $source
  * @param string $contentType
  * @param array $options
- * @return \FluentDOM\Query
+ * @return FluentDOM\Query
  * @codeCoverageIgnore
  */
-function FluentDOM($source = NULL, $contentType = 'text/xml', array $options = []) {
+function FluentDOM($source = NULL, string $contentType = 'text/xml', array $options = []): FluentDOM\Query {
   return FluentDOM::Query($source, $contentType, $options);
 }

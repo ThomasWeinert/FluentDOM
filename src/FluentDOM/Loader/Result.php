@@ -2,6 +2,8 @@
 
 namespace FluentDOM\Loader {
 
+  use FluentDOM\DOM\Document;
+
   class Result {
 
     /**
@@ -18,24 +20,33 @@ namespace FluentDOM\Loader {
     private $_selection = NULL;
 
     /**
-     * @param \DOMDocument $document
+     * @param Document $document
      * @param string $contentType
      * @param \DOMNode|\Traversable|array|NULL $selection
      */
-    public function __construct(\DOMDocument $document, $contentType, $selection = NULL) {
+    public function __construct(Document $document, $contentType, $selection = NULL) {
       $this->_document = $document;
       $this->_contentType = (string)$contentType;
       $this->_selection = $selection;
     }
 
-    public function getDocument() {
+    /**
+     * @return Document
+     */
+    public function getDocument():Document {
       return $this->_document;
     }
 
-    public function getContentType() {
+    /**
+     * @return string
+     */
+    public function getContentType():string {
       return $this->_contentType;
     }
 
+    /**
+     * @return array|\DOMNode|NULL|\Traversable
+     */
     public function getSelection() {
       return $this->_selection;
     }

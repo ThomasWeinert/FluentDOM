@@ -37,7 +37,7 @@ namespace FluentDOM\XMLReader {
      * Iterator constructor.
      *
      * @param XMLReader $reader
-     * @param null $name tag name
+     * @param NULL|string $name tag name filter
      * @param callable|NULL $filter
      */
     public function __construct(

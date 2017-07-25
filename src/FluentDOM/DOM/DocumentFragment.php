@@ -68,7 +68,7 @@ namespace FluentDOM\DOM {
     /**
      * Get/Set the namespace definition used for the fragment strings.
      *
-     * You can use an array(prefix => $namespace, ...) or an element node
+     * You can use an array(prefix => $namespaceURI, ...) or an element node
      * to set the namespaces. If the list is empty, the namespaces from
      * the document object will be used.
      *
@@ -85,15 +85,15 @@ namespace FluentDOM\DOM {
           $namespaces = $xpath('namespace::*', $namespaces);
         }
         if (is_array($namespaces) || $namespaces instanceof \Traversable) {
-          foreach ($namespaces as $key => $namespace) {
-            if ($namespace instanceof \DOMNameSpaceNode) {
-              if ($namespace->nodeName === 'xmlns') {
-                $this->registerNamespace('#default', $namespace->nodeValue);
-              } elseif ($namespace->localName != 'xml') {
-                $this->registerNamespace($namespace->localName, $namespace->nodeValue);
+          foreach ($namespaces as $key => $namespaceURI) {
+            if ($namespaceURI instanceof \DOMNameSpaceNode) {
+              if ($namespaceURI->nodeName === 'xmlns') {
+                $this->registerNamespace('#default', $namespaceURI->nodeValue);
+              } elseif ($namespaceURI->localName != 'xml') {
+                $this->registerNamespace($namespaceURI->localName, $namespaceURI->nodeValue);
               }
             } else {
-              $this->registerNamespace($key, $namespace);
+              $this->registerNamespace($key, $namespaceURI);
             }
           }
         } elseif (isset($namespaces)) {
@@ -109,10 +109,10 @@ namespace FluentDOM\DOM {
      * Register a namespace prefix to use it in appendXml()
      *
      * @param string $prefix
-     * @param string $namespace
+     * @param string $namespaceURI
      */
-    public function registerNamespace(string $prefix, string $namespace) {
-      $this->namespaces()[empty($prefix) ? '#default' : $prefix] = $namespace;
+    public function registerNamespace(string $prefix, string $namespaceURI) {
+      $this->namespaces()[empty($prefix) ? '#default' : $prefix] = $namespaceURI;
     }
 
     /**

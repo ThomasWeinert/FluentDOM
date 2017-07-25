@@ -83,10 +83,10 @@ namespace FluentDOM\Nodes {
 
     /**
      * @param string $prefix
-     * @param string $namespaceUri
+     * @param string $namespaceURI
      */
-    public function registerNamespace($prefix, $namespaceUri) {
-      $this->_document->registerNamespace($prefix, $namespaceUri);
+    public function registerNamespace($prefix, $namespaceURI) {
+      $this->_document->registerNamespace($prefix, $namespaceURI);
     }
 
     /**

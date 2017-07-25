@@ -27,20 +27,20 @@ namespace FluentDOM {
      * next() and other methods with a tag name argument
      *
      * @param string $prefix
-     * @param string $namespace
+     * @param string $namespaceURI
      * @throws \LogicException
      */
-    public function registerNamespace($prefix, $namespace) {
-      $this->_namespaces[$prefix] = $namespace;
+    public function registerNamespace($prefix, $namespaceURI) {
+      $this->_namespaces[$prefix] = $namespaceURI;
     }
 
     /**
      * Add the current namespace configuration as xmlns* attributes to the element node.
      */
     public function applyNamespaces() {
-      foreach ($this->_namespaces as $prefix => $namespaceUri) {
+      foreach ($this->_namespaces as $prefix => $namespaceURI) {
         $this->writeAttribute(
-          empty($prefix) || $prefix == '#default' ? 'xmlns' : 'xmlns:'.$prefix, $namespaceUri
+          empty($prefix) || $prefix == '#default' ? 'xmlns' : 'xmlns:'.$prefix, $namespaceURI
         );
       }
     }
@@ -51,8 +51,8 @@ namespace FluentDOM {
      */
     public function startElement($name) {
       list($prefix, $localName) = QualifiedName::split($name);
-      $namespaceUri = $this->_namespaces->resolveNamespace((string)$prefix);
-      return $this->startElementNS((string)$prefix, $localName, $namespaceUri);
+      $namespaceURI = $this->_namespaces->resolveNamespace((string)$prefix);
+      return $this->startElementNS((string)$prefix, $localName, $namespaceURI);
     }
 
     /**
@@ -62,23 +62,23 @@ namespace FluentDOM {
      */
     public function writeElement($name, $content = NULL) {
       list($prefix, $localName) = QualifiedName::split($name);
-      $namespaceUri = $this->_namespaces->resolveNamespace((string)$prefix);
-      return $this->writeElementNS((string)$prefix, $localName, $namespaceUri, $content);
+      $namespaceURI = $this->_namespaces->resolveNamespace((string)$prefix);
+      return $this->writeElementNS((string)$prefix, $localName, $namespaceURI, $content);
     }
 
     /**
      * @param string $prefix
      * @param string $name
-     * @param string $namespaceUri
+     * @param string $namespaceURI
      * @return bool
      */
-    public function startElementNS($prefix, $name, $namespaceUri) {
+    public function startElementNS($prefix, $name, $namespaceURI) {
       $this->_xmlnsStack->push();
-      if ($this->_xmlnsStack->isDefined($prefix, $namespaceUri)) {
+      if ($this->_xmlnsStack->isDefined($prefix, $namespaceURI)) {
         $result = parent::startElement(empty($prefix) ? $name : $prefix.':'.$name);
       } else {
-        $result = parent::startElementNS(empty($prefix) ? NULL : $prefix, $name, $namespaceUri);
-        $this->_xmlnsStack->add($prefix, $namespaceUri);
+        $result = parent::startElementNS(empty($prefix) ? NULL : $prefix, $name, $namespaceURI);
+        $this->_xmlnsStack->add($prefix, $namespaceURI);
       }
       return $result;
     }
@@ -155,10 +155,10 @@ namespace FluentDOM {
     public function writeAttributeNS($prefix, $localName, $uri, $content) {
       if ((empty($prefix) && $localName == 'xmlns') || $prefix == 'xmlns') {
         $namespacePrefix = empty($prefix) ? '' : $localName;
-        $namespaceUri = $content;
-        if (!$this->_xmlnsStack->isDefined($namespacePrefix, $namespaceUri)) {
-          $result = parent::writeAttribute(empty($prefix) ? 'xmlns' : 'xmlns:'.$localName, $namespaceUri);
-          $this->_xmlnsStack->add($namespacePrefix, $namespaceUri);
+        $namespaceURI = $content;
+        if (!$this->_xmlnsStack->isDefined($namespacePrefix, $namespaceURI)) {
+          $result = parent::writeAttribute(empty($prefix) ? 'xmlns' : 'xmlns:'.$localName, $namespaceURI);
+          $this->_xmlnsStack->add($namespacePrefix, $namespaceURI);
           return $result;
         } else {
           return false;

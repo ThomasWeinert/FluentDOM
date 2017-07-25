@@ -68,12 +68,12 @@ namespace FluentDOM\Loader\Json {
      * @param \stdClass $data
      */
     protected function transferNamespacesTo(\DOMElement $node, $data) {
-      foreach ($data as $key => $namespace) {
+      foreach ($data as $key => $namespaceURI) {
         $prefix = $key === '$' ? NULL : $key;
-        if ($node->lookupNamespaceUri($prefix) != $namespace) {
+        if ($node->lookupNamespaceUri($prefix) != $namespaceURI) {
           $node->setAttribute(
             empty($prefix) ? 'xmlns' : 'xmlns:' . $prefix,
-            $namespace
+            $namespaceURI
           );
         }
       }
@@ -89,10 +89,10 @@ namespace FluentDOM\Loader\Json {
       /** @var Document $document */
       $document = $node->ownerDocument ?: $node;
       $name = substr($name, 1);
-      $namespace = $this->getNamespaceForNode($name, new \stdClass(), $node);
-      $attribute = empty($namespace)
+      $namespaceURI = $this->getNamespaceForNode($name, new \stdClass(), $node);
+      $attribute = empty($namespaceURI)
         ? $document->createAttribute($name)
-        : $document->createAttributeNS($namespace, $name);
+        : $document->createAttributeNS($namespaceURI, $name);
       $attribute->value = $this->getValueAsString($data);
       $node->setAttributeNode($attribute);
     }
@@ -106,7 +106,7 @@ namespace FluentDOM\Loader\Json {
     protected function transferChildTo(\DOMNode $node, string $name, $data) {
       /** @var Document $document */
       $document = $node->ownerDocument ?: $node;
-      $namespace = $this->getNamespaceForNode(
+      $namespaceURI = $this->getNamespaceForNode(
         $name,
         isset($data->{'@xmlns'}) ? $data->{'@xmlns'} : new \stdClass(),
         $document
@@ -116,7 +116,8 @@ namespace FluentDOM\Loader\Json {
       }
       foreach ($data as $dataChild) {
         $child = $node->appendChild(
-          empty($namespace) ? $document->createElement($name) : $document->createElementNS($namespace, $name)
+          empty($namespaceURI)
+            ? $document->createElement($name) : $document->createElementNS($namespaceURI, $name)
         );
         $this->transferTo($child, $dataChild);
       }

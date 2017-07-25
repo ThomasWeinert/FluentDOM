@@ -253,15 +253,15 @@ namespace FluentDOM {
      * Register a namespace for selectors/expressions
      *
      * @param string $prefix
-     * @param string $namespace
+     * @param string $namespaceURI
      */
-    public function registerNamespace($prefix, $namespace) {
-      $this->_namespaces[$prefix] = $namespace;
+    public function registerNamespace($prefix, $namespaceURI) {
+      $this->_namespaces[$prefix] = $namespaceURI;
       $document = $this->getDocument();
       if ($document instanceOf Document) {
-        $document->registerNamespace($prefix, $namespace);
+        $document->registerNamespace($prefix, $namespaceURI);
       } elseif (isset($this->_xpath)) {
-        $this->_xpath->registerNamespace($prefix, $namespace);
+        $this->_xpath->registerNamespace($prefix, $namespaceURI);
       }
     }
 
@@ -271,12 +271,12 @@ namespace FluentDOM {
     private function applyNamespaces() {
       $document = $this->getDocument();
       if ($document instanceof Document) {
-        foreach ($this->_namespaces as $prefix => $namespace) {
-          $document->registerNamespace($prefix, $namespace);
+        foreach ($this->_namespaces as $prefix => $namespaceURI) {
+          $document->registerNamespace($prefix, $namespaceURI);
         }
       } elseif (isset($this->_xpath)) {
-        foreach ($this->_namespaces as $prefix => $namespace) {
-          $this->_xpath->registerNamespace($prefix, $namespace);
+        foreach ($this->_namespaces as $prefix => $namespaceURI) {
+          $this->_xpath->registerNamespace($prefix, $namespaceURI);
         }
       }
     }

@@ -65,10 +65,10 @@ namespace FluentDOM\Loader\Json {
       $document = $node instanceof \DOMDocument ? $node : $node->ownerDocument;
       foreach ($properties as $name => $value) {
         if (!($name === 'xmlns' || substr($name, 0, 6) === 'xmlns:')) {
-          $namespace = $this->getNamespaceForNode($name, $properties, $node);
-          $attribute = empty($namespace)
+          $namespaceURI = $this->getNamespaceForNode($name, $properties, $node);
+          $attribute = empty($namespaceURI)
             ? $document->createAttribute($name)
-            : $document->createAttributeNS($namespace, $name);
+            : $document->createAttributeNS($namespaceURI, $name);
           $attribute->value = $this->getValueAsString($value);
           $node->setAttributeNode($attribute);
         }
@@ -85,10 +85,10 @@ namespace FluentDOM\Loader\Json {
       $length = count($json);
       $hasProperties = $length > 1 && is_object($json[1]);
       $properties = $hasProperties ? $json[1] : new \stdClass;
-      $namespace = $this->getNamespaceForNode($nodeName, $properties, $node);
-      $element = empty($namespace)
+      $namespaceURI = $this->getNamespaceForNode($nodeName, $properties, $node);
+      $element = empty($namespaceURI)
         ? $document->createElement($nodeName)
-        : $document->createElementNS($namespace, $nodeName);
+        : $document->createElementNS($namespaceURI, $nodeName);
       $node->appendChild($element);
       $this->addNamespaceAttributes($element, $properties);
       $this->addAttributes($element, $properties);

@@ -76,11 +76,11 @@ namespace FluentDOM\Transformer\Namespaces {
      */
     private function importElement(\DOMNode $parent, \DOMElement $source) {
       $document = $parent instanceof \DOMDocument ? $parent : $parent->ownerDocument;
-      $namespaceUri = $this->getMappedNamespace($source->namespaceURI);
-      if (empty($namespaceUri)) {
+      $namespaceURI = $this->getMappedNamespace($source->namespaceURI);
+      if (empty($namespaceURI)) {
         $child = $document->createElement($source->localName);
       } else {
-        $child = $document->createElementNS($namespaceUri, $source->nodeName);
+        $child = $document->createElementNS($namespaceURI, $source->nodeName);
       }
       $parent->appendChild($child);
       foreach ($source->attributes as $attribute) {
@@ -97,25 +97,25 @@ namespace FluentDOM\Transformer\Namespaces {
      */
     private function importAttribute(\DOMElement $parent, \DOMAttr $source) {
       $document = $parent instanceof \DOMDocument ? $parent : $parent->ownerDocument;
-      $namespaceUri = $this->getMappedNamespace($source->namespaceURI);
-      if (empty($namespaceUri) || empty($source->prefix)) {
+      $namespaceURI = $this->getMappedNamespace($source->namespaceURI);
+      if (empty($namespaceURI) || empty($source->prefix)) {
         $attribute = $document->createAttribute($source->localName);
       } else {
-        $attribute = $document->createAttributeNS($namespaceUri, $source->nodeName);
+        $attribute = $document->createAttributeNS($namespaceURI, $source->nodeName);
       }
       $attribute->value = $source->value;
       $parent->setAttributeNode($attribute);
     }
 
     /**
-     * @param string $namespaceUri
+     * @param string $namespaceURI
      * @return string
      */
-    private function getMappedNamespace($namespaceUri) {
-      if (isset($this->_namespaces[$namespaceUri])) {
-        return $this->_namespaces[$namespaceUri];
+    private function getMappedNamespace($namespaceURI) {
+      if (isset($this->_namespaces[$namespaceURI])) {
+        return $this->_namespaces[$namespaceURI];
       }
-      return $namespaceUri;
+      return $namespaceURI;
     }
   }
 }

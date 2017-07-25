@@ -70,15 +70,15 @@ namespace FluentDOM\Serializer\Json {
         }
         $target->{'@xmlns'}->{'$'} = $node->namespaceURI;
       }
-      foreach ($xpath->evaluate('namespace::*', $node) as $namespace) {
-        if ($namespace->localName === 'xml' || $namespace->localName === 'xmlns') {
+      foreach ($xpath->evaluate('namespace::*', $node) as $namespaceNode) {
+        if ($namespaceNode->localName === 'xml' || $namespaceNode->localName === 'xmlns') {
           continue;
         }
         if (!isset($target->{'@xmlns'})) {
           $target->{'@xmlns'} = new \stdClass();
         }
-        if ($namespace->nodeName !== 'xmlns') {
-          $target->{'@xmlns'}->{$namespace->localName} = $namespace->namespaceURI;
+        if ($namespaceNode->nodeName !== 'xmlns') {
+          $target->{'@xmlns'}->{$namespaceNode->localName} = $namespaceNode->namespaceURI;
         }
       }
     }

@@ -85,9 +85,9 @@ namespace FluentDOM\DOM {
      * @return bool
      */
     public function hasAttribute($name):bool {
-      list($namespace, $localName) = $this->resolveTagName($name);
-      if ($namespace != '') {
-        return parent::hasAttributeNS($namespace, $localName);
+      list($namespaceURI, $localName) = $this->resolveTagName($name);
+      if ($namespaceURI != '') {
+        return parent::hasAttributeNS($namespaceURI, $localName);
       } else {
         return parent::hasAttribute($name);
       }
@@ -100,9 +100,9 @@ namespace FluentDOM\DOM {
      * @return string|NULL
      */
     public function getAttribute($name) {
-      list($namespace, $localName) = $this->resolveTagName($name);
-      if ($namespace != '') {
-        return parent::getAttributeNS($namespace, $localName);
+      list($namespaceURI, $localName) = $this->resolveTagName($name);
+      if ($namespaceURI != '') {
+        return parent::getAttributeNS($namespaceURI, $localName);
       } else {
         return parent::getAttribute($name);
       }
@@ -115,9 +115,9 @@ namespace FluentDOM\DOM {
      * @return Attribute|\DOMAttr|NULL
      */
     public function getAttributeNode($name) {
-      list($namespaceURI, $localName) = $this->resolveTagName($name);
-      if ($namespaceURI != '') {
-        return parent::getAttributeNodeNS($namespaceURI, $localName);
+      list($namespaceURIURI, $localName) = $this->resolveTagName($name);
+      if ($namespaceURIURI != '') {
+        return parent::getAttributeNodeNS($namespaceURIURI, $localName);
       } else {
         return parent::getAttributeNode($name);
       }
@@ -132,10 +132,10 @@ namespace FluentDOM\DOM {
      * @return Attribute
      */
     public function setAttribute($name, $value) {
-      list($namespaceURI) = $this->resolveTagName($name);
-      if ($namespaceURI != '') {
+      list($namespaceURIURI) = $this->resolveTagName($name);
+      if ($namespaceURIURI != '') {
         /** @noinspection PhpVoidFunctionResultUsedInspection */
-        return parent::setAttributeNS($namespaceURI, $name, $value);
+        return parent::setAttributeNS($namespaceURIURI, $name, $value);
       } else {
         return parent::setAttribute($name, $value);
       }
@@ -148,9 +148,9 @@ namespace FluentDOM\DOM {
      * @return bool
      */
     public function removeAttribute($name):bool {
-      list($namespaceURI, $localName) = $this->resolveTagName($name);
-      if ($namespaceURI != '') {
-        return (bool)parent::removeAttributeNS($namespaceURI, $localName);
+      list($namespaceURIURI, $localName) = $this->resolveTagName($name);
+      if ($namespaceURIURI != '') {
+        return (bool)parent::removeAttributeNS($namespaceURIURI, $localName);
       } else {
         return (bool)parent::removeAttribute($name);
       }
@@ -163,9 +163,9 @@ namespace FluentDOM\DOM {
      * @param bool $isId
      */
     public function setIdAttribute($name, $isId) {
-      list($namespaceURI, $localName) = $this->resolveTagName($name);
-      if ($namespaceURI != '') {
-        parent::setIdAttributeNS($namespaceURI, $localName, $isId);
+      list($namespaceURIURI, $localName) = $this->resolveTagName($name);
+      if ($namespaceURIURI != '') {
+        parent::setIdAttributeNS($namespaceURIURI, $localName, $isId);
       } else {
         parent::setIdAttribute($name, $isId);
       }
@@ -191,9 +191,9 @@ namespace FluentDOM\DOM {
             ? $value : $this->ownerDocument->importNode($value)
         );
       } elseif ($value instanceof Appendable) {
-        $namespaces = $this->ownerDocument->namespaces();
+        $namespaceURIs = $this->ownerDocument->namespaces();
         $value->appendTo($this);
-        $this->ownerDocument->namespaces($namespaces);
+        $this->ownerDocument->namespaces($namespaceURIs);
       } elseif ($value instanceof \Closure && !$value instanceof \DOMNode) {
         $this->append($value());
       } elseif (is_array($value)) {
@@ -276,9 +276,9 @@ namespace FluentDOM\DOM {
      * @return \DOMNodeList
      */
     public function getElementsByTagName($name):\DOMNodeList {
-      list($namespace, $localName) = $this->resolveTagName($name);
-      if ($namespace != '') {
-        return parent::getElementsByTagNameNS($namespace, $localName);
+      list($namespaceURI, $localName) = $this->resolveTagName($name);
+      if ($namespaceURI != '') {
+        return parent::getElementsByTagNameNS($namespaceURI, $localName);
       } else {
         return parent::getElementsByTagName($localName);
       }
@@ -423,8 +423,8 @@ namespace FluentDOM\DOM {
       if (empty($prefix)) {
         return array('', $localName);
       } else {
-        $namespace = $this->getDocument()->namespaces()->resolveNamespace($prefix);
-        return array($namespace, $localName);
+        $namespaceURI = $this->getDocument()->namespaces()->resolveNamespace($prefix);
+        return array($namespaceURI, $localName);
       }
     }
 
@@ -446,14 +446,14 @@ namespace FluentDOM\DOM {
       if ($prefixes !== NULL && !is_array($prefixes)) {
         $prefixes = array($prefixes);
       }
-      foreach ($this->getDocument()->namespaces() as $prefix => $namespace) {
+      foreach ($this->getDocument()->namespaces() as $prefix => $namespaceURI) {
         if (
-          !$this->isCurrentNamespace($prefix, $namespace) &&
+          !$this->isCurrentNamespace($prefix, $namespaceURI) &&
           ($prefixes === NULL || in_array($prefix, $prefixes))
         ) {
           $this->setAttribute(
             ($prefix === '#default') ? 'xmlns' : 'xmlns:'.$prefix,
-            $namespace
+            $namespaceURI
           );
         }
       }
@@ -463,12 +463,12 @@ namespace FluentDOM\DOM {
      * Return true if the provided namespace is the same as the one on the element
      *
      * @param string $prefix
-     * @param string $namespace
+     * @param string $namespaceURI
      * @return bool
      */
-    private function isCurrentNamespace(string $prefix, string $namespace):bool {
+    private function isCurrentNamespace(string $prefix, string $namespaceURI):bool {
       return (
-        $namespace === $this->namespaceURI &&
+        $namespaceURI === $this->namespaceURI &&
         $prefix === ($this->prefix ?: '#default')
       );
     }

@@ -197,12 +197,12 @@ namespace FluentDOM\Serializer {
     private function getAllNamespaces(\DOMElement $node) {
       $xpath = new Xpath($node->ownerDocument);
       $result = [];
-      foreach ($xpath->evaluate('namespace::*', $node) as $namespace) {
+      foreach ($xpath->evaluate('namespace::*', $node) as $namespaceNode) {
         if (
-          ($namespace->nodeName !== 'xmlns:xml') &&
-          ($namespace->nodeName !== 'xmlns:xmlns')
+          ($namespaceNode->nodeName !== 'xmlns:xml') &&
+          ($namespaceNode->nodeName !== 'xmlns:xmlns')
         ) {
-          $result[$namespace->nodeName] = $namespace->namespaceURI;
+          $result[$namespaceNode->nodeName] = $namespaceNode->namespaceURI;
         }
       };
       return $result;

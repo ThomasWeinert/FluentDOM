@@ -29,11 +29,11 @@ namespace FluentDOM {
      * next() and other methods with a tag name argument
      *
      * @param string $prefix
-     * @param string $namespace
+     * @param string $namespaceURI
      * @throws \LogicException
      */
-    public function registerNamespace($prefix, $namespace) {
-      $this->_namespaces[$prefix] = $namespace;
+    public function registerNamespace($prefix, $namespaceURI) {
+      $this->_namespaces[$prefix] = $namespaceURI;
     }
 
     /**
@@ -41,17 +41,17 @@ namespace FluentDOM {
      * a namespace prefix it will be resolved using the registered namespaces.
      *
      * @param null|string $name The name of the next node to move to.
-     * @param null|string $namespaceUri
+     * @param null|string $namespaceURI
      * @param callable|null $filter
      * @return bool
      */
-    public function next($name = NULL, $namespaceUri = NULL, callable $filter = NULL) {
+    public function next($name = NULL, $namespaceURI = NULL, callable $filter = NULL) {
       if (isset($name)) {
-        list($localName, $namespaceUri, $ignoreNamespace) = $this->prepareCondition($name, $namespaceUri);
+        list($localName, $namespaceURI, $ignoreNamespace) = $this->prepareCondition($name, $namespaceURI);
       } else {
-        $ignoreNamespace = empty($namespaceUri);
+        $ignoreNamespace = empty($namespaceURI);
         $localName = $name;
-        $namespaceUri = '';
+        $namespaceURI = '';
       }
       if ($ignoreNamespace && !$filter) {
         return isset($name) ? parent::next($name) : parent::next();
@@ -59,7 +59,7 @@ namespace FluentDOM {
         $found = empty($localName) ? parent::next() : parent::next($localName);
         while ($found) {
           if (
-            ($ignoreNamespace || $this->namespaceURI === $namespaceUri) &&
+            ($ignoreNamespace || $this->namespaceURI === $namespaceURI) &&
             (!$filter || $filter($this))
           ) {
             return TRUE;
@@ -75,19 +75,19 @@ namespace FluentDOM {
      * a namespace prefix it will be resolved using the registered namespaces.
      *
      * @param null|string $name The name of the next node to move to.
-     * @param null|string $namespaceUri
+     * @param null|string $namespaceURI
      * @param callable|null $filter
      * @return bool
      */
-    public function read($name = NULL, $namespaceUri = NULL, callable $filter = NULL) {
+    public function read($name = NULL, $namespaceURI = NULL, callable $filter = NULL) {
       if (isset($name)) {
-        list($localName, $namespaceUri, $ignoreNamespace) = $this->prepareCondition($name, $namespaceUri);
+        list($localName, $namespaceURI, $ignoreNamespace) = $this->prepareCondition($name, $namespaceURI);
         while (parent::read()) {
           if (
             $this->nodeType === XML_ELEMENT_NODE &&
             $this->localName === $localName &&
             (
-              ($ignoreNamespace || ($this->namespaceURI === $namespaceUri)) &&
+              ($ignoreNamespace || ($this->namespaceURI === $namespaceURI)) &&
               (!$filter || $filter($this))
             )
           ) {
@@ -138,20 +138,20 @@ namespace FluentDOM {
 
     /**
      * @param $name
-     * @param $namespaceUri
+     * @param $namespaceURI
      * @return array
      */
-    private function prepareCondition($name, $namespaceUri) {
-      if (isset($namespaceUri)) {
+    private function prepareCondition($name, $namespaceURI) {
+      if (isset($namespaceURI)) {
         $localName = $name;
-        $namespaceUri = (string)$namespaceUri;
+        $namespaceURI = (string)$namespaceURI;
         $ignoreNamespace = FALSE;
       } else {
         list($prefix, $localName) = QualifiedName::split($name);
-        $namespaceUri = $prefix ? $this->_namespaces->resolveNamespace($prefix) : '';
-        $ignoreNamespace = ($prefix === FALSE && $namespaceUri === '');
+        $namespaceURI = $prefix ? $this->_namespaces->resolveNamespace($prefix) : '';
+        $ignoreNamespace = ($prefix === FALSE && $namespaceURI === '');
       }
-      return [$localName, $namespaceUri, $ignoreNamespace];
+      return [$localName, $namespaceURI, $ignoreNamespace];
     }
   }
 }

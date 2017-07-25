@@ -41,20 +41,20 @@ namespace FluentDOM\DOM {
      * document object, too.
      *
      * @param string $prefix
-     * @param string $namespace
+     * @param string $namespaceURI
      * @return bool
      */
-    public function registerNamespace($prefix, $namespace):bool {
+    public function registerNamespace($prefix, $namespaceURI):bool {
       if (
         $this->_documentReference instanceOf Document &&
         (
           !$this->_documentReference->namespaces()->offsetExists($prefix) ||
-          $this->_documentReference->namespaces()->offsetGet($prefix) !== $namespace
+          $this->_documentReference->namespaces()->offsetGet($prefix) !== $namespaceURI
         )
       ) {
-        $this->_documentReference->registerNameSpace($prefix, $namespace);
+        $this->_documentReference->registerNameSpace($prefix, $namespaceURI);
       }
-      return parent::registerNamespace($prefix, $namespace);
+      return parent::registerNamespace($prefix, $namespaceURI);
     }
 
     /**

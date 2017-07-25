@@ -53,17 +53,17 @@ namespace FluentDOM\Utility {
 
     /**
      * @param string $prefix
-     * @param string $namespaceUri
+     * @param string $namespaceURI
      * @return bool
      */
-    public function offsetSet($prefix, $namespaceUri) {
+    public function offsetSet($prefix, $namespaceURI) {
       $prefix = $this->validatePrefix($prefix);
       if (isset($this->_reserved[$prefix])) {
         throw new \LogicException(
           sprintf('Can not register reserved namespace prefix "%s".', $prefix)
         );
       }
-      $this->_namespaces[$prefix] = $namespaceUri;
+      $this->_namespaces[$prefix] = $namespaceURI;
     }
 
     /**
@@ -113,8 +113,8 @@ namespace FluentDOM\Utility {
      */
     public function assign($namespaces) {
       $this->_namespaces = [];
-      foreach ($namespaces as $prefix => $namespaceUri) {
-        $this->offsetSet($prefix, $namespaceUri);
+      foreach ($namespaces as $prefix => $namespaceURI) {
+        $this->offsetSet($prefix, $namespaceURI);
       }
     }
 

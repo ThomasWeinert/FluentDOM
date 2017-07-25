@@ -35,8 +35,8 @@ namespace FluentDOM\XMLWriter {
       throw new \LogicException('Did not resolve namespace levels properly.');
     }
 
-    public function registerNamespace($prefix, $namespaceUri) {
-      $this->_namespaces[$prefix] = $namespaceUri;
+    public function registerNamespace($prefix, $namespaceURI) {
+      $this->_namespaces[$prefix] = $namespaceURI;
     }
 
     public function resolveNamespace($prefix) {

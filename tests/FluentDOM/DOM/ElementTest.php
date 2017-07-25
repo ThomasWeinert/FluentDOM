@@ -5,7 +5,6 @@ namespace FluentDOM\DOM {
   require_once(__DIR__ . '/../TestCase.php');
 
   use FluentDOM\Appendable;
-  use FluentDOM\Query;
   use FluentDOM\TestCase;
 
   class ElementTest extends TestCase {

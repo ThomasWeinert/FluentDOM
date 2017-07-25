@@ -1,9 +1,7 @@
 <?php
 namespace FluentDOM {
 
-  use FluentDOM\Appendable;
   use FluentDOM\DOM\Document;
-  use FluentDOM\Nodes\Creator\Nodes;
 
   /**
    * @property bool $formatOutput

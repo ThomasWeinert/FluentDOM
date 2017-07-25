@@ -1,7 +1,10 @@
 Version 7.0.0
 -------------
 
-- Refactored: Moved extended DOM classes to FluentDOM\DOM\*
+- Changed: minimum PHP version is now 7.0
+- Changed: Moved extended DOM classes to FluentDOM\DOM\*
+- Changed: Added type hints and return types
+- Removed: Document::find() and Element::find()
 
 Version 6.2.0
 -------------

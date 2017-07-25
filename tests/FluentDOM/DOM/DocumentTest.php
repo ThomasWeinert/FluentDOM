@@ -356,20 +356,6 @@ namespace FluentDOM\DOM {
     }
 
     /**
-     * @cover FluentDOM\DOM\Document:find
-     */
-    public function testFind() {
-      $document = new Document();
-      $document->loadXML('<foo><bar/></foo>');
-      $fd = $document->find('/foo/bar');
-      $this->assertInstanceOf(Query::class, $fd);
-      $this->assertSame(
-        $document->documentElement->firstChild,
-        $fd[0]
-      );
-    }
-
-    /**
      * @cover FluentDOM\DOM\Document:toXml
      */
     public function testToXmlWithoutContext() {

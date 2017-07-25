@@ -707,20 +707,6 @@ namespace FluentDOM\DOM {
     }
 
     /**
-     * @cover FluentDOM\Element:find
-     */
-    public function testFind() {
-      $document = new Document();
-      $document->loadXML('<foo><bar/></foo>');
-      $fd = $document->documentElement->find('bar');
-      $this->assertInstanceOf(Query::class, $fd);
-      $this->assertSame(
-        $document->documentElement->firstChild,
-        $fd[0]
-      );
-    }
-
-    /**
      * @cover FluentDOM\DOM\Document:getElementsByTagName
      */
     public function testGetElementsByTagNameWithNamespace() {

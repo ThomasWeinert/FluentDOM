@@ -271,18 +271,6 @@ namespace FluentDOM\DOM {
     }
 
     /**
-     * Put the current node into a FluentDOM\Query
-     * and call find() on it.
-     *
-     * @todo remove or replace with DOM LS
-     * @param string $expression
-     * @return Query
-     */
-    public function find($expression) {
-      return \FluentDOM::Query($this)->find($expression);
-    }
-
-    /**
      * Allow getElementsByTagName to use the defined namespaces.
      *
      * @param string $name

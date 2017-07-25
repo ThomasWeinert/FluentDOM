@@ -223,18 +223,6 @@ namespace FluentDOM\DOM {
     }
 
     /**
-     * Put the document node into a FluentDOM\Query
-     * and call find() on it.
-     *
-     * @todo remove or replace with DOM LS?
-     * @param string $expression
-     * @return Query
-     */
-    public function find(string $expression):Query {
-      return \FluentDOM::Query($this)->find($expression);
-    }
-
-    /**
      * @param \DOMElement $node
      * @param string|array|NULL $content
      * @param array|NULL $attributes

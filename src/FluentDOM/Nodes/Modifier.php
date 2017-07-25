@@ -30,14 +30,14 @@ namespace FluentDOM\Nodes {
     /**
      * @return \DOMNode
      */
-    public function getNode() {
+    public function getNode(): \DOMNode {
       return $this->_node;
     }
 
     /**
      * @return \DOMNode
      */
-    private function getParentNode() {
+    private function getParentNode(): \DOMNode {
       return $this->_node->parentNode;
     }
 
@@ -47,7 +47,7 @@ namespace FluentDOM\Nodes {
      * @param array|\Traversable $contentNodes
      * @return array new nodes
      */
-    public function appendChildren($contentNodes) {
+    public function appendChildren($contentNodes): array {
       $result = array();
       if ($this->_node instanceof \DOMElement) {
         foreach ($contentNodes as $contentNode) {
@@ -66,7 +66,7 @@ namespace FluentDOM\Nodes {
      * @param array|\Traversable $contentNodes
      * @return array new nodes
      */
-    public function replaceChildren($contentNodes) {
+    public function replaceChildren($contentNodes): array {
       $this->_node->nodeValue = '';
       return $this->appendChildren($contentNodes);
     }
@@ -77,7 +77,7 @@ namespace FluentDOM\Nodes {
      * @param array|\Traversable $contentNodes
      * @return array
      */
-    public function insertChildrenBefore($contentNodes) {
+    public function insertChildrenBefore($contentNodes): array {
       $result = array();
       if ($this->_node instanceof \DOMElement) {
         if ($this->_node->firstChild instanceof \DOMNode) {
@@ -94,7 +94,7 @@ namespace FluentDOM\Nodes {
      * @param array|\Traversable $contentNodes
      * @return array
      */
-    public function insertNodesAfter($contentNodes) {
+    public function insertNodesAfter($contentNodes): array {
       $result = array();
       if ($this->_node instanceof \DOMNode && !empty($contentNodes)) {
         $beforeNode = ($this->_node->nextSibling instanceof \DOMNode)
@@ -122,7 +122,7 @@ namespace FluentDOM\Nodes {
      * @param array|\Traversable $contentNodes
      * @return array
      */
-    public function insertNodesBefore($contentNodes) {
+    public function insertNodesBefore($contentNodes): array {
       $result = array();
       if ($this->_node instanceof \DOMNode && !empty($contentNodes)) {
         foreach ($contentNodes as $contentNode) {
@@ -139,7 +139,7 @@ namespace FluentDOM\Nodes {
      * @param array|\Traversable $contentNodes
      * @return \DOMNode
      */
-    public function replaceNode($contentNodes) {
+    public function replaceNode($contentNodes): \DOMNode {
       $this->insertNodesBefore($contentNodes);
       return $this->getParentNode()->removeChild($this->getNode());
     }

@@ -216,7 +216,7 @@ namespace FluentDOM {
         \InvalidArgumentException::class,
         'Invalid selector/expression.'
       );
-      $fd->find(NULL);
+      $fd->find('');
     }
   }
 }

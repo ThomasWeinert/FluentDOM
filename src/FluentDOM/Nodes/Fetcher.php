@@ -48,8 +48,8 @@ namespace FluentDOM\Nodes {
      * @return array
      */
     public function fetch(
-      $expression, callable $filter = NULL, callable $stopAt = NULL, $options = 0
-    ) {
+      string $expression, callable $filter = NULL, callable $stopAt = NULL, int $options = 0
+    ): array {
       if ($this->validateContextIgnore($expression, $options)) {
         $nodes = $this->fetchFor(
           $expression, NULL, $filter, $stopAt, $options
@@ -75,7 +75,7 @@ namespace FluentDOM\Nodes {
      * @param int $options
      * @return bool
      */
-    private function validateContextIgnore($expression, $options) {
+    private function validateContextIgnore(string $expression, int $options): bool {
       if (!is_string($expression) || empty($expression)) {
         throw new \InvalidArgumentException(
           'Invalid selector/expression.'
@@ -93,7 +93,7 @@ namespace FluentDOM\Nodes {
      * @param int $options
      * @return array
      */
-    private function unique($nodes, $options) {
+    private function unique(array $nodes, int $options): array {
       if (
         Constraints::hasOption($options, self::FORCE_SORT) ||
         (count($this->_nodes) > 1 && Constraints::hasOption($options, self::UNIQUE))
@@ -117,11 +117,11 @@ namespace FluentDOM\Nodes {
      * @return array|bool|\DOMNodeList|float|string
      */
     private function fetchFor(
-      $expression,
+      string $expression,
       \DOMNode $context = NULL,
       callable $filter = NULL,
       callable $stopAt = NULL,
-      $options = 0
+      int $options = 0
     ) {
       $nodes = $this->fetchNodes($expression, $context, $options);
       if ($filter || $stopAt) {
@@ -140,7 +140,7 @@ namespace FluentDOM\Nodes {
      * @param int $options
      * @return array|bool|\DOMNodeList|float|string
      */
-    private function fetchNodes($expression, \DOMNode $context = NULL, $options = 0) {
+    private function fetchNodes(string $expression, \DOMNode $context = NULL, int $options = 0) {
       $nodes = $this->_nodes->xpath($expression, $context);
       if (!$nodes instanceof \DOMNodeList) {
         throw new \InvalidArgumentException(
@@ -162,8 +162,8 @@ namespace FluentDOM\Nodes {
      * @return array
      */
     private function filterNodes(
-      array $nodes, callable $filter = NULL, callable $stopAt = NULL, $options = 0
-    ) {
+      array $nodes, callable $filter = NULL, callable $stopAt = NULL, int $options = 0
+    ): array {
       $result = array();
       foreach ($nodes as $index => $node) {
         list($isFilter, $isStopAt) = $this->getNodeStatus(
@@ -192,8 +192,8 @@ namespace FluentDOM\Nodes {
      * @return bool[]
      */
     private function getNodeStatus(
-      \DOMNode $node, $index, callable $filter = NULL, callable $stopAt = NULL
-    ) {
+      \DOMNode $node, int $index, callable $filter = NULL, callable $stopAt = NULL
+    ): array {
       return [
         empty($filter) || $filter($node, $index),
         !empty($stopAt) && $stopAt($node, $index)

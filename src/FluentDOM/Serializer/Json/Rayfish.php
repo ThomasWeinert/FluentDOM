@@ -20,9 +20,9 @@ namespace FluentDOM\Serializer\Json {
 
     /**
      * @param \DOMElement $node
-     * @return \stdClass
+     * @return mixed
      */
-    protected function getNode(\DOMElement $node): \stdClass {
+    protected function getNode(\DOMElement $node) {
       $result = new \stdClass();
       $result->{'#name'} = $node->nodeName;
       $result->{'#text'} = '';

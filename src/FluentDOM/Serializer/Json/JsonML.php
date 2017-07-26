@@ -27,9 +27,9 @@ namespace FluentDOM\Serializer\Json {
 
     /**
      * @param \DOMElement $node
-     * @return array
+     * @return mixed
      */
-    protected function getNode(\DOMElement $node): array {
+    protected function getNode(\DOMElement $node) {
       $result = [
         $node->nodeName
       ];

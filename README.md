@@ -2,6 +2,7 @@
 
 [![Build Status](https://img.shields.io/travis/FluentDOM/FluentDOM.svg)](https://travis-ci.org/FluentDOM/FluentDOM)
 [![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/fluentdom/fluentdom.svg)](https://scrutinizer-ci.com/g/FluentDOM/FluentDOM/?branch=master)
+[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/fluentdom/fluentdom.svg)](https://scrutinizer-ci.com/g/FluentDOM/FluentDOM/?branch=master)
 
 [![License](https://img.shields.io/packagist/l/fluentdom/fluentdom.svg)](http://opensource.org/licenses/mit-license.php)
 [![Total Downloads](https://img.shields.io/packagist/dt/fluentdom/fluentdom.svg)](https://packagist.org/packages/fluentdom/fluentdom)

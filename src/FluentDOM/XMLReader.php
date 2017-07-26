@@ -32,7 +32,7 @@ namespace FluentDOM {
      * @param string $namespaceURI
      * @throws \LogicException
      */
-    public function registerNamespace($prefix, $namespaceURI) {
+    public function registerNamespace(string $prefix, string $namespaceURI) {
       $this->_namespaces[$prefix] = $namespaceURI;
     }
 
@@ -45,7 +45,7 @@ namespace FluentDOM {
      * @param callable|NULL $filter
      * @return bool
      */
-    public function next($name = NULL, $namespaceURI = NULL, callable $filter = NULL) {
+    public function next($name = NULL, string $namespaceURI = NULL, callable $filter = NULL): bool {
       if (isset($name)) {
         list($localName, $namespaceURI, $ignoreNamespace) = $this->prepareCondition($name, $namespaceURI);
       } else {
@@ -79,7 +79,7 @@ namespace FluentDOM {
      * @param callable|NULL $filter
      * @return bool
      */
-    public function read($name = NULL, $namespaceURI = NULL, callable $filter = NULL) {
+    public function read(string $name = NULL, string $namespaceURI = NULL, callable $filter = NULL): bool {
       if (isset($name)) {
         list($localName, $namespaceURI, $ignoreNamespace) = $this->prepareCondition($name, $namespaceURI);
         while (parent::read()) {

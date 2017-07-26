@@ -20,6 +20,6 @@ namespace FluentDOM {
      *
      * @return string
      */
-    function getXml();
+    function getXml(): string;
   }
 }

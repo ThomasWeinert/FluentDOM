@@ -30,7 +30,7 @@ namespace FluentDOM {
      * @param string $namespaceURI
      * @throws \LogicException
      */
-    public function registerNamespace($prefix, $namespaceURI) {
+    public function registerNamespace(string $prefix, string $namespaceURI) {
       $this->_namespaces[$prefix] = $namespaceURI;
     }
 

@@ -25,7 +25,7 @@ namespace FluentDOM {
      * @throws \LogicException
      * @return string
      */
-    public function getXml() {
+    public function getXml(): string {
       if (!$this instanceOf Appendable) {
         throw new \LogicException(
           sprintf(

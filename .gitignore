@@ -3,6 +3,7 @@ docs/
 
 # Ignore composer files
 vendor
+composer.lock
 
 # Ignore IDE specific files
 ## PHPStorm

@@ -29,7 +29,7 @@ namespace FluentDOM\Serializer\Json {
      * @param \DOMElement $node
      * @return array
      */
-    protected function getNode(\DOMElement $node) {
+    protected function getNode(\DOMElement $node): array {
       $result = [
         $node->nodeName
       ];
@@ -55,9 +55,9 @@ namespace FluentDOM\Serializer\Json {
 
     /**
      * @param \DOMElement $node
-     * @return array|NULL
+     * @return array
      */
-    private function getAttributes(\DOMElement $node) {
+    private function getAttributes(\DOMElement $node): array {
       $result = [];
       foreach ($node->attributes as $name => $attribute) {
         $result[$name] = $this->getValue($attribute->value);
@@ -86,7 +86,7 @@ namespace FluentDOM\Serializer\Json {
      * @param mixed $value
      * @return bool
      */
-    private function isInteger($value) {
+    private function isInteger($value): bool {
       return (bool)preg_match('(^[1-9]\d*$)D', $value);
     }
 
@@ -94,7 +94,7 @@ namespace FluentDOM\Serializer\Json {
      * @param mixed $value
      * @return bool
      */
-    private function isNumber($value) {
+    private function isNumber($value): bool {
       return (bool)preg_match('(^(?:\\d+\\.\\d+|[1-9]\d*)$)D', $value);
     }
 
@@ -102,7 +102,7 @@ namespace FluentDOM\Serializer\Json {
      * @param mixed $value
      * @return bool
      */
-    private function isBoolean($value) {
+    private function isBoolean($value): bool {
       return (bool)preg_match('(^(?:true|false)$)Di', $value);
     }
   }

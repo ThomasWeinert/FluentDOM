@@ -11,6 +11,6 @@ namespace FluentDOM\Serializer {
      * @param \DOMNode $node
      * @return object|NULL
      */
-    function createSerializer($contentType, \DOMNode $node);
+    function createSerializer(string $contentType, \DOMNode $node);
   }
 }

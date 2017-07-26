@@ -20,7 +20,7 @@ namespace FluentDOM\Serializer\Json {
 
     /**
      * @param \DOMElement $node
-     * @return \stdClass
+     * @return mixed
      */
     protected function getNodes(\DOMElement $node) {
       $xpath = new Xpath($node->ownerDocument);
@@ -45,7 +45,7 @@ namespace FluentDOM\Serializer\Json {
      * @param Xpath $xpath
      * @return array
      */
-    private function getNodesArray(\DOMElement $node, $attributes, $xpath) {
+    private function getNodesArray(\DOMElement $node, $attributes, $xpath): array {
       $result = [];
       foreach ($attributes as $name => $value) {
         $child = new \stdClass();

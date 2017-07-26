@@ -15,7 +15,7 @@ namespace FluentDOM\Serializer\Factory {
       }
     }
 
-    public function createSerializer($contentType, \DOMNode $node) {
+    public function createSerializer(string $contentType, \DOMNode $node) {
       $serializer = NULL;
       if ($this->offsetExists($contentType)) {
         $factory = $this->offsetGet($contentType);

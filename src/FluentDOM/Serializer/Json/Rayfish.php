@@ -22,7 +22,7 @@ namespace FluentDOM\Serializer\Json {
      * @param \DOMElement $node
      * @return \stdClass
      */
-    protected function getNode(\DOMElement $node) {
+    protected function getNode(\DOMElement $node): \stdClass {
       $result = new \stdClass();
       $result->{'#name'} = $node->nodeName;
       $result->{'#text'} = '';
@@ -53,7 +53,7 @@ namespace FluentDOM\Serializer\Json {
      * @param \DOMElement $node
      * @return array
      */
-    private function getAttributes(\DOMElement $node) {
+    private function getAttributes(\DOMElement $node): array {
       $result = [];
       foreach ($node->attributes as $name => $attributeNode) {
         $attribute = new \stdClass();
@@ -65,7 +65,7 @@ namespace FluentDOM\Serializer\Json {
       return $result;
     }
 
-    protected function getNamespaces(\DOMElement $node) {
+    protected function getNamespaces(\DOMElement $node): array {
       $result = [];
       foreach (parent::getNamespaces($node) as $prefix => $uri) {
         $attribute = new \stdClass();

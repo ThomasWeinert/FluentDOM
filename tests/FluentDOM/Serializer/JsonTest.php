@@ -241,7 +241,7 @@ namespace FluentDOM\Serializer {
       return [ $node->nodeName ];
     }
 
-    public function getNamespaces(\DOMElement $node) {
+    public function getNamespaces(\DOMElement $node): array {
       return parent::getNamespaces($node);
     }
   }

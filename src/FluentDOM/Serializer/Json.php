@@ -71,7 +71,7 @@ namespace FluentDOM\Serializer {
      * @param int $options
      * @param int $depth
      */
-    public function __construct(\DOMNode $node, $options = 0, $depth = 512) {
+    public function __construct(\DOMNode $node, int $options = 0, int $depth = 512) {
       $this->_node = $node;
       $this->_options = (int)$options;
       $this->_depth = (int)$depth;
@@ -80,7 +80,7 @@ namespace FluentDOM\Serializer {
     /**
      * @return string
      */
-    public function __toString() {
+    public function __toString(): string {
       $json = json_encode($this, $this->_options, $this->_depth);
       return ($json) ? $json : '';
     }
@@ -135,7 +135,7 @@ namespace FluentDOM\Serializer {
      * @param \DOMElement $source
      * @return \DOMNodeList
      */
-    private function getChildElements(\DOMElement $source) {
+    private function getChildElements(\DOMElement $source): \DOMNodeList {
       $xpath = new Xpath($source->ownerDocument);
       return $xpath('*', $source);
     }
@@ -144,7 +144,7 @@ namespace FluentDOM\Serializer {
      * @param \DOMElement $node
      * @return string
      */
-    private function getType(\DOMElement $node) {
+    private function getType(\DOMElement $node): string {
       if ($node->hasAttributeNS(self::XMLNS_JSONDOM, 'type')) {
         return $node->getAttributeNS(self::XMLNS_JSONDOM, 'type');
       } else {
@@ -157,7 +157,7 @@ namespace FluentDOM\Serializer {
      * @param \DOMElement $node
      * @return string
      */
-    private function getName(\DOMElement $node) {
+    private function getName(\DOMElement $node): string {
       if ($node->hasAttributeNS(self::XMLNS_JSONDOM, 'name')) {
         return $node->getAttributeNS(self::XMLNS_JSONDOM, 'name');
       } else {
@@ -181,20 +181,20 @@ namespace FluentDOM\Serializer {
      * @param \DOMElement $node
      * @return array
      */
-    protected function getNamespaces(\DOMElement $node) {
+    protected function getNamespaces(\DOMElement $node): array {
       $result = $this->getAllNamespaces($node);
       $inherited = [];
       if ($node->parentNode instanceOf \DOMElement) {
         $inherited = $this->getAllNamespaces($node->parentNode);
       }
-      return array_diff_assoc($result,$inherited);
+      return array_diff_assoc($result, $inherited);
     }
 
     /**
      * @param \DOMElement $node
      * @return array
      */
-    private function getAllNamespaces(\DOMElement $node) {
+    private function getAllNamespaces(\DOMElement $node): array {
       $xpath = new Xpath($node->ownerDocument);
       $result = [];
       foreach ($xpath->evaluate('namespace::*', $node) as $namespaceNode) {

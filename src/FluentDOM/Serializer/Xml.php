@@ -24,7 +24,7 @@ namespace FluentDOM\Serializer {
     /**
      * @return string
      */
-    public function __toString() {
+    public function __toString(): string {
       return $this->_node instanceof \DOMDocument
         ? $this->_node->saveXml()
         : $this->_node->ownerDocument->saveXml($this->_node);

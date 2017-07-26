@@ -15,7 +15,7 @@ matrix:
 
 install: composer install
 
-script: phpunit --configuration phpunit.xml.dist
+script: vendor/bin/phpunit tests
 
 notifications:
   webhooks:

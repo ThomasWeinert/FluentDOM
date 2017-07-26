@@ -55,6 +55,17 @@ namespace FluentDOM {
     }
 
     /**
+     * @covers \FluentDOM\Nodes::__construct
+     */
+    public function testConstructorWithoutSourceButWithContentType() {
+      $fd = new Nodes(NULL, 'text/html');
+      $this->assertEquals(
+        'text/html',
+        $fd->contentType
+      );
+    }
+
+    /**
      * @group Load
      * @covers \FluentDOM\Nodes::load
      * @covers \FluentDOM\Nodes::prepareSource

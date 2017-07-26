@@ -57,7 +57,7 @@ namespace FluentDOM\Transformer\Namespaces {
      *
      * @return string
      */
-    public function __toString() {
+    public function __toString(): string {
       return $this->getDocument()->saveXml();
     }
 
@@ -66,7 +66,7 @@ namespace FluentDOM\Transformer\Namespaces {
      *
      * @return Document
      */
-    public function getDocument() {
+    public function getDocument(): Document {
       $document = new Document($this->_document->xmlVersion, $this->_document->xmlEncoding);
       foreach ($this->_document->childNodes as $node) {
         $this->addNode($document, $node);
@@ -119,16 +119,16 @@ namespace FluentDOM\Transformer\Namespaces {
      * @param \DOMNode $target
      * @param string $prefix
      * @param string $name
-     * @param string $uri
+     * @param string $namespaceURI
      * @return \DOMElement
      */
-    private function createElement(\DOMNode $target, $prefix, $name, $uri) {
+    private function createElement(\DOMNode $target, string $prefix, string $name, string $namespaceURI): \DOMElement {
       $document = $target instanceof \DOMDocument ? $target : $target->ownerDocument;
       $newNodeName = empty($prefix) ? $name : $prefix.':'.$name;
-      if (empty($uri) && NULL === $target->lookupNamespaceUri(NULL)) {
+      if (empty($namespaceURI) && NULL === $target->lookupNamespaceUri(NULL)) {
         $newNode = $document->createElement($newNodeName);
       } else {
-        $newNode = $document->createElementNS((string)$uri, $newNodeName);
+        $newNode = $document->createElementNS((string)$namespaceURI, $newNodeName);
       }
       $target->appendChild($newNode);
       return $newNode;
@@ -158,12 +158,12 @@ namespace FluentDOM\Transformer\Namespaces {
      * @param \DOMNode $node
      * @return array
      */
-    private function getNodeDefinition(\DOMNode $node) {
+    private function getNodeDefinition(\DOMNode $node): array {
       $isElement = $node instanceof \DOMElement;
       $prefix = $isElement && $node->prefix === 'default'
         ? NULL : $node->prefix;
       $name = $node->localName;
-      $uri = $node->namespaceURI;
+      $uri = (string)$node->namespaceURI;
       if (
         (
           ($isElement && isset($this->_namespaceUris[$uri])) ||
@@ -181,20 +181,20 @@ namespace FluentDOM\Transformer\Namespaces {
     /**
      * @param \DOMElement $node
      * @param string|NULL $prefix
-     * @param string $uri
+     * @param string $namespaceURI
      */
-    private function addNamespaceAttribute(\DOMElement $node, $prefix, $uri) {
-      $prefix = empty($prefix) ? NULL : $prefix;
+    private function addNamespaceAttribute(\DOMElement $node, string $prefix, string $namespaceURI) {
+      $prefix = empty($prefix) ? '' : $prefix;
       if (
         ($node->parentNode instanceof \DOMElement) &&
-        ($this->canAddNamespaceToNode($node->parentNode, $prefix, $uri))
+        ($this->canAddNamespaceToNode($node->parentNode, $prefix, $namespaceURI))
       ) {
-        $this->addNamespaceAttribute($node->parentNode, $prefix, $uri);
+        $this->addNamespaceAttribute($node->parentNode, $prefix, $namespaceURI);
       }
-      if ($this->canAddNamespaceToNode($node, $prefix, $uri)) {
+      if ($this->canAddNamespaceToNode($node, $prefix, $namespaceURI)) {
         $attributeName = empty($prefix) ? 'xmlns' : 'xmlns:'.$prefix;
         if (!$node->hasAttribute($attributeName)) {
-          $node->setAttribute($attributeName, $uri);
+          $node->setAttribute($attributeName, $namespaceURI);
         }
       }
     }
@@ -202,17 +202,17 @@ namespace FluentDOM\Transformer\Namespaces {
     /**
      * @param \DOMNode $node
      * @param string|NULL $prefix
-     * @param string $uri
+     * @param string $namespaceURI
      * @return bool
      */
-    private function canAddNamespaceToNode(\DOMNode $node, $prefix, $uri) {
+    private function canAddNamespaceToNode(\DOMNode $node, string $prefix, string $namespaceURI): bool {
       $prefix = empty($prefix) ? NULL : $prefix;
       $currentUri = $node->lookupNamespaceUri($prefix);
       $hasNoNamespace = empty($node->namespaceURI);
       if ($hasNoNamespace && empty($prefix)) {
         return FALSE;
       } elseif (empty($currentUri)) {
-        return ($currentUri !== $uri);
+        return ($currentUri !== $namespaceURI);
       }
       return FALSE;
     }

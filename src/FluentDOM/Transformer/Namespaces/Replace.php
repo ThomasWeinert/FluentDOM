@@ -42,14 +42,14 @@ namespace FluentDOM\Transformer\Namespaces {
      *
      * @return string
      */
-    public function __toString() {
+    public function __toString(): string {
       return $this->getDocument()->saveXml();
     }
 
     /**
      * Create a document with the replaced namespaces.
      */
-    public function getDocument() {
+    public function getDocument(): Document {
       $result = new Document($this->_document->xmlVersion, $this->_document->xmlEncoding);
       foreach ($this->_document->childNodes as $childNode) {
          $this->importNode($result, $childNode);
@@ -76,7 +76,7 @@ namespace FluentDOM\Transformer\Namespaces {
      */
     private function importElement(\DOMNode $parent, \DOMElement $source) {
       $document = $parent instanceof \DOMDocument ? $parent : $parent->ownerDocument;
-      $namespaceURI = $this->getMappedNamespace($source->namespaceURI);
+      $namespaceURI = $this->getMappedNamespace((string)$source->namespaceURI);
       if (empty($namespaceURI)) {
         $child = $document->createElement($source->localName);
       } else {
@@ -97,7 +97,7 @@ namespace FluentDOM\Transformer\Namespaces {
      */
     private function importAttribute(\DOMElement $parent, \DOMAttr $source) {
       $document = $parent instanceof \DOMDocument ? $parent : $parent->ownerDocument;
-      $namespaceURI = $this->getMappedNamespace($source->namespaceURI);
+      $namespaceURI = $this->getMappedNamespace((string)$source->namespaceURI);
       if (empty($namespaceURI) || empty($source->prefix)) {
         $attribute = $document->createAttribute($source->localName);
       } else {
@@ -111,9 +111,9 @@ namespace FluentDOM\Transformer\Namespaces {
      * @param string $namespaceURI
      * @return string
      */
-    private function getMappedNamespace($namespaceURI) {
+    private function getMappedNamespace(string $namespaceURI): string {
       if (isset($this->_namespaces[$namespaceURI])) {
-        return $this->_namespaces[$namespaceURI];
+        return (string)$this->_namespaces[$namespaceURI];
       }
       return $namespaceURI;
     }

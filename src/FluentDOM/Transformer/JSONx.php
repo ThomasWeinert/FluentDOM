@@ -1,4 +1,11 @@
 <?php
+/**
+ * Allows to transform JSONx to JsonDOM
+ *
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ * @copyright Copyright (c) 2009-2017 Bastian Feder, Thomas Weinert
+ */
+
 
 namespace FluentDOM\Transformer {
 
@@ -6,6 +13,11 @@ namespace FluentDOM\Transformer {
   use FluentDOM\DOM\Element;
   use FluentDOM\DOM\Xpath;
 
+  /**
+   * Allows to transform JSONx to JsonDOM
+   *
+   * @package FluentDOM\Transformer
+   */
   class JSONx {
 
     const XMLNS_JSONX = 'http://www.ibm.com/xmlns/prod/2009/jsonx';
@@ -30,7 +42,7 @@ namespace FluentDOM\Transformer {
      *
      * @return string
      */
-    public function __toString() {
+    public function __toString(): string {
       return $this->getDocument()->saveXml();
     }
 
@@ -39,7 +51,7 @@ namespace FluentDOM\Transformer {
      *
      * @return Document
      */
-    public function getDocument() {
+    public function getDocument(): Document {
       $document = new Document();
       $document->registerNamespace('json', self::XMLNS_JSONX);
       $this->addNode($document, $this->_document->documentElement);
@@ -51,7 +63,7 @@ namespace FluentDOM\Transformer {
      * @param \DOMElement $node
      * @param bool $addNameAttribute
      */
-    public function addNode($parent, \DOMElement $node, $addNameAttribute = FALSE) {
+    public function addNode($parent, \DOMElement $node, bool $addNameAttribute = FALSE) {
       switch ($this->getType($node)) {
       case 'object' :
         $result = $parent->appendElement('json:object');
@@ -84,11 +96,11 @@ namespace FluentDOM\Transformer {
     }
 
     /**
-     * @param \DOMElement $target
+     * @param Element $target
      * @param \DOMElement $source
      * @param bool $addNameAttribute
      */
-    private function appendChildNodes(\DOMElement $target, \DOMElement $source, $addNameAttribute = FALSE) {
+    private function appendChildNodes(Element $target, \DOMElement $source, bool $addNameAttribute = FALSE) {
       $xpath = new Xpath($source->ownerDocument);
       /** @var \DOMElement $child */
       foreach ($xpath('*', $source) as $child) {
@@ -100,7 +112,7 @@ namespace FluentDOM\Transformer {
      * @param \DOMElement $node
      * @return string
      */
-    private function getType(\DOMElement $node) {
+    private function getType(\DOMElement $node): string {
       if ($node->hasAttributeNS(self::XMLNS_JSONDOM, 'type')) {
         return $node->getAttributeNS(self::XMLNS_JSONDOM, 'type');
       } else {

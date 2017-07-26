@@ -3,7 +3,7 @@
 * Example file for function 'removeData'
 *
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
-* @copyright Copyright (c) 2011 Bastian Feder, Thomas Weinert
+* @copyright Copyright (c) 2009-2017 FluentDOM Contributors
 */
 header('Content-type: text/plain');
 

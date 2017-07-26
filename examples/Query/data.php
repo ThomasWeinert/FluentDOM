@@ -3,7 +3,7 @@
 * Example file for function 'data'
 *
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
-* @copyright Copyright (c) 2011-2014 Bastian Feder, Thomas Weinert
+* @copyright Copyright (c) 2011-2014 FluentDOM Contributors
 */
 header('Content-type: text/plain');
 require_once('../../vendor/autoload.php');

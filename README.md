@@ -8,7 +8,7 @@
 [![Latest Stable Version](https://img.shields.io/packagist/v/fluentdom/fluentdom.svg)](https://packagist.org/packages/fluentdom/fluentdom)
 [![Latest Unstable Version](https://img.shields.io/packagist/vpre/fluentdom/fluentdom.svg)](https://packagist.org/packages/fluentdom/fluentdom)
 
-  Copyright: 2009-2017 Bastian Feder, Thomas Weinert <br />
+  Copyright: 2009-2017 [FluentDOM Contributors](https://github.com/FluentDOM/FluentDOM/graphs/contributors)<br />
   Licence: [The MIT License](http://www.opensource.org/licenses/mit-license.php) <br />
 
 FluentDOM provides an easy to use fluent interface for DOMDocument. We tried to

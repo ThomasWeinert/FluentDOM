@@ -3,7 +3,7 @@
  * Provide options for a loader
  *
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2016 Bastian Feder, Thomas Weinert
+ * @copyright Copyright (c) 2016 FluentDOM Contributors
  */
 
 namespace FluentDOM\Loader {

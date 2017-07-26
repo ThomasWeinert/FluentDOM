@@ -7,7 +7,7 @@
 * The example uses the self:: axis to avoid this.
 *
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
-* @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
+* @copyright Copyright (c) 2009-2017 FluentDOM Contributors
 */
 header('Content-type: text/plain');
 require_once('../../vendor/autoload.php');

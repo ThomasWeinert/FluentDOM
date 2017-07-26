@@ -3,7 +3,7 @@
  * Allow an object to be appendable to a FluentDOM\DOM\Element
  *
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 Bastian Feder, Thomas Weinert
+ * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
  */
 
 namespace FluentDOM {
@@ -19,7 +19,7 @@ namespace FluentDOM {
      * Append the object to a FluentDOM\DOM\Element
      *
      * @param Element $parentNode
-     * @return Element
+     * @return Element|NULL
      */
     function appendTo(Element $parentNode);
   }

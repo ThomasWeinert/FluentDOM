@@ -5,7 +5,7 @@
  * allow to get the current item by an zero based index position.
  *
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 Bastian Feder, Thomas Weinert
+ * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
  */
 namespace FluentDOM\Utility\Iterators {
 

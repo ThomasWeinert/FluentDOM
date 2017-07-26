@@ -3,7 +3,7 @@
  * Serialize a DOM into an Html string.
  *
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 Bastian Feder, Thomas Weinert
+ * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
  */
 
 namespace FluentDOM\Serializer {

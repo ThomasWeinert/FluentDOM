@@ -3,7 +3,7 @@
 * Shows how to highlight several words in the body of a html document. It adds spans with specified
 * classes around the found words/word parts.
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
-* @copyright Copyright (c) 2009-2014 Bastian Feder, Thomas Weinert
+* @copyright Copyright (c) 2009-2017 FluentDOM Contributors
 */
 
 $html = <<<HTML

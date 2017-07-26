@@ -3,7 +3,7 @@
  * Interface for objects that convert a (css) selector string into an XPath expression
  *
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2015 Bastian Feder, Thomas Weinert
+ * @copyright Copyright (c) 2009-2015 FluentDOM Contributors
  */
 
 namespace FluentDOM\DOM\Xpath {

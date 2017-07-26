@@ -2,17 +2,19 @@ Version 7.0.0
 -------------
 
 - Changed: minimum PHP version is now 7.0
-- Changed: Moved extended DOM classes to FluentDOM\DOM\*
-- Changed: FluentDOM\Nodes\Creator to FluentDOM\Creator
 - Changed: Added type hints and return types
-- Removed: Document::find() and Element::find()
+- Changed: Moved extended DOM classes to `FluentDOM\DOM\*`
+- Changed: `FluentDOM\Nodes\Creator` to `FluentDOM\Creator`
+- Changed: Moved internal classes into `FluentDOM\Utility`
+- Removed: `Document::find()` and `Element::find()`
+- Fixed #70: `FluentDOM\Query::get($position)` should return a node
 
 Version 6.2.0
 -------------
 
-- Added: $filter argument (callable) to XMLReader::next() and XMLReader::read()
-- Added: FluentDOM\XMLReader\Iterator
-- Added: FluentDOM\XMLReader\SiblingIterator
+- Added: `$filter` argument (callable) to `XMLReader::next()` and `XMLReader::read()`
+- Added: `FluentDOM\XMLReader\Iterator`
+- Added: `FluentDOM\XMLReader\SiblingIterator`
 
 Version 6.1.0
 -------------

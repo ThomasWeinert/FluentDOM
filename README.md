@@ -61,6 +61,23 @@ echo $_(
 )->document->saveHTML();
 ```
 
+### Read Large XML Files (FluentDOM 6.2)
+
+```php
+$reader = new FluentDOM\XMLReader();
+$reader->open('sitemap.xml');
+$reader->registerNamespace('s', 'http://www.sitemaps.org/schemas/sitemap/0.9');
+
+foreach (new FluentDOM\XMLReader\SiblingIterator($reader, 's:url') as $url) {
+  /** @var FluentDOM\DOM\Element $url */
+  var_dump(
+    [
+      'location' => $url('string(s:loc)'),
+      'updated' => $url('string(s:lastmod)')
+    ]
+  );
+}
+```
 
 ## Support
 
@@ -82,10 +99,10 @@ If you find a bug that has security implications, you can send an email directly
 
 ### PHP
 
- * PHP >= 5.6
+ * PHP >= 7.0
  * ext/dom
 
-FluentDOM needs at least PHP 5.6 and the DOM extension. For some features
+FluentDOM needs at least PHP 7.0 and the DOM extension. For some features
 additional extensions might be needed, like ext/json to load JSON strings.
 
 ### HHVM
@@ -94,6 +111,8 @@ FluentDOM 5.2 and later requires HHVM 3.5.
 
 FluentDOM 4.0 to 5.1 work with HHVM 3.3 but it was limited. If you like to use
 HHVM it is strongly suggest to use newer releases.
+
+FluentDOM 7.0 and later has not support for HHVM any more.
 
 ## Packagist
 
@@ -188,13 +207,18 @@ Check the Wiki for an [example](https://github.com/FluentDOM/FluentDOM/wiki/Crea
 
 ### From 6.2 to 7.0
 
-The minimum required PHP version now is 7.0. Scalar type hints were added.
+The minimum required PHP version now is 7.0. HHVM is not supported any more.
+Scalar type hints and return types were added.
 
 Moved the extended DOM classes into the `FluentDOM\DOM` namespace. 
-(`FluentDOM\Document` -> `FluentDOM\DOM\Document`)
+(`FluentDOM\Document` -> `FluentDOM\DOM\Document`). `FluentDOM\Nodes\Creator` was moved
+to `FluentDOM\Creator`. Several internal classes were moved into a `FluentDOM\Utiltity`
+namespace.
 
 `FluentDOM\Query::get()` now return a `DOMNode`is the position was provided, not an array
 any more.
+
+`FluentDOM\DOM\Element::find()` was removed, use `FluentDOM($element)->find()`.
 
 ### From 5.3 to 6.0
 

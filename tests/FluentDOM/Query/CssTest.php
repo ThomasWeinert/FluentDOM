@@ -260,7 +260,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::css
      */
     public function testCssReadOnTextNodes() {
-      $fd = $this->getQueryFixtureFromString(self::HTML, '//div')->contents()->andSelf();
+      $fd = $this->getQueryFixtureFromString(self::HTML, '//div')->contents()->addBack();
       $this->assertCount(6, $fd);
       $this->assertEquals('left', $fd->css('text-align'));
     }

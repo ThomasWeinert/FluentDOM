@@ -8,8 +8,6 @@
 
 namespace FluentDOM {
 
-  use FluentDOM\DOM\Document;
-
   /**
    * @property bool $formatOutput
    * @property bool $optimizeNamespaces
@@ -17,7 +15,7 @@ namespace FluentDOM {
   class Creator {
 
     /**
-     * @var Document
+     * @var DOM\Document
      */
     private $_document = NULL;
 
@@ -30,15 +28,15 @@ namespace FluentDOM {
      * @param string $version
      * @param string $encoding
      */
-    public function __construct($version = '1.0', $encoding = 'UTF-8') {
-      $this->_document = new Document($version, $encoding);
+    public function __construct(string $version = '1.0', string $encoding = 'UTF-8') {
+      $this->_document = new DOM\Document($version, $encoding);
     }
 
     /**
      * @param string $name
      * @return bool
      */
-    public function __isset($name) {
+    public function __isset(string $name): bool {
       switch ($name) {
       case 'formatOutput' :
         return isset($this->_document->{$name});
@@ -52,7 +50,7 @@ namespace FluentDOM {
      * @param string $name
      * @return mixed
      */
-    public function __get($name) {
+    public function __get(string $name) {
       switch ($name) {
       case 'formatOutput' :
         return $this->_document->{$name};
@@ -66,7 +64,7 @@ namespace FluentDOM {
      * @param string $name
      * @param mixed $value
      */
-    public function __set($name, $value) {
+    public function __set(string $name, $value) {
       switch ($name) {
       case 'formatOutput' :
         $this->_document->{$name} = $value;
@@ -90,7 +88,7 @@ namespace FluentDOM {
      * @param string $prefix
      * @param string $namespaceURI
      */
-    public function registerNamespace($prefix, $namespaceURI) {
+    public function registerNamespace(string $prefix, string $namespaceURI) {
       $this->_document->registerNamespace($prefix, $namespaceURI);
     }
 
@@ -99,7 +97,7 @@ namespace FluentDOM {
      * @param mixed ...$parameters
      * @return Creator\Node
      */
-    public function __invoke($name, ...$parameters) {
+    public function __invoke(string $name, ...$parameters) {
       return new Creator\Node(
         $this,
         $this->_document,
@@ -120,9 +118,9 @@ namespace FluentDOM {
      *
      * @param string $name
      * @param mixed ...$parameters
-     * @return \FluentDOM\DOM\Element
+     * @return DOM\Element
      */
-    public function element($name, ...$parameters) {
+    public function element(string $name, ...$parameters): DOM\Element {
       $node = $this->_document->createElement($name);
       foreach ($parameters as $parameter) {
         $node->append($parameter);
@@ -132,26 +130,26 @@ namespace FluentDOM {
 
     /**
      * @param string $content
-     * @return \FluentDOM\DOM\CdataSection
+     * @return DOM\CdataSection
      */
-    public function cdata($content) {
+    public function cdata(string $content): DOM\CdataSection {
       return $this->_document->createCDATASection($content);
     }
 
     /**
      * @param string $content
-     * @return \FluentDOM\DOM\Comment
+     * @return DOM\Comment
      */
-    public function comment($content) {
+    public function comment($content): DOM\Comment {
       return $this->_document->createComment($content);
     }
 
     /**
      * @param string $target
      * @param string $content
-     * @return \DOMProcessingInstruction
+     * @return DOM\ProcessingInstruction
      */
-    public function pi($target, $content) {
+    public function pi($target, $content): DOM\ProcessingInstruction {
       return $this->_document->createProcessingInstruction($target, $content);
     }
 
@@ -160,7 +158,7 @@ namespace FluentDOM {
      * @param callable $map
      * @return Appendable
      */
-    public function each($traversable, callable $map = NULL) {
+    public function each($traversable, callable $map = NULL): Appendable {
       return new Creator\Nodes($traversable, $map);
     }
   }
@@ -176,7 +174,6 @@ namespace FluentDOM\Creator {
 
   /**
    * @property-read Document $document
-   * @property-read Document $dom
    * @property-read Element $node
    */
   class Node implements Appendable {
@@ -211,9 +208,8 @@ namespace FluentDOM\Creator {
      * @param string $name
      * @return mixed
      */
-    public function __get($name) {
+    public function __get(string $name) {
       switch ($name) {
-      case 'dom' :
       case 'document' :
         return $this->getDocument();
       case 'node' :
@@ -227,7 +223,7 @@ namespace FluentDOM\Creator {
      * @param mixed $value
      * @throws \LogicException
      */
-    public function __set($name, $value) {
+    public function __set(string $name, $value) {
       throw new \LogicException(
         sprintf('%s is immutable.', get_class($this))
       );
@@ -236,7 +232,7 @@ namespace FluentDOM\Creator {
     /**
      * @return Document
      */
-    public function getDocument() {
+    public function getDocument(): Document {
       $document = clone $this->_document;
       $document->appendChild($document->importNode($this->_node, TRUE));
       if ($this->_creator->optimizeNamespaces) {
@@ -249,7 +245,7 @@ namespace FluentDOM\Creator {
     /**
      * @return string
      */
-    public function __toString() {
+    public function __toString(): string {
       return $this->getDocument()->saveXml() ?: '';
     }
 
@@ -257,7 +253,7 @@ namespace FluentDOM\Creator {
      * @param Element $parent
      * @return Element
      */
-    public function appendTo(Element $parent) {
+    public function appendTo(Element $parent): Element {
       $parent->appendChild(
         $parent->ownerDocument->importNode($this->_node, TRUE)
       );
@@ -294,7 +290,7 @@ namespace FluentDOM\Creator {
     /**
      * @return \Iterator
      */
-    public function getInnerIterator() {
+    public function getInnerIterator(): \Iterator {
       if (NULL === $this->_iterator) {
         if ($this->_traversable instanceof \Iterator) {
           $this->_iterator = $this->_traversable;
@@ -341,7 +337,7 @@ namespace FluentDOM\Creator {
     /**
      * @return bool
      */
-    public function valid() {
+    public function valid(): bool {
       return $this->getInnerIterator()->valid();
     }
 
@@ -349,7 +345,7 @@ namespace FluentDOM\Creator {
      * @param Element $parent
      * @return Element
      */
-    public function appendTo(Element $parent) {
+    public function appendTo(Element $parent): Element {
       foreach ($this as $item) {
         $parent->append($item);
       }

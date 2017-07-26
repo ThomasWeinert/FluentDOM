@@ -204,7 +204,7 @@ namespace FluentDOM\Query {
         $this->getQueryFixtureFromString(self::XML)
           ->find('//group/item')
           ->find('//group')
-          ->andSelf()
+          ->addBack()
           ->hasAttr('index')
       );
     }

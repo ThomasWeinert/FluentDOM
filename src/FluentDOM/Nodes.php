@@ -99,7 +99,7 @@ namespace FluentDOM {
      * @param mixed $source
      * @param NULL|string $contentType
      */
-    public function __construct($source = NULL, $contentType = 'text/xml') {
+    public function __construct($source = NULL, string $contentType = NULL) {
       if (isset($source)) {
         $this->load($source, $contentType);
       } elseif (isset($contentType)) {
@@ -117,7 +117,8 @@ namespace FluentDOM {
      * @throws \InvalidArgumentException
      * @return $this
      */
-    public function load($source, $contentType = 'text/xml', $options = []) {
+    public function load($source, string $contentType = NULL, $options = []) {
+      $contentType = $contentType ?: 'text/xml';
       $loaded = $this->prepareSource($source, $contentType, $options);
       if ($loaded instanceof Loader\Result || $loaded instanceof \DOMDocument) {
         if ($loaded instanceof Loader\Result) {
@@ -143,7 +144,7 @@ namespace FluentDOM {
      * @param array|\Traversable|Options $options
      * @return bool|\DOMDocument|Document|NULL
      */
-    private function prepareSource($source, $contentType, $options) {
+    private function prepareSource($source, string $contentType, $options) {
       $loaded = FALSE;
       $this->_useDocumentContext = TRUE;
       if ($source instanceof Nodes) {
@@ -171,7 +172,7 @@ namespace FluentDOM {
      * @throws \InvalidArgumentException
      * @return Loadable
      */
-    public function loaders($loaders = NULL) {
+    public function loaders($loaders = NULL): Loadable {
       if (isset($loaders)) {
         if ($loaders instanceOf Loadable) {
           $this->_loaders = $loaders;
@@ -213,9 +214,9 @@ namespace FluentDOM {
      * like in a DOMNodeList.
      *
      * @param int $position
-     * @return \DOMElement|\DOMNode
+     * @return \DOMElement|\DOMNode|NULL
      */
-    public function item($position) {
+    public function item(int $position) {
       return isset($this->_nodes[$position]) ? $this->_nodes[$position] : NULL;
     }
 
@@ -224,7 +225,7 @@ namespace FluentDOM {
      * @param \DOMNode $contextNode
      * @return Xpath|\DOMNodeList|float|string
      */
-    public function xpath($expression = NULL, $contextNode = NULL) {
+    public function xpath(string $expression = NULL, \DOMNode $contextNode = NULL) {
       if (isset($expression)) {
         return $this->getXpath()->evaluate($expression, $contextNode);
       } else {
@@ -235,7 +236,7 @@ namespace FluentDOM {
     /**
      * @return Xpath
      */
-    private function getXpath() {
+    private function getXpath(): Xpath {
       if ($this->_document instanceof Document) {
         return $this->_document->xpath();
       } elseif (
@@ -255,7 +256,7 @@ namespace FluentDOM {
      * @param string $prefix
      * @param string $namespaceURI
      */
-    public function registerNamespace($prefix, $namespaceURI) {
+    public function registerNamespace(string $prefix, string $namespaceURI) {
       $this->_namespaces[$prefix] = $namespaceURI;
       $document = $this->getDocument();
       if ($document instanceOf Document) {
@@ -290,7 +291,7 @@ namespace FluentDOM {
      * @param string $contentType
      * @return Nodes
      */
-    public function formatOutput($contentType = NULL) {
+    public function formatOutput(string $contentType = NULL) {
       if (isset($contentType)) {
         $this->setContentType($contentType);
       }
@@ -315,8 +316,8 @@ namespace FluentDOM {
      * @return Nodes
      */
     protected function fetch(
-      $expression, $filter = NULL, $stopAt = NULL, $options = 0
-    ) {
+      string $expression, $filter = NULL, $stopAt = NULL, int $options = 0
+    ): Nodes {
       return $this->spawn(
         (new Nodes\Fetcher($this))->fetch(
           $expression,
@@ -332,7 +333,7 @@ namespace FluentDOM {
      *
      * @param string $value
      */
-    private function setContentType($value) {
+    private function setContentType(string $value) {
       $mapping = [
         'text/xml' => 'text/xml',
         'xml' => 'text/xml',
@@ -359,7 +360,7 @@ namespace FluentDOM {
      *
      * @return \DOMDocument|Document
      */
-    public function getDocument() {
+    public function getDocument(): \DOMDocument {
       if (!($this->_document instanceof \DOMDocument)) {
         $this->_document = new Document();
         $this->applyNamespaces();
@@ -373,7 +374,7 @@ namespace FluentDOM {
      * @param int $contextMode
      * @return string
      */
-    public function prepareSelector($selector, $contextMode) {
+    public function prepareSelector(string $selector, int $contextMode): string {
       if (isset($this->_onPrepareSelector)) {
         return call_user_func($this->_onPrepareSelector, $selector, $contextMode);
       }
@@ -424,7 +425,7 @@ namespace FluentDOM {
      * @param \DOMNode $context optional, default value NULL
      * @return bool
      */
-    protected function matches($selector, \DOMNode $context = NULL) {
+    protected function matches(string $selector, \DOMNode $context = NULL): bool {
       $check = $this->xpath->evaluate(
         $this->prepareSelector($selector, self::CONTEXT_SELF), $context
       );
@@ -444,7 +445,7 @@ namespace FluentDOM {
      *
      * @return int
      */
-    public function count() {
+    public function count(): int {
       return count($this->_nodes);
     }
 
@@ -462,7 +463,7 @@ namespace FluentDOM {
      *
      * @return \DOMNode[]
      */
-    public function toArray() {
+    public function toArray(): array {
       return $this->_nodes;
     }
 
@@ -477,7 +478,7 @@ namespace FluentDOM {
      * @param int $offset
      * @return bool
      */
-    public function offsetExists($offset) {
+    public function offsetExists($offset): bool {
       return isset($this->_nodes[$offset]);
     }
 
@@ -521,7 +522,7 @@ namespace FluentDOM {
      * @param string $name
      * @return bool
      */
-    public function __isset($name) {
+    public function __isset(string $name): bool {
       switch ($name) {
       case 'contentType' :
       case 'length' :
@@ -540,7 +541,7 @@ namespace FluentDOM {
      * @throws \UnexpectedValueException
      * @return mixed
      */
-    public function __get($name) {
+    public function __get(string $name) {
       switch ($name) {
       case 'contentType' :
         return $this->_contentType;
@@ -564,7 +565,7 @@ namespace FluentDOM {
      * @param mixed $value
      * @throws \BadMethodCallException
      */
-    public function __set($name, $value) {
+    public function __set(string $name, $value) {
       switch ($name) {
       case 'contentType' :
         $this->setContentType($value);
@@ -591,7 +592,7 @@ namespace FluentDOM {
      * @param string $name
      * @throws \BadMethodCallException
      */
-    public function __unset($name) {
+    public function __unset(string $name) {
       switch ($name) {
       case 'contentType' :
       case 'document' :
@@ -619,7 +620,7 @@ namespace FluentDOM {
      *
      * @return string
      */
-    public function toString() {
+    public function toString(): string {
       if ($serializer = $this->serializerFactories()->createSerializer($this->contentType, $this->document)) {
         return (string)$serializer;
       } else {
@@ -632,16 +633,12 @@ namespace FluentDOM {
      *
      * @return string
      */
-    public function __toString() {
+    public function __toString(): string {
       try {
         return $this->toString();
-      } catch (\Exception $e) {
-        return '';
-        // @codeCoverageIgnoreStart
       } catch (\Throwable $e) {
         return '';
       }
-      // @codeCoverageIgnoreEnd
     }
 
     /***************************
@@ -655,7 +652,7 @@ namespace FluentDOM {
      * @param array|\Traversable|\DOMNode|Nodes $elements
      * @return Nodes
      */
-    public function spawn($elements = NULL) {
+    public function spawn($elements = NULL): Nodes {
       $result = clone $this;
       $result->_parent = $this;
       $result->_document = $this->getDocument();
@@ -673,7 +670,7 @@ namespace FluentDOM {
      *
      * @return Nodes
      */
-    public function end() {
+    public function end(): Nodes {
       if ($this->_parent instanceof Nodes) {
         return $this->_parent;
       } else {
@@ -688,9 +685,9 @@ namespace FluentDOM {
      * @param bool $ignoreTextNodes ignore text nodes
      * @throws \OutOfBoundsException
      * @throws \InvalidArgumentException
-     * @return $this
+     * @return $this|Nodes
      */
-    public function push($elements, $ignoreTextNodes = FALSE) {
+    public function push($elements, bool $ignoreTextNodes = FALSE): Nodes {
       if (Constraints::filterNode($elements, $ignoreTextNodes)) {
         if ($elements->ownerDocument !== $this->_document) {
           throw new \OutOfBoundsException(
@@ -724,9 +721,9 @@ namespace FluentDOM {
      *
      * @param callable $function
      * @param callable|bool|NULL $elementsFilter
-     * @return $this
+     * @return $this|Nodes
      */
-    public function each(callable $function, $elementsFilter = NULL) {
+    public function each(callable $function, $elementsFilter = NULL): Nodes {
       if (TRUE === $elementsFilter) {
         $filter = function($node) {
           return $node instanceof \DOMElement;
@@ -760,7 +757,7 @@ namespace FluentDOM {
      * @param int $options FIND_* options CONTEXT_DOCUMENT, FIND_MODE_FILTER, FIND_FORCE_SORT
      * @return Nodes
      */
-    public function find($selector, $options = 0) {
+    public function find($selector, int $options = 0): Nodes {
       list(
         $selectorIsScalar,
         $selectorIsFilter,
@@ -792,7 +789,7 @@ namespace FluentDOM {
      * @param int $options
      * @return array
      */
-    private function prepareFindContext($selector, $options) {
+    private function prepareFindContext($selector, int $options): array {
       $useDocumentContext = $this->_useDocumentContext ||
         ($options & self::CONTEXT_DOCUMENT) === self::CONTEXT_DOCUMENT;
       $selectorIsScalar = is_scalar($selector) || NULL === $selector;
@@ -814,7 +811,12 @@ namespace FluentDOM {
       return array($selectorIsScalar, $selectorIsFilter, $expression, $contextMode, $fetchOptions);
     }
 
-    private function prepareSelectorAsFilter($selector, $contextMode) {
+    /**
+     * @param string $selector
+     * @param int $contextMode
+     * @return callable
+     */
+    private function prepareSelectorAsFilter(string $selector, int $contextMode): callable {
       $filter = $this->prepareSelector($selector, $contextMode);
       if (preg_match('(^(/{0,2})([a-z-]+::.*))ui', $filter, $matches)) {
         $filter = $matches[2];
@@ -832,7 +834,7 @@ namespace FluentDOM {
      * @param NULL|string|\DOMNode|\Traversable $selector
      * @return int
      */
-    public function index($selector = NULL) {
+    public function index($selector = NULL): int {
       if (count($this->_nodes) > 0) {
         if (NULL === $selector) {
           return $this->xpath(
@@ -863,7 +865,7 @@ namespace FluentDOM {
      * @throws \InvalidArgumentException
      * @return array
      */
-    public function unique(array $array) {
+    public function unique(array $array): array {
       $count = count($array);
       if ($count <= 1) {
         if ($count == 1) {

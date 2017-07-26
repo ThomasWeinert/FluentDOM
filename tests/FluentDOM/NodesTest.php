@@ -8,7 +8,7 @@ namespace FluentDOM {
   require_once(__DIR__.'/TestCase.php');
 
   class Nodes_TestProxy extends Nodes {
-    public function matches($selector, \DOMNode $context = NULL) {
+    public function matches(string $selector, \DOMNode $context = NULL): bool {
       return parent::matches($selector, $context);
     }
   }

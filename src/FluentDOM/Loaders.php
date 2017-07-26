@@ -50,7 +50,7 @@ namespace FluentDOM {
      *
      * @param Loadable $loader
      */
-    public function remove($loader) {
+    public function remove(Loadable $loader) {
       $key = spl_object_hash($loader);
       if (isset($this->_list[$key])) {
         unset($this->_list[$key]);
@@ -60,9 +60,9 @@ namespace FluentDOM {
     /**
      * Allow to iterate all added loaders
      *
-     * @return \Traversable
+     * @return \Iterator
      */
-    public function getIterator() {
+    public function getIterator(): \Iterator {
       return new \ArrayIterator(array_values($this->_list));
     }
 

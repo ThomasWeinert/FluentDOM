@@ -6,17 +6,6 @@ namespace FluentDOM {
   class QueryTest extends TestCase {
 
     /**
-     * @group MagicFunctions
-     * @covers \FluentDOM\Query::__call()
-     */
-    public function testMagicMethodCallWithUnknownMethodExpectingException() {
-      $fd = new Query();
-      $this->expectException(\BadMethodCallException::class);
-      /** @noinspection PhpUndefinedMethodInspection */
-      $fd->invalidMethodCall();
-    }
-
-    /**
      * @group Properties
      * @covers \FluentDOM\Query::__isset
      * @dataProvider providePropertyNames

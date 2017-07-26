@@ -23,7 +23,7 @@
     "ext-dom": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": "^6.2"
+    "phpunit/phpunit": "^5.7"
   },
   "suggest": {
     "fluentdom/css-selector": "Allows to use css selectors."

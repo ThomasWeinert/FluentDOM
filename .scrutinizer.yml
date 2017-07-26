@@ -7,10 +7,13 @@ tools:
     php_sim:
         min_mass: 30 # Defaults to 16
 build:
+    environment:
+        php:
+            version: 7.1
     tests:
         override:
             -
-                command: 'phpunit --coverage-clover=coverage.xml'
+                command: 'vendor/bin/phpunit --coverage-clover=coverage.xml'
                 coverage:
                     file: 'coverage.xml'
                     format: 'php-clover'

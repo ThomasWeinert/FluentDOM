@@ -275,6 +275,21 @@ namespace FluentDOM {
 
     /**
      * @covers \FluentDOM\Creator
+     * @covers \FluentDOM\Creator\Nodes
+     */
+    public function testEachWithNonIterable() {
+      $_ = new Creator();
+      $iterator = $_->each(NULL);
+      $this->assertInstanceOf(
+        Creator\Nodes::class, $iterator
+      );
+      $this->assertEquals(
+        [], iterator_to_array($iterator)
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\Creator
      * @covers \FluentDOM\Creator\Node
      */
     public function testCreateWithDOMNode() {

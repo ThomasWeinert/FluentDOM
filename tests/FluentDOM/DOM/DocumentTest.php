@@ -478,5 +478,17 @@ namespace FluentDOM\DOM {
         iterator_to_array($document->getElementsByTagName('foo'), FALSE)
       );
     }
+
+    /**
+     * @cover FluentDOM\DOM\Document::__toString
+     */
+    public function testStringCast() {
+      $document = new Document();
+      $document->loadXML('<foo/>');
+      $this->assertEquals(
+        "<?xml version=\"1.0\"?>\n<foo/>\n",
+        (string)$document
+      );
+    }
   }
 }

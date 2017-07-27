@@ -12,7 +12,7 @@ namespace FluentDOM\XMLReader {
    */
   class SiblingIterator extends Iterator {
 
-    protected function move(XMLReader $reader, $name, $filter) {
+    protected function move(XMLReader $reader, $name, $filter): bool {
       return ($this->key() < 0)
         ? $reader->read($name, NULL, $filter)
         : $reader->next($name, NULL, $filter);

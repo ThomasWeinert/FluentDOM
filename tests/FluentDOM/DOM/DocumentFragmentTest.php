@@ -182,7 +182,7 @@ namespace FluentDOM\DOM {
       );
     }
 
-     /**
+    /**
      * @covers \FluentDOM\DOM\DocumentFragment
      */
     public function testWithNamespacesList() {
@@ -194,6 +194,19 @@ namespace FluentDOM\DOM {
         '<foo:test xmlns:foo="urn:bar">success</foo:test>',
         $document->saveXML($document->documentElement)
       );
+    }
+
+    /**
+     * @covers \FluentDOM\DOM\DocumentFragment
+     */
+    public function testWithInvalidNamespacesListExpectingException() {
+      $document = new Document();
+      $fragment = $document->createDocumentFragment();
+      $this->expectException(
+        \InvalidArgumentException::class,
+        '$namespaces needs to be a list of namespaces or an element node to fetch the namespaces from.'
+      );
+      $fragment->appendXml('<foo:test>success</foo:test>',  'INVALID_VALUE');
     }
 
     /**

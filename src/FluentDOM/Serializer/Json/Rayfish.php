@@ -34,10 +34,7 @@ namespace FluentDOM\Serializer\Json {
         if ($childNode instanceof \DOMElement) {
           $result->{'#children'}[] = $this->getNode($childNode);
         } elseif (
-          (
-            $childNode instanceof \DOMText ||
-            $childNode instanceof \DOMCdataSection
-          ) &&
+          ($childNode instanceof \DOMText || $childNode instanceof \DOMCdataSection) &&
           !$childNode->isWhitespaceInElementContent()
         ) {
           $result->{'#text'} .= $childNode->textContent;

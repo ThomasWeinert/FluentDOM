@@ -39,6 +39,14 @@ namespace FluentDOM\Serializer\Json {
           '{ "#name": "alice", "#text": null, "#children": [ ] }',
           '<alice/>'
         ],
+        'Simple element with text' => [
+          '{ "#name": "alice", "#text": "bob", "#children": [ ] }',
+          '<alice>bob</alice>'
+        ],
+        'Simple element with cdata' => [
+          '{ "#name": "alice", "#text": " bob ", "#children": [ ] }',
+          '<alice><![CDATA[ bob ]]></alice>'
+        ],
         'Nested element' => [
           '{ "#name": "alice", "#text": null, "#children": [
             { "#name": "bob", "#text": "charlie", "#children": [ ] },

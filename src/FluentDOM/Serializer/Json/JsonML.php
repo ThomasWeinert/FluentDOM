@@ -44,8 +44,7 @@ namespace FluentDOM\Serializer\Json {
         if ($childNode instanceof \DOMElement) {
           $result[] = $this->getNode($childNode);
         } elseif (
-          $childNode instanceof \DOMText ||
-          $childNode instanceof \DOMCdataSection
+          $childNode instanceof \DOMText || $childNode instanceof \DOMCdataSection
         ) {
           $result[] = $this->getValue($childNode->data);
         }

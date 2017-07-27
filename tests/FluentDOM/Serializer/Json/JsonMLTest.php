@@ -39,6 +39,10 @@ namespace FluentDOM\Serializer\Json {
           '["alice", "bob"]',
           '<alice>bob</alice>'
         ],
+        'Simple element (cdata)' => [
+          '["alice", " bob "]',
+          '<alice><![CDATA[ bob ]]></alice>'
+        ],
         'Number (int)' => [
           '["alice", 42]',
           '<alice>42</alice>'

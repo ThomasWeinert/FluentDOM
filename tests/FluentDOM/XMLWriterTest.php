@@ -219,5 +219,23 @@ namespace FluentDOM {
         $_->outputMemory()
       );
     }
+
+    /**
+     * @covers \FluentDOM\XMLWriter
+     */
+    public function testCollapseWithElement() {
+      $document = new \DOMDocument();
+      $node = $document->createElement('document');
+      $_ = new XMLWriter();
+      $_->openMemory();
+      $_->startDocument();
+      $_->collapse($node);
+      $_->endDocument();
+
+      $this->assertXmlStringEqualsXmlString(
+        '<?xml version="1.0"?><document/>',
+        $_->outputMemory()
+      );
+    }
   }
 }

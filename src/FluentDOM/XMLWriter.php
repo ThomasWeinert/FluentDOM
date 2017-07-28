@@ -171,5 +171,60 @@ namespace FluentDOM {
         return parent::writeAttributeNS($prefix, $localName, $uri, $content);
       }
     }
+
+    /**
+     * Write a DOM node
+     *
+     * @param \DOMNode $node
+     */
+    public function collapse(\DOMNode $node) {
+      switch (TRUE) {
+      case $node instanceof \DOMElement :
+        $this->startElementNS($node->prefix, $node->localName, $node->namespaceURI);
+        foreach ($node->attributes as $attribute) {
+          $this->writeAttributeNS(
+            $attribute->prefix,
+            $attribute->localName,
+            $attribute->namespaceURI,
+            $attribute->value
+          );
+        }
+        foreach ($node->childNodes as $childNode) {
+          $this->collapse($childNode);
+        }
+        $this->endElement();
+        break;
+      case $node instanceof \DOMDocumentFragment :
+        foreach ($node->childNodes as $childNode) {
+          $this->collapse($childNode);
+        }
+        break;
+      case $node instanceof \DOMText :
+        $this->text($node->textContent);
+        break;
+      case $node instanceof \DOMCdataSection :
+        $this->writeCData($node->textContent);
+        break;
+      case $node instanceof \DOMComment :
+        $this->writeComment($node->textContent);
+        break;
+      case $node instanceof \DOMProcessingInstruction :
+        $this->writePI($node->target, $node->textContent);
+        break;
+      case $node instanceof \DOMAttr :
+        $this->writeAttributeNS(
+          $node->prefix,
+          $node->localName,
+          $node->namespaceURI,
+          $node->value
+        );
+        break;
+      case $node instanceof \DOMEntityReference :
+      case $node instanceof \DOMEntity :
+        foreach ($node->childNodes as $childNode) {
+          $this->collapse($childNode);
+        }
+      }
+    }
   }
 }

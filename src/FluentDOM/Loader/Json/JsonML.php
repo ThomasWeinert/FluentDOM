@@ -8,6 +8,7 @@
 
 namespace FluentDOM\Loader\Json {
 
+  use FluentDOM\DOM\Element;
   use FluentDOM\Loadable;
   use FluentDOM\Loader\Supports;
 
@@ -26,7 +27,7 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * @param \DOMNode|\DOMElement $node
+     * @param \DOMNode|Element $node
      * @param mixed $json
      */
     public function transferTo(\DOMNode $node, $json) {
@@ -41,10 +42,10 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * @param \DOMElement $node
+     * @param Element $node
      * @param \stdClass $properties
      */
-    private function addNamespaceAttributes(\DOMElement $node, \stdClass $properties) {
+    private function addNamespaceAttributes(Element $node, \stdClass $properties) {
       foreach ($properties as $name => $value) {
         if ($name === 'xmlns' || substr($name, 0, 6) === 'xmlns:') {
           if ($node instanceof \DOMElement) {
@@ -58,10 +59,10 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * @param \DOMElement $node
+     * @param Element $node
      * @param \stdClass $properties
      */
-    private function addAttributes(\DOMElement $node, \stdClass $properties) {
+    private function addAttributes(Element $node, \stdClass $properties) {
       $document = $node instanceof \DOMDocument ? $node : $node->ownerDocument;
       foreach ($properties as $name => $value) {
         if (!($name === 'xmlns' || substr($name, 0, 6) === 'xmlns:')) {
@@ -77,7 +78,7 @@ namespace FluentDOM\Loader\Json {
 
     /**
      * @param \DOMNode $node
-     * @param $json
+     * @param mixed $json
      */
     private function transferToElement(\DOMNode $node, $json) {
       $document = $node instanceof \DOMDocument ? $node : $node->ownerDocument;

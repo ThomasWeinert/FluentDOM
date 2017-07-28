@@ -56,7 +56,7 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * @param \DOMNode|\DOMElement $node
+     * @param \DOMNode|Element $node
      * @param mixed $json
      */
     protected function transferTo(\DOMNode $node, $json) {

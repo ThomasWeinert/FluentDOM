@@ -28,7 +28,7 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * @param \DOMNode|\DOMElement $node
+     * @param \DOMNode|Element $node
      * @param mixed $json
      */
     protected function transferTo(\DOMNode $node, $json) {
@@ -48,24 +48,24 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * @param \DOMDocument $document
-     * @param \DOMElement $target
+     * @param Document $document
+     * @param Element $target
      * @param \stdClass $json
      */
-    private function transferText(\DOMDocument $document, \DOMElement $target, $json) {
+    private function transferText(Document $document, Element $target, $json) {
       if (isset($json->{'#text'})) {
         $target->appendChild($document->createTextNode($json->{'#text'}));
       }
     }
 
     /**
-     * @param \DOMElement $target
+     * @param Element $target
      * @param \stdClass $json
      * @param \stdClass $namespaces
      * @param \stdClass $attributes
      */
     private function transferChildren(
-      \DOMElement $target, \stdClass $json, \stdClass $namespaces, \stdClass $attributes
+      Element $target, \stdClass $json, \stdClass $namespaces, \stdClass $attributes
     ) {
       if (isset($json->{'#children'})) {
         $this->transferAttributes($target, $namespaces, $attributes);

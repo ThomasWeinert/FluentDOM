@@ -9,6 +9,7 @@
 namespace FluentDOM\Loader\Json {
 
   use FluentDOM\DOM\Document;
+  use FluentDOM\DOM\DocumentFragment;
   use FluentDOM\DOM\Element;
   use FluentDOM\Loadable;
   use FluentDOM\Loader\Result;
@@ -81,12 +82,14 @@ namespace FluentDOM\Loader\Json {
 
 
     /**
-     * Load the json string into an DOMDocument
+     * Load the json string into an DOM Document
      *
      * @param mixed $source
      * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return Document|Result|NULL
+     * @throws \Exception
+     * @throws \FluentDOM\Exceptions\InvalidSource
      */
     public function load($source, string $contentType, $options = []) {
       if (FALSE !== ($json = $this->getJson($source, $contentType, $options))) {
@@ -106,7 +109,7 @@ namespace FluentDOM\Loader\Json {
      * @param string $source
      * @param string $contentType
      * @param array|\Traversable|Options $options
-     * @return \FluentDOM\DOM\DocumentFragment|NULL
+     * @return DocumentFragment|NULL
      */
     public function loadFragment($source, string $contentType, $options = []) {
       if ($this->supports($contentType)) {
@@ -151,14 +154,14 @@ namespace FluentDOM\Loader\Json {
      * If the current element is an object or array the method is called recursive.
      * The $recursions parameter is used to limit the recursion depth of this function.
      *
-     * @param \DOMElement|\DOMNode $target
+     * @param \DOMNode|DocumentFragment|Element $target
      * @param mixed $value
      * @param int $recursions
      */
     protected function transferTo(\DOMNode $target, $value, int $recursions = 100) {
       if ($recursions < 1) {
         return;
-      } elseif ($target instanceof \DOMElement || $target instanceOf \DOMDocumentFragment) {
+      } elseif ($target instanceof Element || $target instanceOf DocumentFragment) {
         $type = $this->getTypeFromValue($value);
         switch ($type) {
         case self::TYPE_ARRAY :
@@ -241,7 +244,7 @@ namespace FluentDOM\Loader\Json {
      * Transfer an array value into a target element node. Sets the json:type attribute to 'array' and
      * creates child element nodes for each array element using the default QName.
      *
-     * @param \DOMNode|\DOMElement|\DOMDocumentFragment $target
+     * @param \DOMNode|Element|DocumentFragment $target
      * @param array $value
      * @param int $recursions
      */
@@ -271,7 +274,7 @@ namespace FluentDOM\Loader\Json {
      * If the normalized NCName is different from the property name or verbose is TRUE, a json:name attribute
      * with the property name will be added.
      *
-     * @param \DOMNode|\DOMElement|\DOMDocumentFragment $target
+     * @param \DOMNode|Element|DocumentFragment $target
      * @param object $value
      * @param int $recursions
      */

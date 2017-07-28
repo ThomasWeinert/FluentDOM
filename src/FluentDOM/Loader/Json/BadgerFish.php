@@ -9,6 +9,7 @@
 namespace FluentDOM\Loader\Json {
 
   use FluentDOM\DOM\Document;
+  use FluentDOM\DOM\Element;
   use FluentDOM\Loadable;
   use FluentDOM\Loader\Supports;
 
@@ -27,7 +28,7 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * @param \DOMNode|\DOMElement $node
+     * @param \DOMNode|Element $node
      * @param mixed $json
      */
     protected function transferTo(\DOMNode $node, $json) {
@@ -64,10 +65,10 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * @param \DOMElement $node
+     * @param Element $node
      * @param \stdClass $data
      */
-    protected function transferNamespacesTo(\DOMElement $node, $data) {
+    protected function transferNamespacesTo(Element $node, $data) {
       foreach ($data as $key => $namespaceURI) {
         $prefix = $key === '$' ? NULL : $key;
         if ($node->lookupNamespaceUri($prefix) != $namespaceURI) {
@@ -80,12 +81,12 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * @param \DOMElement $node
+     * @param Element $node
      * @param string $name
      * @param string|number|bool|NULL $data
      * @return array
      */
-    protected function transferAttributeTo(\DOMElement $node, string $name, $data) {
+    protected function transferAttributeTo(Element $node, string $name, $data) {
       /** @var Document $document */
       $document = $node->ownerDocument ?: $node;
       $name = substr($name, 1);

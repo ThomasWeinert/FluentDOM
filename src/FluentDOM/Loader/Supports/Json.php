@@ -4,6 +4,7 @@ namespace FluentDOM\Loader\Supports {
 
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\DocumentFragment;
+  use FluentDOM\DOM\Element;
   use FluentDOM\Exceptions\LoadingError;
   use FluentDOM\Loader\Options;
   use FluentDOM\Loader\Supports;
@@ -104,7 +105,7 @@ namespace FluentDOM\Loader\Supports {
     }
 
     /**
-     * @param \DOMNode|\DOMElement $node
+     * @param \DOMNode|Element $node
      * @param mixed $json
      */
     protected abstract function transferTo(\DOMNode $node, $json);

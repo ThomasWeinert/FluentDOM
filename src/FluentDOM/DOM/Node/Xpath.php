@@ -31,7 +31,7 @@ namespace FluentDOM\DOM\Node {
     public function evaluate(string $expression, \DOMNode $context = NULL) {
       /** @var Document $document */
       /** @var \DOMNode $this */
-      $document = $this instanceof Document
+      $document = $this instanceof \DOMDocument
         ? $this
         : $this->ownerDocument;
       return $document->xpath()->evaluate(

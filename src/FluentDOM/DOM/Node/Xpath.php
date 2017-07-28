@@ -30,6 +30,7 @@ namespace FluentDOM\DOM\Node {
      */
     public function evaluate(string $expression, \DOMNode $context = NULL) {
       /** @var Document $document */
+      /** @var \DOMNode $this */
       $document = $this instanceof Document
         ? $this
         : $this->ownerDocument;

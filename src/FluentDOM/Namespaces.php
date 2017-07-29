@@ -18,6 +18,11 @@ namespace FluentDOM {
     ];
 
     /**
+     * @var array
+     */
+    private $_stash = [];
+
+    /**
      * Namespaces constructor.
      * @param NULL|array|\Traversable $namespaces
      */
@@ -99,6 +104,20 @@ namespace FluentDOM {
      */
     public function getIterator() {
       return new \ArrayIterator($this->_namespaces);
+    }
+
+    /**
+     * Store current status on the stash
+     */
+    public function stash() {
+      $this->_stash[] = $this->_namespaces;
+    }
+
+    /**
+     * Restore last stashed status from the stash
+     */
+    public function unstash() {
+      $this->_namespaces = array_pop($this->_stash);
     }
 
     /**

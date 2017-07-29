@@ -185,9 +185,9 @@ namespace FluentDOM {
             ? $value : $this->ownerDocument->importNode($value)
         );
       } elseif ($value instanceof Appendable) {
-        $namespaces = $this->ownerDocument->namespaces();
+        $this->ownerDocument->namespaces()->stash();
         $value->appendTo($this);
-        $this->ownerDocument->namespaces($namespaces);
+        $this->ownerDocument->namespaces()->unstash();
       } elseif ($value instanceof \Closure && !$value instanceof \DOMNode) {
         $this->append($value());
       } elseif (is_array($value)) {

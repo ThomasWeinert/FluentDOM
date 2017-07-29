@@ -13,10 +13,11 @@ build:
     tests:
         override:
             -
-                command: 'vendor/bin/phpunit --coverage-clover=coverage.xml tests'
+                command: 'php phpunit.phar --coverage-clover=coverage.xml tests'
                 coverage:
                     file: 'coverage.xml'
                     format: 'php-clover'
     dependencies:
         before:
+            - wget https://phar.phpunit.de/phpunit.phar
             - composer install --prefer-source

@@ -6,16 +6,23 @@ group: edge
 
 php:
   - 7.0
+  - 7.0snapshot
   - 7.1
+  - 7.1snapshot
   - nightly
   
 matrix:
   allow_failures:
     - php: nightly
 
+before_install:
+  - composer self-update
+  - composer clear-cache
+  - wget https://phar.phpunit.de/phpunit.phar
+
 install: composer install
 
-script: vendor/bin/phpunit tests
+script: php phpunit.phar tests
 
 notifications:
   webhooks:

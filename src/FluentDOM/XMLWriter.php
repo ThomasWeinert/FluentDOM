@@ -175,54 +175,56 @@ namespace FluentDOM {
     /**
      * Write a DOM node
      *
-     * @param \DOMNode $node
+     * @param \DOMNode|\DOMNode[]|\Traversable|Creator\Node $nodes
+     * @param int $maximumDepth
      */
-    public function collapse(\DOMNode $node) {
-      switch (TRUE) {
-      case $node instanceof \DOMElement :
-        $this->startElementNS($node->prefix, $node->localName, $node->namespaceURI);
-        foreach ($node->attributes as $attribute) {
+    public function collapse($nodes, int $maximumDepth = 1000) {
+      if ($maximumDepth <= 0) {
+        return;
+      }
+      if ($nodes instanceof \DOMNode) {
+        switch ($nodes->nodeType) {
+        case XML_DOCUMENT_NODE :
+          /** @var \DOMDocument $nodes */
+          $this->collapse($nodes->documentElement, $maximumDepth);
+          break;
+        case XML_ELEMENT_NODE :
+          $this->startElementNS($nodes->prefix, $nodes->localName, $nodes->namespaceURI);
+          $this->collapse($nodes->attributes, $maximumDepth);
+          $this->collapse($nodes->childNodes, $maximumDepth);
+          $this->endElement();
+          break;
+        case XML_TEXT_NODE :
+          /** @var \DOMText $nodes */
+          if (!$nodes->isWhitespaceInElementContent()) {
+            $this->text($nodes->textContent);
+          }
+          break;
+        case XML_CDATA_SECTION_NODE :
+          $this->writeCData($nodes->textContent);
+          break;
+        case XML_COMMENT_NODE :
+          $this->writeComment($nodes->textContent);
+          break;
+        case XML_PI_NODE :
+          /** @var \DOMProcessingInstruction $nodes */
+          $this->writePI($nodes->target, $nodes->textContent);
+          break;
+        case XML_ATTRIBUTE_NODE :
+          /** @var \DOMAttr $nodes */
           $this->writeAttributeNS(
-            $attribute->prefix,
-            $attribute->localName,
-            $attribute->namespaceURI,
-            $attribute->value
+            $nodes->prefix,
+            $nodes->localName,
+            $nodes->namespaceURI,
+            $nodes->value
           );
+          break;
+        default :
+          $this->collapse($nodes->childNodes, $maximumDepth);
         }
-        foreach ($node->childNodes as $childNode) {
-          $this->collapse($childNode);
-        }
-        $this->endElement();
-        break;
-      case $node instanceof \DOMDocumentFragment :
-        foreach ($node->childNodes as $childNode) {
-          $this->collapse($childNode);
-        }
-        break;
-      case $node instanceof \DOMText :
-        $this->text($node->textContent);
-        break;
-      case $node instanceof \DOMCdataSection :
-        $this->writeCData($node->textContent);
-        break;
-      case $node instanceof \DOMComment :
-        $this->writeComment($node->textContent);
-        break;
-      case $node instanceof \DOMProcessingInstruction :
-        $this->writePI($node->target, $node->textContent);
-        break;
-      case $node instanceof \DOMAttr :
-        $this->writeAttributeNS(
-          $node->prefix,
-          $node->localName,
-          $node->namespaceURI,
-          $node->value
-        );
-        break;
-      case $node instanceof \DOMEntityReference :
-      case $node instanceof \DOMEntity :
-        foreach ($node->childNodes as $childNode) {
-          $this->collapse($childNode);
+      } elseif ($nodes instanceof \Traversable || is_array($nodes)) {
+        foreach ($nodes as $childNode) {
+          $this->collapse($childNode, $maximumDepth - 1);
         }
       }
     }

@@ -174,7 +174,7 @@ namespace FluentDOM\Transformer\Namespaces {
         $prefix = $this->_namespaceUris[$uri];
       }
       return [
-        $prefix, $name, $uri
+        (string)$prefix, (string)$name, (string)$uri
       ];
     }
 

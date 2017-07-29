@@ -176,7 +176,7 @@ namespace FluentDOM\Creator {
    * @property-read Document $document
    * @property-read Element $node
    */
-  class Node implements Appendable {
+  class Node implements Appendable, \IteratorAggregate {
 
     /**
      * @var Document
@@ -258,6 +258,13 @@ namespace FluentDOM\Creator {
         $parent->ownerDocument->importNode($this->_node, TRUE)
       );
       return $parent;
+    }
+
+    /**
+     * @return \ArrayIterator
+     */
+    public function getIterator() {
+      return new \ArrayIterator([$this->node]);
     }
   }
 

@@ -1,6 +1,7 @@
 Version 7.0.0
 -------------
 
+- Added: `FluentDOM\XMLWriter::collapse()` collapse DOM nodes
 - Changed: minimum PHP version is now 7.0
 - Changed: Added type hints and return types
 - Changed: Moved extended DOM classes to `FluentDOM\DOM\*`
@@ -12,6 +13,7 @@ Version 7.0.0
 Version 6.2.0
 -------------
 
+- Fixed #73: Creator forgot namespaces
 - Added: `$filter` argument (callable) to `XMLReader::next()` and `XMLReader::read()`
 - Added: `FluentDOM\XMLReader\Iterator`
 - Added: `FluentDOM\XMLReader\SiblingIterator`

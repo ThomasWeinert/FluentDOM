@@ -224,16 +224,45 @@ namespace FluentDOM {
      * @covers \FluentDOM\XMLWriter
      */
     public function testCollapseWithElement() {
+      $xml = '<document attribute="value">
+                <!-- a comment -->
+                <text>some text</text>
+                <cdata><![CDATA[ some text ]]></cdata>
+                <?pi a processing instruction ?>
+              </document>';
+
       $document = new \DOMDocument();
-      $node = $document->createElement('document');
+      $document->loadXML($xml);
+
       $_ = new XMLWriter();
       $_->openMemory();
       $_->startDocument();
-      $_->collapse($node);
+      $_->collapse($document);
       $_->endDocument();
 
       $this->assertXmlStringEqualsXmlString(
-        '<?xml version="1.0"?><document/>',
+        $xml,
+        $_->outputMemory()
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\XMLWriter
+     */
+    public function testCollapseLimitsDepth() {
+      $xml = '<one><two><tree><four></four></tree></two></one>';
+
+      $document = new \DOMDocument();
+      $document->loadXML($xml);
+
+      $_ = new XMLWriter();
+      $_->openMemory();
+      $_->startDocument();
+      $_->collapse($document, 2);
+      $_->endDocument();
+
+      $this->assertXmlStringEqualsXmlString(
+        '<one><two></two></one>',
         $_->outputMemory()
       );
     }

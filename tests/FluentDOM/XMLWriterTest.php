@@ -266,5 +266,33 @@ namespace FluentDOM {
         $_->outputMemory()
       );
     }
+
+
+    /**
+     * @covers \FluentDOM\XMLWriter
+     */
+    public function testCollapseWithDocumentFragment() {
+      $xml = '<document attribute="value">
+                <!-- a comment -->
+                <text>some text</text>
+                <cdata><![CDATA[ some text ]]></cdata>
+                <?pi a processing instruction ?>
+              </document>';
+
+      $document = new \DOMDocument();
+      $fragment = $document->createDocumentFragment();
+      $fragment->appendXML($xml);
+
+      $_ = new XMLWriter();
+      $_->openMemory();
+      $_->startDocument();
+      $_->collapse($fragment);
+      $_->endDocument();
+
+      $this->assertXmlStringEqualsXmlString(
+        $xml,
+        $_->outputMemory()
+      );
+    }
   }
 }

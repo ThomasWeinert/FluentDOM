@@ -192,48 +192,48 @@ namespace FluentDOM {
     }
 
     /**
-     * @param $nodes
+     * @param \DOMNode $node
      * @param int $maximumDepth
      */
-    private function collapseNode($nodes, int $maximumDepth) {
-      switch ($nodes->nodeType) {
+    private function collapseNode(\DOMNode $node, int $maximumDepth) {
+      switch ($node->nodeType) {
       case XML_DOCUMENT_NODE :
-        /** @var \DOMDocument $nodes */
-        $this->collapse($nodes->documentElement, $maximumDepth);
+        /** @var \DOMDocument $node */
+        $this->collapse($node->documentElement, $maximumDepth);
         return;
       case XML_ELEMENT_NODE :
-        $this->startElementNS($nodes->prefix, $nodes->localName, $nodes->namespaceURI);
-        $this->collapse($nodes->attributes, $maximumDepth);
-        $this->collapse($nodes->childNodes, $maximumDepth);
+        $this->startElementNS($node->prefix, $node->localName, $node->namespaceURI);
+        $this->collapse($node->attributes, $maximumDepth);
+        $this->collapse($node->childNodes, $maximumDepth);
         $this->endElement();
         return;
       case XML_TEXT_NODE :
-        /** @var \DOMText $nodes */
-        if (!$nodes->isWhitespaceInElementContent()) {
-          $this->text($nodes->textContent);
+        /** @var \DOMText $node */
+        if (!$node->isWhitespaceInElementContent()) {
+          $this->text($node->textContent);
         }
         return;
       case XML_CDATA_SECTION_NODE :
-        $this->writeCData($nodes->textContent);
+        $this->writeCData($node->textContent);
         return;
       case XML_COMMENT_NODE :
-        $this->writeComment($nodes->textContent);
+        $this->writeComment($node->textContent);
         return;
       case XML_PI_NODE :
-        /** @var \DOMProcessingInstruction $nodes */
-        $this->writePI($nodes->target, $nodes->textContent);
+        /** @var \DOMProcessingInstruction $node */
+        $this->writePI($node->target, $node->textContent);
         return;
       case XML_ATTRIBUTE_NODE :
-        /** @var \DOMAttr $nodes */
+        /** @var \DOMAttr $node */
         $this->writeAttributeNS(
-          $nodes->prefix,
-          $nodes->localName,
-          $nodes->namespaceURI,
-          $nodes->value
+          $node->prefix,
+          $node->localName,
+          $node->namespaceURI,
+          $node->value
         );
         return;
       default :
-        $this->collapse($nodes->childNodes, $maximumDepth);
+        $this->collapse($node->childNodes, $maximumDepth);
         return;
       }
     }

@@ -13,9 +13,13 @@ namespace FluentDOM\Utility {
      * @var array
      */
     private $_reserved = [
+
+
       'xml' => 'http://www.w3.org/XML/1998/namespace',
       'xmlns' => 'http://www.w3.org/2000/xmlns/'
     ];
+
+    private $_stash = [];
 
     /**
      * Namespaces constructor.
@@ -29,10 +33,10 @@ namespace FluentDOM\Utility {
 
     /**
      * @param string $prefix
-     * @return string|NULL
+     * @return string
      */
     public function resolveNamespace(string $prefix) {
-      return $this[(string)$prefix];
+      return $this[empty($prefix) ? '#default' : $prefix];
     }
 
     /**
@@ -99,6 +103,20 @@ namespace FluentDOM\Utility {
      */
     public function getIterator() {
       return new \ArrayIterator($this->_namespaces);
+    }
+
+    /**
+     * Store current status on the stash
+     */
+    public function stash() {
+      $this->_stash[] = $this->_namespaces;
+    }
+
+    /**
+     * Restore last stashed status from the stash
+     */
+    public function unstash() {
+      $this->_namespaces = array_pop($this->_stash);
     }
 
     /**

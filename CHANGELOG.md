@@ -1,7 +1,6 @@
 Version 7.0.0
 -------------
 
-- Added: `FluentDOM\XMLWriter::collapse()` collapse DOM nodes
 - Changed: minimum PHP version is now 7.0
 - Changed: Added type hints and return types
 - Changed: Moved extended DOM classes to `FluentDOM\DOM\*`
@@ -9,6 +8,7 @@ Version 7.0.0
 - Changed: Moved internal classes into `FluentDOM\Utility`
 - Removed: `Document::find()` and `Element::find()`
 - Fixed #70: `FluentDOM\Query::get($position)` should return a node
+- Added #73: `FluentDOM\XMLWriter::collapse()` collapse DOM nodes
 
 Version 6.2.0
 -------------

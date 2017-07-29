@@ -183,49 +183,58 @@ namespace FluentDOM {
         return;
       }
       if ($nodes instanceof \DOMNode) {
-        switch ($nodes->nodeType) {
-        case XML_DOCUMENT_NODE :
-          /** @var \DOMDocument $nodes */
-          $this->collapse($nodes->documentElement, $maximumDepth);
-          break;
-        case XML_ELEMENT_NODE :
-          $this->startElementNS($nodes->prefix, $nodes->localName, $nodes->namespaceURI);
-          $this->collapse($nodes->attributes, $maximumDepth);
-          $this->collapse($nodes->childNodes, $maximumDepth);
-          $this->endElement();
-          break;
-        case XML_TEXT_NODE :
-          /** @var \DOMText $nodes */
-          if (!$nodes->isWhitespaceInElementContent()) {
-            $this->text($nodes->textContent);
-          }
-          break;
-        case XML_CDATA_SECTION_NODE :
-          $this->writeCData($nodes->textContent);
-          break;
-        case XML_COMMENT_NODE :
-          $this->writeComment($nodes->textContent);
-          break;
-        case XML_PI_NODE :
-          /** @var \DOMProcessingInstruction $nodes */
-          $this->writePI($nodes->target, $nodes->textContent);
-          break;
-        case XML_ATTRIBUTE_NODE :
-          /** @var \DOMAttr $nodes */
-          $this->writeAttributeNS(
-            $nodes->prefix,
-            $nodes->localName,
-            $nodes->namespaceURI,
-            $nodes->value
-          );
-          break;
-        default :
-          $this->collapse($nodes->childNodes, $maximumDepth);
-        }
+        $this->collapseNode($nodes, $maximumDepth);
       } elseif ($nodes instanceof \Traversable || is_array($nodes)) {
         foreach ($nodes as $childNode) {
           $this->collapse($childNode, $maximumDepth - 1);
         }
+      }
+    }
+
+    /**
+     * @param $nodes
+     * @param int $maximumDepth
+     */
+    private function collapseNode($nodes, int $maximumDepth) {
+      switch ($nodes->nodeType) {
+      case XML_DOCUMENT_NODE :
+        /** @var \DOMDocument $nodes */
+        $this->collapse($nodes->documentElement, $maximumDepth);
+        return;
+      case XML_ELEMENT_NODE :
+        $this->startElementNS($nodes->prefix, $nodes->localName, $nodes->namespaceURI);
+        $this->collapse($nodes->attributes, $maximumDepth);
+        $this->collapse($nodes->childNodes, $maximumDepth);
+        $this->endElement();
+        return;
+      case XML_TEXT_NODE :
+        /** @var \DOMText $nodes */
+        if (!$nodes->isWhitespaceInElementContent()) {
+          $this->text($nodes->textContent);
+        }
+        return;
+      case XML_CDATA_SECTION_NODE :
+        $this->writeCData($nodes->textContent);
+        return;
+      case XML_COMMENT_NODE :
+        $this->writeComment($nodes->textContent);
+        return;
+      case XML_PI_NODE :
+        /** @var \DOMProcessingInstruction $nodes */
+        $this->writePI($nodes->target, $nodes->textContent);
+        return;
+      case XML_ATTRIBUTE_NODE :
+        /** @var \DOMAttr $nodes */
+        $this->writeAttributeNS(
+          $nodes->prefix,
+          $nodes->localName,
+          $nodes->namespaceURI,
+          $nodes->value
+        );
+        return;
+      default :
+        $this->collapse($nodes->childNodes, $maximumDepth);
+        return;
       }
     }
   }

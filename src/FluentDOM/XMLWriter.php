@@ -175,7 +175,7 @@ namespace FluentDOM {
     /**
      * Write a DOM node
      *
-     * @param \DOMNode|\DOMNode[]|\Traversable|Creator\Node $nodes
+     * @param \DOMNode|\DOMNode[]|\Traversable $nodes
      * @param int $maximumDepth
      */
     public function collapse($nodes, int $maximumDepth = 1000) {
@@ -225,12 +225,7 @@ namespace FluentDOM {
         return;
       case XML_ATTRIBUTE_NODE :
         /** @var \DOMAttr $node */
-        $this->writeAttributeNS(
-          $node->prefix,
-          $node->localName,
-          $node->namespaceURI,
-          $node->value
-        );
+        $this->writeAttributeNS($node->prefix, $node->localName, $node->namespaceURI, $node->value);
         return;
       default :
         $this->collapse($node->childNodes, $maximumDepth);

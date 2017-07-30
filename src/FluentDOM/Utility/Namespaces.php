@@ -1,7 +1,17 @@
 <?php
+/**
+ * Utility class that handles a list of namespace definitions.
+ *
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ */
 
 namespace FluentDOM\Utility {
 
+
+  /**
+   * Utility class that handles a list of namespace definitions.
+   */
   class Namespaces implements NamespaceResolver, \ArrayAccess, \IteratorAggregate, \Countable {
 
     /**
@@ -26,14 +36,14 @@ namespace FluentDOM\Utility {
      * @param NULL|array|\Traversable $namespaces
      */
     public function __construct($namespaces = NULL) {
-      if (isset($namespaces)) {
+      if (NULL !== $namespaces) {
         $this->assign($namespaces);
       }
     }
 
     /**
      * @param string $prefix
-     * @return string
+     * @return string|NULL
      */
     public function resolveNamespace(string $prefix) {
       return $this[empty($prefix) ? '#default' : $prefix];
@@ -43,7 +53,7 @@ namespace FluentDOM\Utility {
      * @param string $prefix
      * @return bool
      */
-    public function isReservedPrefix($prefix) {
+    public function isReservedPrefix($prefix): bool {
       return array_key_exists($prefix, $this->_reserved);
     }
 
@@ -51,7 +61,7 @@ namespace FluentDOM\Utility {
      * @param string $prefix
      * @return bool
      */
-    public function offsetExists($prefix) {
+    public function offsetExists($prefix): bool {
       return array_key_exists($prefix, $this->_reserved) || array_key_exists($prefix, $this->_namespaces);
     }
 
@@ -59,6 +69,7 @@ namespace FluentDOM\Utility {
      * @param string $prefix
      * @param string $namespaceURI
      * @return bool
+     * @throws \LogicException
      */
     public function offsetSet($prefix, $namespaceURI) {
       $prefix = $this->validatePrefix($prefix);
@@ -72,7 +83,8 @@ namespace FluentDOM\Utility {
 
     /**
      * @param string $prefix
-     * @return string
+     * @return string|NULL
+     * @throws \LogicException
      */
     public function offsetGet($prefix) {
       $prefix = $this->validatePrefix($prefix);
@@ -108,26 +120,27 @@ namespace FluentDOM\Utility {
     /**
      * Store current status on the stash
      */
-    public function stash() {
+    public function store() {
       $this->_stash[] = $this->_namespaces;
     }
 
     /**
      * Restore last stashed status from the stash
      */
-    public function unstash() {
+    public function restore() {
       $this->_namespaces = array_pop($this->_stash);
     }
 
     /**
      * @return int
      */
-    public function count() {
+    public function count():int {
       return count($this->_namespaces);
     }
 
     /**
      * @param array|\Traversable $namespaces
+     * @throws \LogicException
      */
     public function assign($namespaces) {
       $this->_namespaces = [];
@@ -140,7 +153,7 @@ namespace FluentDOM\Utility {
      * @param string $prefix
      * @return string
      */
-    private function validatePrefix($prefix) {
+    private function validatePrefix($prefix): string {
       return empty($prefix) ? '#default' : $prefix;
     }
   }

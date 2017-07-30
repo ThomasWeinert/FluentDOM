@@ -125,5 +125,19 @@ namespace FluentDOM\Utility {
       $namespaces = new Namespaces();
       $this->assertFalse($namespaces->isReservedPrefix('prefix'));
     }
+
+    /**
+     * @covers \FluentDOM\Utility\Namespaces::store()
+     * @covers \FluentDOM\Utility\Namespaces::restore()
+     */
+    public function testStoreStatusAndRestore() {
+      $namespaces = new Namespaces();
+      $namespaces['foo'] = 'urn:foo';
+      $namespaces->store();
+      $namespaces['foo'] = 'urn:bar';
+      $this->assertEquals('urn:bar', $namespaces['foo']);
+      $namespaces->restore();
+      $this->assertEquals('urn:foo', $namespaces['foo']);
+    }
   }
 }

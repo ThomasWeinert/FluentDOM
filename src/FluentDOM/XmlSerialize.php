@@ -8,7 +8,6 @@
 
 namespace FluentDOM {
 
-  use FluentDOM\Appendable;
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Element;
 

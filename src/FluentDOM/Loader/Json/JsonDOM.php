@@ -12,10 +12,10 @@ namespace FluentDOM\Loader\Json {
   use FluentDOM\DOM\DocumentFragment;
   use FluentDOM\DOM\Element;
   use FluentDOM\Loadable;
-  use FluentDOM\Loader\Result;
   use FluentDOM\Loader\Options;
-  use FluentDOM\Utility\QualifiedName;
+  use FluentDOM\Loader\Result;
   use FluentDOM\Loader\Supports\Json as SupportsJson;
+  use FluentDOM\Utility\QualifiedName;
 
   /**
    * Load a DOM document from a json string or file

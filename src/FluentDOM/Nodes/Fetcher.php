@@ -8,8 +8,8 @@
 
 namespace FluentDOM\Nodes {
 
-  use FluentDOM\Utility\Constraints;
   use FluentDOM\Nodes;
+  use FluentDOM\Utility\Constraints;
 
   /*
    * Fetches dom nodes for the current context.

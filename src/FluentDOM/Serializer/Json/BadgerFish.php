@@ -8,8 +8,8 @@
 
 namespace FluentDOM\Serializer\Json {
 
-  use FluentDOM\Serializer\Json;
   use FluentDOM\DOM\Xpath;
+  use FluentDOM\Serializer\Json;
 
   /**
    * Serialize a DOM to BadgerFish Json: http://badgerfish.ning.com/

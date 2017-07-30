@@ -8,11 +8,11 @@
 
 namespace FluentDOM {
 
-  use FluentDOM\Loader\Options;
-  use FluentDOM\Serializer;
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Xpath;
   use FluentDOM\DOM\Xpath\Transformer;
+  use FluentDOM\Loader\Options;
+  use FluentDOM\Serializer;
   use FluentDOM\Utility\Constraints;
   use FluentDOM\Utility\Iterators\NodesIterator;
 

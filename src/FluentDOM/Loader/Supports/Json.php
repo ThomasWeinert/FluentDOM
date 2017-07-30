@@ -7,8 +7,8 @@ namespace FluentDOM\Loader\Supports {
   use FluentDOM\DOM\Element;
   use FluentDOM\Exceptions\LoadingError;
   use FluentDOM\Loader\Options;
-  use FluentDOM\Loader\Supports;
   use FluentDOM\Loader\Result;
+  use FluentDOM\Loader\Supports;
 
   trait Json {
 

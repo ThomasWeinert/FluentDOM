@@ -8,8 +8,8 @@
 
 namespace FluentDOM\Loader {
 
-  use FluentDOM\Loaders;
   use FluentDOM\Loader;
+  use FluentDOM\Loaders;
 
   /**
  * Encapsulates the standard loaders (html, xml, json)

@@ -13,9 +13,9 @@ namespace FluentDOM\Loader\Text {
   use FluentDOM\DOM\Element;
   use FluentDOM\Loadable;
   use FluentDOM\Loader\Options;
+  use FluentDOM\Loader\Result;
   use FluentDOM\Loader\Supports;
   use FluentDOM\Utility\QualifiedName;
-  use FluentDOM\Loader\Result;
 
   /**
    * Load a CSV file

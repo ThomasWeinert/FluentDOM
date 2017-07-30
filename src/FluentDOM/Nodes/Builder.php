@@ -8,10 +8,9 @@
 
 namespace FluentDOM\Nodes {
 
-  use FluentDOM\DOM\Element;
-  use FluentDOM\Utility\Constraints;
-  use FluentDOM\Nodes;
   use FluentDOM\Exceptions;
+  use FluentDOM\Nodes;
+  use FluentDOM\Utility\Constraints;
 
   /**
     * Create list of nodes for a FluentDOM\Nodes object from different values

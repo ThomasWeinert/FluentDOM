@@ -167,9 +167,9 @@ namespace FluentDOM {
 namespace FluentDOM\Creator {
 
   use FluentDOM\Appendable;
+  use FluentDOM\Creator;
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Element;
-  use FluentDOM\Creator;
   use FluentDOM\Transformer\Namespaces\Optimize;
 
   /**

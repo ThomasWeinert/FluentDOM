@@ -8,9 +8,6 @@
  */
 namespace FluentDOM\Query\Css {
 
-  use FluentDOM\Query as Query;
-  use FluentDOM\Query\Css as Css;
-
   /**
    * Provides an array access to a css style string. It is used to
    * modify the attribute values of style attributes.

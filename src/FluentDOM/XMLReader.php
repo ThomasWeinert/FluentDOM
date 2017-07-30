@@ -80,7 +80,7 @@ namespace FluentDOM {
      * @return bool
      */
     public function read(string $name = NULL, string $namespaceURI = NULL, callable $filter = NULL): bool {
-      if (isset($name)) {
+      if (NULL !== $name) {
         list($localName, $namespaceURI, $ignoreNamespace) = $this->prepareCondition($name, $namespaceURI);
         while (parent::read()) {
           if (

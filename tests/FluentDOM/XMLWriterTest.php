@@ -10,7 +10,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\XMLWriter\NamespaceDefinition
      * @covers \FluentDOM\XMLWriter\NamespaceStack
      */
-    public function testWriteSomeHtmlWithoutNamespacs() {
+    public function testWriteSomeHtmlWithoutNamespaces() {
       $_ = new XMLWriter();
       $_->openMemory();
       $_->setIndent(2);

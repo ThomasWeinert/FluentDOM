@@ -147,13 +147,36 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\XMLReader
      */
+    public function testTraverseDescendantsWithFilterFunctionAndTagName() {
+      $reader = new XMLReader();
+      $reader->open(__DIR__.'/TestData/xmlreader-1.xml');
+
+      $result = [];
+      $filter = function(XMLReader $reader) { return $reader->namespaceURI === 'urn:foo'; };
+      while ($reader->read('child', NULL, $filter)) {
+        $result[] = $reader->getAttribute('name');
+      }
+
+      $this->assertEquals(
+        ['one', 'one.one', 'three'], $result
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\XMLReader
+     */
     public function testTraverseDescendantsWithFilterFunction() {
       $reader = new XMLReader();
       $reader->open(__DIR__.'/TestData/xmlreader-1.xml');
 
       $result = [];
-      $filter = function(XMLReader $reader) { return $reader->namespaceURI == 'urn:foo'; };
-      while ($reader->read('child', NULL, $filter)) {
+      $filter = function(XMLReader $reader) {
+        return
+          $reader->nodeType !== XMLReader::END_ELEMENT &&
+          $reader->localName === 'child' &&
+          $reader->namespaceURI === 'urn:foo';
+      };
+      while ($reader->read(NULL, NULL, $filter)) {
         $result[] = $reader->getAttribute('name');
       }
 

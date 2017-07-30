@@ -44,6 +44,8 @@ namespace FluentDOM\Loader\Text {
      * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return Document|Result|NULL
+     * @throws \InvalidArgumentException
+     * @throws \FluentDOM\Exceptions\InvalidSource
      */
     public function load($source, string $contentType, $options = []) {
       $options = $this->getOptions($options);
@@ -53,7 +55,7 @@ namespace FluentDOM\Loader\Text {
         $document = new Document('1.0', 'UTF-8');
         $document->appendChild($list = $document->createElementNS(self::XMLNS, 'json:json'));
         $list->setAttributeNS(self::XMLNS, 'json:type', 'array');
-        $this->appendLines($list, $lines, $hasHeaderLine, isset($options['FIELDS']) ? $options['FIELDS'] : NULL);
+        $this->appendLines($list, $lines, $hasHeaderLine, $options['FIELDS'] ?? NULL);
         return $document;
       }
       return NULL;
@@ -66,6 +68,8 @@ namespace FluentDOM\Loader\Text {
      * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return DocumentFragment|NULL
+     * @throws \InvalidArgumentException
+     * @throws \FluentDOM\Exceptions\InvalidSource
      */
     public function loadFragment($source, string $contentType, $options = []) {
       $options = $this->getOptions($options);
@@ -75,7 +79,7 @@ namespace FluentDOM\Loader\Text {
       if ($this->supports($contentType) && ($lines = $this->getLines($source, $options))) {
         $document = new Document('1.0', 'UTF-8');
         $fragment = $document->createDocumentFragment();
-        $this->appendLines($fragment, $lines, $hasHeaderLine, isset($options['FIELDS']) ? $options['FIELDS'] : NULL);
+        $this->appendLines($fragment, $lines, $hasHeaderLine, $options['FIELDS'] ?? NULL);
         return $fragment;
       }
       return NULL;
@@ -85,25 +89,26 @@ namespace FluentDOM\Loader\Text {
      * Append the provided lines to the parent.
      *
      * @param \DOMNode $parent
-     * @param $lines
+     * @param array|\Traversable $lines
      * @param $hasHeaderLine
-     * @param array $fields
+     * @param array $columns
      */
-    private function appendLines(\DOMNode $parent, $lines, $hasHeaderLine, array $fields = NULL) {
+    private function appendLines(\DOMNode $parent, $lines, $hasHeaderLine, array $columns = NULL) {
       $document = $parent instanceof \DOMDocument ? $parent : $parent->ownerDocument;
       $headers = NULL;
-      foreach ($lines as $line) {
+      /** @var array $record */
+      foreach ($lines as $record) {
         if ($headers === NULL) {
           $headers = $this->getHeaders(
-            $line, $hasHeaderLine, $fields
+            $record, $hasHeaderLine, $columns
           );
           if ($hasHeaderLine) {
             continue;
           }
         }
         /** @var Element $node */
-        $parent->appendChild($node = $document->createElement(self::DEFAULT_QNAME));
-        foreach ($line as $index => $field) {
+        $node = $parent->appendChild($document->createElement(self::DEFAULT_QNAME));
+        foreach ($record as $index => $field) {
           if (isset($headers[$index])) {
             $this->appendField($node, $headers[$index], $field);
           }
@@ -125,35 +130,39 @@ namespace FluentDOM\Loader\Text {
     }
 
     /**
-     * @param array $line
+     * @param array $record
      * @param bool $hasHeaderLine
-     * @param array|NULL $fields
+     * @param array|NULL $columns
      * @return array
      */
-    private function getHeaders(array $line, $hasHeaderLine, $fields = NULL) {
-      if (is_array($fields)) {
+    private function getHeaders(array $record, $hasHeaderLine, $columns = NULL) {
+      if (is_array($columns)) {
         $headers = [];
-        foreach ($line as $index => $field) {
+        foreach ($record as $index => $field) {
           $key = $hasHeaderLine ? $field : $index;
-          $headers[$index] = isset($fields[$key]) ? $fields[$key] : FALSE;
+          $headers[$index] = $columns[$key] ?? FALSE;
         }
         return $headers;
       } elseif ($hasHeaderLine) {
-        return $line;
+        return $record;
       } else {
-        return array_keys($line);
+        return array_keys($record);
       }
     }
 
+    /**
+     * @param mixed $source
+     * @param Options $options
+     * @return NULL|\Traversable
+     * @throws \FluentDOM\Exceptions\InvalidSource
+     */
     private function getLines($source, Options $options) {
       $result = NULL;
       if (is_string($source)) {
         $options->isAllowed($sourceType = $options->getSourceType($source));
-        switch ($sourceType) {
-        case Options::IS_FILE :
+        if ($sourceType === Options::IS_FILE) {
           $result = new \SplFileObject($source);
-          break;
-        default :
+        } else {
           $result = new \SplFileObject('data://text/csv;base64,'.base64_encode($source));
         }
         $result->setFlags(\SplFileObject::READ_CSV);
@@ -167,21 +176,22 @@ namespace FluentDOM\Loader\Text {
       } elseif ($source instanceof \Traversable) {
         $result = $source;
       }
-      return (empty($result)) ? NULL : $result;
+      return empty($result) ? NULL : $result;
     }
 
     /**
      * @param array|\Traversable|Options $options
      */
     private function configure($options) {
-      $this->_delimiter = isset($options['DELIMITER']) ? $options['DELIMITER'] : $this->_delimiter;
-      $this->_enclosure = isset($options['ENCLOSURE']) ? $options['ENCLOSURE'] : $this->_enclosure;
-      $this->_escape = isset($options['ESCAPE']) ? $options['ESCAPE'] : $this->_escape;
+      $this->_delimiter = $options['DELIMITER'] ?? $this->_delimiter;
+      $this->_enclosure = $options['ENCLOSURE'] ?? $this->_enclosure;
+      $this->_escape = $options['ESCAPE'] ?? $this->_escape;
     }
 
     /**
      * @param array|\Traversable|Options $options
      * @return Options
+     * @throws \InvalidArgumentException
      */
     public function getOptions($options) {
       $result = new Options(

@@ -34,6 +34,7 @@ namespace FluentDOM\Loader {
     /**
      * @param array|\Traversable|Options $options
      * @param array $callbacks
+     * @throws \InvalidArgumentException
      */
     public function __construct($options = [], $callbacks = []) {
       if (is_array($options)) {
@@ -51,6 +52,7 @@ namespace FluentDOM\Loader {
     /**
      * @param string $name
      * @param callable $callback
+     * @throws \InvalidArgumentException
      */
     public function setCallback(string $name, callable $callback) {
       if (!array_key_exists($name, $this->_callbacks)) {
@@ -96,7 +98,7 @@ namespace FluentDOM\Loader {
      * @return mixed|NULL
      */
     public function offsetGet($offset) {
-      return array_key_exists($offset, $this->_options) ? $this->_options[$offset] : NULL;
+      return $this->_options[$offset] ?? NULL;
     }
 
     /**
@@ -144,17 +146,17 @@ namespace FluentDOM\Loader {
         return self::IS_STRING;
       }
       $isStringSource = $this->executeCallback(
-        Options::CB_IDENTIFY_STRING_SOURCE, TRUE, $source
+        self::CB_IDENTIFY_STRING_SOURCE, TRUE, $source
       );
-      return ($isStringSource) ? self::IS_STRING : self::IS_FILE;
+      return $isStringSource ? self::IS_STRING : self::IS_FILE;
     }
 
     /**
      * @param string $sourceType
      * @param bool $throwException
      * @return bool
-     * @throws \Exception
-     * @throws InvalidSource
+     * @throws InvalidSource\TypeFile
+     * @throws InvalidSource\TypeString
      */
     public function isAllowed(string $sourceType, bool $throwException = TRUE): bool {
       try {
@@ -171,6 +173,7 @@ namespace FluentDOM\Loader {
           break;
         }
       } catch (InvalidSource $e) {
+        /** @var InvalidSource\TypeFile|InvalidSource\TypeString $e */
         if ($throwException) {
           throw $e;
         }

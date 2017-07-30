@@ -12,7 +12,7 @@
 
 namespace FluentDOM\Query {
 
-  use FluentDOM\Query as Query;
+  use FluentDOM\Query;
 
   /**
    * FluentDOM\Query\Attributes is used for the FluentDOM\Query:attr property, providing an array like interface
@@ -27,7 +27,7 @@ namespace FluentDOM\Query {
      * owner object
      * @var Query
      */
-    private $_fd = NULL;
+    private $_fd;
 
     /**
      * Store the FluentDOM instance for later use

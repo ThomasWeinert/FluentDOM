@@ -133,9 +133,7 @@ namespace FluentDOM\Loader\Supports {
     ) {
       $prefix = substr($nodeName, 0, strpos($nodeName, ':'));
       $xmlns = $this->getNamespacePropertyName($prefix);
-      return isset($properties->{$xmlns})
-        ? $properties->{$xmlns}
-        : $parent->lookupNamespaceUri(empty($prefix) ? NULL : $prefix);
+      return $properties->{$xmlns} ?? $parent->lookupNamespaceUri(empty($prefix) ? NULL : $prefix);
     }
 
     /**

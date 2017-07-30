@@ -737,7 +737,7 @@ namespace FluentDOM {
       }
       foreach ($this->_nodes as $index => $node) {
         if (NULL === $filter || $filter($node, $index)) {
-          call_user_func($function, $node, $index);
+          $function($node, $index);
         }
       }
       return $this;

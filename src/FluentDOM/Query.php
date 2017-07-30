@@ -235,7 +235,7 @@ namespace FluentDOM {
           }
         }
         if (!empty($contentNodes)) {
-          $resultNodes = call_user_func($handler, $node, $contentNodes);
+          $resultNodes = $handler($node, $contentNodes);
           if (is_array($resultNodes)) {
             $result = array_merge($result, $resultNodes);
           }

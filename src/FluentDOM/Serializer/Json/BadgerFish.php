@@ -93,7 +93,7 @@ namespace FluentDOM\Serializer\Json {
         if (!is_array($target->$nodeName)) {
           $target->{$nodeName} = [$target->{$nodeName}];
         }
-        array_push($target->$nodeName, $this->getNodes($node));
+        $target->{$nodeName}[] = $this->getNodes($node);
       } else {
         $target->$nodeName = $this->getNodes($node);
       }

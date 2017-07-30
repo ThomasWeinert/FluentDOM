@@ -8,12 +8,12 @@ namespace FluentDOM\DOM\Node {
      * @param string $selector
      * @return \FluentDOM\DOM\Element|NULL
      */
-    function querySelector(string $selector);
+    public function querySelector(string $selector);
 
     /**
      * @param string $selector
      * @return \DOMNodeList
      */
-    function querySelectorAll(string $selector):\DOMNodeList;
+    public function querySelectorAll(string $selector):\DOMNodeList;
   }
 }

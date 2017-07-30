@@ -4,9 +4,9 @@ namespace FluentDOM\DOM\Node {
 
   interface ChildNode {
 
-    function remove():\DOMNode;
-    function before($nodes);
-    function after($nodes);
-    function replace($nodes):\DOMNode;
+    public function remove():\DOMNode;
+    public function before($nodes);
+    public function after($nodes);
+    public function replace($nodes):\DOMNode;
   }
 }

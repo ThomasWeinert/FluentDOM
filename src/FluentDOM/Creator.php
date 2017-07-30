@@ -133,7 +133,7 @@ namespace FluentDOM {
      * @return DOM\CdataSection
      */
     public function cdata(string $content): DOM\CdataSection {
-      return $this->_document->createCDATASection($content);
+      return $this->_document->createCdataSection($content);
     }
 
     /**

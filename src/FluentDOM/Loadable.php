@@ -25,7 +25,7 @@ namespace FluentDOM {
      * @param string $contentType
      * @return bool
      */
-    function supports(string $contentType):bool;
+    public function supports(string $contentType):bool;
 
     /**
      * Load the data source and return the new DOM document. Return NULL if
@@ -36,7 +36,7 @@ namespace FluentDOM {
      * @param array|\Traversable|Options $options Optional options for the loader
      * @return \FluentDOM\DOM\Document|\FluentDOM\Loader\Result|NULL
      */
-    function load($source, string $contentType, $options = []);
+    public function load($source, string $contentType, $options = []);
 
     /**
      * Load the data source and return the new DOM document. Return NULL if
@@ -47,6 +47,6 @@ namespace FluentDOM {
      * @param array|\Traversable|Options $options Optional options for the loader
      * @return NULL|\FluentDOM\DOM\DocumentFragment
      */
-    function loadFragment($source, string $contentType, $options = []);
+    public function loadFragment($source, string $contentType, $options = []);
   }
 }

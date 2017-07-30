@@ -21,6 +21,6 @@ namespace FluentDOM {
      * @param Element $parentNode
      * @return Element|NULL
      */
-    function appendTo(Element $parentNode);
+    public function appendTo(Element $parentNode);
   }
 }

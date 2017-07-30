@@ -11,8 +11,8 @@ namespace FluentDOM\DOM\Node {
    */
   interface ParentNode extends QuerySelector {
 
-    function prepend($nodes);
+    public function prepend($nodes);
 
-    function append($nodes);
+    public function append($nodes);
   }
 }

@@ -84,7 +84,6 @@ namespace FluentDOM\Loader\Json {
      * @param Element $node
      * @param string $name
      * @param string|number|bool|NULL $data
-     * @return array
      */
     protected function transferAttributeTo(Element $node, string $name, $data) {
       /** @var Document $document */

@@ -102,22 +102,23 @@ namespace FluentDOM\Loader\Json {
      * @param string $name
      * @param mixed $data
      * @return array
+     * @throws \LogicException
      */
     protected function transferChildTo(\DOMNode $node, string $name, $data) {
       /** @var Document $document */
       $document = $node->ownerDocument ?: $node;
       $namespaceURI = $this->getNamespaceForNode(
         $name,
-        isset($data->{'@xmlns'}) ? $data->{'@xmlns'} : new \stdClass(),
+        $data->{'@xmlns'} ?? new \stdClass(),
         $document
       );
       if (!is_array($data)) {
         $data = [$data];
       }
       foreach ($data as $dataChild) {
+        /** @noinspection IsEmptyFunctionUsageInspection */
         $child = $node->appendChild(
-          empty($namespaceURI)
-            ? $document->createElement($name) : $document->createElementNS($namespaceURI, $name)
+          empty($namespaceURI) ? $document->createElement($name) : $document->createElementNS($namespaceURI, $name)
         );
         $this->transferTo($child, $dataChild);
       }

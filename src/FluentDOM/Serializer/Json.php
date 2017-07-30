@@ -110,7 +110,7 @@ namespace FluentDOM\Serializer {
         $result = new \stdClass();
         /** @var \DOMElement $child */
         foreach ($this->getChildElements($node) as $child) {
-          $result->{$this->getName($child)} = $this->getNode($child);
+          $result->{$this->getKey($child)} = $this->getNode($child);
         }
         break;
       case 'array' :
@@ -157,7 +157,7 @@ namespace FluentDOM\Serializer {
      * @param \DOMElement $node
      * @return string
      */
-    private function getName(\DOMElement $node): string {
+    private function getKey(\DOMElement $node): string {
       if ($node->hasAttributeNS(self::XMLNS_JSONDOM, 'name')) {
         return $node->getAttributeNS(self::XMLNS_JSONDOM, 'name');
       } else {

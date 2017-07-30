@@ -423,5 +423,16 @@ namespace FluentDOM {
       $this->assertEquals('urn:foo', $document->documentElement->getAttribute('xmlns:foo'));
       $this->assertEquals('urn:foo', $document->documentElement->firstChild->getAttribute('xmlns:foo'));
     }
+
+    /**
+     * @covers \FluentDOM\Creator
+     * @covers \FluentDOM\Creator\Node
+     */
+    public function testResultIsTraversableOfNodes() {
+      $_ = new Creator();
+      $result = $_('foo');
+      $this->assertInstanceOf(\Traversable::class, $result);
+      $this->assertSame([$result->node], iterator_to_array($result));
+    }
   }
 }

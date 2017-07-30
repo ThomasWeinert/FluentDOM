@@ -14,7 +14,7 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../../../vendor/autoload.php');
+require_once '../../../vendor/autoload.php';
 
 $iterator = new RecursiveIteratorIterator(
   FluentDOM($xml)->find('/*'),

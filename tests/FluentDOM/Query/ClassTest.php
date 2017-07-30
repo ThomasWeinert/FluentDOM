@@ -4,7 +4,7 @@ namespace FluentDOM\Query {
   use FluentDOM\Query;
   use FluentDOM\TestCase;
 
-  require_once(__DIR__.'/../TestCase.php');
+  require_once __DIR__.'/../TestCase.php';
 
   class ClassTest extends TestCase {
     /**
@@ -84,10 +84,10 @@ namespace FluentDOM\Query {
     }
 
     public function dataProviderToggleClass() {
-      return array(
-        array('test1', 'test2', 'test2 test1'),
-        array('test2 test4', 'test1 test4', 'test4')
-      );
+      return [
+        ['test1', 'test2', 'test2 test1'],
+        ['test2 test4', 'test1 test4', 'test4']
+      ];
     }
 
     /**

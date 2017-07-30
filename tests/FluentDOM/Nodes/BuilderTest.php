@@ -6,7 +6,7 @@ namespace FluentDOM\Nodes {
   use FluentDOM\TestCase;
   use FluentDOM\Nodes;
 
-  require_once(__DIR__.'/../TestCase.php');
+  require_once __DIR__.'/../TestCase.php';
 
   class BuilderTest extends TestCase {
 
@@ -421,8 +421,12 @@ namespace FluentDOM\Nodes {
       $this->assertFalse($simple);
     }
 
+    /**
+     * @param array $expected
+     * @param array|\Traversable $nodes
+     */
     public function assertXmlNodesArrayEqualsXmlStrings($expected, $nodes) {
-      $actual = array();
+      $actual = [];
       foreach ($nodes as $node) {
         $actual[] = $node->ownerDocument->saveXml($node);
       }

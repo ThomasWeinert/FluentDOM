@@ -26,7 +26,7 @@ namespace FluentDOM\Loader {
      * @return string[]
      */
     public function getSupported(): array {
-      return array('html', 'text/html', 'html-fragment', 'text/html-fragment');
+      return ['html', 'text/html', 'html-fragment', 'text/html-fragment'];
     }
 
     /**

@@ -42,6 +42,7 @@ namespace FluentDOM\Nodes {
      * @param bool $includeTextNodes
      * @param int $limit
      * @return array|\Traversable|NULL
+     * @throws \InvalidArgumentException
      */
     private function getNodeList(
       $content,
@@ -52,9 +53,9 @@ namespace FluentDOM\Nodes {
         $content = $callback();
       }
       if ($content instanceof \DOMElement) {
-        return array($content);
+        return [$content];
       } elseif ($includeTextNodes && Constraints::filterNode($content)) {
-        return array($content);
+        return [$content];
       } elseif (Constraints::filterNodeList($content)) {
         return $this->getLimitedArray($content, $limit);
       }
@@ -138,6 +139,8 @@ namespace FluentDOM\Nodes {
      * @param int $limit
      * @throws Exceptions\InvalidFragmentLoader
      * @return array
+     * @throws \InvalidArgumentException
+     * @throws \UnexpectedValueException
      */
     public function getFragment(
       $xml, $contentType = 'text/xml', bool $includeTextNodes = TRUE, int $limit = -1
@@ -148,9 +151,9 @@ namespace FluentDOM\Nodes {
         throw new Exceptions\InvalidFragmentLoader(get_class($loader));
       }
       if (!$xml) {
-        return array();
+        return [];
       }
-      $result = array();
+      $result = [];
       $fragment = $loader->loadFragment(
         $xml, $contentType, $this->getOwner()->getLoadingOptions($contentType)
       );
@@ -222,7 +225,7 @@ namespace FluentDOM\Nodes {
       } elseif ($targets instanceof \DOMNodeList) {
         $target = $targets->item(0);
       }
-      return array($target, $wrapper);
+      return [$target, $wrapper];
     }
 
     /**

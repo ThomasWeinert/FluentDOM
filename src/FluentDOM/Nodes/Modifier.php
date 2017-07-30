@@ -48,7 +48,7 @@ namespace FluentDOM\Nodes {
      * @return array new nodes
      */
     public function appendChildren($contentNodes): array {
-      $result = array();
+      $result = [];
       if ($this->_node instanceof \DOMElement) {
         foreach ($contentNodes as $contentNode) {
           /** @var \DOMNode $contentNode */
@@ -78,7 +78,7 @@ namespace FluentDOM\Nodes {
      * @return array
      */
     public function insertChildrenBefore($contentNodes): array {
-      $result = array();
+      $result = [];
       if ($this->_node instanceof \DOMElement) {
         if ($this->_node->firstChild instanceof \DOMNode) {
           $result = (new self($this->_node->firstChild))->insertNodesBefore($contentNodes);
@@ -95,7 +95,7 @@ namespace FluentDOM\Nodes {
      * @return array
      */
     public function insertNodesAfter($contentNodes): array {
-      $result = array();
+      $result = [];
       if ($this->_node instanceof \DOMNode && !empty($contentNodes)) {
         $beforeNode = ($this->_node->nextSibling instanceof \DOMNode)
           ? $this->_node->nextSibling : NULL;
@@ -123,7 +123,7 @@ namespace FluentDOM\Nodes {
      * @return array
      */
     public function insertNodesBefore($contentNodes): array {
-      $result = array();
+      $result = [];
       if ($this->_node instanceof \DOMNode && !empty($contentNodes)) {
         foreach ($contentNodes as $contentNode) {
           /** @var \DOMNode $contentNode */

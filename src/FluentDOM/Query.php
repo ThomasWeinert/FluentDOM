@@ -7,8 +7,8 @@
  */
 
 namespace FluentDOM {
+
   use FluentDOM\Nodes\Fetcher;
-  use FluentDOM\Nodes\Modifier;
   use FluentDOM\Utility\Constraints;
   use FluentDOM\Utility\QualifiedName;
 
@@ -19,9 +19,12 @@ namespace FluentDOM {
    * @property Query\Data $data
    * @property Query\Css $css
    *
+   * Define methods from parent to provide information for code completion
+   * @method Query load($source, string $contentType = NULL, $options = [])
    * @method Query spawn($elements = NULL)
    * @method Query find($selector, int $options = 0)
    * @method Query end()
+   * @method Query formatOutput(string $contentType = NULL)
    */
   class Query extends Nodes {
 
@@ -213,9 +216,11 @@ namespace FluentDOM {
      * @param string|array|\DOMNode|\DOMNodeList|\Traversable|callable $content
      * @param callable $handler
      * @return array
+     * @throws \FluentDOM\Exceptions\LoadingError\EmptyResult
+     * @throws \InvalidArgumentException
      */
     private function apply($targetNodes, $content, callable $handler): array {
-      $result = array();
+      $result = [];
       $isSetterFunction = FALSE;
       if ($callback = Constraints::filterCallable($content)) {
         $isSetterFunction = TRUE;
@@ -500,7 +505,7 @@ namespace FluentDOM {
      * @return array
      */
     public function map(callable $function): array {
-      $result = array();
+      $result = [];
       foreach ($this->_nodes as $index => $node) {
         $mapped = $function($node, $index);
         if ($mapped === NULL) {
@@ -1055,7 +1060,7 @@ namespace FluentDOM {
     private function getGroupedNodes() {
       $current = NULL;
       $counter = 0;
-      $groups = array();
+      $groups = [];
       foreach ($this->_nodes as $node) {
         $previous = $node->previousSibling;
         while ($previous instanceof \DOMText && $previous->isWhitespaceInElementContent()) {
@@ -1112,7 +1117,7 @@ namespace FluentDOM {
      * @return Query
      */
     public function wrapInner($content): Query {
-      $elements = array();
+      $elements = [];
       foreach ($this->_nodes as $node) {
         foreach ($node->childNodes as $childNode) {
           if (Constraints::filterNode($childNode)) {
@@ -1284,7 +1289,7 @@ namespace FluentDOM {
      */
     private function getSetterValues($name, $value) {
       if (is_string($name)) {
-        return array((string)$name => $value);
+        return [(string)$name => $value];
       } elseif (is_array($name) || $name instanceOf \Traversable) {
         return $name;
       }

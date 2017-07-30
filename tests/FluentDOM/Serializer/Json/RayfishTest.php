@@ -3,7 +3,7 @@ namespace FluentDOM\Serializer\Json {
 
   use FluentDOM\TestCase;
 
-  require_once(__DIR__ . '/../../TestCase.php');
+  require_once __DIR__ . '/../../TestCase.php';
 
   class RayfishTest extends TestCase {
 

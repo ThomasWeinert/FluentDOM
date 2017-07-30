@@ -17,7 +17,7 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../../vendor/autoload.php');
+require_once '../../vendor/autoload.php';
 echo FluentDOM($xml)
   ->find('//p')
   ->find('span')

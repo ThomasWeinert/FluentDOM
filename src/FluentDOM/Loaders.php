@@ -21,15 +21,16 @@ namespace FluentDOM {
    */
   class Loaders implements \IteratorAggregate, Loadable {
 
-    private $_list = array();
+    private $_list = [];
 
     /**
      * Store the a list of loaders if provided.
      *
-     * @param array|\Traversable $list
+     * @param array|\Traversable|NULL $list
      */
     public function __construct($list = NULL) {
       if (is_array($list) || $list instanceOf \Traversable) {
+        /** @var array|\Traversable $list */
         foreach ($list as $loader) {
           $this->add($loader);
         }

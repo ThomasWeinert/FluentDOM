@@ -4,7 +4,7 @@ namespace FluentDOM\Query {
   use FluentDOM\Query;
   use FluentDOM\TestCase;
 
-  require_once(__DIR__.'/../../TestCase.php');
+  require_once __DIR__.'/../../TestCase.php';
 
   class ManipulationTextTest extends TestCase {
 
@@ -15,9 +15,9 @@ namespace FluentDOM\Query {
      * @group ManipulationInside
      * @covers \FluentDOM\Query
      */
-    public function testTextRead() {
+    public function testTextReadReturnsTextContentOfAllNodes() {
       $expect = 'text1text2text3';
-      $text = $this->getQueryFixtureFromString(self::XML)->formatOutput()->find('//group')->text();
+      $text = $this->getQueryFixtureFromString(self::XML)->formatOutput()->find('//group/item')->text();
       $this->assertEquals($expect, $text);
     }
 

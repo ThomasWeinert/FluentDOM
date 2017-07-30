@@ -55,7 +55,7 @@ namespace FluentDOM\Nodes {
           $expression, NULL, $filter, $stopAt, $options
         );
       } else {
-        $nodes = array();
+        $nodes = [];
         foreach ($this->_nodes->toArray() as $context) {
           $nodes = array_merge(
             $nodes,
@@ -164,7 +164,7 @@ namespace FluentDOM\Nodes {
     private function filterNodes(
       array $nodes, callable $filter = NULL, callable $stopAt = NULL, int $options = 0
     ): array {
-      $result = array();
+      $result = [];
       foreach ($nodes as $index => $node) {
         list($isFilter, $isStopAt) = $this->getNodeStatus(
           $node, $index, $filter, $stopAt

@@ -68,7 +68,7 @@ namespace FluentDOM\DOM {
     /**
      * Get/Set the namespace definition used for the fragment strings.
      *
-     * You can use an array(prefix => $namespaceURI, ...) or an element node
+     * You can use an [prefix => $namespaceURI, ...] or an element node
      * to set the namespaces. If the list is empty, the namespaces from
      * the document object will be used.
      *

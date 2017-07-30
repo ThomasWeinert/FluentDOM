@@ -4,7 +4,7 @@ namespace FluentDOM\Query {
   use FluentDOM\Query;
   use FluentDOM\TestCase;
 
-  require_once(__DIR__.'/../TestCase.php');
+  require_once __DIR__.'/../TestCase.php';
 
   class AttrTest extends TestCase {
 
@@ -121,14 +121,14 @@ namespace FluentDOM\Query {
     }
 
     public static function dataProviderInvalidAttributeNames() {
-      return array(
-        array('1foo'),
-        array('1bar:foo'),
-        array('bar:1foo'),
-        array('bar:foo<>'),
-        array('bar:'),
-        array(':foo')
-      );
+      return [
+        ['1foo'],
+        ['1bar:foo'],
+        ['bar:1foo'],
+        ['bar:foo<>'],
+        ['bar:'],
+        [':foo']
+      ];
     }
 
     /**
@@ -146,10 +146,10 @@ namespace FluentDOM\Query {
     }
 
     public static function dataProviderValidAttributeNames() {
-      return array(
-        array('foo'),
-        array('bar:foo')
-      );
+      return [
+        ['foo'],
+        ['bar:foo']
+      ];
     }
 
     /**
@@ -160,7 +160,7 @@ namespace FluentDOM\Query {
     public function testAttrWriteWithArray() {
       $fd = $this->getQueryFixtureFromString(self::XML)
         ->find('//group/item')
-        ->attr(array('index' => '15', 'length' => '34', 'label' => 'box'));
+        ->attr(['index' => '15', 'length' => '34', 'label' => 'box']);
       $this->assertEquals('15', $fd->attr('index'));
       $this->assertEquals('34', $fd->attr('length'));
       $this->assertEquals('box', $fd->attr('label'));
@@ -254,7 +254,7 @@ namespace FluentDOM\Query {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->find('//p')
-        ->removeAttr(array('index', 'style'));
+        ->removeAttr(['index', 'style']);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
 
@@ -290,12 +290,12 @@ namespace FluentDOM\Query {
      */
     public function testPropertyAttrSetWithArray() {
       $fd = $this->getQueryFixtureFromString('<sample/>')->find('/*');
-      $fd->attr = array(
+      $fd->attr = [
         'foo' => 1,
         'bar' => 2
-      );
+      ];
       $this->assertEquals(
-        '<sample foo="1" bar="2"/>', $fd->document->saveXml($fd[0])
+        '<sample foo="1" bar="2"/>', $fd->document->saveXML($fd[0])
       );
     }
 

@@ -17,7 +17,7 @@ namespace FluentDOM\Loader {
      * @return string[]
      */
     public function getSupported(): array {
-      return array();
+      return [];
     }
 
     /**

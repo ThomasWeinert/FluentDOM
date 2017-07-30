@@ -13,7 +13,7 @@ XML;
 
 
 echo "Example for property 'data':\n";
-require_once('../../../vendor/autoload.php');
+require_once '../../../vendor/autoload.php';
 $fd = FluentDOM($xml)->find('//div');
 
 echo "\nRead:\n";

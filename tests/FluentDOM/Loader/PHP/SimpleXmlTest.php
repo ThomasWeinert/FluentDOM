@@ -5,7 +5,7 @@ namespace FluentDOM\Loader\PHP {
   use FluentDOM\Loader\Result;
   use FluentDOM\TestCase;
 
-  require_once(__DIR__ . '/../../TestCase.php');
+  require_once __DIR__ . '/../../TestCase.php';
 
   class SimpleXmlTest extends TestCase {
 

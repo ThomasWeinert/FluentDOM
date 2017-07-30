@@ -188,10 +188,10 @@ namespace FluentDOM\Utility {
         $prefix = FALSE;
         $localName = $name;
       }
-      return array(
+      return [
         $prefix,
         $localName
-      );
+      ];
     }
 
     /**
@@ -231,10 +231,10 @@ namespace FluentDOM\Utility {
         $nameStartChar.
         '\\.\\d\\x{B7}\\x{300}-\\x{36F}\\x{203F}-\\x{2040}';
       $result = preg_replace(
-        array(
+        [
           '([^'.$nameAdditionalChar.'-]+)u',
           '(^[^'.$nameStartChar.']+)u',
-        ),
+        ],
         '',
         $string
       );

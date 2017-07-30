@@ -4,7 +4,7 @@ namespace FluentDOM\Query {
   use FluentDOM\Query;
   use FluentDOM\TestCase;
 
-  require_once(__DIR__.'/../TestCase.php');
+  require_once __DIR__.'/../TestCase.php';
 
   class CssTest extends TestCase {
 
@@ -143,11 +143,11 @@ namespace FluentDOM\Query {
      */
     public function testGetIteratorForFirstElement() {
       $fd = new Query();
-      $fd->document->loadXml('<sample style="width: 21px;"/>');
+      $fd->document->loadXML('<sample style="width: 21px;"/>');
       $fd = $fd->find('/*');
       $css = new Css($fd);
       $this->assertEquals(
-        array('width' => '21px'),
+        ['width' => '21px'],
         iterator_to_array($css)
       );
     }
@@ -159,7 +159,7 @@ namespace FluentDOM\Query {
       $fd = new Query();
       $css = new Css($fd);
       $this->assertEquals(
-        array(),
+        [],
         iterator_to_array($css)
       );
     }
@@ -208,10 +208,10 @@ namespace FluentDOM\Query {
      */
     public function testPropertyCssSetWithArray() {
       $fd = $this->getQueryFixtureFromString('<sample/>', '/*');
-      $fd->css = array('foo' => '1', 'bar' => '2');
+      $fd->css = ['foo' => '1', 'bar' => '2'];
       $this->assertEquals(
         '<sample style="bar: 2; foo: 1;"/>',
-        $fd->document->saveXml($fd->document->documentElement)
+        $fd->document->saveXML($fd->document->documentElement)
       );
     }
 
@@ -296,10 +296,10 @@ namespace FluentDOM\Query {
     public function testCssWriteWithArray() {
       $fd = $this->getQueryFixtureFromString(self::HTML, '//div');
       $fd->css(
-        array(
+        [
           'text-align' => 'center',
           'color' => 'black'
-        )
+        ]
       );
       $this->assertEquals('color: black; text-align: center;', $fd->eq(0)->attr('style'));
       $this->assertEquals('color: black; text-align: center;', $fd->eq(1)->attr('style'));
@@ -356,7 +356,7 @@ namespace FluentDOM\Query {
      */
     public function testCssWriteWithInvalidPropertyInArray() {
       $this->expectException(\InvalidArgumentException::class);
-      $this->getQueryFixtureFromString(self::HTML, '//div')->css(array('---' => ''));
+      $this->getQueryFixtureFromString(self::HTML, '//div')->css(['---' => '']);
     }
 
     /**
@@ -376,10 +376,10 @@ namespace FluentDOM\Query {
     public function testCssRemoveProperties() {
       $fd = $this->getQueryFixtureFromString(self::HTML, '//div');
       $fd->css(
-        array(
+        [
           'text-align' => '',
           'font-weight' => ''
-        )
+        ]
       );
       $this->assertFalse($fd[0]->hasAttribute('style'));
     }
@@ -391,10 +391,10 @@ namespace FluentDOM\Query {
     public function testCssSortPropertiesName() {
       $fd = $this->getQueryFixtureFromString(self::HTML, '//div');
       $fd->css(
-        array(
+        [
           'padding' => '0em',
           'margin' => '1em'
-        )
+        ]
       );
       $expect = 'margin: 1em; padding: 0em;';
       $this->assertEquals($expect, $fd[2]->getAttribute('style'));
@@ -407,11 +407,11 @@ namespace FluentDOM\Query {
     public function testCssSortPropertiesLevels() {
       $fd = $this->getQueryFixtureFromString(self::HTML, '//div');
       $fd->css(
-        array(
+        [
           'border' => '1px solid red',
           'border-top-color' => 'black',
           'border-top' => '2px solid blue'
-        )
+        ]
       );
       $expect = 'border: 1px solid red; border-top: 2px solid blue; border-top-color: black;';
       $this->assertEquals($expect, $fd[2]->getAttribute('style'));
@@ -424,11 +424,11 @@ namespace FluentDOM\Query {
     public function testCssSortPropertiesPrefix() {
       $fd = $this->getQueryFixtureFromString(self::HTML, '//div');
       $fd->css(
-        array(
+        [
           '-moz-opacity' => 30,
           '-o-opacity' => 30,
           'opacity' => 30
-        )
+        ]
       );
       $expect = 'opacity: 30; -moz-opacity: 30; -o-opacity: 30;';
       $this->assertEquals($expect, $fd[2]->getAttribute('style'));

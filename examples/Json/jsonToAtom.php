@@ -1,19 +1,19 @@
 <?php
 /**
-* Loads the FluentDOM github timeline and output it as an Atom feed.
+* Loads the FluentDOM GitHUB timeline and output it as an Atom feed.
 */
-require_once(__DIR__.'/../../vendor/autoload.php');
+require_once __DIR__.'/../../vendor/autoload.php';
 
 $url = 'https://api.github.com/repos/FluentDOM/FluentDOM/commits?per_page=5';
-$options = array(
-  'http'=>array(
-    'method' => "GET",
+$options = [
+  'http' => [
+    'method' => 'GET',
     'header' => "User-Agent: Awesome-Octocat-App\r\n"
-  )
-);
+  ]
+];
 
 $json = file_get_contents($url, NULL, stream_context_create($options));
-$commits = FluentDOM::load($json, "text/json")('/*/*');
+$commits = FluentDOM::load($json, 'text/json')('/*/*');
 
 $_ = FluentDOM::create();
 $_->formatOutput = TRUE;
@@ -24,7 +24,7 @@ $atom = $_(
   $_('atom:title', 'FluentDOM Commits'),
   $_->each(
     $commits,
-    function(FluentDOM\Element $commit) use ($_) {
+    function(FluentDOM\DOM\Element $commit) use ($_) {
       return $_(
         'atom:entry',
         $_('atom:title', $commit('string(commit/committer/name)')),

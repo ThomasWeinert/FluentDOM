@@ -4,7 +4,7 @@ namespace FluentDOM {
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Element;
 
-  require_once(__DIR__.'/TestCase.php');
+  require_once __DIR__.'/TestCase.php';
 
   class XMLReaderTest extends TestCase {
 

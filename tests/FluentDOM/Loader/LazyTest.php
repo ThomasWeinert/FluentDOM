@@ -6,7 +6,7 @@ namespace FluentDOM\Loader {
   use FluentDOM\Loadable;
   use FluentDOM\TestCase;
 
-  require_once(__DIR__.'/../TestCase.php');
+  require_once __DIR__.'/../TestCase.php';
 
   class LazyTest extends TestCase {
 

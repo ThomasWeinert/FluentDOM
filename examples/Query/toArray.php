@@ -18,7 +18,7 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../../vendor/autoload.php');
+require_once '../../vendor/autoload.php';
 
 $nodes = FluentDOM($xml)->find('//p')->toArray();
 array_splice($nodes, 1, 1);

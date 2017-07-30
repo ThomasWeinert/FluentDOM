@@ -31,7 +31,7 @@ namespace FluentDOM\Loader {
      * @return string[]
      */
     public function getSupported(): array {
-      return array('jsonx', 'application/xml+jsonx');
+      return ['jsonx', 'application/xml+jsonx'];
     }
 
     /**

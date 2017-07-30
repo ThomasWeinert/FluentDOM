@@ -4,7 +4,7 @@ namespace FluentDOM\Query {
   use FluentDOM\Query;
   use FluentDOM\TestCase;
 
-  require_once(__DIR__.'/../TestCase.php');
+  require_once __DIR__.'/../TestCase.php';
 
   class AttributesTest extends TestCase {
 
@@ -30,7 +30,7 @@ namespace FluentDOM\Query {
       );
       $attr = new Attributes($fd);
       $this->assertEquals(
-        array('foo' => 1, 'bar' => 2),
+        ['foo' => 1, 'bar' => 2],
         $attr->toArray()
       );
     }
@@ -152,7 +152,7 @@ namespace FluentDOM\Query {
       $attr = new Attributes($fd);
       $iterator = $attr->getIterator();
       $this->assertEquals(
-        array('foo' => 1, 'bar' => 2),
+        ['foo' => 1, 'bar' => 2],
         iterator_to_array($iterator)
       );
     }
@@ -163,7 +163,7 @@ namespace FluentDOM\Query {
 
     /**
      * @param \DOMNode $node
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit_Framework_MockObject_MockObject|Query
      */
     public function getFluentDOMWithNodeFixture(\DOMNode $node) {
       $fd = $this->getMockBuilder(Query::class)->getMock();

@@ -3,7 +3,7 @@ namespace FluentDOM\Query\Css {
 
   use FluentDOM\TestCase;
 
-  require_once(__DIR__.'/../../TestCase.php');
+  require_once __DIR__.'/../../TestCase.php';
 
   class PropertiesTest extends TestCase {
 
@@ -13,7 +13,7 @@ namespace FluentDOM\Query\Css {
     public function testConstructor() {
       $css = new Properties('width: auto;');
       $this->assertAttributeEquals(
-        array('width' => 'auto'), '_properties', $css
+        ['width' => 'auto'], '_properties', $css
       );
     }
 
@@ -61,7 +61,7 @@ namespace FluentDOM\Query\Css {
       $css = new Properties();
       $css['width'] = 'auto';
       $this->assertAttributeEquals(
-        array('width' => 'auto'), '_properties', $css
+        ['width' => 'auto'], '_properties', $css
       );
     }
 
@@ -136,7 +136,7 @@ namespace FluentDOM\Query\Css {
     public function testGetIterator() {
       $css = new Properties('width: auto; height: auto;');
       $this->assertEquals(
-        array('width' => 'auto', 'height' => 'auto'),
+        ['width' => 'auto', 'height' => 'auto'],
         iterator_to_array($css)
       );
     }
@@ -189,7 +189,7 @@ namespace FluentDOM\Query\Css {
       $this->assertSame(
         'success',
         $css->compileValue(
-          array($this, 'callbackForCompileValue'),
+          [$this, 'callbackForCompileValue'],
           $document->documentElement,
           23,
           'success'
@@ -208,37 +208,37 @@ namespace FluentDOM\Query\Css {
      ********************/
 
     public static function provideStyleStrings() {
-      return array(
-        'single property' => array(
-          array('width' => 'auto'),
+      return [
+        'single property' => [
+          ['width' => 'auto'],
           'width: auto;'
-        )
-      );
+        ]
+      ];
     }
 
     public static function providePropertyArrays() {
-      return array(
-        'single property' => array(
+      return [
+        'single property' => [
           'width: auto;',
-          array('width' => 'auto')
-        ),
-        'two properties' => array(
+          ['width' => 'auto']
+        ],
+        'two properties' => [
           'height: auto; width: auto;',
-          array('width' => 'auto', 'height' => 'auto')
-        ),
-        'detailed properties' => array(
+          ['width' => 'auto', 'height' => 'auto']
+        ],
+        'detailed properties' => [
           'margin: 0; margin-top: 10px;',
-          array('margin-top' => '10px', 'margin' => '0')
-        ),
-        'browser properties' => array(
+          ['margin-top' => '10px', 'margin' => '0']
+        ],
+        'browser properties' => [
           'box-sizing: border-box; -moz-box-sizing: border-box; -o-box-sizing: border-box;',
-          array(
+          [
             '-o-box-sizing' => 'border-box',
             'box-sizing' => 'border-box',
             '-moz-box-sizing' => 'border-box'
-          )
-        )
-      );
+          ]
+        ]
+      ];
     }
   }
 }

@@ -5,7 +5,7 @@ namespace FluentDOM\Query {
   use FluentDOM\Exceptions;
   use FluentDOM\TestCase;
 
-  require_once(__DIR__.'/../../TestCase.php');
+  require_once __DIR__.'/../../TestCase.php';
 
   class ManipulationAppendTest extends TestCase {
 

@@ -4,7 +4,7 @@ namespace FluentDOM\Query {
   use FluentDOM\Query;
   use FluentDOM\TestCase;
 
-  require_once(__DIR__.'/../../TestCase.php');
+  require_once __DIR__.'/../../TestCase.php';
 
   class TraversingMapTest extends TestCase {
 
@@ -58,7 +58,7 @@ namespace FluentDOM\Query {
                   case 1:
                     return 3;
                   default:
-                    return array(1,2);
+                    return [1,2];
                   }
                 }
               )

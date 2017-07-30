@@ -4,7 +4,7 @@ namespace FluentDOM\DOM {
 
   use FluentDOM\TestCase;
 
-  require_once(__DIR__ . '/../TestCase.php');
+  require_once __DIR__ . '/../TestCase.php';
 
   class AttributeTest extends TestCase {
 
@@ -13,7 +13,7 @@ namespace FluentDOM\DOM {
      */
     public function testMagicMethodToString() {
       $document = new Document();
-      $document->appendElement('test', array('attr' => 'success'));
+      $document->appendElement('test', ['attr' => 'success']);
       $this->assertEquals(
         'success',
         (string)$document->documentElement->attributes->getNamedItem('attr')

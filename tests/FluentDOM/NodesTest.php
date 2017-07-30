@@ -5,7 +5,7 @@ namespace FluentDOM {
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Xpath;
 
-  require_once(__DIR__.'/TestCase.php');
+  require_once __DIR__.'/TestCase.php';
 
   class Nodes_TestProxy extends Nodes {
     public function matches(string $selector, \DOMNode $context = NULL): bool {
@@ -452,7 +452,7 @@ namespace FluentDOM {
       $fdParent->load($document);
       $fdChild = $fdParent->spawn($node);
       $this->assertSame(
-        array($node),
+        [$node],
         iterator_to_array($fdChild)
       );
     }
@@ -868,16 +868,16 @@ namespace FluentDOM {
     }
 
     public function getContentTypeSamples() {
-      return array(
-        array('text/xml', 'text/xml'),
-        array('text/html', 'text/html'),
-        array('xml', 'text/xml'),
-        array('html', 'text/html'),
-        array('TEXT/XML', 'text/xml'),
-        array('TEXT/HTML', 'text/html'),
-        array('XML', 'text/xml'),
-        array('HTML', 'text/html')
-      );
+      return [
+        ['text/xml', 'text/xml'],
+        ['text/html', 'text/html'],
+        ['xml', 'text/xml'],
+        ['html', 'text/html'],
+        ['TEXT/XML', 'text/xml'],
+        ['TEXT/HTML', 'text/html'],
+        ['XML', 'text/xml'],
+        ['HTML', 'text/html']
+      ];
     }
 
     /**
@@ -1118,7 +1118,7 @@ namespace FluentDOM {
       $this->assertInstanceOf(
         'Closure',
         $callback = $fd->getSelectorCallback(
-          array($fd->document->documentElement)
+          [$fd->document->documentElement]
         )
       );
       $this->assertTrue(
@@ -1152,7 +1152,7 @@ namespace FluentDOM {
       $this->assertInstanceOf(
         'Closure',
         $callback = $fd->getSelectorCallback(
-          array()
+          []
         )
       );
       $this->assertFalse(

@@ -27,7 +27,7 @@ namespace FluentDOM\Query\Css {
      *
      * @var array
      */
-    private $_properties = array();
+    private $_properties = [];
 
     public function __construct(string $styleString = '') {
       $this->setStyleString($styleString);
@@ -43,9 +43,9 @@ namespace FluentDOM\Query\Css {
      * @param string $styleString
      */
     public function setStyleString(string $styleString) {
-      $this->_properties = array();
+      $this->_properties = [];
       if (!empty($styleString)) {
-        $matches = array();
+        $matches = [];
         if (preg_match_all(self::STYLE_PATTERN, $styleString, $matches, PREG_SET_ORDER)) {
           foreach ($matches as $match) {
             if (isset($match['name']) &&
@@ -148,7 +148,7 @@ namespace FluentDOM\Query\Css {
      */
     public function offsetUnset($names) {
       if (!is_array($names)) {
-        $names = array($names);
+        $names = [$names];
       }
       foreach ($names as $property) {
         if (array_key_exists($property, $this->_properties)) {

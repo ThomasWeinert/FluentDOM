@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__.'/../../../vendor/autoload.php');
+require_once __DIR__.'/../../../vendor/autoload.php';
 
 $xml = <<<'XML'
 <person created="2006-11-11T19:23" modified="2006-12-31T23:59" xmlns="foo:bar" xmlns:bar="urn:oasis:names:tc:entity:xmlns:xml:catalog">

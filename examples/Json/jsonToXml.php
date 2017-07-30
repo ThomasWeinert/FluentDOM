@@ -5,15 +5,15 @@
 * It loads the FluentDOM github timeline.
 */
 
-require_once(__DIR__.'/../../vendor/autoload.php');
+require_once __DIR__.'/../../vendor/autoload.php';
 
 $url = 'https://api.github.com/repos/FluentDOM/FluentDOM/commits?per_page=5';
-$options = array(
-  'http'=>array(
+$options = [
+  'http' => [
     'method' => "GET",
     'header' => "User-Agent: Awesome-Octocat-App\r\n"
-  )
-);
+  ]
+];
 
 $json = file_get_contents($url, NULL, stream_context_create($options));
 

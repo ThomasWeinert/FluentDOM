@@ -6,6 +6,8 @@
 * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
 */
 
+require __DIR__.'/../../../vendor/autoload.php';
+
 $html = <<<HTML
 <head>
   <!--
@@ -18,20 +20,19 @@ $html = <<<HTML
 HTML;
 
 $highlighter = new FluentDOMHighlighter(
-  array(
+  [
     'jump' => 'highlightOne',
     'The' => 'highlightTwo',
     'jumps' => 'highlightThree'
-  )
+  ]
 );
-require('../../vendor/autoload.php');
 
 echo $highlighter->highlight(
   FluentDOM($html, 'text/html')->find('//body')
 );
 
 /**
-* Highlights strings in textnodes, by wrapping them into a span with the given class
+* Highlights strings in text nodes, by wrapping them into a span with the given class
 */
 class FluentDOMHighlighter {
 
@@ -39,7 +40,7 @@ class FluentDOMHighlighter {
   * Internal variable for the string => class name mapping
   * @var array
   */
-  protected $_highlights = array();
+  protected $_highlights = [];
   /**
   * Created pattern to match and split the content of the text nodes
   * @var string
@@ -63,10 +64,10 @@ class FluentDOMHighlighter {
    *
    * @return FluentDOM\Query
    */
-  public function highlight(FluentDOM\Query $fd) {
+  public function highlight(FluentDOM\Query $fd): \FluentDOM\Query {
     $fd
       ->find('descendant-or-self::text()')
-      ->each(array($this, 'replace'));
+      ->each([$this, 'replace']);
     return $fd->spawn();
   }
 
@@ -76,8 +77,8 @@ class FluentDOMHighlighter {
   * @param array $highlights
   */
   public function setHighlights(array $highlights) {
-    uksort($highlights, array($this, 'compareLength'));
-    $this->_highlights = array();
+    uksort($highlights, [$this, 'compareLength']);
+    $this->_highlights = [];
     $pattern = '';
     foreach ($highlights as $string => $className) {
       $key = strtolower($string);
@@ -119,7 +120,7 @@ class FluentDOMHighlighter {
       $parts = preg_split(
         $this->_pattern, $node->nodeValue, -1, PREG_SPLIT_DELIM_CAPTURE
       );
-      $items = array();
+      $items = [];
       foreach ($parts as $part) {
         $string = strtolower($part);
         if (isset($this->_highlights[$string])) {

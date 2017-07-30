@@ -1,7 +1,7 @@
 <?php
 namespace FluentDOM\Utility {
 
-  require_once(__DIR__ . '/../TestCase.php');
+  require_once __DIR__ . '/../TestCase.php';
 
   use FluentDOM\TestCase;
 
@@ -20,11 +20,11 @@ namespace FluentDOM\Utility {
 
     public static function provideValidNodes() {
       $document = new \DOMDocument();
-      return array(
-        array($document->createElement('element')),
-        array($document->createTextNode('text')),
-        array($document->createCDATASection('text'))
-      );
+      return [
+        [$document->createElement('element')],
+        [$document->createTextNode('text')],
+        [$document->createCDATASection('text')]
+      ];
     }
 
     /**
@@ -41,11 +41,11 @@ namespace FluentDOM\Utility {
 
     public static function provideInvalidNodes() {
       $document = new \DOMDocument();
-      return array(
-        array('string'),
-        array($document->createTextNode('text'), TRUE),
-        array($document->createCDATASection('text'), TRUE)
-      );
+      return [
+        ['string'],
+        [$document->createTextNode('text'), TRUE],
+        [$document->createCDATASection('text'), TRUE]
+      ];
     }
 
     /**
@@ -105,10 +105,10 @@ namespace FluentDOM\Utility {
 
     public static function provideNodeLists() {
       $document = new \DOMDocument();
-      return array(
-        array(array($document->createElement('element'))),
-        array($document->getElementsByTagName('text'))
-      );
+      return [
+        [[$document->createElement('element')]],
+        [$document->getElementsByTagName('text')]
+      ];
     }
 
     /**
@@ -135,10 +135,10 @@ namespace FluentDOM\Utility {
     }
 
     public function provideCallables() {
-      return array(
-        array(function() {}),
-        array(array($this, 'provideCallables'))
-      );
+      return [
+        [function() {}],
+        [[$this, 'provideCallables']]
+      ];
     }
 
     /**
@@ -174,11 +174,11 @@ namespace FluentDOM\Utility {
     }
 
     public function provideInvalidCallables() {
-      return array(
-        array(NULL),
-        array(array()),
-        array(array(1, 2, 3))
-      );
+      return [
+        [NULL],
+        [[]],
+        [[1, 2, 3]]
+      ];
     }
 
     /**

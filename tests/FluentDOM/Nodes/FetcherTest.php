@@ -4,7 +4,7 @@ namespace FluentDOM\Nodes {
   use FluentDOM\Nodes;
   use FluentDOM\TestCase;
 
-  require_once(__DIR__.'/../TestCase.php');
+  require_once __DIR__.'/../TestCase.php';
 
   class FetcherTest extends TestCase {
 
@@ -17,9 +17,7 @@ namespace FluentDOM\Nodes {
       $fd = new Nodes(self::XML);
       $fetcher = new Fetcher($fd);
       $this->assertEquals(
-        array(
-          $fd->document->documentElement
-        ),
+        [$fd->document->documentElement],
         $fetcher->fetch(
           '/*',
           NULL,
@@ -36,9 +34,7 @@ namespace FluentDOM\Nodes {
       $fd = (new Nodes(self::XML))->find('/items/group');
       $fetcher = new Fetcher($fd);
       $this->assertXmlNodesArrayEqualsXmlStrings(
-        array(
-          '<item index="1">text2</item>'
-        ),
+        ['<item index="1">text2</item>'],
         $fetcher->fetch(
           'item',
           $fd->getSelectorCallback('@index = 1'),
@@ -54,11 +50,11 @@ namespace FluentDOM\Nodes {
       $fd = (new Nodes(self::XML))->find('/items/group');
       $fetcher = new Fetcher($fd);
       $this->assertXmlNodesArrayEqualsXmlStrings(
-        array(
+        [
           '<item index="2">text3</item>',
           '<item index="1">text2</item>',
           '<item index="0">text1</item>'
-        ),
+        ],
         $fetcher->fetch(
           'item',
           NULL,
@@ -75,11 +71,11 @@ namespace FluentDOM\Nodes {
       $fd = (new Nodes(self::XML))->find('/items/group/item');
       $fetcher = new Fetcher($fd);
       $this->assertXmlNodesArrayEqualsXmlStrings(
-        array(
+        [
           '<item index="0">text1</item>',
           '<item index="1">text2</item>',
           '<item index="2">text3</item>'
-        ),
+        ],
         $fetcher->fetch('self::*', NULL, NULL, Fetcher::UNIQUE)
       );
     }
@@ -91,9 +87,7 @@ namespace FluentDOM\Nodes {
       $fd = (new Nodes(self::XML))->find('/items/group');
       $fetcher = new Fetcher($fd);
       $this->assertXmlNodesArrayEqualsXmlStrings(
-        array(
-          '<item index="0">text1</item>'
-        ),
+        ['<item index="0">text1</item>'],
         $fetcher->fetch(
           'item',
           NULL,
@@ -109,10 +103,10 @@ namespace FluentDOM\Nodes {
       $fd = (new Nodes(self::XML))->find('/items/group');
       $fetcher = new Fetcher($fd);
       $this->assertXmlNodesArrayEqualsXmlStrings(
-        array(
+        [
           '<item index="0">text1</item>',
           '<item index="1">text2</item>'
-        ),
+        ],
         $fetcher->fetch(
           'item',
           NULL,
@@ -129,9 +123,7 @@ namespace FluentDOM\Nodes {
       $fd = (new Nodes(self::XML))->find('/items/group');
       $fetcher = new Fetcher($fd);
       $this->assertXmlNodesArrayEqualsXmlStrings(
-        array(
-          '<item index="1">text2</item>'
-        ),
+        ['<item index="1">text2</item>'],
         $fetcher->fetch(
           'item',
           $fd->getSelectorCallback('@index = 1'),
@@ -168,7 +160,7 @@ namespace FluentDOM\Nodes {
     }
 
     public function assertXmlNodesArrayEqualsXmlStrings($expected, $nodes) {
-      $actual = array();
+      $actual = [];
       foreach ($nodes as $node) {
         $actual[] = $node->ownerDocument->saveXml($node);
       }

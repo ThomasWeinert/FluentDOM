@@ -19,7 +19,7 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../../vendor/autoload.php');
+require_once '../../vendor/autoload.php';
 echo FluentDOM($xml)
   ->find('//div[@id = "container"]/p')
   ->children()

@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__.'/FluentDOM/TestCase.php');
+require_once __DIR__.'/FluentDOM/TestCase.php';
 
 class FluentDOMTest extends \FluentDOM\TestCase  {
 

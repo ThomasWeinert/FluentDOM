@@ -3,7 +3,7 @@ namespace FluentDOM {
 
   use FluentDOM\DOM\Element;
 
-  require_once(__DIR__.'/TestCase.php');
+  require_once __DIR__.'/TestCase.php';
 
   abstract class XmlSerialize_TestProxy implements XmlSerializable {
 

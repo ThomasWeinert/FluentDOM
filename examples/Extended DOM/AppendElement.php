@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__.'/../../vendor/autoload.php');
+require_once __DIR__.'/../../vendor/autoload.php';
 
 /*
  * Appending an element child is on of the most used features.

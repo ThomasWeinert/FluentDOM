@@ -4,7 +4,7 @@ namespace FluentDOM\Utility\Iterators {
   use FluentDOM\DOM\Document;
   use FluentDOM\TestCase;
 
-  require_once(__DIR__.'/../../TestCase.php');
+  require_once __DIR__.'/../../TestCase.php';
 
   class ElementIteratorTest extends TestCase {
 
@@ -15,10 +15,10 @@ namespace FluentDOM\Utility\Iterators {
       $document = new Document();
       $document->loadXML('<items>ONE<two><three/></two></items>');
       $this->assertSame(
-        array(
+        [
           $document->documentElement->firstChild,
           $document->documentElement->lastChild,
-        ),
+        ],
         iterator_to_array($document->documentElement)
       );
     }
@@ -60,11 +60,11 @@ namespace FluentDOM\Utility\Iterators {
         $document->documentElement, \RecursiveIteratorIterator::SELF_FIRST
       );
       $this->assertSame(
-        array(
+        [
           $document->documentElement->firstChild,
           $document->documentElement->lastChild,
           $document->documentElement->lastChild->lastChild
-        ),
+        ],
         iterator_to_array($iterator, FALSE)
       );
     }

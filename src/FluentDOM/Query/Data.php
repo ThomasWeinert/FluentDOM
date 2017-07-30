@@ -37,7 +37,7 @@ namespace FluentDOM\Query {
      * @return array
      */
     public function toArray(): array {
-      $result = array();
+      $result = [];
       foreach ($this->_node->attributes as $attribute) {
         if ($this->isDataProperty($attribute->name)) {
           $result[$this->decodeName($attribute->name)] = $this->decodeValue($attribute->value);
@@ -166,7 +166,8 @@ namespace FluentDOM\Query {
         return TRUE;
       case ($value === 'false') :
         return FALSE;
-      case (in_array(substr($value, 0, 1), array('{', '['))) :
+        /** @noinspection SubStrUsedAsArrayAccessInspection */
+      case (in_array(substr($value, 0, 1), ['{', '['], FALSE)) :
         if ($json = json_decode($value)) {
           return $json;
         } else {

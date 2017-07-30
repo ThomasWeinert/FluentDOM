@@ -3,7 +3,7 @@ namespace FluentDOM {
 
   use FluentDOM\TestCase;
 
-  require_once(__DIR__.'/../TestCase.php');
+  require_once __DIR__.'/../TestCase.php';
 
   class NodesEachTest extends TestCase {
 
@@ -14,17 +14,17 @@ namespace FluentDOM {
      * @covers \FluentDOM\Query::each
      */
     public function testEach() {
-      $data = array();
+      $data = [];
       $collect = function($node) use (&$data) {
         $data[] = (string)$node;
       };
       $fd = (new Nodes(self::XML))->find('//item|//div/text()');
       $fd->each($collect);
       $this->assertEquals(
-        array(
+        [
           'text1', 'text2', 'text3',
           'class testing', 'class testing', 'class testing'
-        ),
+        ],
         $data
       );
     }
@@ -34,14 +34,14 @@ namespace FluentDOM {
      * @covers \FluentDOM\Query::each
      */
     public function testEachIgnoringTextNodes() {
-      $data = array();
+      $data = [];
       $collect = function($node) use (&$data) {
         $data[] = (string)$node;
       };
       $fd = (new Nodes(self::XML))->find('//item|//div/text()');
       $fd->each($collect, TRUE);
       $this->assertEquals(
-        array('text1', 'text2', 'text3'),
+        ['text1', 'text2', 'text3'],
         $data
       );
     }
@@ -51,7 +51,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Query::each
      */
     public function testEachWithFilterFunction() {
-      $data = array();
+      $data = [];
       $collect = function($node) use (&$data) {
         $data[] = (string)$node;
       };
@@ -63,7 +63,7 @@ namespace FluentDOM {
         }
       );
       $this->assertEquals(
-        array('text3'),
+        ['text3'],
         $data
       );
     }

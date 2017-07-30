@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__.'/../../vendor/autoload.php');
+require_once __DIR__.'/../../vendor/autoload.php';
 
 /*
  * FluentDOM\XmlSerializable is a interface supported by the trait

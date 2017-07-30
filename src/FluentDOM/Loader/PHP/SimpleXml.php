@@ -35,7 +35,7 @@ namespace FluentDOM\Loader\PHP {
      * @return string[]
      */
     public function getSupported(): array {
-      return array('simplexml', 'php/simplexml');
+      return ['simplexml', 'php/simplexml'];
     }
 
     /**

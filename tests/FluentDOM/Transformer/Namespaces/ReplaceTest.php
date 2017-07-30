@@ -10,7 +10,7 @@ namespace FluentDOM\Transformer\Namespaces {
 
   use FluentDOM\TestCase;
 
-  require_once(__DIR__ . '/../../TestCase.php');
+  require_once __DIR__ . '/../../TestCase.php';
 
   class ReplaceTest extends TestCase {
 

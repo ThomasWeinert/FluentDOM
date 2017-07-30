@@ -1,6 +1,6 @@
 <?php
 
-require_once('../../vendor/autoload.php');
+require_once '../../vendor/autoload.php';
 
 $document = new DOMDocument();
 $document->loadXML('<message>Hello World!</message>');

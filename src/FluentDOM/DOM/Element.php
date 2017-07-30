@@ -421,10 +421,10 @@ namespace FluentDOM\DOM {
     private function resolveTagName(string $name): array {
       list($prefix, $localName) = QualifiedName::split($name);
       if (empty($prefix)) {
-        return array('', $localName);
+        return ['', $localName];
       } else {
         $namespaceURI = $this->getDocument()->namespaces()->resolveNamespace($prefix);
-        return array($namespaceURI, $localName);
+        return [$namespaceURI, $localName];
       }
     }
 
@@ -444,7 +444,7 @@ namespace FluentDOM\DOM {
      */
     public function applyNamespaces($prefixes = NULL) {
       if ($prefixes !== NULL && !is_array($prefixes)) {
-        $prefixes = array($prefixes);
+        $prefixes = [$prefixes];
       }
       foreach ($this->getDocument()->namespaces() as $prefix => $namespaceURI) {
         if (

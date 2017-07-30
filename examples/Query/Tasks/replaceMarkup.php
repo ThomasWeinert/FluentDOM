@@ -1,6 +1,6 @@
 <?php
+require __DIR__.'/../../../vendor/autoload.php';
 
-require('../../../vendor/autoload.php');
 $markup = new FluentDOMMarkupReplacer();
 
 $html = <<<HTML
@@ -37,7 +37,7 @@ class FluentDOMMarkupReplacer {
   /**
   * List of replacements, first match is used to covert the element
   *
-  * pattern => array(element name, attributes, text content)
+  * pattern => [element name, attributes, text content]
   *
   * If a pattern matches the configuration is used to create the
   * replacement node. The configuration constists of an element name
@@ -45,39 +45,39 @@ class FluentDOMMarkupReplacer {
   *
   * Each of the attribute values and the text content is a replacement pattern.
   *
-  * @var array(string=>array(string,array(string=>string),string))
+  * @var array
   */
-  private $_replacements = array(
-    '(^//(.*)//$)D' => array(
-      'em', array(), '$1'
-    ),
-    '(^!!(.*)!!$)D' => array(
-      'strong', array(), '$1'
-    ),
-    '(^##(.*)##$)D' => array(
-      'span', array('class' => 'quoteblock'), '$1'
-    ),
-    '(^\\[\\[(.+)\\|(.+)\\|(.+)\\]\\]$)D' => array(
-      'a', array('href' => '$2', 'target' => '$3'), '$1'
-    ),
-    '(^\\[\\[(.+)\\|(.+)\\]\\]$)D' => array(
-      'a', array('href' => '$2'), '$1'
-    ),
-    '(^\\[\\[(.+)\\]\\]$)D' => array(
-      'a', array('href' => '$1'), '$1'
-    )
-  );
+  private static $_replacements = [
+    '(^//(.*)//$)D' => [
+      'em', [], '$1'
+    ],
+    '(^!!(.*)!!$)D' => [
+      'strong', [], '$1'
+    ],
+    '(^##(.*)##$)D' => [
+      'span', ['class' => 'quoteblock'], '$1'
+    ],
+    '(^\\[\\[(.+)\\|(.+)\\|(.+)\\]\\]$)D' => [
+      'a', ['href' => '$2', 'target' => '$3'], '$1'
+    ],
+    '(^\\[\\[(.+)\\|(.+)\\]\\]$)D' => [
+      'a', ['href' => '$2'], '$1'
+    ],
+    '(^\\[\\[(.+)\\]\\]$)D' => [
+      'a', ['href' => '$1'], '$1'
+    ]
+  ];
 
   /**
   * A list of replacement done on the strings to replace escapin sequences
   *
-  * var array(string=>string)
+  * var [string=>string]
   */
-  private $_escapings = array(
+  private static $_escaping = [
     '\\/\\/' => '//',
     '\\!\\!' => '!!',
     '\\#\\#' => '##'
-  );
+  ];
 
   /**
   * Replace markup in all text nodes inside the current selection
@@ -85,10 +85,10 @@ class FluentDOMMarkupReplacer {
   * @param FluentDOM\Query $fd
   * @return FluentDOM\Query
   */
-  public function replace(FluentDOM\Query $fd) {
+  public function replace(FluentDOM\Query $fd): \FluentDOM\Query {
     $fd
       ->find('descendant-or-self::text()')
-      ->each(array($this, 'replaceNode'));
+      ->each([$this, 'replaceNode']);
     return $fd->spawn();
   }
 
@@ -106,7 +106,7 @@ class FluentDOMMarkupReplacer {
         -1,
         PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE
       );
-      $items = array();
+      $items = [];
       foreach ($parts as $part) {
         $items[] = $this->createNodes($node->ownerDocument, $part);
       }
@@ -129,16 +129,19 @@ class FluentDOMMarkupReplacer {
   * @return DOMElement|DOMText
   */
   private function createNodes($document, $string) {
-    foreach ($this->_replacements as $pattern => $replacement) {
+    foreach (self::$_replacements as $pattern => $replacement) {
+      /** @var array $replacement */
       if (preg_match($pattern, $string)) {
         $node = $document->createElement($replacement[0]);
-        foreach ($replacement[1] as $attributeName => $attributePattern) {
-          $node->setAttribute(
-            $attributeName,
-            preg_replace(
-              $pattern, $attributePattern, $string
-            )
-          );
+        if (is_array($replacement[1])) {
+          foreach ($replacement[1] as $attributeName => $attributePattern) {
+            $node->setAttribute(
+              $attributeName,
+              preg_replace(
+                $pattern, $attributePattern, $string
+              )
+            );
+          }
         }
         $text = $document->createTextNode(
           preg_replace(
@@ -150,7 +153,7 @@ class FluentDOMMarkupReplacer {
       }
     }
     return $document->createTextNode(
-      strtr($string, $this->_escapings)
+      strtr($string, self::$_escaping)
     );
   }
 }

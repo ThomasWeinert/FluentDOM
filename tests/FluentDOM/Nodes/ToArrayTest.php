@@ -4,7 +4,7 @@ namespace FluentDOM {
   use FluentDOM\Query;
   use FluentDOM\TestCase;
 
-  require_once(__DIR__.'/../TestCase.php');
+  require_once __DIR__.'/../TestCase.php';
 
   class NodesToArrayTest extends TestCase {
 
@@ -17,10 +17,7 @@ namespace FluentDOM {
     public function testToArray() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('/items/*');
       $this->assertSame(
-        array(
-          $fd[0],
-          $fd[1]
-        ),
+        [$fd[0], $fd[1]],
         $fd->toArray()
       );
     }

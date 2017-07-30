@@ -5,7 +5,7 @@ namespace FluentDOM\Loader\Json {
   use FluentDOM\Loader\Options;
   use FluentDOM\TestCase;
 
-  require_once(__DIR__ . '/../../TestCase.php');
+  require_once __DIR__ . '/../../TestCase.php';
 
   class JsonDOMTest extends TestCase {
 
@@ -133,14 +133,14 @@ namespace FluentDOM\Loader\Json {
       $loader = new JsonDOM();
       $document = $loader->load(
         json_encode(
-          array(
+          [
             'boolean' => TRUE,
             'int' => 42,
             'null' => NULL,
             'string' => 'Foo',
-            'array' => array(21),
+            'array' => [21],
             'object' => new \stdClass()
-          )
+          ]
         ),
         'json'
       );

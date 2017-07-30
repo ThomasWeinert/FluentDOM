@@ -3,8 +3,8 @@
 * Sample how to use a custom FluentDOM loader
 */
 
-require_once(__DIR__.'/../../vendor/autoload.php');
-require_once(__DIR__.'/IniLoader.php');
+require_once __DIR__.'/../../vendor/autoload.php';
+require_once __DIR__.'/IniLoader.php';
 
 header('Content-type: text/plain');
 $iniFile = __DIR__.'/sample.ini';

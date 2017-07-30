@@ -24,7 +24,7 @@ namespace FluentDOM\Loader\PHP {
      * @return string[]
      */
     public function getSupported(): array {
-      return array('php/pdo', 'pdo');
+      return ['php/pdo', 'pdo'];
     }
 
     /**

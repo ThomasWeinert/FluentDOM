@@ -6,7 +6,7 @@
 * @copyright Copyright (c) 2011-2014 FluentDOM Contributors
 */
 header('Content-type: text/plain');
-require_once('../../vendor/autoload.php');
+require_once '../../vendor/autoload.php';
 
 $xml = <<<XML
 <div data-role="page" data-hidden="true" data-options='{"name":"John"}'> </div>

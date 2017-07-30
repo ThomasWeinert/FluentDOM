@@ -1,7 +1,7 @@
 <?php
 namespace FluentDOM {
 
-  require_once(__DIR__.'/TestCase.php');
+  require_once __DIR__.'/TestCase.php';
 
   class QueryTest extends TestCase {
 
@@ -30,12 +30,12 @@ namespace FluentDOM {
     }
 
     public static function providePropertyNames() {
-      return array(
-        array('attr'),
-        array('css'),
-        array('data'),
-        array('contentType')
-      );
+      return [
+        ['attr'],
+        ['css'],
+        ['data'],
+        ['contentType']
+      ];
     }
   }
 }

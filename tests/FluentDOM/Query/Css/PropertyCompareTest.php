@@ -5,7 +5,7 @@ namespace FluentDOM\Query\Css {
   use FluentDOM\Query\Css;
   use FluentDOM\TestCase;
 
-  require_once(__DIR__.'/../../TestCase.php');
+  require_once __DIR__.'/../../TestCase.php';
 
   class PropertyCompareTest extends TestCase {
 
@@ -25,15 +25,15 @@ namespace FluentDOM\Query\Css {
     }
 
     public static function providePropertyNames() {
-      return array(
-        array(-1, 'margin', 'margin-top'),
-        array(1, 'padding', 'margin-top'),
-        array(-1, 'margin-top', 'padding'),
-        array(0, 'padding', 'padding'),
-        array(1, '-moz-box-sizing', 'box-sizing'),
-        array(1, '-padding-top', 'margin-top'),
-        array(1, '-padding-top', 'padding-bottom'),
-      );
+      return [
+        [-1, 'margin', 'margin-top'],
+        [1, 'padding', 'margin-top'],
+        [-1, 'margin-top', 'padding'],
+        [0, 'padding', 'padding'],
+        [1, '-moz-box-sizing', 'box-sizing'],
+        [1, '-padding-top', 'margin-top'],
+        [1, '-padding-top', 'padding-bottom'],
+      ];
     }
   }
 }

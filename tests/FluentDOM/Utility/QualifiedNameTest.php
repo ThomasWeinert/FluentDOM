@@ -3,7 +3,7 @@ namespace FluentDOM\Utility {
 
   use FluentDOM\TestCase;
 
-  require_once(__DIR__ . '/../TestCase.php');
+  require_once __DIR__ . '/../TestCase.php';
 
   class QualifiedNameTest extends TestCase {
 
@@ -22,19 +22,19 @@ namespace FluentDOM\Utility {
     }
 
     public static function dataProviderValidQualifiedNames() {
-      return array(
-        array('tag'),
-        array('namespace:tag'),
-        array('_:_'),
-        array('_-_'),
-        array('_'),
-        array('html'),
-        array('tag23'),
-        array('sample-tag'),
-        array('sampleTag'),
-        array('ns:tag'),
-        array('ns:tag')
-      );
+      return [
+        ['tag'],
+        ['namespace:tag'],
+        ['_:_'],
+        ['_-_'],
+        ['_'],
+        ['html'],
+        ['tag23'],
+        ['sample-tag'],
+        ['sampleTag'],
+        ['ns:tag'],
+        ['ns:tag']
+      ];
     }
 
     /**
@@ -227,11 +227,11 @@ namespace FluentDOM\Utility {
      * @return array
      */
     public static function provideQualifiedNamesForSplit() {
-      return array(
-        array(array('foo', 'bar'), 'foo:bar'),
-        array(array(FALSE, 'bar'), 'bar'),
-        array(array('', 'bar'), ':bar'),
-      );
+      return [
+        [['foo', 'bar'], 'foo:bar'],
+        [[FALSE, 'bar'], 'bar'],
+        [['', 'bar'], ':bar'],
+      ];
     }
 
     public static function provideStringsToNormalize() {

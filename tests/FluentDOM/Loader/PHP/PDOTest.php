@@ -4,7 +4,7 @@ namespace FluentDOM\Loader\PHP {
   use FluentDOM\Exceptions\InvalidFragmentLoader;
   use FluentDOM\TestCase;
 
-  require_once(__DIR__ . '/../../TestCase.php');
+  require_once __DIR__ . '/../../TestCase.php';
 
   class PDOTest extends TestCase {
 

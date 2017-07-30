@@ -23,7 +23,7 @@ $html = <<<HTML
 HTML;
 
 echo "Example for property 'attr'- set attributes:\n\n";
-require_once('../../../vendor/autoload.php');
+require_once '../../../vendor/autoload.php';
 $fd = FluentDOM($html, 'text/html');
 $fd
   ->find('//a')

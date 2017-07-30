@@ -5,7 +5,7 @@ namespace FluentDOM\Loader {
   use FluentDOM\TestCase;
   use FluentDOM\Exceptions\InvalidSource;
 
-  require_once(__DIR__.'/../TestCase.php');
+  require_once __DIR__.'/../TestCase.php';
 
   class XmlTest extends TestCase {
 

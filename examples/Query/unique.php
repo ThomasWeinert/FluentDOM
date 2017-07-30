@@ -5,7 +5,7 @@
 */
 header('Content-type: text/plain');
 
-require_once('../../vendor/autoload.php');
+require_once '../../vendor/autoload.php';
 $fd = new FluentDOM\Nodes(
   '<items><one/><two/><three/></items>'
 );

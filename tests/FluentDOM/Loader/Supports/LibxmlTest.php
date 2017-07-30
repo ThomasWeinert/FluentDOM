@@ -8,7 +8,7 @@ namespace FluentDOM\Loader\Supports {
   use FluentDOM\Loader\Options;
   use FluentDOM\TestCase;
 
-  require_once(__DIR__.'/../../TestCase.php');
+  require_once __DIR__.'/../../TestCase.php';
 
   class Libxml_TestProxy {
 

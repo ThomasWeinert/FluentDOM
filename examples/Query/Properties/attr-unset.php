@@ -5,6 +5,8 @@
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
 * @copyright Copyright (c) 2010-2014 FluentDOM Contributors
 */
+require_once __DIR__.'../../../vendor/autoload.php';
+
 header('Content-type: text/plain');
 
 $html = <<<HTML
@@ -23,8 +25,7 @@ $html = <<<HTML
 HTML;
 
 echo "Example for property 'attr' - remove attributes:\n\n";
-require_once('../../../vendor/autoload.php');
 $fd = FluentDOM($html, 'text/html')->find('/html/body//*');
-// like $fd->removeAttr(array('style', 'target')); but array syntax
-unset($fd->attr[array('style', 'target')]);
+// like $fd->removeAttr(['style', 'target']); but array syntax
+unset($fd->attr[['style', 'target']]);
 echo (string)$fd;

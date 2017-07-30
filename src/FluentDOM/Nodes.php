@@ -77,7 +77,7 @@ namespace FluentDOM {
     /**
      * @var \DOMNode[]
      */
-    protected $_nodes = array();
+    protected $_nodes = [];
 
     /**
      * Use document context for expression (not selected nodes).
@@ -143,6 +143,7 @@ namespace FluentDOM {
      * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return bool|\DOMDocument|Document|NULL
+     * @throws \InvalidArgumentException
      */
     private function prepareSource($source, string $contentType, $options) {
       $loaded = FALSE;
@@ -153,7 +154,7 @@ namespace FluentDOM {
         $loaded = $source;
       } elseif ($source instanceof \DOMNode) {
         $loaded = $source->ownerDocument;
-        $this->_nodes = array($source);
+        $this->_nodes = [$source];
         $this->_useDocumentContext = FALSE;
       } elseif ($this->loaders()->supports($contentType)) {
         $loaded = $this->loaders()->load($source, $contentType, $options);
@@ -292,15 +293,15 @@ namespace FluentDOM {
      * @return Nodes
      */
     public function formatOutput(string $contentType = NULL) {
-      if (isset($contentType)) {
+      if (NULL !== $contentType) {
         $this->setContentType($contentType);
       }
-      $this->_nodes = array();
+      $this->_nodes = [];
       $this->_useDocumentContext = TRUE;
       $this->_parent = NULL;
       $this->_document->preserveWhiteSpace = FALSE;
       $this->_document->formatOutput = TRUE;
-      if (!empty($this->_document->documentElement)) {
+      if (!($this->_document->documentElement instanceof \DOMElement)) {
         $this->_document->loadXML($this->_document->saveXML());
       }
       return $this;
@@ -314,10 +315,12 @@ namespace FluentDOM {
      * @param NULL|string|callable|\DOMNode|array|\Traversable $stopAt
      * @param int $options
      * @return Nodes
+     * @throws \OutOfBoundsException
+     * @throws \InvalidArgumentException
      */
     protected function fetch(
       string $expression, $filter = NULL, $stopAt = NULL, int $options = 0
-    ): Nodes {
+    ) {
       return $this->spawn(
         (new Nodes\Fetcher($this))->fetch(
           $expression,
@@ -650,16 +653,18 @@ namespace FluentDOM {
      * Create a new instance of the same class with $this as the parent. This is used for the chaining.
      *
      * @param array|\Traversable|\DOMNode|Nodes $elements
-     * @return Nodes
+     * @return static
+     * @throws \OutOfBoundsException
+     * @throws \InvalidArgumentException
      */
-    public function spawn($elements = NULL): Nodes {
+    public function spawn($elements = NULL) {
       $result = clone $this;
       $result->_parent = $this;
       $result->_document = $this->getDocument();
       $result->_xpath = $this->getXpath();
-      $result->_nodes = array();
+      $result->_nodes = [];
       $result->_loadingContext = $this->_loadingContext;
-      if (isset($elements)) {
+      if (NULL !== $elements) {
         $result->push($elements);
       }
       return $result;
@@ -670,12 +675,11 @@ namespace FluentDOM {
      *
      * @return Nodes
      */
-    public function end(): Nodes {
+    public function end() {
       if ($this->_parent instanceof Nodes) {
         return $this->_parent;
-      } else {
-        return $this;
       }
+      return $this;
     }
 
     /**
@@ -757,7 +761,7 @@ namespace FluentDOM {
      * @param int $options FIND_* options CONTEXT_DOCUMENT, FIND_MODE_FILTER, FIND_FORCE_SORT
      * @return Nodes
      */
-    public function find($selector, int $options = 0): Nodes {
+    public function find($selector, int $options = 0) {
       list(
         $selectorIsScalar,
         $selectorIsFilter,
@@ -806,9 +810,9 @@ namespace FluentDOM {
       }
       if (($options & self::FIND_FORCE_SORT) === self::FIND_FORCE_SORT) {
         $fetchOptions |= Nodes\Fetcher::FORCE_SORT;
-        return array($selectorIsScalar, $selectorIsFilter, $expression, $contextMode, $fetchOptions);
+        return [$selectorIsScalar, $selectorIsFilter, $expression, $contextMode, $fetchOptions];
       }
-      return array($selectorIsScalar, $selectorIsFilter, $expression, $contextMode, $fetchOptions);
+      return [$selectorIsScalar, $selectorIsFilter, $expression, $contextMode, $fetchOptions];
     }
 
     /**
@@ -868,15 +872,15 @@ namespace FluentDOM {
     public function unique(array $array): array {
       $count = count($array);
       if ($count <= 1) {
-        if ($count == 1) {
+        if ($count === 1) {
           Constraints::assertNode(
             reset($array), 'Array must only contain dom nodes, found "%s".'
           );
         }
         return $array;
       }
-      $sortable = array();
-      $unsortable = array();
+      $sortable = [];
+      $unsortable = [];
       foreach ($array as $node) {
         Constraints::assertNode($node, 'Array must only contain dom nodes, found "%s".');
         $hash = spl_object_hash($node);
@@ -905,7 +909,7 @@ namespace FluentDOM {
      * @return Serializer\Factory\Group
      */
     public function serializerFactories(Serializer\Factory\Group $factories = NULL) {
-      if (isset($factories)) {
+      if (NULL !== $factories) {
         $this->_serializerFactories = $factories;
       } elseif (NULL === $this->_serializerFactories) {
         $this->_serializerFactories = \FluentDOM::getSerializerFactories();

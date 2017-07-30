@@ -2,7 +2,7 @@
 
 namespace FluentDOM\DOM {
 
-  require_once(__DIR__ . '/../TestCase.php');
+  require_once __DIR__ . '/../TestCase.php';
 
   use FluentDOM\Appendable;
   use FluentDOM\TestCase;
@@ -613,7 +613,7 @@ namespace FluentDOM\DOM {
     public function testAppendElement() {
       $document = new Document();
       $document->appendChild($document->createElement('root'));
-      $document->documentElement->appendElement('test', 'text', array('attribute' => 'value'));
+      $document->documentElement->appendElement('test', 'text', ['attribute' => 'value']);
       $this->assertXmlStringEqualsXmlString(
         '<root><test attribute="value">text</test></root>',
         $document->saveXML($document->documentElement)
@@ -741,11 +741,11 @@ namespace FluentDOM\DOM {
     }
 
     public static function provideExistingOffsets() {
-      return array(
-        array(0),
-        array(1),
-        array('version')
-      );
+      return [
+        [0],
+        [1],
+        ['version']
+      ];
     }
 
     /**
@@ -759,10 +759,10 @@ namespace FluentDOM\DOM {
     }
 
     public static function provideMissingOffsets() {
-      return array(
-        array(99),
-        array('NON_EXISTING')
-      );
+      return [
+        [99],
+        ['NON_EXISTING']
+      ];
     }
 
     /**
@@ -902,10 +902,10 @@ namespace FluentDOM\DOM {
       $document = new Document();
       $document->loadXML('<foo><bar/><bar/></foo>');
       $this->assertEquals(
-        array(
+        [
           $document->documentElement->firstChild,
           $document->documentElement->firstChild
-        ),
+        ],
         iterator_to_array(
           $document->documentElement
         )

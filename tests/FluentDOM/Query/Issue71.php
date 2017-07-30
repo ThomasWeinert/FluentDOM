@@ -7,7 +7,7 @@ namespace FluentDOM\Query {
   use FluentDOM\Loader\Result;
   use FluentDOM\TestCase;
 
-  require_once(__DIR__ . '/../TestCase.php');
+  require_once __DIR__ . '/../TestCase.php';
 
   class Issue71Test extends TestCase {
 

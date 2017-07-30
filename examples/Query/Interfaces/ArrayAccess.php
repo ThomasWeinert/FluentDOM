@@ -14,7 +14,7 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once('../../../vendor/autoload.php');
+require_once '../../../vendor/autoload.php';
 
 $fd = FluentDOM($xml)->find('//p');
 echo $fd[0], ' ', $fd[2];

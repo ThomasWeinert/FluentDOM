@@ -2,11 +2,11 @@
 
 class IniLoader implements FluentDOM\Loadable {
 
-  public function supports($contentType) {
-    return in_array($contentType, array('ini', 'text/ini'));
+  public function supports(string $contentType): bool {
+    return in_array($contentType, ['ini', 'text/ini'], FALSE);
   }
 
-  public function load($source, $contentType = 'text/ini', $options = []) {
+  public function load($source, string $contentType = 'text/ini', $options = []) {
     if (is_string($source) && $this->supports($contentType)) {
       if (!file_exists($source)) {
         throw new InvalidArgumentException('File not found: '. $source);
@@ -21,7 +21,7 @@ class IniLoader implements FluentDOM\Loadable {
     return FALSE;
   }
 
-  public function loadFragment($source, $contentType = 'text/ini', $options = []) {
+  public function loadFragment($source, string $contentType = 'text/ini', $options = []) {
     throw new \FluentDOM\Exceptions\InvalidFragmentLoader(self::class);
   }
 
@@ -30,7 +30,7 @@ class IniLoader implements FluentDOM\Loadable {
       foreach ($data as $key => $val) {
         if (preg_match('(^\d+$)', $key)) {
           $nodeName = $node->nodeName;
-          if (substr($nodeName, -1) == 's') {
+          if (substr($nodeName, -1) === 's') {
             $nodeName = substr($nodeName, 0, -1);
           }
           $childNode = $document->createElement($nodeName);
@@ -54,6 +54,4 @@ class IniLoader implements FluentDOM\Loadable {
       $node->appendChild($textNode);
     }
   }
-
 }
-

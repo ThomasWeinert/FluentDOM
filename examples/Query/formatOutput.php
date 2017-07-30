@@ -9,7 +9,7 @@ $xml = <<<XML
 <nodes><one/><two/><three/></nodes>
 XML;
 
-require_once('../../vendor/autoload.php');
+require_once '../../vendor/autoload.php';
 
 echo FluentDOM($xml)->formatOutput();
 

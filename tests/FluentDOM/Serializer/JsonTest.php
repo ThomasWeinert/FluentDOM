@@ -4,7 +4,7 @@ namespace FluentDOM\Serializer {
   use FluentDOM\DOM\Document;
   use FluentDOM\TestCase;
 
-  require_once(__DIR__ . '/../TestCase.php');
+  require_once __DIR__ . '/../TestCase.php';
 
   class JsonTest extends TestCase {
 
@@ -205,14 +205,14 @@ namespace FluentDOM\Serializer {
         ],
         'different types' => [
           json_encode(
-            array(
+            [
               'boolean' => TRUE,
               'int' => 42,
               'null' => NULL,
               'string' => 'Foo',
-              'array' => array(21),
+              'array' => [21],
               'object' => new \stdClass()
-            )
+            ]
           ),
           '<?xml version="1.0" encoding="UTF-8"?>
            <json:json xmlns:json="urn:carica-json-dom.2013">

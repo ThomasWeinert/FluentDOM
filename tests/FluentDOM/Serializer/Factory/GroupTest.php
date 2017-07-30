@@ -8,7 +8,7 @@ namespace FluentDOM\Serializer\Factory {
   use FluentDOM\Serializer\Factory;
   use FluentDOM\TestCase;
 
-  require_once(__DIR__ . '/../../TestCase.php');
+  require_once __DIR__ . '/../../TestCase.php';
 
   class GroupTest extends TestCase {
 

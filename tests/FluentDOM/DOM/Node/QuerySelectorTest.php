@@ -6,7 +6,7 @@ namespace FluentDOM\Node {
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Xpath\Transformer;
 
-  require_once(__DIR__.'/../../TestCase.php');
+  require_once __DIR__.'/../../TestCase.php';
 
   class QuerySelectorTest extends TestCase {
 

@@ -25,7 +25,7 @@ namespace FluentDOM\Loader {
      * @return string[]
      */
     public function getSupported(): array {
-      return array('xml', 'application/xml', 'text/xml');
+      return ['xml', 'application/xml', 'text/xml'];
     }
 
     /**

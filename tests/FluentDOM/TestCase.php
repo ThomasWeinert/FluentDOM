@@ -3,7 +3,7 @@ namespace FluentDOM {
 
   use FluentDOM\DOM\Xpath;
 
-  require_once(__DIR__.'/../../vendor/autoload.php');
+  require_once __DIR__.'/../../vendor/autoload.php';
 
   if (!class_exists('PHPUnit_Framework_TestCase')) {
      abstract class PHPUnit_TestCase extends \PHPUnit\Framework\TestCase {}
@@ -90,10 +90,9 @@ namespace FluentDOM {
      *
      * @uses getFileName()
      */
-    protected function assertFluentDOMQueryEqualsXMLFile($functionName, $actual) {
+    protected function assertFluentDOMQueryEqualsXMLFile($functionName, Query $actual) {
       $fileName = $this->getFileName($functionName, 'tgt');
-      $this->assertInstanceOf(__NAMESPACE__.'\\Query', $actual);
-      $this->assertXmlStringEqualsXmlFile($fileName, (string)$actual);
+      $this->assertXmlStringEqualsXmlFile($fileName, (string)$actual->formatOutput());
     }
 
     /**
@@ -101,7 +100,7 @@ namespace FluentDOM {
      * @throws \UnexpectedValueException
      * @return Query
      */
-    protected function getQueryFixtureFromFunctionName($functionName) {
+    protected function getQueryFixtureFromFunctionName($functionName): Query {
       $fileName = $this->getFileName($functionName, 'src');
       if (!file_exists($fileName)) {
         throw new \UnexpectedValueException('File Not Found: '. $fileName);
@@ -113,16 +112,20 @@ namespace FluentDOM {
     }
 
     /**
-     * @param string $string
-     * @param null $xpath
+     * @param string|NULL $string
+     * @param string|NULL $xpath
      * @return Query
+     * @throws \OutOfBoundsException
+     * @throws \InvalidArgumentException
      */
-    protected function getQueryFixtureFromString($string = NULL, $xpath = NULL) {
+    protected function getQueryFixtureFromString($string = NULL, $xpath = NULL): Query {
       $fd = new Query();
+      /** @noinspection IsEmptyFunctionUsageInspection */
       if (!empty($string)) {
         $document = new \DOMDocument();
         $document->loadXML($string);
         $fd->load($document);
+        /** @noinspection IsEmptyFunctionUsageInspection */
         if (!empty($xpath)) {
           $query = new Xpath($document);
           $nodes = $query->evaluate($xpath);
@@ -138,11 +141,12 @@ namespace FluentDOM {
      * @param string $type
      * @return string
      */
-    protected function getFileName($functionName, $type) {
+    protected function getFileName($functionName, $type): string {
+      /** @noinspection SubStrUsedAsArrayAccessInspection */
       return sprintf(
         '%s/TestData/%s%s.%s.xml',
         empty($this->_directory) ? __DIR__ : $this->_directory,
-        strToLower(substr($functionName, 4, 1)),
+        strtolower(substr($functionName, 4, 1)),
         substr($functionName, 5),
         $type
       );

@@ -4,7 +4,7 @@ namespace FluentDOM\Query {
   use FluentDOM\Query;
   use FluentDOM\TestCase;
 
-  require_once(__DIR__.'/../../TestCase.php');
+  require_once __DIR__.'/../../TestCase.php';
 
   class TraversingGetTest extends TestCase {
 
@@ -18,10 +18,10 @@ namespace FluentDOM\Query {
     public function testGet() {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('/items/*');
       $this->assertSame(
-        array(
+        [
           $fd[0],
           $fd[1]
-        ),
+        ],
         $fd->get()
       );
     }

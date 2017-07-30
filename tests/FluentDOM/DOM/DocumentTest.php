@@ -2,7 +2,7 @@
 
 namespace FluentDOM\DOM {
 
-  require_once(__DIR__ . '/../TestCase.php');
+  require_once __DIR__ . '/../TestCase.php';
 
   use FluentDOM\Query;
   use FluentDOM\TestCase;
@@ -309,7 +309,7 @@ namespace FluentDOM\DOM {
      */
     public function testAppendElement() {
       $document = new Document();
-      $document->appendElement('test', 'text', array('attribute' => 'value'));
+      $document->appendElement('test', 'text', ['attribute' => 'value']);
       $this->assertXmlStringEqualsXmlString(
         '<test attribute="value">text</test>',
         $document->saveXML($document->documentElement)
@@ -324,7 +324,7 @@ namespace FluentDOM\DOM {
     public function testAppendElementWithNamespace() {
       $document = new Document();
       $document->registerNamespace('foo', 'urn:foo');
-      $document->appendElement('foo:test', 'text', array('foo:attribute' => 'value'));
+      $document->appendElement('foo:test', 'text', ['foo:attribute' => 'value']);
       $this->assertXmlStringEqualsXmlString(
         '<foo:test xmlns:foo="urn:foo" foo:attribute="value">text</foo:test>',
         $document->saveXML($document->documentElement)

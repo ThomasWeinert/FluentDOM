@@ -5,7 +5,7 @@ namespace FluentDOM\Serializer {
   use FluentDOM\TestCase;
   use FluentDOM\Transformer\JSONx;
 
-  require_once(__DIR__.'/../TestCase.php');
+  require_once __DIR__.'/../TestCase.php';
 
   class JSONxTest extends TestCase {
 

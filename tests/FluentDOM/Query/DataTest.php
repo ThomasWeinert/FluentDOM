@@ -4,7 +4,7 @@ namespace FluentDOM\Query {
   use FluentDOM\Query;
   use FluentDOM\TestCase;
 
-  require_once(__DIR__.'/../TestCase.php');
+  require_once __DIR__.'/../TestCase.php';
 
   class DataTest extends TestCase {
 
@@ -34,11 +34,11 @@ namespace FluentDOM\Query {
       $options->name = 'John';
       $data = new Data($document->documentElement);
       $this->assertEquals(
-        array(
+        [
           'role' => 'page',
           'hidden' => TRUE,
           'options' => $options
-        ),
+        ],
         $data->toArray()
       );
     }
@@ -54,9 +54,7 @@ namespace FluentDOM\Query {
       );
       $data = new Data($document->documentElement);
       $this->assertEquals(
-        array(
-          'optionsName' => 'John'
-        ),
+        ['optionsName' => 'John'],
         $data->toArray()
       );
     }
@@ -71,10 +69,10 @@ namespace FluentDOM\Query {
       );
       $data = new Data($document->documentElement);
       $this->assertEquals(
-        array(
+        [
           'role' => 'page',
           'hidden' => TRUE
-        ),
+        ],
         iterator_to_array($data)
       );
     }
@@ -166,50 +164,50 @@ namespace FluentDOM\Query {
      */
     public function testMagicMethodUnset() {
       $document = new \DOMDocument();
-      $document->loadXml('<node data-truth="true"/>');
+      $document->loadXML('<node data-truth="true"/>');
       $data = new Data($document->documentElement);
       unset($data->truth);
       $this->assertEquals(
-        '<node/>', $document->saveXml($document->documentElement)
+        '<node/>', $document->saveXML($document->documentElement)
       );
     }
 
     public static function provideDataAttributes() {
-      return array(
-        'string' => array('World', 'Hello', '<node data-hello="World"/>'),
-        'boolean true' => array(TRUE, 'truth', '<node data-truth="true"/>'),
-        'boolean false' => array(FALSE, 'lie', '<node data-lie="false"/>'),
-        'array' => array(
-          array('1', '2'),
+      return [
+        'string' => ['World', 'Hello', '<node data-hello="World"/>'],
+        'boolean true' => [TRUE, 'truth', '<node data-truth="true"/>'],
+        'boolean false' => [FALSE, 'lie', '<node data-lie="false"/>'],
+        'array' => [
+          ['1', '2'],
           'list',
           '<node data-list="[&quot;1&quot;,&quot;2&quot;]"/>'
-        ),
-        'object' => array(
-          self::createObjectFromArray(array('foo' => 'bar')),
+        ],
+        'object' => [
+          self::createObjectFromArray(['foo' => 'bar']),
           'object',
           '<node data-object="{&quot;foo&quot;:&quot;bar&quot;}"/>'
-        ),
-        'invalid object' => array(NULL, 'object', '<node data-object=\'{{"foo":"bar"}\'/>'),
-        'invalid attrbute' => array(NULL, 'unknown', '<node/>'),
-        'complex name' => array(1, 'complexName', '<node data-complex-name="1"/>'),
-        'abbreviation' => array(1, 'someABBRName', '<node data-some-abbr-name="1"/>')
-      );
+        ],
+        'invalid object' => [NULL, 'object', '<node data-object=\'{{"foo":"bar"}\'/>'],
+        'invalid attrbute' => [NULL, 'unknown', '<node/>'],
+        'complex name' => [1, 'complexName', '<node data-complex-name="1"/>'],
+        'abbreviation' => [1, 'someABBRName', '<node data-some-abbr-name="1"/>']
+      ];
     }
 
     public static function provideDataValues() {
-      return array(
-        'string' => array('<node data-hello="World"/>', 'hello', 'World'),
-        'boolean true' => array('<node data-truth="true"/>', 'truth', TRUE),
-        'boolean false' => array('<node data-lie="false"/>', 'lie', FALSE),
-        'array' => array('<node data-list="[&quot;1&quot;,&quot;2&quot;]"/>', 'list', array('1', '2')),
-        'object' => array(
+      return [
+        'string' => ['<node data-hello="World"/>', 'hello', 'World'],
+        'boolean true' => ['<node data-truth="true"/>', 'truth', TRUE],
+        'boolean false' => ['<node data-lie="false"/>', 'lie', FALSE],
+        'array' => ['<node data-list="[&quot;1&quot;,&quot;2&quot;]"/>', 'list', ['1', '2']],
+        'object' => [
           '<node data-object="{&quot;foo&quot;:&quot;bar&quot;}"/>',
           'object',
-          self::createObjectFromArray(array('foo' => 'bar'))
-        ),
-        'complex name' => array('<node data-say-hello="World"/>', 'sayHello', 'World'),
-        'abbreviation' => array('<node data-some-abbr-name="1"/>', 'someABBRName', 1),
-      );
+          self::createObjectFromArray(['foo' => 'bar'])
+        ],
+        'complex name' => ['<node data-say-hello="World"/>', 'sayHello', 'World'],
+        'abbreviation' => ['<node data-some-abbr-name="1"/>', 'someABBRName', 1],
+      ];
     }
 
     public static function createObjectFromArray($array) {
@@ -308,10 +306,10 @@ namespace FluentDOM\Query {
       $fd = $this->getQueryFixtureFromString(
         '<sample data-foo="bar" data-bar="foo"/>'
       )->find('//sample');
-      $fd->removeData(array('foo', 'bar'));
+      $fd->removeData(['foo', 'bar']);
       $this->assertEquals(
         '<sample/>',
-        $fd->document->saveXml($fd->document->documentElement)
+        $fd->document->saveXML($fd->document->documentElement)
       );
     }
 

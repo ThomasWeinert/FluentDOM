@@ -726,6 +726,7 @@ namespace FluentDOM {
      * @param callable $function
      * @param callable|bool|NULL $elementsFilter
      * @return $this|Nodes
+     * @throws \InvalidArgumentException
      */
     public function each(callable $function, $elementsFilter = NULL): Nodes {
       if (TRUE === $elementsFilter) {
@@ -760,6 +761,8 @@ namespace FluentDOM {
      * @param mixed $selector selector
      * @param int $options FIND_* options CONTEXT_DOCUMENT, FIND_MODE_FILTER, FIND_FORCE_SORT
      * @return Nodes
+     * @throws \OutOfBoundsException
+     * @throws \InvalidArgumentException
      */
     public function find($selector, int $options = 0) {
       list(
@@ -818,9 +821,9 @@ namespace FluentDOM {
     /**
      * @param string $selector
      * @param int $contextMode
-     * @return callable
+     * @return \Closure
      */
-    private function prepareSelectorAsFilter(string $selector, int $contextMode): callable {
+    private function prepareSelectorAsFilter(string $selector, int $contextMode): \Closure {
       $filter = $this->prepareSelector($selector, $contextMode);
       if (preg_match('(^(/{0,2})([a-z-]+::.*))ui', $filter, $matches)) {
         $filter = $matches[2];

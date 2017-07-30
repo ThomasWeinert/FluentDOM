@@ -82,7 +82,7 @@ namespace FluentDOM\Serializer {
      */
     public function __toString(): string {
       $json = json_encode($this, $this->_options, $this->_depth);
-      return ($json) ? $json : '';
+      return $json ?: '';
     }
 
     /**
@@ -94,7 +94,7 @@ namespace FluentDOM\Serializer {
       if ($node instanceof \DOMDocument) {
         $node = $node->documentElement;
       }
-      if (isset($node)) {
+      if ($node instanceof \DOMElement) {
         return $this->getNode($node);
       }
       return $this->getEmpty();
@@ -122,7 +122,7 @@ namespace FluentDOM\Serializer {
       case 'number' :
         return (float)$node->nodeValue;
       case 'boolean' :
-        return $node->nodeValue === 'true' ? TRUE : FALSE;
+        return $node->nodeValue === 'true';
       case 'null' :
         return NULL;
       default :
@@ -197,7 +197,9 @@ namespace FluentDOM\Serializer {
     private function getAllNamespaces(\DOMElement $node): array {
       $xpath = new Xpath($node->ownerDocument);
       $result = [];
-      foreach ($xpath->evaluate('namespace::*', $node) as $namespaceNode) {
+      /** @var \DOMNodeList $nodes */
+      $nodes = $xpath->evaluate('namespace::*', $node);
+      foreach ($nodes as $namespaceNode) {
         if (
           ($namespaceNode->nodeName !== 'xmlns:xml') &&
           ($namespaceNode->nodeName !== 'xmlns:xmlns')

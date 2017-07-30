@@ -29,8 +29,10 @@ namespace FluentDOM\DOM {
       Node\ParentNode {
 
     use
+      /** @noinspection TraitsPropertiesConflictsInspection */
       Node\ParentNode\Properties,
       Node\QuerySelector\Implementation,
+      /** @noinspection TraitsPropertiesConflictsInspection */
       Node\Xpath;
 
     /**
@@ -74,29 +76,32 @@ namespace FluentDOM\DOM {
      *
      * @param NULL|array|\Traversable|\DOMElement $namespaces
      * @return Namespaces
+     * @throws \InvalidArgumentException
      */
     public function namespaces($namespaces = NULL): Namespaces {
-      if (isset($namespaces) || (!$this->_namespaces instanceof Namespaces)) {
+      if (NULL !== $namespaces || (!$this->_namespaces instanceof Namespaces)) {
         $this->_namespaces = new Namespaces();
       }
-      if (isset($namespaces)) {
+      if (NULL !== $namespaces) {
         if ($namespaces instanceof \DOMElement) {
           $xpath = new Xpath($namespaces->ownerDocument);
+          /** @noinspection CallableParameterUseCaseInTypeContextInspection */
           $namespaces = $xpath('namespace::*', $namespaces);
         }
         if (is_array($namespaces) || $namespaces instanceof \Traversable) {
+          /** @noinspection ForeachSourceInspection */
           foreach ($namespaces as $key => $namespaceURI) {
             if ($namespaceURI instanceof \DOMNameSpaceNode) {
               if ($namespaceURI->nodeName === 'xmlns') {
                 $this->registerNamespace('#default', $namespaceURI->nodeValue);
-              } elseif ($namespaceURI->localName != 'xml') {
+              } elseif ($namespaceURI->localName !== 'xml') {
                 $this->registerNamespace($namespaceURI->localName, $namespaceURI->nodeValue);
               }
             } else {
               $this->registerNamespace($key, $namespaceURI);
             }
           }
-        } elseif (isset($namespaces)) {
+        } elseif (NULL !== $namespaces) {
           throw new \InvalidArgumentException(
             '$namespaces needs to be a list of namespaces or an element node to fetch the namespaces from.'
           );
@@ -110,6 +115,7 @@ namespace FluentDOM\DOM {
      *
      * @param string $prefix
      * @param string $namespaceURI
+     * @throws \InvalidArgumentException
      */
     public function registerNamespace(string $prefix, string $namespaceURI) {
       $this->namespaces()[empty($prefix) ? '#default' : $prefix] = $namespaceURI;
@@ -121,11 +127,12 @@ namespace FluentDOM\DOM {
      * @param string $data
      * @param NULL|array|\Traversable|\DOMElement $namespaces
      * @return bool
+     * @throws \InvalidArgumentException
      */
     public function appendXml($data, $namespaces = NULL): bool {
       $namespaces = $this->namespaces($namespaces);
-      if (count($namespaces) == 0) {
-        return parent::appendXml($data);
+      if (count($namespaces) === 0) {
+        return parent::appendXML($data);
       } else {
         $fragment = '<fragment';
         foreach ($namespaces as $key => $xmlns) {
@@ -153,6 +160,7 @@ namespace FluentDOM\DOM {
      * @param string $content
      * @param array $attributes
      * @return Element
+     * @throws \LogicException
      */
     public function appendElement(string $name, $content = '', array $attributes = NULL): Element {
       $this->appendChild(

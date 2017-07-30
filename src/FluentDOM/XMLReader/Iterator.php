@@ -50,6 +50,8 @@ namespace FluentDOM\XMLReader {
 
     /**
      * Throw an exception if rewind() is called after next()
+     *
+     * @throws \LogicException
      */
     public function rewind() {
       if ($this->_key >= 0) {
@@ -76,7 +78,12 @@ namespace FluentDOM\XMLReader {
      * @return bool
      */
     protected function move(XMLReader $reader, $name, $filter): bool {
-      return $reader->read($name, NULL, $filter);
+      while ($found = $reader->read($name, NULL, $filter)) {
+        if ($found && $reader->nodeType !== XMLReader::END_ELEMENT) {
+          return TRUE;
+        }
+      }
+      return FALSE;
     }
 
     /**

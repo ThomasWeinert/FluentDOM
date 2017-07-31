@@ -4,7 +4,7 @@ namespace FluentDOM\DOM\Node\QuerySelector {
 
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Element;
-  use FluentDOM\DOM\Xpath\Transformer;
+  use FluentDOM\Xpath\Transformer;
 
   trait Implementation {
 

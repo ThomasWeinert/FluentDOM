@@ -4,7 +4,7 @@ namespace FluentDOM\Node {
 
   use FluentDOM\TestCase;
   use FluentDOM\DOM\Document;
-  use FluentDOM\DOM\Xpath\Transformer;
+  use FluentDOM\Xpath\Transformer;
 
   require_once __DIR__.'/../../TestCase.php';
 

@@ -6,7 +6,7 @@
  * @copyright Copyright (c) 2009-2015 FluentDOM Contributors
  */
 
-namespace FluentDOM\DOM\Xpath {
+namespace FluentDOM\Xpath {
 
   /**
    * Interface for objects that convert a (css) selector string into an XPath expression for objects that provide an xpath expression when cast to string

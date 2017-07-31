@@ -1,11 +1,13 @@
 <?php
 
+use FluentDOM\Loadable;
+
 abstract class FluentDOM {
 
   /**
    * @var FluentDOM\Loadable
    */
-  private static $_loader = NULL;
+  private static $_loader;
 
   /**
    * @var array
@@ -20,7 +22,7 @@ abstract class FluentDOM {
   /**
    * @var FluentDOM\Serializer\Factory\Group
    */
-  private static $_serializerFactories = NULL;
+  private static $_serializerFactories;
 
   /**
    * Load a data source into a FluentDOM\DOM\Document
@@ -30,8 +32,8 @@ abstract class FluentDOM {
    * @param array $options
    * @return \FluentDOM\DOM\Document
    */
-  public static function load($source, string $contentType = 'text/xml', array $options = []) {
-    if (!isset(self::$_loader)) {
+  public static function load($source, string $contentType = 'text/xml', array $options = []): \FluentDOM\DOM\Document {
+    if (NULL === self::$_loader) {
       self::$_loader = self::getDefaultLoaders();
     }
     $result = self::$_loader->load($source, $contentType, $options);
@@ -53,6 +55,7 @@ abstract class FluentDOM {
    * @param \DOMNode|FluentDOM\Query $node
    * @param string $contentType
    * @return string
+   * @throws \FluentDOM\Exceptions\NoSerializer
    */
   public static function save($node, string $contentType = 'text/xml'): string {
     if ($node instanceof FluentDOM\Query) {
@@ -76,7 +79,7 @@ abstract class FluentDOM {
     $source = NULL, string $contentType = 'text/xml', array $options = []
   ): FluentDOM\Query {
     $query = new FluentDOM\Query();
-    if (isset($source)) {
+    if (NULL !== $source) {
       $query->load($source, $contentType, $options);
     }
     return $query;
@@ -110,6 +113,7 @@ abstract class FluentDOM {
    * If no loader is provided an FluentDOM\Loader\Standard() will be created.
    *
    * @param FluentDOM\Loadable|NULL $loader
+   * @throws \FluentDOM\Exceptions\InvalidArgument
    */
   public static function setLoader($loader) {
     if ($loader instanceof FluentDOM\Loadable) {
@@ -118,7 +122,7 @@ abstract class FluentDOM {
       self::$_loader = NULL;
     } else {
       throw new FluentDOM\Exceptions\InvalidArgument(
-        'loader', ['FluentDOM\Loadable']
+        'loader', [Loadable::class]
       );
     }
   }
@@ -129,6 +133,7 @@ abstract class FluentDOM {
    * @param FluentDOM\Loadable|callable $loader
    * @param string[] $contentTypes
    * @return FluentDOM\Loaders
+   * @throws \UnexpectedValueException
    */
   public static function registerLoader($loader, string ...$contentTypes): FluentDOM\Loaders {
     $loaders = self::getDefaultLoaders();
@@ -207,28 +212,29 @@ abstract class FluentDOM {
    * Get a xpath expression builder to convert css selectors to xpath
    *
    * @param string $errorMessage
-   * @return \FluentDOM\DOM\Xpath\Transformer
+   * @return \FluentDOM\Xpath\Transformer
+   * @throws \LogicException
    */
   public static function getXPathTransformer(
     string $errorMessage = 'No CSS selector support installed'
-  ): \FluentDOM\DOM\Xpath\Transformer {
-    foreach (FluentDOM::$_xpathTransformers as $index => $transformer) {
+  ): \FluentDOM\Xpath\Transformer {
+    foreach (self::$_xpathTransformers as $index => $transformer) {
       if (is_string($transformer) && class_exists($transformer)) {
-        FluentDOM::$_xpathTransformers[$index] = new $transformer();
+        self::$_xpathTransformers[$index] = new $transformer();
       } elseif (is_callable($transformer)) {
-        FluentDOM::$_xpathTransformers[$index] = $transformer();
+        self::$_xpathTransformers[$index] = $transformer();
       }
-      if (FluentDOM::$_xpathTransformers[$index] instanceof \FluentDOM\DOM\Xpath\Transformer) {
-        return FluentDOM::$_xpathTransformers[$index];
+      if (self::$_xpathTransformers[$index] instanceof \FluentDOM\Xpath\Transformer) {
+        return self::$_xpathTransformers[$index];
       } else {
-        unset(FluentDOM::$_xpathTransformers[$index]);
+        unset(self::$_xpathTransformers[$index]);
       }
     }
     throw new \LogicException($errorMessage);
   }
 
   /**
-   * @param string|callable|FluentDOM\DOM\Xpath\Transformer $transformer
+   * @param string|callable|FluentDOM\Xpath\Transformer $transformer
    * @param bool $reset
    */
   public static function registerXpathTransformer($transformer, bool $reset = FALSE) {

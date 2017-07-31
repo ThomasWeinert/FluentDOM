@@ -166,7 +166,7 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
    * @covers FluentDOM
    */
   public function testGetXPathTransformerAfterRegister() {
-    $transformer = $this->getMockBuilder(FluentDOM\DOM\Xpath\Transformer::class)->getMock();
+    $transformer = $this->getMockBuilder(FluentDOM\Xpath\Transformer::class)->getMock();
     FluentDOM::registerXpathTransformer($transformer, TRUE);
     $this->assertSame(
       $transformer,
@@ -180,7 +180,7 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
    * @covers FluentDOM
    */
   public function testGetXPathTransformerAfterRegisterWithCallback() {
-    $transformer = $this->getMockBuilder(\FluentDOM\DOM\Xpath\Transformer::class)->getMock();
+    $transformer = $this->getMockBuilder(\FluentDOM\Xpath\Transformer::class)->getMock();
     FluentDOM::registerXpathTransformer(
       function() use ($transformer) {
         return $transformer;
@@ -309,10 +309,10 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
   }
 }
 
-class FluentDOMXpathTransformer_TestProxy implements \FluentDOM\DOM\Xpath\Transformer {
+class FluentDOMXpathTransformer_TestProxy implements \FluentDOM\Xpath\Transformer {
   public function toXpath(
     string $selector,
-    int $contextMode = FluentDOM\DOM\Xpath\Transformer::CONTEXT_CHILDREN,
+    int $contextMode = FluentDOM\Xpath\Transformer::CONTEXT_CHILDREN,
     bool $isHtml = false):string {
     return '';
   }

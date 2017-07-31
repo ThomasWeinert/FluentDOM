@@ -135,7 +135,7 @@ namespace FluentDOM\Loader\Text {
      * @param array|NULL $columns
      * @return array
      */
-    private function getHeaders(array $record, $hasHeaderLine, $columns = NULL) {
+    private function getHeaders(array $record, $hasHeaderLine, $columns = NULL): array {
       if (is_array($columns)) {
         $headers = [];
         foreach ($record as $index => $field) {
@@ -143,11 +143,11 @@ namespace FluentDOM\Loader\Text {
           $headers[$index] = $columns[$key] ?? FALSE;
         }
         return $headers;
-      } elseif ($hasHeaderLine) {
-        return $record;
-      } else {
-        return array_keys($record);
       }
+      if ($hasHeaderLine) {
+        return $record;
+      }
+      return array_keys($record);
     }
 
     /**
@@ -193,7 +193,7 @@ namespace FluentDOM\Loader\Text {
      * @return Options
      * @throws \InvalidArgumentException
      */
-    public function getOptions($options) {
+    public function getOptions($options): Options {
       $result = new Options(
         $options,
         [

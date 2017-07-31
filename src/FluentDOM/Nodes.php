@@ -98,11 +98,14 @@ namespace FluentDOM {
     /**
      * @param mixed $source
      * @param NULL|string $contentType
+     * @throws \FluentDOM\Exceptions\InvalidSource\Variable
+     * @throws \InvalidArgumentException
+     * @throws \OutOfBoundsException
      */
     public function __construct($source = NULL, string $contentType = NULL) {
-      if (isset($source)) {
+      if (NULL !== $source) {
         $this->load($source, $contentType);
-      } elseif (isset($contentType)) {
+      } elseif (NULL !== $contentType) {
         $this->setContentType($contentType);
       }
     }
@@ -116,6 +119,8 @@ namespace FluentDOM {
      * @param array|\Traversable|Options $options
      * @throws \InvalidArgumentException
      * @return $this
+     * @throws \FluentDOM\Exceptions\InvalidSource\Variable
+     * @throws \OutOfBoundsException
      */
     public function load($source, string $contentType = NULL, $options = []) {
       $contentType = $contentType ?: 'text/xml';
@@ -174,14 +179,14 @@ namespace FluentDOM {
      * @return Loadable
      */
     public function loaders($loaders = NULL): Loadable {
-      if (isset($loaders)) {
+      if (NULL !== $loaders) {
         if ($loaders instanceOf Loadable) {
           $this->_loaders = $loaders;
         } elseif (is_array($loaders) || $loaders instanceOf \Traversable) {
           $this->_loaders = new Loaders($loaders);
         } else {
           throw new Exceptions\InvalidArgument(
-            'loaders', ['FluentDOM\Loadable', 'array', '\Traversable']
+            'loaders', [Loadable::class, 'array', \Traversable::class]
           );
         }
       } elseif (NULL === $this->_loaders) {
@@ -200,14 +205,12 @@ namespace FluentDOM {
     public function getLoadingOptions($contentType = NULL) {
       $contentType = $contentType ?: $this->_contentType;
       if (
-        isset($this->_loadingContext) &&
-        isset($this->_loadingContext['contentType']) &&
-        $this->_loadingContext['contentType'] == $contentType
+        isset($this->_loadingContext, $this->_loadingContext['contentType']) &&
+        $this->_loadingContext['contentType'] === $contentType
       ) {
         return $this->_loadingContext['options'];
-      } else {
-        return [];
       }
+      return [];
     }
 
     /**
@@ -218,7 +221,7 @@ namespace FluentDOM {
      * @return \DOMElement|\DOMNode|NULL
      */
     public function item(int $position) {
-      return isset($this->_nodes[$position]) ? $this->_nodes[$position] : NULL;
+      return $this->_nodes[$position] ?? NULL;
     }
 
     /**
@@ -227,11 +230,10 @@ namespace FluentDOM {
      * @return Xpath|\DOMNodeList|float|string
      */
     public function xpath(string $expression = NULL, \DOMNode $contextNode = NULL) {
-      if (isset($expression)) {
+      if (NULL !== $expression) {
         return $this->getXpath()->evaluate($expression, $contextNode);
-      } else {
-        return $this->getXpath();
       }
+      return $this->getXpath();
     }
 
     /**
@@ -240,15 +242,13 @@ namespace FluentDOM {
     private function getXpath(): Xpath {
       if ($this->_document instanceof Document) {
         return $this->_document->xpath();
-      } elseif (
-        isset($this->_xpath) && ($this->_xpath->document === $this->_document)
-      ) {
-        return $this->_xpath;
-      } else {
-        $this->_xpath = new Xpath($this->getDocument());
-        $this->applyNamespaces();
+      }
+      if ((NULL !== $this->_xpath) && ($this->_xpath->document === $this->_document)) {
         return $this->_xpath;
       }
+      $this->_xpath = new Xpath($this->getDocument());
+      $this->applyNamespaces();
+      return $this->_xpath;
     }
 
     /**
@@ -256,19 +256,22 @@ namespace FluentDOM {
      *
      * @param string $prefix
      * @param string $namespaceURI
+     * @throws \LogicException
      */
     public function registerNamespace(string $prefix, string $namespaceURI) {
       $this->_namespaces[$prefix] = $namespaceURI;
       $document = $this->getDocument();
       if ($document instanceOf Document) {
         $document->registerNamespace($prefix, $namespaceURI);
-      } elseif (isset($this->_xpath)) {
+      } elseif (NULL !== $this->_xpath) {
         $this->_xpath->registerNamespace($prefix, $namespaceURI);
       }
     }
 
     /**
      * apply stored namespaces to attached document or xpath object
+     *
+     * @throws \LogicException
      */
     private function applyNamespaces() {
       $document = $this->getDocument();
@@ -276,7 +279,7 @@ namespace FluentDOM {
         foreach ($this->_namespaces as $prefix => $namespaceURI) {
           $document->registerNamespace($prefix, $namespaceURI);
         }
-      } elseif (isset($this->_xpath)) {
+      } elseif (NULL !== $this->_xpath) {
         foreach ($this->_namespaces as $prefix => $namespaceURI) {
           $this->_xpath->registerNamespace($prefix, $namespaceURI);
         }
@@ -347,12 +350,11 @@ namespace FluentDOM {
         'text/html' => 'text/html'
       ];
       $normalizedValue = strtolower($value);
+      $newContentType = $value;
       if (array_key_exists($normalizedValue, $mapping)) {
         $newContentType = $mapping[$normalizedValue];
-      } else {
-        $newContentType = $value;
       }
-      if (isset($this->_parent) && $this->_contentType != $newContentType) {
+      if (NULL !== $this->_parent && $this->_contentType !== $newContentType) {
         $this->_parent->contentType = $newContentType;
       }
       $this->_contentType = $newContentType;
@@ -362,6 +364,7 @@ namespace FluentDOM {
      * Get the associated DOM, create one if here isn't one yet.
      *
      * @return \DOMDocument|Document
+     * @throws \LogicException
      */
     public function getDocument(): \DOMDocument {
       if (!($this->_document instanceof \DOMDocument)) {
@@ -378,7 +381,7 @@ namespace FluentDOM {
      * @return string
      */
     public function prepareSelector(string $selector, int $contextMode): string {
-      if (isset($this->_onPrepareSelector)) {
+      if (NULL !== $this->_onPrepareSelector) {
         return call_user_func($this->_onPrepareSelector, $selector, $contextMode);
       }
       return $selector;
@@ -395,17 +398,18 @@ namespace FluentDOM {
     public function getSelectorCallback($selector) {
       if (NULL === $selector || Constraints::filterCallable($selector)) {
         return $selector;
-      } elseif ($selector instanceof \DOMNode) {
+      }
+      if ($selector instanceof \DOMNode) {
         return function(\DOMNode $node) use ($selector) {
           return $node->isSameNode($selector);
         };
-      } elseif (is_string($selector) && $selector !== '') {
+      }
+      if (is_string($selector) && $selector !== '') {
         return function(\DOMNode $node) use ($selector) {
           return $this->matches($selector, $node);
         };
-      } elseif (
-        $selector instanceof \Traversable || is_array($selector)
-      ) {
+      }
+      if ($selector instanceof \Traversable || is_array($selector)) {
         return function(\DOMNode $node) use ($selector) {
           foreach ($selector as $compareWith) {
             if (
@@ -434,9 +438,8 @@ namespace FluentDOM {
       );
       if ($check instanceof \DOMNodeList) {
         return $check->length > 0;
-      } else {
-        return (bool)$check;
       }
+      return (bool)$check;
     }
 
     /**************
@@ -493,7 +496,7 @@ namespace FluentDOM {
      * @return \DOMElement|\DOMNode|NULL
      */
     public function offsetGet($offset) {
-      return isset($this->_nodes[$offset]) ? $this->_nodes[$offset] : NULL;
+      return $this->_nodes[$offset] ?? NULL;
     }
 
     /**
@@ -532,7 +535,7 @@ namespace FluentDOM {
       case 'xpath' :
         return TRUE;
       case 'document' :
-        return isset($this->_document);
+        return NULL !== $this->_document;
       }
       return FALSE;
     }
@@ -542,6 +545,7 @@ namespace FluentDOM {
      *
      * @param string $name
      * @throws \UnexpectedValueException
+     * @throws \LogicException
      * @return mixed
      */
     public function __get(string $name) {
@@ -567,6 +571,7 @@ namespace FluentDOM {
      * @param string $name
      * @param mixed $value
      * @throws \BadMethodCallException
+     * @throws \InvalidArgumentException
      */
     public function __set(string $name, $value) {
       switch ($name) {
@@ -622,13 +627,13 @@ namespace FluentDOM {
      * Return the output of the internal dom document
      *
      * @return string
+     * @throws \FluentDOM\Exceptions\NoSerializer
      */
     public function toString(): string {
       if ($serializer = $this->serializerFactories()->createSerializer($this->contentType, $this->document)) {
         return (string)$serializer;
-      } else {
-        throw new Exceptions\NoSerializer($this->contentType);
       }
+      throw new Exceptions\NoSerializer($this->contentType);
     }
 
     /**
@@ -638,6 +643,7 @@ namespace FluentDOM {
      */
     public function __toString(): string {
       try {
+        /** @noinspection MagicMethodsValidityInspection */
         return $this->toString();
       } catch (\Throwable $e) {
         return '';
@@ -654,6 +660,7 @@ namespace FluentDOM {
      *
      * @param array|\Traversable|\DOMNode|Nodes $elements
      * @return static
+     * @throws \LogicException
      * @throws \OutOfBoundsException
      * @throws \InvalidArgumentException
      */
@@ -779,16 +786,16 @@ namespace FluentDOM {
           NULL,
           $fetchOptions
         );
-      } elseif ($selectorIsScalar) {
+      }
+      if ($selectorIsScalar) {
         return $this->fetch(
           $this->prepareSelector($selector, $contextMode),
           NULL,
           NULL,
           $fetchOptions
         );
-      } else {
-        return $this->fetch($expression, $selector, NULL, $fetchOptions);
       }
+      return $this->fetch($expression, $selector, NULL, $fetchOptions);
     }
 
     /**
@@ -852,12 +859,11 @@ namespace FluentDOM {
             )',
             $this->_nodes[0]
           );
-        } else {
-          $callback = $this->getSelectorCallback($selector);
-          foreach ($this->_nodes as $index => $node) {
-            if ($callback($node)) {
-              return $index;
-            }
+        }
+        $callback = $this->getSelectorCallback($selector);
+        foreach ($this->_nodes as $index => $node) {
+          if ($callback($node)) {
+            return $index;
           }
         }
       }
@@ -911,7 +917,7 @@ namespace FluentDOM {
      * @param Serializer\Factory\Group|NULL $factories
      * @return Serializer\Factory\Group
      */
-    public function serializerFactories(Serializer\Factory\Group $factories = NULL) {
+    public function serializerFactories(Serializer\Factory\Group $factories = NULL): Serializer\Factory\Group {
       if (NULL !== $factories) {
         $this->_serializerFactories = $factories;
       } elseif (NULL === $this->_serializerFactories) {

@@ -24,16 +24,14 @@ namespace FluentDOM\Utility {
      */
     public static function filterNode($node, $ignoreTextNodes = FALSE) {
       if (
+        $node instanceof \DOMElement ||
         (
-          $node instanceof \DOMElement ||
+          !$ignoreTextNodes &&
           (
-            !$ignoreTextNodes &&
+            $node instanceof \DOMCdataSection ||
             (
-              $node instanceof \DOMCdataSection ||
-              (
-                $node instanceof \DOMText &&
-                !$node->isWhitespaceInElementContent()
-              )
+              $node instanceof \DOMText &&
+              !$node->isWhitespaceInElementContent()
             )
           )
         )
@@ -47,6 +45,7 @@ namespace FluentDOM\Utility {
      * @param mixed $node
      * @param string $message
      * @return bool
+     * @throws \InvalidArgumentException
      */
     public static function assertNode($node, $message = 'DOMNode expected, got: %s.'): bool {
       if (!($node instanceof \DOMNode)) {
@@ -90,12 +89,14 @@ namespace FluentDOM\Utility {
     public static function filterCallable($callback, $allowGlobalFunctions = FALSE, $silent = TRUE) {
       if ($callback instanceof \Closure) {
         return $callback;
-      } elseif (
+      }
+      if (
         (is_string($callback) && $allowGlobalFunctions) ||
         self::filterCallableArray($callback)
       ) {
         return is_callable($callback) ? $callback : NULL;
-      } elseif ($silent) {
+      }
+      if ($silent) {
         return NULL;
       }
       throw new \InvalidArgumentException('Invalid callback argument');
@@ -109,10 +110,10 @@ namespace FluentDOM\Utility {
      */
     private static function filterCallableArray($callback) {
       return (
-       is_array($callback) &&
-       count($callback) === 2 &&
-       (is_object($callback[0]) || is_string($callback[0])) &&
-       is_string($callback[1])
+        is_array($callback) &&
+        count($callback) === 2 &&
+        (is_object($callback[0]) || is_string($callback[0])) &&
+        is_string($callback[1])
       );
     }
 

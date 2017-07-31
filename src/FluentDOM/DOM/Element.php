@@ -22,8 +22,8 @@ namespace FluentDOM\DOM {
    * @property-read Element $previousElementSibling
    * @property-read Element $firstElementChild
    * @property-read Element $lastElementChild
-   * @property-read \DOMNode|Node\ChildNode|Node\NonDocumentTypeChildNode $firstChild
-   * @property-read \DOMNode|Node\ChildNode|Node\NonDocumentTypeChildNode $lastChild
+   * @property-read \DOMNode|Node\ChildNode|Node\NonDocumentTypeChildNode|Node $firstChild
+   * @property-read \DOMNode|Node\ChildNode|Node\NonDocumentTypeChildNode|Node $lastChild
    */
   class Element
     extends \DOMElement

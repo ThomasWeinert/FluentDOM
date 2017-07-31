@@ -33,6 +33,7 @@ namespace FluentDOM\Loader\PHP {
      * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return Document|Result|NULL
+     * @throws \LogicException
      */
     public function load($source, string $contentType, $options = []) {
       if ($source instanceof \PDOStatement) {
@@ -56,6 +57,7 @@ namespace FluentDOM\Loader\PHP {
      * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return DocumentFragment|NULL
+     * @throws \FluentDOM\Exceptions\InvalidFragmentLoader
      */
     public function loadFragment($source, string $contentType, $options = []) {
       throw new InvalidFragmentLoader(self::class);

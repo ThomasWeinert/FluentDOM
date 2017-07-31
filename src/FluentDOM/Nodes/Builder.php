@@ -53,9 +53,11 @@ namespace FluentDOM\Nodes {
       }
       if ($content instanceof \DOMElement) {
         return [$content];
-      } elseif ($includeTextNodes && Constraints::filterNode($content)) {
+      }
+      if ($includeTextNodes && Constraints::filterNode($content)) {
         return [$content];
-      } elseif (Constraints::filterNodeList($content)) {
+      }
+      if (Constraints::filterNodeList($content)) {
         return $this->getLimitedArray($content, $limit);
       }
       return NULL;
@@ -72,7 +74,8 @@ namespace FluentDOM\Nodes {
     public function getTargetNodes($selector, \DOMNode $context = NULL) {
       if ($nodes = $this->getNodeList($selector)) {
         return $nodes;
-      } elseif (is_string($selector)) {
+      }
+      if (is_string($selector)) {
         $result = $this->getOwner()->xpath(
           $this->getOwner()->prepareSelector(
             $selector,
@@ -106,13 +109,12 @@ namespace FluentDOM\Nodes {
       }
       if (!is_array($result) || empty($result)) {
         throw new Exceptions\LoadingError\EmptyResult();
-      } else {
-        //if a node is not in the current document import it
-        $document = $this->getOwner()->getDocument();
-        foreach ($result as $index => $node) {
-          if ($node->ownerDocument !== $document) {
-            $result[$index] = $document->importNode($node, TRUE);
-          }
+      }
+      //if a node is not in the current document import it
+      $document = $this->getOwner()->getDocument();
+      foreach ($result as $index => $node) {
+        if ($node->ownerDocument !== $document) {
+          $result[$index] = $document->importNode($node, TRUE);
         }
       }
       return $result;
@@ -123,6 +125,7 @@ namespace FluentDOM\Nodes {
      *
      * @param mixed $content
      * @return \DOMElement
+     * @throws \FluentDOM\Exceptions\LoadingError\EmptyResult
      */
     public function getContentElement($content): \DOMElement {
       $contentNodes = $this->getContentNodes($content, FALSE, 1);
@@ -188,6 +191,7 @@ namespace FluentDOM\Nodes {
      *
      * @param \DOMNode $context
      * @return string
+     * @throws \LogicException
      */
     public function getInnerXml(\DOMNode $context): string {
       $result = '';
@@ -236,14 +240,13 @@ namespace FluentDOM\Nodes {
       if ($limit > 0) {
         if (is_array($nodes)) {
           return array_slice($nodes, 0, $limit);
-        } else {
-          return iterator_to_array(
-            new \LimitIterator(
-              new \IteratorIterator($nodes), 0, $limit
-            ),
-            FALSE
-          );
         }
+        return iterator_to_array(
+          new \LimitIterator(
+            new \IteratorIterator($nodes), 0, $limit
+          ),
+          FALSE
+        );
       }
       return is_array($nodes) ? $nodes : iterator_to_array($nodes, FALSE);
     }

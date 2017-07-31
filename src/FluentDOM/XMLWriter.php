@@ -93,9 +93,8 @@ namespace FluentDOM {
     public function writeElementNS($prefix, $name, $uri, $content = NULL) {
       if ($this->_xmlnsStack->isDefined($prefix, $uri)) {
         return parent::writeElement(empty($prefix) ? $name : $prefix.':'.$name, $content);
-      } else {
-        return parent::writeElementNS(empty($prefix) ? NULL : $prefix, $name, $uri, $content);
       }
+      return parent::writeElementNS(empty($prefix) ? NULL : $prefix, $name, $uri, $content);
     }
 
     /**
@@ -138,11 +137,11 @@ namespace FluentDOM {
     public function startAttributeNS($prefix, $name, $uri) {
       if (empty($prefix)) {
         return parent::startAttribute($name);
-      } elseif ($this->_xmlnsStack->isDefined($prefix, $uri)) {
-        return parent::startAttribute($prefix.':'.$name);
-      } else {
-        return parent::startAttributeNS($prefix, $name, $uri);
       }
+      if ($this->_xmlnsStack->isDefined($prefix, $uri)) {
+        return parent::startAttribute($prefix.':'.$name);
+      }
+      return parent::startAttributeNS($prefix, $name, $uri);
     }
 
     /**
@@ -153,23 +152,23 @@ namespace FluentDOM {
      * @return bool
      */
     public function writeAttributeNS($prefix, $localName, $uri, $content) {
-      if ((empty($prefix) && $localName == 'xmlns') || $prefix == 'xmlns') {
+      if ((empty($prefix) && $localName === 'xmlns') || $prefix === 'xmlns') {
         $namespacePrefix = empty($prefix) ? '' : $localName;
         $namespaceURI = $content;
         if (!$this->_xmlnsStack->isDefined($namespacePrefix, $namespaceURI)) {
           $result = parent::writeAttribute(empty($prefix) ? 'xmlns' : 'xmlns:'.$localName, $namespaceURI);
           $this->_xmlnsStack->add($namespacePrefix, $namespaceURI);
           return $result;
-        } else {
-          return FALSE;
         }
-      } elseif (empty($prefix)) {
-        return parent::writeAttribute($localName, $content);
-      } elseif ($this->_xmlnsStack->isDefined($prefix, $uri)) {
-        return parent::writeAttribute($prefix.':'.$localName, $content);
-      } else {
-        return parent::writeAttributeNS($prefix, $localName, $uri, $content);
+        return FALSE;
       }
+      if (empty($prefix)) {
+        return parent::writeAttribute($localName, $content);
+      }
+      if ($this->_xmlnsStack->isDefined($prefix, $uri)) {
+        return parent::writeAttribute($prefix.':'.$localName, $content);
+      }
+      return parent::writeAttributeNS($prefix, $localName, $uri, $content);
     }
 
     /**
@@ -228,7 +227,10 @@ namespace FluentDOM {
         $this->writeAttributeNS($node->prefix, $node->localName, $node->namespaceURI, $node->value);
         return;
       default :
-        $this->collapse($node->childNodes, $maximumDepth);
+        /** @noinspection UnSafeIsSetOverArrayInspection */
+        if (isset($node->childNodes)) {
+          $this->collapse($node->childNodes, $maximumDepth);
+        }
         return;
       }
     }

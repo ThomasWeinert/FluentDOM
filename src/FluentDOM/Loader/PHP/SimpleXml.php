@@ -59,20 +59,23 @@ namespace FluentDOM\Loader\PHP {
      * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return DocumentFragment|NULL
+     * @throws \FluentDOM\Exceptions\InvalidArgument
      */
     public function loadFragment($source, string $contentType, $options = []) {
       if (!$this->supports($contentType)) {
         return NULL;
-      } elseif (is_string($source)) {
+      }
+      if (is_string($source)) {
         $this->_xmlLoader = $this->_xmlLoader ?: new Xml();
         return $this->_xmlLoader->loadFragment($source, 'text/xml');
-      } elseif ($source instanceof \SimpleXMLElement) {
+      }
+      if ($source instanceof \SimpleXMLElement) {
         $node = dom_import_simplexml($source);
         $fragment = $node->ownerDocument->createDocumentFragment();
         $fragment->appendChild($node->cloneNode(TRUE));
         return $fragment;
       }
-      throw new InvalidArgument('source', ['SimpleXMLElement', 'string']);
+      throw new InvalidArgument('source', [\SimpleXMLElement::class, 'string']);
     }
   }
 }

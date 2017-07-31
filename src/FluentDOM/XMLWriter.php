@@ -185,7 +185,7 @@ namespace FluentDOM {
         $this->collapseNode($nodes, $maximumDepth);
       } elseif ($nodes instanceof \Traversable || is_array($nodes)) {
         foreach ($nodes as $childNode) {
-          $this->collapse($childNode, $maximumDepth - 1);
+          $this->collapse($childNode, $maximumDepth);
         }
       }
     }
@@ -196,14 +196,10 @@ namespace FluentDOM {
      */
     private function collapseNode(\DOMNode $node, int $maximumDepth) {
       switch ($node->nodeType) {
-      case XML_DOCUMENT_NODE :
-        /** @var \DOMDocument $node */
-        $this->collapse($node->documentElement, $maximumDepth);
-        return;
       case XML_ELEMENT_NODE :
         $this->startElementNS($node->prefix, $node->localName, $node->namespaceURI);
-        $this->collapse($node->attributes, $maximumDepth);
-        $this->collapse($node->childNodes, $maximumDepth);
+        $this->collapse($node->attributes, $maximumDepth - 1);
+        $this->collapse($node->childNodes, $maximumDepth - 1);
         $this->endElement();
         return;
       case XML_TEXT_NODE :

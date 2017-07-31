@@ -15,13 +15,17 @@ namespace FluentDOM\Transformer\Namespaces {
   class ReplaceTest extends TestCase {
 
     /**
-     * @covers \FluentDOM\Transformer\Namespaces\Replace
+     * @covers       \FluentDOM\Transformer\Namespaces\Replace
      * @dataProvider provideOptimizeExamples
+     * @param string $expected
+     * @param string $xml
+     * @param array $namespaces
+     * @param array $prefixes
      */
-    public function testReplace($expected, $xml, $namespaces) {
+    public function testReplace($expected, $xml, $namespaces, $prefixes = []) {
       $document = new \DOMDocument();
-      $document->loadXml($xml);
-      $replace = new Replace($document, $namespaces);
+      $document->loadXML($xml);
+      $replace = new Replace($document, $namespaces, $prefixes);
       $this->assertXmlStringEqualsXmlString(
         $expected, (string)$replace
       );
@@ -50,6 +54,16 @@ namespace FluentDOM\Transformer\Namespaces {
             'urn:foo' => 'urn:bar'
           ]
         ],
+        'Replace namespace and prefix' => [
+          '<b:root xmlns:b="urn:bar"/>',
+          '<foo:root xmlns:foo="urn:foo"/>',
+          [
+            'urn:foo' => 'urn:bar'
+          ],
+          [
+            'urn:bar' => 'b'
+          ]
+        ],
         'Remove namespace on attribute' => [
           '<root attr="value"/>',
           '<foo:root xmlns:foo="urn:foo" foo:attr="value"/>',
@@ -69,6 +83,16 @@ namespace FluentDOM\Transformer\Namespaces {
           '<root xmlns:foo="urn:foo" foo:attr="value"/>',
           [
             'urn:foo' => 'urn:bar'
+          ]
+        ],
+        'Replace namespace and prefix on attributes' => [
+          '<root xmlns:b="urn:bar" b:attr="value"/>',
+          '<root xmlns:foo="urn:foo" foo:attr="value"/>',
+          [
+            'urn:foo' => 'urn:bar'
+          ],
+          [
+            'urn:bar' => 'b'
           ]
         ],
         'Copy text nodes' => [

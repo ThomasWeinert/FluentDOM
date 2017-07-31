@@ -8,7 +8,7 @@
 
 namespace FluentDOM\Transformer\Namespaces {
 
-  use FluentDOM\DOM\Document;
+  use FluentDOM\Transformer\Namespaces;
 
   /**
    * Replace namespaces in a document, prefixes are copied, but might be optimized by
@@ -17,51 +17,29 @@ namespace FluentDOM\Transformer\Namespaces {
    * Attributes and Elements without a namespace get their prefix removed.
    * A change from no namespace to a namespace will not affect attributes.
    */
-  class Replace {
-
-    /**
-     * @var \DOMDocument
-     */
-    private $_document = NULL;
+  class Replace extends Namespaces {
 
     /**
      * @var array
      */
-    private $_namespaces = [];
+    private $_namespaces;
 
-    public function __construct(
-      \DOMDocument $document, array $namespaces
-    ) {
-      $this->_document = $document;
+    /**
+     * @var array
+     */
+    private $_prefixes;
+
+    public function __construct(\DOMNode $node, array $namespaces, array $prefixes = []) {
+      parent::__construct($node);
       $this->_namespaces = $namespaces;
-    }
-
-    /**
-     * Create a document with the replaced namespaces and return it
-     * as XML string.
-     *
-     * @return string
-     */
-    public function __toString(): string {
-      return $this->getDocument()->saveXml();
-    }
-
-    /**
-     * Create a document with the replaced namespaces.
-     */
-    public function getDocument(): Document {
-      $result = new Document($this->_document->xmlVersion, $this->_document->xmlEncoding);
-      foreach ($this->_document->childNodes as $childNode) {
-         $this->importNode($result, $childNode);
-      }
-      return $result;
+      $this->_prefixes = $prefixes;
     }
 
     /**
      * @param \DOMNode $parent
      * @param \DOMNode $source
      */
-    private function importNode(\DOMNode $parent, \DOMNode $source) {
+    protected function addNode(\DOMNode $parent, \DOMNode $source) {
       if ($source instanceof \DOMElement) {
         $this->importElement($parent, $source);
       } else {
@@ -77,17 +55,20 @@ namespace FluentDOM\Transformer\Namespaces {
     private function importElement(\DOMNode $parent, \DOMElement $source) {
       $document = $parent instanceof \DOMDocument ? $parent : $parent->ownerDocument;
       $namespaceURI = $this->getMappedNamespace((string)$source->namespaceURI);
+      $prefix = $this->getMappedPrefix($namespaceURI);
       if (empty($namespaceURI)) {
         $child = $document->createElement($source->localName);
-      } else {
+      } elseif ($prefix === NULL) {
         $child = $document->createElementNS($namespaceURI, $source->nodeName);
+      } else {
+        $child = $document->createElementNS($namespaceURI, $prefix.':'.$source->localName);
       }
       $parent->appendChild($child);
       foreach ($source->attributes as $attribute) {
         $this->importAttribute($child, $attribute);
       }
       foreach ($source->childNodes as $childNode) {
-        $this->importNode($child, $childNode);
+        $this->addNode($child, $childNode);
       }
     }
 
@@ -98,10 +79,11 @@ namespace FluentDOM\Transformer\Namespaces {
     private function importAttribute(\DOMElement $parent, \DOMAttr $source) {
       $document = $parent instanceof \DOMDocument ? $parent : $parent->ownerDocument;
       $namespaceURI = $this->getMappedNamespace((string)$source->namespaceURI);
-      if (empty($namespaceURI) || empty($source->prefix)) {
+      $prefix = $this->getMappedPrefix($namespaceURI) ?? $source->prefix;
+      if (empty($namespaceURI) || empty($prefix)) {
         $attribute = $document->createAttribute($source->localName);
       } else {
-        $attribute = $document->createAttributeNS($namespaceURI, $source->nodeName);
+        $attribute = $document->createAttributeNS($namespaceURI, $prefix.':'.$source->localName);
       }
       $attribute->value = $source->value;
       $parent->setAttributeNode($attribute);
@@ -116,6 +98,17 @@ namespace FluentDOM\Transformer\Namespaces {
         return (string)$this->_namespaces[$namespaceURI];
       }
       return $namespaceURI;
+    }
+
+    /**
+     * @param string $namespaceURI
+     * @return string|NULL
+     */
+    private function getMappedPrefix(string $namespaceURI) {
+      if (isset($this->_prefixes[$namespaceURI])) {
+        return (string)$this->_prefixes[$namespaceURI];
+      }
+      return NULL;
     }
   }
 }

@@ -9,22 +9,17 @@
 
 namespace FluentDOM\Transformer\Namespaces {
 
-  use FluentDOM\DOM\Document;
+  use FluentDOM\Transformer\Namespaces;
 
-  class Optimize {
-
-    /**
-     * @var Document
-     */
-    private $_document = NULL;
+  class Optimize extends Namespaces {
 
     /**
      * @var array
      */
-    private $_namespaceUris = [];
+    private $_namespaceUris;
 
     /**
-     * Create a namespace optimizer for the provided document. The provided
+     * Create a namespace optimizer for the provided document/node. The provided
      * document will be copied.
      *
      * The second argument allows to provide namespaces and prefixes. The
@@ -39,39 +34,12 @@ namespace FluentDOM\Transformer\Namespaces {
      * here are attributes in that namespace. Attributes always need a prefix
      * to make use of the namespace.
      *
-     * @param \DOMDocument $document
+     * @param \DOMNode $node
      * @param array $namespaces
      */
-    public function __construct(\DOMDocument $document, array $namespaces = []) {
-      $this->_document = new Document($document->xmlVersion, $document->xmlEncoding);
-      foreach ($document->childNodes as $node) {
-        $this->_document->appendChild(
-          $this->_document->importNode($node, TRUE)
-        );
-      }
+    public function __construct(\DOMNode $node, array $namespaces = []) {
+      parent::__construct($node);
       $this->_namespaceUris = $namespaces;
-    }
-
-    /**
-     * Create a document with optimized namespaces and return it as xml string
-     *
-     * @return string
-     */
-    public function __toString(): string {
-      return $this->getDocument()->saveXml();
-    }
-
-    /**
-     * Create and return a document with optimized namespaces.
-     *
-     * @return Document
-     */
-    public function getDocument(): Document {
-      $document = new Document($this->_document->xmlVersion, $this->_document->xmlEncoding);
-      foreach ($this->_document->childNodes as $node) {
-        $this->addNode($document, $node);
-      }
-      return $document;
     }
 
     /**
@@ -82,7 +50,7 @@ namespace FluentDOM\Transformer\Namespaces {
      * @param \DOMNode $target
      * @param \DOMNode $source
      */
-    private function addNode(\DOMNode $target, \DOMNode $source) {
+    protected function addNode(\DOMNode $target, \DOMNode $source) {
       if ($source instanceof \DOMElement) {
         $this->addElement($target, $source);
       } else {
@@ -160,8 +128,7 @@ namespace FluentDOM\Transformer\Namespaces {
      */
     private function getNodeDefinition(\DOMNode $node): array {
       $isElement = $node instanceof \DOMElement;
-      $prefix = $isElement && $node->prefix === 'default'
-        ? NULL : $node->prefix;
+      $prefix = $isElement && $node->prefix === 'default' ? NULL : $node->prefix;
       $name = $node->localName;
       $uri = (string)$node->namespaceURI;
       if (
@@ -184,15 +151,14 @@ namespace FluentDOM\Transformer\Namespaces {
      * @param string $namespaceURI
      */
     private function addNamespaceAttribute(\DOMElement $node, string $prefix, string $namespaceURI) {
-      $prefix = empty($prefix) ? '' : $prefix;
       if (
         ($node->parentNode instanceof \DOMElement) &&
-        ($this->canAddNamespaceToNode($node->parentNode, $prefix, $namespaceURI))
+        $this->canAddNamespaceToNode($node->parentNode, $prefix, $namespaceURI)
       ) {
         $this->addNamespaceAttribute($node->parentNode, $prefix, $namespaceURI);
       }
       if ($this->canAddNamespaceToNode($node, $prefix, $namespaceURI)) {
-        $attributeName = empty($prefix) ? 'xmlns' : 'xmlns:'.$prefix;
+        $attributeName = '' === $prefix ? 'xmlns' : 'xmlns:'.$prefix;
         if (!$node->hasAttribute($attributeName)) {
           $node->setAttribute($attributeName, $namespaceURI);
         }
@@ -201,17 +167,17 @@ namespace FluentDOM\Transformer\Namespaces {
 
     /**
      * @param \DOMNode $node
-     * @param string|NULL $prefix
+     * @param string $prefix
      * @param string $namespaceURI
      * @return bool
      */
     private function canAddNamespaceToNode(\DOMNode $node, string $prefix, string $namespaceURI): bool {
-      $prefix = empty($prefix) ? NULL : $prefix;
-      $currentUri = $node->lookupNamespaceUri($prefix);
+      $currentUri = (string)$node->lookupNamespaceUri($prefix === '' ? NULL : $prefix);
       $hasNoNamespace = empty($node->namespaceURI);
-      if ($hasNoNamespace && empty($prefix)) {
+      if ($hasNoNamespace && $prefix === '') {
         return FALSE;
-      } elseif (empty($currentUri)) {
+      }
+      if ($currentUri === '') {
         return ($currentUri !== $namespaceURI);
       }
       return FALSE;

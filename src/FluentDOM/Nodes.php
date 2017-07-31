@@ -294,6 +294,7 @@ namespace FluentDOM {
      *
      * @param string $contentType
      * @return Nodes
+     * @throws \LogicException
      */
     public function formatOutput(string $contentType = NULL) {
       if (NULL !== $contentType) {
@@ -302,10 +303,11 @@ namespace FluentDOM {
       $this->_nodes = [];
       $this->_useDocumentContext = TRUE;
       $this->_parent = NULL;
-      $this->_document->preserveWhiteSpace = FALSE;
-      $this->_document->formatOutput = TRUE;
-      if (!($this->_document->documentElement instanceof \DOMElement)) {
-        $this->_document->loadXML($this->_document->saveXML());
+      $document = $this->getDocument();
+      $document->preserveWhiteSpace = FALSE;
+      $document->formatOutput = TRUE;
+      if ($document->documentElement instanceof \DOMElement) {
+        $document->loadXML($document->saveXML());
       }
       return $this;
     }
@@ -318,6 +320,7 @@ namespace FluentDOM {
      * @param NULL|string|callable|\DOMNode|array|\Traversable $stopAt
      * @param int $options
      * @return Nodes
+     * @throws \LogicException
      * @throws \OutOfBoundsException
      * @throws \InvalidArgumentException
      */

@@ -381,7 +381,7 @@ namespace FluentDOM {
      */
     public function testFormatOutput() {
       $fd = new Nodes();
-      $fd->document->loadXml('<html><body><br/></body></html>');
+      $fd->document->loadXML('<html><body><br/></body></html>');
       $fd->formatOutput();
       $expected =
         "<?xml version=\"1.0\"?>\n".
@@ -398,9 +398,19 @@ namespace FluentDOM {
      * @group CoreFunctions
      * @covers \FluentDOM\Nodes::formatOutput
      */
+    public function testFormatOutputWithEmptyDocument() {
+      $fd = new Nodes();
+      $fd->formatOutput();
+      $this->assertEquals('text/xml', $fd->contentType);
+    }
+
+    /**
+     * @group CoreFunctions
+     * @covers \FluentDOM\Nodes::formatOutput
+     */
     public function testFormatOutputWithContentTypeHtml() {
       $fd = new Nodes();
-      $fd->document->loadXml('<html><body><br/></body></html>');
+      $fd->document->loadXML('<html><body><br/></body></html>');
       $fd->formatOutput('text/html');
       $expected = "<html><body><br></body></html>\n";
       $this->assertEquals('text/html', $fd->contentType);

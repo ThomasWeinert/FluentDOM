@@ -46,8 +46,8 @@ namespace FluentDOM\DOM {
      *
      * @var array
      */
-    private $_classes = [
-      'DOMDocument' => Document::class,
+    private static $_classes = [
+      'DOMDocument' => self::class,
       'DOMAttr' => Attribute::class,
       'DOMCdataSection' => CdataSection::class,
       'DOMComment' => Comment::class,
@@ -64,10 +64,10 @@ namespace FluentDOM\DOM {
      */
     public function __construct($version = '1.0', $encoding = 'UTF-8') {
       parent::__construct($version, $encoding ?: 'UTF-8');
-      foreach ($this->_classes as $superClass => $className) {
+      foreach (self::$_classes as $superClass => $className) {
         $this->registerNodeClass($superClass, $className);
       }
-      $this->_namespaces = new \FluentDOM\Utility\Namespaces();
+      $this->_namespaces = new Namespaces();
     }
 
     public function __clone() {
@@ -82,7 +82,8 @@ namespace FluentDOM\DOM {
      */
     public function xpath() {
       if (
-        isset($this->_xpath) && ($this->_xpath->document === $this)
+        $this->_xpath instanceof Xpath &&
+        $this->_xpath->document === $this
       ) {
         return $this->_xpath;
       }
@@ -103,7 +104,7 @@ namespace FluentDOM\DOM {
      */
     public function registerNamespace($prefix, $namespaceURI) {
       $this->_namespaces[$prefix] = $namespaceURI;
-      if (isset($this->_xpath) && $prefix !== '#default') {
+      if (NULL !== $this->_xpath && $prefix !== '#default') {
         $this->_xpath->registerNamespace($prefix, $namespaceURI);
       }
     }
@@ -115,10 +116,12 @@ namespace FluentDOM\DOM {
      *
      * @param array|\Traversable $namespaces
      * @return Namespaces
+     * @throws \LogicException
      */
     public function namespaces($namespaces = NULL) {
-      if (isset($namespaces)) {
+      if (NULL !== $namespaces) {
         $this->_namespaces->assign([]);
+        /** @noinspection ForeachSourceInspection */
         foreach($namespaces as $prefix => $namespaceURI) {
           $this->registerNamespace($prefix, $namespaceURI);
         }
@@ -153,12 +156,12 @@ namespace FluentDOM\DOM {
               sprintf('Can not use reserved namespace prefix "%s" in element name.', $prefix)
             );
           }
-          $namespaceURI = $this->namespaces()->resolveNamespace($prefix);
+          $namespaceURI = (string)$this->namespaces()->resolveNamespace($prefix);
         }
       } else {
-        $namespaceURI = $this->namespaces()->resolveNamespace('#default');
+        $namespaceURI = (string)$this->namespaces()->resolveNamespace('#default');
       }
-      if ($namespaceURI != '') {
+      if ($namespaceURI !== '') {
         $node = $this->createElementNS($namespaceURI, $name);
       } elseif (isset($this->_namespaces['#default'])) {
         $node = $this->createElementNS('', $name);
@@ -200,7 +203,7 @@ namespace FluentDOM\DOM {
       } else {
         $node = $this->createAttributeNS($this->namespaces()->resolveNamespace($prefix), $name);
       }
-      if (isset($value)) {
+      if (NULL !== $value) {
         $node->value = $value;
       }
       return $node;
@@ -213,6 +216,7 @@ namespace FluentDOM\DOM {
      * @param string $content
      * @param array $attributes
      * @return Element
+     * @throws \LogicException
      */
     public function appendElement(string $name, $content = '', array $attributes = NULL): Element {
       $this->appendChild(
@@ -288,7 +292,7 @@ namespace FluentDOM\DOM {
      * @return string
      */
     public function toHtml($context = NULL): string {
-      return $this->saveHtml($context);
+      return $this->saveHTML($context);
     }
 
     /**
@@ -307,7 +311,8 @@ namespace FluentDOM\DOM {
           $result .= parent::saveHTML($node);
         }
         return $result;
-      } elseif (!isset($context)) {
+      }
+      if (NULL === $context) {
         $result = '';
         $textOnly = TRUE;
         $elementCount = 0;
@@ -330,15 +335,15 @@ namespace FluentDOM\DOM {
      *
      * @param string $name
      * @return \DOMNodeList
+     * @throws \LogicException
      */
     public function getElementsByTagName($name): \DOMNodeList {
       list($prefix, $localName) = QualifiedName::split($name);
-      $namespaceURI = $this->namespaces()->resolveNamespace((string)$prefix);
-      if ($namespaceURI != '') {
+      $namespaceURI = (string)$this->namespaces()->resolveNamespace((string)$prefix);
+      if ($namespaceURI !== '') {
         return $this->getElementsByTagNameNS($namespaceURI, $localName);
-      } else {
-        return parent::getElementsByTagName($localName);
       }
+      return parent::getElementsByTagName($localName);
     }
   }
 }

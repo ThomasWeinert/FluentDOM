@@ -43,6 +43,7 @@ namespace FluentDOM\DOM {
      * @param string $prefix
      * @param string $namespaceURI
      * @return bool
+     * @throws \LogicException
      */
     public function registerNamespace($prefix, $namespaceURI): bool {
       if (
@@ -52,7 +53,7 @@ namespace FluentDOM\DOM {
           $this->_documentReference->namespaces()->offsetGet($prefix) !== $namespaceURI
         )
       ) {
-        $this->_documentReference->registerNameSpace($prefix, $namespaceURI);
+        $this->_documentReference->registerNamespace($prefix, $namespaceURI);
       }
       return parent::registerNamespace($prefix, $namespaceURI);
     }
@@ -70,8 +71,7 @@ namespace FluentDOM\DOM {
      * @return string|float|bool|\DOMNodeList
      */
     public function evaluate($expression, \DOMNode $contextNode = NULL, $registerNodeNS = NULL) {
-      $registerNodeNS = (NULL === $registerNodeNS)
-        ? $this->_registerNodeNamespaces : $registerNodeNS;
+      $registerNodeNS = $registerNodeNS ?? $this->_registerNodeNamespaces;
       return parent::evaluate($expression, $contextNode, (bool)$registerNodeNS);
     }
 
@@ -145,7 +145,7 @@ namespace FluentDOM\DOM {
           preg_match_all('("[^\']*|[^"]+)', $string, $matches);
           foreach ($matches[0] as $part) {
             $quoteChar = (substr($part, 0, 1) === '"') ? "'" : '"';
-            $result .= ", ".$quoteChar.$part.$quoteChar;
+            $result .= ', '.$quoteChar.$part.$quoteChar;
           }
           return 'concat('.substr($result, 2).')';
         } else {

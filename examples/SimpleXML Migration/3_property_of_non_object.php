@@ -1,5 +1,5 @@
 <?php
-require(__DIR__.'/../../vendor/autoload.php');
+require __DIR__.'/../../vendor/autoload.php';
 
 /*
  * A problem with the object syntax is that it can result in error

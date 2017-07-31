@@ -5,6 +5,8 @@
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
 * @copyright Copyright (c) 2010-2014 FluentDOM Contributors
 */
+require __DIR__.'/../../../vendor/autoload.php';
+
 header('Content-type: text/plain');
 
 $html = <<<HTML
@@ -23,7 +25,6 @@ $html = <<<HTML
 HTML;
 
 echo "Example for property 'css'- setting text-decoration:\n\n";
-require_once '../../../vendor/autoload.php';
 $fd = FluentDOM($html, 'text/html');
 $fd
   ->find('//a')

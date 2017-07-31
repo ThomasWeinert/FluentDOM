@@ -1,9 +1,9 @@
 
 <?php
-require(__DIR__.'/../../../vendor/autoload.php');
+require __DIR__.'/../../../vendor/autoload.php';
 
 $document = new FluentDOM\DOM\Document();
-$document->loadHtml(
+$document->loadHTML(
   '<!DOCTYPE html>
    <html><body><div id="navigation"/></body></html>'
 );
@@ -22,4 +22,4 @@ $document
     )
   );
 
-echo $document->saveHtml();
+echo $document->saveHTML();

@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__.'/../../../vendor/autoload.php';
+require __DIR__.'/../../../vendor/autoload.php';
 
 $xml = <<<'XML'
 <person created="2006-11-11T19:23" modified="2006-12-31T23:59">
@@ -29,6 +29,6 @@ echo "\n\n BadgerFish -> XML\n\n";
 
 $document = FluentDOM::load($json, 'application/badgerfish+json');
 $document->formatOutput = TRUE;
-echo $document->saveXMl();
+echo $document->saveXML();
 
 

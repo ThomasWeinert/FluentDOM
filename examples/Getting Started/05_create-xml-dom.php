@@ -1,5 +1,5 @@
 <?php
-require(__DIR__.'/../../vendor/autoload.php');
+require __DIR__.'/../../vendor/autoload.php';
 
 $document = new FluentDOM\DOM\Document();
 $document->registerNamespace('atom', 'http://www.w3.org/2005/Atom');
@@ -19,4 +19,4 @@ $entry->appendElement('atom:id', 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a'
 $entry->appendElement('atom:updated', '2003-12-13T18:30:02Z');
 $entry->appendElement('atom:summary', 'Some text.');
 
-echo $document->saveXml();
+echo $document->saveXML();

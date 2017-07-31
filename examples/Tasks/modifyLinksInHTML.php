@@ -1,6 +1,6 @@
 <?php
-// include FluentDOM
-require('../../vendor/autoload.php');
+require __DIR__.'/../../vendor/autoload.php';
+
 // define url
 $url = 'http://www.heise.de/';
 // load data from an url

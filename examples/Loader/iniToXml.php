@@ -3,8 +3,8 @@
 * Sample how to use a custom FluentDOM loader
 */
 
-require_once __DIR__.'/../../vendor/autoload.php';
-require_once __DIR__.'/IniLoader.php';
+require __DIR__.'/../../vendor/autoload.php';
+require __DIR__.'/IniLoader.php';
 
 header('Content-type: text/plain');
 $iniFile = __DIR__.'/sample.ini';
@@ -27,5 +27,5 @@ $document = FluentDOM::load($iniFile, 'text/ini');
 echo 'URL: ', $document('string(//URL)'), "\n\n";
 
 $document->formatOutput = TRUE;
-echo $document->saveXml();
+echo $document->saveXML();
 

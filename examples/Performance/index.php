@@ -3,7 +3,7 @@
  * The example compares the FluentDOM\Query Api with the extended DOM classes
  */
 
-require(__DIR__.'/../../vendor/autoload.php');
+require __DIR__.'/../../vendor/autoload.php';
 
 function benchmark(callable $callback, $callCount) {
   $start = microtime(true);

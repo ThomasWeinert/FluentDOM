@@ -3,9 +3,10 @@
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
 * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
 */
+require __DIR__.'/../../vendor/autoload.php';
+
 header('Content-type: text/plain');
 
-require('../../vendor/autoload.php');
 $fd = new FluentDOM\Nodes(
   '<foo:message xmlns:foo="urn:foo">Hello World!</foo:message>'
 );

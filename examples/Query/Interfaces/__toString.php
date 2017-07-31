@@ -1,4 +1,6 @@
 <?php
+require __DIR__.'/../../../vendor/autoload.php';
+
 header('Content-type: text/plain');
 
 $xml = <<<XML
@@ -11,8 +13,6 @@ $xml = <<<XML
 </body>
 </html>
 XML;
-
-require_once '../../../vendor/autoload.php';
 
 echo FluentDOM($xml)
   ->find('//p')

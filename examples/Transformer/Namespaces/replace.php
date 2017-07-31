@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__.'/../../../vendor/autoload.php';
+require __DIR__.'/../../../vendor/autoload.php';
 
 /*
  * Teh replace namespace transformer replaces namespaces. It basically
@@ -9,7 +9,7 @@ require_once __DIR__.'/../../../vendor/autoload.php';
 
 $document = new FluentDOM\DOM\Document();
 $document->preserveWhiteSpace = FALSE;
-$document->loadXml(
+$document->loadXML(
   '<?xml version="1.0" encoding="UTF-8"?>
   <atom:feed xmlns:atom="http://www.w3.org/2005/Atom">
     <atom:title>Example Feed</atom:title>

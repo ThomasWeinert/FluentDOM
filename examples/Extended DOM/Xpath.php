@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__.'/../../vendor/autoload.php';
+require __DIR__.'/../../vendor/autoload.php';
 
 /*
  * FluentDOM\Xpath::firstOf() returns the first node
@@ -7,7 +7,7 @@ require_once __DIR__.'/../../vendor/autoload.php';
  * result as a node (or null).
  */
 $document = new FluentDOM\DOM\Document();
-$document->loadXml('<xml>Hello World</xml>');
+$document->loadXML('<xml>Hello World</xml>');
 $xpath = new FluentDOM\DOM\Xpath($document);
 echo $xpath->firstOf('//xml');
 
@@ -18,7 +18,7 @@ echo $xpath->firstOf('//xml');
  */
 $value = "World";
 $document = new FluentDOM\DOM\Document();
-$document->loadXml('<xml>Hello World</xml>');
+$document->loadXML('<xml>Hello World</xml>');
 $xpath = new FluentDOM\DOM\Xpath($document);
 echo $xpath->evaluate(
   'string(//xml[contains(., '.$xpath->quote($value).')])'

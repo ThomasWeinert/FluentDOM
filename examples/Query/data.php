@@ -5,8 +5,9 @@
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
 * @copyright Copyright (c) 2011-2014 FluentDOM Contributors
 */
+require __DIR__.'/../../vendor/autoload.php';
+
 header('Content-type: text/plain');
-require_once '../../vendor/autoload.php';
 
 $xml = <<<XML
 <div data-role="page" data-hidden="true" data-options='{"name":"John"}'> </div>

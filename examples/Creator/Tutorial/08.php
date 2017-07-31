@@ -1,8 +1,8 @@
 <?php
-require('../../../vendor/autoload.php');
+require __DIR__.'/../../../vendor/autoload.php';
 
 $document = new FluentDOM\DOM\Document();
-$document->loadXml(
+$document->loadXML(
   '<div>
     <ul>
       <li><a href="http://fluentdom.org">FluentDOM</a></li>

@@ -1,5 +1,5 @@
 <?php
-require(__DIR__.'/../../vendor/autoload.php');
+require __DIR__.'/../../vendor/autoload.php';
 
 /*
  * SimpleXML has some limited functionality for this, basically you
@@ -8,7 +8,7 @@ require(__DIR__.'/../../vendor/autoload.php');
 $element = simplexml_load_string('<ul/>');
 $li = $element->addChild('li', 'FluentDOM');
 $li['href'] = 'http://fluentdom.org';
-echo $element->saveXml();
+echo $element->saveXML();
 
 /*
  * FluentDOM extends DOM for that, so you still can use all
@@ -17,7 +17,7 @@ echo $element->saveXml();
 $document = new FluentDOM\DOM\Document();
 $ul = $document->appendChild($document->createElement('ul'));
 $li = $ul->appendChild($document->createElement('li', 'FluentDOM', ['href' => 'http://fluentdom.org']));
-echo $document->saveHtml();
+echo $document->saveHTML();
 
 /*
  * But here is a shortcut to add an element child.
@@ -25,7 +25,7 @@ echo $document->saveHtml();
 $document = new FluentDOM\DOM\Document();
 $ul = $document->appendElement('ul');
 $li = $ul->appendElement('li', 'FluentDOM', ['href' => 'http://fluentdom.org']);
-echo $document->saveHtml();
+echo $document->saveHTML();
 
 /*
  * Additionally it has a dedicated API to create documents.
@@ -40,5 +40,5 @@ $document = $_(
   'ul',
   $_('li', ['href' => 'http://fluentdom.org'], 'FluentDOM')
 )->document;
-echo $document->saveHtml();
+echo $document->saveHTML();
 

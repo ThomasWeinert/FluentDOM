@@ -1,4 +1,6 @@
 <?php
+require __DIR__.'/../../../vendor/autoload.php';
+
 header('Content-type: text/plain');
 
 $xml = <<<XML
@@ -14,8 +16,7 @@ $xml = <<<XML
 </html>
 XML;
 
-require_once '../../../vendor/autoload.php';
-
 foreach (FluentDOM($xml)->find('//p') as $key => $value) {
+  /** @var \FluentDOM\DOM\Node $value */
   echo $key, ': ', $value, "\n";
 }

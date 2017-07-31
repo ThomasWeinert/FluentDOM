@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__.'/../../vendor/autoload.php';
+require __DIR__.'/../../vendor/autoload.php';
 
 /*
  * This examples shows the different methods of the Creator function object.

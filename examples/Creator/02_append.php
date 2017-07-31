@@ -1,5 +1,5 @@
 <?php
-require(__DIR__.'/../../vendor/autoload.php');
+require __DIR__.'/../../vendor/autoload.php';
 
 /*
  * The Creator can be combined with the DOM methods

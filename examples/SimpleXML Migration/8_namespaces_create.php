@@ -1,5 +1,5 @@
 <?php
-require(__DIR__.'/../../vendor/autoload.php');
+require __DIR__.'/../../vendor/autoload.php';
 
 /*
  * The third argument of SimpleXMLElement::addChild() is the namespace URI.
@@ -10,7 +10,7 @@ require(__DIR__.'/../../vendor/autoload.php');
  */
 $element = simplexml_load_string('<atom:feed xmlns:atom="http://www.w3.org/2005/Atom"/>');
 $title = $element->addChild('atom:title', 'FluentDOM Feed', 'http://www.w3.org/2005/Atom');
-echo $element->saveXml();
+echo $element->saveXML();
 
 /*
  * FluentDOM allows you register namespaces on the DOM document object.
@@ -22,7 +22,7 @@ $document->registerNamespace('atom', 'http://www.w3.org/2005/Atom');
 $document
   ->appendElement('atom:feed')
   ->appendElement('atom:title', 'FluentDOM Feed');
-echo $document->saveXml();
+echo $document->saveXML();
 
 /*
  * That works with the Creator function object, too.

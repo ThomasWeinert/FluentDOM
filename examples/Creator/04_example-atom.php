@@ -1,5 +1,5 @@
 <?php
-require('../../vendor/autoload.php');
+require __DIR__.'/../../vendor/autoload.php';
 
 /*
  * Atom is an XML format that uses namespaces, if you

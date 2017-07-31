@@ -1,6 +1,6 @@
 
 <?php
-require(__DIR__.'/../../../vendor/autoload.php');
+require __DIR__.'/../../../vendor/autoload.php';
 
 $_ = FluentDOM::create();
 $_->formatOutput = TRUE;
@@ -19,4 +19,4 @@ echo $_(
       return $_('li', $_('a', ['href' => $href], $text));
     }
   )
-)->document->saveHtml();
+)->document->saveHTML();

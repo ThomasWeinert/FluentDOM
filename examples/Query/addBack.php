@@ -3,6 +3,8 @@
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
 * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
 */
+require __DIR__.'/../../vendor/autoload.php';
+
 header('Content-type: text/plain');
 
 $xml = <<<XML
@@ -19,7 +21,6 @@ $xml = <<<XML
 </html>
 XML;
 
-require('../../vendor/autoload.php');
 $fd = FluentDOM($xml);
 echo $fd
   ->find('//p')

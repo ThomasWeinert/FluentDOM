@@ -1,5 +1,5 @@
 <?php
-require(__DIR__.'/../../../vendor/autoload.php');
+require __DIR__.'/../../../vendor/autoload.php';
 
 $_ = FluentDOM::create();
 
@@ -10,4 +10,4 @@ echo $_(
     'li',
     $_('a', ['href' => 'http://fluentdom.org'], 'FluentDOM')
   )
-)->document->saveHtml();
+)->document->saveHTML();

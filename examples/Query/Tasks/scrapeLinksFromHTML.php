@@ -1,6 +1,5 @@
 <?php
-//include FluentDOM
-require('../../vendor/autoload.php');
+require __DIR__.'/../../vendor/autoload.php';
 
 //load data from an url
 $html = file_get_contents('https://www.heise.de/');

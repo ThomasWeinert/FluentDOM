@@ -5,6 +5,8 @@
 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
 * @copyright Copyright (c) 2011 FluentDOM Contributors
 */
+require __DIR__.'/../../../vendor/autoload.php';
+
 header('Content-type: text/plain');
 
 $xml = <<<XML
@@ -13,7 +15,6 @@ XML;
 
 
 echo "Example for property 'data':\n";
-require_once '../../../vendor/autoload.php';
 $fd = FluentDOM($xml)->find('//div');
 
 echo "\nRead:\n";

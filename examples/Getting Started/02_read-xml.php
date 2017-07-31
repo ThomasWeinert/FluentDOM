@@ -1,6 +1,6 @@
 <?php
 
-require(__DIR__.'/../../vendor/autoload.php');
+require __DIR__.'/../../vendor/autoload.php';
 
 $xmlString = <<<'XML'
 <?xml version="1.0" encoding="UTF-8"?>
@@ -28,6 +28,7 @@ $document = FluentDOM::load($xmlString);
 $document->registerNamespace('a', 'http://www.w3.org/2005/Atom');
 
 foreach ($document('/a:feed/a:entry') as $entry) {
+  /** @var \FluentDOM\DOM\Element $entry */
   echo $entry('string(a:title)'), "\n\n";
   echo $entry('string(a:summary)'), "\n\n";
 }

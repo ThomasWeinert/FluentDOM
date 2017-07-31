@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__.'/../../vendor/autoload.php';
+require __DIR__.'/../../vendor/autoload.php';
 
 /*
  * FluentDOM\Appendable is an interface to allow you to build

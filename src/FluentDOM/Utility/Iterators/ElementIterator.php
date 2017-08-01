@@ -8,12 +8,12 @@
 
 namespace FluentDOM\Utility\Iterators {
 
-  use FluentDOM\DOM\Element as Element;
+  use FluentDOM\DOM\Element;
 
   /**
    * Iterator class for FluentDOM\DOM\Element objects
    *
-   * @method \DOMElement getOwner()
+   * @method Element getOwner()
    */
   class ElementIterator extends IndexIterator implements \RecursiveIterator {
 

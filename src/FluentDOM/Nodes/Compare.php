@@ -4,8 +4,8 @@ namespace FluentDOM\Nodes {
 
   class Compare {
 
-    private $_xpath = NULL;
-    private $_document = NULL;
+    private $_xpath ;
+    private $_document;
     private $_cache = [];
 
     public function __construct(\DOMXPath $xpath) {
@@ -16,13 +16,15 @@ namespace FluentDOM\Nodes {
     public function __invoke($one, $two): int {
       if ($one === $two) {
         return 0;
-      } elseif (
+      }
+      if (
         $one === $this->_document->documentElement ||
         $one === $two->previousSibling ||
         $one === $two->parentNode
       ) {
         return -1;
-      } elseif (
+      }
+      if (
         $two === $this->_document->documentElement ||
         $two === $one->previousSibling ||
         $two === $one->parentNode) {

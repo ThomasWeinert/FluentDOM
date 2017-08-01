@@ -30,7 +30,7 @@ namespace FluentDOM\Nodes {
     /**
      * @var Nodes
      */
-    private $_nodes = NULL;
+    private $_nodes;
 
     /**
      * @param Nodes $nodes

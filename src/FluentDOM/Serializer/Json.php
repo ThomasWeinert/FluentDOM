@@ -11,6 +11,7 @@ namespace FluentDOM\Serializer {
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Element;
   use FluentDOM\DOM\Xpath;
+  use FluentDOM\Utility\StringCastable;
 
   /**
    * Serialize a DOM into a Json structure. This loader allows to save an imported Json back as JSON.
@@ -41,14 +42,14 @@ namespace FluentDOM\Serializer {
    * @license http://www.opensource.org/licenses/mit-license.php The MIT License
    * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
    */
-  class Json implements \JsonSerializable {
+  class Json implements \JsonSerializable, StringCastable {
 
     const XMLNS_JSONDOM = 'urn:carica-json-dom.2013';
 
     /**
      * @var \DOMNode
      */
-    protected $_node = NULL;
+    protected $_node;
 
     /**
      * @var int

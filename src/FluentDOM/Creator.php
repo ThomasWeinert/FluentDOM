@@ -17,7 +17,7 @@ namespace FluentDOM {
     /**
      * @var DOM\Document
      */
-    private $_document = NULL;
+    private $_document;
 
     /**
      * @var bool

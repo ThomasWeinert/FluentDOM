@@ -17,7 +17,7 @@ namespace FluentDOM\Loader {
     /**
      * @var \DOMNode|\Traversable|array|NULL
      */
-    private $_selection = NULL;
+    private $_selection;
 
     /**
      * @param Document $document

@@ -17,7 +17,7 @@ namespace FluentDOM\Utility\Iterators {
     /**
      * @var callable
      */
-    private $_callback = NULL;
+    private $_callback;
 
     /**
      * @param \Traversable $traversable

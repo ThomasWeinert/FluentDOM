@@ -36,7 +36,7 @@ namespace FluentDOM\Loader {
      * @param array $callbacks
      * @throws \InvalidArgumentException
      */
-    public function __construct($options = [], $callbacks = []) {
+    public function __construct($options = [], array $callbacks = []) {
       if (is_array($options)) {
         $this->_options = $options;
       } else if ($options instanceof \Traversable) {

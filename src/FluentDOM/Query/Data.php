@@ -20,7 +20,7 @@ namespace FluentDOM\Query {
      *
      * @var \DOMElement
      */
-    private $_node = NULL;
+    private $_node;
 
     /**
      * Create object with attached element node.

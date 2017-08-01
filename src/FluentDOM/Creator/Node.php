@@ -19,12 +19,12 @@ namespace FluentDOM\Creator {
     /**
      * @var Document
      */
-    private $_document = NULL;
+    private $_document;
 
     /**
      * @var \DOMElement
      */
-    private $_node = NULL;
+    private $_node;
 
     /**
      * @var Creator

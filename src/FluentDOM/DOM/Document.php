@@ -34,12 +34,12 @@ namespace FluentDOM\DOM {
     /**
      * @var Xpath
      */
-    private $_xpath = NULL;
+    private $_xpath;
 
     /**
      * @var Namespaces
      */
-    private $_namespaces = NULL;
+    private $_namespaces;
 
     /**
      * Map dom node classes to extended descendants.

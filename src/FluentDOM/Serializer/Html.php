@@ -8,11 +8,13 @@
 
 namespace FluentDOM\Serializer {
 
-  class Html {
+  use FluentDOM\Utility\StringCastable;
+
+  class Html implements StringCastable {
     /**
      * @var \DOMNode
      */
-    protected $_node = NULL;
+    protected $_node;
 
     /**
      * @param \DOMNode $node

@@ -8,7 +8,7 @@
 
 namespace FluentDOM\Utility\Iterators {
 
-  use FluentDOM\Nodes as Nodes;
+  use FluentDOM\Nodes;
 
   /**
    * FluentDOM\Query\Iterator is the Iterator class for FluentDOM\Query objects

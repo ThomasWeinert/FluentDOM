@@ -43,20 +43,20 @@ namespace FluentDOM\Loader\Json {
      *
      * @var int
      */
-    private $_recursions = 100;
+    private $_recursions;
 
     /**
      * Add json:type and json:name attributes to all elements, even if not necessary.
      *
      * @var bool
      */
-    private $_verbose = FALSE;
+    private $_verbose;
 
     /**
      * Called to map key names tag names
      * @var NULL|callable
      */
-    private $_onMapKey = NULL;
+    private $_onMapKey;
 
     /**
      * Create the loader for a json string.
@@ -70,7 +70,7 @@ namespace FluentDOM\Loader\Json {
      */
     public function __construct(int $options = 0, int $depth = 100) {
       $this->_recursions = (int)$depth;
-      $this->_verbose = ($options & self::OPTION_VERBOSE) == self::OPTION_VERBOSE;
+      $this->_verbose = ($options & self::OPTION_VERBOSE) === self::OPTION_VERBOSE;
     }
 
     /**
@@ -171,7 +171,7 @@ namespace FluentDOM\Loader\Json {
           $this->transferObjectTo($target, $value, $this->_recursions - 1);
           break;
         default :
-          if ($target instanceof \DOMElement && ($this->_verbose || $type != self::TYPE_STRING)) {
+          if ($target instanceof \DOMElement && ($this->_verbose || $type !== self::TYPE_STRING)) {
             $target->setAttributeNS(self::XMLNS, 'json:type', $type);
           }
           $string = $this->getValueAsString($type, $value);
@@ -275,7 +275,7 @@ namespace FluentDOM\Loader\Json {
      * with the property name will be added.
      *
      * @param \DOMNode|Element|DocumentFragment $target
-     * @param object $value
+     * @param mixed $value
      * @param int $recursions
      */
     private function transferObjectTo(\DOMNode $target, $value, int $recursions) {
@@ -288,7 +288,7 @@ namespace FluentDOM\Loader\Json {
         $target->appendChild(
           $child = $target->ownerDocument->createElement($qname)
         );
-        if ($this->_verbose || $qname != $property) {
+        if ($this->_verbose || $qname !== $property) {
           $child->setAttributeNS(self::XMLNS, 'json:name', $property);
         }
         $this->transferTo($child, $item, $recursions);

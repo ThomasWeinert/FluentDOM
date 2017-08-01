@@ -2,6 +2,8 @@
 
 namespace FluentDOM\Serializer {
 
+  use FluentDOM\Utility\StringCastable;
+
   interface Factory {
 
     /**
@@ -9,7 +11,7 @@ namespace FluentDOM\Serializer {
      *
      * @param string $contentType
      * @param \DOMNode $node
-     * @return object|NULL
+     * @return StringCastable|NULL
      */
     public function createSerializer(string $contentType, \DOMNode $node);
   }

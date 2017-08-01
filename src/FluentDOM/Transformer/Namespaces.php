@@ -11,13 +11,14 @@ namespace FluentDOM\Transformer {
   use FluentDOM\Appendable;
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Element;
+  use FluentDOM\Utility\StringCastable;
 
-  abstract class Namespaces implements \IteratorAggregate, Appendable {
+  abstract class Namespaces implements \IteratorAggregate, Appendable, StringCastable {
 
     /**
      * @var Document
      */
-    private $_document = NULL;
+    private $_document;
 
     /**
      * Add a node to the target node

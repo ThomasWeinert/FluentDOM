@@ -27,7 +27,7 @@ namespace FluentDOM\Loader\PHP {
     /**
      * @var Xml|NULL
      */
-    private $_xmlLoader = NULL;
+    private $_xmlLoader;
 
     /**
      * @return string[]

@@ -24,10 +24,10 @@ namespace FluentDOM\Loader\Libxml {
       $errorSetting = libxml_use_internal_errors(TRUE);
       libxml_clear_errors();
       $result = $callback();
-      if ($errorLevel != self::ERROR_NONE) {
+      if ($errorLevel !== self::ERROR_NONE) {
         foreach (libxml_get_errors() as $error) {
           $severity = $this->_errorMapping[$error->level];
-          if (($errorLevel & $severity) == $severity) {
+          if (($errorLevel & $severity) === $severity) {
             $exception = new LoadingError\Libxml($error);
             break;
           }

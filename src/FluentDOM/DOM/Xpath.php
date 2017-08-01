@@ -23,9 +23,9 @@ namespace FluentDOM\DOM {
     private $_registerNodeNamespaces = FALSE;
 
     /**
-     * @var \DOMDocument|NULL
+     * @var \DOMDocument
      */
-    private $_documentReference = NULL;
+    private $_documentReference;
 
     /**
      * @param \DOMDocument $document

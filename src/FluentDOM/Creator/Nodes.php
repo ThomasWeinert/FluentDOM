@@ -13,17 +13,17 @@ namespace FluentDOM\Creator {
     /**
      * @var array|\Traversable
      */
-    private $_traversable = NULL;
+    private $_traversable;
 
     /**
      * @var callable|NULL
      */
-    private $_map = NULL;
+    private $_map;
 
     /**
      * @var NULL|\Iterator
      */
-    private $_iterator = NULL;
+    private $_iterator;
 
     /**
      * @param array|\Traversable $traversable

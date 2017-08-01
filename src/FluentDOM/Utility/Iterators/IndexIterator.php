@@ -26,7 +26,7 @@ namespace FluentDOM\Utility\Iterators {
      * owner (object) of the iterator
      * @var \Countable
      */
-    private $_owner = NULL;
+    private $_owner;
 
     /**
      * @param \Countable $owner
@@ -40,7 +40,7 @@ namespace FluentDOM\Utility\Iterators {
      *
      * @return \Countable
      */
-    protected function getOwner() {
+    protected function getOwner(): \Countable {
       return $this->_owner;
     }
 

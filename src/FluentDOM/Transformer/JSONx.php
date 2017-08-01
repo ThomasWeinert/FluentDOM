@@ -12,13 +12,14 @@ namespace FluentDOM\Transformer {
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Element;
   use FluentDOM\DOM\Xpath;
+  use FluentDOM\Utility\StringCastable;
 
   /**
    * Allows to transform JSONx to JsonDOM
    *
    * @package FluentDOM\Transformer
    */
-  class JSONx {
+  class JSONx implements StringCastable {
 
     const XMLNS_JSONX = 'http://www.ibm.com/xmlns/prod/2009/jsonx';
     const XMLNS_JSONDOM = 'urn:carica-json-dom.2013';
@@ -26,7 +27,7 @@ namespace FluentDOM\Transformer {
     /**
      * @var \DOMDocument
      */
-    private $_document = NULL;
+    private $_document;
 
     /**
      * Import a DOM document and use the JsonDOM rules to convert it into JSONx.

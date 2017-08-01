@@ -64,7 +64,7 @@ namespace FluentDOM\Serializer\Json {
      * @param Xpath $xpath
      */
     protected function addNamespaces(\stdClass $target, \DOMElement $node, Xpath $xpath) {
-      if ($node->namespaceURI != '' && $node->prefix === '') {
+      if ((string)$node->namespaceURI !== '' && $node->prefix === '') {
         if (!isset($target->{'@xmlns'})) {
           $target->{'@xmlns'} = new \stdClass();
         }

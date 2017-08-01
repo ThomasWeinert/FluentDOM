@@ -9,12 +9,13 @@
 
 namespace FluentDOM\DOM {
 
+  use FluentDOM\Utility\StringCastable;
+
   /**
    * @method string|float|bool|\DOMNodeList|Node[] __invoke()
-   * @method string __toString()
    * @method string|float|bool|\DOMNodeList|Node[] evaluate($expression, \DOMNode $context = NULL)
    */
-  interface Node {
+  interface Node extends StringCastable {
 
   }
 }

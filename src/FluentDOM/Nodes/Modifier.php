@@ -18,7 +18,7 @@ namespace FluentDOM\Nodes {
     /**
      * @var \DOMNode
      */
-    private $_node = NULL;
+    private $_node;
 
     /**
      * @param \DOMNode $node

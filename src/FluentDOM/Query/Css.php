@@ -34,7 +34,7 @@ namespace FluentDOM\Query {
      * owner object
      * @var Query
      */
-    private $_fd = NULL;
+    private $_fd;
 
 
     /**

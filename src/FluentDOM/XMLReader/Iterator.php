@@ -31,7 +31,7 @@ namespace FluentDOM\XMLReader {
     /**
      * @var NULL|\DOMNode
      */
-    private $_current = NULL;
+    private $_current;
 
     /**
      * Iterator constructor.

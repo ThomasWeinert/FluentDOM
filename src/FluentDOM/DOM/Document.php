@@ -195,6 +195,7 @@ namespace FluentDOM\DOM {
      * @param string $name
      * @param string|NULL $value
      * @return Attribute
+     * @throws \LogicException
      */
     public function createAttribute($name, $value = NULL): Attribute {
       list($prefix) = QualifiedName::split($name);
@@ -232,8 +233,8 @@ namespace FluentDOM\DOM {
      */
     private function appendAttributes(\DOMElement $node, $content = NULL, array $attributes = NULL) {
       if (is_array($content)) {
-        $attributes = NULL === $attributes
-          ? $content : array_merge($content, $attributes);
+        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+        $attributes = (NULL === $attributes) ? $content : array_merge($content, $attributes);
       }
       if (!empty($attributes)) {
         foreach ($attributes as $attributeName => $attributeValue) {

@@ -40,10 +40,11 @@ namespace FluentDOM\Loader {
      * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return Document|Result|NULL
+     * @throws \LogicException
      */
     public function load($source, string $contentType, $options = []) {
       if ($this->supports($contentType) && !empty($source)) {
-        $document = $this->loadXmlDocument($source, $contentType, $options);
+        $document = $this->loadXmlDocument($source, $options);
         $target = new Document();
         $target->registerNamespace('json', self::XMLNS_JSONDOM);
         if (isset($document->documentElement)) {
@@ -101,6 +102,7 @@ namespace FluentDOM\Loader {
         case 'object' :
           if ($node('count(*) > 0')) {
             foreach ($node('*') as $childNode) {
+              /** @var Element $childNode */
               $this->transferNode($childNode, $newNode);
             }
             return;
@@ -108,6 +110,7 @@ namespace FluentDOM\Loader {
           break;
         case 'array' :
           foreach ($node('*') as $childNode) {
+            /** @var Element $childNode */
             $this->transferNode($childNode, $newNode);
           }
           break;

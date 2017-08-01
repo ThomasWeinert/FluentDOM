@@ -51,12 +51,12 @@ namespace FluentDOM\Loader {
      *
      * @param array[] $classes ['class' => ['type/one', 'type/two'], ...]
      * @param string $namespace
+     * @throws \LogicException
+     * @throws \UnexpectedValueException
      */
     public function addClasses($classes, string $namespace = '') {
-      $namespace = substr($namespace, -1) === '\\' ? substr($namespace, 0, -1) : $namespace;
       foreach ($classes as $loader => $types) {
-        $loader = substr($loader, 0, 1) === '\\' ? $loader : '\\'.$loader;
-        $class = $namespace.$loader;
+        $class = str_replace(['\\\\\\', '\\\\'], '\\', $namespace.'\\'.$loader);
         $callback = function() use ($class) {
           if (!class_exists($class)) {
             throw new \LogicException(
@@ -72,7 +72,7 @@ namespace FluentDOM\Loader {
             $this->add($type, $callback);
           }
         } else {
-          $this->add($types, $callback);
+          $this->add((string)$types, $callback);
         }
       }
     }
@@ -130,16 +130,22 @@ namespace FluentDOM\Loader {
      * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return DocumentFragment|NULL
+     * @throws \UnexpectedValueException
      */
     public function loadFragment($source, string $contentType, $options = []) {
       $contentType = $this->normalizeContentType($contentType);
       if ($loader = $this->get($contentType)) {
         return $loader->loadFragment($source, $contentType, $options);
       }
+      return NULL;
     }
 
-    private function normalizeContentType(string $contentType) {
-      return trim(strtolower($contentType));
+    /**
+     * @param string $contentType
+     * @return string
+     */
+    private function normalizeContentType(string $contentType): string {
+      return strtolower(trim($contentType));
     }
   }
 }

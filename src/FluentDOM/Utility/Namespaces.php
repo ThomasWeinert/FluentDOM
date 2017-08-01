@@ -68,7 +68,6 @@ namespace FluentDOM\Utility {
     /**
      * @param string $prefix
      * @param string $namespaceURI
-     * @return bool
      * @throws \LogicException
      */
     public function offsetSet($prefix, $namespaceURI) {

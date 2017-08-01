@@ -43,13 +43,14 @@ namespace FluentDOM\Transformer {
      * @return string
      */
     public function __toString(): string {
-      return $this->getDocument()->saveXml();
+      return $this->getDocument()->saveXML();
     }
 
     /**
      * Create and return a JSONx document.
      *
      * @return Document
+     * @throws \LogicException
      */
     public function getDocument(): Document {
       $document = new Document();
@@ -71,7 +72,7 @@ namespace FluentDOM\Transformer {
         break;
       case 'array' :
         $result = $parent->appendElement('json:array');
-        $this->appendChildNodes($result, $node, FALSE);
+        $this->appendChildNodes($result, $node);
         break;
       case 'number' :
         $result = $parent->appendElement('json:number', $node->nodeValue);

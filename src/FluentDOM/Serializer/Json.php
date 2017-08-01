@@ -53,18 +53,12 @@ namespace FluentDOM\Serializer {
     /**
      * @var int
      */
-    private $_options = 0;
+    private $_options;
 
     /**
      * @var int
      */
-    private $_depth = 512;
-
-    /**
-     * Allow the use of the recursion limitation argument
-     * @var bool
-     */
-    private $_useDepth = FALSE;
+    private $_depth;
 
     /**
      * @param \DOMNode $node
@@ -73,8 +67,8 @@ namespace FluentDOM\Serializer {
      */
     public function __construct(\DOMNode $node, int $options = 0, int $depth = 512) {
       $this->_node = $node;
-      $this->_options = (int)$options;
-      $this->_depth = (int)$depth;
+      $this->_options = $options;
+      $this->_depth = $depth;
     }
 
     /**

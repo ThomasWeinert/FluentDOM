@@ -83,7 +83,7 @@ namespace FluentDOM\Nodes {
         if ($this->_node->firstChild instanceof \DOMNode) {
           $result = (new self($this->_node->firstChild))->insertNodesBefore($contentNodes);
         } else {
-          $result = self::appendChildren($contentNodes);
+          $result = $this->appendChildren($contentNodes);
         }
       }
       return $result;
@@ -96,7 +96,7 @@ namespace FluentDOM\Nodes {
      */
     public function insertNodesAfter($contentNodes): array {
       $result = [];
-      if ($this->_node instanceof \DOMNode && !empty($contentNodes)) {
+      if ($this->_node instanceof \DOMNode && NULL !== $contentNodes) {
         $beforeNode = ($this->_node->nextSibling instanceof \DOMNode)
           ? $this->_node->nextSibling : NULL;
         $hasContext = $beforeNode instanceof \DOMNode;
@@ -124,7 +124,7 @@ namespace FluentDOM\Nodes {
      */
     public function insertNodesBefore($contentNodes): array {
       $result = [];
-      if ($this->_node instanceof \DOMNode && !empty($contentNodes)) {
+      if ($this->_node instanceof \DOMNode && !NULL !== $contentNodes) {
         foreach ($contentNodes as $contentNode) {
           /** @var \DOMNode $contentNode */
           $result[] = $this->getParentNode()->insertBefore(

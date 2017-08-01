@@ -10,7 +10,7 @@ namespace FluentDOM\Loader {
      * @return bool
      */
     public function supports(string $contentType): bool {
-      return (in_array(strtolower($contentType), $this->getSupported()));
+      return in_array(strtolower($contentType), $this->getSupported(), TRUE);
     }
 
     /**

@@ -141,7 +141,7 @@ namespace FluentDOM\Loader\Json {
      * @return callable|NULL|FALSE
      */
     public function onMapKey($callback = NULL) {
-      if (isset($callback)) {
+      if (NULL !== $callback) {
         $this->_onMapKey = is_callable($callback) ? $callback : NULL;
       }
       return $this->_onMapKey;

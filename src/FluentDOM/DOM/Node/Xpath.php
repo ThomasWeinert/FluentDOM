@@ -35,7 +35,7 @@ namespace FluentDOM\DOM\Node {
         ? $this
         : $this->ownerDocument;
       return $document->xpath()->evaluate(
-        $expression, isset($context) ? $context : $this
+        $expression, $context ?? $this
       );
     }
 

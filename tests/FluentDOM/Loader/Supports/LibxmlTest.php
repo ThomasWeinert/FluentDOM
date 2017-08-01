@@ -19,7 +19,7 @@ namespace FluentDOM\Loader\Supports {
     }
 
     public function load($source, $contentType, $options = []) {
-      return $this->loadXmlDocument($source, $contentType, $options);
+      return $this->loadXmlDocument($source, $options);
     }
 
   }

@@ -40,7 +40,7 @@ namespace FluentDOM {
     public function applyNamespaces() {
       foreach ($this->_namespaces as $prefix => $namespaceURI) {
         $this->writeAttribute(
-          empty($prefix) || $prefix == '#default' ? 'xmlns' : 'xmlns:'.$prefix, $namespaceURI
+          empty($prefix) || $prefix === '#default' ? 'xmlns' : 'xmlns:'.$prefix, $namespaceURI
         );
       }
     }

@@ -22,7 +22,7 @@ namespace FluentDOM\DOM\Node\ChildNode {
     /**
      * Insert nodes before a node.
      *
-     * @param \DOMNode|\DOMNodeList $nodes
+     * @param \DOMNode|\DOMNodeList|NULL $nodes
      */
     public function before($nodes) {
       /** @var \DOMNode|Implementation $this */
@@ -40,7 +40,7 @@ namespace FluentDOM\DOM\Node\ChildNode {
     /**
      * Insert nodes after a node.
      *
-     * @param \DOMNode|\DOMNodeList $nodes
+     * @param \DOMNode|\DOMNodeList|NULL $nodes
      */
     public function after($nodes) {
       /** @var \DOMNode|Implementation $this */

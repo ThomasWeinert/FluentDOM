@@ -200,9 +200,9 @@ namespace FluentDOM\Utility {
      * @param string $name
      * @return bool
      */
-    public static function validate(string $name) {
+    public static function validate(string $name): bool {
       try {
-        new QualifiedName($name);
+        new self($name);
       } catch (\UnexpectedValueException $e) {
         return FALSE;
       }

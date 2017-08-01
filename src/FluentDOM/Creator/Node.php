@@ -84,7 +84,7 @@ namespace FluentDOM\Creator {
      * @return string
      */
     public function __toString(): string {
-      return $this->getDocument()->saveXml() ?: '';
+      return $this->getDocument()->saveXML() ?: '';
     }
 
     /**

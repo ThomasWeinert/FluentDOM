@@ -87,6 +87,7 @@ namespace FluentDOM {
     /**
      * @param string $prefix
      * @param string $namespaceURI
+     * @throws \LogicException
      */
     public function registerNamespace(string $prefix, string $namespaceURI) {
       $this->_document->registerNamespace($prefix, $namespaceURI);
@@ -96,6 +97,7 @@ namespace FluentDOM {
      * @param string $name
      * @param mixed ...$parameters
      * @return Creator\Node
+     * @throws \LogicException
      */
     public function __invoke(string $name, ...$parameters) {
       return new Creator\Node(
@@ -119,6 +121,7 @@ namespace FluentDOM {
      * @param string $name
      * @param mixed ...$parameters
      * @return DOM\Element
+     * @throws \LogicException
      */
     public function element(string $name, ...$parameters): DOM\Element {
       $node = $this->_document->createElement($name);

@@ -183,7 +183,6 @@ namespace FluentDOM\DOM {
     /**
      * @param string $name
      * @param mixed $value
-     * @return mixed
      */
     public function __set(string $name, $value) {
       switch ($name) {

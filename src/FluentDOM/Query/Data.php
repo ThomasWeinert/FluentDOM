@@ -136,7 +136,7 @@ namespace FluentDOM\Query {
           $name = implode('-', $matches[0]);
         }
       }
-      return 'data-'.strToLower($name);
+      return 'data-'.strtolower($name);
     }
 
     /**
@@ -146,10 +146,10 @@ namespace FluentDOM\Query {
      * @return string
      */
     private function decodeName(string $name): string {
-      $parts = explode('-', strToLower(substr($name, 5)));
+      $parts = explode('-', strtolower(substr($name, 5)));
       $result = array_shift($parts);
       foreach ($parts as $part) {
-        $result .= ucFirst($part);
+        $result .= ucfirst($part);
       }
       return $result;
     }

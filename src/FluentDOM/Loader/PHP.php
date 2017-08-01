@@ -15,14 +15,14 @@ namespace FluentDOM\Loader {
    */
   class PHP extends Lazy {
 
-    private $_loaders = [
+    private static $_loaders = [
       '\PHP\PDO' => ['php/pdo', 'pdo'],
       '\PHP\SimpleXml' => ['php/simplexml', 'simplexml']
     ];
 
     public function __construct() {
       parent::__construct();
-      $this->addClasses($this->_loaders, __NAMESPACE__);
+      $this->addClasses(self::$_loaders, __NAMESPACE__);
     }
   }
 }

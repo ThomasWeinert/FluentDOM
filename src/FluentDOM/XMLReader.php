@@ -46,15 +46,15 @@ namespace FluentDOM {
      * @return bool
      */
     public function next($name = NULL, string $namespaceURI = NULL, callable $filter = NULL): bool {
-      if (isset($name)) {
+      if (NULL !== $name) {
         list($localName, $namespaceURI, $ignoreNamespace) = $this->prepareCondition($name, $namespaceURI);
       } else {
-        $ignoreNamespace = empty($namespaceURI);
+        $ignoreNamespace = NULL === $namespaceURI || '' === $namespaceURI;
         $localName = $name;
         $namespaceURI = '';
       }
       if ($ignoreNamespace && !$filter) {
-        return isset($name) ? parent::next($name) : parent::next();
+        return NULL !== $name ? parent::next($name) : parent::next();
       } else {
         $found = empty($localName) ? parent::next() : parent::next($localName);
         while ($found) {
@@ -95,16 +95,16 @@ namespace FluentDOM {
           }
         }
         return FALSE;
-      } elseif ($filter) {
+      }
+      if ($filter) {
         while (parent::read()) {
           if ($filter($this)) {
             return TRUE;
           }
         }
         return FALSE;
-      } else {
-        return parent::read();
       }
+      return parent::read();
     }
 
     /**
@@ -125,9 +125,10 @@ namespace FluentDOM {
     /**
      * @param \DOMNode $baseNode
      * @return Node|\DOMNode
+     * @throws \LogicException
      */
     public function expand($baseNode = NULL) {
-      if (isset($baseNode)) {
+      if (NULL !== $baseNode) {
         return parent::expand($baseNode);
       } else {
         $this->_document = $document = new Document();
@@ -141,8 +142,8 @@ namespace FluentDOM {
      * @param $namespaceURI
      * @return array
      */
-    private function prepareCondition($name, $namespaceURI) {
-      if (isset($namespaceURI)) {
+    private function prepareCondition($name, $namespaceURI): array {
+      if (NULL !== $namespaceURI) {
         $localName = $name;
         $namespaceURI = (string)$namespaceURI;
         $ignoreNamespace = FALSE;

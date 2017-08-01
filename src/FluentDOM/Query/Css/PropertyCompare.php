@@ -37,16 +37,13 @@ namespace FluentDOM\Query\Css {
       $propertyTwoLevels = count($propertyTwo);
       $maxLevels = ($propertyOneLevels > $propertyTwoLevels)
         ? $propertyOneLevels : $propertyTwoLevels;
+      /** @noinspection ForeachInvariantsInspection */
       for ($i = 0; $i < $maxLevels; ++$i) {
         if (
-          isset($propertyOne[$i]) &&
-          isset($propertyTwo[$i])
+          isset($propertyOne[$i], $propertyTwo[$i])
         ) {
-          $compare = strnatcasecmp(
-            $propertyOne[$i],
-            $propertyTwo[$i]
-          );
-          if ($compare != 0) {
+          $compare = strnatcasecmp($propertyOne[$i], $propertyTwo[$i]);
+          if ($compare !== 0) {
             return $compare;
           }
         } else {
@@ -55,11 +52,11 @@ namespace FluentDOM\Query\Css {
       }
       if ($propertyOneLevels > $propertyTwoLevels) {
         return 1;
-      } elseif ($propertyOneLevels < $propertyTwoLevels) {
-        return -1;
-      } else {
-        return 0;
       }
+      if ($propertyOneLevels < $propertyTwoLevels) {
+        return -1;
+      }
+      return 0;
     }
 
     /**

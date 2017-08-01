@@ -74,6 +74,10 @@ abstract class FluentDOM {
    * @param string $contentType
    * @param array $options
    * @return FluentDOM\Query
+   * @throws \LogicException
+   * @throws \OutOfBoundsException
+   * @throws \InvalidArgumentException
+   * @throws \FluentDOM\Exceptions\InvalidSource\Variable
    */
   public static function Query(
     $source = NULL, string $contentType = 'text/xml', array $options = []
@@ -94,6 +98,9 @@ abstract class FluentDOM {
    * @param array $options
    * @throws \LogicException
    * @return FluentDOM\Query
+   * @throws \InvalidArgumentException
+   * @throws \OutOfBoundsException
+   * @throws \FluentDOM\Exceptions\InvalidSource\Variable
    * @codeCoverageIgnore
    */
   public static function QueryCss(

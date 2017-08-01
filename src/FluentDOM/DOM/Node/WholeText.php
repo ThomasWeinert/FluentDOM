@@ -33,6 +33,7 @@ namespace FluentDOM\DOM\Node {
     /**
      * @param string $content
      * @return $this|NULL
+     * @throws \DOMException
      */
     public function replaceWholeText($content) {
       /** @var \FluentDOM\DOM\Text|\FluentDOM\DOM\CdataSection $this */
@@ -74,8 +75,9 @@ namespace FluentDOM\DOM\Node {
         return FALSE;
       };
       $fragment = $this->ownerDocument->createDocumentFragment();
-      $iterate = function($start, callable $getNext) use ($fragment, $replaceNode) {
+      $iterate = function($start, \Closure $getNext) use ($fragment, $replaceNode) {
         if ($parent = $this->parentNode) {
+          /** @noinspection PhpParamsInspection */
           $current = $getNext($start);
           while (($current instanceof \DOMNode) && $replaceNode($current)) {
             if ($current instanceof \DOMEntityReference) {
@@ -83,6 +85,7 @@ namespace FluentDOM\DOM\Node {
             } else {
               $parent->removeChild($current);
             }
+            /** @noinspection PhpParamsInspection */
             $current = $getNext($start);
           }
         }
@@ -95,10 +98,9 @@ namespace FluentDOM\DOM\Node {
         }
         $this->textContent = '';
         return NULL;
-      } else {
-        $this->textContent = $content;
-        return $this;
       }
+      $this->textContent = $content;
+      return $this;
     }
   }
 }

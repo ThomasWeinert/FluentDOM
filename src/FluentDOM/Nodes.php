@@ -38,7 +38,7 @@ namespace FluentDOM {
     /**
      * @var Xpath
      */
-    private $_xpath = NULL;
+    private $_xpath;
 
     /**
      * @var array
@@ -48,7 +48,7 @@ namespace FluentDOM {
     /**
      * @var \DOMDocument
      */
-    private $_document = NULL;
+    private $_document;
 
     /**
      * Content type for output (xml, text/xml, html, text/html).
@@ -60,19 +60,19 @@ namespace FluentDOM {
      * A list of loaders for different data sources
      * @var Loadable $loaders
      */
-    private $_loaders = NULL;
+    private $_loaders;
 
     /**
      * A callback used to convert the selector to xpath before use
      *
      * @var callable
      */
-    private $_onPrepareSelector = NULL;
+    private $_onPrepareSelector;
 
     /**
      * @var Nodes|NULL
      */
-    protected $_parent = NULL;
+    protected $_parent;
 
     /**
      * @var \DOMNode[]
@@ -93,7 +93,7 @@ namespace FluentDOM {
     /**
      * @var Serializer\Factory\Group
      */
-    private $_serializerFactories = NULL;
+    private $_serializerFactories;
 
     /**
      * @param mixed $source
@@ -101,6 +101,7 @@ namespace FluentDOM {
      * @throws \FluentDOM\Exceptions\InvalidSource\Variable
      * @throws \InvalidArgumentException
      * @throws \OutOfBoundsException
+     * @throws \LogicException
      */
     public function __construct($source = NULL, string $contentType = NULL) {
       if (NULL !== $source) {
@@ -119,6 +120,7 @@ namespace FluentDOM {
      * @param array|\Traversable|Options $options
      * @throws \InvalidArgumentException
      * @return $this
+     * @throws \LogicException
      * @throws \FluentDOM\Exceptions\InvalidSource\Variable
      * @throws \OutOfBoundsException
      */
@@ -148,6 +150,7 @@ namespace FluentDOM {
      * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return bool|\DOMDocument|Document|NULL
+     * @throws \LogicException
      * @throws \InvalidArgumentException
      */
     private function prepareSource($source, string $contentType, $options) {
@@ -228,6 +231,7 @@ namespace FluentDOM {
      * @param string $expression
      * @param \DOMNode $contextNode
      * @return Xpath|\DOMNodeList|float|string
+     * @throws \LogicException
      */
     public function xpath(string $expression = NULL, \DOMNode $contextNode = NULL) {
       if (NULL !== $expression) {
@@ -238,6 +242,7 @@ namespace FluentDOM {
 
     /**
      * @return Xpath
+     * @throws \LogicException
      */
     private function getXpath(): Xpath {
       if ($this->_document instanceof Document) {
@@ -771,6 +776,7 @@ namespace FluentDOM {
      * @param mixed $selector selector
      * @param int $options FIND_* options CONTEXT_DOCUMENT, FIND_MODE_FILTER, FIND_FORCE_SORT
      * @return Nodes
+     * @throws \LogicException
      * @throws \OutOfBoundsException
      * @throws \InvalidArgumentException
      */
@@ -850,6 +856,8 @@ namespace FluentDOM {
      *
      * @param NULL|string|\DOMNode|\Traversable $selector
      * @return int
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
      */
     public function index($selector = NULL): int {
       if (count($this->_nodes) > 0) {

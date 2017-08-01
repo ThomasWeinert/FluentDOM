@@ -71,7 +71,7 @@ namespace FluentDOM\Loader\Json {
     protected function transferNamespacesTo(Element $node, $data) {
       foreach ($data as $key => $namespaceURI) {
         $prefix = $key === '$' ? NULL : $key;
-        if ($node->lookupNamespaceUri($prefix) != $namespaceURI) {
+        if ((string)$node->lookupNamespaceUri($prefix) !== $namespaceURI) {
           $node->setAttribute(
             empty($prefix) ? 'xmlns' : 'xmlns:' . $prefix,
             $namespaceURI
@@ -84,13 +84,14 @@ namespace FluentDOM\Loader\Json {
      * @param Element $node
      * @param string $name
      * @param string|number|bool|NULL $data
+     * @throws \LogicException
      */
     protected function transferAttributeTo(Element $node, string $name, $data) {
       /** @var Document $document */
       $document = $node->ownerDocument ?: $node;
-      $name = substr($name, 1);
-      $namespaceURI = $this->getNamespaceForNode($name, new \stdClass(), $node);
-      $attribute = empty($namespaceURI)
+      $name = (string)substr($name, 1);
+      $namespaceURI = (string)$this->getNamespaceForNode($name, new \stdClass(), $node);
+      $attribute = '' !== $namespaceURI
         ? $document->createAttribute($name)
         : $document->createAttributeNS($namespaceURI, $name);
       $attribute->value = $this->getValueAsString($data);

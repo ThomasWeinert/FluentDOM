@@ -91,6 +91,7 @@ namespace FluentDOM\Loader\Supports {
     /**
      * @param array|\Traversable|Options $options
      * @return Options
+     * @throws \InvalidArgumentException
      */
     public function getOptions($options): Options {
       $result = new Options(
@@ -108,7 +109,7 @@ namespace FluentDOM\Loader\Supports {
      * @param \DOMNode|Element $node
      * @param mixed $json
      */
-    protected abstract function transferTo(\DOMNode $node, $json);
+    abstract protected function transferTo(\DOMNode $node, $json);
 
     /**
      * @param mixed $value

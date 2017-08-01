@@ -47,10 +47,10 @@ namespace FluentDOM\Loader\Json {
      */
     private function addNamespaceAttributes(Element $node, \stdClass $properties) {
       foreach ($properties as $name => $value) {
-        if ($name === 'xmlns' || substr($name, 0, 6) === 'xmlns:') {
+        if ($name === 'xmlns' || 0 === strpos($name, 'xmlns:')) {
           if ($node instanceof \DOMElement) {
             $prefix = $name === 'xmlns' ? NULL : substr($name, 6);
-            if ($node->lookupNamespaceUri($prefix) != $value) {
+            if ((string)$node->lookupNamespaceUri($prefix) !== $value) {
               $node->setAttribute($name, $value);
             }
           }
@@ -65,9 +65,9 @@ namespace FluentDOM\Loader\Json {
     private function addAttributes(Element $node, \stdClass $properties) {
       $document = $node instanceof \DOMDocument ? $node : $node->ownerDocument;
       foreach ($properties as $name => $value) {
-        if (!($name === 'xmlns' || substr($name, 0, 6) === 'xmlns:')) {
+        if (!($name === 'xmlns' || 0 === strpos($name, 'xmlns:'))) {
           $namespaceURI = $this->getNamespaceForNode($name, $properties, $node);
-          $attribute = empty($namespaceURI)
+          $attribute = '' === (string)$namespaceURI
             ? $document->createAttribute($name)
             : $document->createAttributeNS($namespaceURI, $name);
           $attribute->value = $this->getValueAsString($value);
@@ -87,7 +87,8 @@ namespace FluentDOM\Loader\Json {
       $hasProperties = $length > 1 && is_object($json[1]);
       $properties = $hasProperties ? $json[1] : new \stdClass;
       $namespaceURI = $this->getNamespaceForNode($nodeName, $properties, $node);
-      $element = empty($namespaceURI)
+      /** @var Element $element */
+      $element = '' === (string)$namespaceURI
         ? $document->createElement($nodeName)
         : $document->createElementNS($namespaceURI, $nodeName);
       $node->appendChild($element);

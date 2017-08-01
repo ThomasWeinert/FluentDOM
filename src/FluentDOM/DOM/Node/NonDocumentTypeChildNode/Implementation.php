@@ -2,8 +2,6 @@
 
 namespace FluentDOM\DOM\Node\NonDocumentTypeChildNode {
 
-  use FluentDOM\DOM\Element;
-
   /**
    * @property-read \DOMNode $firstChild
    * @property-read \DOMNode $lastChild
@@ -17,12 +15,12 @@ namespace FluentDOM\DOM\Node\NonDocumentTypeChildNode {
      */
     public function getNextElementSibling() {
       $node = $this->nextSibling;
-      do {
-        if ($node instanceof Element) {
+      while ($node instanceof \DOMNode) {
+        if ($node instanceof \DOMElement) {
           return $node;
         }
         $node = $node->nextSibling;
-      } while ($node instanceof \DOMNode);
+      }
       return NULL;
     }
 
@@ -31,12 +29,12 @@ namespace FluentDOM\DOM\Node\NonDocumentTypeChildNode {
      */
     public function getPreviousElementSibling() {
       $node = $this->previousSibling;
-      do {
-        if ($node instanceof Element) {
+      while ($node instanceof \DOMNode) {
+        if ($node instanceof \DOMElement) {
           return $node;
         }
         $node = $node->previousSibling;
-      } while ($node instanceof \DOMNode);
+      }
       return NULL;
     }
   }

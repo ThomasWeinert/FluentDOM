@@ -34,10 +34,12 @@ namespace FluentDOM\Loader {
      * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return Document|Result|NULL
+     * @throws \FluentDOM\Exceptions\InvalidSource\TypeString
+     * @throws \FluentDOM\Exceptions\InvalidSource\TypeFile
      */
     public function load($source, string $contentType, $options = []) {
       if ($this->supports($contentType)) {
-        return $this->loadXmlDocument($source, $contentType, $options);
+        return $this->loadXmlDocument($source, $options);
       }
       return NULL;
     }
@@ -48,11 +50,12 @@ namespace FluentDOM\Loader {
      * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return DocumentFragment|NULL
+     * @throws \InvalidArgumentException
      */
     public function loadFragment($source, string $contentType, $options = []) {
       if ($this->supports($contentType)) {
         return (new Libxml\Errors())->capture(
-          function() use ($source, $contentType, $options) {
+          function() use ($source) {
             $document = new Document();
             $fragment = $document->createDocumentFragment();
             $fragment->appendXml($source);

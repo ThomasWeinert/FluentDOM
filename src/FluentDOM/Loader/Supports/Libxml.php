@@ -14,6 +14,7 @@ namespace FluentDOM\Loader\Supports {
     /**
      * @param array|\Traversable|Options $options
      * @return Options
+     * @throws \InvalidArgumentException
      */
     public function getOptions($options): Options {
       $result = new Options(
@@ -31,13 +32,14 @@ namespace FluentDOM\Loader\Supports {
 
     /**
      * @param string $source
-     * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return Document
+     * @throws \FluentDOM\Exceptions\InvalidSource\TypeString
+     * @throws \FluentDOM\Exceptions\InvalidSource\TypeFile
      */
-    private function loadXmlDocument(string $source, string $contentType, $options) {
+    private function loadXmlDocument(string $source, $options): Document {
       return (new Errors())->capture(
-        function () use ($source, $contentType, $options) {
+        function () use ($source, $options) {
           $document = new Document();
           $document->preserveWhiteSpace = FALSE;
           $settings = $this->getOptions($options);

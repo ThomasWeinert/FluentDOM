@@ -55,6 +55,7 @@ namespace FluentDOM {
      * @param string $name
      * @throws \UnexpectedValueException
      * @return mixed
+     * @throws \LogicException
      */
     public function __get(string $name) {
       switch ($name) {
@@ -79,6 +80,8 @@ namespace FluentDOM {
      *
      * @param string $name
      * @param mixed $value
+     * @throws \InvalidArgumentException
+     * @throws \BadMethodCallException
      */
     public function __set(string $name, $value) {
       switch ($name) {
@@ -150,11 +153,13 @@ namespace FluentDOM {
      * @param array $elements
      * @param string|array|\DOMNode|\Traversable|callable $content
      * @return array
+     * @throws \FluentDOM\Exceptions\LoadingError\EmptyResult
+     * @throws \InvalidArgumentException
      */
     private function wrapNodes(array $elements, $content): array {
       $result = [];
       $wrapperTemplate = NULL;
-      $callback = Constraints::filterCallable($content, FALSE, TRUE);
+      $callback = Constraints::filterCallable($content);
       if (!$callback) {
         $wrapperTemplate = $this->build()->getContentElement($content);
       }
@@ -293,10 +298,13 @@ namespace FluentDOM {
      * @param string|\Traversable|array $selector selector
      * @param array|\Traversable $context
      * @return Query
+     * @throws \FluentDOM\Exceptions\LoadingError\EmptyResult
+     * @throws \OutOfBoundsException
+     * @throws \InvalidArgumentException
      */
     public function add($selector, $context = NULL) {
       $result = $this->spawn($this);
-      if (isset($context)) {
+      if (NULL !== $context) {
         $result->push($this->spawn($context)->find($selector));
       } elseif (
         is_object($selector) ||
@@ -314,12 +322,11 @@ namespace FluentDOM {
      * Add the previous selection to the current selection.
      *
      * @return Query
+     * @throws \OutOfBoundsException
+     * @throws \InvalidArgumentException
      */
     public function addBack(): Query {
-      $result = $this->spawn();
-      $result->push($this->_nodes);
-      $result->push($this->_parent);
-      return $result;
+      return $this->spawn()->push($this->_nodes)->push($this->_parent);
     }
 
     /**
@@ -330,14 +337,12 @@ namespace FluentDOM {
      * @example children.php Usage Examples: FluentDOM\Query::children()
      * @param string $selector selector
      * @return Query|Nodes
+     * @throws \OutOfBoundsException
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
      */
     public function children($selector = NULL): Query {
-      return $this->fetch(
-        '*',
-        $selector,
-        NULL,
-        Nodes\Fetcher::UNIQUE
-      );
+      return $this->fetch('*', $selector, NULL, Nodes\Fetcher::UNIQUE);
     }
 
     /**
@@ -348,6 +353,9 @@ namespace FluentDOM {
      * @param string $selector selector
      * @param array|\Traversable $context
      * @return Query|Nodes
+     * @throws \OutOfBoundsException
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
      */
     public function closest($selector, $context = NULL): Query {
       $context = $context ? $this->spawn($context) : $this;
@@ -364,6 +372,9 @@ namespace FluentDOM {
      * child nodes including elements and text nodes of each of the matched set of elements.
      *
      * @return Query|Nodes
+     * @throws \OutOfBoundsException
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
      */
     public function contents(): Query {
       return $this->fetch(
@@ -380,6 +391,8 @@ namespace FluentDOM {
      * @example eq.php Usage Example: FluentDOM\Query::eq()
      * @param int $position Element index (start with 0)
      * @return Query
+     * @throws \OutOfBoundsException
+     * @throws \InvalidArgumentException
      */
     public function eq(int $position): Query {
       $result = $this->spawn();
@@ -400,6 +413,8 @@ namespace FluentDOM {
      * @example filter-fn.php Usage Example: FluentDOM\Query::filter() with Closure
      * @param string|callable $selector selector or callback function
      * @return Query
+     * @throws \OutOfBoundsException
+     * @throws \InvalidArgumentException
      */
     public function filter($selector): Query {
       $callback = $this->getSelectorCallback($selector);
@@ -416,6 +431,8 @@ namespace FluentDOM {
      * Get a set of elements containing only the first of the currently selected elements.
      *
      * @return Query
+     * @throws \OutOfBoundsException
+     * @throws \InvalidArgumentException
      */
     public function first(): Query {
       return $this->eq(0);
@@ -428,7 +445,7 @@ namespace FluentDOM {
      * @return array|\DOMNode|NULL
      */
     public function get(int $position = NULL) {
-      if (!isset($position)) {
+      if (NULL === $position) {
         return $this->_nodes;
       }
       if ($position < 0) {
@@ -436,9 +453,8 @@ namespace FluentDOM {
       }
       if (isset($this->_nodes[$position])) {
         return $this->_nodes[$position];
-      } else {
-        return NULL;
       }
+      return NULL;
     }
 
     /**
@@ -447,16 +463,17 @@ namespace FluentDOM {
      *
      * @param string|\DOMNode $selector selector or DOMNode
      * @return Query
+     * @throws \OutOfBoundsException
+     * @throws \InvalidArgumentException
      */
     public function has($selector): Query {
       $callback = $this->getSelectorCallback($selector);
       $result = $this->spawn();
+      $expression = './/node()';
+      if ($selector instanceof \DOMElement) {
+        $expression = './/*';
+      }
       foreach ($this->_nodes as $node) {
-        if ($selector instanceof \DOMElement) {
-          $expression = './/*';
-        } else {
-          $expression = './/node()';
-        }
         foreach ($this->xpath($expression, $node) as $has) {
           if ($callback($has)) {
             $result->push($node);
@@ -488,6 +505,8 @@ namespace FluentDOM {
      * Get a set of elements containing only the last of the currently selected elements.
      *
      * @return Query
+     * @throws \OutOfBoundsException
+     * @throws \InvalidArgumentException
      */
     public function last(): Query {
       return $this->eq(-1);
@@ -510,7 +529,8 @@ namespace FluentDOM {
         $mapped = $function($node, $index);
         if ($mapped === NULL) {
           continue;
-        } elseif ($mapped instanceof \Traversable || is_array($mapped)) {
+        }
+        if ($mapped instanceof \Traversable || is_array($mapped)) {
           foreach ($mapped as $element) {
             if ($element !== NULL) {
               $result[] = $element;
@@ -529,6 +549,8 @@ namespace FluentDOM {
      * @example not.php Usage Example: FluentDOM\Query::not()
      * @param string|callback $selector selector or callback function
      * @return Query
+     * @throws \OutOfBoundsException
+     * @throws \InvalidArgumentException
      */
     public function not($selector): Query {
       $callback = $this->getSelectorCallback($selector);
@@ -546,6 +568,9 @@ namespace FluentDOM {
      * @example next.php Usage Example: FluentDOM\Query::next()
      * @param string $selector
      * @return Query|Nodes
+     * @throws \OutOfBoundsException
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
      */
     public function next($selector = NULL): Query {
       return $this->fetch(
@@ -564,6 +589,9 @@ namespace FluentDOM {
      * @example nextAll.php Usage Example: FluentDOM\Query::nextAll()
      * @param string $selector selector
      * @return Query|Nodes
+     * @throws \OutOfBoundsException
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
      */
     public function nextAll($selector = NULL): Query {
       return $this->fetch(
@@ -579,6 +607,9 @@ namespace FluentDOM {
      * @param string $selector selector
      * @param string $filter selector
      * @return Query|Nodes
+     * @throws \OutOfBoundsException
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
      */
     public function nextUntil($selector = NULL, $filter = NULL): Query {
       return $this->fetch(
@@ -593,14 +624,12 @@ namespace FluentDOM {
      *
      * @example parent.php Usage Example: FluentDOM\Query::parent()
      * @return Query|Nodes
+     * @throws \OutOfBoundsException
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
      */
     public function parent(): Query {
-      return $this->fetch(
-        'parent::*',
-        NULL,
-        NULL,
-        Fetcher::UNIQUE
-      );
+      return $this->fetch('parent::*', NULL, NULL, Fetcher::UNIQUE);
     }
 
     /**
@@ -610,14 +639,12 @@ namespace FluentDOM {
      * @example parents.php Usage Example: FluentDOM\Query::parents()
      * @param string $selector selector
      * @return Query|Nodes
+     * @throws \LogicException
+     * @throws \OutOfBoundsException
+     * @throws \InvalidArgumentException
      */
     public function parents($selector = NULL): Query {
-      return $this->fetch(
-        'ancestor::*',
-        $selector,
-        NULL,
-        Fetcher::REVERSE
-      );
+      return $this->fetch('ancestor::*', $selector, NULL, Fetcher::REVERSE);
     }
 
     /**
@@ -627,14 +654,12 @@ namespace FluentDOM {
      * @param string $stopAt selector
      * @param string $filter selector
      * @return Query|Nodes
+     * @throws \OutOfBoundsException
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
      */
     public function parentsUntil($stopAt = NULL, $filter = NULL): Query {
-      return $this->fetch(
-        'ancestor::*',
-        $filter,
-        $stopAt,
-        Nodes\Fetcher::REVERSE
-      );
+      return $this->fetch('ancestor::*', $filter, $stopAt,Nodes\Fetcher::REVERSE);
     }
 
     /**
@@ -644,6 +669,9 @@ namespace FluentDOM {
      * @example prev.php Usage Example: FluentDOM\Query::prev()
      * @param string $selector selector
      * @return Query|Nodes
+     * @throws \OutOfBoundsException
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
      */
     public function prev($selector = NULL): Query {
       return $this->fetch(
@@ -662,6 +690,9 @@ namespace FluentDOM {
      * @example prevAll.php Usage Example: FluentDOM\Query::prevAll()
      * @param string $selector selector
      * @return Query|Nodes
+     * @throws \OutOfBoundsException
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
      */
     public function prevAll($selector = NULL): Query {
       return $this->fetch(
@@ -679,6 +710,9 @@ namespace FluentDOM {
      * @param string $selector selector
      * @param string $filter selector
      * @return Query|Nodes
+     * @throws \OutOfBoundsException
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
      */
     public function prevUntil($selector = NULL, $filter = NULL): Query {
       return $this->fetch(
@@ -694,11 +728,11 @@ namespace FluentDOM {
      * Reverse the order of the matched elements.
      *
      * @return Query
+     * @throws \OutOfBoundsException
+     * @throws \InvalidArgumentException
      */
     public function reverse(): Query {
-      $result = $this->spawn();
-      $result->push(array_reverse($this->_nodes));
-      return $result;
+      return $this->spawn()->push(array_reverse($this->_nodes));
     }
 
     /**
@@ -708,6 +742,9 @@ namespace FluentDOM {
      * @example siblings.php Usage Example: FluentDOM\Query::siblings()
      * @param string $selector selector
      * @return Query|Nodes
+     * @throws \OutOfBoundsException
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
      */
     public function siblings($selector = NULL): Query {
       return $this->fetch(
@@ -728,6 +765,8 @@ namespace FluentDOM {
      * @param int $start
      * @param int $end
      * @return Query
+     * @throws \OutOfBoundsException
+     * @throws \InvalidArgumentException
      */
     public function slice(int $start, int $end = NULL): Query {
       $result = $this->spawn();
@@ -764,13 +803,16 @@ namespace FluentDOM {
       );
     }
 
-   /**
-   * Append content to the inside of every matched element.
-   *
-   * @example append.php Usage Example: FluentDOM\Query::append()
-   * @param string|array|\DOMNode|\Traversable|callable $content DOMNode or DOMNodeList or xml fragment string
-   * @return Query
-   */
+    /**
+     * Append content to the inside of every matched element.
+     *
+     * @example append.php Usage Example: FluentDOM\Query::append()
+     * @param string|array|\DOMNode|\Traversable|callable $content DOMNode or DOMNodeList or xml fragment string
+     * @return Query
+     * @throws \InvalidArgumentException
+     * @throws \FluentDOM\Exceptions\LoadingError\EmptyResult
+     * @throws \LogicException
+     */
     public function append($content): Query {
       if (empty($this->_nodes) &&
         $this->_useDocumentContext &&
@@ -832,6 +874,8 @@ namespace FluentDOM {
      *
      * @example clone.php Usage Example: FluentDOM\Query:clone()
      * @return Query
+     * @throws \OutOfBoundsException
+     * @throws \InvalidArgumentException
      */
     public function clone(): Query {
       $result = $this->spawn();
@@ -847,6 +891,7 @@ namespace FluentDOM {
      *
      * @example empty.php Usage Example: FluentDOM\Query:empty()
      * @return Query
+     * @throws \InvalidArgumentException
      */
     public function empty(): Query {
       $this->each(
@@ -864,6 +909,7 @@ namespace FluentDOM {
      * @example insertAfter.php Usage Example: FluentDOM\Query::insertAfter()
      * @param string|array|\DOMNode|\Traversable $selector
      * @return Query
+     * @throws \InvalidArgumentException
      */
     public function insertAfter($selector): Query {
       return $this->applyToSpawn(
@@ -934,6 +980,7 @@ namespace FluentDOM {
      * @example replaceAll.php Usage Example: FluentDOM\Query::replaceAll()
      * @param string|array|\DOMNode|\Traversable $selector
      * @return Query
+     * @throws \InvalidArgumentException
      */
     public function replaceAll($selector): Query {
       $result = $this->applyToSpawn(
@@ -957,6 +1004,8 @@ namespace FluentDOM {
      * @example replaceWith.php Usage Example: FluentDOM\Query::replaceWith()
      * @param string|array|\DOMNode|\Traversable|callable $content
      * @return Query
+     * @throws \InvalidArgumentException
+     * @throws \FluentDOM\Exceptions\LoadingError\EmptyResult
      */
     public function replaceWith($content): Query {
       $this->apply(
@@ -976,12 +1025,14 @@ namespace FluentDOM {
      * @example remove.php Usage Example: FluentDOM\Query::remove()
      * @param string $selector selector
      * @return Query removed elements
+     * @throws \OutOfBoundsException
+     * @throws \InvalidArgumentException
      */
-    public function remove($selector = NULL): Query {
+    public function remove(string $selector = NULL): Query {
       $result = $this->spawn();
       foreach ($this->_nodes as $node) {
         if ($node->parentNode instanceof \DOMNode) {
-          if (empty($selector) || $this->matches($selector, $node)) {
+          if (NULL === $selector || $this->matches($selector, $node)) {
             $result->push($node->parentNode->removeChild($node));
           }
         }
@@ -996,25 +1047,21 @@ namespace FluentDOM {
      * @example text.php Usage Example: FluentDOM\Query::text()
      * @param string|callable $text
      * @return string|Query
+     * @throws \InvalidArgumentException
      */
     public function text($text = NULL) {
-      if (isset($text)) {
-        $callback = Constraints::filterCallable($text, FALSE, TRUE);
+      if (NULL !== $text) {
+        $callback = Constraints::filterCallable($text);
         foreach ($this->_nodes as $index => $node) {
-          if ($callback) {
-            $node->nodeValue = $callback($node, $index, $node->nodeValue);
-          } else {
-            $node->nodeValue = $text;
-          }
+          $node->nodeValue = $callback ? $callback($node, $index, $node->nodeValue): $text;
         }
         return $this;
-      } else {
-        $result = '';
-        foreach ($this->_nodes as $node) {
-          $result .= $node->textContent;
-        }
-        return $result;
       }
+      $result = '';
+      foreach ($this->_nodes as $node) {
+        $result .= $node->textContent;
+      }
+      return $result;
     }
 
     /**
@@ -1027,8 +1074,7 @@ namespace FluentDOM {
      * @return Query
      */
     public function wrap($content): Query {
-      $result = $this->spawn($this->wrapNodes($this->_nodes, $content));
-      return $result;
+      return $this->spawn($this->wrapNodes($this->_nodes, $content));
     }
 
     /**
@@ -1039,6 +1085,9 @@ namespace FluentDOM {
      * @example wrapAll.php Usage Example: FluentDOM::wrapAll()
      * @param string|array|\DOMNode|\Traversable $content
      * @return Query
+     * @throws \FluentDOM\Exceptions\LoadingError\EmptyResult
+     * @throws \OutOfBoundsException
+     * @throws \InvalidArgumentException
      */
     public function wrapAll($content): Query {
       $result = $this->spawn();
@@ -1135,6 +1184,10 @@ namespace FluentDOM {
      * @example xml.php Usage Example: FluentDOM::xml()
      * @param string|callable|NULL $xml XML fragment
      * @return string|$this
+     * @throws \InvalidArgumentException
+     * @throws \FluentDOM\Exceptions\InvalidFragmentLoader
+     * @throws \UnexpectedValueException
+     * @throws \LogicException
      */
     public function xml($xml = NULL) {
       return $this->content(
@@ -1143,7 +1196,7 @@ namespace FluentDOM {
           return $this->build()->getInnerXml($node);
         },
         function($node) {
-          return $this->build()->getFragment($node, 'text/xml', TRUE);
+          return $this->build()->getFragment($node);
         },
         function($node, $fragment) {
           $this->modify($node)->replaceChildren($fragment);
@@ -1157,6 +1210,10 @@ namespace FluentDOM {
      *
      * @param string|callable|NULL $xml
      * @return string|$this
+     * @throws \LogicException
+     * @throws \UnexpectedValueException
+     * @throws \InvalidArgumentException
+     * @throws \FluentDOM\Exceptions\InvalidFragmentLoader
      */
     public function outerXml($xml = NULL) {
       return $this->outerContent(
@@ -1165,7 +1222,7 @@ namespace FluentDOM {
           return $this->getDocument()->saveXML($node);
         },
         function($xml) {
-          return $this->build()->getFragment($xml, 'text/xml', TRUE);
+          return $this->build()->getFragment($xml);
         }
       );
     }
@@ -1176,6 +1233,10 @@ namespace FluentDOM {
      *
      * @param string|callable|NULL $html
      * @return string|$this
+     * @throws \LogicException
+     * @throws \UnexpectedValueException
+     * @throws \InvalidArgumentException
+     * @throws \FluentDOM\Exceptions\InvalidFragmentLoader
      */
     public function outerHtml($html = NULL) {
       return $this->outerContent(
@@ -1195,13 +1256,17 @@ namespace FluentDOM {
      *
      * @param string|callable|NULL $html
      * @return string|$this
+     * @throws \LogicException
+     * @throws \UnexpectedValueException
+     * @throws \InvalidArgumentException
+     * @throws \FluentDOM\Exceptions\InvalidFragmentLoader
      */
     public function html($html = NULL) {
       return $this->content(
         $html,
-        function($node) {
+        function(\DOMNode $parent) {
           $result = '';
-          foreach ($node->childNodes as $node) {
+          foreach ($parent->childNodes as $node) {
             $result .= $this->getDocument()->saveHTML($node);
           }
           return $result;
@@ -1221,10 +1286,11 @@ namespace FluentDOM {
      * @param callable $import
      * @param callable $insert
      * @return string|$this
+     * @throws \InvalidArgumentException
      */
     private function content($content, callable $export, callable $import, callable $insert) {
-      if (isset($content)) {
-        $callback = Constraints::filterCallable($content, FALSE, TRUE);
+      if (NULL !== $content) {
+        $callback = Constraints::filterCallable($content);
         if ($callback) {
           foreach ($this->_nodes as $index => $node) {
             $contentString = $callback($node, $index, $export($node));
@@ -1237,7 +1303,8 @@ namespace FluentDOM {
           }
         }
         return $this;
-      } elseif (isset($this->_nodes[0])) {
+      }
+      if (isset($this->_nodes[0])) {
         return $export($this->_nodes[0]);
       }
       return '';
@@ -1248,13 +1315,14 @@ namespace FluentDOM {
      * @param callable $export
      * @param callable $import
      * @return $this|string
+     * @throws \InvalidArgumentException
      */
     private function outerContent($content, callable $export, callable $import) {
       return $this->content(
         $content,
         $export,
         $import,
-        function($node, $fragment) {
+        function(\DOMNode $node, $fragment) {
           $this->modify($node)->replaceNode($fragment);
         }
       );
@@ -1270,15 +1338,16 @@ namespace FluentDOM {
      * @return array|NULL
      */
     private function getNamesList($names) {
-      $attributes = NULL;
       if (is_array($names)) {
-        $attributes = $names;
-      } elseif (is_string($names) && $names !== '*' && $names !== '') {
-        $attributes = [$names];
-      } elseif (isset($names) && $names !== '*') {
-        throw new \InvalidArgumentException();
+        return $names;
       }
-      return $attributes;
+      if (is_string($names) && $names !== '*' && $names !== '') {
+        return [$names];
+      }
+      if (NULL !== $names && $names !== '*') {
+        throw new \InvalidArgumentException('Invalid names argument provided.');
+      }
+      return NULL;
     }
 
     /**
@@ -1290,7 +1359,8 @@ namespace FluentDOM {
     private function getSetterValues($name, $value) {
       if (is_string($name)) {
         return [(string)$name => $value];
-      } elseif (is_array($name) || $name instanceOf \Traversable) {
+      }
+      if (is_array($name) || $name instanceOf \Traversable) {
         return $name;
       }
       throw new \InvalidArgumentException('Invalid css property name argument type.');
@@ -1303,9 +1373,10 @@ namespace FluentDOM {
      * @param string|array $attribute attribute name or attribute list
      * @param array ...$arguments
      * @return $this|string attribute value or $this
+     * @throws \InvalidArgumentException
      */
     public function attr($attribute, ...$arguments) {
-      if (count($arguments) == 0 && is_string($attribute)) {
+      if (is_string($attribute) && count($arguments) === 0) {
         //empty value - read attribute from first element in list
         $attribute = (new QualifiedName($attribute))->name;
         $node = $this->getFirstElement();
@@ -1314,7 +1385,7 @@ namespace FluentDOM {
         }
         return NULL;
       } else {
-        $attributes = $this->getSetterValues($attribute, isset($arguments[0]) ? $arguments[0] : NULL);
+        $attributes = $this->getSetterValues($attribute, $arguments[0] ?? NULL);
         // set attributes on each element
         foreach ($attributes as $key => $value) {
           $name = (new QualifiedName($key))->name;
@@ -1365,9 +1436,7 @@ namespace FluentDOM {
       $this->each(
         function(\DOMElement $node) use ($names) {
           /** @noinspection PhpParamsInspection */
-          $attributes = NULL === $names
-            ? array_keys(iterator_to_array($node->attributes))
-            : $names;
+          $attributes = $names ?? array_keys(iterator_to_array($node->attributes));
           foreach ($attributes as $attribute) {
             if ($node->hasAttribute($attribute)) {
               $node->removeAttribute($attribute);
@@ -1403,7 +1472,7 @@ namespace FluentDOM {
       foreach ($this->_nodes as $node) {
         if ($node instanceof \DOMElement && $node->hasAttribute('class')) {
           $classes = preg_split('(\s+)', trim($node->getAttribute('class')));
-          if (in_array($class, $classes)) {
+          if (in_array($class, $classes, TRUE)) {
             return TRUE;
           }
         }
@@ -1416,6 +1485,7 @@ namespace FluentDOM {
      *
      * @param string|callable $class
      * @return $this|Query
+     * @throws \InvalidArgumentException
      */
     public function removeClass($class = ''): Query {
       return $this->toggleClass($class, FALSE);
@@ -1430,16 +1500,13 @@ namespace FluentDOM {
      * @param string|callable $class
      * @param NULL|bool $switch toggle if NULL, add if TRUE, remove if FALSE
      * @return $this|Query
+     * @throws \InvalidArgumentException
      */
     public function toggleClass($class, bool $switch = NULL): Query {
       $callback = Constraints::filterCallable($class);
       $this->each(
         function(\DOMElement $node, $index) use ($class, $switch, $callback) {
-          if ($callback) {
-            $classString = $callback($node, $index, $node->getAttribute('class'));
-          } else {
-            $classString = $class;
-          }
+          $classString = $callback ? $callback($node, $index, $node->getAttribute('class')) : $class;
           if (empty($classString) && !(bool)$switch) {
             if ($node->hasAttribute('class')) {
               $node->removeAttribute('class');
@@ -1514,21 +1581,21 @@ namespace FluentDOM {
      * @return string|NULL|$this
      */
     public function css($property, ...$arguments) {
-      if (count($arguments) == 0 && is_string($property)) {
+      if (is_string($property) && count($arguments) === 0) {
         $properties = new Query\Css\Properties((string)$this->attr('style'));
         if (isset($properties[$property])) {
           return $properties[$property];
         }
         return NULL;
       }
-      $values = $this->getSetterValues($property, isset($arguments[0]) ? $arguments[0] : NULL);
+      $values = $this->getSetterValues($property, $arguments[0] ?? NULL);
       //set list of properties to all elements
       $this->each(
         function(\DOMElement $node, $index) use ($values) {
           $properties = new Query\Css\Properties($node->getAttribute('style'));
           foreach ($values as $name => $value) {
             $properties[$name] = $properties->compileValue(
-              $value, $node, $index, isset($properties[$name]) ? $properties[$name] : NULL
+              $value, $node, $index, $properties[$name] ?? NULL
             );
           }
           if (count($properties) > 0) {
@@ -1553,17 +1620,16 @@ namespace FluentDOM {
      * @param string|array $name data attribute identifier or array of data attributes to set
      * @param [mixed] ...$arguments
      * @return mixed
+     * @throws \InvalidArgumentException
      */
     public function data($name, ...$arguments) {
-      if (count($arguments) == 0 && !is_array($name)) {
-        //reading
+      if (is_string($name) && count($arguments) === 0) {
         if ($node = $this->getFirstElement()) {
-          $data = new Query\Data($node);
-          return $data->$name;
+          return (new Query\Data($node))->$name;
         }
         return NULL;
       }
-      $values = $this->getSetterValues($name, isset($arguments[0]) ? $arguments[0] : NULL);
+      $values = $this->getSetterValues($name, $arguments[0] ?? NULL);
       $this->each(
         function(\DOMElement $node) use ($values) {
           $data = new Query\Data($node);
@@ -1609,7 +1675,7 @@ namespace FluentDOM {
      * Validate if the element has an data attributes attached. If it is called without an
      * actual $element parameter, it will check the first matched node.
      *
-     * @param \DOMElement $element
+     * @param \DOMElement|NULL $element
      * @return bool
      */
     public function hasData(\DOMElement $element = NULL): bool {

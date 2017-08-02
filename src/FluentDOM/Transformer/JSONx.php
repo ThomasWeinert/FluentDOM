@@ -46,7 +46,7 @@ namespace FluentDOM\Transformer {
     public function __toString(): string {
       try {
         return $this->getDocument()->saveXML();
-      } catch (\Exception $e) {
+      } catch (\Throwable $e) {
         return '';
       }
     }
@@ -55,7 +55,6 @@ namespace FluentDOM\Transformer {
      * Create and return a JSONx document.
      *
      * @return Document
-     * @throws \LogicException
      */
     public function getDocument(): Document {
       $document = new Document();

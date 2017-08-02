@@ -24,6 +24,17 @@ namespace FluentDOM\Serializer {
       );
     }
 
+    /**
+     * @covers \FluentDOM\Transformer\JSONx
+     */
+    public function testCastInvalidDocumentToStringExpectingEmptyString() {
+      $document = new Document();
+      $transformer = new JSONx($document);
+      $this->assertEquals(
+        '', (string)$transformer
+      );
+    }
+
     public  static function provideExamples() {
       return [
         'object as root' => [

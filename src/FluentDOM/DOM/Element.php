@@ -224,7 +224,7 @@ namespace FluentDOM\DOM {
      * - a scalar or object castable to string (adds a text node)
      * - an array (sets attributes)
      *
-     * @param mixed $value
+     * @param \Traversable|\DOMNode|Appendable|array|string|callable $value
      * @return $this|Element
      * @throws \LogicException
      */

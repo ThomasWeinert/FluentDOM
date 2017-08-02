@@ -307,7 +307,7 @@ namespace FluentDOM {
         $result->push($this->spawn($context)->find($selector));
       } elseif (
         is_object($selector) ||
-        (is_string($selector) && substr(ltrim($selector), 0, 1) === '<')
+        (is_string($selector) && 0 === strpos(ltrim($selector), '<'))
       ) {
         $result->push($this->build()->getContentNodes($selector));
       } else {

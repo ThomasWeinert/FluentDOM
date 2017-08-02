@@ -71,7 +71,7 @@ namespace FluentDOM\Loader\Json {
         $this->transferAttributes($target, $namespaces, $attributes);
         foreach ($json->{'#children'} as $value) {
           $name = $value->{'#name'} ?? '@';
-          if (substr($name, 0, 1) !== '@') {
+          if (0 !== strpos($name, '@')) {
             $this->transferTo($target, $value);
           }
         }
@@ -105,9 +105,9 @@ namespace FluentDOM\Loader\Json {
         foreach ($json->{'#children'} as $child) {
           $name = $child->{'#name'} ?? '';
           $value = $child->{'#text'} ?? '';
-          if ($name === '@xmlns' || substr($name, 0, 7) === '@xmlns:') {
+          if ($name === '@xmlns' || 0 === strpos($name, '@xmlns:')) {
             $namespaces->{substr($name, 1)} = $value;
-          } elseif (substr($name, 0, 1) === '@') {
+          } elseif (0 === strpos($name, '@')) {
             $attributes->{substr($name, 1)} = $value;
           }
         }

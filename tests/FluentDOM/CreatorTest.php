@@ -62,6 +62,16 @@ namespace FluentDOM {
      * @covers \FluentDOM\Creator
      * @covers \FluentDOM\Creator\Node
      */
+    public function testCreateIssetDocument() {
+      $_ = new Creator();
+      $node = $_('xml', $_('child'));
+      $this->assertTrue(isset($node->document));
+    }
+
+    /**
+     * @covers \FluentDOM\Creator
+     * @covers \FluentDOM\Creator\Node
+     */
     public function testCreateFetchingDom() {
       $_ = new Creator();
       $document = $_('xml', $_('child'))->document;
@@ -69,6 +79,16 @@ namespace FluentDOM {
       $this->assertXmlStringEqualsXmlString(
         '<xml><child/></xml>', $document->saveXml()
       );
+    }
+
+    /**
+     * @covers \FluentDOM\Creator
+     * @covers \FluentDOM\Creator\Node
+     */
+    public function testCreateIssetNode() {
+      $_ = new Creator();
+      $node = $_('xml', $_('child'));
+      $this->assertTrue(isset($node->node));
     }
 
     /**
@@ -349,10 +369,27 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\Creator\Node
      */
+    public function testCreateIssetUnknownPropertyOnResultExpectingFalse() {
+      $_ = new Creator();
+      $this->assertFalse(isset($_('foo')->SOME_PROPERTY));
+    }
+
+    /**
+     * @covers \FluentDOM\Creator\Node
+     */
     public function testCreateSetPropertyOnResultExpectingException() {
       $_ = new Creator();
       $this->expectException(\LogicException::class);
       $_('foo')->document = 'bar';
+    }
+
+    /**
+     * @covers \FluentDOM\Creator\Node
+     */
+    public function testCreateUnsetPropertyOnResultExpectingException() {
+      $_ = new Creator();
+      $this->expectException(\LogicException::class);
+      unset($_('foo')->document);
     }
 
     /**

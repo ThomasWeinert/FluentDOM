@@ -66,6 +66,7 @@ namespace FluentDOM\Loader\Json {
     /**
      * @param Element $node
      * @param \stdClass $data
+     * @throws \LogicException
      */
     protected function transferNamespacesTo(Element $node, $data) {
       foreach ($data as $key => $namespaceURI) {
@@ -90,7 +91,7 @@ namespace FluentDOM\Loader\Json {
       $document = $node->ownerDocument ?: $node;
       $name = (string)substr($name, 1);
       $namespaceURI = (string)$this->getNamespaceForNode($name, new \stdClass(), $node);
-      $attribute = '' !== $namespaceURI
+      $attribute = '' === $namespaceURI
         ? $document->createAttribute($name)
         : $document->createAttributeNS($namespaceURI, $name);
       $attribute->value = $this->getValueAsString($data);

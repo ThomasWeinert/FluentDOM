@@ -1371,6 +1371,7 @@ namespace FluentDOM {
      * @param string|array $attribute attribute name or attribute list
      * @param array ...$arguments
      * @return $this|string attribute value or $this
+     * @throws \UnexpectedValueException
      * @throws \InvalidArgumentException
      */
     public function attr($attribute, ...$arguments) {
@@ -1593,8 +1594,8 @@ namespace FluentDOM {
         function(\DOMElement $node, $index) use ($values) {
           $properties = new Query\Css\Properties($node->getAttribute('style'));
           foreach ($values as $name => $value) {
-            $properties[$name] = $properties->compileValue(
-              $value, $node, $index, $properties[$name] ?? NULL
+            $properties[(string)$name] = $properties->compileValue(
+              $value, $node, $index, $properties[(string)$name] ?? NULL
             );
           }
           if (count($properties) > 0) {

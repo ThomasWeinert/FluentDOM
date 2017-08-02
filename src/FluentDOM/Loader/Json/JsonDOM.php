@@ -69,7 +69,7 @@ namespace FluentDOM\Loader\Json {
      * @param int $depth
      */
     public function __construct(int $options = 0, int $depth = 100) {
-      $this->_recursions = (int)$depth;
+      $this->_recursions = $depth;
       $this->_verbose = ($options & self::OPTION_VERBOSE) === self::OPTION_VERBOSE;
     }
 

@@ -199,7 +199,7 @@ namespace FluentDOM\Serializer {
         ) {
           $result[$namespaceNode->nodeName] = $namespaceNode->namespaceURI;
         }
-      };
+      }
       return $result;
     }
   }

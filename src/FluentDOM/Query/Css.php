@@ -12,7 +12,7 @@
 
 namespace FluentDOM\Query {
 
-  use FluentDOM\Query as Query;
+  use FluentDOM\Query;
 
   /**
    * FluentDOMCss is used for the FluentDOM:css property, providing an array like interface

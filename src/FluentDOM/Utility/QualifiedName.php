@@ -243,7 +243,7 @@ namespace FluentDOM\Utility {
         '',
         $string
       );
-      return (empty($result)) ? $default : $result;
+      return empty($result) ? $default : $result;
     }
   }
 }

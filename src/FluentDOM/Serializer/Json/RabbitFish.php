@@ -47,12 +47,13 @@ namespace FluentDOM\Serializer\Json {
      */
     private function getNodesArray(\DOMElement $node, $attributes, $xpath): array {
       $result = [];
-      foreach ($attributes as $name => $value) {
+      foreach ((array)$attributes as $name => $value) {
         $child = new \stdClass();
         $child->{$name} = $value;
         $result[] = $child;
       }
-      foreach ($xpath->evaluate('*|text()[normalize-space(.) != ""]', $node) as $childNode) {
+      $nodes = $xpath->evaluate('*|text()[normalize-space(.) != ""]', $node);
+      foreach ($nodes as $childNode) {
         /** @var \DOMElement|\DOMText|\DOMCdataSection $childNode */
         if ($childNode instanceof \DOMElement) {
           $child = new \stdClass();

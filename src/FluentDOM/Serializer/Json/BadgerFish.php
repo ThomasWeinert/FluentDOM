@@ -38,11 +38,13 @@ namespace FluentDOM\Serializer\Json {
       $xpath = new Xpath($node->ownerDocument);
       $this->addNamespaces($result, $node, $xpath);
       $this->addAttributes($result, $node, $xpath);
-      foreach ($xpath->evaluate('*', $node) as $childNode) {
-        $this->addElement($result, $childNode);
-      }
-      foreach ($xpath->evaluate('text()', $node) as $childNode) {
-        $this->addText($result, $childNode);
+      $nodes = $xpath->evaluate('*|text()', $node);
+      foreach ($nodes as $childNode) {
+        if ($childNode instanceof \DOMElement) {
+          $this->addElement($result, $childNode);
+        } else {
+          $this->addText($result, $childNode);
+        }
       }
       return $result;
     }
@@ -53,7 +55,8 @@ namespace FluentDOM\Serializer\Json {
      * @param Xpath $xpath
      */
     protected function addAttributes(\stdClass $target, \DOMElement $node, Xpath $xpath) {
-      foreach ($xpath->evaluate('@*', $node) as $attribute) {
+      $nodes = $xpath->evaluate('@*', $node);
+      foreach ($nodes as $attribute) {
         $target->{'@'.$attribute->name} = $attribute->value;
       }
     }
@@ -70,7 +73,8 @@ namespace FluentDOM\Serializer\Json {
         }
         $target->{'@xmlns'}->{'$'} = $node->namespaceURI;
       }
-      foreach ($xpath->evaluate('namespace::*', $node) as $namespaceNode) {
+      $nodes = $xpath->evaluate('namespace::*', $node);
+      foreach ($nodes as $namespaceNode) {
         if ($namespaceNode->localName === 'xml' || $namespaceNode->localName === 'xmlns') {
           continue;
         }

@@ -39,9 +39,7 @@ namespace FluentDOM\Query\Css {
         ? $propertyOneLevels : $propertyTwoLevels;
       /** @noinspection ForeachInvariantsInspection */
       for ($i = 0; $i < $maxLevels; ++$i) {
-        if (
-          isset($propertyOne[$i], $propertyTwo[$i])
-        ) {
+        if (isset($propertyOne[$i], $propertyTwo[$i])) {
           $compare = strnatcasecmp($propertyOne[$i], $propertyTwo[$i]);
           if ($compare !== 0) {
             return $compare;

@@ -142,10 +142,9 @@ namespace FluentDOM\Serializer {
     private function getType(\DOMElement $node): string {
       if ($node->hasAttributeNS(self::XMLNS_JSONDOM, 'type')) {
         return $node->getAttributeNS(self::XMLNS_JSONDOM, 'type');
-      } else {
-        $xpath = new Xpath($node->ownerDocument);
-        return $xpath('count(*) > 0', $node) ? 'object' : 'string';
       }
+      $xpath = new Xpath($node->ownerDocument);
+      return $xpath('count(*) > 0', $node) ? 'object' : 'string';
     }
 
     /**
@@ -155,9 +154,8 @@ namespace FluentDOM\Serializer {
     private function getKey(\DOMElement $node): string {
       if ($node->hasAttributeNS(self::XMLNS_JSONDOM, 'name')) {
         return $node->getAttributeNS(self::XMLNS_JSONDOM, 'name');
-      } else {
-        return $node->localName;
       }
+      return $node->localName;
     }
 
     /**

@@ -118,9 +118,8 @@ namespace FluentDOM\Loader\Supports {
     private function getValueAsString($value): string {
       if (is_bool($value)) {
         return $value ? 'true' : 'false';
-      } else {
-        return (string)$value;
       }
+      return (string)$value;
     }
 
     /**

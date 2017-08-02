@@ -161,7 +161,8 @@ namespace FluentDOM\Loader\Json {
     protected function transferTo(\DOMNode $target, $value, int $recursions = 100) {
       if ($recursions < 1) {
         return;
-      } elseif ($target instanceof Element || $target instanceOf DocumentFragment) {
+      }
+      if ($target instanceof Element || $target instanceOf DocumentFragment) {
         $type = $this->getTypeFromValue($value);
         switch ($type) {
         case self::TYPE_ARRAY :
@@ -194,17 +195,20 @@ namespace FluentDOM\Loader\Json {
           return self::TYPE_ARRAY;
         }
         return self::TYPE_OBJECT;
-      } elseif (is_object($value)) {
-        return self::TYPE_OBJECT;
-      } elseif (NULL === $value) {
-        return self::TYPE_NULL;
-      } elseif (is_bool($value)) {
-        return self::TYPE_BOOLEAN;
-      } elseif (is_int($value) || is_float($value)) {
-        return self::TYPE_NUMBER;
-      } else {
-        return self::TYPE_STRING;
       }
+      if (is_object($value)) {
+        return self::TYPE_OBJECT;
+      }
+      if (NULL === $value) {
+        return self::TYPE_NULL;
+      }
+      if (is_bool($value)) {
+        return self::TYPE_BOOLEAN;
+      }
+      if (is_int($value) || is_float($value)) {
+        return self::TYPE_NUMBER;
+      }
+      return self::TYPE_STRING;
     }
 
     /**
@@ -255,8 +259,8 @@ namespace FluentDOM\Loader\Json {
         $parentName = $target->getAttributeNS(self::XMLNS, 'name') ?: $target->localName;
       }
       foreach ($value as $item) {
-        $target->appendChild(
-          $child = $target->ownerDocument->createElement(
+        $child = $target->appendChild(
+          $target->ownerDocument->createElement(
             $this->getQualifiedName($parentName, self::DEFAULT_QNAME, TRUE
             )
           )

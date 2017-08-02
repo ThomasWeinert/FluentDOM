@@ -131,9 +131,8 @@ namespace FluentDOM\DOM {
       list($namespaceURI, $localName) = $this->resolveTagName($name);
       if ($namespaceURI !== '') {
         return parent::hasAttributeNS($namespaceURI, $localName);
-      } else {
-        return parent::hasAttribute($name);
       }
+      return parent::hasAttribute($name);
     }
 
     /**
@@ -147,9 +146,8 @@ namespace FluentDOM\DOM {
       list($namespaceURI, $localName) = $this->resolveTagName($name);
       if ($namespaceURI !== '') {
         return parent::getAttributeNS($namespaceURI, $localName);
-      } else {
-        return parent::getAttribute($name);
       }
+      return parent::getAttribute($name);
     }
 
     /**
@@ -163,9 +161,8 @@ namespace FluentDOM\DOM {
       list($namespaceURI, $localName) = $this->resolveTagName($name);
       if ($namespaceURI !== '') {
         return parent::getAttributeNodeNS($namespaceURI, $localName);
-      } else {
-        return parent::getAttributeNode($name);
       }
+      return parent::getAttributeNode($name);
     }
 
     /**
@@ -182,9 +179,8 @@ namespace FluentDOM\DOM {
       if ($namespaceURI !== '') {
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         return parent::setAttributeNS($namespaceURI, $name, $value);
-      } else {
-        return parent::setAttribute($name, $value);
       }
+      return parent::setAttribute($name, $value);
     }
 
     /**
@@ -198,9 +194,8 @@ namespace FluentDOM\DOM {
       list($namespaceURI, $localName) = $this->resolveTagName($name);
       if ($namespaceURI !== '') {
         return (bool)parent::removeAttributeNS($namespaceURI, $localName);
-      } else {
-        return (bool)parent::removeAttribute($name);
       }
+      return (bool)parent::removeAttribute($name);
     }
 
     /**

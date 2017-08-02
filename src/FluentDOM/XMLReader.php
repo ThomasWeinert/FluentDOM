@@ -55,19 +55,18 @@ namespace FluentDOM {
       }
       if ($ignoreNamespace && !$filter) {
         return NULL !== $name ? parent::next($name) : parent::next();
-      } else {
-        $found = empty($localName) ? parent::next() : parent::next($localName);
-        while ($found) {
-          if (
-            ($ignoreNamespace || $this->namespaceURI === $namespaceURI) &&
-            (!$filter || $filter($this))
-          ) {
-            return TRUE;
-          }
-          $found = empty($localName) ? parent::next() : parent::next($localName);
-        }
-        return FALSE;
       }
+      $found = empty($localName) ? parent::next() : parent::next($localName);
+      while ($found) {
+        if (
+          ($ignoreNamespace || $this->namespaceURI === $namespaceURI) &&
+          (!$filter || $filter($this))
+        ) {
+          return TRUE;
+        }
+        $found = empty($localName) ? parent::next() : parent::next($localName);
+      }
+      return FALSE;
     }
 
     /**
@@ -117,9 +116,8 @@ namespace FluentDOM {
       list($prefix, $localName) = QualifiedName::split($name);
       if (empty($prefix)) {
         return parent::getAttribute($name);
-      } else {
-        return parent::getAttributeNs($localName, $this->_namespaces->resolveNamespace($prefix));
       }
+      return parent::getAttributeNs($localName, $this->_namespaces->resolveNamespace($prefix));
     }
 
     /**
@@ -130,11 +128,10 @@ namespace FluentDOM {
     public function expand($baseNode = NULL) {
       if (NULL !== $baseNode) {
         return parent::expand($baseNode);
-      } else {
-        $this->_document = $document = new Document();
-        $document->namespaces($this->_namespaces);
-        return parent::expand($document);
       }
+      $this->_document = $document = new Document();
+      $document->namespaces($this->_namespaces);
+      return parent::expand($document);
     }
 
     /**

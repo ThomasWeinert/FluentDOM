@@ -233,9 +233,8 @@ abstract class FluentDOM {
       }
       if (self::$_xpathTransformers[$index] instanceof \FluentDOM\Xpath\Transformer) {
         return self::$_xpathTransformers[$index];
-      } else {
-        unset(self::$_xpathTransformers[$index]);
       }
+      unset(self::$_xpathTransformers[$index]);
     }
     throw new \LogicException($errorMessage);
   }

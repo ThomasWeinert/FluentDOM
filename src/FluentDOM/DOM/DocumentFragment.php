@@ -133,24 +133,22 @@ namespace FluentDOM\DOM {
       $namespaces = $this->namespaces($namespaces);
       if (count($namespaces) === 0) {
         return parent::appendXML($data);
-      } else {
-        $fragment = '<fragment';
-        foreach ($namespaces as $key => $xmlns) {
-          $prefix = $key === '#default' ? '' : $key;
-          $fragment .= ' '.htmlspecialchars(empty($prefix) ? 'xmlns' : 'xmlns:'.$prefix);
-          $fragment .= '="'.htmlspecialchars($xmlns).'"';
-        }
-        $fragment .= '>'.$data.'</fragment>';
-        $source = new Document();
-        if ($source->loadXML($fragment)) {
-          foreach ($source->documentElement->childNodes as $child) {
-            $this->appendChild($this->ownerDocument->importNode($child, TRUE));
-          }
-          return TRUE;
-        } else {
-          return FALSE;
-        }
       }
+      $fragment = '<fragment';
+      foreach ($namespaces as $key => $xmlns) {
+        $prefix = $key === '#default' ? '' : $key;
+        $fragment .= ' '.htmlspecialchars(empty($prefix) ? 'xmlns' : 'xmlns:'.$prefix);
+        $fragment .= '="'.htmlspecialchars($xmlns).'"';
+      }
+      $fragment .= '>'.$data.'</fragment>';
+      $source = new Document();
+      if ($source->loadXML($fragment)) {
+        foreach ($source->documentElement->childNodes as $child) {
+          $this->appendChild($this->ownerDocument->importNode($child, TRUE));
+        }
+        return TRUE;
+      }
+      return FALSE;
     }
 
     /**

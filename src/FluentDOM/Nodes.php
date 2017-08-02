@@ -127,8 +127,9 @@ namespace FluentDOM {
     public function load($source, string $contentType = NULL, $options = []) {
       $contentType = $contentType ?: 'text/xml';
       $loaded = $this->prepareSource($source, $contentType, $options);
-      if ($loaded instanceof Loader\Result || $loaded instanceof \DOMDocument) {
-        if ($loaded instanceof Loader\Result) {
+      $isResult = $loaded instanceof Loader\Result;
+      if ($isResult || $loaded instanceof \DOMDocument) {
+        if ($isResult) {
           $this->_document = $loaded->getDocument();
           $this->setContentType($loaded->getContentType());
           if ($selection = $loaded->getSelection()) {
@@ -149,7 +150,7 @@ namespace FluentDOM {
      * @param mixed $source
      * @param string $contentType
      * @param array|\Traversable|Options $options
-     * @return bool|\DOMDocument|Document|NULL
+     * @return \DOMDocument|Document|Loader\Result|bool|NULL
      * @throws \LogicException
      * @throws \InvalidArgumentException
      */

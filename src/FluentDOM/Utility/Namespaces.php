@@ -89,9 +89,11 @@ namespace FluentDOM\Utility {
       $prefix = $this->validatePrefix($prefix);
       if (array_key_exists($prefix, $this->_reserved)) {
         return $this->_reserved[$prefix];
-      } elseif (array_key_exists($prefix, $this->_namespaces)) {
+      }
+      if (array_key_exists($prefix, $this->_namespaces)) {
         return $this->_namespaces[$prefix];
-      } elseif ($prefix === '#default') {
+      }
+      if ($prefix === '#default') {
         return '';
       }
       throw new \LogicException(

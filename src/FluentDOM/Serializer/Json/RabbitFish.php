@@ -32,11 +32,11 @@ namespace FluentDOM\Serializer\Json {
       $attributes = (array)$attributes;
       if ($hasText && $hasElements) {
         return $this->getNodesArray($node, $attributes, $xpath);
-      } elseif ($hasText && count($attributes) === 0) {
-        return $node->nodeValue;
-      } else {
-        return parent::getNodes($node);
       }
+      if ($hasText && count($attributes) === 0) {
+        return $node->nodeValue;
+      }
+      return parent::getNodes($node);
     }
 
     /**

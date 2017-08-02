@@ -177,7 +177,8 @@ namespace FluentDOM\Nodes {
             $result[] = $node;
           }
           return $result;
-        } elseif ($isFilter) {
+        }
+        if ($isFilter) {
           $result[] = $node;
         }
       }

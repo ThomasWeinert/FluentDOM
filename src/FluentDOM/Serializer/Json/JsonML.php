@@ -44,7 +44,7 @@ namespace FluentDOM\Serializer\Json {
         if ($childNode instanceof \DOMElement) {
           $result[] = $this->getNode($childNode);
         } elseif (
-          $childNode instanceof \DOMText || $childNode instanceof \DOMCdataSection
+          $childNode instanceof \DOMCharacterData
         ) {
           $result[] = $this->getValue($childNode->data);
         }
@@ -73,9 +73,11 @@ namespace FluentDOM\Serializer\Json {
     private function getValue($value) {
       if ($this->isBoolean($value)) {
         return (strtolower($value) === 'true');
-      } elseif ($this->isInteger($value)) {
+      }
+      if ($this->isInteger($value)) {
         return (int)$value;
-      } elseif ($this->isNumber($value)) {
+      }
+      if ($this->isNumber($value)) {
         return (float)$value;
       }
       return $value;

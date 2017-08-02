@@ -25,6 +25,7 @@ namespace FluentDOM\Utility {
 
     /**
      * @param string $name
+     * @throws \UnexpectedValueException
      */
     public function __construct(string $name) {
       $this->setQName($name);
@@ -39,11 +40,13 @@ namespace FluentDOM\Utility {
     private function setQName(string $name) {
       if (empty($name)) {
         throw new \UnexpectedValueException('Invalid QName: QName is empty.');
-      } elseif (isset(self::$_cache[$name])) {
+      }
+      if (isset(self::$_cache[$name])) {
         $this->_prefix = self::$_cache[$name][0];
         $this->_localName = self::$_cache[$name][1];
         return;
-      } elseif (FALSE !== ($position = strpos($name, ':'))) {
+      }
+      if (FALSE !== ($position = strpos($name, ':'))) {
         list($prefix, $localName) = explode(':', $name, 2);
         $this->isNCName($prefix, 0, $name);
         $this->isNCName($name, $position + 1);
@@ -68,7 +71,7 @@ namespace FluentDOM\Utility {
      * @throws \UnexpectedValueException
      * @return bool
      */
-    private function isNCName(string $name, int $offset = 0, string $fullName = NULL) {
+    private function isNCName(string $name, int $offset = 0, string $fullName = NULL): bool {
       $nameStartChar =
         'A-Z_a-z'.
         '\\x{C0}-\\x{D6}\\x{D8}-\\x{F6}\\x{F8}-\\x{2FF}\\x{370}-\\x{37D}'.
@@ -88,13 +91,15 @@ namespace FluentDOM\Utility {
         throw new \UnexpectedValueException(
           'Invalid QName "'.$name.'": Missing QName part.'
         );
-      } elseif (preg_match('([^'.$nameChar.'-])u', $namePart, $match, PREG_OFFSET_CAPTURE)) {
+      }
+      if (preg_match('([^'.$nameChar.'-])u', $namePart, $match, PREG_OFFSET_CAPTURE)) {
         //invalid bytes and whitespaces
         $position = (int)$match[0][1];
         throw new \UnexpectedValueException(
           'Invalid QName "'.$name.'": Invalid character at index '.($offset + $position).'.'
         );
-      } elseif (preg_match('(^[^'.$nameStartChar.'])u', $namePart)) {
+      }
+      if (preg_match('(^[^'.$nameStartChar.'])u', $namePart)) {
         //first char is a little more limited
         throw new \UnexpectedValueException(
           'Invalid QName "'.$name.'": Invalid character at index '.$offset.'.'

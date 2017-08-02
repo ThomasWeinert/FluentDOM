@@ -73,9 +73,8 @@ namespace FluentDOM\Loader {
       $callback = $this->_callbacks[$name];
       if (is_callable($callback)) {
         return $callback(...$arguments);
-      } else {
-        return $default;
       }
+      return $default;
     }
 
     /**
@@ -142,7 +141,8 @@ namespace FluentDOM\Loader {
     public function getSourceType($source): string {
       if ($this[self::IS_FILE]) {
         return self::IS_FILE;
-      } elseif ($this[self::IS_STRING]) {
+      }
+      if ($this[self::IS_STRING]) {
         return self::IS_STRING;
       }
       $isStringSource = $this->executeCallback(

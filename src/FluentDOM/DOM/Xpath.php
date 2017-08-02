@@ -144,16 +144,14 @@ namespace FluentDOM\DOM {
           $result = '';
           preg_match_all('("[^\']*|[^"]+)', $string, $matches);
           foreach ($matches[0] as $part) {
-            $quoteChar = (substr($part, 0, 1) === '"') ? "'" : '"';
+            $quoteChar = 0 === strpos($part, '"') ? "'" : '"';
             $result .= ', '.$quoteChar.$part.$quoteChar;
           }
           return 'concat('.substr($result, 2).')';
-        } else {
-          return '"'.$string.'"';
         }
-      } else {
-        return "'".$string."'";
+        return '"'.$string.'"';
       }
+      return "'".$string."'";
     }
 
     /**

@@ -30,25 +30,24 @@ namespace FluentDOM\Loader\Json {
     /**
      * @param \DOMNode|Element $node
      * @param mixed $json
+     * @throws \LogicException
      */
     protected function transferTo(\DOMNode $node, $json) {
-      if (is_object($json)) {
-        /** @var Document $document */
-        $document = $node->ownerDocument ?: $node;
-        if (is_object($json)) {
-          foreach ($json as $name => $data) {
-            if ($name === '@xmlns') {
-              $this->transferNamespacesTo($node, $data);
-            } elseif ($name === '$') {
-              // text content
-              $node->appendChild(
-                $document->createTextNode($this->getValueAsString($data))
-              );
-            } elseif (substr($name, 0, 1) === '@') {
-              $this->transferAttributeTo($node, $name, $data);
-            } else {
-              $this->transferChildTo($node, $name, $data);
-            }
+      /** @var Document $document */
+      $document = $node->ownerDocument ?: $node;
+      if ($json instanceof \stdClass) {
+        foreach ($json as $name => $data) {
+          if ($name === '@xmlns') {
+            $this->transferNamespacesTo($node, $data);
+          } elseif ($name === '$') {
+            // text content
+            $node->appendChild(
+              $document->createTextNode($this->getValueAsString($data))
+            );
+          } elseif (0 === strpos($name, '@')) {
+            $this->transferAttributeTo($node, $name, $data);
+          } else {
+            $this->transferChildTo($node, $name, $data);
           }
         }
       }

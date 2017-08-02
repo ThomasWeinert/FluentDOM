@@ -45,8 +45,8 @@ namespace FluentDOM\Query\Css {
         $matches = [];
         if (preg_match_all(self::STYLE_PATTERN, $styleString, $matches, PREG_SET_ORDER)) {
           foreach ($matches as $match) {
-            if (isset($match['name']) &&
-              isset($match['value']) &&
+            if (
+              isset($match['name'], $match['value']) &&
               $this->_isCSSProperty($match['name']) &&
               trim($match['value']) !== '') {
               $this->_properties[$match['name']] = $match['value'];

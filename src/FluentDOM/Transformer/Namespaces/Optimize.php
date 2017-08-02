@@ -131,17 +131,18 @@ namespace FluentDOM\Transformer\Namespaces {
       $prefix = $isElement && $node->prefix === 'default' ? NULL : $node->prefix;
       $name = $node->localName;
       $uri = (string)$node->namespaceURI;
+      $targetUri = $this->_namespaceUris[$uri] ?? '';
       if (
+        $targetUri !== '#default' &&
         (
-          ($isElement && isset($this->_namespaceUris[$uri])) ||
-          !empty($this->_namespaceUris[$uri])
-        ) &&
-        $this->_namespaceUris[$uri] !== '#default'
+          $targetUri !== '' ||
+          ($isElement && isset($this->_namespaceUris[$uri]))
+        )
       ) {
         $prefix = $this->_namespaceUris[$uri];
       }
       return [
-        (string)$prefix, (string)$name, (string)$uri
+        (string)$prefix, $name, $uri
       ];
     }
 

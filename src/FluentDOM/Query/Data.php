@@ -170,9 +170,8 @@ namespace FluentDOM\Query {
       case (in_array(substr($value, 0, 1), ['{', '['], FALSE)) :
         if ($json = json_decode($value)) {
           return $json;
-        } else {
-          return NULL;
         }
+        return NULL;
       default :
         return $value;
       }
@@ -187,12 +186,12 @@ namespace FluentDOM\Query {
      */
     private function encodeValue($value): string {
       if (is_bool($value)) {
-        return ($value) ? 'true' : 'false';
-      } elseif (is_object($value) || is_array($value)) {
-        return json_encode($value);
-      } else {
-        return (string)$value;
+        return $value ? 'true' : 'false';
       }
+      if (is_object($value) || is_array($value)) {
+        return json_encode($value);
+      }
+      return (string)$value;
     }
   }
 }

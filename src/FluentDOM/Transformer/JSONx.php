@@ -117,10 +117,9 @@ namespace FluentDOM\Transformer {
     private function getType(\DOMElement $node): string {
       if ($node->hasAttributeNS(self::XMLNS_JSONDOM, 'type')) {
         return $node->getAttributeNS(self::XMLNS_JSONDOM, 'type');
-      } else {
-        $xpath = new Xpath($node->ownerDocument);
-        return $xpath('count(*) > 0', $node) ? 'object' : 'string';
       }
+      $xpath = new Xpath($node->ownerDocument);
+      return $xpath('count(*) > 0', $node) ? 'object' : 'string';
     }
   }
 }

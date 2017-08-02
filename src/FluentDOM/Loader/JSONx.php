@@ -43,7 +43,7 @@ namespace FluentDOM\Loader {
      * @throws \LogicException
      */
     public function load($source, string $contentType, $options = []) {
-      if ($this->supports($contentType) && !empty($source)) {
+      if (NULL !== $source && $this->supports($contentType)) {
         $document = $this->loadXmlDocument($source, $options);
         $target = new Document();
         $target->registerNamespace('json', self::XMLNS_JSONDOM);
@@ -55,16 +55,17 @@ namespace FluentDOM\Loader {
       return NULL;
     }
 
-     /**
-      * @see Loadable::loadFragment
-      *
-      * @param string $source
-      * @param string $contentType
-      * @param array|\Traversable|Options $options
-      * @return DocumentFragment|NULL
-      */
+    /**
+     * @see Loadable::loadFragment
+     *
+     * @param string $source
+     * @param string $contentType
+     * @param array|\Traversable|Options $options
+     * @return DocumentFragment|NULL
+     * @throws \LogicException
+     */
     public function loadFragment($source, string $contentType, $options = []) {
-      if ($this->supports($contentType) && !empty($source)) {
+      if (NULL !== $source && $this->supports($contentType)) {
         $document = new Document();
         $document->preserveWhiteSpace = FALSE;
         $document->registerNamespace('jx', self::XMLNS_JSONX);
@@ -84,6 +85,7 @@ namespace FluentDOM\Loader {
     /**
      * @param \DOMNode|Element $node
      * @param \DOMNode|Document|Element $target
+     * @throws \LogicException
      */
     private function transferNode(\DOMNode $node, \DOMNode $target) {
       if ($node->namespaceURI === self::XMLNS_JSONX) {

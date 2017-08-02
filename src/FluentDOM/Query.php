@@ -66,11 +66,10 @@ namespace FluentDOM {
       case 'data' :
         if ($node = $this->getFirstElement()) {
           return new Query\Data($node);
-        } else {
-          throw new \UnexpectedValueException(
-            'UnexpectedValueException: first selected node is no element.'
-          );
         }
+        throw new \UnexpectedValueException(
+          'UnexpectedValueException: first selected node is no element.'
+        );
       }
       return parent::__get($name);
     }
@@ -823,15 +822,14 @@ namespace FluentDOM {
           $contentNode = $this->build()->getContentElement($content);
         }
         return $this->spawn($this->getDocument()->appendChild($contentNode));
-      } else {
-        return $this->applyToSpawn(
-          $this->_nodes,
-          $content,
-          function($targetNode, $contentNodes) {
-            return $this->modify($targetNode)->appendChildren($contentNodes);
-          }
-        );
       }
+      return $this->applyToSpawn(
+        $this->_nodes,
+        $content,
+        function($targetNode, $contentNodes) {
+          return $this->modify($targetNode)->appendChildren($contentNodes);
+        }
+      );
     }
 
     /**
@@ -1384,24 +1382,23 @@ namespace FluentDOM {
           return $node->getAttribute($attribute);
         }
         return NULL;
-      } else {
-        $attributes = $this->getSetterValues($attribute, $arguments[0] ?? NULL);
-        // set attributes on each element
-        foreach ($attributes as $key => $value) {
-          $name = (new QualifiedName($key))->name;
-          $callback = Constraints::filterCallable($value);
-          $this->each(
-            function(\DOMElement $node, $index) use ($name, $value, $callback) {
-              $node->setAttribute(
-                $name,
-                $callback
-                  ? (string)$callback($node, $index, $node->getAttribute($name))
-                  : (string)$value
-              );
-            },
-            TRUE
-          );
-        }
+      }
+      $attributes = $this->getSetterValues($attribute, $arguments[0] ?? NULL);
+      // set attributes on each element
+      foreach ($attributes as $key => $value) {
+        $name = (new QualifiedName($key))->name;
+        $callback = Constraints::filterCallable($value);
+        $this->each(
+          function(\DOMElement $node, $index) use ($name, $value, $callback) {
+            $node->setAttribute(
+              $name,
+              $callback
+                ? (string)$callback($node, $index, $node->getAttribute($name))
+                : (string)$value
+            );
+          },
+          TRUE
+        );
       }
       return $this;
     }
@@ -1544,17 +1541,19 @@ namespace FluentDOM {
      * @return FALSE|string
      */
     private function changeClassString(string $current, string $toggle, bool $switch = NULL) {
+      /** @var array $currentClasses */
       $currentClasses = array_flip(
         preg_split('(\s+)', trim($current), 0, PREG_SPLIT_NO_EMPTY)
       );
+      /** @var array $toggleClasses */
       $toggleClasses = array_unique(
         preg_split('(\s+)', trim($toggle), 0, PREG_SPLIT_NO_EMPTY)
       );
       $modified = FALSE;
       foreach ($toggleClasses as $class) {
         if (
-          isset($currentClasses[$class]) &&
-          (NULL === $switch || FALSE === $switch)
+          (NULL === $switch || FALSE === $switch) &&
+          isset($currentClasses[$class])
         ) {
           unset($currentClasses[$class]);
           $modified = TRUE;

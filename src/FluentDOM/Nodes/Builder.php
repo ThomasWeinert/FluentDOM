@@ -40,14 +40,14 @@ namespace FluentDOM\Nodes {
      * @param mixed $content
      * @param bool $includeTextNodes
      * @param int $limit
-     * @return array|\Traversable|NULL
+     * @return array
      * @throws \InvalidArgumentException
      */
     private function getNodeList(
       $content,
       bool $includeTextNodes = TRUE,
       int $limit = -1
-    ) {
+    ): array {
       if ($callback = Constraints::filterCallable($content)) {
         $content = $callback();
       }
@@ -60,7 +60,7 @@ namespace FluentDOM\Nodes {
       if (Constraints::filterNodeList($content)) {
         return $this->getLimitedArray($content, $limit);
       }
-      return NULL;
+      return [];
     }
 
     /**
@@ -70,16 +70,16 @@ namespace FluentDOM\Nodes {
      * @param \DOMNode $context optional, default value NULL
      * @throws \InvalidArgumentException
      * @return array
+     * @throws \LogicException
      */
-    public function getTargetNodes($selector, \DOMNode $context = NULL) {
+    public function getTargetNodes($selector, \DOMNode $context = NULL): array {
       if ($nodes = $this->getNodeList($selector)) {
         return $nodes;
       }
       if (is_string($selector)) {
         $result = $this->getOwner()->xpath(
           $this->getOwner()->prepareSelector(
-            $selector,
-            Nodes::CONTEXT_SELF
+            $selector,Nodes::CONTEXT_SELF
           ),
           $context
         );
@@ -97,11 +97,15 @@ namespace FluentDOM\Nodes {
      * @param mixed $content
      * @param bool $includeTextNodes
      * @param int $limit
-     * @throws Exceptions\LoadingError\EmptyResult
      * @return array
+     * @throws \LogicException
+     * @throws \UnexpectedValueException
+     * @throws Exceptions\LoadingError\EmptyResult
+     * @throws \FluentDOM\Exceptions\InvalidFragmentLoader
+     * @throws \InvalidArgumentException
      */
-    public function getContentNodes($content, bool $includeTextNodes = TRUE, int $limit = -1) {
-      $result = FALSE;
+    public function getContentNodes($content, bool $includeTextNodes = TRUE, int $limit = -1): array {
+      $result = [];
       if ($nodes = $this->getNodeList($content, $includeTextNodes, $limit)) {
         $result = $nodes;
       } elseif (is_string($content)) {

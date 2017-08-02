@@ -29,10 +29,9 @@ namespace FluentDOM\Loader {
      * @return bool
      */
     private function startsWith(string $haystack, string $needle, bool $ignoreWhitespace = TRUE): bool {
-      $pattern = $ignoreWhitespace
-        ? '(^\s*'.preg_quote($needle).')'
-        : '(^'.preg_quote($needle).')';
-      return (bool)preg_match($pattern, $haystack);
+      return $ignoreWhitespace
+        ? (bool)preg_match('(^\s*'.preg_quote($needle, '(').')', $haystack)
+        : 0 === strpos($haystack, $needle);
     }
   }
 }

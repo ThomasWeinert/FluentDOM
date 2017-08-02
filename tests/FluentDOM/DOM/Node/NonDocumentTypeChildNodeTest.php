@@ -13,7 +13,27 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
      */
-    public function testNextElementSibling() {
+    public function testIssetNextElementSiblingExpectingTrue() {
+      $document = new Document();
+      $document->loadXML('<foo><!-- START -->TEXT<bar index="1"/></foo>');
+      $this->assertTrue(isset($document->documentElement->firstChild->nextElementSibling));
+    }
+
+    /**
+     * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
+     * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
+     */
+    public function testIssetNextElementSiblingExpectingFalse() {
+      $document = new Document();
+      $document->loadXML('<foo><!-- START -->TEXT</foo>');
+      $this->assertFalse(isset($document->documentElement->firstChild->nextElementSibling));
+    }
+
+    /**
+     * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
+     * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
+     */
+    public function testGetNextElementSibling() {
       $document = new Document();
       $document->loadXML('<foo><bar index="0"/>TEXT<bar index="1"/></foo>');
       $node = $document->documentElement->firstChild->nextElementSibling;
@@ -27,7 +47,7 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
      */
-    public function testNextElementSiblingFromCommentNode() {
+    public function testGetNextElementSiblingFromCommentNode() {
       $document = new Document();
       $document->loadXML('<foo><!-- START -->TEXT<bar index="1"/></foo>');
       $node = $document->documentElement->firstChild->nextElementSibling;
@@ -41,7 +61,7 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
      */
-    public function testNextElementSiblingExpectingNull() {
+    public function testGetNextElementSiblingExpectingNull() {
       $document = new Document();
       $document->loadXML('<foo><bar index="0"/>TEXT</foo>');
       $this->assertNull(
@@ -53,7 +73,26 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
      */
-    public function testPreviousElementSibling() {
+    public function testIssetPreviousElementSiblingExpectingTrue() {
+      $document = new Document();
+      $document->loadXML('<foo><bar index="0"/>TEXT<!-- START --></foo>');
+      $this->assertTrue(isset($document->documentElement->lastChild->previousElementSibling));
+    }
+    /**
+     * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
+     * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
+     */
+    public function testIssetPreviousElementSiblingExpectingFalse() {
+      $document = new Document();
+      $document->loadXML('<foo>TEXT<!-- START --></foo>');
+      $this->assertFalse(isset($document->documentElement->lastChild->previousElementSibling));
+    }
+
+    /**
+     * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
+     * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
+     */
+    public function testGetPreviousElementSibling() {
       $document = new Document();
       $document->loadXML('<foo><bar index="0"/>TEXT<bar index="1"/></foo>');
       $node = $document->documentElement->lastChild->previousElementSibling;
@@ -129,11 +168,6 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
      */
     public function testSetUnknownProperty() {
-      if (defined('HHVM_VERSION')) {
-        $this->markTestSkipped(
-          'Setting properties on DOM objects results in a fatal error on HHVM.'
-        );
-      }
       $document = new Document();
       $document->loadXML('<foo><!--comment--></foo>');
       $node = $document->documentElement->firstChild;
@@ -145,12 +179,43 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
      */
+    public function testUnsetUnknownProperty() {
+      $document = new Document();
+      $document->loadXML('<foo><!--comment--></foo>');
+      $node = $document->documentElement->firstChild;
+      $this->expectError(E_NOTICE);
+      unset($node->SOME_PROPERTY);
+      $this->assertNull($node->SOME_PROPERTY);
+    }
+
+    /**
+     * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
+     * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
+     */
+    public function testIssetUnknownPropertyExpectingTrue() {
+      $document = new Document();
+      $document->loadXML('<foo><!--comment--></foo>');
+      $node = $document->documentElement->firstChild;
+      $node->SOME_PROPERTY = 'foo';
+      $this->assertTrue(isset($node->SOME_PROPERTY));
+    }
+
+    /**
+     * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
+     * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
+     */
+    public function testIssetUnknownPropertyExpectingFalse() {
+      $document = new Document();
+      $document->loadXML('<foo><!--comment--></foo>');
+      $node = $document->documentElement->firstChild;
+      $this->assertFalse(isset($node->SOME_PROPERTY));
+    }
+
+    /**
+     * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
+     * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
+     */
     public function testGetUnknownPropertyExpectingException() {
-      if (defined('HHVM_VERSION') && version_compare(HHVM_VERSION, '3.6', '<')) {
-        $this->markTestSkipped(
-          'Setting properties on DOM objects results in a fatal error on HHVM.'
-        );
-      }
       $document = new Document();
       $document->loadXML('<foo><!--comment--></foo>');
       $node = $document->documentElement->firstChild;

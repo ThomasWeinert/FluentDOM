@@ -46,6 +46,19 @@ namespace FluentDOM\Creator {
      * @param string $name
      * @return mixed
      */
+    public function __isset(string $name) {
+      switch ($name) {
+      case 'document' :
+      case 'node' :
+        return TRUE;
+      }
+      return FALSE;
+    }
+
+    /**
+     * @param string $name
+     * @return mixed
+     */
     public function __get(string $name) {
       switch ($name) {
       case 'document' :
@@ -59,10 +72,20 @@ namespace FluentDOM\Creator {
     /**
      * @param string $name
      * @param mixed $value
-     * @throws \LogicException
+     * @throws \BadMethodCallException
      */
     public function __set(string $name, $value) {
-      throw new \LogicException(
+      throw new \BadMethodCallException(
+        sprintf('%s is immutable.', get_class($this))
+      );
+    }
+
+    /**
+     * @param string $name
+     * @throws \BadMethodCallException
+     */
+    public function __unset(string $name) {
+      throw new \BadMethodCallException(
         sprintf('%s is immutable.', get_class($this))
       );
     }

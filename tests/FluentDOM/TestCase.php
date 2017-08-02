@@ -2,6 +2,9 @@
 namespace FluentDOM {
 
   use FluentDOM\DOM\Xpath;
+  use PHPUnit\Framework\Error\Notice;
+  use PHPUnit\Framework\Error\Warning;
+  use PHPUnit\Framework\Error\Deprecated;
 
   require_once __DIR__.'/../../vendor/autoload.php';
 
@@ -65,8 +68,9 @@ namespace FluentDOM {
 
     public function expectError($severity) {
       $levels = [
-        E_NOTICE => ['PHPUnit_Framework_Error_Notice', 'PHPUnit\\Framework\\Error\\Notice'],
-        E_DEPRECATED => ['PHPUnit_Framework_Error_Deprecated', 'PHPUnit\\Framework\\Error\\Deprecated']
+        E_NOTICE => ['PHPUnit_Framework_Error_Notice', Notice::class],
+        E_WARNING => ['PHPUnit_Framework_Error_Warning', Warning::class],
+        E_DEPRECATED => ['PHPUnit_Framework_Error_Deprecated', Deprecated::class]
       ];
       if ($levels[$severity]) {
         foreach ($levels[$severity] as $class) {

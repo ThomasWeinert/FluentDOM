@@ -14,9 +14,10 @@ namespace FluentDOM\DOM {
     public function testMagicMethodToString() {
       $document = new Document();
       $document->appendElement('test', ['attr' => 'success']);
+      $attribute = $document->documentElement->attributes->getNamedItem('attr');
       $this->assertEquals(
         'success',
-        (string)$document->documentElement->attributes->getNamedItem('attr')
+        (string)$attribute
       );
     }
   }

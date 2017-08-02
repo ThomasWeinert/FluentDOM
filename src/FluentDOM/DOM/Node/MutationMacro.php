@@ -9,7 +9,7 @@ namespace FluentDOM\DOM\Node {
       $result = $document->createDocumentFragment();
       if (!self::isTraversableOfNodes($nodes)) {
         $nodes = [$nodes];
-      };
+      }
       foreach ($nodes as $node) {
         if ($node instanceof \DOMNode) {
           self::add($result, $node);

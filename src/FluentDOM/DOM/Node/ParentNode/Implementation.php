@@ -36,12 +36,12 @@ namespace FluentDOM\DOM\Node\ParentNode {
         return $this->documentElement;
       }
       $node = $this->firstChild;
-      do {
+      while ($node instanceof \DOMNode) {
         if ($node instanceof Element) {
           return $node;
         }
         $node = $node->nextSibling;
-      } while ($node instanceof \DOMNode);
+      }
       return NULL;
     }
 
@@ -55,12 +55,12 @@ namespace FluentDOM\DOM\Node\ParentNode {
       }
       /** @var \DOMNode $this */
       $node = $this->lastChild;
-      do {
+      while ($node instanceof \DOMNode) {
         if ($node instanceof Element) {
           return $node;
         }
         $node = $node->previousSibling;
-      } while ($node instanceof \DOMNode);
+      }
       return NULL;
     }
 

@@ -44,7 +44,11 @@ namespace FluentDOM\Transformer {
      * @return string
      */
     public function __toString(): string {
-      return $this->getDocument()->saveXML();
+      try {
+        return $this->getDocument()->saveXML();
+      } catch (\Exception $e) {
+        return '';
+      }
     }
 
     /**

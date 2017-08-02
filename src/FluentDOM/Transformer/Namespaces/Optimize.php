@@ -96,7 +96,7 @@ namespace FluentDOM\Transformer\Namespaces {
       if (empty($namespaceURI) && NULL === $target->lookupNamespaceUri(NULL)) {
         $newNode = $document->createElement($newNodeName);
       } else {
-        $newNode = $document->createElementNS((string)$namespaceURI, $newNodeName);
+        $newNode = $document->createElementNS($namespaceURI, $newNodeName);
       }
       $target->appendChild($newNode);
       return $newNode;

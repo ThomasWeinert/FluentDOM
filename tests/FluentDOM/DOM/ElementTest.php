@@ -213,8 +213,25 @@ namespace FluentDOM\DOM {
 
     public static function dataProviderDynamicElementProperties() {
       return [
-        ['firstElementChild', 'lastElementChild', 'nextElementSibling', 'previousElementSibling']
+        ['firstElementChild'],
+        ['lastElementChild'],
+        ['nextElementSibling'],
+        ['previousElementSibling']
       ];
+    }
+
+    /**
+     * @covers \FluentDOM\DOM\Element::__unset
+     * @covers \FluentDOM\DOM\Element::blockReadOnlyProperties
+     * @dataProvider dataProviderDynamicElementProperties
+     * @param string $propertyName
+     */
+    public function testUnsetUnknownProperty(string $propertyName) {
+      $document = new Document();
+      $document->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
+      $this->expectError(E_NOTICE);
+      unset($document->documentElement->SOME_PROPERTY);
+      $this->assertNull($document->documentElement->SOME_PROPERTY);
     }
 
     /**

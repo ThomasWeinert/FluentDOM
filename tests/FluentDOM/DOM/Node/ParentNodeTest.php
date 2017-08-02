@@ -13,26 +13,41 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\DOM\Node\ParentNode\Implementation
      * @covers \FluentDOM\DOM\Node\ParentNode\Properties
      */
-    public function testGetFirstElementChild() {
+    public function testIssetFirstElementChildExpectingTrue() {
       $document = new Document();
-      $document->loadXML('<foo>TEXT<bar/><foobar/></foo>');
-      $node = $document->documentElement->firstElementChild;
-      $this->assertXmlStringEqualsXmlString(
-        '<bar/>',
-        $document->saveXML($node)
-      );
+      $document->loadXML('<foo/>');
+      $this->assertTrue(isset($document->firstElementChild));
+    }
+    /**
+     * @covers \FluentDOM\DOM\Node\ParentNode\Implementation
+     * @covers \FluentDOM\DOM\Node\ParentNode\Properties
+     */
+    public function testIssetFirstElementChildExpectingFalse() {
+      $document = new Document();
+      $this->assertFalse(isset($document->firstElementChild));
     }
 
     /**
      * @covers \FluentDOM\DOM\Node\ParentNode\Implementation
      * @covers \FluentDOM\DOM\Node\ParentNode\Properties
      */
-    public function testGetFirstElementChildOnDocument() {
+    public function testGetFirstElementChild() {
       $document = new Document();
       $document->loadXML('<foo/>');
-      $this->assertSame(
-        $document->documentElement,
-        $document->firstElementChild
+      $this->assertSame($document->documentElement, $document->firstElementChild);
+    }
+
+    /**
+     * @covers \FluentDOM\DOM\Node\ParentNode\Implementation
+     * @covers \FluentDOM\DOM\Node\ParentNode\Properties
+     */
+    public function testGetFirstElementChildOnFragment() {
+      $document = new Document();
+      $fragment = $document->createDocumentFragment();
+      $fragment->appendXml('TEXT<bar/>');
+      $this->assertEquals(
+        '<bar/>',
+        $document->saveXML($fragment->firstElementChild)
       );
     }
 
@@ -42,9 +57,21 @@ namespace FluentDOM\Node {
      */
     public function testGetFirstElementChildExpectingNull() {
       $document = new Document();
-      $document->loadXML('<foo>TEXT</foo>');
       $this->assertNull(
-        $document->documentElement->firstElementChild
+        $document->firstElementChild
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\DOM\Node\ParentNode\Implementation
+     * @covers \FluentDOM\DOM\Node\ParentNode\Properties
+     */
+    public function testGetFirstElementChildOnFragmentExpectingNull() {
+      $document = new Document();
+      $fragment = $document->createDocumentFragment();
+      $fragment->appendXml('TEXT');
+      $this->assertNull(
+        $fragment->firstElementChild
       );
     }
 
@@ -54,7 +81,6 @@ namespace FluentDOM\Node {
      */
     public function testSetFirstElementChildExpectingException() {
       $document = new Document();
-      $document->loadXML('<foo>TEXT</foo>');
       $this->expectException(
         \BadMethodCallException::class
       );
@@ -65,13 +91,31 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\DOM\Node\ParentNode\Implementation
      * @covers \FluentDOM\DOM\Node\ParentNode\Properties
      */
+    public function testIssetLastElementChildExpectingTrue() {
+      $document = new Document();
+      $document->loadXML('<foo/>');
+      $this->assertTrue(isset($document->lastElementChild));
+    }
+    /**
+     * @covers \FluentDOM\DOM\Node\ParentNode\Implementation
+     * @covers \FluentDOM\DOM\Node\ParentNode\Properties
+     */
+    public function testIssetLastElementChildExpectingFalse() {
+      $document = new Document();
+      $this->assertFalse(isset($document->lastElementChild));
+    }
+
+    /**
+     * @covers \FluentDOM\DOM\Node\ParentNode\Implementation
+     * @covers \FluentDOM\DOM\Node\ParentNode\Properties
+     */
     public function testGetLastElementChild() {
       $document = new Document();
-      $document->loadXML('<foo>TEXT<bar/><foobar/>TEXT</foo>');
-      $node = $document->documentElement->lastElementChild;
-      $this->assertXmlStringEqualsXmlString(
-        '<foobar/>',
-        $document->saveXML($node)
+      $document->loadXML('<foo/>');
+      $node = $document->lastElementChild;
+      $this->assertSame(
+        $document->documentElement,
+        $node
       );
     }
 
@@ -79,12 +123,13 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\DOM\Node\ParentNode\Implementation
      * @covers \FluentDOM\DOM\Node\ParentNode\Properties
      */
-    public function testGetLastElementChildOnDocument() {
+    public function testGetLastElementChildOnFragment() {
       $document = new Document();
-      $document->loadXML('<foo/>');
-      $this->assertSame(
-        $document->documentElement,
-        $document->lastElementChild
+      $fragment = $document->createDocumentFragment();
+      $fragment->appendXml('TEXT<bar/><foobar/>TEXT');
+      $this->assertEquals(
+        '<foobar/>',
+        $document->saveXML($fragment->lastElementChild)
       );
     }
 
@@ -94,9 +139,21 @@ namespace FluentDOM\Node {
      */
     public function testGetLastElementChildExpectingNull() {
       $document = new Document();
-      $document->loadXML('<foo>TEXT</foo>');
       $this->assertNull(
-        $document->documentElement->lastElementChild
+        $document->lastElementChild
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\DOM\Node\ParentNode\Implementation
+     * @covers \FluentDOM\DOM\Node\ParentNode\Properties
+     */
+    public function testGetLastElementChildOnFragmentExpectingNull() {
+      $document = new Document();
+      $fragment = $document->createDocumentFragment();
+      $fragment->appendXml('TEXT');
+      $this->assertNull(
+        $fragment->lastElementChild
       );
     }
 
@@ -106,7 +163,6 @@ namespace FluentDOM\Node {
      */
     public function testSetLastElementChildExpectingException() {
       $document = new Document();
-      $document->loadXML('<foo>TEXT</foo>');
       $this->expectException(
         \BadMethodCallException::class
       );
@@ -115,7 +171,6 @@ namespace FluentDOM\Node {
 
     /**
      * @covers \FluentDOM\DOM\Node\ParentNode\Implementation
-     * @covers \FluentDOM\DOM\Node\ParentNode\Properties
      */
     public function testPrepend() {
       $document = new Document();
@@ -129,7 +184,6 @@ namespace FluentDOM\Node {
 
     /**
      * @covers \FluentDOM\DOM\Node\ParentNode\Implementation
-     * @covers \FluentDOM\DOM\Node\ParentNode\Properties
      */
     public function testPrependToNodeWithoutChildren() {
       $document = new Document();
@@ -143,7 +197,6 @@ namespace FluentDOM\Node {
 
     /**
      * @covers \FluentDOM\DOM\Node\ParentNode\Implementation
-     * @covers \FluentDOM\DOM\Node\ParentNode\Properties
      */
     public function testAppend() {
       $document = new Document();
@@ -153,6 +206,36 @@ namespace FluentDOM\Node {
         '<foo><bar/>APPENDED</foo>',
         $document->saveXML()
       );
+    }
+
+    /**
+     * @covers \FluentDOM\DOM\Node\ParentNode\Implementation
+     * @covers \FluentDOM\DOM\Node\ParentNode\Properties
+     */
+    public function testSetUnknownProperty() {
+      $document = new Document();
+      $document->UNKNOWN_PROPERTY = 'FOO';
+      $this->assertEquals('FOO', $document->UNKNOWN_PROPERTY);
+    }
+
+    /**
+     * @covers \FluentDOM\DOM\Node\ParentNode\Implementation
+     * @covers \FluentDOM\DOM\Node\ParentNode\Properties
+     */
+    public function testGetUnknownProperty() {
+      $document = new Document();
+      $this->expectError(E_NOTICE);
+      $this->assertNull($document->UNKNOWN_PROPERTY);
+    }
+
+    /**
+     * @covers \FluentDOM\DOM\Node\ParentNode\Implementation
+     * @covers \FluentDOM\DOM\Node\ParentNode\Properties
+     */
+    public function testUnsetUnknownProperty() {
+      $document = new Document();
+      unset($document->UNKNOWN_PROPERTY);
+      $this->assertFalse(isset($document->UNKNOWN_PROPERTY));
     }
   }
 }

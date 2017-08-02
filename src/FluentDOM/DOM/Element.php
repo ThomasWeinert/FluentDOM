@@ -49,24 +49,6 @@ namespace FluentDOM\DOM {
 
     /**
      * @param string $name
-     * @return \DOMNode|Element|NULL
-     */
-    public function __get(string $name) {
-      switch ($name) {
-      case 'nextElementSibling' :
-        return $this->getNextElementSibling();
-      case 'previousElementSibling' :
-        return $this->getPreviousElementSibling();
-      case 'firstElementChild' :
-        return $this->getFirstElementChild();
-      case 'lastElementChild' :
-        return $this->getLastElementChild();
-      }
-      return $this->$name;
-    }
-
-    /**
-     * @param string $name
      * @return bool
      */
     public function __isset(string $name) {
@@ -85,6 +67,24 @@ namespace FluentDOM\DOM {
 
     /**
      * @param string $name
+     * @return \DOMNode|Element|NULL
+     */
+    public function __get(string $name) {
+      switch ($name) {
+      case 'nextElementSibling' :
+        return $this->getNextElementSibling();
+      case 'previousElementSibling' :
+        return $this->getPreviousElementSibling();
+      case 'firstElementChild' :
+        return $this->getFirstElementChild();
+      case 'lastElementChild' :
+        return $this->getLastElementChild();
+      }
+      return $this->$name;
+    }
+
+    /**
+     * @param string $name
      * @param $value
      * @throws \BadMethodCallException
      */
@@ -99,6 +99,7 @@ namespace FluentDOM\DOM {
      */
     public function __unset(string $name) {
       $this->blockReadOnlyProperties($name);
+      unset($this->$name);
     }
 
     /**

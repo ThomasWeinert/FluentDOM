@@ -9,14 +9,17 @@
 [![Latest Stable Version](https://img.shields.io/packagist/v/fluentdom/fluentdom.svg)](https://packagist.org/packages/fluentdom/fluentdom)
 [![Latest Unstable Version](https://img.shields.io/packagist/vpre/fluentdom/fluentdom.svg)](https://packagist.org/packages/fluentdom/fluentdom)
 
-  Copyright: 2009-2017 [FluentDOM Contributors](https://github.com/FluentDOM/FluentDOM/graphs/contributors)<br />
-  Licence: [The MIT License](http://www.opensource.org/licenses/mit-license.php) <br />
+Copyright: 2009-2017 [FluentDOM Contributors](https://github.com/FluentDOM/FluentDOM/graphs/contributors)<br />
+License: [The MIT License](http://www.opensource.org/licenses/mit-license.php) <br />
 
-FluentDOM provides an easy to use fluent interface for DOMDocument. We tried to
-keep the jQuery API but adapted it to PHP and the server environment.
+FluentDOM provides extended XML handling classes for PHPs DOM, XMLReader and XMLWriter.
+Additionally, it contains a easy to use jQuery like, fluent interface for DOM.
+
+Here are loaders and serializers for different formats like JSON, YAML, JsonML and others.
+More (like HTML5) can be installed as additional packages.
 
 FluentDOM is a test driven project. We write tests before and during the
-development. You will find the PHPUnit test in the "tests" subdirectory.
+development. You will find the PHPUnit tests in the `tests/` subdirectory.
 
 ## Table Of Contents
 * Examples
@@ -27,6 +30,9 @@ development. You will find the PHPUnit test in the "tests" subdirectory.
 * Backwards Compatibility Breaks
 
 ## Examples
+
+Many examples can be found in the `examples/` subdirectory. Here are
+some for an initial impression:
 
 ### Read All Links in a HTML File
 
@@ -122,37 +128,15 @@ just add the dependency to your composer.json.
 
 ```javascript
 {
-  "require" : {
-    "fluentdom/fluentdom": "^6.0"
+  "require": {
+    "fluentdom/fluentdom": "^7.0"
   }
 }
 ```
 
-### CSS Selectors
-
-To use CSS selectors, you need a CSS to XPath library.
-
-#### FluentDOM >= 5.3
-
-Here is a new interface `FluentDOM\Xpath\Transformer` which is implemented in 
-separate connector packages. Two are currently available.
-
-  1. [FluentDOM/Selectors-PHPCss](https://github.com/FluentDOM/Selectors-PHPCss)
-  2. [FluentDOM/Selectors-Symfony](https://github.com/FluentDOM/Selectors-Symfony)
-  
-The packages provide a `fluentdom/css-selector` meta package.
-
-### FluentDOM <= 5.2
-
-Had fixed support for two CSS to XPath libraries. If they are installed in the project
-CSS selects are available.
-
-  1. [Carica/PhpCss](https://github.com/ThomasWeinert/PhpCss)
-  2. [Symfony/CssSelector](https://github.com/symfony/css-selector)
-
 ## Usage
 
-The examples load the sample.xml file,
+The following examples load the sample.xml file,
 look for tags &lt;h1> with the attribute "id" that has the value "title",
 set the content of these tags to "Hello World" and output the manipulated
 document.
@@ -162,7 +146,6 @@ document.
 Using the `FluentDOM\Document` class:
 
 ```php
-<?php
 $fd = FluentDOM::load('sample.xml');
 foreach ($fd('//h1[@id = "title"]') as $node) {
   $node->nodeValue = 'Hello World!';
@@ -176,7 +159,6 @@ echo $fd->saveXml();
 Using the `FluentDOM\Query` class:
 
 ```php
-<?php
 echo FluentDOM('sample.xml')
   ->find('//h1[@id = "title"]')
   ->text('Hello World!');
@@ -189,11 +171,12 @@ you can use the `FluentDOM::QueryCss()` function. It returns a `FluentDOM\Query`
 supporting CSS 3 selectors.
 
 ```php
-<?php
 $fd = FluentDOM::QueryCss('sample.xml')
   ->find('h1#title')
   ->text('Hello World!');
 ```
+
+Read more about it in the [Wiki](https://github.com/FluentDOM/FluentDOM/wiki/CSS-Selectors)
 
 ### Creating XML
 
@@ -220,63 +203,6 @@ namespace.
 any more.
 
 `FluentDOM\DOM\Element::find()` was removed, use `FluentDOM($element)->find()`.
-
-### From 5.3 to 6.0
-
-The minimum required PHP version now is 5.6. HHVM support was removed.
-
-`FluentDOM\Query` now parses fragment arguments depending on the
-content type. It uses the loaders to parse the fragments for methods like
-`FluentDOM\Query::append()`. To parse the fragments as XML change the content type 
-after loading.
-
-```php
-$fd = FluentDOM($content, 'type/some-type');
-$fd->contentType = 'text/xml';
-```
-
-`FluentDOM\Query::attr()`, `FluentDOM\Query::css()` and `FluentDOM\Query::data()`
-now recognize that the second argument is provided, even if it is NULL.
-
-Serializer factories can now be registered on the FluentDOM class. Loaders implement
-an additional method to parse a fragment. This allows the FluentDOM\Nodes() class
-to keep the content type used to load a source. Methods like `append()` now parse
-a string as a fragment of the current content type. Casting the FluentDOM\Nodes()
-instance to a string serializes it to the current content type.
-
-```php
-$fd = FluentDOM('{"firstName": "John"}', 'text/json');
-echo $fd->find('/*')->append('{"lastName": "Smith"}');
-/*
- {"firstName":"John","lastName":"Smith"}
- */
-```
-
-To get the previous behaviour you will have to change the content type to 'text/xml' after
-loading a source.
-
-```php
-$fd = FluentDOM('{"firstName": "John"}', 'text/json');
-$fd->contentType = 'text/xml';
-echo $fd->find('/*')->append('<lastName>Smith</lastName>');
-
-/* 
-  <json:json xmlns:json="urn:carica-json-dom.2013">
-    <firstName>John</firstName>
-    <lastName>Smith</lastName>
-  </json:json>
- */
-```
-
-Loaders have an additional method loadFragment(). Serializers are now expected to be able to 
-serialize a node (not only a document).
-
-You will now have to explicitly allow loaders to load a file. 
-
-```php
-$fd = FluentDOM('...', '...', [FluentDOM\Loader\Options::ALLOW_FILE => TRUE]);
-$fd = FluentDOM('...', '...', [FluentDOM\Loader\Options::IS_FILE => TRUE]);
-```
 
 [Previous BC breaks](https://github.com/FluentDOM/FluentDOM/wiki/Backwards-Compatibility) are documented in the Wiki.
 

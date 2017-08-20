@@ -3,6 +3,7 @@ namespace FluentDOM {
 
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Element;
+  use FluentDOM\Exceptions\InvalidArgument;
 
   require_once __DIR__.'/TestCase.php';
 
@@ -257,6 +258,15 @@ namespace FluentDOM {
       $reader->read();
       $this->assertEquals('root', $reader->localName);
       fclose($fh);
+    }
+
+    /**
+     * @covers \FluentDOM\XMLReader
+     */
+    public function testAttachStreamExpectingException() {
+      $reader = new XMLReader();
+      $this->expectException(InvalidArgument::class);
+      $reader->attachStream('dummy');
     }
   }
 }

@@ -246,6 +246,18 @@ namespace FluentDOM {
       $this->assertInstanceOf(Element::class, $node);
       $this->assertSame($document, $node->ownerDocument);
     }
+
+    /**
+     * @covers \FluentDOM\XMLReader
+     */
+    public function testAttachStream() {
+      $fh = fopen(__DIR__.'/TestData/xmlreader-1.xml', 'rb');
+      $reader = new XMLReader();
+      $reader->attachStream($fh);
+      $reader->read();
+      $this->assertEquals('root', $reader->localName);
+      fclose($fh);
+    }
   }
 }
 

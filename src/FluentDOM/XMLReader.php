@@ -4,8 +4,10 @@ namespace FluentDOM {
 
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Node;
+  use FluentDOM\Exceptions\InvalidArgument;
   use FluentDOM\Utility\Namespaces;
   use FluentDOM\Utility\QualifiedName;
+  use FluentDOM\Utility\ResourceWrapper;
 
   class XMLReader extends \XMLReader {
 
@@ -150,6 +152,22 @@ namespace FluentDOM {
         $ignoreNamespace = ($prefix === FALSE && $namespaceURI === '');
       }
       return [$localName, $namespaceURI, $ignoreNamespace];
+    }
+
+    /**
+     * @param resource $stream
+     * @param string $encoding
+     * @param int $options
+     * @return bool
+     * @throws \FluentDOM\Exceptions\InvalidArgument
+     */
+    public function attachStream($stream, string $encoding = NULL, int $options = 0): bool {
+      if (!is_resource($stream)) {
+        throw new InvalidArgument('stream', 'resource');
+      }
+      list($uri, $context) = ResourceWrapper::createContext($stream);
+      libxml_set_streams_context($context);
+      return $this->open($uri, $encoding, $options);
     }
   }
 }

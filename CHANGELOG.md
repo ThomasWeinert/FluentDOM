@@ -8,7 +8,9 @@ Version 7.0.0
 - Changed: Moved internal classes into `FluentDOM\Utility`
 - Removed: `Document::find()` and `Element::find()`
 - Fixed #70: `FluentDOM\Query::get($position)` should return a node
+- Fixed #73, Creator forgets namespaces 
 - Added #73: `FluentDOM\XMLWriter::collapse()` collapse DOM nodes
+- Added #74: `FluentDOM\XMLReader::attachStream()` attach stream to read from
 
 Version 6.2.0
 -------------

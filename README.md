@@ -108,9 +108,15 @@ If you find a bug that has security implications, you can send an email directly
 
  * PHP >= 7.0
  * ext/dom
+ * Optional
+    * ext/xmlreader
+    * ext/xmlwriter
 
 FluentDOM needs at least PHP 7.0 and the DOM extension. For some features
 additional extensions might be needed, like ext/json to load JSON strings.
+
+To use the extended XMLReader/XMLWriter you will need the respective PHP extensions,
+of course.
 
 ### HHVM
 

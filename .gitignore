@@ -14,5 +14,7 @@ vendor
 .buildpath
 
 /build
+/tools
 
 /phpunit.xml
+

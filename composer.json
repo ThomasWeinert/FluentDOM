@@ -28,7 +28,9 @@
     "ext-dom": "*"
   },
   "suggest": {
-    "fluentdom/css-selector": "Allows to use css selectors."
+    "fluentdom/css-selector": "Allows to use css selectors.",
+    "ext-xmlreader": "XMLReader, XML pull parser, read large XMLs",
+    "ext-xmlwriter": "XMLWriter, Write large XMLs"
   },
   "autoload": {
     "files": [

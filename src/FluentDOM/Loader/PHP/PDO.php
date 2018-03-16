@@ -43,7 +43,7 @@ namespace FluentDOM\Loader\PHP {
         $source->setFetchMode(\PDO::FETCH_OBJ);
         foreach ($source as $row) {
           $child = $root->appendElement('_');
-          $this->transferTo($child, $row, 1);
+          $this->transferTo($child, $row, 2);
         }
         return new Result($document, 'text/xml');
       }

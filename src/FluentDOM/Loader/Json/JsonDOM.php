@@ -166,10 +166,10 @@ namespace FluentDOM\Loader\Json {
         $type = $this->getTypeFromValue($value);
         switch ($type) {
         case self::TYPE_ARRAY :
-          $this->transferArrayTo($target, $value, $this->_recursions - 1);
+          $this->transferArrayTo($target, $value, $recursions - 1);
           break;
         case self::TYPE_OBJECT :
-          $this->transferObjectTo($target, $value, $this->_recursions - 1);
+          $this->transferObjectTo($target, $value, $recursions - 1);
           break;
         default :
           if ($target instanceof \DOMElement && ($this->_verbose || $type !== self::TYPE_STRING)) {

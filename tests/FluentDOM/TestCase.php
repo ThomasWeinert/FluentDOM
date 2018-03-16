@@ -8,13 +8,7 @@ namespace FluentDOM {
 
   require_once __DIR__.'/../../vendor/autoload.php';
 
-  if (!class_exists('PHPUnit_Framework_TestCase')) {
-     abstract class PHPUnit_TestCase extends \PHPUnit\Framework\TestCase {}
-  } else {
-     abstract class PHPUnit_TestCase extends \PHPUnit_Framework_TestCase {}
-  }
-
-  abstract class TestCase extends PHPUnit_TestCase {
+  abstract class TestCase extends \PHPUnit\Framework\TestCase {
 
     const XML = '
       <items version="1.0">
@@ -42,35 +36,11 @@ namespace FluentDOM {
 
     protected $_directory = __DIR__;
 
-    /**
-     * setExpectedException() is deprecated, add a wrapper for forward compatibility
-     * extend expectedException to allow for the optional arguments (message and code)
-     *
-     * @param string $exception
-     */
-    public function expectException($exception, $message = NULL, $code = NULL) {
-      static $useBC = NULL;
-      if (NULL === $useBC) {
-        $useBC = FALSE !== array_search('expectException', get_class_methods(PHPUnit_TestCase::class));
-      }
-      if ($useBC) {
-        parent::expectException($exception);
-        if ($message !== NULL) {
-          parent::expectExceptionMessage($message);
-        }
-        if ($code !== NULL) {
-          parent::expectExceptionCode($code);
-        }
-      } else {
-        parent::setExpectedException($exception, $message, $code);
-      }
-    }
-
     public function expectError($severity) {
       $levels = [
-        E_NOTICE => ['PHPUnit_Framework_Error_Notice', Notice::class],
-        E_WARNING => ['PHPUnit_Framework_Error_Warning', Warning::class],
-        E_DEPRECATED => ['PHPUnit_Framework_Error_Deprecated', Deprecated::class]
+        E_NOTICE => [Notice::class],
+        E_WARNING => [Warning::class],
+        E_DEPRECATED => [Deprecated::class]
       ];
       if ($levels[$severity]) {
         foreach ($levels[$severity] as $class) {

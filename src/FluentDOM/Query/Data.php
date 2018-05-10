@@ -120,7 +120,7 @@ namespace FluentDOM\Query {
      * @return bool
      */
     private function isDataProperty(string $name): bool {
-      return (0 === strpos($name, 'data-') && $name === strtolower($name));
+      return (0 === \strpos($name, 'data-') && $name === \strtolower($name));
     }
 
     /**
@@ -130,13 +130,13 @@ namespace FluentDOM\Query {
      * @return string
      */
     private function encodeName(string $name): string {
-      if (preg_match('(^[a-z][a-z\d]*([A-Z]+[a-z\d]*)+$)DS', $name)) {
+      if (\preg_match('(^[a-z][a-z\d]*([A-Z]+[a-z\d]*)+$)DS', $name)) {
         $camelCasePattern = '((?:[a-z][a-z\d]+)|(?:[A-Z][a-z\d]+)|(?:[A-Z]+(?![a-z\d])))S';
-        if (preg_match_all($camelCasePattern, $name, $matches)) {
-          $name = implode('-', $matches[0]);
+        if (\preg_match_all($camelCasePattern, $name, $matches)) {
+          $name = \implode('-', $matches[0]);
         }
       }
-      return 'data-'.strtolower($name);
+      return 'data-'.\strtolower($name);
     }
 
     /**
@@ -146,10 +146,10 @@ namespace FluentDOM\Query {
      * @return string
      */
     private function decodeName(string $name): string {
-      $parts = explode('-', strtolower(substr($name, 5)));
-      $result = array_shift($parts);
+      $parts = \explode('-', \strtolower(\substr($name, 5)));
+      $result = \array_shift($parts);
       foreach ($parts as $part) {
-        $result .= ucfirst($part);
+        $result .= \ucfirst($part);
       }
       return $result;
     }
@@ -166,15 +166,23 @@ namespace FluentDOM\Query {
         return TRUE;
       case ($value === 'false') :
         return FALSE;
-        /** @noinspection SubStrUsedAsArrayAccessInspection */
-      case (in_array(substr($value, 0, 1), ['{', '['], FALSE)) :
-        if ($json = json_decode($value)) {
+      case ($this->isJsonString($value)) :
+        if ($json = \json_decode($value)) {
           return $json;
         }
         return NULL;
       default :
         return $value;
       }
+    }
+
+    /**
+     * @param string $value
+     * @return bool
+     */
+    private function isJsonString(string $value): bool {
+      $firstChar = $value[0] ?? '';
+      return $firstChar === '{' ||$firstChar === '[';
     }
 
     /**
@@ -185,11 +193,11 @@ namespace FluentDOM\Query {
      * @return string
      */
     private function encodeValue($value): string {
-      if (is_bool($value)) {
+      if (\is_bool($value)) {
         return $value ? 'true' : 'false';
       }
-      if (is_object($value) || is_array($value)) {
-        return json_encode($value);
+      if (\is_object($value) || \is_array($value)) {
+        return \json_encode($value);
       }
       return (string)$value;
     }

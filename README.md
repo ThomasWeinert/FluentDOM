@@ -1,6 +1,6 @@
 # FluentDOM
 
-[![Build Status](https://img.shields.io/travis/FluentDOM/FluentDOM.svg)](https://travis-ci.org/FluentDOM/FluentDOM)
+[![Build Status](https://img.shields.io/travis/ThomasWeinert/FluentDOM.svg)](https://travis-ci.org/ThomasWeinert/FluentDOM)
 [![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/fluentdom/fluentdom.svg)](https://scrutinizer-ci.com/g/FluentDOM/FluentDOM/?branch=master)
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/fluentdom/fluentdom.svg)](https://scrutinizer-ci.com/g/FluentDOM/FluentDOM/?branch=master)
 
@@ -9,7 +9,7 @@
 [![Latest Stable Version](https://img.shields.io/packagist/v/fluentdom/fluentdom.svg)](https://packagist.org/packages/fluentdom/fluentdom)
 [![Latest Unstable Version](https://img.shields.io/packagist/vpre/fluentdom/fluentdom.svg)](https://packagist.org/packages/fluentdom/fluentdom)
 
-Copyright: 2009-2017 [FluentDOM Contributors](https://github.com/FluentDOM/FluentDOM/graphs/contributors)<br />
+Copyright: 2009-2017 [FluentDOM Contributors](https://github.com/ThomasWeinert/FluentDOM/graphs/contributors)<br />
 License: [The MIT License](http://www.opensource.org/licenses/mit-license.php) <br />
 
 FluentDOM provides extended XML handling classes for PHPs DOM, XMLReader and XMLWriter.
@@ -88,11 +88,11 @@ foreach (new FluentDOM\XMLReader\SiblingIterator($reader, 's:url') as $url) {
 
 ## Support
 
-The [wiki](https://github.com/FluentDOM/FluentDOM/wiki) provides information and usage examples.
+The [wiki](https://github.com/ThomasWeinert/FluentDOM/wiki) provides information and usage examples.
 
-If you find a bug or have a feature request please report it in the [issue tracker](https://github.com/FluentDOM/FluentDOM/issues).
+If you find a bug or have a feature request please report it in the [issue tracker](https://github.com/ThomasWeinert/FluentDOM/issues).
 
-You can check out the [![Gitter chat](https://img.shields.io/badge/gitter-join--chat-blue.svg)](https://gitter.im/FluentDOM/FluentDOM), too.
+You can check out the [![Gitter chat](https://img.shields.io/badge/gitter-join--chat-blue.svg)](https://gitter.im/ThomasWeinert/FluentDOM), too.
 
 Be ware that the release packages (downloads) do not include the examples or tests. They are not needed
 to use the library. If you clone the repository, they will be included.
@@ -182,7 +182,7 @@ $fd = FluentDOM::QueryCss('sample.xml')
   ->text('Hello World!');
 ```
 
-Read more about it in the [Wiki](https://github.com/FluentDOM/FluentDOM/wiki/CSS-Selectors)
+Read more about it in the [Wiki](https://github.com/ThomasWeinert/FluentDOM/wiki/CSS-Selectors)
 
 ### Creating XML
 
@@ -191,7 +191,7 @@ you can register XML namespaces on the document and methods without direct names
 (like `createElement()`) will resolve the namespace and call the namespace aware variant 
 (like `createElementNS()`).
 
-Check the Wiki for an [example](https://github.com/FluentDOM/FluentDOM/wiki/Creating-XML-with-Namespaces-%28Atom%29).
+Check the Wiki for an [example](https://github.com/ThomasWeinert/FluentDOM/wiki/Creating-XML-with-Namespaces-%28Atom%29).
 
 ## Backwards Compatibility Breaks
 
@@ -210,5 +210,5 @@ any more.
 
 `FluentDOM\DOM\Element::find()` was removed, use `FluentDOM($element)->find()`.
 
-[Previous BC breaks](https://github.com/FluentDOM/FluentDOM/wiki/Backwards-Compatibility) are documented in the Wiki.
+[Previous BC breaks](https://github.com/ThomasWeinert/FluentDOM/wiki/Backwards-Compatibility) are documented in the Wiki.
 

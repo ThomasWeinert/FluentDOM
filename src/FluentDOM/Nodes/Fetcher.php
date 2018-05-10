@@ -57,12 +57,13 @@ namespace FluentDOM\Nodes {
       } else {
         $nodes = [];
         foreach ($this->_nodes->toArray() as $context) {
-          $nodes = array_merge(
-            $nodes,
-            $this->fetchFor(
-              $expression, $context, $filter, $stopAt, $options
-            )
+          $fetchedNodes = $this->fetchFor(
+            $expression, $context, $filter, $stopAt, $options
           );
+          if (empty($fetchedNodes)) {
+            continue;
+          }
+          \array_push($nodes, ...$fetchedNodes);
         }
       }
       return $this->unique($nodes, $options);
@@ -76,14 +77,14 @@ namespace FluentDOM\Nodes {
      * @return bool
      */
     private function validateContextIgnore(string $expression, int $options): bool {
-      if (!is_string($expression) || empty($expression)) {
+      if (!\is_string($expression) || empty($expression)) {
         throw new \InvalidArgumentException(
           'Invalid selector/expression.'
         );
       }
       return
         Constraints::hasOption($options, self::IGNORE_CONTEXT) ||
-        (strpos($expression, '/') === 0);
+        (\strpos($expression, '/') === 0);
     }
 
     /**
@@ -96,7 +97,7 @@ namespace FluentDOM\Nodes {
     private function unique(array $nodes, int $options): array {
       if (
         Constraints::hasOption($options, self::FORCE_SORT) ||
-        (count($this->_nodes) > 1 && Constraints::hasOption($options, self::UNIQUE))
+        (\count($this->_nodes) > 1 && Constraints::hasOption($options, self::UNIQUE))
       ) {
         $nodes = $this->_nodes->unique($nodes);
       }
@@ -147,9 +148,9 @@ namespace FluentDOM\Nodes {
           'Given selector/expression did not return a node list.'
         );
       }
-      $nodes = iterator_to_array($nodes);
+      $nodes = \iterator_to_array($nodes);
       if (Constraints::hasOption($options, self::REVERSE)) {
-        return array_reverse($nodes, FALSE);
+        return \array_reverse($nodes, FALSE);
       }
       return $nodes;
     }

@@ -108,6 +108,28 @@ namespace FluentDOM\Loader {
 
     /**
      * @covers \FluentDOM\Loader\Html
+     * @covers \FluentDOM\Loader\Supports
+     */
+    public function testLoadWithValidHtmlFragmentDefinedByOption() {
+      $loader = new Html();
+      $this->assertInstanceOf(
+        Result::class,
+        $result = $loader->load(
+          '<div>Test</div>Text<input>',
+          'text/html',
+          [
+            Html::IS_FRAGMENT => TRUE
+          ]
+        )
+      );
+      $this->assertEquals(
+        "<div>Test</div>Text<input>",
+        $result->getDocument()->saveHtml()
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\Loader\Html
      */
     public function testLoadWithValidHtmlFileAllowFile() {
       $loader = new Html();

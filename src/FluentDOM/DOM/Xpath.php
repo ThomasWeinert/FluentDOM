@@ -1,10 +1,11 @@
 <?php
 /**
- * FluentDOM\DOM\Xpath extends PHPs DOMXpath class. It disables the
- * automatic namespace registration by default and, throws notices for the query method.
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\DOM {
@@ -66,7 +67,7 @@ namespace FluentDOM\DOM {
      * is disabled by default.
      *
      * @param string $expression
-     * @param \DOMNode $contextNode
+     * @param \DOMNode|NULL $contextNode
      * @param NULL|bool $registerNodeNS
      * @return string|float|bool|\DOMNodeList
      */
@@ -94,7 +95,7 @@ namespace FluentDOM\DOM {
      *
      * @deprecated
      * @param string $expression
-     * @param \DOMNode $contextNode
+     * @param \DOMNode|NULL $contextNode
      * @param NULL|bool $registerNodeNS
      * @return \DOMNodeList
      */

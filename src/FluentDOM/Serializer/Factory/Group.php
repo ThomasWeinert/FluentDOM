@@ -1,4 +1,12 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\Serializer\Factory {
 
@@ -21,17 +29,17 @@ namespace FluentDOM\Serializer\Factory {
         $factory = $this->offsetGet($contentType);
         if ($factory instanceof SerializerFactory) {
           $serializer = $factory->createSerializer($contentType, $node);
-        } elseif (is_callable($factory)) {
+        } elseif (\is_callable($factory)) {
           $serializer = $factory($contentType, $node);
         }
-        if (NULL !== $serializer && !method_exists($serializer, '__toString')) {
-          throw new Exceptions\InvalidSerializer($contentType, get_class($serializer));
+        if (NULL !== $serializer && !\method_exists($serializer, '__toString')) {
+          throw new Exceptions\InvalidSerializer($contentType, \get_class($serializer));
         }
       }
       return $serializer;
     }
 
-    private function normalizeContentType($contentType) {
+    private function normalizeContentType(string $contentType): string {
       return strtolower($contentType);
     }
 
@@ -42,7 +50,7 @@ namespace FluentDOM\Serializer\Factory {
 
     public function offsetSet($contentType, $factory) {
       $contentType = $this->normalizeContentType($contentType);
-      if (!($factory instanceOf SerializerFactory || is_callable($factory))) {
+      if (!($factory instanceOf SerializerFactory || \is_callable($factory))) {
         throw new Exceptions\InvalidArgument(
           'factory', 'FluentDOM\Serializer\Factory, callable'
         );
@@ -62,12 +70,12 @@ namespace FluentDOM\Serializer\Factory {
       }
     }
 
-    public function getIterator() {
+    public function getIterator(): \Iterator {
       return new \ArrayIterator($this->_factories);
     }
 
-    public function count() {
-      return count($this->_factories);
+    public function count(): int {
+      return \count($this->_factories);
     }
   }
 }

@@ -1,9 +1,11 @@
 <?php
 /**
- * FluentDOM\DOM\DocumentFragment extends PHPs DOMDocumentFragment class. It adds some namespace handling.
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\DOM {
@@ -88,7 +90,7 @@ namespace FluentDOM\DOM {
           /** @noinspection CallableParameterUseCaseInTypeContextInspection */
           $namespaces = $xpath('namespace::*', $namespaces);
         }
-        if (is_array($namespaces) || $namespaces instanceof \Traversable) {
+        if (\is_array($namespaces) || $namespaces instanceof \Traversable) {
           /** @noinspection ForeachSourceInspection */
           foreach ($namespaces as $key => $namespaceURI) {
             if ($namespaceURI instanceof \DOMNameSpaceNode) {
@@ -107,7 +109,7 @@ namespace FluentDOM\DOM {
           );
         }
       }
-      return count($this->_namespaces) > 0 ? $this->_namespaces : $this->ownerDocument->namespaces();
+      return \count($this->_namespaces) > 0 ? $this->_namespaces : $this->ownerDocument->namespaces();
     }
 
     /**
@@ -131,14 +133,14 @@ namespace FluentDOM\DOM {
      */
     public function appendXml($data, $namespaces = NULL): bool {
       $namespaces = $this->namespaces($namespaces);
-      if (count($namespaces) === 0) {
+      if (\count($namespaces) === 0) {
         return parent::appendXML($data);
       }
       $fragment = '<fragment';
       foreach ($namespaces as $key => $xmlns) {
         $prefix = $key === '#default' ? '' : $key;
-        $fragment .= ' '.htmlspecialchars(empty($prefix) ? 'xmlns' : 'xmlns:'.$prefix);
-        $fragment .= '="'.htmlspecialchars($xmlns).'"';
+        $fragment .= ' '.\htmlspecialchars(empty($prefix) ? 'xmlns' : 'xmlns:'.$prefix);
+        $fragment .= '="'.\htmlspecialchars($xmlns).'"';
       }
       $fragment .= '>'.$data.'</fragment>';
       $source = new Document();

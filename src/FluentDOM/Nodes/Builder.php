@@ -1,9 +1,11 @@
 <?php
 /**
- * Create list of nodes for a FluentDOM\Nodes object from different values
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Nodes {
@@ -76,7 +78,7 @@ namespace FluentDOM\Nodes {
       if ($nodes = $this->getNodeList($selector)) {
         return $nodes;
       }
-      if (is_string($selector)) {
+      if (\is_string($selector)) {
         $result = $this->getOwner()->xpath(
           $this->getOwner()->prepareSelector(
             $selector,Nodes::CONTEXT_SELF
@@ -86,7 +88,7 @@ namespace FluentDOM\Nodes {
         if (!($result instanceof \Traversable)) {
           throw new \InvalidArgumentException('Given selector did not return an node list.');
         }
-        return iterator_to_array($result);
+        return \iterator_to_array($result);
       }
       throw new \InvalidArgumentException('Invalid selector');
     }
@@ -108,10 +110,10 @@ namespace FluentDOM\Nodes {
       $result = [];
       if ($nodes = $this->getNodeList($content, $includeTextNodes, $limit)) {
         $result = $nodes;
-      } elseif (is_string($content)) {
+      } elseif (\is_string($content)) {
         $result = $this->getFragment($content, $this->getOwner()->contentType, $includeTextNodes, $limit);
       }
-      if (!is_array($result) || empty($result)) {
+      if (!\is_array($result) || empty($result)) {
         throw new Exceptions\LoadingError\EmptyResult();
       }
       //if a node is not in the current document import it
@@ -154,7 +156,7 @@ namespace FluentDOM\Nodes {
       $xml = $this->getContentAsString($xml);
       $loader = $this->getOwner()->loaders();
       if (!$loader->supports($contentType)) {
-        throw new Exceptions\InvalidFragmentLoader(get_class($loader));
+        throw new Exceptions\InvalidFragmentLoader(\get_class($loader));
       }
       if (!$xml) {
         return [];
@@ -169,7 +171,7 @@ namespace FluentDOM\Nodes {
           $element = $fragment->childNodes->item($i);
           if ($element instanceof \DOMElement ||
             ($includeTextNodes && Constraints::filterNode($element))) {
-            array_unshift($result, $element);
+            \array_unshift($result, $element);
             $element->parentNode->removeChild($element);
           }
         }
@@ -183,7 +185,7 @@ namespace FluentDOM\Nodes {
      * @throws \UnexpectedValueException
      */
     private function getContentAsString($content) {
-      if (is_scalar($content) || method_exists($content, '__toString')) {
+      if (\is_scalar($content) || \method_exists($content, '__toString')) {
         $content = (string)$content;
         return ($content === '') ? FALSE : $content;
       }
@@ -218,7 +220,7 @@ namespace FluentDOM\Nodes {
      * @param bool $simple
      * @return \DOMElement[]
      */
-    public function getWrapperNodes(\DOMElement $template, bool &$simple) {
+    public function getWrapperNodes(\DOMElement $template, bool &$simple): array {
       $wrapper = $template->cloneNode(TRUE);
       $targets = NULL;
       $target = NULL;
@@ -242,17 +244,17 @@ namespace FluentDOM\Nodes {
      */
     private function getLimitedArray($nodes, int $limit = -1): array {
       if ($limit > 0) {
-        if (is_array($nodes)) {
-          return array_slice($nodes, 0, $limit);
+        if (\is_array($nodes)) {
+          return \array_slice($nodes, 0, $limit);
         }
-        return iterator_to_array(
+        return \iterator_to_array(
           new \LimitIterator(
             new \IteratorIterator($nodes), 0, $limit
           ),
           FALSE
         );
       }
-      return is_array($nodes) ? $nodes : iterator_to_array($nodes, FALSE);
+      return \is_array($nodes) ? $nodes : \iterator_to_array($nodes, FALSE);
     }
   }
 }

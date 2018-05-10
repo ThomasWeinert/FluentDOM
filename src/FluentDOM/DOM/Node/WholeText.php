@@ -1,11 +1,11 @@
 <?php
 /**
- * Add the `replaceWholeText()` method. To the text node classes.
+ * FluentDOM
  *
- * https://www.w3.org/TR/DOM-Level-3-Core/core.html#Text3-replaceWholeText
- *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\DOM\Node {
@@ -13,8 +13,8 @@ namespace FluentDOM\DOM\Node {
   use FluentDOM\DOM\Document;
 
   // @codeCoverageIgnoreStart
-  if (!defined('LIBXML_NO_MODIFICATION_ALLOWED_ERR')) {
-    define('LIBXML_NO_MODIFICATION_ALLOWED_ERR',  7);
+  if (!\defined('LIBXML_NO_MODIFICATION_ALLOWED_ERR')) {
+    \define('LIBXML_NO_MODIFICATION_ALLOWED_ERR',  7);
   }
   // @codeCoverageIgnoreEnd
 
@@ -93,7 +93,7 @@ namespace FluentDOM\DOM\Node {
       $iterate($this, function(\DOMNode $node) { return $node->previousSibling; } );
       $iterate($this, function(\DOMNode $node) { return $node->nextSibling; } );
       if ($content === '') {
-        if ($this->parentNode instanceof \DOMNode) {
+        if ($this instanceof  \DOMNode && $this->parentNode instanceof \DOMNode) {
           $this->parentNode->removeChild($this);
         }
         $this->textContent = '';

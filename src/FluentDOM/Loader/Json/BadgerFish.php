@@ -1,9 +1,11 @@
 <?php
 /**
- * Load a DOM document from a json string or file
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Loader\Json {
@@ -89,7 +91,7 @@ namespace FluentDOM\Loader\Json {
     protected function transferAttributeTo(Element $node, string $name, $data) {
       /** @var Document $document */
       $document = $node->ownerDocument ?: $node;
-      $name = (string)substr($name, 1);
+      $name = (string)\substr($name, 1);
       $namespaceURI = (string)$this->getNamespaceForNode($name, new \stdClass(), $node);
       $attribute = '' === $namespaceURI
         ? $document->createAttribute($name)
@@ -113,13 +115,14 @@ namespace FluentDOM\Loader\Json {
         $data->{'@xmlns'} ?? new \stdClass(),
         $document
       );
-      if (!is_array($data)) {
+      if (!\is_array($data)) {
         $data = [$data];
       }
       foreach ($data as $dataChild) {
         /** @noinspection IsEmptyFunctionUsageInspection */
         $child = $node->appendChild(
-          empty($namespaceURI) ? $document->createElement($name) : $document->createElementNS($namespaceURI, $name)
+          empty($namespaceURI)
+            ? $document->createElement($name) : $document->createElementNS($namespaceURI, $name)
         );
         $this->transferTo($child, $dataChild);
       }

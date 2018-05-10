@@ -1,10 +1,11 @@
 <?php
 /**
- * FluentDOM\DOM\Document extends PHPs DOMDocument class. It adds some generic namespace handling on
- * the document level and registers extended Node classes for convenience.
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\DOM {
@@ -153,7 +154,7 @@ namespace FluentDOM\DOM {
         } else {
           if ($this->namespaces()->isReservedPrefix($prefix)) {
             throw new \LogicException(
-              sprintf('Can not use reserved namespace prefix "%s" in element name.', $prefix)
+              \sprintf('Can not use reserved namespace prefix "%s" in element name.', $prefix)
             );
           }
           $namespaceURI = (string)$this->namespaces()->resolveNamespace($prefix);

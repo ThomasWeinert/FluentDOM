@@ -1,9 +1,11 @@
 <?php
 /**
- * Provide options for a loader
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2016 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Loader {
@@ -37,10 +39,10 @@ namespace FluentDOM\Loader {
      * @throws \InvalidArgumentException
      */
     public function __construct($options = [], array $callbacks = []) {
-      if (is_array($options)) {
+      if (\is_array($options)) {
         $this->_options = $options;
       } else if ($options instanceof \Traversable) {
-        $this->_options = iterator_to_array($options);
+        $this->_options = \iterator_to_array($options);
       } else {
         throw new InvalidArgument('options', ['array', \Traversable::class]);
       }
@@ -57,7 +59,7 @@ namespace FluentDOM\Loader {
     public function setCallback(string $name, callable $callback) {
       if (!array_key_exists($name, $this->_callbacks)) {
         throw new \InvalidArgumentException(
-          sprintf('Unknown callback specifier "%s".', $name)
+          \sprintf('Unknown callback specifier "%s".', $name)
         );
       }
       $this->_callbacks[$name] = $callback;
@@ -71,7 +73,7 @@ namespace FluentDOM\Loader {
      */
     private function executeCallback(string $name, $default, ...$arguments) {
       $callback = $this->_callbacks[$name];
-      if (is_callable($callback)) {
+      if (\is_callable($callback)) {
         return $callback(...$arguments);
       }
       return $default;

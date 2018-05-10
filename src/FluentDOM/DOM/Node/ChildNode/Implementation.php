@@ -1,4 +1,12 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\DOM\Node\ChildNode {
 
@@ -12,8 +20,7 @@ namespace FluentDOM\DOM\Node\ChildNode {
      * @return $this|\DOMNode
      */
     public function remove(): \DOMNode {
-      /** @var \DOMNode|Implementation $this */
-      if ($this->parentNode instanceof \DOMNode) {
+      if ($this instanceof \DOMNode && $this->parentNode instanceof \DOMNode) {
         $this->parentNode->removeChild($this);
       }
       return $this;

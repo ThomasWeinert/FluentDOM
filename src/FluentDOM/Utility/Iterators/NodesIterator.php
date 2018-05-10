@@ -1,9 +1,11 @@
 <?php
 /**
- * FluentDOM\Query\Iterator is the Iterator class for FluentDOM\Query objects
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Utility\Iterators {
@@ -22,8 +24,8 @@ namespace FluentDOM\Utility\Iterators {
      *
      * @return bool
      */
-    public function valid() {
-      return is_object($this->getOwner()->item($this->_position));
+    public function valid(): bool {
+      return \is_object($this->getOwner()->item($this->_position));
     }
 
     /**
@@ -31,16 +33,16 @@ namespace FluentDOM\Utility\Iterators {
      *
      * @return \DOMNode
      */
-    public function current() {
+    public function current(): \DOMNode {
       return $this->getOwner()->item($this->_position);
     }
 
     /**
      * Get children of the current iterator element
      *
-     * @return \RecursiveIterator
+     * @return self
      */
-    public function getChildren() {
+    public function getChildren(): self {
       $owner = $this->getOwner();
       $query = $owner->spawn();
       $query->push($owner->item($this->_position)->childNodes);
@@ -52,9 +54,9 @@ namespace FluentDOM\Utility\Iterators {
      *
      * @return bool
      */
-    public function hasChildren() {
+    public function hasChildren(): bool {
       $item = $this->getOwner()->item($this->_position);
-      return $item->hasChildNodes();
+      return $item ? $item->hasChildNodes() : FALSE;
     }
   }
 }

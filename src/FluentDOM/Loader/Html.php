@@ -1,9 +1,11 @@
 <?php
 /**
- * Load a DOM document from a xml string
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Loader {
@@ -74,16 +76,16 @@ namespace FluentDOM\Loader {
     }
 
     private function ensureEncodingPI(string $source, string $encoding = NULL, bool $force = NULL): string {
-      $hasXmlPi = preg_match('(<\\?xml\\s)', $source);
+      $hasXmlPi = \preg_match('(<\\?xml\\s)', $source);
       if (!$force && ($charset = $this->getCharsetFromMetaTag($source))) {
         $encoding = (string)$charset;
       }
-      $pi = '<?xml version="1.0" encoding="'.htmlspecialchars($encoding).'"?>';
+      $pi = '<?xml version="1.0" encoding="'.\htmlspecialchars($encoding).'"?>';
       if (!$hasXmlPi) {
         return $pi.$source;
       }
       if ($force) {
-        return preg_replace('(<\\?xml\\s[^?>]*?>)', $pi, $source, 1);
+        return \preg_replace('(<\\?xml\\s[^?>]*?>)', $pi, $source, 1);
       }
       return $source;
     }
@@ -93,7 +95,7 @@ namespace FluentDOM\Loader {
      * @return string|bool
      */
     private function getCharsetFromMetaTag(string $source) {
-      $hasMetaTag = preg_match(
+      $hasMetaTag = \preg_match(
         '(<meta\\s+[^>]*charset=["\']\s*(?<charset>[^\\s\'">]+)\s*["\'])i',
         $source,
         $match
@@ -101,13 +103,13 @@ namespace FluentDOM\Loader {
       if ($hasMetaTag) {
         return $match['charset'];
       }
-      $hasMetaTag = preg_match(
+      $hasMetaTag = \preg_match(
         '(<meta\\s+[^>]*http-equiv=["\']content-type["\'][^>]*>)i',
         $source,
         $match
       );
       if ($hasMetaTag) {
-        preg_match(
+        \preg_match(
           '(content=["\']\s*[^#\']+;\s*charset\s*=\s*(?<encoding>[^\S\'">]+))',
           $match[0],
           $match
@@ -150,7 +152,7 @@ namespace FluentDOM\Loader {
       return NULL;
     }
 
-    private function isFragment(string $contentType, $options) {
+    private function isFragment(string $contentType, $options): bool {
       return (
         $contentType === 'html-fragment' ||
         $contentType === 'text/html-fragment' ||

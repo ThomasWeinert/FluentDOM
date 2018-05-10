@@ -1,9 +1,11 @@
 <?php
 /**
- * Abstract utility class that provides several constraints/validations
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Utility {
@@ -50,9 +52,9 @@ namespace FluentDOM\Utility {
     public static function assertNode($node, $message = 'DOMNode expected, got: %s.'): bool {
       if (!($node instanceof \DOMNode)) {
         throw new \InvalidArgumentException(
-          sprintf(
+          \sprintf(
             $message,
-            is_object($node) ? get_class($node) : gettype($node)
+            \is_object($node) ? \get_class($node) : \gettype($node)
           )
         );
       }
@@ -67,8 +69,7 @@ namespace FluentDOM\Utility {
      * @return \Traversable|array
      */
     public static function filterNodeList($elements) {
-      if ($elements instanceof \Traversable ||
-          is_array($elements)) {
+      if ($elements instanceof \Traversable || \is_array($elements)) {
         return empty($elements) ? new \EmptyIterator() : $elements;
       }
       return NULL;
@@ -91,10 +92,10 @@ namespace FluentDOM\Utility {
         return $callback;
       }
       if (
-        (is_string($callback) && $allowGlobalFunctions) ||
+        (\is_string($callback) && $allowGlobalFunctions) ||
         self::filterCallableArray($callback)
       ) {
-        return is_callable($callback) ? $callback : NULL;
+        return \is_callable($callback) ? $callback : NULL;
       }
       if ($silent) {
         return NULL;
@@ -108,12 +109,12 @@ namespace FluentDOM\Utility {
      * @param mixed $callback
      * @return bool
      */
-    private static function filterCallableArray($callback) {
+    private static function filterCallableArray($callback): bool {
       return (
-        is_array($callback) &&
-        count($callback) === 2 &&
-        (is_object($callback[0]) || is_string($callback[0])) &&
-        is_string($callback[1])
+        \is_array($callback) &&
+        \count($callback) === 2 &&
+        (\is_object($callback[0]) || \is_string($callback[0])) &&
+        \is_string($callback[1])
       );
     }
 

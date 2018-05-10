@@ -1,7 +1,22 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\DOM\Node {
 
+  /**
+   * Class MutationMacro
+   *
+   * Converts a list of potential nodes into a single DOM node.
+   *
+   * @package FluentDOM\DOM\Node
+   */
   abstract class MutationMacro {
 
     public static function expand(\DOMNode $context, $nodes) {
@@ -29,7 +44,7 @@ namespace FluentDOM\DOM\Node {
      * @return bool
      */
     private static function isStringCastable($value): bool {
-      return is_scalar($value) || (is_object($value) && method_exists($value, '__toString'));
+      return \is_scalar($value) || (\is_object($value) && \method_exists($value, '__toString'));
     }
 
     /**
@@ -39,7 +54,7 @@ namespace FluentDOM\DOM\Node {
     private static function isTraversableOfNodes($value): bool {
       return (
         !($value instanceof \DOMNode) &&
-        ($value instanceof \Traversable || is_array($value))
+        ($value instanceof \Traversable || \is_array($value))
       );
     }
 

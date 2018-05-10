@@ -1,9 +1,11 @@
 <?php
 /**
- * Implements an extended replacement for DOMNodeList.
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM {
@@ -124,7 +126,7 @@ namespace FluentDOM {
      * @throws \FluentDOM\Exceptions\InvalidSource\Variable
      * @throws \OutOfBoundsException
      */
-    public function load($source, string $contentType = NULL, $options = []) {
+    public function load($source, string $contentType = NULL, $options = []): self {
       $contentType = $contentType ?: 'text/xml';
       $loaded = $this->prepareSource($source, $contentType, $options);
       $isResult = $loaded instanceof Loader\Result;
@@ -157,7 +159,7 @@ namespace FluentDOM {
     private function prepareSource($source, string $contentType, $options) {
       $loaded = FALSE;
       $this->_useDocumentContext = TRUE;
-      if ($source instanceof Nodes) {
+      if ($source instanceof self) {
         $loaded = $source->getDocument();
       } elseif ($source instanceof \DOMDocument) {
         $loaded = $source;
@@ -186,7 +188,7 @@ namespace FluentDOM {
       if (NULL !== $loaders) {
         if ($loaders instanceOf Loadable) {
           $this->_loaders = $loaders;
-        } elseif (is_array($loaders) || $loaders instanceOf \Traversable) {
+        } elseif (\is_array($loaders) || $loaders instanceOf \Traversable) {
           $this->_loaders = new Loaders($loaders);
         } else {
           throw new Exceptions\InvalidArgument(
@@ -209,7 +211,7 @@ namespace FluentDOM {
     public function getLoadingOptions($contentType = NULL) {
       $contentType = $contentType ?: $this->_contentType;
       if (
-        isset($this->_loadingContext, $this->_loadingContext['contentType']) &&
+        isset($this->_loadingContext['contentType']) &&
         $this->_loadingContext['contentType'] === $contentType
       ) {
         return $this->_loadingContext['options'];
@@ -299,10 +301,10 @@ namespace FluentDOM {
      * of this document will get invalid.
      *
      * @param string $contentType
-     * @return Nodes
+     * @return self
      * @throws \LogicException
      */
-    public function formatOutput(string $contentType = NULL) {
+    public function formatOutput(string $contentType = NULL): self {
       if (NULL !== $contentType) {
         $this->setContentType($contentType);
       }
@@ -325,14 +327,14 @@ namespace FluentDOM {
      * @param NULL|string|callable|\DOMNode|array|\Traversable $filter
      * @param NULL|string|callable|\DOMNode|array|\Traversable $stopAt
      * @param int $options
-     * @return Nodes
+     * @return static
      * @throws \LogicException
      * @throws \OutOfBoundsException
      * @throws \InvalidArgumentException
      */
     protected function fetch(
       string $expression, $filter = NULL, $stopAt = NULL, int $options = 0
-    ) {
+    ): self {
       return $this->spawn(
         (new Nodes\Fetcher($this))->fetch(
           $expression,
@@ -391,7 +393,8 @@ namespace FluentDOM {
      */
     public function prepareSelector(string $selector, int $contextMode): string {
       if (NULL !== $this->_onPrepareSelector) {
-        return call_user_func($this->_onPrepareSelector, $selector, $contextMode);
+        $onPrepareSelector = $this->_onPrepareSelector;
+        return $onPrepareSelector($selector, $contextMode);
       }
       return $selector;
     }
@@ -413,12 +416,12 @@ namespace FluentDOM {
           return $node->isSameNode($selector);
         };
       }
-      if (is_string($selector) && $selector !== '') {
+      if (\is_string($selector) && $selector !== '') {
         return function(\DOMNode $node) use ($selector) {
           return $this->matches($selector, $node);
         };
       }
-      if ($selector instanceof \Traversable || is_array($selector)) {
+      if ($selector instanceof \Traversable || \is_array($selector)) {
         return function(\DOMNode $node) use ($selector) {
           foreach ($selector as $compareWith) {
             if (
@@ -461,7 +464,7 @@ namespace FluentDOM {
      * @return int
      */
     public function count(): int {
-      return count($this->_nodes);
+      return \count($this->_nodes);
     }
 
     /**
@@ -564,7 +567,7 @@ namespace FluentDOM {
       case 'document' :
         return $this->getDocument();
       case 'length' :
-        return count($this->_nodes);
+        return \count($this->_nodes);
       case 'xpath' :
         return $this->getXpath();
       case 'onPrepareSelector' :
@@ -616,17 +619,17 @@ namespace FluentDOM {
       case 'length' :
       case 'xpath' :
         throw new \BadMethodCallException(
-          sprintf(
+          \sprintf(
             'Can not unset property %s::$%s',
-            get_class($this),
+            \get_class($this),
             $name
           )
         );
       }
       throw new \BadMethodCallException(
-        sprintf(
+        \sprintf(
           'Can not unset non existing property %s::$%s',
-          get_class($this),
+          \get_class($this),
           $name
         )
       );
@@ -689,10 +692,10 @@ namespace FluentDOM {
     /**
      * Return the parent FluentDOM\Nodes object.
      *
-     * @return Nodes
+     * @return $this|self
      */
-    public function end() {
-      if ($this->_parent instanceof Nodes) {
+    public function end(): self {
+      if ($this->_parent instanceof self) {
         return $this->_parent;
       }
       return $this;
@@ -705,9 +708,9 @@ namespace FluentDOM {
      * @param bool $ignoreTextNodes ignore text nodes
      * @throws \OutOfBoundsException
      * @throws \InvalidArgumentException
-     * @return $this|Nodes
+     * @return $this
      */
-    public function push($elements, bool $ignoreTextNodes = FALSE): Nodes {
+    public function push($elements, bool $ignoreTextNodes = FALSE): self {
       if (Constraints::filterNode($elements, $ignoreTextNodes)) {
         if ($elements->ownerDocument !== $this->_document) {
           throw new \OutOfBoundsException(
@@ -720,7 +723,7 @@ namespace FluentDOM {
         foreach ($nodes as $index => $node) {
           if ($node->ownerDocument !== $this->_document) {
             throw new \OutOfBoundsException(
-              sprintf('Node #%d is not a part of this document', $index)
+              \sprintf('Node #%d is not a part of this document', $index)
             );
           }
           $this->_nodes[] = $node;
@@ -741,10 +744,10 @@ namespace FluentDOM {
      *
      * @param callable $function
      * @param callable|bool|NULL $elementsFilter
-     * @return $this|Nodes
+     * @return $this
      * @throws \InvalidArgumentException
      */
-    public function each(callable $function, $elementsFilter = NULL): Nodes {
+    public function each(callable $function, $elementsFilter = NULL): self {
       if (TRUE === $elementsFilter) {
         $filter = function($node) {
           return $node instanceof \DOMElement;
@@ -776,12 +779,12 @@ namespace FluentDOM {
      * @example find.php Usage Example: FluentDOM::find()
      * @param mixed $selector selector
      * @param int $options FIND_* options CONTEXT_DOCUMENT, FIND_MODE_FILTER, FIND_FORCE_SORT
-     * @return Nodes
+     * @return self
      * @throws \LogicException
      * @throws \OutOfBoundsException
      * @throws \InvalidArgumentException
      */
-    public function find($selector, int $options = 0) {
+    public function find($selector, int $options = 0): self {
       list(
         $selectorIsScalar,
         $selectorIsFilter,
@@ -861,7 +864,7 @@ namespace FluentDOM {
      * @throws \InvalidArgumentException
      */
     public function index($selector = NULL): int {
-      if (count($this->_nodes) > 0) {
+      if (\count($this->_nodes) > 0) {
         if (NULL === $selector) {
           return $this->xpath(
             'count(
@@ -891,11 +894,11 @@ namespace FluentDOM {
      * @return array
      */
     public function unique(array $array): array {
-      $count = count($array);
+      $count = \count($array);
       if ($count <= 1) {
         if ($count === 1) {
           Constraints::assertNode(
-            reset($array), 'Array must only contain dom nodes, found "%s".'
+            \reset($array), 'Array must only contain dom nodes, found "%s".'
           );
         }
         return $array;
@@ -904,7 +907,7 @@ namespace FluentDOM {
       $unsortable = [];
       foreach ($array as $node) {
         Constraints::assertNode($node, 'Array must only contain dom nodes, found "%s".');
-        $hash = spl_object_hash($node);
+        $hash = \spl_object_hash($node);
         if (
           ($node->parentNode instanceof \DOMNode) ||
           $node === $node->ownerDocument->documentElement) {
@@ -919,9 +922,9 @@ namespace FluentDOM {
           }
         }
       }
-      uasort($sortable, new Nodes\Compare($this->xpath));
-      $result = array_values($sortable);
-      array_splice($result, count($result), 0, array_values($unsortable));
+      \uasort($sortable, new Nodes\Compare($this->xpath));
+      $result = \array_values($sortable);
+      \array_splice($result, \count($result), 0, \array_values($unsortable));
       return $result;
     }
 

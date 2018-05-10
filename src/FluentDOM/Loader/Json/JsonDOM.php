@@ -1,9 +1,11 @@
 <?php
 /**
- * Load a DOM document from a json string or file
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Loader\Json {
@@ -116,7 +118,7 @@ namespace FluentDOM\Loader\Json {
         $document = new Document('1.0', 'UTF-8');
         $fragment = $document->createDocumentFragment();
         $onMapKey = $this->prepareOnMapKey($options);
-        $this->transferTo($fragment, json_decode($source), $this->_recursions);
+        $this->transferTo($fragment, \json_decode($source), $this->_recursions);
         $this->_onMapKey = $onMapKey;
         return $fragment;
       }
@@ -125,7 +127,7 @@ namespace FluentDOM\Loader\Json {
 
     private function prepareOnMapKey($options) {
       $onMapKey = $this->_onMapKey;
-      if (isset($options[self::ON_MAP_KEY]) && is_callable($options[self::ON_MAP_KEY])) {
+      if (isset($options[self::ON_MAP_KEY]) && \is_callable($options[self::ON_MAP_KEY])) {
         $this->onMapKey($options[self::ON_MAP_KEY]);
       }
       return $onMapKey;
@@ -190,22 +192,22 @@ namespace FluentDOM\Loader\Json {
      * @return string
      */
     public function getTypeFromValue($value): string {
-      if (is_array($value)) {
-        if (empty($value) || array_keys($value) === range(0, count($value) - 1)) {
+      if (\is_array($value)) {
+        if (empty($value) || \array_keys($value) === \range(0, \count($value) - 1)) {
           return self::TYPE_ARRAY;
         }
         return self::TYPE_OBJECT;
       }
-      if (is_object($value)) {
+      if (\is_object($value)) {
         return self::TYPE_OBJECT;
       }
       if (NULL === $value) {
         return self::TYPE_NULL;
       }
-      if (is_bool($value)) {
+      if (\is_bool($value)) {
         return self::TYPE_BOOLEAN;
       }
-      if (is_int($value) || is_float($value)) {
+      if (\is_int($value) || \is_float($value)) {
         return self::TYPE_NUMBER;
       }
       return self::TYPE_STRING;
@@ -283,7 +285,7 @@ namespace FluentDOM\Loader\Json {
      * @param int $recursions
      */
     private function transferObjectTo(\DOMNode $target, $value, int $recursions) {
-      $properties = is_array($value) ? $value : get_object_vars($value);
+      $properties = \is_array($value) ? $value : \get_object_vars($value);
       if ($this->_verbose || empty($properties)) {
         $target->setAttributeNS(self::XMLNS, 'json:type', 'object');
       }

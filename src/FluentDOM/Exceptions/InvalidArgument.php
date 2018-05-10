@@ -1,4 +1,12 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\Exceptions {
 
@@ -11,9 +19,9 @@ namespace FluentDOM\Exceptions {
      * @param string|string[] $expectedTypes
      */
     public function __construct(string $argumentName, $expectedTypes = NULL) {
-      $message = sprintf('Invalid $%s argument.', $argumentName);
-      if (is_array($expectedTypes) && count($expectedTypes) > 0) {
-        $message .= ' Expected: '.implode(', ', $expectedTypes);
+      $message = \sprintf('Invalid $%s argument.', $argumentName);
+      if (\is_array($expectedTypes) && \count($expectedTypes) > 0) {
+        $message .= ' Expected: '.\implode(', ', $expectedTypes);
       } elseif (NULL !== $expectedTypes) {
         $message .= ' Expected: '.$expectedTypes;
       }

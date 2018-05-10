@@ -1,9 +1,11 @@
 <?php
 /**
- * Encapsulates the standard loaders (html, xml, json)
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Loader {
@@ -12,7 +14,7 @@ namespace FluentDOM\Loader {
   use FluentDOM\Loaders;
 
   /**
- * Encapsulates the standard loaders (html, xml, json)
+ * Encapsulates the standard loaders (html, xml, json, ...)
    */
   class Standard extends Loaders {
 

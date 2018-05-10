@@ -1,9 +1,11 @@
 <?php
 /**
- * Load a DOM document from a SimpleXML element
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Loader\PHP {
@@ -46,7 +48,7 @@ namespace FluentDOM\Loader\PHP {
     public function load($source, string $contentType, $options = []) {
       if ($source instanceof \SimpleXMLElement) {
         $document = new Document();
-        $document->appendChild($document->importNode(dom_import_simplexml($source), TRUE));
+        $document->appendChild($document->importNode(\dom_import_simplexml($source), TRUE));
         return new Result($document, 'text/xml');
       }
       return NULL;
@@ -58,19 +60,19 @@ namespace FluentDOM\Loader\PHP {
      * @param mixed $source
      * @param string $contentType
      * @param array|\Traversable|Options $options
-     * @return DocumentFragment|NULL
+     * @return \DOMDocumentFragment|NULL
      * @throws \FluentDOM\Exceptions\InvalidArgument
      */
     public function loadFragment($source, string $contentType, $options = []) {
       if (!$this->supports($contentType)) {
         return NULL;
       }
-      if (is_string($source)) {
+      if (\is_string($source)) {
         $this->_xmlLoader = $this->_xmlLoader ?: new Xml();
         return $this->_xmlLoader->loadFragment($source, 'text/xml');
       }
       if ($source instanceof \SimpleXMLElement) {
-        $node = dom_import_simplexml($source);
+        $node = \dom_import_simplexml($source);
         $fragment = $node->ownerDocument->createDocumentFragment();
         $fragment->appendChild($node->cloneNode(TRUE));
         return $fragment;

@@ -1,10 +1,11 @@
 <?php
 /**
- * Provides an array access to a css style string. It is used to
- * modify the attribute values of style attributes.
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 namespace FluentDOM\Query\Css {
 
@@ -43,12 +44,12 @@ namespace FluentDOM\Query\Css {
       $this->_properties = [];
       if (!empty($styleString)) {
         $matches = [];
-        if (preg_match_all(self::STYLE_PATTERN, $styleString, $matches, PREG_SET_ORDER)) {
+        if (\preg_match_all(self::STYLE_PATTERN, $styleString, $matches, PREG_SET_ORDER)) {
           foreach ($matches as $match) {
             if (
               isset($match['name'], $match['value']) &&
               $this->_isCSSProperty($match['name']) &&
-              trim($match['value']) !== '') {
+              \trim($match['value']) !== '') {
               $this->_properties[$match['name']] = $match['value'];
             }
           }
@@ -63,15 +64,15 @@ namespace FluentDOM\Query\Css {
      */
     public function getStyleString(): string {
       $result = '';
-      if (is_array($this->_properties) && count($this->_properties) > 0) {
-        uksort($this->_properties, new PropertyCompare());
+      if (\is_array($this->_properties) && \count($this->_properties) > 0) {
+        \uksort($this->_properties, new PropertyCompare());
         foreach ($this->_properties as $name => $value) {
-          if (trim($value) !== '') {
+          if (\trim($value) !== '') {
             $result .= ' '.$name.': '.$value.';';
           }
         }
       }
-      return (string)substr($result, 1);
+      return (string)\substr($result, 1);
     }
 
     /**
@@ -91,7 +92,7 @@ namespace FluentDOM\Query\Css {
      * @return int
      */
     public function count(): int {
-      return count($this->_properties);
+      return \count($this->_properties);
     }
 
     /**
@@ -127,7 +128,7 @@ namespace FluentDOM\Query\Css {
      */
     public function offsetSet($name, $value) {
       if ($this->_isCSSProperty($name)) {
-        if (trim($value) !== '') {
+        if (\trim($value) !== '') {
           $this->_properties[$name] = (string)$value;
         } else {
           $this->offsetUnset($name);
@@ -144,11 +145,11 @@ namespace FluentDOM\Query\Css {
      * @param string|array $names
      */
     public function offsetUnset($names) {
-      if (!is_array($names)) {
+      if (!\is_array($names)) {
         $names = [$names];
       }
       foreach ($names as $property) {
-        if (array_key_exists($property, $this->_properties)) {
+        if (\array_key_exists($property, $this->_properties)) {
           unset($this->_properties[$property]);
         }
       }
@@ -163,8 +164,8 @@ namespace FluentDOM\Query\Css {
      * @param string $currentValue
      * @return string
      */
-    public function compileValue($value, \DOMElement $node, int $index, string $currentValue = NULL) {
-      if (!is_string($value) && is_callable($value, TRUE)) {
+    public function compileValue($value, \DOMElement $node, int $index, string $currentValue = NULL): string {
+      if (!\is_string($value) && \is_callable($value, TRUE)) {
         return (string)$value($node, $index, $currentValue);
       }
       return (string)$value;

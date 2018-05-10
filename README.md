@@ -9,7 +9,7 @@
 [![Latest Stable Version](https://img.shields.io/packagist/v/fluentdom/fluentdom.svg)](https://packagist.org/packages/fluentdom/fluentdom)
 [![Latest Unstable Version](https://img.shields.io/packagist/vpre/fluentdom/fluentdom.svg)](https://packagist.org/packages/fluentdom/fluentdom)
 
-Copyright: 2009-2017 [FluentDOM Contributors](https://github.com/ThomasWeinert/FluentDOM/graphs/contributors)<br />
+Copyright: 2009-2018 [FluentDOM Contributors](https://github.com/ThomasWeinert/FluentDOM/graphs/contributors)<br />
 License: [The MIT License](http://www.opensource.org/licenses/mit-license.php) <br />
 
 FluentDOM provides extended XML handling classes for PHPs DOM, XMLReader and XMLWriter.

@@ -1,13 +1,11 @@
 <?php
 /**
- * FluentDOM\Query\Css is used for the FluentDOM\Query:css property, providing an array like interface
- * to the css properties in the style attribute of the selected nodes(s)
+ * FluentDOM
  *
- * It acts like the FluentDOM\Query::css() method. If you read css properties it uses the first
- * selected node. Write actions are applied to all matches element nodes.
- *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Query {
@@ -34,16 +32,16 @@ namespace FluentDOM\Query {
      * owner object
      * @var Query
      */
-    private $_fd;
+    private $_query;
 
 
     /**
      * Store the FluentDOM instance for later use and decode the style string into an array
      *
-     * @param Query $fd
+     * @param Query $query
      */
-    public function __construct(Query $fd) {
-      $this->_fd = $fd;
+    public function __construct(Query $query) {
+      $this->_query = $query;
     }
 
     /**
@@ -52,7 +50,7 @@ namespace FluentDOM\Query {
      * @return Css\Properties|NULL
      */
     private function getStyleProperties() {
-      if (isset($this->_fd[0]) && ($node = $this->_fd[0]) instanceof \DOMElement) {
+      if (isset($this->_query[0]) && ($node = $this->_query[0]) instanceof \DOMElement) {
         /**
          * @var \DOMElement $node
          */
@@ -98,7 +96,7 @@ namespace FluentDOM\Query {
      * @param string $value
      */
     public function offsetSet($name, $value) {
-      $this->_fd->css($name, $value);
+      $this->_query->css($name, $value);
     }
 
     /**
@@ -109,12 +107,12 @@ namespace FluentDOM\Query {
      * @param string $name
      */
     public function offsetUnset($name) {
-      foreach ($this->_fd as $node) {
+      foreach ($this->_query as $node) {
         if ($node instanceof \DOMElement &&
           $node->hasAttribute('style')) {
           $properties = new Css\Properties($node->getAttribute('style'));
           unset($properties[$name]);
-          if (count($properties) > 0) {
+          if (\count($properties) > 0) {
             $node->setAttribute('style', (string)$properties);
           } else {
             $node->removeAttribute('style');
@@ -144,7 +142,7 @@ namespace FluentDOM\Query {
      */
     public function count(): int {
       if ($properties = $this->getStyleProperties()) {
-        return count($properties);
+        return \count($properties);
       }
       return 0;
     }

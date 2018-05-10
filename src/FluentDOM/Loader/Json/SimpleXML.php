@@ -1,10 +1,11 @@
 <?php
 /**
- * Load a DOM document from a string or file that was the result of a
- * SimpleXMLElement encoded as JSON.
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Loader\Json {
@@ -87,10 +88,10 @@ namespace FluentDOM\Loader\Json {
      * @param mixed $data
      * @return array
      */
-    protected function transferChildTo(\DOMNode $node, $name, $data) {
+    protected function transferChildTo(\DOMNode $node, $name, $data): array {
       /** @var Document $document */
       $document = $node->ownerDocument ?: $node;
-      if (!is_array($data)) {
+      if (!\is_array($data)) {
         $data = [$data];
       }
       foreach ($data as $dataChild) {

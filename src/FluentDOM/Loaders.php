@@ -1,10 +1,11 @@
 <?php
 /**
- * FluentDOM\Loaders is a list of loaders that allow to import data sources into
- * a DOM document.
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM {
@@ -29,7 +30,7 @@ namespace FluentDOM {
      * @param array|\Traversable|NULL $list
      */
     public function __construct($list = NULL) {
-      if (is_array($list) || $list instanceOf \Traversable) {
+      if (\is_array($list) || $list instanceOf \Traversable) {
         /** @var array|\Traversable $list */
         foreach ($list as $loader) {
           $this->add($loader);

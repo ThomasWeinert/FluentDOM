@@ -1,9 +1,11 @@
 <?php
 /**
- * Serialize a DOM to RabbitFish Json: http://www.bramstein.com/projects/xsltjson/
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Serializer\Json {
@@ -12,9 +14,6 @@ namespace FluentDOM\Serializer\Json {
 
   /**
    * Serialize a DOM to RabbitFish Json: http://www.bramstein.com/projects/xsltjson/
-   *
-   * @license http://www.opensource.org/licenses/mit-license.php The MIT License
-   * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
    */
   class RabbitFish extends BadgerFish {
 
@@ -45,7 +44,7 @@ namespace FluentDOM\Serializer\Json {
      * @param Xpath $xpath
      * @return array
      */
-    private function getNodesArray(\DOMElement $node, $attributes, $xpath): array {
+    private function getNodesArray(\DOMElement $node, $attributes, Xpath $xpath): array {
       $result = [];
       foreach ((array)$attributes as $name => $value) {
         $child = new \stdClass();

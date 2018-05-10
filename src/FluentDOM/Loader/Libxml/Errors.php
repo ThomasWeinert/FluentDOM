@@ -1,4 +1,12 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\Loader\Libxml {
 
@@ -21,11 +29,11 @@ namespace FluentDOM\Loader\Libxml {
 
     public function capture(callable $callback, int $errorLevel = self::ERROR_FATAL) {
       $exception = FALSE;
-      $errorSetting = libxml_use_internal_errors(TRUE);
-      libxml_clear_errors();
+      $errorSetting = \libxml_use_internal_errors(TRUE);
+      \libxml_clear_errors();
       $result = $callback();
       if ($errorLevel !== self::ERROR_NONE) {
-        foreach (libxml_get_errors() as $error) {
+        foreach (\libxml_get_errors() as $error) {
           $severity = $this->_errorMapping[$error->level];
           if (($errorLevel & $severity) === $severity) {
             $exception = new LoadingError\Libxml($error);
@@ -33,8 +41,8 @@ namespace FluentDOM\Loader\Libxml {
           }
         }
       }
-      libxml_clear_errors();
-      libxml_use_internal_errors($errorSetting);
+      \libxml_clear_errors();
+      \libxml_use_internal_errors($errorSetting);
       if ($exception instanceof LoadingError\Libxml) {
         throw $exception;
       }

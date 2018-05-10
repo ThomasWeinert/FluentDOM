@@ -1,4 +1,12 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\Loader\Supports {
 
@@ -63,19 +71,19 @@ namespace FluentDOM\Loader\Supports {
      */
     private function getJson($source, string $contentType, $options)  {
       if ($this->supports($contentType)) {
-        if (is_string($source)) {
+        if (\is_string($source)) {
           $json = FALSE;
           $settings = $this->getOptions($options);
           if ($settings->isAllowed($sourceType = $settings->getSourceType($source))) {
             switch ($sourceType) {
               /** @noinspection PhpMissingBreakStatementInspection */
             case Options::IS_FILE :
-              $source = file_get_contents($source);
+              $source = \file_get_contents($source);
             case Options::IS_STRING :
-              $json = json_decode($source);
+              $json = \json_decode($source);
               if (!($json || is_array($json))) {
                 throw new LoadingError\Json(
-                  is_callable('json_last_error') ? json_last_error() : -1
+                  \is_callable('json_last_error') ? \json_last_error() : -1
                 );
               }
             }
@@ -83,7 +91,7 @@ namespace FluentDOM\Loader\Supports {
         } else {
           $json = $source;
         }
-        return ($json || is_array($json)) ? $json : FALSE;
+        return ($json || \is_array($json)) ? $json : FALSE;
       }
       return FALSE;
     }
@@ -116,7 +124,7 @@ namespace FluentDOM\Loader\Supports {
      * @return string
      */
     private function getValueAsString($value): string {
-      if (is_bool($value)) {
+      if (\is_bool($value)) {
         return $value ? 'true' : 'false';
       }
       return (string)$value;
@@ -131,7 +139,7 @@ namespace FluentDOM\Loader\Supports {
     private function getNamespaceForNode(
       string $nodeName, \stdClass $properties, \DOMNode $parent
     ) {
-      $prefix = substr($nodeName, 0, strpos($nodeName, ':'));
+      $prefix = \substr($nodeName, 0, \strpos($nodeName, ':'));
       $xmlns = $this->getNamespacePropertyName($prefix);
       return $properties->{$xmlns} ?? $parent->lookupNamespaceUri(empty($prefix) ? NULL : $prefix);
     }

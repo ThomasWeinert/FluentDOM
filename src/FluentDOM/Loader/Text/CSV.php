@@ -1,9 +1,11 @@
 <?php
 /**
- * Load a CSV file
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Loader\Text {
@@ -136,7 +138,7 @@ namespace FluentDOM\Loader\Text {
      * @return array
      */
     private function getHeaders(array $record, $hasHeaderLine, $columns = NULL): array {
-      if (is_array($columns)) {
+      if (\is_array($columns)) {
         $headers = [];
         foreach ($record as $index => $field) {
           $key = $hasHeaderLine ? $field : $index;
@@ -147,7 +149,7 @@ namespace FluentDOM\Loader\Text {
       if ($hasHeaderLine) {
         return $record;
       }
-      return array_keys($record);
+      return \array_keys($record);
     }
 
     /**
@@ -158,12 +160,12 @@ namespace FluentDOM\Loader\Text {
      */
     private function getLines($source, Options $options) {
       $result = NULL;
-      if (is_string($source)) {
+      if (\is_string($source)) {
         $options->isAllowed($sourceType = $options->getSourceType($source));
         if ($sourceType === Options::IS_FILE) {
           $result = new \SplFileObject($source);
         } else {
-          $result = new \SplFileObject('data://text/csv;base64,'.base64_encode($source));
+          $result = new \SplFileObject('data://text/csv;base64,'.\base64_encode($source));
         }
         $result->setFlags(\SplFileObject::READ_CSV);
         $result->setCsvControl(
@@ -171,7 +173,7 @@ namespace FluentDOM\Loader\Text {
           $this->_enclosure,
           $this->_escape
         );
-      } elseif (is_array($source)) {
+      } elseif (\is_array($source)) {
         $result = new \ArrayIterator($source);
       } elseif ($source instanceof \Traversable) {
         $result = $source;
@@ -198,7 +200,7 @@ namespace FluentDOM\Loader\Text {
         $options,
         [
           Options::CB_IDENTIFY_STRING_SOURCE => function($source) {
-            return (is_string($source) && (FALSE !== strpos($source, "\n")));
+            return (\is_string($source) && (FALSE !== \strpos($source, "\n")));
           }
         ]
       );

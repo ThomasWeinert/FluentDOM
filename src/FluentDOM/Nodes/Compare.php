@@ -1,7 +1,18 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\Nodes {
 
+  /**
+   * Compare the position of nodes in a document
+   */
   class Compare {
 
     private $_xpath ;

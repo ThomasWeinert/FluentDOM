@@ -1,9 +1,11 @@
 <?php
 /**
- * Serialize a DOM to JsonML: http://www.jsonml.org/
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Serializer\Json {
@@ -12,9 +14,6 @@ namespace FluentDOM\Serializer\Json {
 
   /**
    * Serialize a DOM to JsonML: http://www.jsonml.org/
-   *
-   * @license http://www.opensource.org/licenses/mit-license.php The MIT License
-   * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
    */
   class JsonML extends Json {
 
@@ -33,7 +32,7 @@ namespace FluentDOM\Serializer\Json {
       $result = [
         $node->nodeName
       ];
-      $attributes = array_merge(
+      $attributes = \array_merge(
         $this->getNamespaces($node),
         $this->getAttributes($node)
       );
@@ -72,7 +71,7 @@ namespace FluentDOM\Serializer\Json {
      */
     private function getValue($value) {
       if ($this->isBoolean($value)) {
-        return (strtolower($value) === 'true');
+        return (\strtolower($value) === 'true');
       }
       if ($this->isInteger($value)) {
         return (int)$value;
@@ -88,7 +87,7 @@ namespace FluentDOM\Serializer\Json {
      * @return bool
      */
     private function isInteger($value): bool {
-      return (bool)preg_match('(^[1-9]\d*$)D', $value);
+      return (bool)\preg_match('(^[1-9]\d*$)D', $value);
     }
 
     /**
@@ -96,7 +95,7 @@ namespace FluentDOM\Serializer\Json {
      * @return bool
      */
     private function isNumber($value): bool {
-      return (bool)preg_match('(^(?:\\d+\\.\\d+|[1-9]\d*)$)D', $value);
+      return (bool)\preg_match('(^(?:\\d+\\.\\d+|[1-9]\d*)$)D', $value);
     }
 
     /**
@@ -104,7 +103,7 @@ namespace FluentDOM\Serializer\Json {
      * @return bool
      */
     private function isBoolean($value): bool {
-      return (bool)preg_match('(^(?:true|false)$)Di', $value);
+      return (bool)\preg_match('(^(?:true|false)$)Di', $value);
     }
   }
 }

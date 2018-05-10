@@ -1,9 +1,11 @@
 <?php
 /**
- * Serialize a DOM to BadgerFish Json: http://badgerfish.ning.com/
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Serializer\Json {
@@ -13,9 +15,6 @@ namespace FluentDOM\Serializer\Json {
 
   /**
    * Serialize a DOM to BadgerFish Json: http://badgerfish.ning.com/
-   *
-   * @license http://www.opensource.org/licenses/mit-license.php The MIT License
-   * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
    */
   class BadgerFish extends Json {
 

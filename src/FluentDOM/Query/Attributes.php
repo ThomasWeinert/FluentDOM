@@ -1,13 +1,11 @@
 <?php
 /**
- * FluentDOM\Query\Attributes is used for the FluentDOM\Query:attr property, providing an array like interface
- * to the attributes of the selected nodes(s)
+ * FluentDOM
  *
- * It acts like the FluentDOM\Query::attr() method. If you read attributes it uses the first
- * selected node. Write actions are applied to all matches element nodes.
- *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Query {
@@ -27,15 +25,15 @@ namespace FluentDOM\Query {
      * owner object
      * @var Query
      */
-    private $_fd;
+    private $_query;
 
     /**
      * Store the FluentDOM instance for later use
      *
-     * @param Query $fd
+     * @param Query $query
      */
-    public function __construct(Query $fd) {
-      $this->_fd = $fd;
+    public function __construct(Query $query) {
+      $this->_query = $query;
     }
 
     /**
@@ -77,7 +75,7 @@ namespace FluentDOM\Query {
      * @return string
      */
     public function offsetGet($name) {
-      return $this->_fd->attr($name);
+      return $this->_query->attr($name);
     }
 
     /**
@@ -90,7 +88,7 @@ namespace FluentDOM\Query {
      * @param string $value
      */
     public function offsetSet($name, $value) {
-      $this->_fd->attr($name, $value);
+      $this->_query->attr($name, $value);
     }
 
     /**
@@ -102,7 +100,7 @@ namespace FluentDOM\Query {
      * @param string|array $name
      */
     public function offsetUnset($name) {
-      $this->_fd->removeAttr($name);
+      $this->_query->removeAttr($name);
     }
 
     /**
@@ -132,8 +130,8 @@ namespace FluentDOM\Query {
      * @return \DOMElement|NULL
      */
     private function getFirstElement() {
-      if (isset($this->_fd[0]) && $this->_fd[0] instanceof \DOMElement) {
-        return $this->_fd[0];
+      if (isset($this->_query[0]) && $this->_query[0] instanceof \DOMElement) {
+        return $this->_query[0];
       }
       return NULL;
     }

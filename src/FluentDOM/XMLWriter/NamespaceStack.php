@@ -1,4 +1,12 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\XMLWriter {
 
@@ -32,7 +40,7 @@ namespace FluentDOM\XMLWriter {
       }
     }
 
-    public function isDefined($prefix, $namespaceURI) {
+    public function isDefined($prefix, $namespaceURI): bool {
       return ($this->_current->resolveNamespace((string)$prefix) === $namespaceURI);
     }
 

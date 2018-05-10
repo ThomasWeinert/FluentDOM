@@ -1,4 +1,12 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM {
 
@@ -156,17 +164,17 @@ namespace FluentDOM {
 
     /**
      * @param resource $stream
-     * @param string $encoding
+     * @param string|NULL $encoding
      * @param int $options
      * @return bool
      * @throws \FluentDOM\Exceptions\InvalidArgument
      */
     public function attachStream($stream, string $encoding = NULL, int $options = 0): bool {
-      if (!is_resource($stream)) {
+      if (!\is_resource($stream)) {
         throw new InvalidArgument('stream', 'resource');
       }
       list($uri, $context) = ResourceWrapper::createContext($stream);
-      libxml_set_streams_context($context);
+      \libxml_set_streams_context($context);
       return $this->open($uri, $encoding, $options);
     }
   }

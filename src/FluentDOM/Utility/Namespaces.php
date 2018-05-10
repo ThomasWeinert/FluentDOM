@@ -1,9 +1,11 @@
 <?php
 /**
- * Utility class that handles a list of namespace definitions.
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Utility {
@@ -54,7 +56,7 @@ namespace FluentDOM\Utility {
      * @return bool
      */
     public function isReservedPrefix($prefix): bool {
-      return array_key_exists($prefix, $this->_reserved);
+      return \array_key_exists($prefix, $this->_reserved);
     }
 
     /**
@@ -62,7 +64,7 @@ namespace FluentDOM\Utility {
      * @return bool
      */
     public function offsetExists($prefix): bool {
-      return array_key_exists($prefix, $this->_reserved) || array_key_exists($prefix, $this->_namespaces);
+      return \array_key_exists($prefix, $this->_reserved) || \array_key_exists($prefix, $this->_namespaces);
     }
 
     /**
@@ -74,7 +76,7 @@ namespace FluentDOM\Utility {
       $prefix = $this->validatePrefix($prefix);
       if (isset($this->_reserved[$prefix])) {
         throw new \LogicException(
-          sprintf('Can not register reserved namespace prefix "%s".', $prefix)
+          \sprintf('Can not register reserved namespace prefix "%s".', $prefix)
         );
       }
       $this->_namespaces[$prefix] = $namespaceURI;
@@ -87,17 +89,17 @@ namespace FluentDOM\Utility {
      */
     public function offsetGet($prefix) {
       $prefix = $this->validatePrefix($prefix);
-      if (array_key_exists($prefix, $this->_reserved)) {
+      if (\array_key_exists($prefix, $this->_reserved)) {
         return $this->_reserved[$prefix];
       }
-      if (array_key_exists($prefix, $this->_namespaces)) {
+      if (\array_key_exists($prefix, $this->_namespaces)) {
         return $this->_namespaces[$prefix];
       }
       if ($prefix === '#default') {
         return '';
       }
       throw new \LogicException(
-        sprintf('Unknown namespace prefix "%s".', $prefix)
+        \sprintf('Unknown namespace prefix "%s".', $prefix)
       );
     }
 
@@ -106,15 +108,15 @@ namespace FluentDOM\Utility {
      */
     public function offsetUnset($prefix) {
       $prefix = $this->validatePrefix($prefix);
-      if (array_key_exists($prefix, $this->_namespaces)) {
+      if (\array_key_exists($prefix, $this->_namespaces)) {
         unset($this->_namespaces[$prefix]);
       }
     }
 
     /**
-     * @return \ArrayIterator
+     * @return \Iterator
      */
-    public function getIterator() {
+    public function getIterator(): \Iterator {
       return new \ArrayIterator($this->_namespaces);
     }
 
@@ -129,14 +131,14 @@ namespace FluentDOM\Utility {
      * Restore last stashed status from the stash
      */
     public function restore() {
-      $this->_namespaces = array_pop($this->_stash);
+      $this->_namespaces = \array_pop($this->_stash);
     }
 
     /**
      * @return int
      */
-    public function count():int {
-      return count($this->_namespaces);
+    public function count(): int {
+      return \count($this->_namespaces);
     }
 
     /**

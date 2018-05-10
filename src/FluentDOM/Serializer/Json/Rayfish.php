@@ -1,9 +1,11 @@
 <?php
 /**
- * Serialize a DOM to Rayfish Json: http://www.bramstein.com/projects/xsltjson/
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Serializer\Json {
@@ -26,7 +28,7 @@ namespace FluentDOM\Serializer\Json {
       $result = new \stdClass();
       $result->{'#name'} = $node->nodeName;
       $result->{'#text'} = '';
-      $result->{'#children'} = array_merge(
+      $result->{'#children'} = \array_merge(
         $this->getNamespaces($node),
         $this->getAttributes($node)
       );

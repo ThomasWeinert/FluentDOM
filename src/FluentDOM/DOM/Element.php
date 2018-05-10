@@ -1,10 +1,11 @@
 <?php
 /**
- * FluentDOM\DOM\Element extends PHPs DOMDocument class. It adds some generic namespace handling on
- * the document level and registers extended Node classes for convenience.
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\DOM {
@@ -113,9 +114,9 @@ namespace FluentDOM\DOM {
       case 'firstElementChild' :
       case 'lastElementChild' :
         throw new \BadMethodCallException(
-          sprintf(
+          \sprintf(
             'Can not write readonly property %s::$%s.',
-            get_class($this), $name
+            \get_class($this), $name
           )
         );
       }
@@ -241,7 +242,7 @@ namespace FluentDOM\DOM {
         $this->ownerDocument->namespaces()->restore();
       } elseif ($value instanceof \Closure && !$value instanceof \DOMNode) {
         $this->append($value());
-      } elseif (is_array($value)) {
+      } elseif (\is_array($value)) {
         $nodes = [];
         foreach ($value as $name => $data) {
           if (QualifiedName::validate($name)) {
@@ -410,7 +411,7 @@ namespace FluentDOM\DOM {
      * @return bool
      */
     private function isNodeOffset($offset): bool {
-      if (is_int($offset) || ctype_digit((string)$offset)) {
+      if (\is_int($offset) || \ctype_digit((string)$offset)) {
         return TRUE;
       }
       if ($this->isAttributeOffset($offset)) {
@@ -490,13 +491,13 @@ namespace FluentDOM\DOM {
      * @throws \LogicException
      */
     public function applyNamespaces($prefixes = NULL) {
-      if ($prefixes !== NULL && !is_array($prefixes)) {
+      if ($prefixes !== NULL && !\is_array($prefixes)) {
         $prefixes = [$prefixes];
       }
       foreach ($this->getDocument()->namespaces() as $prefix => $namespaceURI) {
         if (
           !$this->isCurrentNamespace($prefix, $namespaceURI) &&
-          ($prefixes === NULL || in_array($prefix, $prefixes, TRUE))
+          ($prefixes === NULL || \in_array($prefix, $prefixes, TRUE))
         ) {
           $this->setAttribute(
             ($prefix === '#default') ? 'xmlns' : 'xmlns:'.$prefix,

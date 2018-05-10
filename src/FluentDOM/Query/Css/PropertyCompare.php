@@ -1,9 +1,11 @@
 <?php
 /**
- * A functor that allows to compare two css property names.
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 namespace FluentDOM\Query\Css {
 
@@ -33,14 +35,14 @@ namespace FluentDOM\Query\Css {
     public function compare(string $propertyNameOne, string $propertyNameTwo): int {
       $propertyOne = $this->_decodeName($propertyNameOne);
       $propertyTwo = $this->_decodeName($propertyNameTwo);
-      $propertyOneLevels = count($propertyOne);
-      $propertyTwoLevels = count($propertyTwo);
+      $propertyOneLevels = \count($propertyOne);
+      $propertyTwoLevels = \count($propertyTwo);
       $maxLevels = ($propertyOneLevels > $propertyTwoLevels)
         ? $propertyOneLevels : $propertyTwoLevels;
       /** @noinspection ForeachInvariantsInspection */
       for ($i = 0; $i < $maxLevels; ++$i) {
         if (isset($propertyOne[$i], $propertyTwo[$i])) {
-          $compare = strnatcasecmp($propertyOne[$i], $propertyTwo[$i]);
+          $compare = \strnatcasecmp($propertyOne[$i], $propertyTwo[$i]);
           if ($compare !== 0) {
             return $compare;
           }
@@ -64,13 +66,13 @@ namespace FluentDOM\Query\Css {
      * @return array
      */
     private function _decodeName(string $propertyName): array {
-      if (0 === strpos($propertyName,'-')) {
-        $pos = strpos($propertyName, '-', 1);
-        $items = explode('-', substr($propertyName, $pos + 1));
-        $items[] = substr($propertyName, 1, $pos);
+      if (0 === \strpos($propertyName,'-')) {
+        $pos = \strpos($propertyName, '-', 1);
+        $items = \explode('-', \substr($propertyName, $pos + 1));
+        $items[] = \substr($propertyName, 1, $pos);
         return $items;
       }
-      $items = explode('-', $propertyName);
+      $items = \explode('-', $propertyName);
       return $items;
     }
   }

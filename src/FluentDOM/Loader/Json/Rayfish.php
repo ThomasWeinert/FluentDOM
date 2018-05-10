@@ -1,9 +1,11 @@
 <?php
 /**
- * Load a DOM document from a json string or file
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Loader\Json {
@@ -32,7 +34,7 @@ namespace FluentDOM\Loader\Json {
      * @param mixed $json
      */
     protected function transferTo(\DOMNode $node, $json) {
-      if (is_object($json)) {
+      if (\is_object($json)) {
         /** @var Document $document */
         $document = $node->ownerDocument ?: $node;
         $nodeName = $json->{'#name'};
@@ -71,7 +73,7 @@ namespace FluentDOM\Loader\Json {
         $this->transferAttributes($target, $namespaces, $attributes);
         foreach ($json->{'#children'} as $value) {
           $name = $value->{'#name'} ?? '@';
-          if (0 !== strpos($name, '@')) {
+          if (0 !== \strpos($name, '@')) {
             $this->transferTo($target, $value);
           }
         }
@@ -105,10 +107,10 @@ namespace FluentDOM\Loader\Json {
         foreach ($json->{'#children'} as $child) {
           $name = $child->{'#name'} ?? '';
           $value = $child->{'#text'} ?? '';
-          if ($name === '@xmlns' || 0 === strpos($name, '@xmlns:')) {
-            $namespaces->{substr($name, 1)} = $value;
-          } elseif (0 === strpos($name, '@')) {
-            $attributes->{substr($name, 1)} = $value;
+          if ($name === '@xmlns' || 0 === \strpos($name, '@xmlns:')) {
+            $namespaces->{\substr($name, 1)} = $value;
+          } elseif (0 === \strpos($name, '@')) {
+            $attributes->{\substr($name, 1)} = $value;
           }
         }
       }

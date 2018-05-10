@@ -1,9 +1,11 @@
 <?php
 /**
- * Superclass for the namespace transformers (optimize and replace)
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Transformer {
@@ -13,6 +15,11 @@ namespace FluentDOM\Transformer {
   use FluentDOM\DOM\Element;
   use FluentDOM\Utility\StringCastable;
 
+  /**
+   * Superclass for the namespace transformers (optimize and replace)
+   *
+   * @package FluentDOM\Transformer
+   */
   abstract class Namespaces implements \IteratorAggregate, Appendable, StringCastable {
 
     /**

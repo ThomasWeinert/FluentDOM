@@ -1,4 +1,12 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\Creator {
 
@@ -76,7 +84,7 @@ namespace FluentDOM\Creator {
      */
     public function __set(string $name, $value) {
       throw new \BadMethodCallException(
-        sprintf('%s is immutable.', get_class($this))
+        \sprintf('%s is immutable.', \get_class($this))
       );
     }
 
@@ -86,7 +94,7 @@ namespace FluentDOM\Creator {
      */
     public function __unset(string $name) {
       throw new \BadMethodCallException(
-        sprintf('%s is immutable.', get_class($this))
+        \sprintf('%s is immutable.', \get_class($this))
       );
     }
 
@@ -122,9 +130,9 @@ namespace FluentDOM\Creator {
     }
 
     /**
-     * @return \ArrayIterator
+     * @return \Iterator
      */
-    public function getIterator() {
+    public function getIterator(): \Iterator {
       return new \ArrayIterator([$this->node]);
     }
   }

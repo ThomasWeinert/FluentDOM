@@ -1,9 +1,11 @@
 <?php
 /**
- * Create an object from a string that contains a valid Qualified XML name.
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Utility {
@@ -46,8 +48,8 @@ namespace FluentDOM\Utility {
         $this->_localName = self::$_cache[$name][1];
         return;
       }
-      if (FALSE !== ($position = strpos($name, ':'))) {
-        list($prefix, $localName) = explode(':', $name, 2);
+      if (FALSE !== ($position = \strpos($name, ':'))) {
+        list($prefix, $localName) = \explode(':', $name, 2);
         $this->isNCName($prefix, 0, $name);
         $this->isNCName($name, $position + 1);
         $this->_prefix = $prefix;
@@ -56,8 +58,8 @@ namespace FluentDOM\Utility {
         $this->isNCName($name);
         $this->_localName = $name;
       }
-      if (count(self::$_cache) > self::$cacheLimit) {
-        array_splice(self::$_cache, 0, self::$cacheLimit / 2);
+      if (\count(self::$_cache) > self::$cacheLimit) {
+        \array_splice(self::$_cache, 0, self::$cacheLimit / 2);
       }
       self::$_cache[$name] = [$this->_prefix, $this->_localName];
     }
@@ -82,7 +84,7 @@ namespace FluentDOM\Utility {
         $nameStartChar.
         '\\.\\d\\x{B7}\\x{300}-\\x{36F}\\x{203F}-\\x{2040}';
       if ($offset > 0) {
-        $namePart = substr($name, $offset);
+        $namePart = \substr($name, $offset);
       } else {
         $namePart = $name;
         $name = $fullName ?: $namePart;
@@ -92,14 +94,14 @@ namespace FluentDOM\Utility {
           'Invalid QName "'.$name.'": Missing QName part.'
         );
       }
-      if (preg_match('([^'.$nameChar.'-])u', $namePart, $match, PREG_OFFSET_CAPTURE)) {
+      if (\preg_match('([^'.$nameChar.'-])u', $namePart, $match, PREG_OFFSET_CAPTURE)) {
         //invalid bytes and whitespaces
         $position = (int)$match[0][1];
         throw new \UnexpectedValueException(
           'Invalid QName "'.$name.'": Invalid character at index '.($offset + $position).'.'
         );
       }
-      if (preg_match('(^[^'.$nameStartChar.'])u', $namePart)) {
+      if (\preg_match('(^[^'.$nameStartChar.'])u', $namePart)) {
         //first char is a little more limited
         throw new \UnexpectedValueException(
           'Invalid QName "'.$name.'": Invalid character at index '.$offset.'.'
@@ -150,7 +152,7 @@ namespace FluentDOM\Utility {
         return $this->_prefix;
       }
       throw new \LogicException(
-        sprintf('Invalid property %s::$%s', get_class($this), $property)
+        \sprintf('Invalid property %s::$%s', \get_class($this), $property)
       );
     }
 
@@ -163,7 +165,7 @@ namespace FluentDOM\Utility {
      */
     public function __set(string $property, $value) {
       throw new \LogicException(
-        sprintf('%s is immutable.', get_class($this))
+        \sprintf('%s is immutable.', \get_class($this))
       );
     }
 
@@ -175,7 +177,7 @@ namespace FluentDOM\Utility {
      */
     public function __unset(string $property) {
       throw new \LogicException(
-        sprintf('%s is immutable.', get_class($this))
+        \sprintf('%s is immutable.', \get_class($this))
       );
     }
 
@@ -186,9 +188,9 @@ namespace FluentDOM\Utility {
      * @return array
      */
     public static function split(string $name): array {
-      if (FALSE !== ($position = strpos($name, ':'))) {
-        $prefix = substr($name, 0, $position);
-        $localName = substr($name, $position + 1);
+      if (FALSE !== ($position = \strpos($name, ':'))) {
+        $prefix = \substr($name, 0, $position);
+        $localName = \substr($name, $position + 1);
       } else {
         $prefix = FALSE;
         $localName = $name;
@@ -235,7 +237,7 @@ namespace FluentDOM\Utility {
       $nameAdditionalChar =
         $nameStartChar.
         '\\.\\d\\x{B7}\\x{300}-\\x{36F}\\x{203F}-\\x{2040}';
-      $result = preg_replace(
+      $result = \preg_replace(
         [
           '([^'.$nameAdditionalChar.'-]+)u',
           '(^[^'.$nameStartChar.']+)u',

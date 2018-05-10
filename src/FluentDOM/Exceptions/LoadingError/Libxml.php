@@ -1,4 +1,13 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Exceptions\LoadingError {
 
   use FluentDOM\Exceptions;
@@ -17,13 +26,13 @@ namespace FluentDOM\Exceptions\LoadingError {
         $message = 'Libxml %1$s in line %3$d at character %4$d: %5$s.';
       }
       parent::__construct(
-        sprintf(
+        \sprintf(
           $message,
           self::$_levels[$error->level],
           $error->file,
           $error->line,
           $error->column,
-          trim($error->message)
+          \trim($error->message)
         ),
         $error->code
       );

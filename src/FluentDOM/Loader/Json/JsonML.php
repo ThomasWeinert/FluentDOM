@@ -1,9 +1,11 @@
 <?php
 /**
- * Load a DOM document from a json string or file
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Loader\Json {
@@ -31,9 +33,9 @@ namespace FluentDOM\Loader\Json {
      * @param mixed $json
      */
     public function transferTo(\DOMNode $node, $json) {
-      if (is_array($json) && count($json) > 0) {
+      if (\is_array($json) && \count($json) > 0) {
         $this->transferToElement($node, $json);
-      } elseif (is_scalar($json)) {
+      } elseif (\is_scalar($json)) {
         $document = $node instanceof \DOMDocument ? $node : $node->ownerDocument;
         $node->appendChild(
           $document->createTextNode($this->getValueAsString($json))
@@ -47,9 +49,9 @@ namespace FluentDOM\Loader\Json {
      */
     private function addNamespaceAttributes(Element $node, \stdClass $properties) {
       foreach ($properties as $name => $value) {
-        if ($name === 'xmlns' || 0 === strpos($name, 'xmlns:')) {
+        if ($name === 'xmlns' || 0 === \strpos($name, 'xmlns:')) {
           if ($node instanceof \DOMElement) {
-            $prefix = $name === 'xmlns' ? NULL : substr($name, 6);
+            $prefix = $name === 'xmlns' ? NULL : \substr($name, 6);
             if ((string)$node->lookupNamespaceUri($prefix) !== $value) {
               $node->setAttribute($name, $value);
             }
@@ -65,7 +67,7 @@ namespace FluentDOM\Loader\Json {
     private function addAttributes(Element $node, \stdClass $properties) {
       $document = $node instanceof \DOMDocument ? $node : $node->ownerDocument;
       foreach ($properties as $name => $value) {
-        if (!($name === 'xmlns' || 0 === strpos($name, 'xmlns:'))) {
+        if (!($name === 'xmlns' || 0 === \strpos($name, 'xmlns:'))) {
           $namespaceURI = $this->getNamespaceForNode($name, $properties, $node);
           $attribute = '' === (string)$namespaceURI
             ? $document->createAttribute($name)
@@ -83,8 +85,8 @@ namespace FluentDOM\Loader\Json {
     private function transferToElement(\DOMNode $node, $json) {
       $document = $node instanceof \DOMDocument ? $node : $node->ownerDocument;
       $nodeName = $json[0];
-      $length = count($json);
-      $hasProperties = $length > 1 && is_object($json[1]);
+      $length = \count($json);
+      $hasProperties = $length > 1 && \is_object($json[1]);
       $properties = $hasProperties ? $json[1] : new \stdClass;
       $namespaceURI = $this->getNamespaceForNode($nodeName, $properties, $node);
       /** @var Element $element */

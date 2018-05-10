@@ -1,9 +1,11 @@
 <?php
 /**
- * A list of lazy initialized loaders.
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Loader {
@@ -34,12 +36,12 @@ namespace FluentDOM\Loader {
      */
     public function add(string $contentType, $loader) {
       $contentType = $this->normalizeContentType($contentType);
-      if ($loader instanceof Loadable || is_callable($loader)) {
+      if ($loader instanceof Loadable || \is_callable($loader)) {
         $this->_list[$contentType] = $loader;
         return;
       }
       throw new \UnexpectedValueException(
-        sprintf(
+        \sprintf(
           'Lazy loader for content type "%s" is not a callable or FluentDOM\Loadable',
           $contentType
         )
@@ -56,18 +58,18 @@ namespace FluentDOM\Loader {
      */
     public function addClasses($classes, string $namespace = '') {
       foreach ($classes as $loader => $types) {
-        $class = str_replace(['\\\\\\', '\\\\'], '\\', $namespace.'\\'.$loader);
+        $class = \str_replace(['\\\\\\', '\\\\'], '\\', $namespace.'\\'.$loader);
         $callback = function() use ($class) {
-          if (!class_exists($class)) {
+          if (!\class_exists($class)) {
             throw new \LogicException(
-              sprintf(
+              \sprintf(
                 'Loader class "%s" not found.', $class
               )
             );
           }
           return new $class;
         };
-        if (is_array($types)) {
+        if (\is_array($types)) {
           foreach ($types as $type) {
             $this->add($type, $callback);
           }
@@ -86,12 +88,12 @@ namespace FluentDOM\Loader {
       $contentType = $this->normalizeContentType($contentType);
       if (isset($this->_list[$contentType])) {
         if (!($this->_list[$contentType] instanceof Loadable)) {
-          $this->_list[$contentType] = call_user_func($this->_list[$contentType]);
+          $this->_list[$contentType] = $this->_list[$contentType]();
         }
         if (!($this->_list[$contentType] instanceof Loadable)) {
           unset($this->_list[$contentType]);
           throw new \UnexpectedValueException(
-            sprintf(
+            \sprintf(
               'Lazy loader for content type "%s" did not return a FluentDOM\Loadable',
               $contentType
             )
@@ -145,7 +147,7 @@ namespace FluentDOM\Loader {
      * @return string
      */
     private function normalizeContentType(string $contentType): string {
-      return strtolower(trim($contentType));
+      return \strtolower(\trim($contentType));
     }
   }
 }

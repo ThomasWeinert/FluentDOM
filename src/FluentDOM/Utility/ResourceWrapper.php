@@ -1,9 +1,11 @@
 <?php
 /**
- * Allow to load a stream resource using generated URI/context.
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Utility {
@@ -19,7 +21,7 @@ namespace FluentDOM\Utility {
     private static $__streams = [];
 
     /**
-     * @var null|resource
+     * @var NULL|resource
      */
     private $__stream;
     /**
@@ -43,7 +45,7 @@ namespace FluentDOM\Utility {
     public static function createURI($stream, string $protocol = 'fluentdom-resource'): string {
       self::register($protocol);
       do {
-        $id = uniqid('fd', TRUE);
+        $id = \uniqid('fd', TRUE);
       } while(isset(self::$__streams[$id]));
       self::$__streams[$id] = $stream;
       return $protocol.'://'.$id;
@@ -60,7 +62,7 @@ namespace FluentDOM\Utility {
     public static function createContext($stream, string $protocol = 'fluentdom-resource'): array {
       self::register($protocol);
       return [
-        $protocol.'://context', stream_context_create([$protocol => ['stream' => $stream]])
+        $protocol.'://context', \stream_context_create([$protocol => ['stream' => $stream]])
       ];
     }
 
@@ -70,8 +72,8 @@ namespace FluentDOM\Utility {
      * @param string $protocol
      */
     private static function register($protocol) {
-      if (!in_array($protocol, stream_get_wrappers(), TRUE)) {
-        stream_wrapper_register($protocol, __CLASS__);
+      if (!\in_array($protocol, \stream_get_wrappers(), TRUE)) {
+        \stream_wrapper_register($protocol, __CLASS__);
       }
     }
 
@@ -80,7 +82,10 @@ namespace FluentDOM\Utility {
      * @param int $flags
      * @return array
      */
-    public function url_stat(string $path , int $flags) {
+    public function url_stat(
+      /** @noinspection PhpUnusedParameterInspection */
+      string $path , int $flags
+    ): array {
       return [];
     }
 
@@ -91,12 +96,15 @@ namespace FluentDOM\Utility {
      * @param string $opened_path
      * @return bool
      */
-    public function stream_open($path, $mode, $options, &$opened_path): bool {
-      list($protocol, $id) = explode('://', $path);
-      $context = stream_context_get_options($this->context);
+    public function stream_open(
+      /** @noinspection PhpUnusedParameterInspection */
+      string $path, string $mode, int $options, &$opened_path
+    ): bool {
+      list($protocol, $id) = \explode('://', $path);
+      $context = \stream_context_get_options($this->context);
       if (
-        isset($context[$protocol], $context[$protocol]['stream']) &&
-        is_resource($context[$protocol]['stream'])
+        isset($context[$protocol]['stream']) &&
+        \is_resource($context[$protocol]['stream'])
       ) {
         $this->__stream = $context[$protocol]['stream'];
         return TRUE;
@@ -114,7 +122,7 @@ namespace FluentDOM\Utility {
      * @return bool|string
      */
     public function stream_read(int $count) {
-      return fread($this->__stream, $count);
+      return \fread($this->__stream, $count);
     }
 
     /**
@@ -122,14 +130,14 @@ namespace FluentDOM\Utility {
      * @return bool|int
      */
     public function stream_write(string $data) {
-      return fwrite($this->__stream, $data);
+      return \fwrite($this->__stream, $data);
     }
 
     /**
      * @return bool
      */
     public function stream_eof(): bool {
-      return feof($this->__stream);
+      return \feof($this->__stream);
     }
 
     /**
@@ -138,7 +146,7 @@ namespace FluentDOM\Utility {
      * @return int
      */
     public function stream_seek(int $offset, int $whence): int {
-      return fseek($this->__stream, $offset, $whence);
+      return \fseek($this->__stream, $offset, $whence);
     }
 
     public function __destruct() {

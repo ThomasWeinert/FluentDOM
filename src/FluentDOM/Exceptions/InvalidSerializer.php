@@ -1,4 +1,12 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\Exceptions {
 
@@ -8,7 +16,7 @@ namespace FluentDOM\Exceptions {
 
     public function __construct(string $contentType, string $class) {
       parent::__construct(
-        sprintf(
+        \sprintf(
           'Invalid serializer for content type %s, instances of %s are not castable to string.',
           $contentType,
           $class

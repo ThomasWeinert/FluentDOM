@@ -1,4 +1,12 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\Exceptions\InvalidSource {
 
@@ -12,9 +20,9 @@ namespace FluentDOM\Exceptions\InvalidSource {
      */
     public function __construct($source, string $contentType) {
       parent::__construct(
-        sprintf(
+        \sprintf(
           'Can not load %s as "%s".',
-          (is_object($source) ? get_class($source) : gettype($source)),
+          (\is_object($source) ? \get_class($source) : \gettype($source)),
           $contentType
         )
       );

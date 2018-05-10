@@ -1,4 +1,12 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\Loader {
 
@@ -30,8 +38,8 @@ namespace FluentDOM\Loader {
      */
     private function startsWith(string $haystack, string $needle, bool $ignoreWhitespace = TRUE): bool {
       return $ignoreWhitespace
-        ? (bool)preg_match('(^\s*'.preg_quote($needle, '(').')', $haystack)
-        : 0 === strpos($haystack, $needle);
+        ? (bool)\preg_match('(^\s*'.\preg_quote($needle, '(').')', $haystack)
+        : 0 === \strpos($haystack, $needle);
     }
   }
 }

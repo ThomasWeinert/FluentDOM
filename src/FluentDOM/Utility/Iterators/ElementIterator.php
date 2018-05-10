@@ -1,9 +1,11 @@
 <?php
 /**
- * Iterator class for FluentDOM\DOM\Element objects
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Utility\Iterators {
@@ -42,9 +44,9 @@ namespace FluentDOM\Utility\Iterators {
      * Get child nodes of the current iterator element
      *
      * @throws \UnexpectedValueException
-     * @return \RecursiveIterator
+     * @return self
      */
-    public function getChildren(): \RecursiveIterator {
+    public function getChildren(): self {
       $element = $this->current();
       if ($element instanceof Element) {
         return new self($element);

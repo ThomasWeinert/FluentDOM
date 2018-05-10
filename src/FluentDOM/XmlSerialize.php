@@ -1,9 +1,11 @@
 <?php
 /**
- * Standard implementation for FluentDOM\XmlSerializable
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM {
@@ -27,9 +29,9 @@ namespace FluentDOM {
     public function getXml(): string {
       if (!$this instanceOf Appendable) {
         throw new \LogicException(
-          sprintf(
+          \sprintf(
             'Class %s does not implement the FluentDOM\Appendable interface.',
-            is_object($this) ? get_class($this) : ''
+            \is_object($this) ? \get_class($this) : ''
           )
         );
       }

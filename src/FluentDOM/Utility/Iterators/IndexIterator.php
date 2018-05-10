@@ -1,11 +1,11 @@
 <?php
 /**
- * A abstract superclass for index based iterators. The object
- * using this iterator needs to implement \Countable and
- * allow to get the current item by an zero based index position.
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 namespace FluentDOM\Utility\Iterators {
 
@@ -49,7 +49,7 @@ namespace FluentDOM\Utility\Iterators {
      *
      * @return int
      */
-    public function key() {
+    public function key(): int {
       return $this->_position;
     }
 
@@ -80,9 +80,10 @@ namespace FluentDOM\Utility\Iterators {
         $this->_position = $position;
       } else {
         throw new \InvalidArgumentException(
-          sprintf(
+          \sprintf(
             'Unknown position %d, only %d items',
-            $position, $this->getOwner()->count()
+            $position,
+            $this->getOwner()->count()
           )
         );
       }

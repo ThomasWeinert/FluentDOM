@@ -1,4 +1,12 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\Creator {
 
@@ -41,7 +49,7 @@ namespace FluentDOM\Creator {
       if (NULL === $this->_iterator) {
         if ($this->_traversable instanceof \Iterator) {
           $this->_iterator = $this->_traversable;
-        } elseif (is_array($this->_traversable)) {
+        } elseif (\is_array($this->_traversable)) {
           $this->_iterator = new \ArrayIterator($this->_traversable);
         } else {
           $this->_iterator = ($this->_traversable instanceof \Traversable)
@@ -72,8 +80,8 @@ namespace FluentDOM\Creator {
      */
     public function current() {
       if (NULL !== $this->_map) {
-        return call_user_func(
-          $this->_map,
+        $map = $this->_map;
+        return $map(
           $this->getInnerIterator()->current(),
           $this->getInnerIterator()->key()
         );

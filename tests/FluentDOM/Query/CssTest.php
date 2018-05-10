@@ -1,4 +1,13 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Query {
 
   use FluentDOM\Query;
@@ -23,7 +32,7 @@ namespace FluentDOM\Query {
     public function testConstructorWithOwner() {
       $fd = $this->getMockBuilder(Query::class)->getMock();
       $css = new Css($fd);
-      $this->assertAttributeSame($fd, '_fd', $css);
+      $this->assertAttributeSame($fd, '_query', $css);
     }
 
     /**
@@ -198,7 +207,7 @@ namespace FluentDOM\Query {
       $css = $fd->css;
       $this->assertInstanceOf(Css::class, $css);
       $this->assertAttributeSame(
-        $fd, '_fd', $css
+        $fd, '_query', $css
       );
     }
 

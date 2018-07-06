@@ -1,4 +1,12 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\DOM {
 
@@ -488,6 +496,20 @@ namespace FluentDOM\DOM {
       $this->assertEquals(
         "<?xml version=\"1.0\"?>\n<foo/>\n",
         (string)$document
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\DOM\Document::createDocumentType
+     */
+    public function testCreateDocumentType() {
+      $document = new Document();
+      $document->formatOutput = TRUE;
+      $document->appendChild($document->createDocumentType('html'));
+      $document->appendElement('html');
+      $this->assertEquals(
+        "<!DOCTYPE html>\n<html></html>\n",
+        $document->saveHTML()
       );
     }
   }

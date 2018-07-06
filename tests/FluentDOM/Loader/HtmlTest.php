@@ -1,4 +1,13 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Loader {
 
   use FluentDOM\TestCase;
@@ -232,7 +241,7 @@ namespace FluentDOM\Loader {
         'text/html'
       );
       $this->assertEquals(
-        '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'.
+        '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'."\n".
         '<html><body>你好，世界</body></html>'."\n",
         $result->getDocument()->saveHTML()
       );
@@ -288,7 +297,7 @@ namespace FluentDOM\Loader {
         ]
       );
       $this->assertEquals(
-        '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'.
+        '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'."\n".
         '<html>'."\n".
         '<head><meta charset="utf-8"></head>'."\n".
         '<body>你好，世界</body>'."\n".
@@ -304,7 +313,7 @@ namespace FluentDOM\Loader {
     public function testLoadWithMultiByteHtmlDefinedByDeprecatedMetaTag() {
       $loader = new Html();
       $result = $loader->load(
-        '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'.
+        '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'."\n".
         '<html>'.
         '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head>'.
         '<body>你好，世界</body>'.
@@ -315,7 +324,7 @@ namespace FluentDOM\Loader {
         ]
       );
       $this->assertEquals(
-        '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'.
+        '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'."\n".
         '<html>'."\n".
         '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head>'."\n".
         '<body>你好，世界</body>'."\n".
@@ -338,7 +347,7 @@ namespace FluentDOM\Loader {
         'text/html'
       );
       $this->assertEquals(
-        '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'.
+        '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'."\n".
         '<html>'.
         '<body>你好，世界</body>'.
         '</html>'."\n",
@@ -365,7 +374,7 @@ namespace FluentDOM\Loader {
         ]
       );
       $this->assertEquals(
-        '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'.
+        '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'."\n".
         '<html>'."\n".
         '<head><meta charset="utf-8"></head>'."\n".
         '<body>你好，世界</body>'."\n".

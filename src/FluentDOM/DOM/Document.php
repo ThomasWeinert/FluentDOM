@@ -322,7 +322,7 @@ namespace FluentDOM\DOM {
           $textOnly = $textOnly && $node instanceof \DOMText;
           $elementCount += $node instanceof \DOMElement ? 1 : 0;
           if ($node instanceof \DOMDocumentType) {
-            $result .= parent::saveXML($node);
+            $result .= parent::saveXML($node)."\n";
           } else {
             $result .= parent::saveHTML($node);
           }
@@ -346,6 +346,18 @@ namespace FluentDOM\DOM {
         return $this->getElementsByTagNameNS($namespaceURI, $localName);
       }
       return parent::getElementsByTagName($localName);
+    }
+
+    /**
+     * @param string|null $qualifiedName
+     * @param string|null $publicId
+     * @param \DOMDocumentType|null $systemId
+     * @return \DOMDocumentType
+     */
+    public function createDocumentType(
+      string $qualifiedName = NULL, string $publicId = NULL, \DOMDocumentType $systemId = NULL
+    ): \DOMDocumentType {
+      return (new Implementation())->createDocumentType($qualifiedName, $publicId, $systemId);
     }
   }
 }

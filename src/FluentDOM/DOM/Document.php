@@ -351,11 +351,11 @@ namespace FluentDOM\DOM {
     /**
      * @param string|null $qualifiedName
      * @param string|null $publicId
-     * @param \DOMDocumentType|null $systemId
+     * @param string|null $systemId
      * @return \DOMDocumentType
      */
     public function createDocumentType(
-      string $qualifiedName = NULL, string $publicId = NULL, \DOMDocumentType $systemId = NULL
+      string $qualifiedName = NULL, string $publicId = NULL, string $systemId = NULL
     ): \DOMDocumentType {
       return (new Implementation())->createDocumentType($qualifiedName, $publicId, $systemId);
     }

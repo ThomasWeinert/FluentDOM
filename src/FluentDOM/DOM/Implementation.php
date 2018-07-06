@@ -26,7 +26,7 @@ namespace FluentDOM\DOM {
         $document->appendElement($document->createElementNS($namespaceURI, $qualifiedName));
         $prefix = strstr($qualifiedName, ':', TRUE);
         if ($prefix !== '' || !empty($namespaceURI)) {
-          $document->registerNamespace('', $namespaceURI);
+          $document->registerNamespace($prefix, $namespaceURI);
         }
       }
       return $document;

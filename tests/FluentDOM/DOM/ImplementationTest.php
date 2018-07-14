@@ -115,7 +115,7 @@ namespace FluentDOM\DOM {
       $feed->appendElement('atom:title', 'Example Feed');
       $feed->appendElement('atom:link', ['href' => 'http://example.org/']);
       $this->assertXmlStringEqualsXmlString(
-        '<atom:feed xmlns:atom="http://www.w3.org/2005/atom">
+        '<atom:feed xmlns:atom="http://www.w3.org/2005/Atom">
           <atom:title>Example Feed</atom:title>
           <atom:link href="http://example.org/"/>
         </atom:feed>',

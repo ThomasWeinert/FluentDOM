@@ -10,14 +10,18 @@ build:
     environment:
         php:
             version: 7.1
-    tests:
-        override:
-            -
-                command: 'php phpunit.phar --coverage-clover=coverage.xml tests'
-                coverage:
-                    file: 'coverage.xml'
-                    format: 'php-clover'
+    nodes:
+        analysis:
+            tests:
+                override:
+                    - php-scrutinizer-run
+                    -
+                        command: 'php phpunit.phar --coverage-clover=coverage.xml tests'
+                        coverage:
+                            file: 'coverage.xml'
+                            format: 'php-clover'
     dependencies:
         before:
             - wget https://phar.phpunit.de/phpunit.phar
             - composer install --prefer-source
+

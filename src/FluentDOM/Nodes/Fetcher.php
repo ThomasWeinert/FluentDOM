@@ -1,9 +1,11 @@
 <?php
 /**
- * Fetches dom nodes for the current context.
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Nodes {
@@ -60,7 +62,7 @@ namespace FluentDOM\Nodes {
           $fetchedNodes = $this->fetchFor(
             $expression, $context, $filter, $stopAt, $options
           );
-          if (empty($fetchedNodes)) {
+          if (empty($fetchedNodes) || \count($fetchedNodes) === 0) {
             continue;
           }
           \array_push($nodes, ...$fetchedNodes);
@@ -77,7 +79,7 @@ namespace FluentDOM\Nodes {
      * @return bool
      */
     private function validateContextIgnore(string $expression, int $options): bool {
-      if (!\is_string($expression) || empty($expression)) {
+      if ('' === $expression) {
         throw new \InvalidArgumentException(
           'Invalid selector/expression.'
         );

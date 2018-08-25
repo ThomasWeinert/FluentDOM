@@ -1,4 +1,13 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Nodes {
 
   use FluentDOM\Nodes;
@@ -39,6 +48,21 @@ namespace FluentDOM\Nodes {
           'item',
           $fd->getSelectorCallback('@index = 1'),
           NULL
+        )
+      );
+    }
+
+
+    /**
+     * @covers \FluentDOM\Nodes\Fetcher
+     */
+    public function testFetchWithContext() {
+      $fd = (new Nodes(self::XML))->find('/items/group/item');
+      $fetcher = new Fetcher($fd);
+      $this->assertXmlNodesArrayEqualsXmlStrings(
+        ['<item index="1">text2</item>'],
+        $fetcher->fetch(
+          'self::item[@index = 1]'
         )
       );
     }

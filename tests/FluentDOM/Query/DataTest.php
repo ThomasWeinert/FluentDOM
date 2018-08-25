@@ -1,4 +1,13 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Query {
 
   use FluentDOM\Query;
@@ -129,6 +138,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query\Data::__get
      * @covers \FluentDOM\Query\Data::encodeName
      * @covers \FluentDOM\Query\Data::decodeValue
+     * @covers \FluentDOM\Query\Data::isJsonString
      * @dataProvider provideDataAttributes
      */
     public function testMagicMethodGet($expected, $name, $xml) {

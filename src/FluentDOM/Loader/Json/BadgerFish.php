@@ -107,10 +107,10 @@ namespace FluentDOM\Loader\Json {
      * @return array
      * @throws \LogicException
      */
-    protected function transferChildTo(\DOMNode $node, string $name, $data) {
+    protected function transferChildTo(\DOMNode $node, string $name, $data): array {
       /** @var Document $document */
       $document = $node->ownerDocument ?: $node;
-      $namespaceURI = $this->getNamespaceForNode(
+      $namespaceURI = (string)$this->getNamespaceForNode(
         $name,
         $data->{'@xmlns'} ?? new \stdClass(),
         $document
@@ -119,9 +119,8 @@ namespace FluentDOM\Loader\Json {
         $data = [$data];
       }
       foreach ($data as $dataChild) {
-        /** @noinspection IsEmptyFunctionUsageInspection */
         $child = $node->appendChild(
-          empty($namespaceURI)
+          '' === $namespaceURI
             ? $document->createElement($name) : $document->createElementNS($namespaceURI, $name)
         );
         $this->transferTo($child, $dataChild);

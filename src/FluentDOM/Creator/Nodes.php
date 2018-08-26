@@ -21,7 +21,7 @@ namespace FluentDOM\Creator {
     /**
      * @var array|\Traversable
      */
-    private $_traversable;
+    private $_iterable;
 
     /**
      * @var callable|NULL
@@ -34,11 +34,13 @@ namespace FluentDOM\Creator {
     private $_iterator;
 
     /**
-     * @param array|\Traversable $traversable
+     * @param array|\Traversable $iterable
      * @param callable $map
      */
-    public function __construct($traversable, callable $map = NULL) {
-      $this->_traversable = $traversable;
+    public function __construct($iterable, callable $map = NULL) {
+      if (\is_array($iterable) || $iterable instanceof \Traversable) {
+        $this->_iterable = $iterable;
+      }
       $this->_map = $map;
     }
 
@@ -47,13 +49,13 @@ namespace FluentDOM\Creator {
      */
     public function getInnerIterator(): \Iterator {
       if (NULL === $this->_iterator) {
-        if ($this->_traversable instanceof \Iterator) {
-          $this->_iterator = $this->_traversable;
-        } elseif (\is_array($this->_traversable)) {
-          $this->_iterator = new \ArrayIterator($this->_traversable);
+        if ($this->_iterable instanceof \Iterator) {
+          $this->_iterator = $this->_iterable;
+        } elseif (\is_array($this->_iterable)) {
+          $this->_iterator = new \ArrayIterator($this->_iterable);
         } else {
-          $this->_iterator = ($this->_traversable instanceof \Traversable)
-            ? new \IteratorIterator($this->_traversable)
+          $this->_iterator = (NULL !== $this->_iterable)
+            ? new \IteratorIterator($this->_iterable)
             : new \EmptyIterator();
         }
       }

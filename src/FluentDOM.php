@@ -1,4 +1,12 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 use FluentDOM\Loadable;
 
@@ -123,15 +131,17 @@ abstract class FluentDOM {
    * @throws \FluentDOM\Exceptions\InvalidArgument
    */
   public static function setLoader($loader) {
+    if (NULL === $loader) {
+      self::$_loader = NULL;
+      return;
+    }
     if ($loader instanceof FluentDOM\Loadable) {
       self::$_loader = $loader;
-    } elseif (NULL === $loader) {
-      self::$_loader = NULL;
-    } else {
-      throw new FluentDOM\Exceptions\InvalidArgument(
-        'loader', [Loadable::class]
-      );
+      return;
     }
+    throw new FluentDOM\Exceptions\InvalidArgument(
+      'loader', [Loadable::class]
+    );
   }
 
   /**
@@ -150,8 +160,8 @@ abstract class FluentDOM {
         $lazyLoader->add($contentType, $loader);
       }
       $loaders->add($lazyLoader);
-    } else if (is_callable($loader)) {
-      $loaders->add($loader());
+    } elseif (is_callable($loader)) {
+      self::registerLoader($loader());
     } else {
       $loaders->add($loader);
     }
@@ -191,7 +201,7 @@ abstract class FluentDOM {
    * @return FluentDOM\Serializer\Factory\Group
    */
   public static function getSerializerFactories(): FluentDOM\Serializer\Factory\Group {
-    if (!(self::$_serializerFactories instanceof FluentDOM\Serializer\Factory)) {
+    if (NULL === self::$_serializerFactories) {
       $xml = function($contentType, \DOMNode $node) {
         return new FluentDOM\Serializer\Xml($node);
       };

@@ -1,9 +1,11 @@
 <?php
 /**
- * Cast a DOMNode into a string
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\DOM\Node {
@@ -21,7 +23,6 @@ namespace FluentDOM\DOM\Node {
      * @return string
      */
     public function __toString(): string {
-      /** @var \DOMNode $this */
       return ($this instanceof \DOMNode) ? (string)$this->textContent : '';
     }
   }

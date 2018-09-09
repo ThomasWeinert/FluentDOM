@@ -1,4 +1,12 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\Loader {
 
@@ -7,7 +15,7 @@ namespace FluentDOM\Loader {
   class Result {
 
     /**
-     * @var \DOMDocument
+     * @var Document
      */
     private $_document;
     /**

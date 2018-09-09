@@ -41,7 +41,7 @@ namespace FluentDOM\Loader {
     public function __construct($options = [], array $callbacks = []) {
       if (\is_array($options)) {
         $this->_options = $options;
-      } else if ($options instanceof \Traversable) {
+      } elseif ($options instanceof \Traversable) {
         $this->_options = \iterator_to_array($options);
       } else {
         throw new InvalidArgument('options', ['array', \Traversable::class]);

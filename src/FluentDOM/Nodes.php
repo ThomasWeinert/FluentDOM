@@ -132,6 +132,7 @@ namespace FluentDOM {
       $isResult = $loaded instanceof Loader\Result;
       if ($isResult || $loaded instanceof \DOMDocument) {
         if ($isResult) {
+          /** @var Loader\Result $loaded */
           $this->_document = $loaded->getDocument();
           $this->setContentType($loaded->getContentType());
           if ($selection = $loaded->getSelection()) {

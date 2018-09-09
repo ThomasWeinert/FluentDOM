@@ -83,7 +83,7 @@ namespace FluentDOM\Serializer {
      * @return mixed
      */
     public function jsonSerialize() {
-      /** @var Element|Document $node */
+      /** @var \DOMNode $node */
       $node = $this->_node;
       if ($node instanceof \DOMDocument) {
         $node = $node->documentElement;

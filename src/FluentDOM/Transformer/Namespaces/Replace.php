@@ -1,9 +1,11 @@
 <?php
 /**
- * Allows to replace namespaces.
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Transformer\Namespaces {
@@ -77,7 +79,7 @@ namespace FluentDOM\Transformer\Namespaces {
      * @param \DOMAttr $source
      */
     private function importAttribute(\DOMElement $parent, \DOMAttr $source) {
-      $document = $parent instanceof \DOMDocument ? $parent : $parent->ownerDocument;
+      $document = $parent->ownerDocument;
       $namespaceURI = $this->getMappedNamespace((string)$source->namespaceURI);
       $prefix = $this->getMappedPrefix($namespaceURI) ?? $source->prefix;
       if (empty($namespaceURI) || empty($prefix)) {

@@ -442,7 +442,7 @@ namespace FluentDOM {
     /**
      * Retrieve the matched DOM elements in an array. A negative position will be counted from the end.
      *
-     * @param int|NULL optional offset of a single element to get.
+     * @param int|NULL $position optional offset of a single element to get.
      * @return array|\DOMNode|NULL
      */
     public function get(int $position = NULL) {
@@ -1054,7 +1054,7 @@ namespace FluentDOM {
       if (NULL !== $text) {
         $callback = Constraints::filterCallable($text);
         foreach ($this->_nodes as $index => $node) {
-          $node->nodeValue = $callback ? $callback($node, $index, $node->nodeValue): $text;
+          $node->nodeValue = (string)($callback ? $callback($node, $index, $node->nodeValue) : $text);
         }
         return $this;
       }
@@ -1473,7 +1473,7 @@ namespace FluentDOM {
       foreach ($this->_nodes as $node) {
         if ($node instanceof \DOMElement && $node->hasAttribute('class')) {
           $classes = \preg_split('(\s+)', trim($node->getAttribute('class')));
-          if (\in_array($class, $classes, TRUE)) {
+          if (\is_array($classes) && \in_array($class, $classes, TRUE)) {
             return TRUE;
           }
         }
@@ -1547,11 +1547,11 @@ namespace FluentDOM {
     private function changeClassString(string $current, string $toggle, bool $switch = NULL) {
       /** @var array $currentClasses */
       $currentClasses = \array_flip(
-        \preg_split('(\s+)', \trim($current), 0, PREG_SPLIT_NO_EMPTY)
+        \preg_split('(\s+)', \trim($current), 0, PREG_SPLIT_NO_EMPTY) ?: []
       );
       /** @var array $toggleClasses */
       $toggleClasses = \array_unique(
-        \preg_split('(\s+)', \trim($toggle), 0, PREG_SPLIT_NO_EMPTY)
+        \preg_split('(\s+)', \trim($toggle), 0, PREG_SPLIT_NO_EMPTY) ?: []
       );
       $modified = FALSE;
       foreach ($toggleClasses as $class) {

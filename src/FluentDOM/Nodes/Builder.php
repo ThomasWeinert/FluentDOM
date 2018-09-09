@@ -113,7 +113,7 @@ namespace FluentDOM\Nodes {
       } elseif (\is_string($content)) {
         $result = $this->getFragment($content, $this->getOwner()->contentType, $includeTextNodes, $limit);
       }
-      if (!\is_array($result) || empty($result)) {
+      if (empty($result)) {
         throw new Exceptions\LoadingError\EmptyResult();
       }
       //if a node is not in the current document import it

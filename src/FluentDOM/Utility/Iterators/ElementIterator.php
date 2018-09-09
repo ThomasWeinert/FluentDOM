@@ -36,7 +36,7 @@ namespace FluentDOM\Utility\Iterators {
      *
      * @return \DOMNode|NULL
      */
-    public function current(): \DOMNode {
+    public function current() {
       return $this->getOwner()->childNodes->item($this->_position);
     }
 

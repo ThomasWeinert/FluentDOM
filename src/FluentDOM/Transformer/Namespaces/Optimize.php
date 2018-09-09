@@ -1,10 +1,11 @@
 <?php
 /**
- * Create a namespace optimizer for the provided document. This allows
- * to change namespace prefixes and optimize the namespace attributes.
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Transformer\Namespaces {
@@ -73,10 +74,8 @@ namespace FluentDOM\Transformer\Namespaces {
         $this->addNamespaceAttribute($target, $prefix, $uri);
       }
       $newNode = $this->createElement($target, $prefix, $name, $uri);
-      if ($source instanceof \DOMElement) {
-        foreach ($source->attributes as $attribute) {
-          $this->addAttribute($newNode, $attribute);
-        }
+      foreach ($source->attributes as $attribute) {
+        $this->addAttribute($newNode, $attribute);
       }
       foreach ($source->childNodes as $childNode) {
         $this->addNode($newNode, $childNode);

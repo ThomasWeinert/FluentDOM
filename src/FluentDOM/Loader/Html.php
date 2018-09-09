@@ -59,7 +59,9 @@ namespace FluentDOM\Loader {
               case Options::IS_STRING :
               default :
                 $document->loadHTML(
-                  $this->ensureEncodingPI($source, $settings[Options::ENCODING], $settings[Options::FORCE_ENCODING]),
+                  $this->ensureEncodingPI(
+                    $source, $settings[Options::ENCODING], (bool)$settings[Options::FORCE_ENCODING]
+                  ),
                   $settings[Options::LIBXML_OPTIONS]
                 );
               }
@@ -75,7 +77,7 @@ namespace FluentDOM\Loader {
       return NULL;
     }
 
-    private function ensureEncodingPI(string $source, string $encoding = NULL, bool $force = NULL): string {
+    private function ensureEncodingPI(string $source, string $encoding = NULL, bool $force = FALSE): string {
       $hasXmlPi = \preg_match('(<\\?xml\\s)', $source);
       if (!$force && ($charset = $this->getCharsetFromMetaTag($source))) {
         $encoding = (string)$charset;
@@ -137,7 +139,7 @@ namespace FluentDOM\Loader {
               $this->ensureEncodingPI(
                 '<html-fragment>'.$source.'</html-fragment>',
                 $options[Options::ENCODING],
-                $options[Options::FORCE_ENCODING]
+                (bool)$options[Options::FORCE_ENCODING]
               ),
               $options[Options::LIBXML_OPTIONS]
             );
@@ -166,7 +168,7 @@ namespace FluentDOM\Loader {
         $this->ensureEncodingPI(
           '<html-fragment>'.$source.'</html-fragment>',
           $settings[Options::ENCODING],
-          $settings[Options::FORCE_ENCODING]
+          (bool)$settings[Options::FORCE_ENCODING]
         ),
         $settings[Options::LIBXML_OPTIONS]
       );

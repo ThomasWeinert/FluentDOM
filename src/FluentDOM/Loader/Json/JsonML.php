@@ -65,7 +65,7 @@ namespace FluentDOM\Loader\Json {
      * @param \stdClass $properties
      */
     private function addAttributes(Element $node, \stdClass $properties) {
-      $document = $node instanceof \DOMDocument ? $node : $node->ownerDocument;
+      $document = $node->ownerDocument;
       foreach ($properties as $name => $value) {
         if (!($name === 'xmlns' || 0 === \strpos($name, 'xmlns:'))) {
           $namespaceURI = $this->getNamespaceForNode($name, $properties, $node);

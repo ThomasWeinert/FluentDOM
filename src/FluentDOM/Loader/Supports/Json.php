@@ -79,9 +79,10 @@ namespace FluentDOM\Loader\Supports {
               /** @noinspection PhpMissingBreakStatementInspection */
             case Options::IS_FILE :
               $source = \file_get_contents($source);
+              /* $source now contains file constants as string continue with that */
             case Options::IS_STRING :
               $json = \json_decode($source);
-              if (!($json || is_array($json))) {
+              if (!($json || \is_array($json))) {
                 throw new LoadingError\Json(
                   \is_callable('json_last_error') ? \json_last_error() : -1
                 );
@@ -150,7 +151,7 @@ namespace FluentDOM\Loader\Supports {
      * @param string $prefix
      * @return string
      */
-    protected function getNamespacePropertyName($prefix) {
+    protected function getNamespacePropertyName($prefix): string {
       return empty($prefix) ? 'xmlns' : 'xmlns:'.$prefix;
     }
   }

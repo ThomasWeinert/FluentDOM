@@ -139,6 +139,7 @@ namespace FluentDOM {
             $this->push($selection);
           }
         } else {
+          /** @var \DOMDocument $loaded */
           $this->_document = $loaded;
           $this->setContentType($contentType);
         }
@@ -315,7 +316,7 @@ namespace FluentDOM {
       $document = $this->getDocument();
       $document->preserveWhiteSpace = FALSE;
       $document->formatOutput = TRUE;
-      if ($document->documentElement instanceof \DOMElement) {
+      if (NULL !== $document->documentElement) {
         $document->loadXML($document->saveXML());
       }
       return $this;
@@ -379,7 +380,7 @@ namespace FluentDOM {
      * @throws \LogicException
      */
     public function getDocument(): \DOMDocument {
-      if (!($this->_document instanceof \DOMDocument)) {
+      if (NULL === $this->_document) {
         $this->_document = new Document();
         $this->applyNamespaces();
       }
@@ -410,6 +411,7 @@ namespace FluentDOM {
      */
     public function getSelectorCallback($selector) {
       if (NULL === $selector || Constraints::filterCallable($selector)) {
+        /** NULL|callable $selector */
         return $selector;
       }
       if ($selector instanceof \DOMNode) {

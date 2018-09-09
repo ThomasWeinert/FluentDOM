@@ -1,9 +1,11 @@
 <?php
 /**
- * Provides several extended manipulation functions for a DOMNode/DOMElement.
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Nodes {
@@ -80,7 +82,7 @@ namespace FluentDOM\Nodes {
     public function insertChildrenBefore($contentNodes): array {
       $result = [];
       if ($this->_node instanceof \DOMElement) {
-        if ($this->_node->firstChild instanceof \DOMNode) {
+        if (NULL !== $this->_node->firstChild) {
           $result = (new self($this->_node->firstChild))->insertNodesBefore($contentNodes);
         } else {
           $result = $this->appendChildren($contentNodes);
@@ -97,8 +99,7 @@ namespace FluentDOM\Nodes {
     public function insertNodesAfter($contentNodes): array {
       $result = [];
       if ($this->_node instanceof \DOMNode && NULL !== $contentNodes) {
-        $beforeNode = ($this->_node->nextSibling instanceof \DOMNode)
-          ? $this->_node->nextSibling : NULL;
+        $beforeNode = $this->_node->nextSibling ?: NULL;
         $hasContext = $beforeNode instanceof \DOMNode;
         foreach ($contentNodes as $contentNode) {
           /** @var \DOMNode $contentNode */

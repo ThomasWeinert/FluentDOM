@@ -286,11 +286,11 @@ namespace FluentDOM\Loader {
     public function testLoadWithMultiByteHtmlDefinedByMetaTag() {
       $loader = new Html();
       $result = $loader->load(
-        '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'.
-        '<html>'.
-        '<head><meta charset="utf-8"></head>'.
-        '<body>你好，世界</body>'.
-        '</html>',
+        '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'."\n".
+        '<html>'."\n".
+        '<head><meta charset="utf-8"></head>'."\n".
+        '<body>你好，世界</body>'."\n".
+        '</html>'."\n",
         'text/html',
         [
           Options::ENCODING => 'ascii'
@@ -314,10 +314,10 @@ namespace FluentDOM\Loader {
       $loader = new Html();
       $result = $loader->load(
         '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'."\n".
-        '<html>'.
-        '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head>'.
-        '<body>你好，世界</body>'.
-        '</html>',
+        '<html>'."\n".
+        '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head>'."\n".
+        '<body>你好，世界</body>'."\n".
+        '</html>'."\n",
         'text/html',
         [
           Options::ENCODING => 'ascii'
@@ -362,11 +362,11 @@ namespace FluentDOM\Loader {
     public function testLoadWithMultiByteHtmlReplaceExistingPi() {
       $loader = new Html();
       $result = $loader->load(
-        '<?xml encoding="ASCII"?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'.
-        '<html>'.
-        '<head><meta charset="utf-8"></head>'.
-        '<body>你好，世界</body>'.
-        '</html>',
+        '<?xml encoding="ASCII"?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'."\n".
+        '<html>'."\n".
+        '<head><meta charset="utf-8"></head>'."\n".
+        '<body>你好，世界</body>'."\n".
+        '</html>'."\n",
         'text/html',
         [
           Options::ENCODING => 'UTF-8',

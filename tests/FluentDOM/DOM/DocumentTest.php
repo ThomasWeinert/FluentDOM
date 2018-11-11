@@ -416,7 +416,7 @@ namespace FluentDOM\DOM {
      */
     public function testToHtmlWithNodeContext() {
       $document = new Document();
-      $document->loadXML('<div>TEXT<br/></div>');
+      $document->loadXML("<div>TEXT<br/>\n</div>");
       $this->assertEquals(
         "<div>TEXT<br>\n</div>",
         $document->toHtml($document->firstChild)

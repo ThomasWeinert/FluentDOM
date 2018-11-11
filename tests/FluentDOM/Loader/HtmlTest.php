@@ -296,13 +296,24 @@ namespace FluentDOM\Loader {
           Options::ENCODING => 'ascii'
         ]
       );
-      $this->assertEquals(
-        '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'."\n".
-        '<html>'."\n".
-        '<head><meta charset="utf-8"></head>'."\n".
-        '<body>你好，世界</body>'."\n".
-        '</html>'."\n",
-        $result->getDocument()->saveHTML()
+      $this->assertThat(
+        $result->getDocument()->saveHTML(),
+        $this->logicalOr(
+          $this->equalTo(
+            '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'."\n".
+            '<html>'."\n".
+            '<head><meta charset="utf-8"></head>'."\n".
+            '<body>你好，世界</body>'."\n".
+            '</html>'."\n"
+          ),
+          $this->equalTo(
+            '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'."\n".
+            '<html>'.
+            '<head><meta charset="utf-8"></head>'.
+            '<body>你好，世界</body>'.
+            '</html>'."\n"
+          )
+        )
       );
     }
 
@@ -323,13 +334,24 @@ namespace FluentDOM\Loader {
           Options::ENCODING => 'ascii'
         ]
       );
-      $this->assertEquals(
-        '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'."\n".
-        '<html>'."\n".
-        '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head>'."\n".
-        '<body>你好，世界</body>'."\n".
-        '</html>'."\n",
-        $result->getDocument()->saveHTML()
+      $this->assertThat(
+        $result->getDocument()->saveHTML(),
+        $this->logicalOr(
+          $this->equalTo(
+            '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'."\n".
+            '<html>'."\n".
+            '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head>'."\n".
+            '<body>你好，世界</body>'."\n".
+            '</html>'."\n"
+          ),
+          $this->equalTo(
+            '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'."\n".
+            '<html>'.
+            '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head>'.
+            '<body>你好，世界</body>'.
+            '</html>'."\n"
+          )
+        )
       );
     }
 
@@ -373,13 +395,21 @@ namespace FluentDOM\Loader {
           Options::FORCE_ENCODING => true
         ]
       );
-      $this->assertEquals(
-        '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'."\n".
-        '<html>'."\n".
-        '<head><meta charset="utf-8"></head>'."\n".
-        '<body>你好，世界</body>'."\n".
-        '</html>'."\n",
-        $result->getDocument()->saveHTML()
+      $this->assertThat(
+        $result->getDocument()->saveHTML(),
+        $this->logicalOr(
+          $this->equalTo(
+            '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'."\n".
+            '<html>'."\n".
+            '<head><meta charset="utf-8"></head>'."\n".
+            '<body>你好，世界</body>'."\n".
+            '</html>'."\n"
+          ),
+          $this->equalTo(
+            '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'."\n".
+            '<html><head><meta charset="utf-8"></head><body>你好，世界</body></html>'."\n"
+          )
+        )
       );
     }
   }

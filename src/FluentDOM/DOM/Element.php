@@ -62,13 +62,15 @@ namespace FluentDOM\DOM {
         return $this->getFirstElementChild() !== NULL;
       case 'lastElementChild' :
         return $this->getLastElementChild() !== NULL;
+      case 'childElementCount' :
+        return TRUE;
       }
       return FALSE;
     }
 
     /**
      * @param string $name
-     * @return \DOMNode|Element|NULL
+     * @return mixed
      */
     public function __get(string $name) {
       switch ($name) {
@@ -80,6 +82,8 @@ namespace FluentDOM\DOM {
         return $this->getFirstElementChild();
       case 'lastElementChild' :
         return $this->getLastElementChild();
+      case 'childElementCount' :
+        return (int)$this->evaluate('count(*)');
       }
       return $this->$name;
     }

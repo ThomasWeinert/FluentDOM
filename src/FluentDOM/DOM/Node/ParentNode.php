@@ -1,4 +1,12 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\DOM\Node {
 
@@ -6,8 +14,9 @@ namespace FluentDOM\DOM\Node {
 
   /**
    * Interface ParentNode
-   * @property Element $firstElementChild
-   * @property Element $lastElementChild
+   * @property-read Element $firstElementChild
+   * @property-read Element $lastElementChild
+   * @property-read int $childElementCount
    */
   interface ParentNode extends QuerySelector {
 

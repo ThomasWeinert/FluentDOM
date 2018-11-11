@@ -24,13 +24,15 @@ namespace FluentDOM\DOM\Node\ParentNode {
         return $this->getFirstElementChild() !== NULL;
       case 'lastElementChild' :
         return $this->getLastElementChild() !== NULL;
+      case 'childElementCount' :
+        return TRUE;
       }
       return isset($this->$name);
     }
 
     /**
      * @param string $name
-     * @return \FluentDOM\DOM\Element|NULL
+     * @return mixed
      */
     public function __get(string $name) {
       switch ($name) {
@@ -38,6 +40,8 @@ namespace FluentDOM\DOM\Node\ParentNode {
         return $this->getFirstElementChild();
       case 'lastElementChild' :
         return $this->getLastElementChild();
+      case 'childElementCount' :
+        return (int)$this->evaluate('count(*)');
       }
       return $this->$name;
     }
@@ -67,6 +71,7 @@ namespace FluentDOM\DOM\Node\ParentNode {
       switch ($name) {
       case 'firstElementChild' :
       case 'lastElementChild' :
+      case 'childElementCount' :
         throw new \BadMethodCallException(
           \sprintf(
             'Can not write readonly property %s::$%s.',

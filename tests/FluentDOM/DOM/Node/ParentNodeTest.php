@@ -1,4 +1,12 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\Node {
 
@@ -167,6 +175,32 @@ namespace FluentDOM\Node {
         \BadMethodCallException::class
       );
       $document->lastElementChild = $document->createElement('dummy');
+    }
+
+    /**
+     * @param int $expected
+     * @param string $xml
+     * @covers \FluentDOM\DOM\Node\ParentNode\Implementation
+     * @testWith
+     *   [0, "<foo/>"]
+     *   [1, "<foo><bar/></foo>"]
+     *   [1, "<foo>text<bar/>text</foo>"]
+     *   [1, "<foo>text<bar><child/></bar>text</foo>"]
+     */
+    public function testChildElementCount($expected, $xml) {
+      $document = new Document();
+      $document->loadXML($xml);
+      $this->assertSame($expected, $document->documentElement->childElementCount);
+    }
+
+    /**
+     * @covers \FluentDOM\DOM\Node\ParentNode\Implementation
+     */
+    public function testChildElementCountOnDocument() {
+      $document = new Document();
+      $this->assertSame(0, $document->childElementCount);
+      $document->loadXML('<foo/>');
+      $this->assertSame(1, $document->childElementCount);
     }
 
     /**

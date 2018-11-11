@@ -1,10 +1,11 @@
 <?php
 /**
- * FluentDOM\DOM\Node is an interface implemented by all the extended DOM node classes
- * in FluentDOM
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\DOM {
@@ -13,7 +14,7 @@ namespace FluentDOM\DOM {
 
   /**
    * @method string|float|bool|\DOMNodeList|Node[] __invoke()
-   * @method string|float|bool|\DOMNodeList|Node[] evaluate($expression, \DOMNode $context = NULL)
+   * @method string|float|bool|\DOMNodeList|Node[] evaluate(string $expression, \DOMNode $context = NULL)
    */
   interface Node extends StringCastable {
 

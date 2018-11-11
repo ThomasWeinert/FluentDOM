@@ -81,7 +81,7 @@ namespace FluentDOM\DOM {
      *
      * @return Xpath
      */
-    public function xpath() {
+    public function xpath(): Xpath {
       if (
         $this->_xpath instanceof Xpath &&
         $this->_xpath->document === $this
@@ -119,7 +119,7 @@ namespace FluentDOM\DOM {
      * @return Namespaces
      * @throws \LogicException
      */
-    public function namespaces($namespaces = NULL) {
+    public function namespaces($namespaces = NULL): Namespaces {
       if (NULL !== $namespaces) {
         $this->_namespaces->assign([]);
         /** @noinspection ForeachSourceInspection */
@@ -233,9 +233,9 @@ namespace FluentDOM\DOM {
      * @param array|NULL $attributes
      */
     private function appendAttributes(\DOMElement $node, $content = NULL, array $attributes = NULL) {
-      if (is_array($content)) {
+      if (\is_array($content)) {
         /** @noinspection CallableParameterUseCaseInTypeContextInspection */
-        $attributes = (NULL === $attributes) ? $content : array_merge($content, $attributes);
+        $attributes = (NULL === $attributes) ? $content : \array_merge($content, $attributes);
       }
       if (!empty($attributes)) {
         foreach ($attributes as $attributeName => $attributeValue) {
@@ -249,7 +249,7 @@ namespace FluentDOM\DOM {
      * @param string|array|NULL $content
      */
     private function appendContent(\DOMElement $node, $content = NULL) {
-      if (!((empty($content) && !is_numeric($content)) || is_array($content) )) {
+      if (!((empty($content) && !\is_numeric($content)) || \is_array($content) )) {
         $node->appendChild($this->createTextNode($content));
       }
     }

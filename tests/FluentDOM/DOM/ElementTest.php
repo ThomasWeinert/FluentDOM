@@ -1,4 +1,12 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\DOM {
 
@@ -1048,6 +1056,22 @@ namespace FluentDOM\DOM {
       $this->assertCount(
         1, $document->documentElement
       );
+    }
+
+    /**
+     * @param int $expected
+     * @param string $xml
+     * @covers \FluentDOM\DOM\Element
+     * @testWith
+     *   [0, "<foo/>"]
+     *   [1, "<foo><bar/></foo>"]
+     *   [1, "<foo>text<bar/>text</foo>"]
+     *   [1, "<foo>text<bar><child/></bar>text</foo>"]
+     */
+    public function testChildElementCount($expected, $xml) {
+      $document = new Document();
+      $document->loadXML($xml);
+      $this->assertSame($expected, $document->documentElement->childElementCount);
     }
   }
 }

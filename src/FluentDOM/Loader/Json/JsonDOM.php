@@ -144,7 +144,7 @@ namespace FluentDOM\Loader\Json {
      */
     public function onMapKey($callback = NULL) {
       if (NULL !== $callback) {
-        $this->_onMapKey = is_callable($callback) ? $callback : NULL;
+        $this->_onMapKey = \is_callable($callback) ? $callback : NULL;
       }
       return $this->_onMapKey;
     }
@@ -178,7 +178,7 @@ namespace FluentDOM\Loader\Json {
             $target->setAttributeNS(self::XMLNS, 'json:type', $type);
           }
           $string = $this->getValueAsString($type, $value);
-          if (is_string($string)) {
+          if (\is_string($string)) {
             $target->appendChild($target->ownerDocument->createTextNode($string));
           }
         }
@@ -221,7 +221,7 @@ namespace FluentDOM\Loader\Json {
      * @param bool $isArrayElement
      * @return string
      */
-    private function getQualifiedName(string $key, string $default, bool $isArrayElement = FALSE) {
+    private function getQualifiedName(string $key, string $default, bool $isArrayElement = FALSE): string {
       if ($callback = $this->onMapKey()) {
         $key = $callback($key, $isArrayElement);
       } elseif ($isArrayElement) {

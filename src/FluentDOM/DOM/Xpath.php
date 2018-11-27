@@ -136,7 +136,7 @@ namespace FluentDOM\DOM {
      * @param string $string
      * @return string
      */
-    public function quote(string $string): string {
+    public static function quote(string $string): string {
       $string = str_replace("\x00", '', $string);
       $hasSingleQuote = FALSE !== strpos($string, "'");
       if ($hasSingleQuote) {

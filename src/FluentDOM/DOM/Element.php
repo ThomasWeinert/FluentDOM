@@ -46,6 +46,8 @@ namespace FluentDOM\DOM {
         Node\ParentNode\Implementation::append as appendToParentNode;
       }
 
+    const NAMESPACE_XMLNS = 'http://www.w3.org/2000/xmlns/';
+
     /**
      * @param string $name
      * @return bool
@@ -197,9 +199,34 @@ namespace FluentDOM\DOM {
     public function removeAttribute($name): bool {
       list($namespaceURI, $localName) = $this->resolveTagName($name);
       if ($namespaceURI !== '') {
-        return (bool)parent::removeAttributeNS($namespaceURI, $localName);
+        return $this->removeAttributeNS($namespaceURI, $localName);
       }
       return (bool)parent::removeAttribute($name);
+    }
+
+    /**
+     * @param string $namespaceURI
+     * @param string $localName
+     * @return bool
+     */
+    public function removeAttributeNS($namespaceURI, $localName): bool {
+      if ($namespaceURI === self::NAMESPACE_XMLNS) {
+        if (parent::removeAttributeNS($namespaceURI, $localName)) {
+          return TRUE;
+        }
+        $namespaceDefinitionValue = $this->getAttributeNS($namespaceURI, $localName);
+        if ($this->evaluate('count(@*[namespace-uri() = '.Xpath::quote($namespaceDefinitionValue).']) = 0')) {
+          return (bool)parent::removeAttributeNS($namespaceDefinitionValue, $localName);
+        }
+        return FALSE;
+      }
+      if (
+        ($this->getAttribute('xmlns:'.$localName) === $namespaceURI) &&
+        ($attribute = $this->getAttributeNodeNS($namespaceURI, $localName))
+      ) {
+        return (bool)parent::removeAttributeNode($attribute);
+      }
+      return (bool)parent::removeAttributeNS($namespaceURI, $localName);
     }
 
     /**

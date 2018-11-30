@@ -17,7 +17,7 @@ namespace FluentDOM\DOM {
    */
   class Text
     extends \DOMText
-    implements Node, Node\ChildNode, Node\NonDocumentTypeChildNode {
+    implements Node\NonDocumentTypeChildNode {
 
     use Node\ChildNode\Implementation;
     use Node\NonDocumentTypeChildNode\Properties;

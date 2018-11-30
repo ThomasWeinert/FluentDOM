@@ -17,7 +17,7 @@ namespace FluentDOM\DOM {
    */
   class Comment
     extends \DOMComment
-    implements Node, Node\ChildNode, Node\NonDocumentTypeChildNode  {
+    implements Node\NonDocumentTypeChildNode  {
 
     use Node\ChildNode\Implementation;
     use Node\NonDocumentTypeChildNode\Properties;

@@ -11,6 +11,7 @@
 namespace FluentDOM\DOM\Node {
 
   use FluentDOM\DOM\Element;
+  use FluentDOM\DOM\Node;
 
   /**
    * Interface ParentNode
@@ -18,7 +19,7 @@ namespace FluentDOM\DOM\Node {
    * @property-read Element $lastElementChild
    * @property-read int $childElementCount
    */
-  interface ParentNode extends QuerySelector {
+  interface ParentNode extends Node, QuerySelector {
 
     public function prepend($nodes);
 

@@ -9,7 +9,7 @@ namespace FluentDOM\DOM\Node {
    * @property Element $nextElementSibling
    * @property Element $previousElementSibling
    */
-  interface NonDocumentTypeChildNode {
+  interface NonDocumentTypeChildNode extends ChildNode {
 
   }
 }

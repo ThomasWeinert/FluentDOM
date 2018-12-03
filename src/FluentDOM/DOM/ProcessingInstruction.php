@@ -17,7 +17,7 @@ namespace FluentDOM\DOM {
    */
   class ProcessingInstruction
     extends \DOMProcessingInstruction
-    implements Node, Node\ChildNode, Node\NonDocumentTypeChildNode  {
+    implements Node\NonDocumentTypeChildNode  {
 
     use Node\ChildNode\Implementation;
     use Node\NonDocumentTypeChildNode\Properties;

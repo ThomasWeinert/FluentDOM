@@ -27,7 +27,6 @@ namespace FluentDOM\DOM {
     implements
       \Countable,
       \IteratorAggregate,
-      Node,
       Node\ParentNode {
 
     use

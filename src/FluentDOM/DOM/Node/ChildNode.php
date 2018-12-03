@@ -2,7 +2,9 @@
 
 namespace FluentDOM\DOM\Node {
 
-  interface ChildNode {
+  use FluentDOM\DOM\Node;
+
+  interface ChildNode extends Node {
 
     public function remove():\DOMNode;
     public function before($nodes);

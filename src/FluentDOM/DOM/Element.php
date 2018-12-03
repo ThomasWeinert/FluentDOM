@@ -32,8 +32,6 @@ namespace FluentDOM\DOM {
       \ArrayAccess,
       \Countable,
       \IteratorAggregate,
-      Node,
-      Node\ChildNode,
       Node\NonDocumentTypeChildNode,
       Node\ParentNode {
 

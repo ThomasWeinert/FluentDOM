@@ -25,7 +25,7 @@ namespace FluentDOM\DOM {
    * @property-read Element $firstElementChild
    * @property-read Element $lastElementChild
    */
-  class Document extends \DOMDocument implements Node, Node\ParentNode {
+  class Document extends \DOMDocument implements Node\ParentNode {
 
     use
       Node\ParentNode\Properties,

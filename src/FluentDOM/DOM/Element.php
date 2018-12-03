@@ -174,19 +174,17 @@ namespace FluentDOM\DOM {
     /**
      * Set an attribute on an element
      *
-     * @todo validate return value
      * @param string $name
      * @param string $value
-     * @return Attribute
+     * @return void
      * @throws \LogicException
      */
     public function setAttribute($name, $value) {
       list($namespaceURI) = $this->resolveTagName($name);
       if ($namespaceURI !== '') {
-        /** @noinspection PhpVoidFunctionResultUsedInspection */
-        return parent::setAttributeNS($namespaceURI, $name, $value);
+        parent::setAttributeNS($namespaceURI, $name, $value);
       }
-      return parent::setAttribute($name, $value);
+      parent::setAttribute($name, $value);
     }
 
     /**

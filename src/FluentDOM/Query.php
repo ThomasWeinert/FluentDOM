@@ -548,7 +548,7 @@ namespace FluentDOM {
      * Removes elements matching the specified expression from the set of matched elements.
      *
      * @example not.php Usage Example: FluentDOM\Query::not()
-     * @param string|callback $selector selector or callback function
+     * @param string|callable $selector selector or callback function
      * @return self
      * @throws \OutOfBoundsException
      * @throws \InvalidArgumentException

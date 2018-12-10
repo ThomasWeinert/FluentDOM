@@ -359,6 +359,19 @@ namespace FluentDOM\DOM {
       return parent::getElementsByTagName($localName);
     }
 
+    /**
+     * The 'Clark Notation' for the element.
+     *
+     * @see http://www.jclark.com/xml/xmlns.htm
+     */
+    public function clarkNotation() : string {
+      if (!$this->namespaceURI) {
+        return $this->tagName;
+      }
+
+      return sprintf('{%s}%s', $this->namespaceURI, $this->tagName);
+    }
+
     /***************************
      * Array Access Interface
      ***************************/

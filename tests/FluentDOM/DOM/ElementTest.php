@@ -1073,5 +1073,20 @@ namespace FluentDOM\DOM {
       $document->loadXML($xml);
       $this->assertSame($expected, $document->documentElement->childElementCount);
     }
+
+    /**
+     * @param string $expected
+     * @param string $xml
+     * @covers \FluentDOM\DOM\Element::clarkNotation
+     * @testWith
+     *   ["foo", "<foo/>"]
+     *   ["{http://example.com}foo", "<foo xmlns=\"http://example.com\"/>"]
+     *   ["{urn:example}foo", "<foo xmlns=\"urn:example\"/>"]
+     */
+    public function testClarkNotation(string $expected, string $xml) {
+      $document = new Document();
+      $document->loadXML($xml);
+      $this->assertSame($expected, $document->documentElement->clarkNotation());
+    }
   }
 }

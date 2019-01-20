@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @copyright Copyright 2009-2019 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -1081,6 +1081,7 @@ namespace FluentDOM\DOM {
      * @testWith
      *   ["foo", "<foo/>"]
      *   ["{http://example.com}foo", "<foo xmlns=\"http://example.com\"/>"]
+     *   ["{http://example.com}foo", "<bar:foo xmlns:bar=\"http://example.com\"/>"]
      *   ["{urn:example}foo", "<foo xmlns=\"urn:example\"/>"]
      */
     public function testClarkNotation(string $expected, string $xml) {

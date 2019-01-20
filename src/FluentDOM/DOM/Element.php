@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @copyright Copyright 2009-2019 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -366,10 +366,10 @@ namespace FluentDOM\DOM {
      */
     public function clarkNotation() : string {
       if (!$this->namespaceURI) {
-        return $this->tagName;
+        return $this->localName;
       }
 
-      return sprintf('{%s}%s', $this->namespaceURI, $this->tagName);
+      return sprintf('{%s}%s', $this->namespaceURI, $this->localName);
     }
 
     /***************************

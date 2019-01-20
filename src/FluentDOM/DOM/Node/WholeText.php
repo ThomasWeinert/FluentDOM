@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @copyright Copyright 2009-2019 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -33,7 +33,6 @@ namespace FluentDOM\DOM\Node {
     /**
      * @param string $content
      * @return $this|NULL
-     * @throws \DOMException
      */
     public function replaceWholeText($content) {
       /** @var \FluentDOM\DOM\Text|\FluentDOM\DOM\CdataSection $this */

@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @copyright Copyright 2009-2019 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -18,7 +18,7 @@ namespace FluentDOM\Serializer\Json {
   class JsonML extends Json {
 
     /**
-     * @return array
+     * @return array|\stdClass
      */
     protected function getEmpty() {
       return [];

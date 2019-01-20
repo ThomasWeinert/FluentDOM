@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @copyright Copyright 2009-2019 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -82,7 +82,7 @@ namespace FluentDOM\Transformer\Namespaces {
       $document = $parent->ownerDocument;
       $namespaceURI = $this->getMappedNamespace((string)$source->namespaceURI);
       $prefix = $this->getMappedPrefix($namespaceURI) ?? $source->prefix;
-      if (empty($namespaceURI) || empty($prefix)) {
+      if (empty($namespaceURI) || '' === (string)$prefix) {
         $attribute = $document->createAttribute($source->localName);
       } else {
         $attribute = $document->createAttributeNS($namespaceURI, $prefix.':'.$source->localName);

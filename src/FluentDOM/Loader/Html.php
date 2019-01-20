@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @copyright Copyright 2009-2019 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -98,6 +98,7 @@ namespace FluentDOM\Loader {
      */
     private function getCharsetFromMetaTag(string $source) {
       $hasMetaTag = \preg_match(
+        /** @lang TEXT */
         '(<meta\\s+[^>]*charset=["\']\s*(?<charset>[^\\s\'">]+)\s*["\'])i',
         $source,
         $match
@@ -106,12 +107,14 @@ namespace FluentDOM\Loader {
         return $match['charset'];
       }
       $hasMetaTag = \preg_match(
+        /** @lang TEXT */
         '(<meta\\s+[^>]*http-equiv=["\']content-type["\'][^>]*>)i',
         $source,
         $match
       );
       if ($hasMetaTag) {
         \preg_match(
+          /** @lang TEXT */
           '(content=["\']\s*[^#\']+;\s*charset\s*=\s*(?<encoding>[^\S\'">]+))',
           $match[0],
           $match

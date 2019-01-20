@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @copyright Copyright 2009-2019 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -97,7 +97,7 @@ namespace FluentDOM\DOM {
      * @param string $expression
      * @param \DOMNode|NULL $contextNode
      * @param NULL|bool $registerNodeNS
-     * @return \DOMNodeList
+     * @return \DOMNodeList|NULL
      */
     public function query($expression, \DOMNode $contextNode = NULL, $registerNodeNS = NULL) {
       trigger_error(

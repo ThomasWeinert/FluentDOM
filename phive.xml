@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ FluentDOM
+  ~
+  ~ @link https://thomas.weinert.info/FluentDOM/
+  ~ @copyright Copyright 2009-2019 FluentDOM Contributors
+  ~ @license http://www.opensource.org/licenses/mit-license.php The MIT License
+  ~
+  -->
+
 <phive xmlns="https://phar.io/phive">
   <phar name="phpunit" version="^6.0" installed="6.5.7" location="./tools/phpunit"/>
+  <phar name="phpstan" version="^0.10.5" installed="0.10.5" location="./tools/phpstan"/>
 </phive>

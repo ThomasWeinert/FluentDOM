@@ -1,4 +1,12 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\XMLWriter {
 
@@ -20,15 +28,15 @@ namespace FluentDOM\XMLWriter {
       $this->_namespaces = new Namespaces($inherit);
     }
 
-    public function getDepth() {
+    public function getDepth(): int {
       return $this->_indent;
     }
 
-    public function increaseDepth() {
+    public function increaseDepth(): int {
       return ++$this->_indent;
     }
 
-    public function decreaseDepth() {
+    public function decreaseDepth(): int {
       if ($this->_indent > 0) {
         return --$this->_indent;
       }

@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @copyright Copyright 2009-2019 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -918,11 +918,9 @@ namespace FluentDOM {
           if (!isset($sortable[$hash])) {
             $sortable[$hash] = $node;
           }
-        } else {
+        } elseif (!isset($unsortable[$hash])) {
           /* use the object hash as index, ignore duplicates */
-          if (!isset($unsortable[$hash])) {
-            $unsortable[$hash] = $node;
-          }
+          $unsortable[$hash] = $node;
         }
       }
       \uasort($sortable, new Nodes\Compare($this->xpath));

@@ -3,15 +3,13 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @copyright Copyright 2009-2019 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
 
 namespace FluentDOM\Serializer {
 
-  use FluentDOM\DOM\Document;
-  use FluentDOM\DOM\Element;
   use FluentDOM\DOM\Xpath;
   use FluentDOM\Utility\StringCastable;
 
@@ -38,7 +36,7 @@ namespace FluentDOM\Serializer {
    *   <array json:type="array">
    *     <_ json:type="number">21</_>
    *   </array>
-   *   <acomplexname json:type="object" json:name="a complex name"/>
+   *   <a-complex-name json:type="object" json:name="a complex name"/>
    * </json:json>
    */
   class Json implements \JsonSerializable, StringCastable {
@@ -75,7 +73,7 @@ namespace FluentDOM\Serializer {
      * @return string
      */
     public function __toString(): string {
-      $json = json_encode($this, $this->_options, $this->_depth);
+      $json = (string)json_encode($this, $this->_options, $this->_depth);
       return $json ?: '';
     }
 

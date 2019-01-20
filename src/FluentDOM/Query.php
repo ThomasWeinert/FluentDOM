@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @copyright Copyright 2009-2019 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -452,10 +452,7 @@ namespace FluentDOM {
       if ($position < 0) {
         $position = \count($this->_nodes) + $position;
       }
-      if (isset($this->_nodes[$position])) {
-        return $this->_nodes[$position];
-      }
-      return NULL;
+      return $this->_nodes[$position] ?? NULL;
     }
 
     /**
@@ -1586,10 +1583,7 @@ namespace FluentDOM {
     public function css($property, ...$arguments) {
       if (\is_string($property) && \count($arguments) === 0) {
         $properties = new Query\Css\Properties((string)$this->attr('style'));
-        if (isset($properties[$property])) {
-          return $properties[$property];
-        }
-        return NULL;
+        return $properties[$property] ?? NULL;
       }
       $values = $this->getSetterValues($property, $arguments[0] ?? NULL);
       //set list of properties to all elements

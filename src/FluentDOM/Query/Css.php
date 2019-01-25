@@ -51,11 +51,11 @@ namespace FluentDOM\Query {
      * @return Css\Properties|NULL
      */
     private function getStyleProperties() {
-      if (isset($this->_query[0]) && ($node = $this->_query[0]) instanceof \DOMElement) {
-        /**
-         * @var \DOMElement $node
-         */
-        return new Css\Properties($node->getAttribute('style'));
+      if (isset($this->_query[0])) {
+        $node = $this->_query[0];
+        if ($node instanceof \DOMElement) {
+          return new Css\Properties($node->getAttribute('style'));
+        }
       }
       return NULL;
     }

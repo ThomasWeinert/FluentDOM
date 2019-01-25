@@ -136,7 +136,6 @@ namespace FluentDOM {
      * Returns the item from the internal array if
      * if the index exists and is an DOMElement
      *
-     * @param array|\Traversable
      * @return NULL|\DOMElement
      */
     private function getFirstElement() {

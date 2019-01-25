@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @copyright Copyright 2009-2019 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -92,10 +92,10 @@ namespace FluentDOM\Loader\Text {
      *
      * @param \DOMNode $parent
      * @param array|\Traversable $lines
-     * @param $hasHeaderLine
+     * @param bool $hasHeaderLine
      * @param array $columns
      */
-    private function appendLines(\DOMNode $parent, $lines, $hasHeaderLine, array $columns = NULL) {
+    private function appendLines(\DOMNode $parent, $lines, bool $hasHeaderLine, array $columns = NULL) {
       $document = $parent instanceof \DOMDocument ? $parent : $parent->ownerDocument;
       $headers = NULL;
       /** @var array $record */
@@ -137,7 +137,7 @@ namespace FluentDOM\Loader\Text {
      * @param array|NULL $columns
      * @return array
      */
-    private function getHeaders(array $record, $hasHeaderLine, $columns = NULL): array {
+    private function getHeaders(array $record, bool $hasHeaderLine, $columns = NULL): array {
       if (\is_array($columns)) {
         $headers = [];
         foreach ($record as $index => $field) {

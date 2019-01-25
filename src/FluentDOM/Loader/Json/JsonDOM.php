@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @copyright Copyright 2009-2019 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -286,7 +286,7 @@ namespace FluentDOM\Loader\Json {
      */
     private function transferObjectTo(\DOMNode $target, $value, int $recursions) {
       $properties = \is_array($value) ? $value : \get_object_vars($value);
-      if ($this->_verbose || empty($properties)) {
+      if (($this->_verbose || empty($properties)) && $target instanceof \DOMElement) {
         $target->setAttributeNS(self::XMLNS, 'json:type', 'object');
       }
       foreach ($properties as $property => $item) {

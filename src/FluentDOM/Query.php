@@ -620,13 +620,15 @@ namespace FluentDOM {
      * Get a set of elements containing the unique parents of the matched set of elements.
      *
      * @example parent.php Usage Example: FluentDOM\Query::parent()
-     * @return self|Nodes
+     * @return self
      * @throws \OutOfBoundsException
      * @throws \LogicException
      * @throws \InvalidArgumentException
      */
     public function parent(): self {
-      return $this->fetch('parent::*', NULL, NULL, Fetcher::UNIQUE);
+      return $this->fetch(
+        'parent::*', NULL, NULL, Fetcher::UNIQUE
+      );
     }
 
     /**

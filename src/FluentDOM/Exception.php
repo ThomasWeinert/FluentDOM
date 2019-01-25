@@ -1,9 +1,11 @@
 <?php
 /**
- * FluentDOM\Exception is an interface implemented by FluentDOM specific exceptions.
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2019 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM {
@@ -13,7 +15,7 @@ namespace FluentDOM {
    *
    * This allow to catch them without handling each specifically.
    */
-  interface Exception {
+  interface Exception extends \Throwable {
 
   }
 }

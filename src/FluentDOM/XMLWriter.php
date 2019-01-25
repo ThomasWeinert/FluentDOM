@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @copyright Copyright 2009-2019 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -203,39 +203,25 @@ namespace FluentDOM {
      * @param int $maximumDepth
      */
     private function collapseNode(\DOMNode $node, int $maximumDepth) {
-      switch ($node->nodeType) {
-      case XML_ELEMENT_NODE :
+      if ($node instanceof \DOMElement) {
         $this->startElementNS($node->prefix, $node->localName, $node->namespaceURI);
         $this->collapse($node->attributes, $maximumDepth - 1);
         $this->collapse($node->childNodes, $maximumDepth - 1);
         $this->endElement();
-        return;
-      case XML_TEXT_NODE :
-        /** @var \DOMText $node */
+      } elseif ($node instanceof \DOMText) {
         if (!$node->isWhitespaceInElementContent()) {
           $this->text($node->textContent);
         }
-        return;
-      case XML_CDATA_SECTION_NODE :
+      } elseif ($node instanceof \DOMCdataSection) {
         $this->writeCdata($node->textContent);
-        return;
-      case XML_COMMENT_NODE :
+      } elseif ($node instanceof \DOMComment) {
         $this->writeComment($node->textContent);
-        return;
-      case XML_PI_NODE :
-        /** @var \DOMProcessingInstruction $node */
+      } elseif ($node instanceof \DOMProcessingInstruction) {
         $this->writePi($node->target, $node->textContent);
-        return;
-      case XML_ATTRIBUTE_NODE :
-        /** @var \DOMAttr $node */
+      } elseif ($node instanceof \DOMAttr) {
         $this->writeAttributeNS($node->prefix, $node->localName, $node->namespaceURI, $node->value);
-        return;
-      default :
-        /** @noinspection UnSafeIsSetOverArrayInspection */
-        if (isset($node->childNodes)) {
-          $this->collapse($node->childNodes, $maximumDepth);
-        }
-        return;
+      } elseif (isset($node->childNodes)) {
+        $this->collapse($node->childNodes, $maximumDepth);
       }
     }
   }

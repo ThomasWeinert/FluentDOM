@@ -1,4 +1,13 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Serializer\Json {
 
   use FluentDOM\TestCase;
@@ -69,6 +78,10 @@ namespace FluentDOM\Serializer\Json {
           '"@xmlns":{"$":"http:\\/\\/some-namespace","charlie":"http:\\/\\/some-other-namespace"}}}',
           '<alice xmlns="http://some-namespace" xmlns:charlie="http://some-other-namespace">'.
           ' <bob>david</bob> <charlie:edgar>frank</charlie:edgar> </alice>'
+        ],
+        'Multiple text nodes and cdata section will be collected int $' => [
+          '{"alice":{"$":"one  two "}}',
+          '<alice>one <![CDATA[ two ]]></alice>'
         ]
       ];
     }

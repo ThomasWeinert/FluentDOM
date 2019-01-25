@@ -66,7 +66,7 @@ namespace FluentDOM\Loader\Json {
       if ($json instanceof \stdClass) {
         foreach ($json as $name => $data) {
           if ($name === '@attributes') {
-            if ($data instanceof \stdClass) {
+            if ($data instanceof \stdClass && $node instanceof \DOMElement) {
               foreach ($data as $attributeName => $attributeValue) {
                 $node->setAttribute($attributeName, $this->getValueAsString($attributeValue));
               }

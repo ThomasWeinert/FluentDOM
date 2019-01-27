@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @copyright Copyright 2009-2019 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -12,6 +12,7 @@ namespace FluentDOM\DOM\Node {
 
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Node;
+  use PhpParser\Comment\Doc;
 
   /**
    * Add a `evaluate()` method to execute an Xpath expression in the context of the node and
@@ -26,14 +27,16 @@ namespace FluentDOM\DOM\Node {
      * element.
      *
      * @param string $expression
-     * @param \DOMNode $context
+     * @param Node|\DOMNode $context
      * @return string|float|\DOMNodeList|Node[]
      */
-    public function evaluate(string $expression, \DOMNode $context = NULL) {
-      /** @var \DOMNode|Document $this */
+    public function evaluate(string $expression, Node $context = NULL) {
       $document = $this instanceof Document
         ? $this
         : $this->ownerDocument;
+      if (!$document instanceof Document) {
+        throw new \LogicException('Node is not owned by a document.');
+      }
       return $document->xpath()->evaluate(
         $expression, $context ?? $this
       );

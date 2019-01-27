@@ -66,8 +66,10 @@ namespace FluentDOM\Loader {
                 );
               }
             }
-            /** @var ProcessingInstruction $pi */
-            if ($pi = $document->xpath()->firstOf('//processing-instruction()')) {
+            if (
+              ($pi = $document->xpath()->firstOf('//processing-instruction()')) &&
+              $pi instanceof ProcessingInstruction
+            ) {
               $pi->remove();
             }
             return new Result($document, 'text/html', $selection);

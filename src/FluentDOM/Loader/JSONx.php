@@ -1,9 +1,11 @@
 <?php
 /**
- * A loader that converts JSONx into JsonDOM
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2019 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Loader {
@@ -15,9 +17,7 @@ namespace FluentDOM\Loader {
   use FluentDOM\Utility\QualifiedName;
 
   /**
-   * A lazy load group for php class loaders
-   *
-   * This defines loaders for PHP classes like SimpleXML
+   * Load IBMs JSONx format.
    */
   class JSONx implements Loadable {
 
@@ -88,8 +88,24 @@ namespace FluentDOM\Loader {
      * @throws \LogicException
      */
     private function transferNode(\DOMNode $node, \DOMNode $target) {
+      if (!($node instanceof Element)) {
+        throw new \LogicException(
+          sprintf('Unexpected node type: %s', get_class($node))
+        );
+      }
+      if (
+        !(
+          $target instanceOf Element ||
+          $target instanceof DocumentFragment ||
+          $target instanceof Document
+        )
+      ) {
+        throw new \LogicException(
+          sprintf('Unexpected node type: %s', get_class($node))
+        );
+      }
       if ($node->namespaceURI === self::XMLNS_JSONX) {
-        if ($target instanceOf Document) {
+        if ($target instanceof Document) {
           $normalizedName = $name = 'json:json';
         } else {
           $name = $node->getAttribute('name');

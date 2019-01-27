@@ -27,7 +27,7 @@ namespace FluentDOM\DOM\Node {
      * element.
      *
      * @param string $expression
-     * @param Node|\DOMNode $context
+     * @param Node|\DOMNode|NULL $context
      * @return string|float|\DOMNodeList|Node[]
      */
     public function evaluate(string $expression, Node $context = NULL) {

@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @copyright Copyright 2009-2019 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -148,9 +148,8 @@ abstract class FluentDOM {
    * Register an additional default loader
    *
    * @param FluentDOM\Loadable|callable $loader
-   * @param string[] $contentTypes
+   * @param string ...$contentTypes
    * @return FluentDOM\Loaders
-   * @throws \UnexpectedValueException
    */
   public static function registerLoader($loader, string ...$contentTypes): FluentDOM\Loaders {
     $loaders = self::getDefaultLoaders();
@@ -187,7 +186,7 @@ abstract class FluentDOM {
    * a callable returning the create serializer.
    *
    * @param \FluentDOM\Serializer\Factory|callable $factory
-   * @param string[] $contentTypes
+   * @param string ...$contentTypes
    */
   public static function registerSerializerFactory($factory, string ...$contentTypes) {
     foreach ($contentTypes as $contentType) {

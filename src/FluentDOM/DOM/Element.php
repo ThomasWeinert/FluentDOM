@@ -90,7 +90,7 @@ namespace FluentDOM\DOM {
 
     /**
      * @param string $name
-     * @param $value
+     * @param mixed $value
      * @throws \BadMethodCallException
      */
     public function __set(string $name, $value) {

@@ -14,7 +14,7 @@ namespace FluentDOM\DOM {
    * FluentDOM\DOM\Xpath extends PHPs DOMXpath class. It disables the
    * automatic namespace registration by default and, throws notices for the query method.
    *
-   * @property bool registerNodeNamespaces
+   * @property bool $registerNodeNamespaces
    */
   class Xpath extends \DOMXPath {
 

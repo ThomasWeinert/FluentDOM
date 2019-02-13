@@ -258,15 +258,21 @@ namespace FluentDOM\DOM {
      * @throws \LogicException
      */
     public function append($value): Element {
+      $document = $this->ownerDocument;
+      if (!$document instanceof Document) {
+        throw new \LogicException(
+          sprintf('Node is not attached to a %s.', Document::class)
+        );
+      }
       if ($value instanceof \DOMAttr) {
         $this->setAttributeNode(
-          $value->ownerDocument === $this->ownerDocument
-            ? $value : $this->ownerDocument->importNode($value)
+          $value->ownerDocument === $document
+            ? $value : $document->importNode($value)
         );
       } elseif ($value instanceof Appendable) {
-        $this->ownerDocument->namespaces()->store();
+        $document->namespaces()->store();
         $value->appendTo($this);
-        $this->ownerDocument->namespaces()->restore();
+        $document->namespaces()->restore();
       } elseif ($value instanceof \Closure && !$value instanceof \DOMNode) {
         $this->append($value());
       } elseif (\is_array($value)) {

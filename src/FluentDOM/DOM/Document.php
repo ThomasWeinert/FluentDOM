@@ -3,6 +3,16 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
+declare(strict_types=1);
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
  * @copyright Copyright 2009-2018 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
@@ -250,7 +260,7 @@ namespace FluentDOM\DOM {
      */
     private function appendContent(\DOMElement $node, $content = NULL) {
       if (!((empty($content) && !\is_numeric($content)) || \is_array($content) )) {
-        $node->appendChild($this->createTextNode($content));
+        $node->appendChild($this->createTextNode((string)$content));
       }
     }
 
@@ -357,7 +367,7 @@ namespace FluentDOM\DOM {
     public function createDocumentType(
       string $qualifiedName = NULL, string $publicId = NULL, string $systemId = NULL
     ): \DOMDocumentType {
-      return (new Implementation())->createDocumentType($qualifiedName, $publicId, $systemId);
+      return (new Implementation())->createDocumentType($qualifiedName, (string)$publicId, (string)$systemId);
     }
   }
 }

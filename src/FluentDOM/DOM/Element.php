@@ -8,6 +8,16 @@
  *
  */
 
+declare(strict_types=1);
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\DOM {
 
   use FluentDOM\Appendable;
@@ -278,7 +288,7 @@ namespace FluentDOM\DOM {
       } elseif (\is_array($value)) {
         $nodes = [];
         foreach ($value as $name => $data) {
-          if (QualifiedName::validate($name)) {
+          if (QualifiedName::validate((string)$name)) {
             $this->setAttribute($name, (string)$data);
           } else {
             $nodes[] = $data;

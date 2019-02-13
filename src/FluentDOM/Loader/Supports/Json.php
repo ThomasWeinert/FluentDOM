@@ -3,10 +3,11 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @copyright Copyright 2009-2019 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
+declare(strict_types=1);
 
 namespace FluentDOM\Loader\Supports {
 
@@ -140,7 +141,7 @@ namespace FluentDOM\Loader\Supports {
     private function getNamespaceForNode(
       string $nodeName, \stdClass $properties, \DOMNode $parent
     ) {
-      $prefix = \substr($nodeName, 0, \strpos($nodeName, ':'));
+      $prefix = \substr($nodeName, 0, (int)\strpos($nodeName, ':'));
       $xmlns = $this->getNamespacePropertyName($prefix);
       return $properties->{$xmlns} ?? $parent->lookupNamespaceUri(empty($prefix) ? NULL : $prefix);
     }

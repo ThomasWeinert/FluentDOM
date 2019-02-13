@@ -7,6 +7,7 @@
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
+declare(strict_types=1);
 
 namespace FluentDOM\Loader\Text {
 
@@ -112,7 +113,7 @@ namespace FluentDOM\Loader\Text {
         $node = $parent->appendChild($document->createElement(self::DEFAULT_QNAME));
         foreach ($record as $index => $field) {
           if (isset($headers[$index])) {
-            $this->appendField($node, $headers[$index], $field);
+            $this->appendField($node, (string)$headers[$index], (string)$field);
           }
         }
       }
@@ -123,7 +124,7 @@ namespace FluentDOM\Loader\Text {
      * @param string $name
      * @param string $value
      */
-    private function appendField(Element $parent, $name, $value) {
+    private function appendField(Element $parent, string $name, string $value) {
       $qname = QualifiedName::normalizeString($name, self::DEFAULT_QNAME);
       $child = $parent->appendElement($qname, $value);
       if ($qname !== $name) {

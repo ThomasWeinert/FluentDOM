@@ -7,6 +7,7 @@
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
+declare(strict_types=1);
 
 namespace FluentDOM\Loader\PHP {
 

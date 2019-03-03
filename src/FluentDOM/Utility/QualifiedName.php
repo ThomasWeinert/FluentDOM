@@ -3,10 +3,11 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @copyright Copyright 2009-2019 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
+declare(strict_types=1);
 
 namespace FluentDOM\Utility {
 
@@ -59,7 +60,7 @@ namespace FluentDOM\Utility {
         $this->_localName = $name;
       }
       if (\count(self::$_cache) > self::$cacheLimit) {
-        \array_splice(self::$_cache, 0, self::$cacheLimit / 2);
+        \array_splice(self::$_cache, 0, (int)floor(self::$cacheLimit / 2));
       }
       self::$_cache[$name] = [$this->_prefix, $this->_localName];
     }

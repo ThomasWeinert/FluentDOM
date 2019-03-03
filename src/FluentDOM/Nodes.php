@@ -7,6 +7,7 @@
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
+declare(strict_types=1);
 
 namespace FluentDOM {
 
@@ -869,7 +870,7 @@ namespace FluentDOM {
     public function index($selector = NULL): int {
       if (\count($this->_nodes) > 0) {
         if (NULL === $selector) {
-          return $this->xpath(
+          return (int)$this->xpath(
             'count(
               preceding-sibling::node()[
                 self::* or (self::text() and normalize-space(.) != "")

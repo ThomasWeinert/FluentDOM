@@ -1,11 +1,13 @@
 <?php
 /**
- * Allows to transform JSONx to JsonDOM
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2019 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
-
+declare(strict_types=1);
 
 namespace FluentDOM\Transformer {
 

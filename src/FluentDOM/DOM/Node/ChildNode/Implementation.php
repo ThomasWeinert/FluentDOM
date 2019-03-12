@@ -83,9 +83,18 @@ namespace FluentDOM\DOM\Node\ChildNode {
      * @param \DOMNode|\DOMNodeList $nodes
      * @return $this|\DOMNode
      */
-    public function replace($nodes): \DOMNode {
+    public function replaceWith($nodes): \DOMNode {
       $this->before($nodes);
       return $this->remove();
+    }
+
+    /**
+     * @param  \DOMNode|\DOMNodeList $nodes
+     * @return $this|\DOMNode
+     * @deprecated re
+     */
+    public function replace($nodes) {
+      return $this->replaceWith($nodes);
     }
   }
 }

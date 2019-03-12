@@ -1,4 +1,12 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\DOM\Node {
 
@@ -81,7 +89,7 @@ namespace FluentDOM\DOM\Node {
       $document = new Document();
       $document->loadXML('<foo><bar/></foo>');
       $newNode = $document->createElement('replaced');
-      $document('/foo/bar')->item(0)->replace($newNode);
+      $document('/foo/bar')->item(0)->replaceWith($newNode);
       $this->assertXmlStringEqualsXmlString(
         '<foo><replaced/></foo>',
         $document->saveXML()
@@ -95,7 +103,7 @@ namespace FluentDOM\DOM\Node {
       $document = new Document();
       $document->loadXML('<foo><bar/></foo>');
       $newNode = $document->createElement('replaced');
-      $document('/foo')->item(0)->replace($newNode);
+      $document('/foo')->item(0)->replaceWith($newNode);
       $this->assertXmlStringEqualsXmlString(
         '<replaced/>',
         $document->saveXML()

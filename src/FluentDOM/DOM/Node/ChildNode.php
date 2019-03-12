@@ -19,6 +19,6 @@ namespace FluentDOM\DOM\Node {
     public function remove():\DOMNode;
     public function before($nodes);
     public function after($nodes);
-    public function replace($nodes):\DOMNode;
+    public function replaceWith($nodes):\DOMNode;
   }
 }

@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace FluentDOM\DOM\Node\ParentNode {
 
+  use FluentDOM\DOM\Node;
+
   trait Properties {
 
     use Implementation;
@@ -82,6 +84,8 @@ namespace FluentDOM\DOM\Node\ParentNode {
         );
       }
     }
+
+    abstract public function evaluate(string $expression, Node $context = NULL);
   }
 
 }

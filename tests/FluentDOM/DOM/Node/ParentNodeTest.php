@@ -199,6 +199,7 @@ namespace FluentDOM\Node {
      */
     public function testChildElementCountOnDocument() {
       $document = new Document();
+      $this->assertTrue(isset($document->childElementCount));
       $this->assertSame(0, $document->childElementCount);
       $document->loadXML('<foo/>');
       $this->assertSame(1, $document->childElementCount);

@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @copyright Copyright 2009-2019 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -180,7 +180,7 @@ namespace FluentDOM\Node {
     /**
      * @param int $expected
      * @param string $xml
-     * @covers \FluentDOM\DOM\Node\ParentNode\Implementation
+     * @covers \FluentDOM\DOM\Node\ParentNode\Properties
      * @testWith
      *   [0, "<foo/>"]
      *   [1, "<foo><bar/></foo>"]
@@ -190,11 +190,12 @@ namespace FluentDOM\Node {
     public function testChildElementCount($expected, $xml) {
       $document = new Document();
       $document->loadXML($xml);
+      $this->assertTrue(isset($document->documentElement->childElementCount));
       $this->assertSame($expected, $document->documentElement->childElementCount);
     }
 
     /**
-     * @covers \FluentDOM\DOM\Node\ParentNode\Implementation
+     * @covers \FluentDOM\DOM\Node\ParentNode\Properties
      */
     public function testChildElementCountOnDocument() {
       $document = new Document();

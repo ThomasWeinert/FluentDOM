@@ -857,6 +857,17 @@ namespace FluentDOM\DOM {
         $document->documentElement->evaluate('string(.)')
       );
     }
+
+    /**
+     * @covers \FluentDOM\DOM\Element
+     * @covers \FluentDOM\DOM\Node\Xpath
+     */
+    public function testEvaluateWithUnattachedNodeExpectingException() {
+      $node = new Element('foo');
+      $this->expectException(\LogicException::class);
+      $node->evaluate('string(.)');
+    }
+
     /**
      * @covers \FluentDOM\DOM\Element
      * @covers \FluentDOM\DOM\Node\Xpath

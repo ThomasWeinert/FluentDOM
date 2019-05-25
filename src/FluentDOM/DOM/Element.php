@@ -212,7 +212,10 @@ namespace FluentDOM\DOM {
     public function removeAttributeNS($namespaceURI, $localName): bool {
       if ($namespaceURI === self::NAMESPACE_XMLNS) {
         if (parent::removeAttributeNS($namespaceURI, $localName)) {
+          // @codeCoverageIgnoreStart
+          // will only be triggered if PHP is fixed
           return TRUE;
+          // @codeCoverageIgnoreEnd
         }
         $namespaceDefinitionValue = $this->getAttributeNS($namespaceURI, $localName);
         if ($this->evaluate('count(@*[namespace-uri() = '.Xpath::quote($namespaceDefinitionValue).']) = 0')) {

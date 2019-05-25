@@ -150,6 +150,15 @@ namespace FluentDOM\DOM {
     }
 
     /**
+     * @covers \FluentDOM\DOM\Element::__isset
+     */
+    public function testIssetPropertyChildElementCountExpectingTrue() {
+      $document = new Document();
+      $document->loadXml('<foo/>');
+      $this->assertTrue(isset($document->documentElement->childElementCount));
+    }
+
+    /**
      * @covers \FluentDOM\DOM\Element::__get
      */
     public function testGetInvalidProperty() {
@@ -394,6 +403,19 @@ namespace FluentDOM\DOM {
       $document->loadXML('<root xmlns:foo="urn:foo" foo:attribute="value"/>');
       $document->registerNamespace('foo', 'urn:foo');
       $document->documentElement->removeAttribute('foo:attribute');
+      $this->assertXmlStringEqualsXmlString(
+        '<root xmlns:foo="urn:foo"/>',
+        $document->saveXML($document->documentElement)
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\DOM\Element::removeAttributeNS
+     */
+    public function testRemoveAttributeNS() {
+      $document = new Document();
+      $document->loadXML('<root xmlns:foo="urn:foo" foo:attribute="value"/>');
+      $document->documentElement->removeAttributeNS('urn:foo', 'attribute');
       $this->assertXmlStringEqualsXmlString(
         '<root xmlns:foo="urn:foo"/>',
         $document->saveXML($document->documentElement)
@@ -740,6 +762,15 @@ namespace FluentDOM\DOM {
         '<root><![CDATA[success]]></root>',
         $document->saveXML($document->documentElement)
       );
+    }
+
+    /**
+     * @covers \FluentDOM\DOM\Element::append
+     */
+    public function testAppendWithUnattachedNodeExpectingException() {
+      $node = new Element('foo', '', NULL);
+      $this->expectException(\LogicException::class);
+      $node->append('');
     }
 
     /**

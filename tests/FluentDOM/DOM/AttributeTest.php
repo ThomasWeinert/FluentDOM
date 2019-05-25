@@ -38,5 +38,14 @@ namespace FluentDOM\DOM {
         $document->documentElement->getAttributeNode('a:bar')->clarkNotation()
       );
     }
+
+    public function testClarkNotationForEmptyNamespace() {
+      $document = new Document();
+      $document->appendElement('foo', ['bar' => '42']);
+      $this->assertEquals(
+        'bar',
+        $document->documentElement->getAttributeNode('bar')->clarkNotation()
+      );
+    }
   }
 }

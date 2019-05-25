@@ -91,7 +91,7 @@ namespace FluentDOM\DOM\Node\ChildNode {
     /**
      * @param  \DOMNode|\DOMNodeList $nodes
      * @return $this|\DOMNode
-     * @deprecated re
+     * @deprecated
      */
     public function replace($nodes) {
       return $this->replaceWith($nodes);

@@ -22,6 +22,6 @@ build:
                             format: 'php-clover'
     dependencies:
         before:
-            - wget https://phar.phpunit.de/phpunit.phar
+            - wget -O phpunit.phar https://phar.phpunit.de/phpunit-6.phar
             - composer install --prefer-source
 

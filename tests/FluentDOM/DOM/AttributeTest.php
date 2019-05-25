@@ -1,4 +1,12 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\DOM {
 
@@ -6,11 +14,11 @@ namespace FluentDOM\DOM {
 
   require_once __DIR__ . '/../TestCase.php';
 
+  /**
+   * @covers \FluentDOM\DOM\Attribute
+   */
   class AttributeTest extends TestCase {
 
-    /**
-     * @covers \FluentDOM\DOM\Attribute
-     */
     public function testMagicMethodToString() {
       $document = new Document();
       $document->appendElement('test', ['attr' => 'success']);
@@ -18,6 +26,16 @@ namespace FluentDOM\DOM {
       $this->assertEquals(
         'success',
         (string)$attribute
+      );
+    }
+
+    public function testClarkNotation() {
+      $document = new Document();
+      $document->registerNamespace('a', 'urn:a');
+      $document->appendElement('foo', ['a:bar' => '42']);
+      $this->assertEquals(
+        '{urn:a}bar',
+        $document->documentElement->getAttributeNode('a:bar')->clarkNotation()
       );
     }
   }

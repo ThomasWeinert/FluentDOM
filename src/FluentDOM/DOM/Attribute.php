@@ -31,5 +31,17 @@ namespace FluentDOM\DOM {
     public function __toString(): string {
       return $this->value;
     }
+
+    /**
+     * The 'Clark Notation' for the attribute.
+     *
+     * @see http://www.jclark.com/xml/xmlns.htm
+     */
+    public function clarkNotation() : string {
+      if (!$this->namespaceURI) {
+        return $this->localName;
+      }
+      return sprintf('{%s}%s', $this->namespaceURI, $this->localName);
+    }
   }
 }

@@ -1,8 +1,18 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Utility {
 
   require_once __DIR__ . '/../TestCase.php';
 
+  use FluentDOM\DOM\Element;
   use FluentDOM\TestCase;
 
   class ConstraintsTest extends TestCase {
@@ -83,6 +93,53 @@ namespace FluentDOM\Utility {
         'Not a node but a stdClass.'
       );
       Constraints::assertNode(new \stdClass, 'Not a node but a %s.');
+    }
+
+    /**
+     * @group Utility
+     * @group Constraints
+     * @covers \FluentDOM\Utility\Constraints::assertNodeClass
+     */
+    public function testAssertNodeClassWithMatchingClass() {
+      $document = new \DOMDocument();
+      $this->assertTrue(
+        Constraints::assertNodeClass($document, [\DOMElement::class, \DOMDocument::class])
+      );
+    }
+
+    /**
+     * @group Utility
+     * @group Constraints
+     * @covers \FluentDOM\Utility\Constraints::assertNodeClass
+     */
+    public function testAssertNodeClassExpectingException() {
+      $document = new \DOMDocument();
+      $this->expectException(\LogicException::class);
+      $this->expectExceptionMessage('Unexpected node type: DOMDocument');
+      Constraints::assertNodeClass($document, \DOMElement::class);
+    }
+
+    /**
+     * @group Utility
+     * @group Constraints
+     * @covers \FluentDOM\Utility\Constraints::assertNodeClass
+     */
+    public function testAssertNodeClassExpectingExceptionWithProvidedMessage() {
+      $document = new \DOMDocument();
+      $this->expectException(\LogicException::class);
+      $this->expectExceptionMessage('Expect DOMElement not DOMDocument');
+      Constraints::assertNodeClass($document, \DOMElement::class, 'Expect DOMElement not %s');
+    }
+
+    /**
+     * @group Utility
+     * @group Constraints
+     * @covers \FluentDOM\Utility\Constraints::assertNodeClass
+     */
+    public function testAssertNodeClassWithMultipleClassesExpectingException() {
+      $document = new \DOMDocument();
+      $this->expectException(\LogicException::class);
+      Constraints::assertNodeClass($document, [\DOMElement::class, \DOMAttr::class]);
     }
 
 

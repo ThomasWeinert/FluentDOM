@@ -15,6 +15,7 @@ namespace FluentDOM\Loader {
   use FluentDOM\DOM\DocumentFragment;
   use FluentDOM\DOM\Element;
   use FluentDOM\Loadable;
+  use FluentDOM\Utility\Constraints;
   use FluentDOM\Utility\QualifiedName;
 
   /**
@@ -89,22 +90,12 @@ namespace FluentDOM\Loader {
      * @throws \LogicException
      */
     private function transferNode(\DOMNode $node, \DOMNode $target) {
-      if (!($node instanceof Element)) {
-        throw new \LogicException(
-          sprintf('Unexpected node type: %s', get_class($node))
-        );
-      }
-      if (
-        !(
-          $target instanceOf Element ||
-          $target instanceof DocumentFragment ||
-          $target instanceof Document
-        )
-      ) {
-        throw new \LogicException(
-          sprintf('Unexpected node type: %s', get_class($node))
-        );
-      }
+      Constraints::assertNodeClass(
+        $node, Element::class
+      );
+      Constraints::assertNodeClass(
+        $node, [Element::class, DocumentFragment::class, Document::class]
+      );
       if ($node->namespaceURI === self::XMLNS_JSONX) {
         if ($target instanceof Document) {
           $normalizedName = $name = 'json:json';

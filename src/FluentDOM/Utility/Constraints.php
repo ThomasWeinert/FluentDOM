@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace FluentDOM\Utility {
 
+  use FluentDOM\DOM\Element;
+
   /**
    * Abstract utility class that provides several constraints/validations
    */
@@ -60,6 +62,26 @@ namespace FluentDOM\Utility {
         );
       }
       return TRUE;
+    }
+
+    /**
+     * @param \DOMNode $node
+     * @param string|string[] $classes
+     * @param string $message
+     * @return boolean
+     */
+    public static function assertNodeClass(\DOMNode $node, $classes, $message = 'Unexpected node type: %s') {
+      if (!is_array($classes)) {
+        $classes = [$classes];
+      }
+      foreach ($classes as $className) {
+        if ($node instanceof $className) {
+          return TRUE;
+        }
+      }
+      throw new \LogicException(
+        sprintf($message, get_class($node))
+      );
     }
 
     /**

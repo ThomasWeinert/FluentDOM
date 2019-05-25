@@ -209,12 +209,12 @@ namespace FluentDOM {
         $this->collapse($node->attributes, $maximumDepth - 1);
         $this->collapse($node->childNodes, $maximumDepth - 1);
         $this->endElement();
+      } elseif ($node instanceof \DOMCdataSection) {
+        $this->writeCdata($node->textContent);
       } elseif ($node instanceof \DOMText) {
         if (!$node->isWhitespaceInElementContent()) {
           $this->text($node->textContent);
         }
-      } elseif ($node instanceof \DOMCdataSection) {
-        $this->writeCdata($node->textContent);
       } elseif ($node instanceof \DOMComment) {
         $this->writeComment($node->textContent);
       } elseif ($node instanceof \DOMProcessingInstruction) {

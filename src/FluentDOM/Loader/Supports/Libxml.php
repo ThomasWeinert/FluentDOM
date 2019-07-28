@@ -35,8 +35,8 @@ namespace FluentDOM\Loader\Supports {
           }
         ]
       );
-      $result['libxml'] = (int)$result['libxml'];
-      $result['encoding'] = empty($result['encoding']) ? 'utf-8' : $result['encoding'];
+      $result[Options::LIBXML_OPTIONS] = (int)$result[Options::LIBXML_OPTIONS];
+      $result[Options::ENCODING] = empty($result[Options::ENCODING]) ? 'utf-8' : $result[Options::ENCODING];
       return $result;
     }
 
@@ -50,10 +50,10 @@ namespace FluentDOM\Loader\Supports {
     private function loadXmlDocument(string $source, $options): Document {
       return (new Errors())->capture(
         function () use ($source, $options) {
-          $document = new Document();
-          $document->preserveWhiteSpace = FALSE;
           $settings = $this->getOptions($options);
           $settings->isAllowed($sourceType = $settings->getSourceType($source));
+          $document = new Document();
+          $document->preserveWhiteSpace = (bool)$settings[Options::PRESERVE_WHITESPACE];
           switch ($sourceType) {
           case Options::IS_FILE :
             $document->load($source, $settings[Options::LIBXML_OPTIONS]);

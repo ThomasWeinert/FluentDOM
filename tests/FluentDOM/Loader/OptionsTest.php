@@ -1,4 +1,13 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Loader {
 
   use FluentDOM\Exceptions\InvalidArgument;
@@ -109,7 +118,12 @@ namespace FluentDOM\Loader {
       );
       $this->assertInstanceOf(\Traversable::class, $options);
       $this->assertEquals(
-        [ Options::ALLOW_FILE => TRUE, Options::IS_FILE => TRUE ],
+        [
+          Options::PRESERVE_WHITESPACE => FALSE,
+          Options::ALLOW_FILE => TRUE,
+          Options::IS_FILE => TRUE,
+          Options::IS_STRING => FALSE,
+        ],
         iterator_to_array($options)
       );
     }

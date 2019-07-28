@@ -1,4 +1,13 @@
 <?php
+/**
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Loader {
 
   use FluentDOM\Exceptions\LoadingError;
@@ -157,6 +166,18 @@ namespace FluentDOM\Loader {
         'Libxml fatal error in line 1 at character 12: Premature end of data in tag foo line 1.'
       );
       $loader->load('<foo><bar/>', 'text/xml');
+    }
+
+    public function testLoadWithPreserveWhitespaceTrue() {
+      $loader = new Xml();
+      $document = $loader->load('<foo> <bar/> </foo>', 'xml', [Options::PRESERVE_WHITESPACE => TRUE]);
+      $this->assertCount(3, $document->documentElement->childNodes);
+    }
+
+    public function testLoadWithPreserveWhitespaceFalse() {
+      $loader = new Xml();
+      $document = $loader->load('<foo> <bar/> </foo>', 'xml', [Options::PRESERVE_WHITESPACE => FALSE]);
+      $this->assertCount(1, $document->documentElement->childNodes);
     }
   }
 }

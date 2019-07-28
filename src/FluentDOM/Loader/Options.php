@@ -26,10 +26,13 @@ namespace FluentDOM\Loader {
     const LIBXML_OPTIONS = 'libxml';
     const ENCODING = 'encoding';
     const FORCE_ENCODING = 'force-encoding';
+    const PRESERVE_WHITESPACE = 'preserve_whitespace';
 
     const CB_IDENTIFY_STRING_SOURCE = 'identifyStringSource';
 
-    private $_options = [];
+    private $_options = [
+      self::PRESERVE_WHITESPACE => FALSE
+    ];
     protected $_callbacks = [
       self::CB_IDENTIFY_STRING_SOURCE => FALSE
     ];
@@ -40,10 +43,10 @@ namespace FluentDOM\Loader {
      * @throws \InvalidArgumentException
      */
     public function __construct($options = [], array $callbacks = []) {
-      if (\is_array($options)) {
-        $this->_options = $options;
-      } elseif ($options instanceof \Traversable) {
-        $this->_options = \iterator_to_array($options);
+      if (\is_array($options) || $options instanceof \Traversable) {
+        foreach ($options as $name => $value) {
+          $this->offsetSet($name, $value);
+        }
       } else {
         throw new InvalidArgument('options', ['array', \Traversable::class]);
       }
@@ -158,8 +161,7 @@ namespace FluentDOM\Loader {
      * @param string $sourceType
      * @param bool $throwException
      * @return bool
-     * @throws InvalidSource\TypeFile
-     * @throws InvalidSource\TypeString
+     * @throws InvalidSource
      */
     public function isAllowed(string $sourceType, bool $throwException = TRUE): bool {
       try {

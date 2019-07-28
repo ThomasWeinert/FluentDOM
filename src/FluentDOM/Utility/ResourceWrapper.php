@@ -19,16 +19,16 @@ namespace FluentDOM\Utility {
     /**
      * @var array
      */
-    private static $__streams = [];
+    private static $_streams = [];
 
     /**
      * @var NULL|resource
      */
-    private $__stream;
+    private $_stream;
     /**
      * @var string
      */
-    private $__id = '';
+    private $_id = '';
 
     /**
      * @var resource
@@ -47,8 +47,8 @@ namespace FluentDOM\Utility {
       self::register($protocol);
       do {
         $id = \uniqid('fd', TRUE);
-      } while(isset(self::$__streams[$id]));
-      self::$__streams[$id] = $stream;
+      } while(isset(self::$_streams[$id]));
+      self::$_streams[$id] = $stream;
       return $protocol.'://'.$id;
     }
 
@@ -72,7 +72,7 @@ namespace FluentDOM\Utility {
      *
      * @param string $protocol
      */
-    private static function register($protocol) {
+    private static function register(string $protocol) {
       if (!\in_array($protocol, \stream_get_wrappers(), TRUE)) {
         \stream_wrapper_register($protocol, __CLASS__);
       }
@@ -107,12 +107,12 @@ namespace FluentDOM\Utility {
         isset($context[$protocol]['stream']) &&
         \is_resource($context[$protocol]['stream'])
       ) {
-        $this->__stream = $context[$protocol]['stream'];
+        $this->_stream = $context[$protocol]['stream'];
         return TRUE;
       }
-      if (isset(self::$__streams[$id])) {
-        $this->__stream = self::$__streams[$id];
-        $this->__id = $id;
+      if (isset(self::$_streams[$id])) {
+        $this->_stream = self::$_streams[$id];
+        $this->_id = $id;
         return TRUE;
       }
       return FALSE;
@@ -123,7 +123,7 @@ namespace FluentDOM\Utility {
      * @return bool|string
      */
     public function stream_read(int $count) {
-      return \fread($this->__stream, $count);
+      return \fread($this->_stream, $count);
     }
 
     /**
@@ -131,14 +131,14 @@ namespace FluentDOM\Utility {
      * @return bool|int
      */
     public function stream_write(string $data) {
-      return \fwrite($this->__stream, $data);
+      return \fwrite($this->_stream, $data);
     }
 
     /**
      * @return bool
      */
     public function stream_eof(): bool {
-      return \feof($this->__stream);
+      return \feof($this->_stream);
     }
 
     /**
@@ -147,12 +147,12 @@ namespace FluentDOM\Utility {
      * @return int
      */
     public function stream_seek(int $offset, int $whence): int {
-      return \fseek($this->__stream, $offset, $whence);
+      return \fseek($this->_stream, $offset, $whence);
     }
 
     public function __destruct() {
-      if (isset($this->__id, self::$__streams[$this->__id])) {
-        unset(self::$__streams[$this->__id]);
+      if (isset($this->_id, self::$_streams[$this->_id])) {
+        unset(self::$_streams[$this->_id]);
       }
     }
   }

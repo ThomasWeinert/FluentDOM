@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ FluentDOM
+  ~
+  ~ @link https://thomas.weinert.info/FluentDOM/
+  ~ @copyright Copyright 2009-2019 FluentDOM Contributors
+  ~ @license http://www.opensource.org/licenses/mit-license.php The MIT License
+  ~
+  -->
+
+<html>
+<head></head>
+<body>
+  <div><p>Hello</p></div>
+  <div><section><p>cruel</p></section></div>
+  <div><p>World</p></div>
+</body>
+</html>

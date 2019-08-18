@@ -1065,6 +1065,24 @@ namespace FluentDOM {
     }
 
     /**
+     * Replace the parent nodes of the current selection with
+     * their child nodes and remove the parent nodes.
+     *
+     * @param string|NULL $selector
+     * @return $this
+     */
+    public function unwrap(string $selector = NULL) {
+      $parents = $this->parent()->filter($selector);
+      foreach ($parents as $parentNode) {
+        while ($parentNode->firstChild) {
+          $parentNode->parentNode->insertBefore($parentNode->firstChild, $parentNode);
+        }
+        $parentNode->parentNode->removeChild($parentNode);
+      }
+      return $this;
+    }
+
+    /**
      * Wrap each matched element with the specified content.
      *
      * If $content contains several elements the first one is used

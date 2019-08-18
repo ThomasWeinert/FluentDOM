@@ -30,5 +30,39 @@ namespace FluentDOM\Query {
         ->unwrap('self::div');
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
+
+    /**
+     * @group Manipulation
+     * @group ManipulationAround
+     * @covers \FluentDOM\Query
+     */
+    public function testUnwrapWithoutSelector() {
+      $fd = $this->getQueryFixtureFromString('<section><div><p>One</p></div><div><p>Two</p></div></section>');
+      $fd
+        ->find('//p')
+        ->unwrap();
+      $this->assertXmlStringEqualsXmlString(
+        '<section><p>One</p><p>Two</p></section>',
+        (string)$fd->formatOutput()
+      );
+    }
+
+    /**
+     * @group Manipulation
+     * @group ManipulationAround
+     * @covers \FluentDOM\Query
+     */
+    public function testUnwrapWithSelector() {
+      $fd = $this->getQueryFixtureFromString(
+        '<section><div class="one"><p>One</p></div><div class="two"><p>Two</p></div></section>'
+      );
+      $fd
+        ->find('//p')
+        ->unwrap('self::*[@class = "two"]');
+      $this->assertXmlStringEqualsXmlString(
+        '<section><div class="one"><p>One</p></div><p>Two</p></section>',
+        (string)$fd->formatOutput()
+      );
+    }
   }
 }

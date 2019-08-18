@@ -1072,7 +1072,10 @@ namespace FluentDOM {
      * @return $this
      */
     public function unwrap(string $selector = NULL) {
-      $parents = $this->parent()->filter($selector);
+      $parents = $this->parent();
+      if (NULL !== $selector) {
+        $parents = $parents->filter($selector);
+      }
       foreach ($parents as $parentNode) {
         while ($parentNode->firstChild) {
           $parentNode->parentNode->insertBefore($parentNode->firstChild, $parentNode);

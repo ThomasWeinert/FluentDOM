@@ -27,6 +27,8 @@ namespace FluentDOM\Loader\Json {
 
     use SupportsJson;
 
+    const CONTENT_TYPES = ['json', 'application/json', 'text/json'];
+
     const ON_MAP_KEY = 'onMapKey';
 
     const XMLNS = 'urn:carica-json-dom.2013';
@@ -75,14 +77,6 @@ namespace FluentDOM\Loader\Json {
       $this->_recursions = $depth;
       $this->_verbose = ($options & self::OPTION_VERBOSE) === self::OPTION_VERBOSE;
     }
-
-    /**
-     * @return string[]
-     */
-    public function getSupported(): array {
-      return ['json', 'application/json', 'text/json'];
-    }
-
 
     /**
      * Load the json string into an DOM Document

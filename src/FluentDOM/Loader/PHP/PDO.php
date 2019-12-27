@@ -23,12 +23,7 @@ namespace FluentDOM\Loader\PHP {
    */
   class PDO extends JsonDOM {
 
-    /**
-     * @return string[]
-     */
-    public function getSupported(): array {
-      return ['php/pdo', 'pdo'];
-    }
+    const CONTENT_TYPES = ['php/pdo', 'pdo'];
 
     /**
      * @see Loadable::load

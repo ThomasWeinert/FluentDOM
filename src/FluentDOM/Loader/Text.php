@@ -17,12 +17,12 @@ namespace FluentDOM\Loader {
   class Text extends Lazy {
 
     private static $_loaders = [
-      '\\Text\\CSV' => ['text/csv']
+      Text\CSV::class => Text\CSV::CONTENT_TYPES
     ];
 
     public function __construct() {
       parent::__construct();
-      $this->addClasses(self::$_loaders, __NAMESPACE__);
+      $this->addClasses(self::$_loaders);
     }
   }
 }

@@ -25,15 +25,9 @@ namespace FluentDOM\Loader\Json {
   class SimpleXML implements Loadable {
 
     use Supports\Json;
+    const CONTENT_TYPES = ['text/simplexml', 'text/simplexml+json', 'application/simplexml+json'];
 
     const XMLNS = 'urn:carica-json-dom.2013';
-
-    /**
-     * @return string[]
-     */
-    public function getSupported(): array {
-      return ['text/simplexml', 'text/simplexml+json', 'application/simplexml+json'];
-    }
 
     /**
      * Load the json string into an DOMDocument

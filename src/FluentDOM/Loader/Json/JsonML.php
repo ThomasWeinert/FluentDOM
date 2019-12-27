@@ -21,13 +21,7 @@ namespace FluentDOM\Loader\Json {
   class JsonML implements Loadable {
 
     use Supports\Json;
-
-    /**
-     * @return string[]
-     */
-    public function getSupported(): array {
-      return ['jsonml', 'application/jsonml', 'application/jsonml+json'];
-    }
+    const CONTENT_TYPES = ['jsonml', 'application/jsonml', 'application/jsonml+json'];
 
     /**
      * @param \DOMNode|Element $node

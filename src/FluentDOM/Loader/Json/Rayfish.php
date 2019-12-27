@@ -22,13 +22,7 @@ namespace FluentDOM\Loader\Json {
   class Rayfish implements Loadable {
 
     use Supports\Json;
-
-    /**
-     * @return string[]
-     */
-    public function getSupported(): array {
-      return ['rayfish', 'application/rayfish', 'application/rayfish+json'];
-    }
+    const CONTENT_TYPES = ['rayfish', 'application/rayfish', 'application/rayfish+json'];
 
     /**
      * @param \DOMNode|Element $node

@@ -22,13 +22,7 @@ namespace FluentDOM\Loader\Json {
   class BadgerFish implements Loadable {
 
     use Supports\Json;
-
-    /**
-     * @return string[]
-     */
-    public function getSupported(): array {
-      return ['badgerfish', 'application/badgerfish', 'application/badgerfish+json'];
-    }
+    const CONTENT_TYPES = ['badgerfish', 'application/badgerfish', 'application/badgerfish+json'];
 
     /**
      * @param \DOMNode|Element $node

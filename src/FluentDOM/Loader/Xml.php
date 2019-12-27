@@ -23,13 +23,7 @@ namespace FluentDOM\Loader {
     use Supports\Libxml;
 
     const LIBXML_OPTIONS = 'libxml';
-
-    /**
-     * @return string[]
-     */
-    public function getSupported(): array {
-      return ['xml', 'application/xml', 'text/xml'];
-    }
+    const CONTENT_TYPES = ['xml', 'application/xml', 'text/xml'];
 
     /**
      * @see Loadable::load

@@ -26,7 +26,7 @@ namespace FluentDOM\Loader {
      * @return string[]
      */
     public function getSupported(): array {
-      return [];
+      return defined(static::class.'::CONTENT_TYPES') ? static::CONTENT_TYPES : [];
     }
 
     /**

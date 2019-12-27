@@ -24,17 +24,11 @@ namespace FluentDOM\Loader {
   class JSONx implements Loadable {
 
     use Supports\Libxml;
+    const CONTENT_TYPES = ['jsonx', 'application/xml+jsonx'];
 
     const XMLNS_JSONX = 'http://www.ibm.com/xmlns/prod/2009/jsonx';
     const XMLNS_JSONDOM = 'urn:carica-json-dom.2013';
     const DEFAULT_QNAME = '_';
-
-    /**
-     * @return string[]
-     */
-    public function getSupported(): array {
-      return ['jsonx', 'application/xml+jsonx'];
-    }
 
     /**
      * @see Loadable::load

@@ -17,15 +17,17 @@ namespace FluentDOM\Loader {
   class Json extends Lazy {
 
     private static $_loaders = [
-      '\Json\JsonDOM' => ['json', 'application/json', 'text/json'],
-      '\Json\JsonML' => ['jsonml', 'application/jsonml', 'application/jsonml+json'],
-      '\Json\BadgerFish' => ['badgerfish', 'application/badgerfish', 'application/badgerfish+json'],
-      '\JSONx' => ['jsonx', 'application/xml+jsonx']
+      Json\JsonDOM::class => Json\JsonDOM::CONTENT_TYPES,
+      Json\JsonML::class => Json\JsonML::CONTENT_TYPES,
+      Json\BadgerFish::class => Json\BadgerFish::CONTENT_TYPES,
+      Json\Rayfish::class => Json\Rayfish::CONTENT_TYPES,
+      Json\SimpleXML::class => Json\SimpleXML::CONTENT_TYPES,
+      JSONx::class => JSONx::CONTENT_TYPES
     ];
 
     public function __construct() {
       parent::__construct();
-      $this->addClasses(self::$_loaders, __NAMESPACE__);
+      $this->addClasses(self::$_loaders);
     }
   }
 }

@@ -25,18 +25,12 @@ namespace FluentDOM\Loader\PHP {
   class SimpleXml implements Loadable {
 
     use Supports;
+    const CONTENT_TYPES = ['simplexml', 'php/simplexml'];
 
     /**
      * @var Xml|NULL
      */
     private $_xmlLoader;
-
-    /**
-     * @return string[]
-     */
-    public function getSupported(): array {
-      return ['simplexml', 'php/simplexml'];
-    }
 
     /**
      * @see Loadable::load

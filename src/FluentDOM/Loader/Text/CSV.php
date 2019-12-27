@@ -29,17 +29,11 @@ namespace FluentDOM\Loader\Text {
 
     const XMLNS = 'urn:carica-json-dom.2013';
     const DEFAULT_QNAME = '_';
+    const CONTENT_TYPES = ['text/csv'];
 
     private $_delimiter = ',';
     private $_enclosure = '"';
     private $_escape = '\\';
-
-    /**
-     * @return string[]
-     */
-    public function getSupported(): array {
-      return ['text/csv'];
-    }
 
     /**
      * @see Loadable::load

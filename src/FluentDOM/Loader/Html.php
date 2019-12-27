@@ -24,13 +24,7 @@ namespace FluentDOM\Loader {
     use Supports\Libxml;
 
     const IS_FRAGMENT = 'is_fragment';
-
-    /**
-     * @return string[]
-     */
-    public function getSupported(): array {
-      return ['html', 'text/html', 'html-fragment', 'text/html-fragment'];
-    }
+    const CONTENT_TYPES = ['html', 'text/html', 'html-fragment', 'text/html-fragment'];
 
     /**
      * @see Loadable::load

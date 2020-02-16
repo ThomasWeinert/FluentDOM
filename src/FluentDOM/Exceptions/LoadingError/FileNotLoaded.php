@@ -14,11 +14,13 @@ namespace FluentDOM\Exceptions\LoadingError {
 
   use FluentDOM\Exceptions;
 
-  class EmptyResult extends \UnexpectedValueException implements Exceptions\LoadingError {
+  class FileNotLoaded extends \UnexpectedValueException implements Exceptions\LoadingError {
 
-    public function __construct() {
+    public function __construct(string $fileName) {
       parent::__construct(
-        'Parsed result did not contain an usable node.'
+        sprintf(
+          'Could not load file: %s', $fileName
+        )
       );
     }
 

@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2020 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -52,7 +52,7 @@ namespace FluentDOM\Loader {
     public function loadFragment($source, string $contentType, $options = []) {
       if ($this->supports($contentType)) {
         return (new Libxml\Errors())->capture(
-          function() use ($source) {
+          static function() use ($source) {
             $document = new Document();
             $fragment = $document->createDocumentFragment();
             $fragment->appendXml($source);

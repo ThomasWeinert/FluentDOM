@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2020 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -127,6 +127,22 @@ namespace FluentDOM\Loader {
           __DIR__.'/TestData/loader.html',
           'text/html'
         )
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\Loader\Xml
+     * @covers \FluentDOM\Loader\Supports
+     */
+    public function testLoadWithNonExistingFileExpectingException() {
+      $loader = new Xml();
+      $this->expectException(LoadingError\FileNotLoaded::class);
+      $loader->load(
+        __DIR__.'/TestData/non-existing.xml',
+        'text/xml',
+        [
+          Options::IS_FILE => TRUE
+        ]
       );
     }
 

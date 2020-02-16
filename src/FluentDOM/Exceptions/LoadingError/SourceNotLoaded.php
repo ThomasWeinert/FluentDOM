@@ -14,12 +14,10 @@ namespace FluentDOM\Exceptions\LoadingError {
 
   use FluentDOM\Exceptions;
 
-  class EmptyResult extends \UnexpectedValueException implements Exceptions\LoadingError {
+  class SourceNotLoaded extends \UnexpectedValueException implements Exceptions\LoadingError {
 
     public function __construct() {
-      parent::__construct(
-        'Parsed result did not contain an usable node.'
-      );
+      parent::__construct('Could not load source.');
     }
 
   }

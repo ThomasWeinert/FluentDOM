@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -1392,13 +1392,13 @@ namespace FluentDOM {
      *
      * @example attr.php Usage Example: FluentDOM\Query::attr() Read an attribute value.
      * @param string|array $attribute attribute name or attribute list
-     * @param array ...$arguments
+     * @param mixed $attributeValue
      * @return $this|string attribute value or $this
      * @throws \UnexpectedValueException
      * @throws \InvalidArgumentException
      */
-    public function attr($attribute, ...$arguments) {
-      if (\is_string($attribute) && \count($arguments) === 0) {
+    public function attr($attribute, $attributeValue = NULL) {
+      if (\is_string($attribute) && func_num_args() === 1) {
         //empty value - read attribute from first element in list
         $attribute = (new QualifiedName($attribute))->name;
         $node = $this->getFirstElement();
@@ -1407,7 +1407,7 @@ namespace FluentDOM {
         }
         return NULL;
       }
-      $attributes = $this->getSetterValues($attribute, $arguments[0] ?? NULL);
+      $attributes = $this->getSetterValues($attribute, $attributeValue ?? NULL);
       // set attributes on each element
       foreach ($attributes as $key => $value) {
         $name = (new QualifiedName($key))->name;

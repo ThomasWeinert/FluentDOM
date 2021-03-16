@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -166,7 +166,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::attr
      * @covers \FluentDOM\Query::getSetterValues
      */
-    public function testAttrWriteWithArray() {
+    public function testAttrWriteWithArray(): void {
       $fd = $this->getQueryFixtureFromString(self::XML)
         ->find('//group/item')
         ->attr(['index' => '15', 'length' => '34', 'label' => 'box']);
@@ -180,7 +180,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::attr
      * @covers \FluentDOM\Query::getSetterValues
      */
-    public function testAttrWriteWithCallback() {
+    public function testAttrWriteWithCallback(): void {
       $fd = $this->getQueryFixtureFromString(self::XML)
         ->find('//group/item')
         ->attr(
@@ -196,7 +196,7 @@ namespace FluentDOM\Query {
      * @group Attributes
      * @covers \FluentDOM\Query::hasAttr
      */
-    public function testHasAttrExpectingTrue() {
+    public function testHasAttrExpectingTrue(): void {
       $this->assertTrue(
         $this->getQueryFixtureFromString(self::XML)
           ->find('//group/item')
@@ -208,7 +208,7 @@ namespace FluentDOM\Query {
      * @group Attributes
      * @covers \FluentDOM\Query::hasAttr
      */
-    public function testHasAttrNotOnFirstNodeExpectingTrue() {
+    public function testHasAttrNotOnFirstNodeExpectingTrue(): void {
       $this->assertTrue(
         $this->getQueryFixtureFromString(self::XML)
           ->find('//group/item')
@@ -222,7 +222,7 @@ namespace FluentDOM\Query {
      * @group Attributes
      * @covers \FluentDOM\Query::hasAttr
      */
-    public function testHasAttrExpectingFalse() {
+    public function testHasAttrExpectingFalse(): void {
       $this->assertFalse(
         $this->getQueryFixtureFromString(self::XML)
           ->find('//group')
@@ -235,7 +235,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::removeAttr
      * @covers \FluentDOM\Query::getNamesList
      */
-    public function testRemoveAttr() {
+    public function testRemoveAttr(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->find('//p')
@@ -248,7 +248,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::removeAttr
      * @covers \FluentDOM\Query::getNamesList
      */
-    public function testRemoveAttrWithInvalidParameter() {
+    public function testRemoveAttrWithInvalidParameter(): void {
       $fd = new Query();
       $this->expectException(\InvalidArgumentException::class);
       $fd->removeAttr(1);
@@ -259,7 +259,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::removeAttr
      * @covers \FluentDOM\Query::getNamesList
      */
-    public function testRemoveAttrWithListParameter() {
+    public function testRemoveAttrWithListParameter(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->find('//p')
@@ -272,7 +272,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::removeAttr
      * @covers \FluentDOM\Query::getNamesList
      */
-    public function testRemoveAttrWithAsteriskParameter() {
+    public function testRemoveAttrWithAsteriskParameter(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->find('//p')
@@ -284,12 +284,12 @@ namespace FluentDOM\Query {
      * @group Attributes
      * @covers \FluentDOM\Query::__get
      */
-    public function testPropertyAttrGet() {
+    public function testPropertyAttrGet(): void {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//item[2]');
       $attr = $fd->attr;
       $this->assertInstanceOf(Attributes::class, $attr);
-      $this->assertAttributeSame(
-        $fd, '_query', $attr
+      $this->assertSame(
+        $fd, $attr->getOwner()
       );
     }
 
@@ -297,7 +297,7 @@ namespace FluentDOM\Query {
      * @group Attributes
      * @covers \FluentDOM\Query::__set
      */
-    public function testPropertyAttrSetWithArray() {
+    public function testPropertyAttrSetWithArray(): void {
       $fd = $this->getQueryFixtureFromString('<sample/>')->find('/*');
       $fd->attr = [
         'foo' => 1,
@@ -312,7 +312,7 @@ namespace FluentDOM\Query {
      * @group Attributes
      * @covers \FluentDOM\Query::__set
      */
-    public function testPropertyAttrSetWithFluentDOMAttributes() {
+    public function testPropertyAttrSetWithFluentDOMAttributes(): void {
       $fd = $this->getQueryFixtureFromString('<sample><item foo="1"/><item/></sample>')->find('//item');
       $buffer = $fd->attr;
       $fd->attr = $buffer;

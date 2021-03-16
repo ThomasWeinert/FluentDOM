@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -186,14 +186,12 @@ namespace FluentDOM\Utility {
      * @param $callable
      */
     public function testFilterCallable($callable) {
-      $this->assertInternalType(
-        'callable', Constraints::filterCallable($callable)
-      );
+      $this->assertIsCallable(Constraints::filterCallable($callable));
     }
 
     public function provideCallables() {
       return [
-        [function() {}],
+        [static function() {}],
         [[$this, 'provideCallables']]
       ];
     }
@@ -204,8 +202,8 @@ namespace FluentDOM\Utility {
      * @covers \FluentDOM\Utility\Constraints::filterCallable
      */
     public function testFilterCallableWithGlobalFunctionExpectingCallable() {
-      $this->assertInternalType(
-        'callable', Constraints::filterCallable('strpos', TRUE)
+      $this->assertIsCallable(
+        Constraints::filterCallable('strpos', TRUE)
       );
     }
 

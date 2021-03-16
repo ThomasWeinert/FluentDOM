@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM {
 
   use FluentDOM\Utility\Iterators\NodesIterator;
@@ -431,7 +440,7 @@ namespace FluentDOM {
      * @group CoreFunctions
      * @covers \FluentDOM\Nodes::item
      */
-    public function testItemExpectingNull() {
+    public function testItemExpectingNull(): void {
       $fd = new Nodes();
       $this->assertNull($fd->item(0));
     }
@@ -440,13 +449,12 @@ namespace FluentDOM {
      * @group CoreFunctions
      * @covers \FluentDOM\Nodes::spawn
      */
-    public function testSpawn() {
+    public function testSpawn(): void {
       $fdParent = new Nodes;
       $fdChild = $fdParent->spawn();
-      $this->assertAttributeSame(
+      $this->assertSame(
         $fdParent,
-        '_parent',
-        $fdChild
+        $fdChild->end()
       );
     }
 
@@ -454,7 +462,7 @@ namespace FluentDOM {
      * @group CoreFunctions
      * @covers \FluentDOM\Nodes::spawn
      */
-    public function testSpawnWithElements() {
+    public function testSpawnWithElements(): void {
       $document = new \DOMDocument;
       $node = $document->createElement('test');
       $document->appendChild($node);
@@ -471,7 +479,7 @@ namespace FluentDOM {
      * @group CoreFunctions
      * @covers \FluentDOM\Nodes::unique
      */
-    public function testUnique() {
+    public function testUnique(): void {
       $fd = new Nodes();
       $fd->document->appendElement('test');
       $nodes = $fd->unique(
@@ -484,7 +492,7 @@ namespace FluentDOM {
      * @group CoreFunctions
      * @covers \FluentDOM\Nodes::unique
      */
-    public function testUniquewithASingleNode() {
+    public function testUniquewithASingleNode(): void {
       $fd = new Nodes();
       $fd->document->appendElement('test');
       $nodes = $fd->unique(
@@ -497,7 +505,7 @@ namespace FluentDOM {
      * @group CoreFunctions
      * @covers \FluentDOM\Nodes::unique
      */
-    public function testUniqueWithUnattachedNodes() {
+    public function testUniqueWithUnattachedNodes(): void {
       $fd = new Nodes();
       $node = $fd->document->createElement("test");
       $nodes = $fd->unique([$node, $node]);
@@ -508,7 +516,7 @@ namespace FluentDOM {
      * @group CoreFunctions
      * @covers \FluentDOM\Nodes::unique
      */
-    public function testUniqueWithInvalidElementInList() {
+    public function testUniqueWithInvalidElementInList(): void {
       $fd = new Nodes();
       $this->expectException(\InvalidArgumentException::class);
       $fd->unique(['Invalid']);
@@ -519,7 +527,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::matches
      * @covers \FluentDOM\Nodes::prepareSelector
      */
-    public function testMatchesWithNodeListExpectingTrue() {
+    public function testMatchesWithNodeListExpectingTrue(): void {
       $fd = new Nodes_TestProxy(self::XML);
       $this->assertTrue($fd->matches('/*'));
     }
@@ -529,7 +537,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::matches
      * @covers \FluentDOM\Nodes::prepareSelector
      */
-    public function testMatchesWithSelectorCallbackExpectingTrue() {
+    public function testMatchesWithSelectorCallbackExpectingTrue(): void {
       $fd = new Nodes_TestProxy(self::XML);
       $fd->onPrepareSelector = function($selector) { return '/'.$selector; };
       $this->assertTrue($fd->matches('*'));
@@ -540,7 +548,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::matches
      * @covers \FluentDOM\Nodes::prepareSelector
      */
-    public function testMatchesWithNodeListExpectingFalse() {
+    public function testMatchesWithNodeListExpectingFalse(): void {
       $fd = new Nodes_TestProxy(self::XML);
       $this->assertFalse($fd->matches('invalid'));
     }
@@ -550,7 +558,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::matches
      * @covers \FluentDOM\Nodes::prepareSelector
      */
-    public function testMatchesWithScalarExpectingTrue() {
+    public function testMatchesWithScalarExpectingTrue(): void {
       $fd = new Nodes_TestProxy(self::XML);
       $this->assertTrue(
         $fd->matches('count(/items)')
@@ -562,7 +570,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::matches
      * @covers \FluentDOM\Nodes::prepareSelector
      */
-    public function testMatchesWithScalarAndContextExpectingTrue() {
+    public function testMatchesWithScalarAndContextExpectingTrue(): void {
       $fd = new Nodes_TestProxy(self::XML);
       $this->assertTrue(
         $fd->matches(
@@ -577,7 +585,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::matches
      * @covers \FluentDOM\Nodes::prepareSelector
      */
-    public function testMatchesWithScalarExpectingFalse() {
+    public function testMatchesWithScalarExpectingFalse(): void {
       $fd = new Nodes_TestProxy(self::XML);
       $this->assertFalse(
         $fd->matches('count(item)')
@@ -589,7 +597,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::matches
      * @covers \FluentDOM\Nodes::prepareSelector
      */
-    public function testMatchesWithPreparedSelectorExpectingTrue() {
+    public function testMatchesWithPreparedSelectorExpectingTrue(): void {
       $fd = new Nodes_TestProxy(self::XML);
       $fd->onPrepareSelector = function($selector) {
         return 'count(//group[1]'.$selector.')';
@@ -604,7 +612,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::matches
      * @covers \FluentDOM\Nodes::prepareSelector
      */
-    public function testMatchesWithPreparedSelectorExpectingFalse() {
+    public function testMatchesWithPreparedSelectorExpectingFalse(): void {
       $fd = new Nodes_TestProxy(self::XML);
       $fd->onPrepareSelector = function($selector) {
         return 'count('.$selector.')';
@@ -619,7 +627,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::__get
      * @covers \FluentDOM\Nodes::__set
      */
-    public function testGetAfterSetOnPrepareSelector() {
+    public function testGetAfterSetOnPrepareSelector(): void {
       $fd = new Nodes();
       $fd->onPrepareSelector = $callback = function() {};
       $this->assertSame($callback, $fd->onPrepareSelector);
@@ -631,7 +639,7 @@ namespace FluentDOM {
      * @group CoreFunctions
      * @covers \FluentDOM\Nodes::__set
      */
-    public function testSetOnPrepareSelectorExpectingException() {
+    public function testSetOnPrepareSelectorExpectingException(): void {
       $fd = new Nodes();
       $this->expectException(\InvalidArgumentException::class);
       $fd->onPrepareSelector = FALSE;
@@ -642,7 +650,7 @@ namespace FluentDOM {
      * @group IteratorAggregate
      * @covers \FluentDOM\Nodes::getIterator
      */
-    public function testIterator() {
+    public function testIterator(): void {
       $fd = new Nodes(self::XML);
       $fd = $fd->find('//item');
       $this->assertInstanceOf(NodesIterator::class, $fd->getIterator());
@@ -655,7 +663,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::offsetExists
      *
      */
-    public function testOffsetExistsExpectingTrue() {
+    public function testOffsetExistsExpectingTrue(): void {
       $fd = new Nodes(self::XML);
       $fd = $fd->find('//item');
       $this->assertTrue(isset($fd[1]));
@@ -667,7 +675,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::offsetExists
      *
      */
-    public function testOffsetExistsExpectingFalse() {
+    public function testOffsetExistsExpectingFalse(): void {
       $fd = new Nodes();
       $fd = $fd->find('//item');
       $this->assertFalse(isset($fd[99]));
@@ -689,7 +697,7 @@ namespace FluentDOM {
      * @group ArrayAccess
      * @covers \FluentDOM\Nodes::offsetSet
      */
-    public function testOffsetSetExpectingException() {
+    public function testOffsetSetExpectingException(): void {
       $fd = new Nodes(self::XML);
       $fd = $fd->find('//item');
       $this->expectException(\BadMethodCallException::class);
@@ -701,7 +709,7 @@ namespace FluentDOM {
      * @group ArrayAccess
      * @covers \FluentDOM\Nodes::offsetUnset
      */
-    public function testOffsetUnsetExpectingException() {
+    public function testOffsetUnsetExpectingException(): void {
       $fd = new Nodes();
       $fd = $fd->find('//item');
       $this->expectException(\BadMethodCallException::class);
@@ -713,7 +721,7 @@ namespace FluentDOM {
      * @group Countable
      * @covers \FluentDOM\Nodes::count
      */
-    public function testInterfaceCountableExpecting3() {
+    public function testInterfaceCountableExpecting3(): void {
       $fd = new Nodes(self::XML);
       $fd = $fd->find('//item');
       $this->assertCount(3, $fd);
@@ -724,7 +732,7 @@ namespace FluentDOM {
      * @group Countable
      * @covers \FluentDOM\Nodes::count
      */
-    public function testInterfaceCountableExpectingZero() {
+    public function testInterfaceCountableExpectingZero(): void {
       $fd = new Nodes(self::XML);
       $this->assertCount(0, $fd);
     }
@@ -736,7 +744,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::__set
      * @covers \FluentDOM\Nodes::__unset
      */
-    public function testDynamicProperty() {
+    public function testDynamicProperty(): void {
       $fd = new Nodes();
       $this->assertEquals(FALSE, isset($fd->dynamicProperty));
       $this->assertEquals(NULL, $fd->dynamicProperty);
@@ -750,7 +758,7 @@ namespace FluentDOM {
      * @group Properties
      * @covers \FluentDOM\Nodes::__unset
      */
-    public function testDynamicPropertyUnsetOnNonExistingPropertyExpectingException() {
+    public function testDynamicPropertyUnsetOnNonExistingPropertyExpectingException(): void {
       $fd = new Nodes();
       $this->expectException(\BadMethodCallException::class);
       unset($fd->dynamicProperty);
@@ -759,7 +767,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\Nodes::__set
      */
-    public function testSetPropertyXpath() {
+    public function testSetPropertyXpath(): void {
       $fd = new Nodes(self::XML);
       $this->expectException(\BadMethodCallException::class);
       $fd->xpath = $fd->xpath();
@@ -769,7 +777,7 @@ namespace FluentDOM {
      * @group CoreFunctions
      * @covers \FluentDOM\Nodes::xpath
      */
-    public function testUseXpathToCallEvaluate() {
+    public function testUseXpathToCallEvaluate(): void {
       $fd = new Nodes_TestProxy(self::XML);
       $this->assertEquals(
         3,
@@ -781,7 +789,7 @@ namespace FluentDOM {
      * @group Properties
      * @covers \FluentDOM\Nodes::__isset
      */
-    public function testIssetPropertyLength() {
+    public function testIssetPropertyLength(): void {
       $fd = new Nodes();
       $this->assertTrue(isset($fd->length));
     }
@@ -790,7 +798,7 @@ namespace FluentDOM {
      * @group Properties
      * @covers \FluentDOM\Nodes::__get
      */
-    public function testGetPropertyLength() {
+    public function testGetPropertyLength(): void {
       $fd = new Nodes(self::XML);
       $fd = $fd->find('//item');
       $this->assertEquals(3, $fd->length);
@@ -800,7 +808,7 @@ namespace FluentDOM {
      * @group Properties
      * @covers \FluentDOM\Nodes::__set
      */
-    public function testSetPropertyLength() {
+    public function testSetPropertyLength(): void {
       $fd = new Nodes();
       $this->expectException(\BadMethodCallException::class);
       $fd->length = 50;
@@ -810,7 +818,7 @@ namespace FluentDOM {
      * @group Properties
      * @covers \FluentDOM\Nodes::__unset
      */
-    public function testUnsetPropertyLength() {
+    public function testUnsetPropertyLength(): void {
       $fd = new Nodes;
       $this->expectException(\BadMethodCallException::class);
       unset($fd->length);
@@ -820,7 +828,7 @@ namespace FluentDOM {
      * @group Properties
      * @covers \FluentDOM\Nodes::__isset
      */
-    public function testIssetPropertyDocumentExpectingFalse() {
+    public function testIssetPropertyDocumentExpectingFalse(): void {
       $fd = new Nodes();
       $this->assertFalse(isset($fd->document));
     }
@@ -829,7 +837,7 @@ namespace FluentDOM {
      * @group Properties
      * @covers \FluentDOM\Nodes::__isset
      */
-    public function testIssetPropertyDocumentExpectingTrue() {
+    public function testIssetPropertyDocumentExpectingTrue(): void {
       $fd = new Nodes();
       $fd->document;
       $this->assertTrue(isset($fd->document));
@@ -840,7 +848,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::__get
      * @covers \FluentDOM\Nodes::getDocument
      */
-    public function testGetPropertyDocumentImplicitCreate() {
+    public function testGetPropertyDocumentImplicitCreate(): void {
       $fd = new Nodes;
       $document = $fd->document;
       $this->assertInstanceOf(Document::class, $document);
@@ -851,7 +859,7 @@ namespace FluentDOM {
      * @group Properties
      * @covers \FluentDOM\Nodes::__isset
      */
-    public function testIssetPropertyContentType() {
+    public function testIssetPropertyContentType(): void {
       $fd = new Nodes();
       $this->assertTrue(isset($fd->contentType));
     }
@@ -860,7 +868,7 @@ namespace FluentDOM {
      * @group Properties
      * @covers \FluentDOM\Nodes::__get
      */
-    public function testGetPropertyContentType() {
+    public function testGetPropertyContentType(): void {
       $fd = new Nodes();
       $this->assertEquals('text/xml', $fd->contentType);
     }
@@ -870,14 +878,16 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::__set
      * @covers \FluentDOM\Nodes::setContentType
      * @dataProvider getContentTypeSamples
+     * @param string $contentType
+     * @param string $expected
      */
-    public function testSetPropertyContentType($contentType, $expected) {
+    public function testSetPropertyContentType(string $contentType, string $expected): void {
       $fd = new Nodes();
       $fd->contentType = $contentType;
-      $this->assertAttributeEquals($expected, '_contentType', $fd);
+      $this->assertEquals($expected, $fd->contentType);
     }
 
-    public function getContentTypeSamples() {
+    public function getContentTypeSamples(): array {
       return [
         ['text/xml', 'text/xml'],
         ['text/html', 'text/html'],
@@ -895,7 +905,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::__set
      * @covers \FluentDOM\Nodes::setContentType
      */
-    public function testSetPropertyContentTypeChaining() {
+    public function testSetPropertyContentTypeChaining(): void {
       $fdParent = new Nodes();
       $fdChild = $fdParent->spawn();
       $fdChild->contentType = 'text/html';
@@ -909,7 +919,7 @@ namespace FluentDOM {
      * @group Properties
      * @covers \FluentDOM\Nodes::__get
      */
-    public function testGetPropertyXpath() {
+    public function testGetPropertyXpath(): void {
       $fd = new Nodes();
       $this->assertInstanceOf(Xpath::class, $fd->xpath);
     }
@@ -920,7 +930,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::toString
      * @covers \FluentDOM\Nodes::__toString
      */
-    public function testMagicToString() {
+    public function testMagicToString(): void {
       $fd = new Nodes(self::XML);
       $this->assertEquals($fd->document->saveXML(), (string)$fd);
     }
@@ -931,7 +941,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::toString
      * @covers \FluentDOM\Nodes::__toString
      */
-    public function testMagicToStringWithExceptionInSerializerFactory() {
+    public function testMagicToStringWithExceptionInSerializerFactory(): void {
       $factory = $this->getMockBuilder(Serializer\Factory\Group::class)->getMock();
       $factory
         ->expects($this->once())
@@ -949,7 +959,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::toString
      * @covers \FluentDOM\Nodes::__toString
      */
-    public function testMagicToStringWithSerializerFactoryReturningNull() {
+    public function testMagicToStringWithSerializerFactoryReturningNull(): void {
       $factory = $this->getMockBuilder(Serializer\Factory\Group::class)->getMock();
       $factory
         ->expects($this->once())
@@ -967,7 +977,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::toString
      * @covers \FluentDOM\Nodes::__toString
      */
-    public function testStringWithSerializerFactoryExpectingException() {
+    public function testStringWithSerializerFactoryExpectingException(): void {
       $factory = $this->getMockBuilder(Serializer\Factory\Group::class)->getMock();
       $factory
         ->expects($this->once())
@@ -985,7 +995,7 @@ namespace FluentDOM {
      * @group StringCastable
      * @covers \FluentDOM\Nodes::__toString
      */
-    public function testMagicToStringHtml() {
+    public function testMagicToStringHtml(): void {
       $document = new \DOMDocument();
       $document->loadHTML(self::HTML);
       $fd = new Nodes();
@@ -1001,7 +1011,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::xpath()
      * @covers \FluentDOM\Nodes::getXpath()
      */
-    public function testXpathGetFromDocument() {
+    public function testXpathGetFromDocument(): void {
       $document = new Document();
       $fd = new Nodes();
       $fd = $fd->load($document);
@@ -1015,7 +1025,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::xpath()
      * @covers \FluentDOM\Nodes::getXpath()
      */
-    public function testXpathGetImplicitCreate() {
+    public function testXpathGetImplicitCreate(): void {
       $document = new \DOMDocument();
       $fd = new Nodes();
       $fd = $fd->load($document);
@@ -1032,7 +1042,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::registerNamespace()
      * @covers \FluentDOM\Nodes::applyNamespaces
      */
-    public function testXpathGetImplicitCreateWithNamespace() {
+    public function testXpathGetImplicitCreateWithNamespace(): void {
       $document = new \DOMDocument();
       $fd = new Nodes();
       $fd = $fd->load($document);
@@ -1048,7 +1058,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::registerNamespace
      * @covers \FluentDOM\Nodes::applyNamespaces
      */
-    public function testRegisterNamespaceBeforeLoad() {
+    public function testRegisterNamespaceBeforeLoad(): void {
       $fd = new Nodes();
       $fd->registerNamespace('f', 'urn:foo');
       $fd->load('<foo:foo xmlns:foo="urn:foo"/>');
@@ -1060,7 +1070,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::registerNamespace
      * @covers \FluentDOM\Nodes::applyNamespaces
      */
-    public function testRegisterNamespaceAfterLoad() {
+    public function testRegisterNamespaceAfterLoad(): void {
       $fd = new Nodes();
       $fd->load('<foo:foo xmlns:foo="urn:foo"/>', 'text/xml');
       $fd->registerNamespace('f', 'urn:foo');
@@ -1072,7 +1082,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::registerNamespace
      * @covers \FluentDOM\Nodes::applyNamespaces
      */
-    public function testRegisterNamespaceAfterLoadOnCreatedXpath() {
+    public function testRegisterNamespaceAfterLoadOnCreatedXpath(): void {
       $document = new \DOMDocument();
       $document->loadXML('<foo:foo xmlns:foo="urn:foo"/>');
       $fd = new Nodes();
@@ -1085,7 +1095,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\Nodes::getSelectorCallback
      */
-    public function testGetSelectorCallbackWithNullExpectingNull() {
+    public function testGetSelectorCallbackWithNullExpectingNull(): void {
       $fd = new Nodes(self::XML);
       $this->assertNull(
         $callback = $fd->getSelectorCallback(NULL)
@@ -1095,7 +1105,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\Nodes::getSelectorCallback
      */
-    public function testGetSelectorCallbackWithStringExpectingTrue() {
+    public function testGetSelectorCallbackWithStringExpectingTrue(): void {
       $fd = new Nodes(self::XML);
       $this->assertInstanceOf(
         'Closure',
@@ -1109,7 +1119,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\Nodes::getSelectorCallback
      */
-    public function testGetSelectorCallbackWithNodeExpectingTrue() {
+    public function testGetSelectorCallbackWithNodeExpectingTrue(): void {
       $fd = new Nodes(self::XML);
       $this->assertInstanceOf(
         'Closure',
@@ -1123,7 +1133,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\Nodes::getSelectorCallback
      */
-    public function testGetSelectorCallbackWithNodeArrayExpectingTrue() {
+    public function testGetSelectorCallbackWithNodeArrayExpectingTrue(): void {
       $fd = new Nodes(self::XML);
       $this->assertInstanceOf(
         'Closure',
@@ -1139,7 +1149,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\Nodes::getSelectorCallback
      */
-    public function testGetSelectorCallbackWithCallableExpectingTrue() {
+    public function testGetSelectorCallbackWithCallableExpectingTrue(): void {
       $fd = new Nodes(self::XML);
       $this->assertInstanceOf(
         'Closure',
@@ -1157,7 +1167,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\Nodes::getSelectorCallback
      */
-    public function testGetSelectorCallbackWithEmptyArrayExpectingFalse() {
+    public function testGetSelectorCallbackWithEmptyArrayExpectingFalse(): void {
       $fd = new Nodes(self::XML);
       $this->assertInstanceOf(
         'Closure',
@@ -1173,7 +1183,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\Nodes::getSelectorCallback
      */
-    public function testGetSelectorCallbackWithInvalidSelectorExpectingException() {
+    public function testGetSelectorCallbackWithInvalidSelectorExpectingException(): void {
       $fd = new Nodes(self::XML);
       $this->expectException(
         \InvalidArgumentException::class,
@@ -1196,7 +1206,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\Nodes::serializerFactories
      */
-    public function testGetSerializerFactoriesInitializesFromStaticClass() {
+    public function testGetSerializerFactoriesInitializesFromStaticClass(): void {
       $fd = new Nodes();
       $this->assertSame(
         \FluentDOM::getSerializerFactories(), $fd->serializerFactories()

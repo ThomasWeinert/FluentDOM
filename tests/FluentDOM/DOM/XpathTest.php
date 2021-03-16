@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\DOM {
 
   require_once __DIR__ . '/../TestCase.php';
@@ -189,7 +198,7 @@ namespace FluentDOM\DOM {
       }
       $document = new \DOMDocument();
       $xpath = new Xpath($document);
-      $this->expectError(E_DEPRECATED);
+      $this->expectDeprecation();
       $xpath->query('*');
       error_reporting($current);
     }
@@ -298,7 +307,7 @@ namespace FluentDOM\DOM {
       $errors = error_reporting(E_ALL);
       $document = new \DOMDocument();
       $xpath = new Xpath($document);
-      $this->expectError(E_NOTICE);
+      $this->expectNotice();
       $xpath->someUnknownProperty;
       error_reporting($errors);
     }

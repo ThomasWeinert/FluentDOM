@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Query\Css {
 
   use FluentDOM\TestCase;
@@ -12,8 +21,8 @@ namespace FluentDOM\Query\Css {
      */
     public function testConstructor() {
       $css = new Properties('width: auto;');
-      $this->assertAttributeEquals(
-        ['width' => 'auto'], '_properties', $css
+      $this->assertEquals(
+        ['width' => 'auto'], iterator_to_array($css)
       );
     }
 
@@ -60,8 +69,8 @@ namespace FluentDOM\Query\Css {
     public function testOffsetSet() {
       $css = new Properties();
       $css['width'] = 'auto';
-      $this->assertAttributeEquals(
-        ['width' => 'auto'], '_properties', $css
+      $this->assertEquals(
+        ['width' => 'auto'], iterator_to_array($css)
       );
     }
 
@@ -111,8 +120,8 @@ namespace FluentDOM\Query\Css {
     public function testSetStyleString($expected, $styleString) {
       $css = new Properties();
       $css->setStyleString($styleString);
-      $this->assertAttributeEquals(
-        $expected, '_properties', $css
+      $this->assertEquals(
+        $expected, iterator_to_array($css)
       );
     }
 

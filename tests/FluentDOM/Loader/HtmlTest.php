@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -15,30 +15,23 @@ namespace FluentDOM\Loader {
 
   require_once __DIR__.'/../TestCase.php';
 
+  /**
+   * @covers \FluentDOM\Loader\Html
+   * @covers \FluentDOM\Loader\Supports
+   */
   class HtmlTest extends TestCase {
 
-    /**
-     * @covers \FluentDOM\Loader\Html
-     */
-    public function testSupportsExpectingTrue() {
+    public function testSupportsExpectingTrue(): void {
       $loader = new Html();
       $this->assertTrue($loader->supports('text/html'));
     }
 
-    /**
-     * @covers \FluentDOM\Loader\Html
-     * @covers \FluentDOM\Loader\Supports
-     */
-    public function testSupportsExpectingFalse() {
+    public function testSupportsExpectingFalse(): void {
       $loader = new Html();
       $this->assertFalse($loader->supports('text/xml'));
     }
 
-    /**
-     * @covers \FluentDOM\Loader\Html
-     * @covers \FluentDOM\Loader\Supports
-     */
-    public function testLoadWithValidHtml() {
+    public function testLoadWithValidHtml(): void {
       $loader = new Html();
       $this->assertInstanceOf(
         Result::class,
@@ -49,11 +42,7 @@ namespace FluentDOM\Loader {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Loader\Html
-     * @covers \FluentDOM\Loader\Supports
-     */
-    public function testLoadWithoutOptionsAddsElements() {
+    public function testLoadWithoutOptionsAddsElements(): void {
       $loader = new Html();
       $result = $loader->load(
         '<div/>',
@@ -66,11 +55,7 @@ namespace FluentDOM\Loader {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Loader\Html
-     * @covers \FluentDOM\Loader\Supports
-     */
-    public function testLoadWithOptions() {
+    public function testLoadWithOptions(): void {
       if (
         !(
           defined('LIBXML_HTML_NODEFDTD') &&
@@ -96,11 +81,7 @@ namespace FluentDOM\Loader {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Loader\Html
-     * @covers \FluentDOM\Loader\Supports
-     */
-    public function testLoadWithValidHtmlFragment() {
+    public function testLoadWithValidHtmlFragment(): void {
       $loader = new Html();
       $this->assertInstanceOf(
         Result::class,
@@ -115,11 +96,7 @@ namespace FluentDOM\Loader {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Loader\Html
-     * @covers \FluentDOM\Loader\Supports
-     */
-    public function testLoadWithValidHtmlFragmentDefinedByOption() {
+    public function testLoadWithValidHtmlFragmentDefinedByOption(): void {
       $loader = new Html();
       $this->assertInstanceOf(
         Result::class,
@@ -140,7 +117,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Html
      */
-    public function testLoadWithValidHtmlFileAllowFile() {
+    public function testLoadWithValidHtmlFileAllowFile(): void {
       $loader = new Html();
       $this->assertInstanceOf(
         Result::class,
@@ -158,7 +135,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Html
      */
-    public function testLoadWithValidHtmlFileForceFile() {
+    public function testLoadWithValidHtmlFileForceFile(): void {
       $loader = new Html();
       $this->assertInstanceOf(
         Result::class,
@@ -176,7 +153,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Html
      */
-    public function testLoadWithFileExpectingException() {
+    public function testLoadWithFileExpectingException(): void {
       $loader = new Html();
       $this->expectException(InvalidSource\TypeFile::class);
       $loader->load(
@@ -188,7 +165,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Html
      */
-    public function testLoadWithUnsupportedType() {
+    public function testLoadWithUnsupportedType(): void {
       $loader = new Html();
       $this->assertNull(
         $loader->load(
@@ -198,11 +175,7 @@ namespace FluentDOM\Loader {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Loader\Html
-     * @covers \FluentDOM\Loader\Supports
-     */
-    public function testLoadFragmentWithValidHtmlFragment() {
+    public function testLoadFragmentWithValidHtmlFragment(): void {
       $loader = new Html();
       $this->assertInstanceOf(
         'DOMDocumentFragment',
@@ -220,7 +193,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Html
      */
-    public function testLoadFragmentWithUnsupportedType() {
+    public function testLoadFragmentWithUnsupportedType(): void {
       $loader = new Html();
       $this->assertNull(
         $loader->loadFragment(
@@ -229,11 +202,7 @@ namespace FluentDOM\Loader {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Loader\Html
-     * @covers \FluentDOM\Loader\Supports
-     */
-    public function testLoadWithMultiByteHtml() {
+    public function testLoadWithMultiByteHtml(): void {
       $loader = new Html();
       $result = $loader->load(
         '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'.
@@ -247,11 +216,7 @@ namespace FluentDOM\Loader {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Loader\Html
-     * @covers \FluentDOM\Loader\Supports
-     */
-    public function testLoadWithMultiByteHtmlFragment() {
+    public function testLoadWithMultiByteHtmlFragment(): void {
       $loader = new Html();
       $result = $loader->load(
         '<div>你好，世界</div>',
@@ -263,11 +228,7 @@ namespace FluentDOM\Loader {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Loader\Html
-     * @covers \FluentDOM\Loader\Supports
-     */
-    public function testLoadFragmentWithMultiByteHtml() {
+    public function testLoadFragmentWithMultiByteHtml(): void {
       $loader = new Html();
       $result = $loader->loadFragment(
         '<div>你好，世界</div>',
@@ -279,11 +240,7 @@ namespace FluentDOM\Loader {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Loader\Html
-     * @covers \FluentDOM\Loader\Supports
-     */
-    public function testLoadWithMultiByteHtmlDefinedByMetaTag() {
+    public function testLoadWithMultiByteHtmlDefinedByMetaTag(): void {
       $loader = new Html();
       $result = $loader->load(
         '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'."\n".
@@ -317,11 +274,7 @@ namespace FluentDOM\Loader {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Loader\Html
-     * @covers \FluentDOM\Loader\Supports
-     */
-    public function testLoadWithMultiByteHtmlDefinedByDeprecatedMetaTag() {
+    public function testLoadWithMultiByteHtmlDefinedByDeprecatedMetaTag(): void {
       $loader = new Html();
       $result = $loader->load(
         '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'."\n".
@@ -355,11 +308,7 @@ namespace FluentDOM\Loader {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Loader\Html
-     * @covers \FluentDOM\Loader\Supports
-     */
-    public function testLoadWithMultiByteHtmlUseExistingPi() {
+    public function testLoadWithMultiByteHtmlUseExistingDeclaration(): void {
       $loader = new Html();
       $result = $loader->load(
         '<?xml encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'.
@@ -377,11 +326,7 @@ namespace FluentDOM\Loader {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Loader\Html
-     * @covers \FluentDOM\Loader\Supports
-     */
-    public function testLoadWithMultiByteHtmlReplaceExistingPi() {
+    public function testLoadWithMultiByteHtmlReplaceExistingDeclaration(): void {
       $loader = new Html();
       $result = $loader->load(
         '<?xml encoding="ASCII"?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'."\n".

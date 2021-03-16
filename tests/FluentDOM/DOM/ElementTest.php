@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -164,8 +164,10 @@ namespace FluentDOM\DOM {
     public function testGetInvalidProperty() {
       $document = new Document();
       $document->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
-      $this->expectError(E_NOTICE);
-      $document->documentElement->INVALID_PROPERTY;
+      if ((error_reporting() & E_NOTICE) === E_NOTICE) {
+        $this->expectNotice();
+      }
+      $this->assertNull($document->documentElement->INVALID_PROPERTY);
     }
 
     /**
@@ -246,7 +248,9 @@ namespace FluentDOM\DOM {
     public function testUnsetUnknownProperty(string $propertyName) {
       $document = new Document();
       $document->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
-      $this->expectError(E_NOTICE);
+      if ((error_reporting() & E_NOTICE) === E_NOTICE) {
+        $this->expectNotice();
+      }
       unset($document->documentElement->SOME_PROPERTY);
       $this->assertNull($document->documentElement->SOME_PROPERTY);
     }

@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Utility\Iterators {
 
   use FluentDOM\DOM\Document;
@@ -30,18 +39,18 @@ namespace FluentDOM\Utility\Iterators {
     public function testIteratorNext() {
       $fd = $this->getMockBuilder(Query::class)->getMock();
       $fdi = new NodesIterator($fd);
-      $this->assertEquals(0, $this->readAttribute($fdi, '_position'));
+      $this->assertEquals(0, $fdi->key());
       $fdi->next();
-      $this->assertEquals(1, $this->readAttribute($fdi, '_position'));
+      $this->assertEquals(1, $fdi->key());
     }
 
     public function testIteratorRewind() {
       $fd = $this->getMockBuilder(Query::class)->getMock();
       $fdi = new NodesIterator($fd);
       $fdi->next();
-      $this->assertEquals(1, $this->readAttribute($fdi, '_position'));
+      $this->assertEquals(1, $fdi->key());
       $fdi->rewind();
-      $this->assertEquals(0, $this->readAttribute($fdi, '_position'));
+      $this->assertEquals(0, $fdi->key());
     }
 
     public function testIteratorSeek() {
@@ -51,7 +60,7 @@ namespace FluentDOM\Utility\Iterators {
         ->will($this->returnValue(2));
       $fdi = new NodesIterator($fd);
       $fdi->seek(1);
-      $this->assertEquals(1, $this->readAttribute($fdi, '_position'));
+      $this->assertEquals(1, $fdi->key());
     }
 
     public function testIteratorSeekToInvalidPosition() {

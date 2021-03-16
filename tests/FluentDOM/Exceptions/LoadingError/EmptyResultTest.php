@@ -1,4 +1,12 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\Exceptions\LoadingError {
 
@@ -8,10 +16,10 @@ namespace FluentDOM\Exceptions\LoadingError {
 
   class EmptyResultTest extends TestCase {
 
-    public function testGetMessage() {
+    public function testGetMessage(): void {
       $e = new EmptyResult();
       $this->assertEquals(
-        'Parsing result did not contain an usable node.',
+        'Parsed result did not contain an usable node.',
         $e->getMessage()
       );
     }

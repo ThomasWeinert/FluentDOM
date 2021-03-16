@@ -1,4 +1,12 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\Node {
 
@@ -183,7 +191,9 @@ namespace FluentDOM\Node {
       $document = new Document();
       $document->loadXML('<foo><!--comment--></foo>');
       $node = $document->documentElement->firstChild;
-      $this->expectError(E_NOTICE);
+      if ((error_reporting() & E_NOTICE) === E_NOTICE) {
+        $this->expectNotice();
+      }
       unset($node->SOME_PROPERTY);
       $this->assertNull($node->SOME_PROPERTY);
     }
@@ -215,12 +225,14 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
      */
-    public function testGetUnknownPropertyExpectingException() {
+    public function testGetUnknownPropertyExpectingNull() {
       $document = new Document();
       $document->loadXML('<foo><!--comment--></foo>');
       $node = $document->documentElement->firstChild;
-      $this->expectError(E_NOTICE);
-      $node->SOME_PROPERTY;
+      if ((error_reporting() & E_NOTICE) === E_NOTICE) {
+        $this->expectNotice();
+      }
+      $this->assertNull($node->SOME_PROPERTY);
     }
   }
 }

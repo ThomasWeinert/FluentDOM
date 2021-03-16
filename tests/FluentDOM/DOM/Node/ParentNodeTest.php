@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -257,10 +257,13 @@ namespace FluentDOM\Node {
     /**
      * @covers \FluentDOM\DOM\Node\ParentNode\Implementation
      * @covers \FluentDOM\DOM\Node\ParentNode\Properties
+     * @version
      */
     public function testGetUnknownProperty() {
       $document = new Document();
-      $this->expectError(E_NOTICE);
+      if ((error_reporting() & E_NOTICE) === E_NOTICE) {
+        $this->expectNotice();
+      }
       $this->assertNull($document->UNKNOWN_PROPERTY);
     }
 

@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -14,6 +14,7 @@ namespace FluentDOM {
   /**
    * @property bool $formatOutput
    * @property bool $optimizeNamespaces
+   * @property-read DOM\Document $document
    */
   class Creator {
 
@@ -41,10 +42,12 @@ namespace FluentDOM {
      */
     public function __isset(string $name): bool {
       switch ($name) {
-      case 'formatOutput' :
-        return isset($this->_document->{$name});
-      case 'optimizeNamespaces' :
-        return TRUE;
+        case 'document' :
+          return true;
+        case 'formatOutput' :
+          return isset($this->_document->{$name});
+        case 'optimizeNamespaces' :
+          return TRUE;
       }
       return FALSE;
     }
@@ -55,10 +58,12 @@ namespace FluentDOM {
      */
     public function __get(string $name) {
       switch ($name) {
-      case 'formatOutput' :
-        return $this->_document->{$name};
-      case 'optimizeNamespaces' :
-        return $this->_optimizeNamespaces;
+        case 'document' :
+          return $this->_document;
+        case 'formatOutput' :
+          return $this->_document->{$name};
+        case 'optimizeNamespaces' :
+          return $this->_optimizeNamespaces;
       }
       return NULL;
     }
@@ -69,12 +74,12 @@ namespace FluentDOM {
      */
     public function __set(string $name, $value) {
       switch ($name) {
-      case 'formatOutput' :
-        $this->_document->{$name} = $value;
-        return;
-      case 'optimizeNamespaces' :
-        $this->_optimizeNamespaces = (bool)$value;
-        return;
+        case 'formatOutput' :
+          $this->_document->{$name} = $value;
+          return;
+        case 'optimizeNamespaces' :
+          $this->_optimizeNamespaces = (bool)$value;
+          return;
       }
       $this->{$name} = $value;
     }
@@ -92,7 +97,7 @@ namespace FluentDOM {
      * @param string $namespaceURI
      * @throws \LogicException
      */
-    public function registerNamespace(string $prefix, string $namespaceURI) {
+    public function registerNamespace(string $prefix, string $namespaceURI): void {
       $this->_document->registerNamespace($prefix, $namespaceURI);
     }
 
@@ -102,7 +107,7 @@ namespace FluentDOM {
      * @return Creator\Node
      * @throws \LogicException
      */
-    public function __invoke(string $name, ...$parameters) {
+    public function __invoke(string $name, ...$parameters): Creator\Node {
       return new Creator\Node(
         $this,
         $this->_document,
@@ -146,7 +151,7 @@ namespace FluentDOM {
      * @param string $content
      * @return DOM\Comment
      */
-    public function comment($content): DOM\Comment {
+    public function comment(string $content): DOM\Comment {
       return $this->_document->createComment($content);
     }
 
@@ -155,13 +160,13 @@ namespace FluentDOM {
      * @param string $content
      * @return DOM\ProcessingInstruction
      */
-    public function pi($target, $content): DOM\ProcessingInstruction {
+    public function pi(string $target, string $content): DOM\ProcessingInstruction {
       return $this->_document->createProcessingInstruction($target, $content);
     }
 
     /**
      * @param array|\Traversable $traversable
-     * @param callable $map
+     * @param callable|null $map
      * @return Appendable
      */
     public function each($traversable, callable $map = NULL): Appendable {

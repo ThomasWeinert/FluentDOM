@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM {
 
   use FluentDOM\DOM\Xpath;
@@ -35,24 +44,6 @@ namespace FluentDOM {
     ';
 
     protected $_directory = __DIR__;
-
-    public function expectError($severity) {
-      $levels = [
-        E_NOTICE => [Notice::class],
-        E_WARNING => [Warning::class],
-        E_DEPRECATED => [Deprecated::class]
-      ];
-      if ($levels[$severity]) {
-        foreach ($levels[$severity] as $class) {
-          if (class_exists($class)) {
-            $this->expectException($class);
-            break;
-          }
-        }
-      } else {
-        throw new \InvalidArgumentException('Can not map severity to exception class.');
-      }
-    }
 
     /**
      * Tests, if the content of a file equals the given string

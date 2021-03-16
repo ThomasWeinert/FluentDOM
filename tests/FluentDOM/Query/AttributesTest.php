@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -12,6 +12,7 @@ namespace FluentDOM\Query {
 
   use FluentDOM\Query;
   use FluentDOM\TestCase;
+  use PHPUnit\Framework\MockObject\MockObject;
 
   require_once __DIR__.'/../TestCase.php';
 
@@ -22,18 +23,18 @@ namespace FluentDOM\Query {
     /**
      * @covers \FluentDOM\Query\Attributes::__construct
      */
-    public function testConstructor() {
+    public function testConstructor(): void {
       $fd = $this->getMockBuilder(Query::class)->getMock();
       $attr = new Attributes($fd);
-      $this->assertAttributeSame(
-        $fd, '_query', $attr
+      $this->assertSame(
+        $fd, $attr->getOwner()
       );
     }
 
     /**
      * @covers \FluentDOM\Query\Attributes::toArray
      */
-    public function testToArray() {
+    public function testToArray(): void {
       $fd = $this->getFluentDOMWithNodeFixture(
         $this->getSimpleDocumentNodeFixture()
       );
@@ -47,7 +48,7 @@ namespace FluentDOM\Query {
     /**
      * @covers \FluentDOM\Query\Attributes::offsetExists
      */
-    public function testOffsetExistsExpectingTrue() {
+    public function testOffsetExistsExpectingTrue(): void {
       $fd = $this->getFluentDOMWithNodeFixture(
         $this->getSimpleDocumentNodeFixture()
       );
@@ -58,7 +59,7 @@ namespace FluentDOM\Query {
     /**
      * @covers \FluentDOM\Query\Attributes::offsetExists
      */
-    public function testOffsetExistsExpectingFalse() {
+    public function testOffsetExistsExpectingFalse(): void {
       $fd = $this->getFluentDOMWithNodeFixture(
         $this->getSimpleDocumentNodeFixture()
       );
@@ -69,7 +70,7 @@ namespace FluentDOM\Query {
     /**
      * @covers \FluentDOM\Query\Attributes::offsetExists
      */
-    public function testOffsetExistsWithoutSelectionExpectingFalse() {
+    public function testOffsetExistsWithoutSelectionExpectingFalse(): void {
       $fd = $this->getMockBuilder(Query::class)->getMock();
       $fd
         ->expects($this->any())
@@ -83,7 +84,7 @@ namespace FluentDOM\Query {
     /**
      * @covers \FluentDOM\Query\Attributes::offsetGet
      */
-    public function testOffsetGet() {
+    public function testOffsetGet(): void {
       $fd = $this->getMockBuilder(Query::class)->getMock();
       $fd
         ->expects($this->once())
@@ -97,7 +98,7 @@ namespace FluentDOM\Query {
     /**
      * @covers \FluentDOM\Query\Attributes::offsetSet
      */
-    public function testOffsetSet() {
+    public function testOffsetSet(): void {
       $fd = $this->getMockBuilder(Query::class)->getMock();
       $fd
         ->expects($this->once())
@@ -110,7 +111,7 @@ namespace FluentDOM\Query {
     /**
      * @covers \FluentDOM\Query\Attributes::offsetUnset
      */
-    public function testOffsetUnset() {
+    public function testOffsetUnset(): void {
       $fd = $this->getMockBuilder(Query::class)->getMock();
       $fd
         ->expects($this->once())
@@ -124,7 +125,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query\Attributes::count
      * @covers \FluentDOM\Query\Attributes::getFirstElement
      */
-    public function testCountExpectingTwo() {
+    public function testCountExpectingTwo(): void {
       $fd = $this->getFluentDOMWithNodeFixture(
         $this->getSimpleDocumentNodeFixture()
       );
@@ -138,7 +139,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query\Attributes::count
      * @covers \FluentDOM\Query\Attributes::getFirstElement
      */
-    public function testCountExpectingZero() {
+    public function testCountExpectingZero(): void {
       $fd = $this->getMockBuilder(Query::class)->getMock();
       $fd
         ->expects($this->any())
@@ -154,7 +155,7 @@ namespace FluentDOM\Query {
     /**
      * @covers \FluentDOM\Query\Attributes::getIterator
      */
-    public function testGetIterator() {
+    public function testGetIterator(): void {
       $fd = $this->getFluentDOMWithNodeFixture(
         $this->getSimpleDocumentNodeFixture()
       );
@@ -172,7 +173,7 @@ namespace FluentDOM\Query {
 
     /**
      * @param \DOMNode $node
-     * @return \PHPUnit_Framework_MockObject_MockObject|Query
+     * @return MockObject|Query
      */
     public function getFluentDOMWithNodeFixture(\DOMNode $node) {
       $fd = $this->getMockBuilder(Query::class)->getMock();
@@ -189,7 +190,7 @@ namespace FluentDOM\Query {
       return $fd;
     }
 
-    public function getSimpleDocumentNodeFixture() {
+    public function getSimpleDocumentNodeFixture(): \DOMElement {
       $document = new \DOMDocument;
       $node = $document->createElement('sample');
       $node->setAttribute('foo', 1);

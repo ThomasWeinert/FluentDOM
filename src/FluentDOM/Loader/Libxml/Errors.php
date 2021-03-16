@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2020 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -12,14 +12,16 @@ declare(strict_types=1);
 namespace FluentDOM\Loader\Libxml {
 
   use FluentDOM\Exceptions\LoadingError;
+  use FluentDOM\Exceptions\LoadingError\SourceNotLoaded;
+  use FluentDOM\Loader\Result as LoaderResult;
 
   class Errors {
 
-    const ERROR_NONE = 0;
-    const ERROR_WARNING = 1;
-    const ERROR_ERROR = 2;
-    const ERROR_FATAL = 4;
-    const ERROR_ALL = self::ERROR_WARNING | self::ERROR_ERROR | self::ERROR_FATAL;
+    public const ERROR_NONE = 0;
+    public const ERROR_WARNING = 1;
+    public const ERROR_ERROR = 2;
+    public const ERROR_FATAL = 4;
+    public const ERROR_ALL = self::ERROR_WARNING | self::ERROR_ERROR | self::ERROR_FATAL;
 
     private $_errorMapping = [
       LIBXML_ERR_NONE => self::ERROR_NONE,
@@ -51,10 +53,14 @@ namespace FluentDOM\Loader\Libxml {
       if ($exception instanceof \Throwable) {
         throw $exception;
       }
-      if (!($result instanceof \DOMDocument)) {
-        throw new SourceNotLoaded();
+      if (
+        $result instanceof \DOMDocument ||
+        $result instanceof \DOMDocumentFragment ||
+        $result instanceof LoaderResult
+      ) {
+        return $result;
       }
-      return $result;
+      throw new SourceNotLoaded();
     }
   }
 }

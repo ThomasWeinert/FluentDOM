@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Utility {
 
   use FluentDOM\TestCase;
@@ -31,7 +40,7 @@ namespace FluentDOM\Utility {
      */
     public function testUrlStat() {
       $inner = fopen('data://text/plain;base64,'.base64_encode('success'), 'rb');
-      $this->assertInternalType('array', stat(ResourceWrapper::createURI($inner)));
+      $this->assertIsArray(stat(ResourceWrapper::createURI($inner)));
     }
 
     /**
@@ -73,7 +82,7 @@ namespace FluentDOM\Utility {
     public function testOpenWithInvalidContext() {
       $inner = fopen('data://text/plain;base64,'.base64_encode('success'), 'rb');
       list($uri, $context) = ResourceWrapper::createContext($inner);
-      $this->expectError(E_WARNING);
+      $this->expectWarning();
       fopen($uri, 'rb', NULL);
     }
   }

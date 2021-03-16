@@ -1,27 +1,39 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Utility {
 
   use FluentDOM\TestCase;
 
   require_once __DIR__ . '/../TestCase.php';
 
+  /**
+   * @covers \FluentDOM\Utility\QualifiedName
+   */
   class QualifiedNameTest extends TestCase {
 
-    public function setUp() {
+    public function setUp(): void {
       // disable caching limit
       QualifiedName::$cacheLimit = 0;
     }
 
     /**
-     * @covers \FluentDOM\Utility\QualifiedName
      * @dataProvider dataProviderValidQualifiedNames
+     * @param string $name
      */
-    public function testIsQualifiedName($name) {
+    public function testIsQualifiedName(string $name): void {
       $qualifiedName = new QualifiedName($name);
       $this->assertEquals($name, (string)$qualifiedName);
     }
 
-    public static function dataProviderValidQualifiedNames() {
+    public static function dataProviderValidQualifiedNames(): array {
       return [
         ['tag'],
         ['namespace:tag'],
@@ -37,67 +49,42 @@ namespace FluentDOM\Utility {
       ];
     }
 
-    /**
-     * @covers \FluentDOM\Utility\QualifiedName
-     */
-    public function testIsQnameWithEmptyNameExpectingException() {
+    public function testIsQnameWithEmptyNameExpectingException(): void {
       $this->expectException(
         \UnexpectedValueException::class
       );
       new QualifiedName('');
     }
 
-    /**
-     * @covers \FluentDOM\Utility\QualifiedName
-     */
-    public function testIsNCNameWithEmptyTagnameExpectingException() {
-      $this->expectException(
-        \UnexpectedValueException::class,
-        'Invalid QName "nc:": Missing QName part.'
-      );
+    public function testIsNCNameWithEmptyTagNameExpectingException(): void {
+      $this->expectException(\UnexpectedValueException::class);
+      $this->expectDeprecationMessage('Invalid QName "nc:": Missing QName part.');
       new QualifiedName('nc:');
     }
 
-    /**
-     * @covers \FluentDOM\Utility\QualifiedName
-     */
-    public function testIsNCNameWithInvalidTagnameCharExpectingException() {
-      $this->expectException(
-        \UnexpectedValueException::class,
-        'Invalid QName "nc:ta<g>": Invalid character at index 5.'
-      );
+    public function testIsNCNameWithInvalidTagNameCharExpectingException(): void {
+      $this->expectException(\UnexpectedValueException::class);
+      $this->expectExceptionMessage('Invalid QName "nc:ta<g>": Invalid character at index 5.');
       new QualifiedName('nc:ta<g>');
     }
 
-    /**
-     * @covers \FluentDOM\Utility\QualifiedName
-     */
-    public function testIsNCNameWithInvalidPrefixCharExpectingException() {
-      $this->expectException(
-        \UnexpectedValueException::class,
-        'Invalid QName "n<c>:tag": Invalid character at index 1.'
-      );
+    public function testIsNCNameWithInvalidPrefixCharExpectingException(): void {
+      $this->expectException(\UnexpectedValueException::class);
+      $this->expectExceptionMessage('Invalid QName "n<c>:tag": Invalid character at index 1.');
       new QualifiedName('n<c>:tag');
     }
 
-    /**
-     * @covers \FluentDOM\Utility\QualifiedName
-     */
-    public function testIsNCNameWithInvalidTagnameStartingCharExpectingException() {
-      $this->expectException(
-        \UnexpectedValueException::class,
-        'Invalid QName "nc:1tag": Invalid character at index 3.'
-      );
+    public function testIsNCNameWithInvalidTagNameStartingCharExpectingException(): void {
+      $this->expectException(\UnexpectedValueException::class);
+      $this->expectExceptionMessage('Invalid QName "nc:1tag": Invalid character at index 3.');
       new QualifiedName('nc:1tag');
     }
 
     /**
      * This is an integration test for the transparent caching.
      * With the low limit all parts of the logic will be triggered.
-     *
-     * @covers \FluentDOM\Utility\QualifiedName
      */
-    public function testCaching() {
+    public function testCache(): void {
       QualifiedName::$cacheLimit = 3;
       $names = ['one', 'two', 'one', 'three', 'four', 'five', 'one'];
       foreach ($names as $name) {
@@ -105,20 +92,14 @@ namespace FluentDOM\Utility {
       }
     }
 
-    /**
-     * @covers \FluentDOM\Utility\QualifiedName
-     */
-    public function testPropertiesWithNCName() {
+    public function testPropertiesWithNCName(): void {
       $qualifiedName = new QualifiedName('tag');
       $this->assertEquals('tag', $qualifiedName->localName);
       $this->assertEquals('tag', $qualifiedName->name);
       $this->assertEquals('', $qualifiedName->prefix);
     }
 
-    /**
-     * @covers \FluentDOM\Utility\QualifiedName
-     */
-    public function testPropertiesWithFullName() {
+    public function testPropertiesWithFullName(): void {
       $qualifiedName = new QualifiedName('ns:tag');
       $this->assertEquals('tag', $qualifiedName->localName);
       $this->assertEquals('ns:tag', $qualifiedName->name);
@@ -126,82 +107,66 @@ namespace FluentDOM\Utility {
     }
 
     /**
-     * @covers \FluentDOM\Utility\QualifiedName
      * @dataProvider providePropertyNames
+     * @param string $property
      */
-    public function testPropertiesExistsExpectingTrue($property) {
+    public function testPropertiesExistsExpectingTrue(string $property): void {
       $qualifiedName = new QualifiedName('ns:tag');
       $this->assertTrue(isset($qualifiedName->$property));
     }
 
-    /**
-     * @covers \FluentDOM\Utility\QualifiedName
-     */
-    public function testPropertiesExistsExpectingFalse() {
+    public function testPropertiesExistsExpectingFalse(): void {
       $qualifiedName = new QualifiedName('ns:tag');
       $this->assertFalse(isset($qualifiedName->invalidPropertyName));
     }
 
-    /**
-     * @covers \FluentDOM\Utility\QualifiedName
-     */
-    public function testPropertyGetWithInvalidPropertyExpectingException() {
+    public function testPropertyGetWithInvalidPropertyExpectingException(): void {
       $qualifiedName = new QualifiedName('ns:tag');
       $this->expectException(\LogicException::class);
       $qualifiedName->invalidPropertyName;
     }
 
-    /**
-     * @covers \FluentDOM\Utility\QualifiedName
-     */
-    public function testPropertySetExpectingException() {
+    public function testPropertySetExpectingException(): void {
       $qualifiedName = new QualifiedName('ns:tag');
       $this->expectException(\LogicException::class);
       $qualifiedName->name = 'foo';
     }
 
-    /**
-     * @covers \FluentDOM\Utility\QualifiedName
-     */
-    public function testPropertyUnsetExpectingException() {
+    public function testPropertyUnsetExpectingException(): void {
       $qualifiedName = new QualifiedName('ns:tag');
       $this->expectException(\LogicException::class);
       unset($qualifiedName->name);
     }
 
     /**
-     * @covers \FluentDOM\Utility\QualifiedName
      * @dataProvider provideQualifiedNamesForSplit
+     * @param array $expected
+     * @param string $name
      */
-    public function testSplit($expected, $name) {
+    public function testSplit(array $expected, string $name): void {
       $this->assertSame(
         $expected, QualifiedName::split($name)
       );
     }
 
-    /**
-     * @covers \FluentDOM\Utility\QualifiedName
-     */
-    public function testValidateExceptionTrue() {
+    public function testValidateExceptionTrue(): void {
       $this->assertTrue(
         QualifiedName::validate('foo')
       );
     }
 
-    /**
-     * @covers \FluentDOM\Utility\QualifiedName
-     */
-    public function testValidateExceptionFalse() {
+    public function testValidateExceptionFalse(): void {
       $this->assertFalse(
         QualifiedName::validate('123')
       );
     }
 
     /**
-     * @covers \FluentDOM\Utility\QualifiedName
      * @dataProvider provideStringsToNormalize
+     * @param string $expected
+     * @param string $string
      */
-    public function testNormalizeString($expected, $string) {
+    public function testNormalizeString(string $expected, string $string): void {
       $this->assertEquals(
         $expected,
         QualifiedName::normalizeString($string)
@@ -215,7 +180,7 @@ namespace FluentDOM\Utility {
     /**
      * @return array
      */
-    public static function providePropertyNames() {
+    public static function providePropertyNames(): array {
       return [
         ['name'],
         ['prefix'],
@@ -226,7 +191,7 @@ namespace FluentDOM\Utility {
     /**
      * @return array
      */
-    public static function provideQualifiedNamesForSplit() {
+    public static function provideQualifiedNamesForSplit(): array {
       return [
         [['foo', 'bar'], 'foo:bar'],
         [[FALSE, 'bar'], 'bar'],
@@ -234,7 +199,7 @@ namespace FluentDOM\Utility {
       ];
     }
 
-    public static function provideStringsToNormalize() {
+    public static function provideStringsToNormalize(): array {
       return [
         ['foo', 'foo'],
         ['foo-bar', 'foo-bar'],

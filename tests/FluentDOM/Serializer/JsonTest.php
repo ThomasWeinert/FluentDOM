@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Serializer {
 
   use FluentDOM\DOM\Document;
@@ -30,9 +39,6 @@ namespace FluentDOM\Serializer {
      * @covers \FluentDOM\Serializer\Json
      */
     public function testToStringWithLimitedDepthExpectingEmptyString() {
-      if (version_compare(PHP_VERSION, '5.5.0', '<')) {
-        $this->markTestSkipped('Minimum version for $depth argument is PHP 5.5');
-      }
       $serializer = new Json_TestProxy(new \DOMDocument(), 0, 1);
       $serializer->jsonData = self::getArrayAsStdClass(
         [
@@ -71,9 +77,6 @@ namespace FluentDOM\Serializer {
      * @covers \FluentDOM\Serializer\Json
      */
     public function testJsonSerializableWithLimitedDepthExpectingFalse() {
-      if (version_compare(PHP_VERSION, '5.5.0', '<') || defined('HHVM_VERSION')) {
-        $this->markTestSkipped('Minimum version for $depth argument is PHP 5.5');
-      }
       $serializer = new Json_TestProxy(new \DOMDocument());
       $serializer->jsonData = self::getArrayAsStdClass(
         [

@@ -17,9 +17,9 @@ jobs:
       matrix:
         php-version:
           - "7.3"
-          - "7.4"
-          - "8.0"
-          - "8.1"
+          # - "7.4"
+          # - "8.0"
+          # - "8.1"
 
     steps:
       - name: "Checkout"
@@ -31,14 +31,10 @@ jobs:
           php-version: "${{ matrix.php-version }}"
           coverage: "pcov"
 
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "::set-output name=dir::$(./tools/composer config cache-files-dir)"
-
       - name: Cache dependencies
         uses: actions/cache@v2
         with:
-          path: ${{ steps.composer-cache.outputs.dir }}
+          path: "~/.composer/cache"
           key: "php${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-${{ hashFiles('**/composer.json') }}"
           restore-keys: "php${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-"
 

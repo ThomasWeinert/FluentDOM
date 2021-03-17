@@ -1,8 +1,9 @@
 # FluentDOM
 
-[![Build Status](https://img.shields.io/travis/ThomasWeinert/FluentDOM.svg)](https://travis-ci.org/ThomasWeinert/FluentDOM)
-[![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/fluentdom/fluentdom.svg)](https://scrutinizer-ci.com/g/FluentDOM/FluentDOM/?branch=master)
-[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/fluentdom/fluentdom.svg)](https://scrutinizer-ci.com/g/FluentDOM/FluentDOM/?branch=master)
+[![CI](https://github.com/ThomasWeinert/FluentDOM/actions/workflows/ci.yml/badge.svg)](https://github.com/ThomasWeinert/FluentDOM/actions/workflows/ci.yml)
+
+[comment]: <> ([![Code Coverage]&#40;https://img.shields.io/scrutinizer/coverage/g/fluentdom/fluentdom.svg&#41;]&#40;https://scrutinizer-ci.com/g/FluentDOM/FluentDOM/?branch=master&#41;)
+[comment]: <> ([![Scrutinizer Code Quality]&#40;https://img.shields.io/scrutinizer/g/fluentdom/fluentdom.svg&#41;]&#40;https://scrutinizer-ci.com/g/FluentDOM/FluentDOM/?branch=master&#41;)
 
 [![License](https://img.shields.io/packagist/l/fluentdom/fluentdom.svg)](http://opensource.org/licenses/mit-license.php)
 [![Total Downloads](https://img.shields.io/packagist/dt/fluentdom/fluentdom.svg)](https://packagist.org/packages/fluentdom/fluentdom)

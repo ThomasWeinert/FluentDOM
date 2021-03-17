@@ -20,14 +20,17 @@ jobs:
           - "7.3"
           - "7.4"
           - "8.0"
-          - "8.1"
         dependencies:
           - highest
+        experimental:
+          - false
 
         include:
           - php-version: "8.1"
+            dependencies: highest
             experimental: true
 
+    continue-on-error: ${{ matrix.experimental }}
     steps:
       - name: "Configure git to avoid issues with line endings"
         run: "git config --global core.autocrlf false"
@@ -52,6 +55,4 @@ jobs:
         run: "php tools/composer.phar install --prefer-dist"
 
       - name: "Run tests with phpunit.phar"
-        env:
-          FAILURE_ACTION: "${{ matrix.experimental == true }}"
-        run: "php tools/phpunit.phar --coverage-clover=coverage.xml || $FAILURE_ACTION"
+        run: "php tools/phpunit.phar --coverage-clover=coverage.xml"

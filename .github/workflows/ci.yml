@@ -16,12 +16,22 @@ jobs:
       fail-fast: false
       matrix:
         php-version:
+          - "7.2"
           - "7.3"
           - "7.4"
           - "8.0"
           - "8.1"
+        dependencies:
+          - highest
+
+        include:
+          - php-version: "8.1"
+            experimental: true
 
     steps:
+      - name: "Configure git to avoid issues with line endings"
+        run: "git config --global core.autocrlf false"
+
       - name: "Checkout"
         uses: "actions/checkout@v2"
 
@@ -31,11 +41,17 @@ jobs:
           php-version: "${{ matrix.php-version }}"
           coverage: "pcov"
 
-      - uses: php-actions/composer@v5
-
-      - name: PHPUnit Tests
-        uses: php-actions/phpunit@v9
+      - name: "Cache dependencies"
+        uses: actions/cache@v2
         with:
-          bootstrap: vendor/autoload.php
-          configuration: phpunit.xml.dist
-          args: --coverage-text
+          path: "~/.composer/cache"
+          key: "php${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-${{ hashFiles('**/composer.json') }}"
+          restore-keys: "php${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-"
+
+      - name: "Install dependencies"
+        run: "php tools/composer.phar install --prefer-dist"
+
+      - name: "Run tests with phpunit.phar"
+        env:
+          FAILURE_ACTION: "${{ matrix.experimental == true }}"
+        run: "php tools/phpunit.phar --coverage-clover=coverage.xml || $FAILURE_ACTION"

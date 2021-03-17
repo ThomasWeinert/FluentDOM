@@ -768,7 +768,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Element::append
      */
     public function testAppendWithUnattachedNodeExpectingException() {
-      $node = new Element('foo', '', NULL);
+      $node = new Element('foo', '', '');
       $this->expectException(\LogicException::class);
       $node->append('');
     }

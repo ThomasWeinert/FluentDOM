@@ -31,7 +31,7 @@ namespace FluentDOM\Utility {
     public function testOpenStreamFromContext() {
       $inner = fopen('data://text/plain;base64,'.base64_encode('success'), 'rb');
       list($uri, $context) = ResourceWrapper::createContext($inner);
-      $outer = fopen($uri, 'rb', NULL, $context);
+      $outer = fopen($uri, 'rb', FALSE, $context);
       $this->assertEquals('success', fread($outer, 100));
     }
 

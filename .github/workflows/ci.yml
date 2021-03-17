@@ -25,21 +25,11 @@ jobs:
       - name: "Checkout"
         uses: "actions/checkout@v2"
 
-      - name: "Install PHP with extensions"
-        uses: "shivammathur/setup-php@v2"
+      - uses: php-actions/composer@v5
+
+      - name: PHPUnit Tests
+        uses: php-actions/phpunit@v2
         with:
-          php-version: "${{ matrix.php-version }}"
-          coverage: "pcov"
-
-      - name: "Cache dependencies installed with composer"
-        uses: "actions/cache@v1"
-        with:
-          path: "~/.composer/cache"
-          key: "php${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-${{ hashFiles('**/composer.json') }}"
-          restore-keys: "php${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-"
-
-      - name: "Install dependencies with composer"
-        run: "./tools/composer update --no-ansi --no-interaction --no-progress"
-
-      - name: "Run tests with phpunit/phpunit"
-        run: "./tools/phpunit --coverage-clover=coverage.xml"
+          bootstrap: vendor/autoload.php
+          configuration: phpunit.xml.dist
+          args: --coverage-text

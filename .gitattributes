@@ -10,3 +10,9 @@ phpdox.xml export-ignore
 /tests export-ignore
 /examples export-ignore
 /tools export-ignore
+
+* text=lf
+
+*.png binary
+*.jpg binary
+*.phar binary

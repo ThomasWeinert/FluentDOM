@@ -31,15 +31,15 @@ jobs:
           php-version: "${{ matrix.php-version }}"
           coverage: "pcov"
 
-      - name: Cache dependencies
+      - name: "Cache dependencies"
         uses: actions/cache@v2
         with:
           path: "~/.composer/cache"
           key: "php${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-${{ hashFiles('**/composer.json') }}"
           restore-keys: "php${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-"
 
-      - name: Install dependencies
-        run: tools/composer install --prefer-dist
+      - name: "Install dependencies"
+        run: "php tools/composer install --prefer-dist"
 
       - name: "Run tests with phpunit"
-        run: "tools/phpunit --coverage-clover=coverage.xml"
+        run: "php tools/phpunit --coverage-clover=coverage.xml"

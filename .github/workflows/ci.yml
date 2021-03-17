@@ -31,11 +31,19 @@ jobs:
           php-version: "${{ matrix.php-version }}"
           coverage: "pcov"
 
-      - uses: php-actions/composer@v5
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(./tools/composer config cache-files-dir)"
 
-      - name: PHPUnit Tests
-        uses: php-actions/phpunit@v9
+      - name: Cache dependencies
+        uses: actions/cache@v2
         with:
-          bootstrap: vendor/autoload.php
-          configuration: phpunit.xml.dist
-          args: --coverage-text
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: "php${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-${{ hashFiles('**/composer.json') }}"
+          restore-keys: "php${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-"
+
+      - name: Install dependencies
+        run: tools/composer install --prefer-dist
+
+      - name: "Run tests with phpunit"
+        run: "tools/phpunit --coverage-clover=coverage.xml"

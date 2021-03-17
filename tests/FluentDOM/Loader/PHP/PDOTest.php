@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Loader\PHP {
 
   use FluentDOM\Exceptions\InvalidFragmentLoader;
@@ -33,6 +42,10 @@ namespace FluentDOM\Loader\PHP {
       }
       $pdo = $this->getExampleDatabase();
       $loader = new PDO();
+      $pdo->setAttribute(\PDO::ATTR_STRINGIFY_FETCHES, TRUE);
+      $xml = $loader->load(
+        $pdo->query("SELECT * FROM persons"), 'php/pdo'
+      )->getDocument()->saveXML();
       $this->assertXmlStringEqualsXmlString(
         '<json:json xmlns:json="urn:carica-json-dom.2013">
           <_>
@@ -44,7 +57,7 @@ namespace FluentDOM\Loader\PHP {
             <givenname>Bob</givenname>
           </_>
         </json:json>',
-        $loader->load($pdo->query("SELECT * FROM persons"), 'php/pdo')->getDocument()->saveXML()
+        $xml
       );
     }
 

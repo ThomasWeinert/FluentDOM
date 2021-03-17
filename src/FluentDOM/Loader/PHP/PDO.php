@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -23,17 +23,17 @@ namespace FluentDOM\Loader\PHP {
    */
   class PDO extends JsonDOM {
 
-    const CONTENT_TYPES = ['php/pdo', 'pdo'];
+    public const CONTENT_TYPES = ['php/pdo', 'pdo'];
 
     /**
      * @see Loadable::load
-     * @param \PDOStatement $source
+     * @param mixed $source
      * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return Document|Result|NULL
      * @throws \LogicException
      */
-    public function load($source, string $contentType, $options = []) {
+    public function load($source, string $contentType, $options = []): ?Result {
       if ($source instanceof \PDOStatement) {
         $document = new Document('1.0', 'UTF-8');
         $document->registerNamespace('json', self::XMLNS);
@@ -55,9 +55,9 @@ namespace FluentDOM\Loader\PHP {
      * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return DocumentFragment|NULL
-     * @throws \FluentDOM\Exceptions\InvalidFragmentLoader
+     * @throws InvalidFragmentLoader
      */
-    public function loadFragment($source, string $contentType, $options = []) {
+    public function loadFragment($source, string $contentType, $options = []): ?DocumentFragment {
       throw new InvalidFragmentLoader(self::class);
     }
   }

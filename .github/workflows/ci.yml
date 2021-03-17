@@ -42,7 +42,7 @@ jobs:
           restore-keys: "php${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-"
 
       - name: "Install dependencies"
-        run: "php tools/composer install --prefer-dist"
+        run: "php tools/composer.phar install --prefer-dist"
 
       - name: "Run tests with phpunit"
-        run: "php tools/phpunit --coverage-clover=coverage.xml"
+        run: "php tools/phpunit.phar --coverage-clover=coverage.xml"

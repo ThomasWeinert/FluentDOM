@@ -8,5 +8,6 @@
   ~
   -->
 <phive xmlns="https://phar.io/phive">
-  <phar name="phpunit" version="^8.0.0" location="./tools/phpunit" installed="8.5.14"/>
+  <phar name="composer" version="^2.0.11" location="./tools/phpunit" installed="2.0.11" copy="true"/>
+  <phar name="phpunit" version="^8.0.0" location="./tools/phpunit" installed="8.5.14" copy="true"/>
 </phive>

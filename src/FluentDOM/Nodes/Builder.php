@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -186,7 +186,10 @@ namespace FluentDOM\Nodes {
      * @throws \UnexpectedValueException
      */
     private function getContentAsString($content) {
-      if (\is_scalar($content) || \method_exists($content, '__toString')) {
+      if (
+        \is_scalar($content) ||
+        (is_object($content) && \method_exists($content, '__toString'))
+      ) {
         $content = (string)$content;
         return ($content === '') ? FALSE : $content;
       }

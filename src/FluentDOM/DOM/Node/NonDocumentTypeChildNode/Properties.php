@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -72,7 +72,7 @@ namespace FluentDOM\DOM\Node\NonDocumentTypeChildNode {
       case 'previousElementSibling' :
         throw new \BadMethodCallException(
           \sprintf(
-            'Can not write readonly property %s::$%s.',
+            'Cannot write property %s::$%s.',
             \get_class($this), $name
           )
         );

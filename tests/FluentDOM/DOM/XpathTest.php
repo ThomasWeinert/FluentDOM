@@ -307,7 +307,11 @@ namespace FluentDOM\DOM {
       $errors = error_reporting(E_ALL);
       $document = new \DOMDocument();
       $xpath = new Xpath($document);
-      $this->expectNotice();
+      if (PHP_VERSION_ID < 80000) {
+        $this->expectNotice();
+      } else {
+        $this->expectWarning();
+      }
       $xpath->someUnknownProperty;
       error_reporting($errors);
     }

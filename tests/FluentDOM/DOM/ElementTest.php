@@ -164,9 +164,7 @@ namespace FluentDOM\DOM {
     public function testGetInvalidProperty() {
       $document = new Document();
       $document->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
-      if ((error_reporting() & E_NOTICE) === E_NOTICE) {
-        $this->expectNotice();
-      }
+      $this->expectPropertyIsUndefined();
       $this->assertNull($document->documentElement->INVALID_PROPERTY);
     }
 
@@ -213,7 +211,7 @@ namespace FluentDOM\DOM {
     public function testSetDynamicPropertyExpectingException(string $propertyName) {
       $document = new Document();
       $document->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
-      $this->expectException(\BadMethodCallException::class);
+      $this->expectErrorMessage('Cannot write property');
       $document->documentElement->$propertyName = $document->createElement('test');
     }
 
@@ -248,11 +246,9 @@ namespace FluentDOM\DOM {
     public function testUnsetUnknownProperty(string $propertyName) {
       $document = new Document();
       $document->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
-      if ((error_reporting() & E_NOTICE) === E_NOTICE) {
-        $this->expectNotice();
-      }
       unset($document->documentElement->SOME_PROPERTY);
-      $this->assertNull($document->documentElement->SOME_PROPERTY);
+      $this->expectPropertyIsUndefined();
+      $document->documentElement->SOME_PROPERTY;
     }
 
     /**

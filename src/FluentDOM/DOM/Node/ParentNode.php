@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -23,8 +23,8 @@ namespace FluentDOM\DOM\Node {
    */
   interface ParentNode extends Node, QuerySelector {
 
-    public function prepend($nodes);
+    public function prepend(...$nodes): void;
 
-    public function append($nodes);
+    public function append(...$nodes): void;
   }
 }

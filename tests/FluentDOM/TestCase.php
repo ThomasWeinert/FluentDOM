@@ -45,6 +45,11 @@ namespace FluentDOM {
 
     protected $_directory = __DIR__;
 
+    public function setUp(): void {
+      parent::setUp();
+      error_reporting(E_ALL);
+    }
+
     /**
      * Tests, if the content of a file equals the given string
      *
@@ -62,13 +67,13 @@ namespace FluentDOM {
 
     /**
      * @param string $functionName
-     * @throws \UnexpectedValueException
      * @return Query
+     * @throws \UnexpectedValueException
      */
     protected function getQueryFixtureFromFunctionName($functionName): Query {
       $fileName = $this->getFileName($functionName, 'src');
       if (!file_exists($fileName)) {
-        throw new \UnexpectedValueException('File Not Found: '. $fileName);
+        throw new \UnexpectedValueException('File Not Found: ' . $fileName);
       }
       $document = new \DOMDocument();
       $document->load($fileName);
@@ -115,6 +120,16 @@ namespace FluentDOM {
         substr($functionName, 5),
         $type
       );
+    }
+
+    public function expectPropertyIsUndefined(): void {
+      if (PHP_VERSION_ID < 80000) {
+        $this->expectNotice();
+        $this->expectNoticeMessage("Undefined property:");
+      } else {
+        $this->expectWarning();
+        $this->expectWarningMessage("Undefined property:");
+      }
     }
   }
 }

@@ -17,4 +17,5 @@ vendor
 /tools
 
 /phpunit.xml
+/.phpunit.result.cache
 

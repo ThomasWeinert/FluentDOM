@@ -156,7 +156,7 @@ namespace FluentDOM\Node {
     public function testSetNextElementChildExpectingException() {
       $document = new Document();
       $document->loadXML('<foo><!--comment--></foo>');
-      $this->expectException(\BadMethodCallException::class);
+      $this->expectErrorMessage("Cannot write property");
       $document->documentElement->firstChild->nextElementSibling = $document->createElement('foo');
     }
 
@@ -167,7 +167,7 @@ namespace FluentDOM\Node {
     public function testSetPreviousElementChildExpectingException() {
       $document = new Document();
       $document->loadXML('<foo><!--comment--></foo>');
-      $this->expectException(\BadMethodCallException::class);
+      $this->expectErrorMessage("Cannot write property");
       $document->documentElement->firstChild->previousElementSibling = $document->createElement('foo');
     }
 
@@ -191,9 +191,7 @@ namespace FluentDOM\Node {
       $document = new Document();
       $document->loadXML('<foo><!--comment--></foo>');
       $node = $document->documentElement->firstChild;
-      if ((error_reporting() & E_NOTICE) === E_NOTICE) {
-        $this->expectNotice();
-      }
+      $this->expectPropertyIsUndefined();
       unset($node->SOME_PROPERTY);
       $this->assertNull($node->SOME_PROPERTY);
     }
@@ -225,14 +223,12 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
      */
-    public function testGetUnknownPropertyExpectingNull() {
+    public function testGetUnknownPropertyExpectingError() {
       $document = new Document();
       $document->loadXML('<foo><!--comment--></foo>');
       $node = $document->documentElement->firstChild;
-      if ((error_reporting() & E_NOTICE) === E_NOTICE) {
-        $this->expectNotice();
-      }
-      $this->assertNull($node->SOME_PROPERTY);
+      $this->expectPropertyIsUndefined();
+      $node->SOME_PROPERTY;
     }
   }
 }

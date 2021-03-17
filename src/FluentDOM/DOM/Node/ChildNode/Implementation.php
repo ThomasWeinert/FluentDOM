@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -26,14 +26,12 @@ namespace FluentDOM\DOM\Node\ChildNode {
 
     /**
      * Removes a node from its parent, returns the node
-     *
-     * @return $this|\DOMNode
+     * @return void
      */
-    public function remove(): \DOMNode {
+    public function remove(): void {
       if ($this instanceof \DOMNode && $this->parentNode instanceof \DOMNode) {
         $this->parentNode->removeChild($this);
       }
-      return $this;
     }
 
     /**
@@ -41,14 +39,14 @@ namespace FluentDOM\DOM\Node\ChildNode {
      *
      * @param \DOMNode|\DOMNodeList|NULL $nodes
      */
-    public function before($nodes) {
+    public function before(...$nodes): void {
       /** @var \DOMNode|Implementation $this */
       if (
         (
           $this->parentNode instanceof \DOMElement ||
           $this->parentNode instanceof \DOMDocument
         ) &&
-        ($nodes = MutationMacro::expand($this->ownerDocument, $nodes))
+        ($nodes = MutationMacro::expand($this->ownerDocument, ...$nodes))
       ) {
         $this->parentNode->insertBefore($nodes, $this);
       }
@@ -59,14 +57,14 @@ namespace FluentDOM\DOM\Node\ChildNode {
      *
      * @param \DOMNode|\DOMNodeList|NULL $nodes
      */
-    public function after($nodes) {
+    public function after(...$nodes): void {
       /** @var \DOMNode|Implementation $this */
       if (
         (
           $this->parentNode instanceof \DOMElement ||
           $this->parentNode instanceof \DOMDocument
         ) &&
-        ($nodes = MutationMacro::expand($this->ownerDocument, $nodes))
+        ($nodes = MutationMacro::expand($this->ownerDocument, ...$nodes))
       ) {
         if ($this->nextSibling instanceof \DOMNode) {
           $this->parentNode->insertBefore($nodes, $this->nextSibling);
@@ -81,11 +79,10 @@ namespace FluentDOM\DOM\Node\ChildNode {
      * returns the replaced node.
      *
      * @param \DOMNode|\DOMNodeList $nodes
-     * @return $this|\DOMNode
      */
-    public function replaceWith($nodes): \DOMNode {
-      $this->before($nodes);
-      return $this->remove();
+    public function replaceWith(...$nodes): void {
+      $this->before(...$nodes);
+      $this->remove();
     }
 
     /**
@@ -94,7 +91,8 @@ namespace FluentDOM\DOM\Node\ChildNode {
      * @deprecated
      */
     public function replace($nodes) {
-      return $this->replaceWith($nodes);
+      $this->replaceWith($nodes);
+      return $this;
     }
   }
 }

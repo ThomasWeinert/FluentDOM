@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -37,6 +37,7 @@ namespace FluentDOM\DOM {
       parent::__construct($document);
       // store the document reference to avoid optimization to DOMDocument
       $this->_documentReference = $document;
+      $this->registerNodeNamespaces = FALSE;
     }
 
     /**
@@ -74,7 +75,7 @@ namespace FluentDOM\DOM {
      * @return string|float|bool|\DOMNodeList
      */
     public function evaluate($expression, \DOMNode $contextNode = NULL, $registerNodeNS = NULL) {
-      $registerNodeNS = $registerNodeNS ?? $this->_registerNodeNamespaces;
+      $registerNodeNS = $registerNodeNS ?? $this->registerNodeNamespaces;
       return parent::evaluate($expression, $contextNode, (bool)$registerNodeNS);
     }
 
@@ -200,7 +201,7 @@ namespace FluentDOM\DOM {
     public function __unset(string $name) {
       switch ($name) {
       case 'registerNodeNamespaces' :
-        $this->_registerNodeNamespaces = FALSE;
+        $this->registerNodeNamespaces = FALSE;
       }
       unset($this->$name);
     }

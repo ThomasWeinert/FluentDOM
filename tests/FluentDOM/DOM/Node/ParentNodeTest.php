@@ -89,9 +89,7 @@ namespace FluentDOM\Node {
      */
     public function testSetFirstElementChildExpectingException() {
       $document = new Document();
-      $this->expectException(
-        \BadMethodCallException::class
-      );
+      $this->expectErrorMessage("Cannot write property");
       $document->firstElementChild = $document->createElement('dummy');
     }
 
@@ -171,9 +169,7 @@ namespace FluentDOM\Node {
      */
     public function testSetLastElementChildExpectingException() {
       $document = new Document();
-      $this->expectException(
-        \BadMethodCallException::class
-      );
+      $this->expectErrorMessage("Cannot write property");
       $document->lastElementChild = $document->createElement('dummy');
     }
 
@@ -262,7 +258,11 @@ namespace FluentDOM\Node {
     public function testGetUnknownProperty() {
       $document = new Document();
       if ((error_reporting() & E_NOTICE) === E_NOTICE) {
-        $this->expectNotice();
+        if (PHP_VERSION_ID < 80000) {
+          $this->expectNotice();
+        } else {
+          $this->expectWarning();
+        }
       }
       $this->assertNull($document->UNKNOWN_PROPERTY);
     }

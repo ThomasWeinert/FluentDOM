@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -48,7 +48,7 @@ namespace FluentDOM\DOM {
         Node\ParentNode\Implementation::append as appendToParentNode;
       }
 
-    const NAMESPACE_XMLNS = 'http://www.w3.org/2000/xmlns/';
+    private const NAMESPACE_XMLNS = 'http://www.w3.org/2000/xmlns/';
 
     /**
      * @param string $name
@@ -121,7 +121,7 @@ namespace FluentDOM\DOM {
       case 'lastElementChild' :
         throw new \BadMethodCallException(
           \sprintf(
-            'Can not write readonly property %s::$%s.',
+            'Cannot write property %s::$%s.',
             \get_class($this), $name
           )
         );
@@ -258,42 +258,43 @@ namespace FluentDOM\DOM {
      * - a scalar or object castable to string (adds a text node)
      * - an array (sets attributes)
      *
-     * @param \Traversable|\DOMNode|Appendable|array|string|callable $value
-     * @return $this|Element
+     * @param \Traversable|\DOMNode|Appendable|array|string|callable $nodes
+     * @return void
      * @throws \LogicException
      */
-    public function append($value): Element {
+    public function append(...$nodes): void {
       $document = $this->ownerDocument;
       if (!$document instanceof Document) {
         throw new \LogicException(
           sprintf('Node is not attached to a %s.', Document::class)
         );
       }
-      if ($value instanceof \DOMAttr) {
-        $this->setAttributeNode(
-          $value->ownerDocument === $document
-            ? $value : $document->importNode($value)
-        );
-      } elseif ($value instanceof Appendable) {
-        $document->namespaces()->store();
-        $value->appendTo($this);
-        $document->namespaces()->restore();
-      } elseif ($value instanceof \Closure && !$value instanceof \DOMNode) {
-        $this->append($value());
-      } elseif (\is_array($value)) {
-        $nodes = [];
-        foreach ($value as $name => $data) {
-          if (QualifiedName::validate((string)$name)) {
-            $this->setAttribute($name, (string)$data);
-          } else {
-            $nodes[] = $data;
+      foreach ($nodes as $node) {
+        if ($node instanceof \DOMAttr) {
+          $this->setAttributeNode(
+            $node->ownerDocument === $document
+              ? $node : $document->importNode($node)
+          );
+        } elseif ($node instanceof Appendable) {
+          $document->namespaces()->store();
+          $node->appendTo($this);
+          $document->namespaces()->restore();
+        } elseif ($node instanceof \Closure && !$node instanceof \DOMNode) {
+          $this->append($node());
+        } elseif (\is_array($node)) {
+          $nodes = [];
+          foreach ($node as $name => $data) {
+            if (QualifiedName::validate((string)$name)) {
+              $this->setAttribute($name, (string)$data);
+            } else {
+              $nodes[] = $data;
+            }
           }
+          $this->appendToParentNode($nodes);
+        } else {
+          $this->appendToParentNode($node);
         }
-        $this->appendToParentNode($nodes);
-      } else {
-        $this->appendToParentNode($value);
       }
-      return $this;
     }
 
     /**
@@ -301,7 +302,7 @@ namespace FluentDOM\DOM {
      *
      * @param string $name
      * @param string $content
-     * @param array $attributes
+     * @param array|NULL $attributes
      * @return Element
      * @throws \LogicException
      */

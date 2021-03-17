@@ -21,6 +21,12 @@ jobs:
           - "7.4"
           - "8.0"
           - "8.1"
+        dependencies:
+          - highest
+
+        include:
+          - php-version: "8.1"
+            experimental: true
 
     steps:
       - name: "Configure git to avoid issues with line endings"
@@ -46,4 +52,6 @@ jobs:
         run: "php tools/composer.phar install --prefer-dist"
 
       - name: "Run tests with phpunit.phar"
-        run: "php tools/phpunit.phar --coverage-clover=coverage.xml"
+        env:
+          FAILURE_ACTION: "${{ matrix.experimental == true }}"
+        run: "php tools/phpunit.phar --coverage-clover=coverage.xml || $FAILURE_ACTION"

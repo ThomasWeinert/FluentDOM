@@ -70,9 +70,6 @@ namespace FluentDOM\Loader\XDM {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Loader\Json\JsonAsXDM
-     */
     public function testLoadWithValidFileExpectingException() {
       $loader = new JsonAsXDM();
       $this->expectException(InvalidSource\TypeFile::class);

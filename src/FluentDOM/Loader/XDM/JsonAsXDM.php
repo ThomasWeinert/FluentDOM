@@ -14,6 +14,8 @@ namespace FluentDOM\Loader\XDM {
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\DocumentFragment;
   use FluentDOM\DOM\Element;
+  use FluentDOM\DOM\Implementation;
+  use FluentDOM\Exceptions\UnattachedNode;
   use FluentDOM\Loadable;
   use FluentDOM\Loader\Options;
   use FluentDOM\Loader\Result;
@@ -26,15 +28,15 @@ namespace FluentDOM\Loader\XDM {
 
     use SupportsJson;
 
-    const CONTENT_TYPES = ['xdm-json', 'application/xdm-json', 'text/xdm-json'];
-    const XMLNS_FN = 'http://www.w3.org/2005/xpath-functions';
+    private const CONTENT_TYPES = ['xdm-json', 'application/xdm-json', 'text/xdm-json'];
+    private const XMLNS_FN = 'http://www.w3.org/2005/xpath-functions';
 
-    const TYPE_NULL = 'null';
-    const TYPE_BOOLEAN = 'boolean';
-    const TYPE_NUMBER = 'number';
-    const TYPE_STRING = 'string';
-    const TYPE_OBJECT = 'map';
-    const TYPE_ARRAY = 'array';
+    private const TYPE_NULL = 'null';
+    private const TYPE_BOOLEAN = 'boolean';
+    private const TYPE_NUMBER = 'number';
+    private const TYPE_STRING = 'string';
+    private const TYPE_OBJECT = 'map';
+    private const TYPE_ARRAY = 'array';
 
     /**
      * Maximum recursions
@@ -111,12 +113,13 @@ namespace FluentDOM\Loader\XDM {
      * @param mixed $value
      * @param string|null $key
      * @param int $recursions
+     * @throws UnattachedNode
      */
-    protected function transferTo(\DOMNode $parent, $value, string $key = NULL, int $recursions = 100) {
+    protected function transferTo(\DOMNode $parent, $value, string $key = NULL, int $recursions = 100): void {
       if ($recursions < 1) {
         return;
       }
-      $document = $parent instanceof Document ? $parent : $parent->ownerDocument;
+      $document = Implementation::getNodeDocument($parent);
       if (
         $document instanceof Document &&
         (

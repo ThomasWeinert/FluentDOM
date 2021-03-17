@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -11,6 +11,9 @@
 declare(strict_types=1);
 
 namespace FluentDOM\DOM\Node {
+
+  use FluentDOM\DOM\Implementation;
+  use FluentDOM\Exceptions\UnattachedNode;
 
   /**
    * Class MutationMacro
@@ -21,14 +24,32 @@ namespace FluentDOM\DOM\Node {
    */
   abstract class MutationMacro {
 
-    public static function expand(\DOMNode $context, $nodes) {
-      $document = $context instanceof \DOMDocument ? $context : $context->ownerDocument;
+    /**
+     * @param \DOMNode $context
+     * @param \DOMNode|string|null ...$nodes
+     * @return \DOMDocumentFragment|null
+     * @throws UnattachedNode
+     */
+    public static function expand(\DOMNode $context, ...$nodes): ?\DOMDocumentFragment {
+      $document = Implementation::getNodeDocument($context);
       $result = $document->createDocumentFragment();
-      if (!self::isTraversableOfNodes($nodes)) {
-        $nodes = [$nodes];
-      }
       foreach ($nodes as $node) {
-        if ($node instanceof \DOMNode) {
+        if (NULL === $node) {
+          continue;
+        }
+        if ($node instanceof \DOMNodeList || self::isTraversableOfNodes($node)) {
+          foreach ($node as $childNode) {
+            if ($childNode instanceof \DOMNode) {
+              self::add($result, $childNode);
+            } elseif (self::isStringCastable($childNode)) {
+              $result->appendChild($document->createTextNode((string)$childNode));
+            } else {
+              throw new \InvalidArgumentException(
+                'Argument needs to be a dom node or castable into a string'
+              );
+            }
+          }
+        } elseif ($node instanceof \DOMNode) {
           self::add($result, $node);
         } elseif (self::isStringCastable($node)) {
           $result->appendChild($document->createTextNode((string)$node));
@@ -55,8 +76,7 @@ namespace FluentDOM\DOM\Node {
      */
     private static function isTraversableOfNodes($value): bool {
       return (
-        !($value instanceof \DOMNode) &&
-        ($value instanceof \Traversable || \is_array($value))
+        !($value instanceof \DOMNode) && \is_iterable($value)
       );
     }
 
@@ -64,7 +84,7 @@ namespace FluentDOM\DOM\Node {
      * @param \DOMDocumentFragment $target
      * @param \DOMNode $node
      */
-    private static function add(\DOMDocumentFragment $target, \DOMNode $node) {
+    private static function add(\DOMDocumentFragment $target, \DOMNode $node): void {
       if ($node instanceof \DOMDocument) {
         if ($node->documentElement instanceof \DOMElement) {
           $target->appendChild($target->ownerDocument->importNode($node->documentElement, TRUE));

@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace FluentDOM\Transformer\Namespaces {
 
+  use FluentDOM\DOM\Implementation;
+  use FluentDOM\Exceptions\UnattachedNode;
   use FluentDOM\Transformer\Namespaces;
 
   /**
@@ -39,24 +41,26 @@ namespace FluentDOM\Transformer\Namespaces {
     }
 
     /**
-     * @param \DOMNode $parent
+     * @param \DOMNode $target
      * @param \DOMNode $source
+     * @throws UnattachedNode
      */
-    protected function addNode(\DOMNode $parent, \DOMNode $source) {
+    protected function addNode(\DOMNode $target, \DOMNode $source): void {
       if ($source instanceof \DOMElement) {
-        $this->importElement($parent, $source);
+        $this->importElement($target, $source);
       } else {
-        $document = $parent instanceof \DOMDocument ? $parent : $parent->ownerDocument;
-        $parent->appendChild($document->importNode($source));
+        $document = Implementation::getNodeDocument($target);
+        $target->appendChild($document->importNode($source));
       }
     }
 
     /**
-     * @param \DOMNode $parent
+     * @param \DOMNode $target
      * @param \DOMElement $source
+     * @throws UnattachedNode
      */
-    private function importElement(\DOMNode $parent, \DOMElement $source) {
-      $document = $parent instanceof \DOMDocument ? $parent : $parent->ownerDocument;
+    private function importElement(\DOMNode $target, \DOMElement $source): void {
+      $document = Implementation::getNodeDocument($target);
       $namespaceURI = $this->getMappedNamespace((string)$source->namespaceURI);
       $prefix = $this->getMappedPrefix($namespaceURI);
       if (empty($namespaceURI)) {
@@ -66,7 +70,7 @@ namespace FluentDOM\Transformer\Namespaces {
       } else {
         $child = $document->createElementNS($namespaceURI, $prefix.':'.$source->localName);
       }
-      $parent->appendChild($child);
+      $target->appendChild($child);
       foreach ($source->attributes as $attribute) {
         $this->importAttribute($child, $attribute);
       }
@@ -79,7 +83,7 @@ namespace FluentDOM\Transformer\Namespaces {
      * @param \DOMElement $parent
      * @param \DOMAttr $source
      */
-    private function importAttribute(\DOMElement $parent, \DOMAttr $source) {
+    private function importAttribute(\DOMElement $parent, \DOMAttr $source): void {
       $document = $parent->ownerDocument;
       $namespaceURI = $this->getMappedNamespace((string)$source->namespaceURI);
       $prefix = $this->getMappedPrefix($namespaceURI) ?? $source->prefix;
@@ -107,7 +111,7 @@ namespace FluentDOM\Transformer\Namespaces {
      * @param string $namespaceURI
      * @return string|NULL
      */
-    private function getMappedPrefix(string $namespaceURI) {
+    private function getMappedPrefix(string $namespaceURI): ?string {
       if (isset($this->_prefixes[$namespaceURI])) {
         return (string)$this->_prefixes[$namespaceURI];
       }

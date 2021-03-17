@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -14,6 +14,8 @@ namespace FluentDOM\Loader\Text {
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\DocumentFragment;
   use FluentDOM\DOM\Element;
+  use FluentDOM\DOM\Implementation;
+  use FluentDOM\Exceptions\UnattachedNode;
   use FluentDOM\Loadable;
   use FluentDOM\Loader\Options;
   use FluentDOM\Loader\Result;
@@ -88,10 +90,11 @@ namespace FluentDOM\Loader\Text {
      * @param \DOMNode $parent
      * @param array|\Traversable $lines
      * @param bool $hasHeaderLine
-     * @param array $columns
+     * @param array|NULL $columns
+     * @throws UnattachedNode
      */
-    private function appendLines(\DOMNode $parent, $lines, bool $hasHeaderLine, array $columns = NULL) {
-      $document = $parent instanceof \DOMDocument ? $parent : $parent->ownerDocument;
+    private function appendLines(\DOMNode $parent, $lines, bool $hasHeaderLine, array $columns = NULL): void {
+      $document = Implementation::getNodeDocument($parent);
       $headers = NULL;
       /** @var array $record */
       foreach ($lines as $record) {

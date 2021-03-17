@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -14,6 +14,8 @@ namespace FluentDOM\Transformer {
   use FluentDOM\Appendable;
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Element;
+  use FluentDOM\DOM\Implementation;
+  use FluentDOM\Exceptions\UnattachedNode;
   use FluentDOM\Utility\StringCastable;
 
   /**
@@ -38,9 +40,10 @@ namespace FluentDOM\Transformer {
 
     /**
      * @param \DOMNode $node
+     * @throws UnattachedNode
      */
     public function __construct(\DOMNode $node) {
-      $document = $node instanceof \DOMDocument ? $node : $node->ownerDocument;
+      $document = Implementation::getNodeDocument($node);
       $this->_document = new Document($document->xmlVersion, $document->xmlEncoding);
       if ($node instanceof \DOMDocument) {
         foreach ($document->childNodes as $childNode) {
@@ -94,9 +97,8 @@ namespace FluentDOM\Transformer {
      * Append transformed nodes to another DOM
      *
      * @param Element $parentNode
-     * @return Element|NULL|void
      */
-    public function appendTo(Element $parentNode) {
+    public function appendTo(Element $parentNode): void {
       foreach ($this->_document->childNodes as $node) {
         if ($node instanceof \DOMElement) {
           $this->addNode($parentNode, $node);

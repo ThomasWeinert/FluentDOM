@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace FluentDOM\Transformer\Namespaces {
 
+  use FluentDOM\DOM\Implementation;
+  use FluentDOM\Exceptions\UnattachedNode;
   use FluentDOM\Transformer\Namespaces;
 
   class Optimize extends Namespaces {
@@ -38,6 +40,7 @@ namespace FluentDOM\Transformer\Namespaces {
      *
      * @param \DOMNode $node
      * @param array $namespaces
+     * @throws UnattachedNode
      */
     public function __construct(\DOMNode $node, array $namespaces = []) {
       parent::__construct($node);
@@ -51,12 +54,13 @@ namespace FluentDOM\Transformer\Namespaces {
      *
      * @param \DOMNode $target
      * @param \DOMNode $source
+     * @throws UnattachedNode
      */
-    protected function addNode(\DOMNode $target, \DOMNode $source) {
+    protected function addNode(\DOMNode $target, \DOMNode $source): void {
       if ($source instanceof \DOMElement) {
         $this->addElement($target, $source);
       } else {
-        $document = $target instanceof \DOMDocument ? $target : $target->ownerDocument;
+        $document = Implementation::getNodeDocument($target);
         $target->appendChild($document->importNode($source));
       }
     }
@@ -68,9 +72,10 @@ namespace FluentDOM\Transformer\Namespaces {
      *
      * @param \DOMNode $target
      * @param \DOMElement $source
+     * @throws UnattachedNode
      */
-    private function addElement(\DOMNode $target, \DOMElement $source) {
-      list($prefix, $name, $uri) = $this->getNodeDefinition($source);
+    private function addElement(\DOMNode $target, \DOMElement $source): void {
+      [$prefix, $name, $uri] = $this->getNodeDefinition($source);
       if ($target instanceof \DOMElement) {
         $this->addNamespaceAttribute($target, $prefix, $uri);
       }
@@ -89,9 +94,10 @@ namespace FluentDOM\Transformer\Namespaces {
      * @param string $name
      * @param string $namespaceURI
      * @return \DOMElement
+     * @throws UnattachedNode
      */
     private function createElement(\DOMNode $target, string $prefix, string $name, string $namespaceURI): \DOMElement {
-      $document = $target instanceof \DOMDocument ? $target : $target->ownerDocument;
+      $document = Implementation::getNodeDocument($target);
       $newNodeName = empty($prefix) ? $name : $prefix.':'.$name;
       if (empty($namespaceURI) && NULL === $target->lookupNamespaceUri(NULL)) {
         $newNode = $document->createElement($newNodeName);
@@ -108,8 +114,8 @@ namespace FluentDOM\Transformer\Namespaces {
      * @param \DOMElement $target
      * @param \DOMAttr $source
      */
-    private function addAttribute(\DOMElement $target, \DOMAttr $source) {
-      list($prefix, $name, $uri) = $this->getNodeDefinition($source);
+    private function addAttribute(\DOMElement $target, \DOMAttr $source): void {
+      [$prefix, $name, $uri] = $this->getNodeDefinition($source);
       if (empty($prefix)) {
         $target->setAttribute($name, $source->value);
       } else {
@@ -151,7 +157,7 @@ namespace FluentDOM\Transformer\Namespaces {
      * @param string $prefix
      * @param string $namespaceURI
      */
-    private function addNamespaceAttribute(\DOMElement $node, string $prefix, string $namespaceURI) {
+    private function addNamespaceAttribute(\DOMElement $node, string $prefix, string $namespaceURI): void {
       if (
         ($node->parentNode instanceof \DOMElement) &&
         $this->canAddNamespaceToNode($node->parentNode, $prefix, $namespaceURI)

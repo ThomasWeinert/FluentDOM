@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -12,6 +12,8 @@ declare(strict_types=1);
 namespace FluentDOM\Loader\Json {
 
   use FluentDOM\DOM\Element;
+  use FluentDOM\DOM\Implementation;
+  use FluentDOM\Exceptions\UnattachedNode;
   use FluentDOM\Loadable;
   use FluentDOM\Loader\Supports;
 
@@ -21,17 +23,18 @@ namespace FluentDOM\Loader\Json {
   class JsonML implements Loadable {
 
     use Supports\Json;
-    const CONTENT_TYPES = ['jsonml', 'application/jsonml', 'application/jsonml+json'];
+    public const CONTENT_TYPES = ['jsonml', 'application/jsonml', 'application/jsonml+json'];
 
     /**
      * @param \DOMNode|Element $node
      * @param mixed $json
+     * @throws UnattachedNode
      */
-    public function transferTo(\DOMNode $node, $json) {
+    public function transferTo(\DOMNode $node, $json): void {
       if (\is_array($json) && \count($json) > 0) {
         $this->transferToElement($node, $json);
       } elseif (\is_scalar($json)) {
-        $document = $node instanceof \DOMDocument ? $node : $node->ownerDocument;
+        $document = Implementation::getNodeDocument($node);
         $node->appendChild(
           $document->createTextNode($this->getValueAsString($json))
         );
@@ -42,7 +45,7 @@ namespace FluentDOM\Loader\Json {
      * @param Element $node
      * @param \stdClass $properties
      */
-    private function addNamespaceAttributes(Element $node, \stdClass $properties) {
+    private function addNamespaceAttributes(Element $node, \stdClass $properties): void {
       foreach ($properties as $name => $value) {
         if ($name === 'xmlns' || 0 === \strpos($name, 'xmlns:')) {
           if ($node instanceof \DOMElement) {
@@ -59,7 +62,7 @@ namespace FluentDOM\Loader\Json {
      * @param Element $node
      * @param \stdClass $properties
      */
-    private function addAttributes(Element $node, \stdClass $properties) {
+    private function addAttributes(Element $node, \stdClass $properties): void {
       $document = $node->ownerDocument;
       foreach ($properties as $name => $value) {
         if (!($name === 'xmlns' || 0 === \strpos($name, 'xmlns:'))) {
@@ -76,9 +79,10 @@ namespace FluentDOM\Loader\Json {
     /**
      * @param \DOMNode $node
      * @param mixed $json
+     * @throws UnattachedNode
      */
-    private function transferToElement(\DOMNode $node, $json) {
-      $document = $node instanceof \DOMDocument ? $node : $node->ownerDocument;
+    private function transferToElement(\DOMNode $node, $json): void {
+      $document = Implementation::getNodeDocument($node);
       $nodeName = $json[0];
       $length = \count($json);
       $hasProperties = $length > 1 && \is_object($json[1]);

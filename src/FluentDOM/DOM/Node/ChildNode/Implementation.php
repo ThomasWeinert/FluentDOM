@@ -55,7 +55,7 @@ namespace FluentDOM\DOM\Node\ChildNode {
     /**
      * Insert nodes after a node.
      *
-     * @param \DOMNode|\DOMNodeList|NULL $nodes
+     * @param \DOMNode[]|\DOMNodeList[] $nodes
      */
     public function after(...$nodes): void {
       /** @var \DOMNode|Implementation $this */

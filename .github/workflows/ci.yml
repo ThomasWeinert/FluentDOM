@@ -16,10 +16,11 @@ jobs:
       fail-fast: false
       matrix:
         php-version:
+          - "7.2"
           - "7.3"
-          # - "7.4"
-          # - "8.0"
-          # - "8.1"
+          - "7.4"
+          - "8.0"
+          - "8.1"
 
     steps:
       - name: "Configure git to avoid issues with line endings"
@@ -44,5 +45,5 @@ jobs:
       - name: "Install dependencies"
         run: "php tools/composer.phar install --prefer-dist"
 
-      - name: "Run tests with phpunit"
+      - name: "Run tests with phpunit.phar"
         run: "php tools/phpunit.phar --coverage-clover=coverage.xml"

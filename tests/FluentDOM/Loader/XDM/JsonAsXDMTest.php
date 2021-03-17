@@ -17,7 +17,7 @@ namespace FluentDOM\Loader\XDM {
   require_once __DIR__.'/../../TestCase.php';
 
   /**
-   * @covers \FluentDOM\Loader\XDM
+   * @covers \FluentDOM\Loader\XDM\JsonAsXDM
    */
   class JsonAsXDMTest extends TestCase {
 
@@ -82,9 +82,6 @@ namespace FluentDOM\Loader\XDM {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Loader\Json\JsonAsXDM
-     */
     public function testLoadWithValidStructure() {
       $loader = new JsonAsXDM();
       $json = new \stdClass();
@@ -104,9 +101,6 @@ namespace FluentDOM\Loader\XDM {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Loader\Json\JsonAsXDM
-     */
     public function testLoadWithAllTypes() {
       $loader = new JsonAsXDM();
       $json = json_decode(
@@ -156,9 +150,6 @@ namespace FluentDOM\Loader\XDM {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Loader\Json\JsonAsXDM
-     */
     public function testLoadWithAssociativeArray() {
       $loader = new JsonAsXDM();
       $json = ['foo' => 'bar'];
@@ -177,9 +168,6 @@ namespace FluentDOM\Loader\XDM {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Loader\Json\JsonAsXDM
-     */
     public function testLoadWithInvalidSourceExpectingNull() {
       $loader = new JsonAsXDM();
       $this->assertNull(
@@ -190,9 +178,6 @@ namespace FluentDOM\Loader\XDM {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Loader\Json\JsonAsXDM
-     */
     public function testLoadWithInvalidJsonStringExpectingException() {
       $loader = new JsonAsXDM();
       $this->expectException(\UnexpectedValueException::class);
@@ -202,9 +187,6 @@ namespace FluentDOM\Loader\XDM {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Loader\Json\JsonAsXDM
-     */
     public function testLoadStoppingAtMaxDepth() {
       $loader = new JsonAsXDM(0, 2);
       $this->assertXmlStringEqualsXmlString(
@@ -218,9 +200,6 @@ namespace FluentDOM\Loader\XDM {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Loader\Json\JsonAsXDM
-     */
     public function testLoadWithEmptyArray() {
       $loader = new JsonAsXDM(0, 1);
       $this->assertXmlStringEqualsXmlString(

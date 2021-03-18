@@ -165,11 +165,11 @@ namespace FluentDOM {
     }
 
     /**
-     * @param array|\Traversable $traversable
-     * @param callable|null $map
+     * @param iterable $traversable
+     * @param callable|NULL $map
      * @return Appendable
      */
-    public function each($traversable, callable $map = NULL): Appendable {
+    public function each(iterable $traversable, callable $map = NULL): Appendable {
       return new Creator\Nodes($traversable, $map);
     }
   }

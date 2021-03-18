@@ -253,18 +253,6 @@ namespace FluentDOM {
       );
     }
 
-    public function testEachWithNonIterable(): void {
-      $_ = new Creator();
-      $iterator = $_->each(NULL);
-      $this->assertInstanceOf(
-        Creator\Nodes::class, $iterator
-      );
-      $this->assertEquals(
-        [], iterator_to_array($iterator)
-      );
-    }
-
-
     public function testCreateWithDOMNode(): void {
       $document = new \DOMDocument();
       $_ = new Creator();

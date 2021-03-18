@@ -19,7 +19,7 @@ namespace FluentDOM\DOM\Node\NonDocumentTypeChildNode {
      * @param string $name
      * @return bool
      */
-    public function __isset(string $name) {
+    public function __isset(string $name): bool {
       switch ($name) {
       case 'nextElementSibling' :
         return $this->getNextElementSibling() !== NULL;
@@ -33,7 +33,7 @@ namespace FluentDOM\DOM\Node\NonDocumentTypeChildNode {
      * @param string $name
      * @return \DOMNode|NULL
      */
-    public function __get(string $name) {
+    public function __get(string $name): ?\DOMNode {
       switch ($name) {
       case 'nextElementSibling' :
         return $this->getNextElementSibling();
@@ -66,7 +66,7 @@ namespace FluentDOM\DOM\Node\NonDocumentTypeChildNode {
      * @param string $name
      * @throws \BadMethodCallException
      */
-    protected function blockReadOnlyProperties(string $name) {
+    protected function blockReadOnlyProperties(string $name): void {
       switch ($name) {
       case 'nextElementSibling' :
       case 'previousElementSibling' :

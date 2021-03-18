@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -34,13 +34,11 @@ namespace FluentDOM\Creator {
     private $_iterator;
 
     /**
-     * @param array|\Traversable $iterable
-     * @param callable $map
+     * @param iterable $iterable
+     * @param callable|NULL $map
      */
-    public function __construct($iterable, callable $map = NULL) {
-      if (\is_array($iterable) || $iterable instanceof \Traversable) {
-        $this->_iterable = $iterable;
-      }
+    public function __construct(iterable $iterable, callable $map = NULL) {
+      $this->_iterable = $iterable;
       $this->_map = $map;
     }
 
@@ -62,11 +60,11 @@ namespace FluentDOM\Creator {
       return $this->_iterator;
     }
 
-    public function rewind() {
+    public function rewind(): void {
       $this->getInnerIterator()->rewind();
     }
 
-    public function next() {
+    public function next(): void {
       $this->getInnerIterator()->next();
     }
 
@@ -99,14 +97,14 @@ namespace FluentDOM\Creator {
     }
 
     /**
-     * @param Element $parent
+     * @param Element $parentNode
      * @return Element
      */
-    public function appendTo(Element $parent): Element {
+    public function appendTo(Element $parentNode): Element {
       foreach ($this as $item) {
-        $parent->append($item);
+        $parentNode->append($item);
       }
-      return $parent;
+      return $parentNode;
     }
   }
 }

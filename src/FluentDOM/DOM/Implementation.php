@@ -20,14 +20,21 @@ namespace FluentDOM\DOM {
    */
   class Implementation extends \DOMImplementation {
 
-    public function createDocument($namespaceURI = NULL, $qualifiedName = NULL, DOMDocumentType $doctype = NULL) {
+    /**
+     * @param string|null $namespaceURI
+     * @param string|null $qualifiedName
+     * @param DOMDocumentType|null $doctype
+     * @return Document
+     */
+    public function createDocument($namespaceURI = NULL, $qualifiedName = NULL, DOMDocumentType
+    $doctype = NULL) {
       $document = new Document();
       if ($doctype) {
         $document->appendChild($doctype);
       }
       if ($qualifiedName) {
         $document->appendChild($document->createElementNS($namespaceURI, $qualifiedName));
-        $prefix = strstr($qualifiedName, ':', TRUE);
+        $prefix = (string)strstr($qualifiedName, ':', TRUE);
         if ($prefix !== '' || !empty($namespaceURI)) {
           $document->registerNamespace($prefix, $namespaceURI);
         }

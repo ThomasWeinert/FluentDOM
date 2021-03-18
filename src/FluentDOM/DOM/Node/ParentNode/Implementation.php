@@ -15,6 +15,7 @@ namespace FluentDOM\DOM\Node\ParentNode {
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Element;
   use FluentDOM\DOM\Node\MutationMacro;
+  use FluentDOM\Exceptions\UnattachedNode;
 
   /**
    * @property-read \DOMNode $firstChild
@@ -29,7 +30,7 @@ namespace FluentDOM\DOM\Node\ParentNode {
      * @param \DOMNode|NULL $refChild
      * @return \DOMNode
      */
-    abstract public function insertBefore(\DOMNode $newChild,\DOMNode $refChild = NULL);
+    abstract public function insertBefore(\DOMNode $newChild, \DOMNode $refChild = NULL);
 
     /**
      * @param \DOMNode $newChild
@@ -41,7 +42,7 @@ namespace FluentDOM\DOM\Node\ParentNode {
      * Returns the first element child node
      * @return Element|NULL
      */
-    public function getFirstElementChild() {
+    public function getFirstElementChild(): ?Element {
       if ($this instanceof Document) {
         return $this->documentElement;
       }
@@ -59,7 +60,7 @@ namespace FluentDOM\DOM\Node\ParentNode {
      * Returns the last element child node
      * @return Element|NULL
      */
-    public function getLastElementChild() {
+    public function getLastElementChild(): ?Element {
       if ($this instanceof Document) {
         return $this->documentElement;
       }
@@ -78,6 +79,7 @@ namespace FluentDOM\DOM\Node\ParentNode {
      * Insert nodes before the first child node
      *
      * @param mixed $nodes
+     * @throws UnattachedNode
      */
     public function prepend(...$nodes): void {
       /** @var \DOMNode|Implementation $this */
@@ -95,6 +97,7 @@ namespace FluentDOM\DOM\Node\ParentNode {
      * Append nodes as children to the node itself
      *
      * @param mixed $nodes
+     * @throws UnattachedNode
      */
     public function append(...$nodes): void {
       /** @var \DOMNode|Implementation $this */

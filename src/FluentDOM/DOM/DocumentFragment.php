@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -91,8 +91,7 @@ namespace FluentDOM\DOM {
           /** @noinspection CallableParameterUseCaseInTypeContextInspection */
           $namespaces = $xpath('namespace::*', $namespaces);
         }
-        if (\is_array($namespaces) || $namespaces instanceof \Traversable) {
-          /** @noinspection ForeachSourceInspection */
+        if (is_iterable($namespaces)) {
           foreach ($namespaces as $key => $namespaceURI) {
             if ($namespaceURI instanceof \DOMNameSpaceNode) {
               if ($namespaceURI->nodeName === 'xmlns') {
@@ -120,7 +119,7 @@ namespace FluentDOM\DOM {
      * @param string $namespaceURI
      * @throws \InvalidArgumentException
      */
-    public function registerNamespace(string $prefix, string $namespaceURI) {
+    public function registerNamespace(string $prefix, string $namespaceURI): void {
       $this->namespaces()[empty($prefix) ? '#default' : $prefix] = $namespaceURI;
     }
 
@@ -159,7 +158,7 @@ namespace FluentDOM\DOM {
      *
      * @param string $name
      * @param string $content
-     * @param array $attributes
+     * @param array|NULL $attributes
      * @return Element
      * @throws \LogicException
      */

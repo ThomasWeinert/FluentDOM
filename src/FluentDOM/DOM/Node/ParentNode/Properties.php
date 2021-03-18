@@ -22,7 +22,7 @@ namespace FluentDOM\DOM\Node\ParentNode {
      * @param string $name
      * @return bool
      */
-    public function __isset(string $name) {
+    public function __isset(string $name): bool {
       switch ($name) {
       case 'firstElementChild' :
         return $this->getFirstElementChild() !== NULL;
@@ -71,7 +71,7 @@ namespace FluentDOM\DOM\Node\ParentNode {
      * @param string $name
      * @throws \BadMethodCallException
      */
-    protected function blockReadOnlyProperties(string $name) {
+    protected function blockReadOnlyProperties(string $name): void {
       switch ($name) {
       case 'firstElementChild' :
       case 'lastElementChild' :

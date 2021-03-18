@@ -26,8 +26,8 @@ namespace FluentDOM\DOM\Node {
 
     /**
      * @param \DOMNode $context
-     * @param \DOMNode|string|null ...$nodes
-     * @return \DOMDocumentFragment|null
+     * @param \DOMNode|string|\DOMNodeList ...$nodes
+     * @return \DOMDocumentFragment|NULL
      * @throws UnattachedNode
      */
     public static function expand(\DOMNode $context, ...$nodes): ?\DOMDocumentFragment {

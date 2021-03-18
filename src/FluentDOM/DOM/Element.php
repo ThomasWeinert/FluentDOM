@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace FluentDOM\DOM {
 
   use FluentDOM\Appendable;
+  use FluentDOM\Exceptions\UnattachedNode;
   use FluentDOM\Utility\Iterators\ElementIterator;
   use FluentDOM\Utility\QualifiedName;
 
@@ -54,7 +55,7 @@ namespace FluentDOM\DOM {
      * @param string $name
      * @return bool
      */
-    public function __isset(string $name) {
+    public function __isset(string $name): bool {
       switch ($name) {
       case 'nextElementSibling' :
         return $this->getNextElementSibling() !== NULL;
@@ -113,7 +114,7 @@ namespace FluentDOM\DOM {
      * @param string $name
      * @throws \BadMethodCallException
      */
-    private function blockReadOnlyProperties(string $name) {
+    private function blockReadOnlyProperties(string $name): void {
       switch ($name) {
       case 'nextElementSibling' :
       case 'previousElementSibling' :
@@ -131,77 +132,77 @@ namespace FluentDOM\DOM {
     /**
      * Validate if an attribute exists
      *
-     * @param string $name
+     * @param string $qualifiedName
      * @return bool
      * @throws \LogicException
      */
-    public function hasAttribute($name): bool {
-      list($namespaceURI, $localName) = $this->resolveTagName($name);
+    public function hasAttribute($qualifiedName): bool {
+      [$namespaceURI, $localName] = $this->resolveTagName($qualifiedName);
       if ($namespaceURI !== '') {
         return parent::hasAttributeNS($namespaceURI, $localName);
       }
-      return parent::hasAttribute($name);
+      return parent::hasAttribute($qualifiedName);
     }
 
     /**
      * Get an attribute value
      *
-     * @param string $name
+     * @param string $qualifiedName
      * @return string|NULL
      * @throws \LogicException
      */
-    public function getAttribute($name) {
-      list($namespaceURI, $localName) = $this->resolveTagName($name);
+    public function getAttribute($qualifiedName) {
+      [$namespaceURI, $localName] = $this->resolveTagName($qualifiedName);
       if ($namespaceURI !== '') {
         return parent::getAttributeNS($namespaceURI, $localName);
       }
-      return parent::getAttribute($name);
+      return parent::getAttribute($qualifiedName);
     }
 
     /**
      * Get an attribute value
      *
-     * @param string $name
+     * @param string $qualifiedName
      * @return Attribute|\DOMAttr|NULL
      * @throws \LogicException
      */
-    public function getAttributeNode($name) {
-      list($namespaceURI, $localName) = $this->resolveTagName($name);
+    public function getAttributeNode($qualifiedName) {
+      [$namespaceURI, $localName] = $this->resolveTagName($qualifiedName);
       if ($namespaceURI !== '') {
         return parent::getAttributeNodeNS($namespaceURI, $localName);
       }
-      return parent::getAttributeNode($name);
+      return parent::getAttributeNode($qualifiedName);
     }
 
     /**
      * Set an attribute on an element
      *
-     * @param string $name
+     * @param string $qualifiedName
      * @param string $value
      * @return void
      * @throws \LogicException
      */
-    public function setAttribute($name, $value) {
-      list($namespaceURI) = $this->resolveTagName($name);
+    public function setAttribute($qualifiedName, $value) {
+      [$namespaceURI] = $this->resolveTagName($qualifiedName);
       if ($namespaceURI !== '') {
-        parent::setAttributeNS($namespaceURI, $name, $value);
+        parent::setAttributeNS($namespaceURI, $qualifiedName, $value);
       }
-      parent::setAttribute($name, $value);
+      parent::setAttribute($qualifiedName, $value);
     }
 
     /**
      * Set an attribute on an element
      *
-     * @param string $name
+     * @param string $qualifiedName
      * @return bool
      * @throws \LogicException
      */
-    public function removeAttribute($name): bool {
-      list($namespaceURI, $localName) = $this->resolveTagName($name);
+    public function removeAttribute($qualifiedName): bool {
+      [$namespaceURI, $localName] = $this->resolveTagName($qualifiedName);
       if ($namespaceURI !== '') {
         return $this->removeAttributeNS($namespaceURI, $localName);
       }
-      return (bool)parent::removeAttribute($name);
+      return (bool)parent::removeAttribute($qualifiedName);
     }
 
     /**
@@ -235,16 +236,16 @@ namespace FluentDOM\DOM {
     /**
      * Set an attribute on an element
      *
-     * @param string $name
+     * @param string $qualifiedName
      * @param bool $isId
      * @throws \LogicException
      */
-    public function setIdAttribute($name, $isId) {
-      list($namespaceURI, $localName) = $this->resolveTagName($name);
+    public function setIdAttribute($qualifiedName, $isId) {
+      [$namespaceURI, $localName] = $this->resolveTagName($qualifiedName);
       if ($namespaceURI !== '') {
         parent::setIdAttributeNS($namespaceURI, $localName, $isId);
       } else {
-        parent::setIdAttribute($name, $isId);
+        parent::setIdAttribute($qualifiedName, $isId);
       }
     }
 
@@ -260,7 +261,7 @@ namespace FluentDOM\DOM {
      *
      * @param \Traversable|\DOMNode|Appendable|array|string|callable $nodes
      * @return void
-     * @throws \LogicException
+     * @throws \LogicException|UnattachedNode
      */
     public function append(...$nodes): void {
       $document = $this->ownerDocument;
@@ -300,15 +301,15 @@ namespace FluentDOM\DOM {
     /**
      * Append an child element
      *
-     * @param string $name
+     * @param string $qualifiedName
      * @param string $content
      * @param array|NULL $attributes
      * @return Element
      * @throws \LogicException
      */
-    public function appendElement(string $name, $content = '', array $attributes = NULL): Element {
+    public function appendElement(string $qualifiedName, $content = '', array $attributes = NULL): Element {
       $this->appendChild(
-        $node = $this->getDocument()->createElement($name, $content, $attributes)
+        $node = $this->getDocument()->createElement($qualifiedName, $content, $attributes)
       );
       return $node;
     }
@@ -319,7 +320,7 @@ namespace FluentDOM\DOM {
      * @param string $xmlFragment
      * @throws \InvalidArgumentException
      */
-    public function appendXml(string $xmlFragment) {
+    public function appendXml(string $xmlFragment): void {
       $fragment = $this->getDocument()->createDocumentFragment();
       $fragment->appendXml($xmlFragment);
       $this->appendChild($fragment);
@@ -364,7 +365,7 @@ namespace FluentDOM\DOM {
      * @throws \LogicException
      */
     public function getElementsByTagName($name): \DOMNodeList {
-      list($namespaceURI, $localName) = $this->resolveTagName($name);
+      [$namespaceURI, $localName] = $this->resolveTagName($name);
       if ($namespaceURI !== '') {
         return parent::getElementsByTagNameNS($namespaceURI, $localName);
       }
@@ -422,7 +423,7 @@ namespace FluentDOM\DOM {
      * @param \DOMNode|string $value
      * @throws \LogicException
      */
-    public function offsetSet($offset, $value) {
+    public function offsetSet($offset, $value): void {
       if (NULL === $offset || $this->isNodeOffset($offset)) {
         if (!($value instanceOf \DOMNode)) {
           throw new \InvalidArgumentException(
@@ -447,7 +448,7 @@ namespace FluentDOM\DOM {
      * @param int|string $offset
      * @throws \InvalidArgumentException
      */
-    public function offsetUnset($offset) {
+    public function offsetUnset($offset): void {
       if ($this->isNodeOffset($offset)) {
         $this->removeChild($this->childNodes->item((int)$offset));
       } else {
@@ -519,7 +520,7 @@ namespace FluentDOM\DOM {
      * @throws \LogicException
      */
     private function resolveTagName(string $name): array {
-      list($prefix, $localName) = QualifiedName::split($name);
+      [$prefix, $localName] = QualifiedName::split($name);
       if (empty($prefix)) {
         return ['', (string)$localName];
       }
@@ -542,7 +543,7 @@ namespace FluentDOM\DOM {
      * @param NULL|string|array $prefixes
      * @throws \LogicException
      */
-    public function applyNamespaces($prefixes = NULL) {
+    public function applyNamespaces($prefixes = NULL): void {
       if ($prefixes !== NULL && !\is_array($prefixes)) {
         $prefixes = [$prefixes];
       }

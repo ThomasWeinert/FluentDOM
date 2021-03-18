@@ -21,6 +21,7 @@ declare(strict_types=1);
 namespace FluentDOM\DOM\Node\ChildNode {
 
   use FluentDOM\DOM\Node\MutationMacro;
+  use FluentDOM\Exceptions\UnattachedNode;
 
   trait Implementation {
 
@@ -37,7 +38,8 @@ namespace FluentDOM\DOM\Node\ChildNode {
     /**
      * Insert nodes before a node.
      *
-     * @param \DOMNode|\DOMNodeList|NULL $nodes
+     * @param \DOMNode|\DOMNodeList|string ...$nodes
+     * @throws UnattachedNode
      */
     public function before(...$nodes): void {
       /** @var \DOMNode|Implementation $this */
@@ -46,16 +48,17 @@ namespace FluentDOM\DOM\Node\ChildNode {
           $this->parentNode instanceof \DOMElement ||
           $this->parentNode instanceof \DOMDocument
         ) &&
-        ($nodes = MutationMacro::expand($this->ownerDocument, ...$nodes))
+        ($fragment = MutationMacro::expand($this, ...$nodes))
       ) {
-        $this->parentNode->insertBefore($nodes, $this);
+        $this->parentNode->insertBefore($fragment, $this);
       }
     }
 
     /**
      * Insert nodes after a node.
      *
-     * @param \DOMNode[]|\DOMNodeList[] $nodes
+     * @param \DOMNode|\DOMNodeList|string ...$nodes
+     * @throws UnattachedNode
      */
     public function after(...$nodes): void {
       /** @var \DOMNode|Implementation $this */
@@ -64,12 +67,12 @@ namespace FluentDOM\DOM\Node\ChildNode {
           $this->parentNode instanceof \DOMElement ||
           $this->parentNode instanceof \DOMDocument
         ) &&
-        ($nodes = MutationMacro::expand($this->ownerDocument, ...$nodes))
+        ($fragment = MutationMacro::expand($this, ...$nodes))
       ) {
         if ($this->nextSibling instanceof \DOMNode) {
-          $this->parentNode->insertBefore($nodes, $this->nextSibling);
+          $this->parentNode->insertBefore($fragment, $this->nextSibling);
         } else {
-          $this->parentNode->appendChild($nodes);
+          $this->parentNode->appendChild($fragment);
         }
       }
     }
@@ -79,6 +82,7 @@ namespace FluentDOM\DOM\Node\ChildNode {
      * returns the replaced node.
      *
      * @param \DOMNode|\DOMNodeList $nodes
+     * @throws UnattachedNode
      */
     public function replaceWith(...$nodes): void {
       $this->before(...$nodes);
@@ -86,8 +90,9 @@ namespace FluentDOM\DOM\Node\ChildNode {
     }
 
     /**
-     * @param  \DOMNode|\DOMNodeList $nodes
+     * @param \DOMNode|\DOMNodeList $nodes
      * @return $this|\DOMNode
+     * @throws UnattachedNode
      * @deprecated
      */
     public function replace($nodes) {

@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -11,7 +11,9 @@ declare(strict_types=1);
 
 namespace FluentDOM\DOM\Node {
 
+  use FluentDOM\DOM\CdataSection;
   use FluentDOM\DOM\Document;
+  use FluentDOM\DOM\Text;
 
   // @codeCoverageIgnoreStart
   if (!\defined('LIBXML_NO_MODIFICATION_ALLOWED_ERR')) {
@@ -33,12 +35,10 @@ namespace FluentDOM\DOM\Node {
 
     /**
      * @param string $content
-     * @return $this|NULL
+     * @return $this|Text|CdataSection|NULL
      */
     public function replaceWholeText($content) {
-      /** @var \FluentDOM\DOM\Text|\FluentDOM\DOM\CdataSection $this */
-      $content = (string)$content;
-      $canReplaceEntity = function(\DOMEntityReference $reference) use (&$canReplaceEntity) {
+      $canReplaceEntity = static function(\DOMEntityReference $reference) use (&$canReplaceEntity) {
         foreach ($reference->firstChild->childNodes as $childNode) {
           $canReplace = FALSE;
           if ($childNode instanceof \DOMEntityReference) {
@@ -54,7 +54,7 @@ namespace FluentDOM\DOM\Node {
         }
         return TRUE;
       };
-      $replaceNode = function(\DOMNode $node = NULL) use ($canReplaceEntity) {
+      $replaceNode = static function(\DOMNode $node = NULL) use ($canReplaceEntity) {
         if (
           $node instanceof \DOMNode &&
           !(
@@ -79,7 +79,6 @@ namespace FluentDOM\DOM\Node {
       $fragment = $this->ownerDocument->createDocumentFragment();
       $iterate = function($start, \Closure $getNext) use ($fragment, $replaceNode) {
         if ($parent = $this->parentNode) {
-          /** @noinspection PhpParamsInspection */
           $current = $getNext($start);
           while (($current instanceof \DOMNode) && $replaceNode($current)) {
             if ($current instanceof \DOMEntityReference) {
@@ -87,7 +86,6 @@ namespace FluentDOM\DOM\Node {
             } else {
               $parent->removeChild($current);
             }
-            /** @noinspection PhpParamsInspection */
             $current = $getNext($start);
           }
         }

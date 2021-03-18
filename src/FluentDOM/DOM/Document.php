@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -105,7 +105,7 @@ namespace FluentDOM\DOM {
      * @param string $namespaceURI
      * @throws \LogicException
      */
-    public function registerNamespace($prefix, $namespaceURI) {
+    public function registerNamespace(string $prefix, string $namespaceURI): void {
       $this->_namespaces[$prefix] = $namespaceURI;
       if (NULL !== $this->_xpath && $prefix !== '#default') {
         $this->_xpath->registerNamespace($prefix, $namespaceURI);
@@ -124,7 +124,6 @@ namespace FluentDOM\DOM {
     public function namespaces($namespaces = NULL): Namespaces {
       if (NULL !== $namespaces) {
         $this->_namespaces->assign([]);
-        /** @noinspection ForeachSourceInspection */
         foreach($namespaces as $prefix => $namespaceURI) {
           $this->registerNamespace($prefix, $namespaceURI);
         }
@@ -143,12 +142,12 @@ namespace FluentDOM\DOM {
      *
      * @param string $name
      * @param string|array $content
-     * @param array $attributes
+     * @param array|NULL $attributes
      * @throws \LogicException
      * @return Element
      */
     public function createElement($name, $content = NULL, array $attributes = NULL): Element {
-      list($prefix, $localName) = QualifiedName::split($name);
+      [$prefix, $localName] = QualifiedName::split($name);
       $namespaceURI = '';
       if ($prefix !== FALSE) {
         if (empty($prefix)) {
@@ -201,7 +200,7 @@ namespace FluentDOM\DOM {
      * @throws \LogicException
      */
     public function createAttribute($name, $value = NULL): Attribute {
-      list($prefix) = QualifiedName::split($name);
+      [$prefix] = QualifiedName::split($name);
       if (empty($prefix)) {
         $node = parent::createAttribute($name);
       } else {
@@ -218,7 +217,7 @@ namespace FluentDOM\DOM {
      *
      * @param string $name
      * @param string $content
-     * @param array $attributes
+     * @param array|NULL $attributes
      * @return Element
      * @throws \LogicException
      */
@@ -234,7 +233,7 @@ namespace FluentDOM\DOM {
      * @param string|array|NULL $content
      * @param array|NULL $attributes
      */
-    private function appendAttributes(\DOMElement $node, $content = NULL, array $attributes = NULL) {
+    private function appendAttributes(\DOMElement $node, $content = NULL, array $attributes = NULL): void {
       if (\is_array($content)) {
         /** @noinspection CallableParameterUseCaseInTypeContextInspection */
         $attributes = (NULL === $attributes) ? $content : \array_merge($content, $attributes);
@@ -250,7 +249,7 @@ namespace FluentDOM\DOM {
      * @param \DOMElement $node
      * @param string|array|NULL $content
      */
-    private function appendContent(\DOMElement $node, $content = NULL) {
+    private function appendContent(\DOMElement $node, $content = NULL): void {
       if (!((empty($content) && !\is_numeric($content)) || \is_array($content) )) {
         $node->appendChild($this->createTextNode((string)$content));
       }
@@ -337,12 +336,12 @@ namespace FluentDOM\DOM {
     /**
      * Allow getElementsByTagName to use the defined namespaces.
      *
-     * @param string $name
+     * @param string $qualifiedName
      * @return \DOMNodeList
      * @throws \LogicException
      */
-    public function getElementsByTagName($name): \DOMNodeList {
-      list($prefix, $localName) = QualifiedName::split($name);
+    public function getElementsByTagName($qualifiedName): \DOMNodeList {
+      list($prefix, $localName) = QualifiedName::split($qualifiedName);
       $namespaceURI = (string)$this->namespaces()->resolveNamespace((string)$prefix);
       if ($namespaceURI !== '') {
         return $this->getElementsByTagNameNS($namespaceURI, $localName);

@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -14,6 +14,7 @@ namespace FluentDOM\Creator {
   use FluentDOM\Creator;
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Element;
+  use FluentDOM\Exceptions\UnattachedNode;
   use FluentDOM\Transformer\Namespaces\Optimize;
 
   /**
@@ -54,7 +55,7 @@ namespace FluentDOM\Creator {
      * @param string $name
      * @return mixed
      */
-    public function __isset(string $name) {
+    public function __isset(string $name): bool {
       switch ($name) {
       case 'document' :
       case 'node' :
@@ -105,8 +106,11 @@ namespace FluentDOM\Creator {
       $document = clone $this->_document;
       $document->appendChild($document->importNode($this->_node, TRUE));
       if ($this->_creator->optimizeNamespaces) {
-        $document = (new Optimize($document))->getDocument();
-        $document->formatOutput = $this->_document->formatOutput;
+        try {
+          $document = (new Optimize($document))->getDocument();
+          $document->formatOutput = $this->_document->formatOutput;
+        } catch (UnattachedNode $exception) {
+        }
       }
       return $document;
     }
@@ -119,14 +123,14 @@ namespace FluentDOM\Creator {
     }
 
     /**
-     * @param Element $parent
+     * @param Element $parentNode
      * @return Element
      */
-    public function appendTo(Element $parent): Element {
-      $parent->appendChild(
-        $parent->ownerDocument->importNode($this->_node, TRUE)
+    public function appendTo(Element $parentNode): Element {
+      $parentNode->appendChild(
+        $parentNode->ownerDocument->importNode($this->_node, TRUE)
       );
-      return $parent;
+      return $parentNode;
     }
 
     /**

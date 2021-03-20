@@ -1,5 +1,62 @@
-Version 7.0.0
--------------
+8.0.0
+-----
+
+- [!BC] Minimum PHP Version 7.2.0
+- [!BC] \FluentDOM\Loadable::load() now always returns 
+    \FluentDOM\Loader\Result instance (or NULL)
+- [!BC] Define Return Type For \FluentDOM\Loadable::load()
+- [!BC] Define Return Type For \FluentDOM\Loadable::loadFragment()
+- [!BC] Change Method Signatures Of DOM L3 Methods To PHP
+- [FEATURE] #90 Throw Exception If File Can Not Be Loaded
+- [REFACTOR] Define Argument And Return Types
+- [REFACTOR] Reference Loaders By Class Constants
+
+7.4.0
+-----
+
+- [DOC] Add XMLWriter Append Example
+- [FEATURE] #87 Add FluentDOM\Query::unwrap()
+
+7.3.0
+-----
+
+- [FEATURE] Add PRESERVE_WHITESPACE option to XML loaders
+
+7.2.0
+-----
+
+- Set class files to strict types
+- Implement #78: ParentNode::$childElementCount
+- Implement #80: allow to remove namespace attributes
+- Add inheritance to Node interfaces
+- DocumentFragment implements the ParentNode interface
+- DOM Element::setAttribute() has not return value (in W3C standard)
+- Add Clark Notation to elements: FluentDOM\Element::clarkNotation
+- Add Clark Notation to attributes: FluentDOM\DOM\Attribute::clarkNotation()
+- Fix cdata section support for BadgerFish serializer
+- Let \FluentDOM\Exception interface extend \Throwable
+- Rename DOM\ChildNode::replace() to replaceWith() (DOM LS standard), keep replace for BC but mark as deprecated
+- DOMCDATASection implements DOMText change condition order to fix handling in XMLWriter::collapse().
+- Add constraint for node classes, FluentDOM\Utility\Constraints::assertNodeClass()
+- Add: JsonDOM example with mapping array node name
+- Fix phpdoc annotations
+- Cleanup code and fix inspections
+- Add missing unit tests
+
+7.1.0
+-----
+
+- Add: FluentDOM\DOM\Implementation extended DOMImplementation
+- Add: FluentDOM\DOM\Document::createDocumentType()
+- Add: XMLWriter filter example
+- Update: PHP 7.3 added to CI
+- Test: loading html fragment using option Loader\Html::IS_FRAGMENT
+- Fix inspection messages, function call optimization and return types
+- Refactor: array_merge() to array_push()
+- Fix: recursion handling in FluentDOM\Loader\Json\JsonDOM and FluentDOM\Loader\PHP\PDO
+
+7.0.0
+-----
 
 - Changed: minimum PHP version is now 7.0
 - Changed: Added type hints and return types
@@ -12,16 +69,16 @@ Version 7.0.0
 - Added #73: `FluentDOM\XMLWriter::collapse()` collapse DOM nodes
 - Added #74: `FluentDOM\XMLReader::attachStream()` attach stream to read from
 
-Version 6.2.0
--------------
+6.2.0
+-----
 
 - Fixed #73: Creator forgot namespaces
 - Added: `$filter` argument (callable) to `XMLReader::next()` and `XMLReader::read()`
 - Added: `FluentDOM\XMLReader\Iterator`
 - Added: `FluentDOM\XMLReader\SiblingIterator`
 
-Version 6.1.0
--------------
+6.1.0
+-----
 
 - Added #58: FluentDOM\Nodes\Creator::$optimizeNamespaces (default TRUE) optimizes
   namespace definitions on the created document.
@@ -37,13 +94,13 @@ Version 6.1.0
 - Fixed #66: Improved Multibyte handling for HTML loader/serializer
 - Added #60: FluentDOM\EntityReference
 
-Version 6.0.1
--------------
+6.0.1
+-----
 
 - Fixed #57: FluentDOM\Text::replaceWholeText() should not remove entity definition
 
-Version 6.0.0
--------------
+6.0.0
+-----
 
 - Changed: minimum PHP version is now 5.6
 - Changed: you might now need to set an option to load files (security)
@@ -68,8 +125,8 @@ Version 6.0.0
 - Added: FluentDOM\Loader\Options generic options for loaders (source type) 
 - Added: FluentDOM\Exceptions\LoadingError exception interface 
 
-Version 5.3
------------
+5.3.0
+-----
 
 - Changed: CSS Selectors are now provided by small connector libraries
 - Added: Interface FluentDOM\Xpath\Transformer, transform selectors to XPath
@@ -81,15 +138,15 @@ Version 5.3
 - Implemented: Added FluentDOM\Nodes::FIND_FORCE_SORT, allow to force sorting for find()
 - Fixed: _require.php explicit class loading
 
-Version 5.2.1
--------------
+5.2.1
+-----
 
 - Implemented: allow associative arrays in JsonDOM loader
 - Refactored: use === not just == 
 - Fixed: HHVM now has native properties, adapted XPath to Document connection 
 
-Version 5.2.0
--------------
+5.2.0
+-----
 
 - Added: FluentDOM\Loader\Text\CSV loads csv data into a xml document
 - Added: FluentDOM::registerLoader() as a plugin system for loaders provided by other composer packages
@@ -106,14 +163,14 @@ Version 5.2.0
 - Refactored: FluentDOM\Nodes\Compare implements compare for nodes, allow to optimize sorting
 - Refactored: most workarounds for HHVM are not necessary with HHVM 3.5, HHVM 3.5 is required for FluentDOM 5.2
 
-Version 5.1.1
--------------
+5.1.1
+-----
 
 - Fixed: FluentDOM\Element::append() needs to ignore arrays and strings
   if checking for callable
 
-Version 5.1.0
--------------
+5.1.0
+-----
 
 - Changed: All DOMNode descendants (FluentDOM\Document, FluentDOM\Element,
   FluentDOM\Text, ...) are now functors, allowing to evaluate an
@@ -139,20 +196,20 @@ Version 5.1.0
   namespace attributes, change prefixes
 - Added: FluentDOM\Transformer\Namespaces\Replace, replace namespaces
 
-Version 5.0.2
--------------
+5.0.2
+-----
 
 - Fixed: Remove null bytes in FluentDOM\Xpath::quote()
 - Fixed: Namespace definition for Symfony CSS Selector
 
-Version 5.0.1
--------------
+5.0.1
+-----
 
 - Fixed: Disable automatic namespace registration using the third
   argument to evaluate(), if activated using the property
 
-Version 5.0.0
--------------
+5.0.0
+-----
 
 Complete Rewrite!
 - PHP Namespaces, PSR-4 comatible, Composer support
@@ -180,8 +237,8 @@ Complete Rewrite!
 - Added: FluentDOM\Appendable - define objects appendable to a FluentDOM\Element
 - Added: FluentDOM\XmlSerializable - define objects serializable to xml fragments
 
-Version 4.1
------------
+4.1.0
+-----
 
 For css() and attr() now property access is possible. HTML 5 data attributes are supported, too.
 
@@ -201,8 +258,8 @@ is disabled if possible. This improves performance, too.
 - Added: FluentDOM::hasData() check if an element has HTML 5 data attributes
 - Added: FluentDOM::reverse() reverse the order of the matched nodes.
 
-Version 4.0
------------
+4.0.0
+-----
 
 This version has been restructured because the class had grown to large. The new structure allows
 better testing and inheritance.
@@ -267,8 +324,8 @@ methods.
 - Added: FluentDOM::get(), retrieve elements as array
 - Implemented: support negative position parameter for eq()
 
-Version 3.0
------------
+3.0.0
+-----
 - Documented: tutorial for find()
 - Documented: optimized structure for html output
 - Documented: custom loaders
@@ -323,8 +380,8 @@ Version 3.0
 - changed FluentDOMTestCase should be an abstract class
 - patch by Sebastian Bergmann
 
-Version 2.0
------------
+2.0.0
+-----
 - added: FluentDOMIterator
 - added: FluentDOM now implements IteratorAggregate
 - removed: FluentDOM does not implement RecursiveIterator any more
@@ -351,7 +408,7 @@ Version 2.0
 - added: FluentDOM::contentType - content type property for input and output
 - fixed: attribute name check allowed invalid attribute names
 
-Version 1.0
------------
+1.0.0
+-----
 
 - initial release

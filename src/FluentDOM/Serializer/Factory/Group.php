@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -13,6 +13,9 @@ namespace FluentDOM\Serializer\Factory {
 
   use FluentDOM\Exceptions;
   use FluentDOM\Serializer\Factory as SerializerFactory;
+  use FluentDOM\Serializer\StringCast;
+  use FluentDOM\Utility\StringCastable;
+  use PHPUnit\phpDocumentor\Reflection\DocBlock\Serializer;
 
   class Group implements SerializerFactory, \ArrayAccess, \IteratorAggregate, \Countable {
 
@@ -24,7 +27,7 @@ namespace FluentDOM\Serializer\Factory {
       }
     }
 
-    public function createSerializer(string $contentType, \DOMNode $node) {
+    public function createSerializer(string $contentType, \DOMNode $node): ?StringCastable {
       $serializer = NULL;
       if ($this->offsetExists($contentType)) {
         $factory = $this->offsetGet($contentType);
@@ -33,7 +36,13 @@ namespace FluentDOM\Serializer\Factory {
         } elseif (\is_callable($factory)) {
           $serializer = $factory($contentType, $node);
         }
-        if (NULL !== $serializer && !\method_exists($serializer, '__toString')) {
+        if ($serializer instanceof StringCastable) {
+          return $serializer;
+        }
+        if ((NULL !== $serializer) && \method_exists($serializer, '__toString')) {
+          return new StringCast($serializer);
+        }
+        if (NULL !== $serializer) {
           throw new Exceptions\InvalidSerializer($contentType, \get_class($serializer));
         }
       }
@@ -44,28 +53,32 @@ namespace FluentDOM\Serializer\Factory {
       return strtolower($contentType);
     }
 
-    public function offsetExists($contentType) {
-      $contentType = $this->normalizeContentType($contentType);
+    public function offsetExists($offset): bool {
+      $contentType = $this->normalizeContentType($offset);
       return array_key_exists($contentType, $this->_factories);
     }
 
-    public function offsetSet($contentType, $factory) {
-      $contentType = $this->normalizeContentType($contentType);
-      if (!($factory instanceOf SerializerFactory || \is_callable($factory))) {
+    public function offsetSet($offset, $value): void {
+      $contentType = $this->normalizeContentType($offset);
+      if (!($value instanceOf SerializerFactory || \is_callable($value))) {
         throw new Exceptions\InvalidArgument(
           'factory', 'FluentDOM\Serializer\Factory, callable'
         );
       }
-      $this->_factories[$contentType] = $factory;
+      $this->_factories[$contentType] = $value;
     }
 
-    public function offsetGet($contentType) {
-      $contentType = $this->normalizeContentType($contentType);
+    /**
+     * @param mixed $offset
+     * @return callable|Serializer
+     */
+    public function offsetGet($offset) {
+      $contentType = $this->normalizeContentType($offset);
       return $this->_factories[$contentType];
     }
 
-    public function offsetUnset($contentType) {
-      $contentType = $this->normalizeContentType($contentType);
+    public function offsetUnset($offset): void {
+      $contentType = $this->normalizeContentType($offset);
       if (array_key_exists($contentType, $this->_factories)) {
         unset($this->_factories[$contentType]);
       }

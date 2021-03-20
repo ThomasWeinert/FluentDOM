@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace FluentDOM\Serializer {
 
   use FluentDOM\DOM\Xpath;
+  use FluentDOM\Loader\Json\JsonDOM;
   use FluentDOM\Utility\StringCastable;
 
   /**
@@ -42,7 +43,7 @@ namespace FluentDOM\Serializer {
    */
   class Json implements \JsonSerializable, StringCastable {
 
-    const XMLNS_JSONDOM = 'urn:carica-json-dom.2013';
+    private const XMLNS_JSONDOM = JsonDOM::XMLNS;
 
     /**
      * @var \DOMNode
@@ -82,7 +83,6 @@ namespace FluentDOM\Serializer {
      * @return mixed
      */
     public function jsonSerialize() {
-      /** @var \DOMNode $node */
       $node = $this->_node;
       if ($node instanceof \DOMDocument) {
         $node = $node->documentElement;

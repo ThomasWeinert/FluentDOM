@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace FluentDOM\Nodes {
 
   use FluentDOM\Exceptions;
-  use FluentDOM\Exceptions\InvalidFragmentLoader as InvalidFragmentLoader;
+  use FluentDOM\Exceptions\InvalidFragmentLoader;
   use FluentDOM\Exceptions\LoadingError\EmptyResult;
   use FluentDOM\Nodes;
   use FluentDOM\Utility\Constraints;

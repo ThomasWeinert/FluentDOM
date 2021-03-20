@@ -49,7 +49,7 @@ namespace FluentDOM\Query {
      *
      * @return Css\Properties|NULL
      */
-    private function getStyleProperties() {
+    private function getStyleProperties(): ?Css\Properties {
       if (isset($this->_query[0])) {
         $node = $this->_query[0];
         if ($node instanceof \DOMElement) {
@@ -64,7 +64,7 @@ namespace FluentDOM\Query {
      * the first matched node.
      *
      * @see \ArrayAccess::offsetExists()
-     * @param string $offset
+     * @param mixed $offset
      * @return bool
      */
     public function offsetExists($offset): bool {
@@ -78,7 +78,7 @@ namespace FluentDOM\Query {
      * Allow to use array syntax to read a css property value from first matched node.
      *
      * @see ArrayAccess::offsetGet()
-     * @param string $offset
+     * @param mixed $offset
      * @return mixed
      */
     public function offsetGet($offset) {
@@ -92,8 +92,8 @@ namespace FluentDOM\Query {
      * Allow to use array syntax to change a css property value on all matched nodes.
      *
      * @see ArrayAccess::offsetSet()
-     * @param string $offset
-     * @param string $value
+     * @param mixed $offset
+     * @param mixed $value
      */
     public function offsetSet($offset, $value): void {
       $this->_query->css($offset, $value);
@@ -104,7 +104,7 @@ namespace FluentDOM\Query {
      * all matched nodes.
      *
      * @see ArrayAccess::offsetUnset()
-     * @param string $offset
+     * @param mixed $offset
      */
     public function offsetUnset($offset): void {
       foreach ($this->_query as $node) {

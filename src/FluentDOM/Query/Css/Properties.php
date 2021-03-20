@@ -102,7 +102,7 @@ namespace FluentDOM\Query\Css {
      * Allow to use isset() and array syntax to check if a css property is set on
      * the first matched node.
      *
-     * @param string $offset
+     * @param mixed $offset
      * @return bool
      * @see ArrayAccess::offsetExists()
      */
@@ -114,7 +114,7 @@ namespace FluentDOM\Query\Css {
      * Allow to use array syntax to read a css property value from first matched node.
      *
      * @see ArrayAccess::offsetGet()
-     * @param string $offset
+     * @param mixed $offset
      * @return string $value
      */
     public function offsetGet($offset): string {
@@ -125,8 +125,8 @@ namespace FluentDOM\Query\Css {
      * Set a property
      *
      * @see ArrayAccess::offsetSet()
-     * @param string $offset
-     * @param string $value
+     * @param mixed $offset
+     * @param mixed $value
      * @throws \InvalidArgumentException
      */
     public function offsetSet($offset, $value): void {

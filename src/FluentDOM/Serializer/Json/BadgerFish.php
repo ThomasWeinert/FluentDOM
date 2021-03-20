@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -19,10 +19,10 @@ namespace FluentDOM\Serializer\Json {
    */
   class BadgerFish extends Json {
 
-      /**
-       * @param \DOMElement $node
-       * @return mixed
-       */
+    /**
+     * @param \DOMElement $node
+     * @return mixed
+     */
     protected function getNode(\DOMElement $node) {
       $result = new \stdClass();
       $result->{$node->nodeName} = $this->getNodes($node);
@@ -54,7 +54,7 @@ namespace FluentDOM\Serializer\Json {
      * @param \DOMElement $node
      * @param Xpath $xpath
      */
-    protected function addAttributes(\stdClass $target, \DOMElement $node, Xpath $xpath) {
+    protected function addAttributes(\stdClass $target, \DOMElement $node, Xpath $xpath): void {
       $nodes = $xpath->evaluate('@*', $node);
       foreach ($nodes as $attribute) {
         $target->{'@'.$attribute->name} = $attribute->value;
@@ -66,7 +66,7 @@ namespace FluentDOM\Serializer\Json {
      * @param \DOMElement $node
      * @param Xpath $xpath
      */
-    protected function addNamespaces(\stdClass $target, \DOMElement $node, Xpath $xpath) {
+    protected function addNamespaces(\stdClass $target, \DOMElement $node, Xpath $xpath): void {
       if ((string)$node->namespaceURI !== '' && $node->prefix === '') {
         if (!isset($target->{'@xmlns'})) {
           $target->{'@xmlns'} = new \stdClass();
@@ -91,7 +91,7 @@ namespace FluentDOM\Serializer\Json {
      * @param \stdClass $target
      * @param \DOMElement $node
      */
-    private function addElement(\stdClass $target, \DOMElement $node) {
+    private function addElement(\stdClass $target, \DOMElement $node): void {
       $nodeName = $node->nodeName;
       if (isset($target->$nodeName)) {
         if (!is_array($target->$nodeName)) {
@@ -107,7 +107,7 @@ namespace FluentDOM\Serializer\Json {
      * @param \stdClass $target
      * @param \DOMNode|\DOMText|\DOMCdataSection $node
      */
-    private function addText(\stdClass $target, \DOMNode $node) {
+    private function addText(\stdClass $target, \DOMNode $node): void {
       if (!($node instanceof \DOMText) || !$node->isWhitespaceInElementContent()) {
         if (!isset($target->{'$'})) {
           $target->{'$'} = '';

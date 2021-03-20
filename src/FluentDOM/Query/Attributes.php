@@ -60,7 +60,7 @@ namespace FluentDOM\Query {
      * Check if the first selected node has the specified attribute
      *
      * @see ArrayAccess::offsetExists()
-     * @param string $offset
+     * @param mixed $offset
      * @return bool
      */
     public function offsetExists($offset): bool {
@@ -76,7 +76,7 @@ namespace FluentDOM\Query {
      * @see ArrayAccess::offsetGet()
      * @see FluentDOM::attr()
      * @example properties/attr-get.php Usage: Get attribute property
-     * @param string $offset
+     * @param mixed $offset
      * @return string
      */
     public function offsetGet($offset): string {
@@ -89,8 +89,8 @@ namespace FluentDOM\Query {
      * @see ArrayAccess::offsetSet()
      * @see FluentDOM::attr()
      * @example properties/attr-set.php Usage: Set attribute property
-     * @param string $offset
-     * @param string $value
+     * @param mixed $offset
+     * @param mixed $value
      */
     public function offsetSet($offset, $value): void {
       $this->_query->attr($offset, $value);

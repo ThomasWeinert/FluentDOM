@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -19,9 +19,9 @@ namespace FluentDOM\Serializer\Json {
   class JsonML extends Json {
 
     /**
-     * @return array|\stdClass
+     * @return array
      */
-    protected function getEmpty() {
+    protected function getEmpty(): array {
       return [];
     }
 
@@ -29,7 +29,7 @@ namespace FluentDOM\Serializer\Json {
      * @param \DOMElement $node
      * @return mixed
      */
-    protected function getNode(\DOMElement $node) {
+    protected function getNode(\DOMElement $node): array {
       $result = [
         $node->nodeName
       ];

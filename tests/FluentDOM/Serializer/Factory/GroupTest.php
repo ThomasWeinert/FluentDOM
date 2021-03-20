@@ -1,4 +1,12 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\Serializer\Factory {
 
@@ -7,6 +15,7 @@ namespace FluentDOM\Serializer\Factory {
   use FluentDOM\Exceptions\InvalidSerializer;
   use FluentDOM\Serializer\Factory;
   use FluentDOM\TestCase;
+  use FluentDOM\Utility\StringCastable;
 
   require_once __DIR__ . '/../../TestCase.php';
 
@@ -72,13 +81,16 @@ namespace FluentDOM\Serializer\Factory {
     /**
      * @covers \FluentDOM\Serializer\Factory\Group
      */
-    public function testCreateSerializer() {
+    public function testCreateSerializer(): void {
       $document = new Document();
       $document->appendElement('dummy');
       $serializer = $this
         ->getMockBuilder(\stdClass::class)
-        ->setMethods(['__toString'])
+        ->addMethods(['__toString'])
         ->getMock();
+      $serializer
+        ->method('__toString')
+        ->willReturn('success');
       $factory = $this
         ->getMockBuilder(Factory::class)
         ->getMock();
@@ -87,7 +99,32 @@ namespace FluentDOM\Serializer\Factory {
         ->method('createSerializer')
         ->willReturn($serializer);
       $group = new Group(['some/type' => $factory]);
-      $this->assertSame($serializer, $group->createSerializer('some/type', $document->documentElement));
+      $this->assertSame(
+        'success',
+        (string)$group->createSerializer('some/type', $document->documentElement)
+      );
+    }
+
+    /**
+     * @covers \FluentDOM\Serializer\Factory\Group
+     */
+    public function testCreateSerializerWithStringCastable(): void {
+      $document = new Document();
+      $document->appendElement('dummy');
+      $serializer = $this
+        ->createMock(StringCastable::class);
+      $factory = $this
+        ->getMockBuilder(Factory::class)
+        ->getMock();
+      $factory
+        ->expects($this->once())
+        ->method('createSerializer')
+        ->willReturn($serializer);
+      $group = new Group(['some/type' => $factory]);
+      $this->assertSame(
+        $serializer,
+        $group->createSerializer('some/type', $document->documentElement)
+      );
     }
 
     /**

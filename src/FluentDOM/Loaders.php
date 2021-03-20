@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace FluentDOM {
 
+  use FluentDOM\DOM\Document;
+  use FluentDOM\DOM\DocumentFragment;
   use FluentDOM\Loader\Options;
   use FluentDOM\Loader\Result;
 
@@ -94,9 +96,9 @@ namespace FluentDOM {
      * @param mixed $source
      * @param string $contentType
      * @param array|\Traversable|Options $options
-     * @return \DOMDocument|Result|NULL
+     * @return Result|NULL
      */
-    public function load($source, string $contentType, $options = []) {
+    public function load($source, string $contentType, $options = []): ?Result {
       $result = NULL;
       foreach ($this as $loader) {
         /**
@@ -106,7 +108,7 @@ namespace FluentDOM {
           break;
         }
       }
-      return ($result instanceOf \DOMDocument || $result instanceof Result) ? $result : NULL;
+      return ($result instanceof Result) ? $result : NULL;
     }
 
     /**
@@ -116,9 +118,9 @@ namespace FluentDOM {
      * @param mixed $source
      * @param string $contentType
      * @param array|\Traversable|Options $options
-     * @return \DOMDocumentFragment|NULL
+     * @return DocumentFragment|NULL
      */
-    public function loadFragment($source, string $contentType, $options = []) {
+    public function loadFragment($source, string $contentType, $options = []): ?DocumentFragment {
       $fragment = NULL;
       foreach ($this as $loader) {
         /**
@@ -131,7 +133,7 @@ namespace FluentDOM {
           break;
         }
       }
-      return ($fragment instanceOf \DOMDocumentFragment) ? $fragment : NULL;
+      return ($fragment instanceOf DocumentFragment) ? $fragment : NULL;
     }
   }
 }

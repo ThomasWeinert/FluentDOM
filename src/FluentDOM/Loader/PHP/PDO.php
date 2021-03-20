@@ -51,7 +51,7 @@ namespace FluentDOM\Loader\PHP {
     /**
      * @see Loadable::loadFragment
      *
-     * @param string $source
+     * @param mixed $source
      * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return DocumentFragment|NULL

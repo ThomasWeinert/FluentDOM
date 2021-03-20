@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -14,6 +14,7 @@ namespace FluentDOM\Loader\Supports {
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\DocumentFragment;
   use FluentDOM\DOM\Element;
+  use FluentDOM\Exceptions\InvalidSource;
   use FluentDOM\Exceptions\LoadingError;
   use FluentDOM\Loader\Options;
   use FluentDOM\Loader\Result;
@@ -29,15 +30,14 @@ namespace FluentDOM\Loader\Supports {
      * @param mixed $source
      * @param string $contentType
      * @param array|\Traversable|Options $options
-     * @return Document|Result|NULL
-     * @throws \Exception
-     * @throws \FluentDOM\Exceptions\InvalidSource
+     * @return Result|NULL
+     * @throws InvalidSource
      */
-    public function load($source, string $contentType, $options = []) {
+    public function load($source, string $contentType, $options = []): ?Result {
       if (FALSE !== ($json = $this->getJson($source, $contentType, $options))) {
         $document = new Document('1.0', 'UTF-8');
         $this->transferTo($document, $json);
-        return $document;
+        return new Result($document, $contentType);
       }
       return NULL;
     }
@@ -45,14 +45,13 @@ namespace FluentDOM\Loader\Supports {
     /**
      * @see Loadable::loadFragment
      *
-     * @param string $source
+     * @param mixed $source
      * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return DocumentFragment|NULL
-     * @throws \Exception
-     * @throws \FluentDOM\Exceptions\InvalidSource
+     * @throws InvalidSource
      */
-    public function loadFragment($source, string $contentType, $options = []) {
+    public function loadFragment($source, string $contentType, $options = []): ?DocumentFragment {
       if (FALSE !== ($json = $this->getJson($source, $contentType, $options))) {
         $document = new Document('1.0', 'UTF-8');
         $fragment = $document->createDocumentFragment();
@@ -68,7 +67,7 @@ namespace FluentDOM\Loader\Supports {
      * @param array|\Traversable|Options $options
      * @return mixed
      * @throws \Exception
-     * @throws \FluentDOM\Exceptions\InvalidSource
+     * @throws InvalidSource
      */
     private function getJson($source, string $contentType, $options)  {
       if ($this->supports($contentType)) {
@@ -82,7 +81,7 @@ namespace FluentDOM\Loader\Supports {
               $source = \file_get_contents($source);
               /* $source now contains file constants as string continue with that */
             case Options::IS_STRING :
-              $json = \json_decode($source);
+              $json = \json_decode($source, FALSE);
               if (!($json || \is_array($json))) {
                 throw new LoadingError\Json(
                   \is_callable('json_last_error') ? \json_last_error() : -1
@@ -104,7 +103,7 @@ namespace FluentDOM\Loader\Supports {
      * @throws \InvalidArgumentException
      */
     public function getOptions($options): Options {
-      $result = new Options(
+      return new Options(
         $options,
         [
           Options::CB_IDENTIFY_STRING_SOURCE => function($source) {
@@ -112,14 +111,13 @@ namespace FluentDOM\Loader\Supports {
           }
         ]
       );
-      return $result;
     }
 
     /**
-     * @param \DOMNode|Element $node
+     * @param \DOMNode|Element $target
      * @param mixed $json
      */
-    abstract protected function transferTo(\DOMNode $node, $json);
+    abstract protected function transferTo(\DOMNode $target, $json);
 
     /**
      * @param mixed $value
@@ -140,10 +138,10 @@ namespace FluentDOM\Loader\Supports {
      */
     private function getNamespaceForNode(
       string $nodeName, \stdClass $properties, \DOMNode $parent
-    ) {
+    ): ?string {
       $prefix = \substr($nodeName, 0, (int)\strpos($nodeName, ':'));
       $xmlns = $this->getNamespacePropertyName($prefix);
-      return $properties->{$xmlns} ?? $parent->lookupNamespaceUri(empty($prefix) ? NULL : $prefix);
+      return $properties->{$xmlns} ?? $parent->lookupNamespaceUri(empty($prefix) ? '' : $prefix);
     }
 
     /**
@@ -152,7 +150,7 @@ namespace FluentDOM\Loader\Supports {
      * @param string $prefix
      * @return string
      */
-    protected function getNamespacePropertyName($prefix): string {
+    protected function getNamespacePropertyName(string $prefix): string {
       return empty($prefix) ? 'xmlns' : 'xmlns:'.$prefix;
     }
   }

@@ -26,16 +26,16 @@ namespace FluentDOM\Loader\Json {
     public const CONTENT_TYPES = ['jsonml', 'application/jsonml', 'application/jsonml+json'];
 
     /**
-     * @param \DOMNode|Element $node
+     * @param \DOMNode|Element $target
      * @param mixed $json
      * @throws UnattachedNode
      */
-    public function transferTo(\DOMNode $node, $json): void {
+    public function transferTo(\DOMNode $target, $json): void {
       if (\is_array($json) && \count($json) > 0) {
-        $this->transferToElement($node, $json);
+        $this->transferToElement($target, $json);
       } elseif (\is_scalar($json)) {
-        $document = Implementation::getNodeDocument($node);
-        $node->appendChild(
+        $document = Implementation::getNodeDocument($target);
+        $target->appendChild(
           $document->createTextNode($this->getValueAsString($json))
         );
       }

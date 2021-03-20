@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Loader\Json {
 
   use FluentDOM\TestCase;
@@ -16,7 +25,7 @@ namespace FluentDOM\Loader\Json {
     public function testIntegeration($xmlInput, $expectedXml) {
       $json = json_decode(json_encode(new \SimpleXMLElement($xmlInput)));
       $loader = new SimpleXML();
-      $document = $loader->load($json, 'text/simplexml');
+      $document = $loader->load($json, 'text/simplexml')->getDocument();
       $this->assertXmlStringEqualsXmlString(
         $expectedXml, $document->saveXml()
       );

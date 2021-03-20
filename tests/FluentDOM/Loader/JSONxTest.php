@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Loader {
 
   use FluentDOM\TestCase;
@@ -19,7 +28,7 @@ namespace FluentDOM\Loader {
      */
     public function testIntegeration($JsonDOM, $JSONx) {
       $loader = new JSONx();
-      $document = $loader->load($JSONx, 'jsonx');
+      $document = $loader->load($JSONx, 'jsonx')->getDocument();
       $this->assertXmlStringEqualsXmlString(
         $JsonDOM, $document->saveXml()
       );
@@ -43,7 +52,11 @@ namespace FluentDOM\Loader {
      */
     public function testLoadFromFileConvertToJson() {
       $loader = new JSONx();
-      $fd = $loader->load(__DIR__.'/TestData/jsonx.xml', 'jsonx', [Options::IS_FILE => TRUE]);
+      $document = $loader->load(
+        __DIR__.'/TestData/jsonx.xml',
+        'jsonx',
+        [Options::IS_FILE => TRUE]
+      )->getDocument();
       $this->assertXmlStringEqualsXmlString(
         '<?xml version="1.0"?>
           <json:json xmlns:json="urn:carica-json-dom.2013">
@@ -63,7 +76,7 @@ namespace FluentDOM\Loader {
             <height json:type="number">62.4</height>
             <ficoScore>&gt; 640</ficoScore>
           </json:json>',
-        $fd->saveXml()
+        $document->saveXml()
       );
     }
 

@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Loader\Json {
 
   use FluentDOM\Exceptions\InvalidSource;
@@ -30,13 +39,10 @@ namespace FluentDOM\Loader\Json {
      */
     public function testLoadWithValidJsonDOM() {
       $loader = new JsonDOM();
-      $this->assertInstanceOf(
-        'DOMDocument',
-        $document = $loader->load(
-          '{"foo":"bar"}',
-          'json'
-        )
-      );
+      $document = $loader->load(
+        '{"foo":"bar"}',
+        'json'
+      )->getDocument();
       $this->assertXmlStringEqualsXmlString(
         '<?xml version="1.0" encoding="UTF-8"?>'.
         '<json:json xmlns:json="urn:carica-json-dom.2013">'.
@@ -51,16 +57,13 @@ namespace FluentDOM\Loader\Json {
      */
     public function testLoadWithValidFileAllowFile() {
       $loader = new JsonDOM();
-      $this->assertInstanceOf(
-        'DOMDocument',
-        $document = $loader->load(
-          __DIR__.'/TestData/loader.json',
-          'json',
-          [
-            Options::ALLOW_FILE => TRUE
-          ]
-        )
-      );
+      $document = $loader->load(
+        __DIR__.'/TestData/loader.json',
+        'json',
+        [
+          Options::ALLOW_FILE => TRUE
+        ]
+      )->getDocument();
       $this->assertXmlStringEqualsXmlString(
         '<?xml version="1.0" encoding="UTF-8"?>'.
         '<json:json xmlns:json="urn:carica-json-dom.2013">'.
@@ -89,12 +92,9 @@ namespace FluentDOM\Loader\Json {
       $loader = new JsonDOM();
       $json = new \stdClass();
       $json->foo = 'bar';
-      $this->assertInstanceOf(
-        'DOMDocument',
-        $document = $loader->load(
-          $json, 'json'
-        )
-      );
+      $document = $loader->load(
+        $json, 'json'
+      )->getDocument();
       $this->assertXmlStringEqualsXmlString(
         '<?xml version="1.0" encoding="UTF-8"?>'.
         '<json:json xmlns:json="urn:carica-json-dom.2013">'.
@@ -109,13 +109,10 @@ namespace FluentDOM\Loader\Json {
      */
     public function testLoadWithValidJsonVerbose() {
       $loader = new JsonDOM(JsonDOM::OPTION_VERBOSE);
-      $this->assertInstanceOf(
-        'DOMDocument',
-        $document = $loader->load(
-          '{"foo":"bar"}',
-          'json'
-        )
-      );
+      $document = $loader->load(
+        '{"foo":"bar"}',
+        'json'
+      )->getDocument();
       $this->assertXmlStringEqualsXmlString(
         '<?xml version="1.0" encoding="UTF-8"?>'.
         '<json:json'.
@@ -143,7 +140,7 @@ namespace FluentDOM\Loader\Json {
           ]
         ),
         'json'
-      );
+      )->getDocument();
       $this->assertXmlStringEqualsXmlString(
         '<?xml version="1.0" encoding="UTF-8"?>
          <json:json xmlns:json="urn:carica-json-dom.2013">
@@ -166,12 +163,9 @@ namespace FluentDOM\Loader\Json {
     public function testLoadWithAssociativeArray() {
       $loader = new JsonDOM();
       $json = ['foo' => 'bar'];
-      $this->assertInstanceOf(
-        'DOMDocument',
-        $document = $loader->load(
-          $json, 'json'
-        )
-      );
+      $document = $loader->load(
+        $json, 'json'
+      )->getDocument();
       $this->assertXmlStringEqualsXmlString(
         '<?xml version="1.0" encoding="UTF-8"?>'.
         '<json:json xmlns:json="urn:carica-json-dom.2013">'.
@@ -216,6 +210,7 @@ namespace FluentDOM\Loader\Json {
          <json:json xmlns:json="urn:carica-json-dom.2013"><foo/></json:json>',
         $loader
           ->load(json_encode(['foo' => [1, 2, 3]]), 'json')
+          ->getDocument()
           ->saveXML()
       );
     }
@@ -230,6 +225,7 @@ namespace FluentDOM\Loader\Json {
          <json:json xmlns:json="urn:carica-json-dom.2013" json:type="array"/>',
         $loader
           ->load('[]', 'json')
+          ->getDocument()
           ->saveXML()
       );
     }
@@ -250,7 +246,7 @@ namespace FluentDOM\Loader\Json {
             return $isArrayElement ? 'number' : $key;
           }
         ]
-      );
+      )->getDocument();
       $this->assertXmlStringEqualsXmlString(
         '<?xml version="1.0" encoding="UTF-8"?>'.
         '<json:json xmlns:json="urn:carica-json-dom.2013">'.

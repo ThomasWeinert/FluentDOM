@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -20,7 +20,7 @@ namespace FluentDOM\Query\Css {
     /**
      * Pattern to decode the style property string
      */
-    const STYLE_PATTERN = /** @lang TEXT */
+    private const STYLE_PATTERN = /** @lang TEXT */
       '((?:^|;)\s*(?P<name>[-\w]+)\s*:\s*(?P<value>[^;]+))';
 
     /**
@@ -43,7 +43,7 @@ namespace FluentDOM\Query\Css {
      *
      * @param string $styleString
      */
-    public function setStyleString(string $styleString) {
+    public function setStyleString(string $styleString): void {
       $this->_properties = [];
       if (!empty($styleString)) {
         $matches = [];
@@ -102,42 +102,42 @@ namespace FluentDOM\Query\Css {
      * Allow to use isset() and array syntax to check if a css property is set on
      * the first matched node.
      *
-     * @see ArrayAccess::offsetExists()
-     * @param string $name
+     * @param string $offset
      * @return bool
+     * @see ArrayAccess::offsetExists()
      */
-    public function offsetExists($name): bool {
-      return isset($this->_properties[$name]);
+    public function offsetExists($offset): bool {
+      return isset($this->_properties[$offset]);
     }
 
     /**
      * Allow to use array syntax to read a css property value from first matched node.
      *
      * @see ArrayAccess::offsetGet()
-     * @param string $name
+     * @param string $offset
      * @return string $value
      */
-    public function offsetGet($name): string {
-      return $this->_properties[$name];
+    public function offsetGet($offset): string {
+      return $this->_properties[$offset];
     }
 
     /**
      * Set a property
      *
      * @see ArrayAccess::offsetSet()
-     * @param string $name
+     * @param string $offset
      * @param string $value
      * @throws \InvalidArgumentException
      */
-    public function offsetSet($name, $value) {
-      if ($this->_isCSSProperty($name)) {
+    public function offsetSet($offset, $value): void {
+      if ($this->_isCSSProperty($offset)) {
         if (\trim($value) !== '') {
-          $this->_properties[$name] = (string)$value;
+          $this->_properties[$offset] = (string)$value;
         } else {
-          $this->offsetUnset($name);
+          $this->offsetUnset($offset);
         }
       } else {
-        throw new \InvalidArgumentException('Invalid css property name: '.$name);
+        throw new \InvalidArgumentException('Invalid css property name: '.$offset);
       }
     }
 
@@ -145,15 +145,15 @@ namespace FluentDOM\Query\Css {
      * Remove a css properties if it is set.
      *
      * @see ArrayAccess::offsetUnset()
-     * @param string|array $names
+     * @param string|string[] $offset
      */
-    public function offsetUnset($names) {
-      if (!\is_array($names)) {
-        $names = [$names];
+    public function offsetUnset($offset): void {
+      if (!\is_array($offset)) {
+        $offset = [$offset];
       }
-      foreach ($names as $property) {
+      foreach ($offset as $property) {
         if (\array_key_exists($property, $this->_properties)) {
-          unset($this->_properties[$property]);
+          unset($this->_properties[(string)$property]);
         }
       }
     }
@@ -161,13 +161,15 @@ namespace FluentDOM\Query\Css {
     /**
      * Compile value argument into a string (it can be an callback)
      *
-     * @param string|Callable $value
+     * @param string|callable $value
      * @param \DOMElement $node
      * @param int $index
-     * @param string $currentValue
+     * @param string|NULL $currentValue
      * @return string
      */
-    public function compileValue($value, \DOMElement $node, int $index, string $currentValue = NULL): string {
+    public function compileValue(
+      $value, \DOMElement $node, int $index, string $currentValue = NULL
+    ): string {
       if (!\is_string($value) && \is_callable($value, TRUE)) {
         return (string)$value($node, $index, $currentValue);
       }

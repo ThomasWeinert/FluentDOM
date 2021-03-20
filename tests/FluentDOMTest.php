@@ -1,4 +1,12 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 require_once __DIR__.'/FluentDOM/TestCase.php';
 
@@ -65,15 +73,22 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
    * @group FactoryFunctions
    * @covers FluentDOM
    */
-  public function testLoadWithDefinedLoader() {
-    $loader = $this->getMockBuilder(\FluentDOM\Loadable::class)->getMock();
+  public function testLoadWithDefinedLoader(): void {
+    $result = new \FluentDOM\Loader\Result(
+      $document = new \FluentDOM\DOM\Document(),
+      'type'
+    );
+    $loader = $this->createMock(\FluentDOM\Loadable::class);
     $loader
       ->expects($this->once())
       ->method('load')
       ->with('source', 'type')
-      ->will($this->returnValue(new FluentDOM\DOM\Document()));
+      ->willReturn($result);
     FluentDOM::setLoader($loader);
-    $this->assertInstanceOf(FluentDOM\DOM\Document::class, FluentDOM::load('source', 'type'));
+    $this->assertSame(
+      $document,
+      FluentDOM::load('source', 'type')
+    );
   }
 
   /**
@@ -90,19 +105,17 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
    * @group Plugins
    * @covers FluentDOM
    */
-  public function testRegisterLoader() {
+  public function testRegisterLoader(): void {
     $document = new \FluentDOM\DOM\Document();
     $document->loadXML('<success/>');
     $mockLoader = $this->getMockBuilder(\FluentDOM\Loadable::class)->getMock();
     $mockLoader
-      ->expects($this->any())
       ->method('supports')
       ->will($this->returnValue(TRUE));
     $mockLoader
-      ->expects($this->any())
       ->method('load')
       ->with('test.xml', 'mock/loader')
-      ->will($this->returnValue($document));
+      ->willReturn(new \FluentDOM\Loader\Result($document, 'mock/loader'));
     FluentDOM::registerLoader($mockLoader);
     $this->assertEquals(
       $document,
@@ -120,14 +133,12 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
     $document->loadXML('<success/>');
     $mockLoader = $this->getMockBuilder(\FluentDOM\Loadable::class)->getMock();
     $mockLoader
-      ->expects($this->any())
       ->method('supports')
       ->will($this->returnValue(TRUE));
     $mockLoader
-      ->expects($this->any())
       ->method('load')
       ->with('test.xml', 'two')
-      ->will($this->returnValue($document));
+      ->willReturn(new \FluentDOM\Loader\Result($document, ''));
     FluentDOM::registerLoader($mockLoader, 'one', 'two');
     $this->assertEquals(
       $document,
@@ -145,14 +156,12 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
     $document->loadXML('<success/>');
     $mockLoader = $this->getMockBuilder(\FluentDOM\Loadable::class)->getMock();
     $mockLoader
-      ->expects($this->any())
       ->method('supports')
       ->will($this->returnValue(TRUE));
     $mockLoader
-      ->expects($this->any())
       ->method('load')
       ->with('test.xml', 'some/type')
-      ->will($this->returnValue($document));
+      ->willReturn(new \FluentDOM\Loader\Result($document, ''));
     FluentDOM::registerLoader(function() use ($mockLoader) { return $mockLoader; });
     $this->assertEquals(
       $document,

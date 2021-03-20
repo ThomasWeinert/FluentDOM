@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -23,7 +23,7 @@ namespace FluentDOM\Query\Css {
      * @param string $propertyNameTwo
      * @return int
      */
-    public function __invoke(string $propertyNameOne, string $propertyNameTwo) {
+    public function __invoke(string $propertyNameOne, string $propertyNameTwo): int {
       return $this->compare($propertyNameOne, $propertyNameTwo);
     }
 
@@ -41,7 +41,6 @@ namespace FluentDOM\Query\Css {
       $propertyTwoLevels = \count($propertyTwo);
       $maxLevels = ($propertyOneLevels > $propertyTwoLevels)
         ? $propertyOneLevels : $propertyTwoLevels;
-      /** @noinspection ForeachInvariantsInspection */
       for ($i = 0; $i < $maxLevels; ++$i) {
         if (isset($propertyOne[$i], $propertyTwo[$i])) {
           $compare = \strnatcasecmp($propertyOne[$i], $propertyTwo[$i]);
@@ -71,8 +70,12 @@ namespace FluentDOM\Query\Css {
       if (0 === \strpos($propertyName,'-')) {
         $pos = \strpos($propertyName, '-', 1);
         $items = \explode('-', \substr($propertyName, $pos + 1));
-        $items[] = \substr($propertyName, 1, $pos);
-        return $items;
+        if (is_array($items)) {
+          /** @var string[] $items */
+          $items[] = \substr($propertyName, 1, $pos);
+          return $items;
+        }
+        return [];
       }
       $items = \explode('-', $propertyName);
       return $items;

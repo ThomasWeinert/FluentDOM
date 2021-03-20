@@ -60,12 +60,12 @@ namespace FluentDOM\Query {
      * Check if the first selected node has the specified attribute
      *
      * @see ArrayAccess::offsetExists()
-     * @param string $name
+     * @param string $offset
      * @return bool
      */
-    public function offsetExists($name): bool {
+    public function offsetExists($offset): bool {
       if ($node = $this->getFirstElement()) {
-        return $node->hasAttribute($name);
+        return $node->hasAttribute($offset);
       }
       return FALSE;
     }
@@ -76,11 +76,11 @@ namespace FluentDOM\Query {
      * @see ArrayAccess::offsetGet()
      * @see FluentDOM::attr()
      * @example properties/attr-get.php Usage: Get attribute property
-     * @param string $name
+     * @param string $offset
      * @return string
      */
-    public function offsetGet($name): string {
-      return $this->_query->attr($name);
+    public function offsetGet($offset): string {
+      return $this->_query->attr($offset);
     }
 
     /**
@@ -89,11 +89,11 @@ namespace FluentDOM\Query {
      * @see ArrayAccess::offsetSet()
      * @see FluentDOM::attr()
      * @example properties/attr-set.php Usage: Set attribute property
-     * @param string $name
+     * @param string $offset
      * @param string $value
      */
-    public function offsetSet($name, $value) {
-      $this->_query->attr($name, $value);
+    public function offsetSet($offset, $value): void {
+      $this->_query->attr($offset, $value);
     }
 
     /**
@@ -102,10 +102,10 @@ namespace FluentDOM\Query {
      * @see ArrayAccess::offsetUnset()
      * @see FluentDOM::removeAttr()
      * @example properties/attr-unset.php Usage: Remove attribute properties
-     * @param string|array $name
+     * @param string|array $offset
      */
-    public function offsetUnset($name) {
-      $this->_query->removeAttr($name);
+    public function offsetUnset($offset): void {
+      $this->_query->removeAttr($offset);
     }
 
     /**
@@ -134,7 +134,7 @@ namespace FluentDOM\Query {
     /**
      * @return \DOMElement|NULL
      */
-    private function getFirstElement() {
+    private function getFirstElement(): ?\DOMElement {
       if (isset($this->_query[0]) && $this->_query[0] instanceof \DOMElement) {
         return $this->_query[0];
       }

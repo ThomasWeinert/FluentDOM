@@ -12,6 +12,8 @@ declare(strict_types=1);
 namespace FluentDOM\Nodes {
 
   use FluentDOM\Exceptions;
+  use FluentDOM\Exceptions\InvalidFragmentLoader as InvalidFragmentLoader;
+  use FluentDOM\Exceptions\LoadingError\EmptyResult;
   use FluentDOM\Nodes;
   use FluentDOM\Utility\Constraints;
 
@@ -70,7 +72,7 @@ namespace FluentDOM\Nodes {
      * Match selector against context and return matched elements.
      *
      * @param mixed $selector
-     * @param \DOMNode $context optional, default value NULL
+     * @param \DOMNode|NULL $context optional, default value NULL
      * @throws \InvalidArgumentException
      * @return array
      * @throws \LogicException
@@ -103,9 +105,9 @@ namespace FluentDOM\Nodes {
      * @return array
      * @throws \LogicException
      * @throws \UnexpectedValueException
-     * @throws Exceptions\LoadingError\EmptyResult
-     * @throws \FluentDOM\Exceptions\InvalidFragmentLoader
      * @throws \InvalidArgumentException
+     * @throws EmptyResult
+     * @throws InvalidFragmentLoader
      */
     public function getContentNodes($content, bool $includeTextNodes = TRUE, int $limit = -1): array {
       $result = [];
@@ -115,7 +117,7 @@ namespace FluentDOM\Nodes {
         $result = $this->getFragment($content, $this->getOwner()->contentType, $includeTextNodes, $limit);
       }
       if (empty($result)) {
-        throw new Exceptions\LoadingError\EmptyResult();
+        throw new EmptyResult();
       }
       //if a node is not in the current document import it
       $document = $this->getOwner()->getDocument();
@@ -132,7 +134,7 @@ namespace FluentDOM\Nodes {
      *
      * @param mixed $content
      * @return \DOMElement
-     * @throws \FluentDOM\Exceptions\LoadingError\EmptyResult
+     * @throws EmptyResult
      */
     public function getContentElement($content): \DOMElement {
       $contentNodes = $this->getContentNodes($content, FALSE, 1);

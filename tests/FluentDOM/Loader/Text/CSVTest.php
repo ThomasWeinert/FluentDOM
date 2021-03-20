@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Loader\Text {
 
   use FluentDOM\Loader\Options;
@@ -39,7 +48,7 @@ namespace FluentDOM\Loader\Text {
         </json:json>',
         $loader->load(
           "one,two,three\r\n1,2,3", 'text/csv'
-        )->saveXML()
+        )->getDocument()->saveXML()
       );
     }
 
@@ -58,7 +67,7 @@ namespace FluentDOM\Loader\Text {
         </json:json>',
         $loader->load(
           __DIR__.'/TestData/example.csv', 'text/csv', [Options::IS_FILE => TRUE]
-        )->saveXML()
+        )->getDocument()->saveXML()
       );
     }
 
@@ -77,7 +86,7 @@ namespace FluentDOM\Loader\Text {
         </json:json>',
         $loader->load(
           [['one','two','three'],[1,2,3]], 'text/csv'
-        )->saveXML()
+        )->getDocument()->saveXML()
       );
     }
 
@@ -96,7 +105,7 @@ namespace FluentDOM\Loader\Text {
         </json:json>',
         $loader->load(
           new \ArrayIterator([['one','two','three'],[1,2,3]]), 'text/csv'
-        )->saveXML()
+        )->getDocument()->saveXML()
       );
     }
 
@@ -126,7 +135,7 @@ namespace FluentDOM\Loader\Text {
               'one', 'two', 'three'
             ]
           ]
-        )->saveXML()
+        )->getDocument()->saveXML()
       );
     }
 
@@ -145,7 +154,7 @@ namespace FluentDOM\Loader\Text {
         </json:json>',
         $loader->load(
           "one+one,two=two,three three\r\n1,2,3", 'text/csv'
-        )->saveXML()
+        )->getDocument()->saveXML()
       );
     }
 
@@ -169,7 +178,7 @@ namespace FluentDOM\Loader\Text {
         </json:json>',
         $loader->load(
           "1,2,3\n4,5,6", 'text/csv', ['HEADER' => FALSE]
-        )->saveXML()
+        )->getDocument()->saveXML()
       );
     }
 

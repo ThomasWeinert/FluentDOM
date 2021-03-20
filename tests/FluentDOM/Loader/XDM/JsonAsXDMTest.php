@@ -33,13 +33,10 @@ namespace FluentDOM\Loader\XDM {
 
     public function testLoadWithValidJson() {
       $loader = new JsonAsXDM();
-      $this->assertInstanceOf(
-        'DOMDocument',
-        $document = $loader->load(
-          '{"foo":"bar"}',
-          'xdm-json'
-        )
-      );
+      $document = $loader->load(
+        '{"foo":"bar"}',
+        'xdm-json'
+      )->getDocument();
       $this->assertXmlStringEqualsXmlString(
         '<?xml version="1.0" encoding="UTF-8"?>'.
         '<map xmlns="http://www.w3.org/2005/xpath-functions">'.
@@ -51,16 +48,13 @@ namespace FluentDOM\Loader\XDM {
 
     public function testLoadWithValidFileAllowFile() {
       $loader = new JsonAsXDM();
-      $this->assertInstanceOf(
-        'DOMDocument',
-        $document = $loader->load(
-          __DIR__.'/TestData/loader.json',
-          'xdm-json',
-          [
-            Options::ALLOW_FILE => TRUE
-          ]
-        )
-      );
+      $document = $loader->load(
+        __DIR__.'/TestData/loader.json',
+        'xdm-json',
+        [
+          Options::ALLOW_FILE => TRUE
+        ]
+      )->getDocument();
       $this->assertXmlStringEqualsXmlString(
         '<?xml version="1.0" encoding="UTF-8"?>'.
         '<map xmlns="http://www.w3.org/2005/xpath-functions">'.
@@ -83,12 +77,9 @@ namespace FluentDOM\Loader\XDM {
       $loader = new JsonAsXDM();
       $json = new \stdClass();
       $json->foo = 'bar';
-      $this->assertInstanceOf(
-        'DOMDocument',
-        $document = $loader->load(
-          $json, 'xdm-json'
-        )
-      );
+      $document = $loader->load(
+        $json, 'xdm-json'
+      )->getDocument();
       $this->assertXmlStringEqualsXmlString(
         '<?xml version="1.0" encoding="UTF-8"?>'.
         '<map xmlns="http://www.w3.org/2005/xpath-functions">'.
@@ -116,12 +107,9 @@ namespace FluentDOM\Loader\XDM {
         }',
         FALSE
       );
-      $this->assertInstanceOf(
-        'DOMDocument',
-        $document = $loader->load(
-          $json, 'xdm-json'
-        )
-      );
+      $document = $loader->load(
+        $json, 'xdm-json'
+      )->getDocument();
       $this->assertXmlStringEqualsXmlString(
         '<?xml version="1.0"?>
         <map xmlns="http://www.w3.org/2005/xpath-functions">
@@ -150,12 +138,9 @@ namespace FluentDOM\Loader\XDM {
     public function testLoadWithAssociativeArray() {
       $loader = new JsonAsXDM();
       $json = ['foo' => 'bar'];
-      $this->assertInstanceOf(
-        'DOMDocument',
-        $document = $loader->load(
-          $json, 'xdm-json'
-        )
-      );
+      $document = $loader->load(
+        $json, 'xdm-json'
+      )->getDocument();
       $this->assertXmlStringEqualsXmlString(
         '<?xml version="1.0" encoding="UTF-8"?>'.
         '<map xmlns="http://www.w3.org/2005/xpath-functions">'.
@@ -193,6 +178,7 @@ namespace FluentDOM\Loader\XDM {
         </map>',
         $loader
           ->load(json_encode(['foo' => [1, 2, 3]]), 'xdm-json')
+          ->getDocument()
           ->saveXML()
       );
     }
@@ -204,6 +190,7 @@ namespace FluentDOM\Loader\XDM {
          <array xmlns="http://www.w3.org/2005/xpath-functions"/>',
         $loader
           ->load('[]', 'xdm-json')
+          ->getDocument()
           ->saveXML()
       );
     }

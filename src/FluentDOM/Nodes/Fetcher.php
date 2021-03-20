@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -20,15 +20,15 @@ namespace FluentDOM\Nodes {
   class Fetcher {
 
     /** reverse the order of the fetched nodes */
-    const REVERSE = 1;
+    public const REVERSE = 1;
     /** include the node at the stop */
-    const INCLUDE_STOP = 2;
+    public const INCLUDE_STOP = 2;
     /** unique and sort nodes */
-    const UNIQUE = 4;
+    public const UNIQUE = 4;
     /** ignore the current context (use the document context) */
-    const IGNORE_CONTEXT = 8;
+    public const IGNORE_CONTEXT = 8;
     /** ignore the current context (use the document context) */
-    const FORCE_SORT = 16;
+    public const FORCE_SORT = 16;
 
     /**
      * @var Nodes
@@ -44,8 +44,8 @@ namespace FluentDOM\Nodes {
 
     /**
      * @param string $expression
-     * @param callable $filter
-     * @param callable $stopAt
+     * @param callable|NULL $filter
+     * @param callable|NULL $stopAt
      * @param int $options
      * @throws \InvalidArgumentException
      * @return array
@@ -114,9 +114,9 @@ namespace FluentDOM\Nodes {
      *
      * @throws \InvalidArgumentException
      * @param string $expression
-     * @param \DOMNode $context
-     * @param callable $filter
-     * @param callable $stopAt
+     * @param \DOMNode|NULL $context
+     * @param callable|NULL $filter
+     * @param callable|NULL $stopAt
      * @param int $options
      * @return array|bool|\DOMNodeList|float|string
      */
@@ -140,7 +140,7 @@ namespace FluentDOM\Nodes {
      *
      * @throws \InvalidArgumentException
      * @param string $expression
-     * @param \DOMNode $context
+     * @param \DOMNode|NULL $context
      * @param int $options
      * @return array|bool|\DOMNodeList|float|string
      */
@@ -160,8 +160,8 @@ namespace FluentDOM\Nodes {
 
     /**
      * @param array $nodes
-     * @param callable $filter
-     * @param callable $stopAt
+     * @param callable|NULL $filter
+     * @param callable|NULL $stopAt
      * @param int $options
      * @return array
      */
@@ -170,7 +170,7 @@ namespace FluentDOM\Nodes {
     ): array {
       $result = [];
       foreach ($nodes as $index => $node) {
-        list($isFilter, $isStopAt) = $this->getNodeStatus(
+        [$isFilter, $isStopAt] = $this->getNodeStatus(
           $node, $index, $filter, $stopAt
         );
         if ($isStopAt) {
@@ -192,8 +192,8 @@ namespace FluentDOM\Nodes {
     /**
      * @param \DOMNode $node
      * @param int $index
-     * @param callable $filter
-     * @param callable $stopAt
+     * @param callable|NULL $filter
+     * @param callable|NULL $stopAt
      * @return bool[]
      */
     private function getNodeStatus(

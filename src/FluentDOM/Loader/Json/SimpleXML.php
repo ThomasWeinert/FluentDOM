@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -13,6 +13,7 @@ namespace FluentDOM\Loader\Json {
 
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Element;
+  use FluentDOM\Exceptions\InvalidSource;
   use FluentDOM\Loadable;
   use FluentDOM\Loader\Options;
   use FluentDOM\Loader\Result;
@@ -25,9 +26,9 @@ namespace FluentDOM\Loader\Json {
   class SimpleXML implements Loadable {
 
     use Supports\Json;
-    const CONTENT_TYPES = ['text/simplexml', 'text/simplexml+json', 'application/simplexml+json'];
+    public const CONTENT_TYPES = ['text/simplexml', 'text/simplexml+json', 'application/simplexml+json'];
 
-    const XMLNS = 'urn:carica-json-dom.2013';
+    private const XMLNS = 'urn:carica-json-dom.2013';
 
     /**
      * Load the json string into an DOMDocument
@@ -35,43 +36,42 @@ namespace FluentDOM\Loader\Json {
      * @param mixed $source
      * @param string $contentType
      * @param array|\Traversable|Options $options
-     * @return Document|Result|NULL
-     * @throws \Exception
-     * @throws \FluentDOM\Exceptions\InvalidSource
+     * @return Result|NULL
+     * @throws InvalidSource
      */
-    public function load($source, string $contentType, $options = []) {
+    public function load($source, string $contentType, $options = []): ?Result {
       if (FALSE !== ($json = $this->getJson($source, $contentType, $options))) {
         $document = new Document('1.0', 'UTF-8');
         $document->appendChild(
           $root = $document->createElementNS(self::XMLNS, 'json:json')
         );
         $this->transferTo($root, $json);
-        return $document;
+        return new Result($document, $contentType);
       }
       return NULL;
     }
 
     /**
-     * @param \DOMNode|Element $node
+     * @param \DOMNode|Element $target
      * @param mixed $json
      */
-    protected function transferTo(\DOMNode $node, $json) {
+    protected function transferTo(\DOMNode $target, $json): void {
       /** @var Document $document */
-      $document = $node->ownerDocument ?: $node;
+      $document = $target->ownerDocument ?: $target;
       if ($json instanceof \stdClass) {
         foreach ($json as $name => $data) {
           if ($name === '@attributes') {
-            if ($data instanceof \stdClass && $node instanceof \DOMElement) {
+            if ($data instanceof \stdClass && $target instanceof \DOMElement) {
               foreach ($data as $attributeName => $attributeValue) {
-                $node->setAttribute($attributeName, $this->getValueAsString($attributeValue));
+                $target->setAttribute($attributeName, $this->getValueAsString($attributeValue));
               }
             }
           } else {
-            $this->transferChildTo($node, $name, $data);
+            $this->transferChildTo($target, $name, $data);
           }
         }
       } elseif (is_scalar($json)) {
-        $node->appendChild(
+        $target->appendChild(
           $document->createTextNode($this->getValueAsString($json))
         );
       }
@@ -83,7 +83,7 @@ namespace FluentDOM\Loader\Json {
      * @param mixed $data
      * @return array
      */
-    protected function transferChildTo(\DOMNode $node, $name, $data): array {
+    protected function transferChildTo(\DOMNode $node, string $name, $data): array {
       /** @var Document $document */
       $document = $node->ownerDocument ?: $node;
       if (!\is_array($data)) {

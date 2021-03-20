@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2020 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -43,7 +43,7 @@ namespace FluentDOM\Loader {
       $document = $loader->load(
         '<xml><![CDATA[Test]]></xml>',
         'text/xml'
-      );
+      )->getDocument();
       $this->assertEquals(
         '<xml><![CDATA[Test]]></xml>',
         $document->documentElement->saveXml()
@@ -62,7 +62,7 @@ namespace FluentDOM\Loader {
         [
           Xml::LIBXML_OPTIONS => LIBXML_NOCDATA
         ]
-      );
+      )->getDocument();
       $this->assertEquals(
         '<xml>Test</xml>',
         $document->documentElement->saveXml()
@@ -76,7 +76,7 @@ namespace FluentDOM\Loader {
     public function testLoadWithValidXmlFileAllowFile() {
       $loader = new Xml();
       $this->assertInstanceOf(
-        'DOMDocument',
+        Result::class,
         $loader->load(
           __DIR__.'/TestData/loader.xml',
           'text/xml',
@@ -94,7 +94,7 @@ namespace FluentDOM\Loader {
     public function testLoadWithValidXmlFileForceFile() {
       $loader = new Xml();
       $this->assertInstanceOf(
-        'DOMDocument',
+        Result::class,
         $loader->load(
           __DIR__.'/TestData/loader.xml',
           'text/xml',
@@ -177,22 +177,23 @@ namespace FluentDOM\Loader {
 
     public function testLoadWithInvalidXmlExpectingException() {
       $loader = new Xml();
-      $this->expectException(
-        LoadingError\Libxml::class,
-        'Libxml fatal error in line 1 at character 12: Premature end of data in tag foo line 1.'
-      );
+      $this->expectException(LoadingError\Libxml::class);
       $loader->load('<foo><bar/>', 'text/xml');
     }
 
     public function testLoadWithPreserveWhitespaceTrue() {
       $loader = new Xml();
-      $document = $loader->load('<foo> <bar/> </foo>', 'xml', [Options::PRESERVE_WHITESPACE => TRUE]);
+      $document = $loader
+        ->load('<foo> <bar/> </foo>', 'xml', [Options::PRESERVE_WHITESPACE => TRUE])
+        ->getDocument();
       $this->assertCount(3, $document->documentElement->childNodes);
     }
 
     public function testLoadWithPreserveWhitespaceFalse() {
       $loader = new Xml();
-      $document = $loader->load('<foo> <bar/> </foo>', 'xml', [Options::PRESERVE_WHITESPACE => FALSE]);
+      $document = $loader
+        ->load('<foo> <bar/> </foo>', 'xml', [Options::PRESERVE_WHITESPACE => FALSE])
+        ->getDocument();
       $this->assertCount(1, $document->documentElement->childNodes);
     }
   }

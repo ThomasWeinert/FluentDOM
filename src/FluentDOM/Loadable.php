@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -11,7 +11,9 @@ declare(strict_types=1);
 
 namespace FluentDOM {
 
+  use FluentDOM\DOM\DocumentFragment;
   use FluentDOM\Loader\Options;
+  use FluentDOM\Loader\Result;
 
   /**
    * FluentDOM\Loadable describes an interface for loader objects that can be used to load
@@ -36,9 +38,9 @@ namespace FluentDOM {
      * @param mixed $source
      * @param string $contentType
      * @param array|\Traversable|Options $options Optional options for the loader
-     * @return \FluentDOM\DOM\Document|\FluentDOM\Loader\Result|NULL
+     * @return Result|NULL
      */
-    public function load($source, string $contentType, $options = []);
+    public function load($source, string $contentType, $options = []): ?Result;
 
     /**
      * Load the data source and return the new DOM document. Return NULL if
@@ -47,8 +49,8 @@ namespace FluentDOM {
      * @param mixed $source
      * @param string $contentType
      * @param array|\Traversable|Options $options Optional options for the loader
-     * @return NULL|\FluentDOM\DOM\DocumentFragment
+     * @return NULL|DocumentFragment
      */
-    public function loadFragment($source, string $contentType, $options = []);
+    public function loadFragment($source, string $contentType, $options = []): ?DocumentFragment;
   }
 }

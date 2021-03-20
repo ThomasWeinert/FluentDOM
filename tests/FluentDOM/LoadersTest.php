@@ -1,5 +1,16 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM {
+
+  use FluentDOM\Loader\Result;
 
   require_once __DIR__.'/TestCase.php';
 
@@ -75,13 +86,14 @@ namespace FluentDOM {
      * @covers \FluentDOM\Loaders
      */
     public function testLoadUsesSecondLoader() {
-      $loaderOne = $this->getMockBuilder(Loadable::class)->getMock();
+      $result = $this->createMock(Result::class);
+      $loaderOne = $this->createMock(Loadable::class);
       $loaderOne
         ->expects($this->once())
         ->method('supports')
         ->with('text/xml')
         ->will($this->returnValue(FALSE));
-      $loaderTwo = $this->getMockBuilder(Loadable::class)->getMock();
+      $loaderTwo = $this->createMock(Loadable::class);
       $loaderTwo
         ->expects($this->once())
         ->method('supports')
@@ -91,9 +103,9 @@ namespace FluentDOM {
         ->expects($this->once())
         ->method('load')
         ->with('DATA', 'text/xml')
-        ->will($this->returnValue($document = new \DOMDOcument));
+        ->willReturn($result);
       $loaders = new Loaders([$loaderOne, $loaderTwo]);
-      $this->assertSame($document, $loaders->load('DATA', 'text/xml'));
+      $this->assertSame($result, $loaders->load('DATA', 'text/xml'));
     }
   }
 }

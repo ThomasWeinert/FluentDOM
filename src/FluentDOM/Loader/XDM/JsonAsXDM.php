@@ -15,6 +15,7 @@ namespace FluentDOM\Loader\XDM {
   use FluentDOM\DOM\DocumentFragment;
   use FluentDOM\DOM\Element;
   use FluentDOM\DOM\Implementation;
+  use FluentDOM\Exceptions\InvalidSource;
   use FluentDOM\Exceptions\UnattachedNode;
   use FluentDOM\Loadable;
   use FluentDOM\Loader\Options;
@@ -28,7 +29,7 @@ namespace FluentDOM\Loader\XDM {
 
     use SupportsJson;
 
-    private const CONTENT_TYPES = ['xdm-json', 'application/xdm-json', 'text/xdm-json'];
+    public const CONTENT_TYPES = ['xdm-json', 'application/xdm-json', 'text/xdm-json'];
     private const XMLNS_FN = 'http://www.w3.org/2005/xpath-functions';
 
     private const TYPE_NULL = 'null';
@@ -73,15 +74,14 @@ namespace FluentDOM\Loader\XDM {
      * @param mixed $source
      * @param string $contentType
      * @param array|\Traversable|Options $options
-     * @return Document|Result|NULL
-     * @throws \Exception
-     * @throws \FluentDOM\Exceptions\InvalidSource
+     * @return Result|NULL
+     * @throws InvalidSource
      */
-    public function load($source, string $contentType, $options = []) {
+    public function load($source, string $contentType, $options = []): ?Result {
       if (FALSE !== ($json = $this->getJson($source, $contentType, $options))) {
         $document = new Document('1.0', 'UTF-8');
         $this->transferTo($document, $json, NULL, $this->_recursions);
-        return $document;
+        return new Result($document, $contentType);
       }
       return NULL;
     }
@@ -92,11 +92,11 @@ namespace FluentDOM\Loader\XDM {
      * @param array|\Traversable|Options $options
      * @return DocumentFragment|NULL
      */
-    public function loadFragment($source, string $contentType, $options = []) {
+    public function loadFragment($source, string $contentType, $options = []): ?DocumentFragment {
       if ($this->supports($contentType)) {
         $document = new Document('1.0', 'UTF-8');
         $fragment = $document->createDocumentFragment();
-        $this->transferTo($fragment, \json_decode($source), NULL, $this->_recursions);
+        $this->transferTo($fragment, \json_decode($source, FALSE), NULL, $this->_recursions);
         return $fragment;
       }
       return NULL;
@@ -110,23 +110,27 @@ namespace FluentDOM\Loader\XDM {
      * The $recursions parameter is used to limit the recursion depth of this function.
      *
      * @param \DOMNode|DocumentFragment|Element $parent
-     * @param mixed $value
+     * @param mixed $json
      * @param string|null $key
      * @param int $recursions
      * @throws UnattachedNode
      */
-    protected function transferTo(\DOMNode $parent, $value, string $key = NULL, int $recursions = 100): void {
+    protected function transferTo(\DOMNode $parent, $json, string $key = NULL, int $recursions = 100): void {
       if ($recursions < 1) {
         return;
       }
-      $document = Implementation::getNodeDocument($parent);
+      try {
+        $document = Implementation::getNodeDocument($parent);
+      } catch (UnattachedNode $e) {
+        return;
+      }
       if (
         $document instanceof Document &&
         (
           $parent instanceof Document || $parent instanceof Element || $parent instanceOf DocumentFragment
         )
       ) {
-        $type = $this->getTypeFromValue($value);
+        $type = $this->getTypeFromValue($json);
         $parent->appendChild(
           $target = $document->createElementNS(self::XMLNS_FN, $type)
         );
@@ -135,18 +139,18 @@ namespace FluentDOM\Loader\XDM {
         }
         switch ($type) {
         case self::TYPE_ARRAY :
-          foreach ($value as $childValue) {
+          foreach ($json as $childValue) {
             $this->transferTo($target, $childValue, NULL, $recursions - 1);
           }
           break;
         case self::TYPE_OBJECT :
-          $properties = \is_array($value) ? $value : \get_object_vars($value);
+          $properties = \is_array($json) ? $json : \get_object_vars($json);
           foreach ($properties as $childKey => $childValue) {
             $this->transferTo($target, $childValue, $childKey, $recursions - 1);
           }
           break;
         default :
-          $string = $this->getValueAsString($type, $value);
+          $string = $this->getValueAsString($type, $json);
           if (\is_string($string)) {
             $target->appendChild($document->createTextNode($string));
           }
@@ -187,7 +191,7 @@ namespace FluentDOM\Loader\XDM {
      * @param mixed $value
      * @return NULL|string
      */
-    public function getValueAsString(string $type, $value) {
+    public function getValueAsString(string $type, $value): ?string {
       switch ($type) {
       case self::TYPE_NULL :
         return NULL;

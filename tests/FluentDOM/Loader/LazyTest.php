@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Loader {
 
   use FluentDOM\DOM\Document;
@@ -125,12 +134,13 @@ namespace FluentDOM\Loader {
      * @covers \FluentDOM\Loader\Lazy
      */
     public function testLoad() {
-      $loaderMock = $this->getMockBuilder(Loadable::class)->getMock();
+      $result = $this->createMock(Result::class);
+      $loaderMock = $this->createMock(Loadable::class);
       $loaderMock
         ->expects($this->once())
         ->method('load')
         ->with('data', 'type')
-        ->will($this->returnValue(new Document()));
+        ->willReturn($result);
       $loader = new Lazy(
         [
           'type' => function() use ($loaderMock) {
@@ -138,7 +148,7 @@ namespace FluentDOM\Loader {
           }
         ]
       );
-      $this->assertInstanceOf(Document::class, $loader->load('data', 'type'));
+      $this->assertSame($result, $loader->load('data', 'type'));
     }
 
     /**

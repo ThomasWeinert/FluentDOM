@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -14,6 +14,7 @@ namespace FluentDOM\Loader\Json {
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\DocumentFragment;
   use FluentDOM\DOM\Element;
+  use FluentDOM\Exceptions\InvalidSource;
   use FluentDOM\Loadable;
   use FluentDOM\Loader\Options;
   use FluentDOM\Loader\Result;
@@ -27,21 +28,21 @@ namespace FluentDOM\Loader\Json {
 
     use SupportsJson;
 
-    const CONTENT_TYPES = ['json', 'application/json', 'text/json'];
+    public const XMLNS = 'urn:carica-json-dom.2013';
 
-    const ON_MAP_KEY = 'onMapKey';
+    private const DEFAULT_QNAME = '_';
 
-    const XMLNS = 'urn:carica-json-dom.2013';
-    const DEFAULT_QNAME = '_';
+    public const CONTENT_TYPES = ['json', 'application/json', 'text/json'];
 
-    const OPTION_VERBOSE = 1;
+    public const ON_MAP_KEY = 'onMapKey';
+    public const OPTION_VERBOSE = 1;
 
-    const TYPE_NULL = 'null';
-    const TYPE_BOOLEAN = 'boolean';
-    const TYPE_NUMBER = 'number';
-    const TYPE_STRING = 'string';
-    const TYPE_OBJECT = 'object';
-    const TYPE_ARRAY = 'array';
+    private const TYPE_NULL = 'null';
+    private const TYPE_BOOLEAN = 'boolean';
+    private const TYPE_NUMBER = 'number';
+    private const TYPE_STRING = 'string';
+    private const TYPE_OBJECT = 'object';
+    private const TYPE_ARRAY = 'array';
 
     /**
      * Maximum recursions
@@ -84,11 +85,11 @@ namespace FluentDOM\Loader\Json {
      * @param mixed $source
      * @param string $contentType
      * @param array|\Traversable|Options $options
-     * @return Document|Result|NULL
+     * @return Result|NULL
      * @throws \Exception
-     * @throws \FluentDOM\Exceptions\InvalidSource
+     * @throws InvalidSource
      */
-    public function load($source, string $contentType, $options = []) {
+    public function load($source, string $contentType, $options = []): ?Result {
       if (FALSE !== ($json = $this->getJson($source, $contentType, $options))) {
         $document = new Document('1.0', 'UTF-8');
         $document->appendChild(
@@ -97,30 +98,30 @@ namespace FluentDOM\Loader\Json {
         $onMapKey = $this->prepareOnMapKey($options);
         $this->transferTo($root, $json, $this->_recursions);
         $this->_onMapKey = $onMapKey;
-        return $document;
+        return new Result($document, $contentType);
       }
       return NULL;
     }
 
     /**
-     * @param string $source
+     * @param mixed $source
      * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return DocumentFragment|NULL
      */
-    public function loadFragment($source, string $contentType, $options = []) {
+    public function loadFragment($source, string $contentType, $options = []): ?DocumentFragment {
       if ($this->supports($contentType)) {
         $document = new Document('1.0', 'UTF-8');
         $fragment = $document->createDocumentFragment();
         $onMapKey = $this->prepareOnMapKey($options);
-        $this->transferTo($fragment, \json_decode($source), $this->_recursions);
+        $this->transferTo($fragment, \json_decode($source, FALSE), $this->_recursions);
         $this->_onMapKey = $onMapKey;
         return $fragment;
       }
       return NULL;
     }
 
-    private function prepareOnMapKey($options) {
+    private function prepareOnMapKey($options): ?callable {
       $onMapKey = $this->_onMapKey;
       if (isset($options[self::ON_MAP_KEY]) && \is_callable($options[self::ON_MAP_KEY])) {
         $this->onMapKey($options[self::ON_MAP_KEY]);
@@ -135,9 +136,9 @@ namespace FluentDOM\Loader\Json {
      * function callback(string $key, bool $isArrayElement) {}
      *
      * @param NULL|FALSE|callable $callback
-     * @return callable|NULL|FALSE
+     * @return callable|NULL
      */
-    public function onMapKey($callback = NULL) {
+    public function onMapKey($callback = NULL): ?callable {
       if (NULL !== $callback) {
         $this->_onMapKey = \is_callable($callback) ? $callback : NULL;
       }
@@ -152,27 +153,27 @@ namespace FluentDOM\Loader\Json {
      * The $recursions parameter is used to limit the recursion depth of this function.
      *
      * @param \DOMNode|DocumentFragment|Element $target
-     * @param mixed $value
+     * @param mixed $json
      * @param int $recursions
      */
-    protected function transferTo(\DOMNode $target, $value, int $recursions = 100) {
+    protected function transferTo(\DOMNode $target, $json, int $recursions = 100): void {
       if ($recursions < 1) {
         return;
       }
       if ($target instanceof Element || $target instanceOf DocumentFragment) {
-        $type = $this->getTypeFromValue($value);
+        $type = $this->getTypeFromValue($json);
         switch ($type) {
         case self::TYPE_ARRAY :
-          $this->transferArrayTo($target, $value, $recursions - 1);
+          $this->transferArrayTo($target, $json, $recursions - 1);
           break;
         case self::TYPE_OBJECT :
-          $this->transferObjectTo($target, $value, $recursions - 1);
+          $this->transferObjectTo($target, $json, $recursions - 1);
           break;
         default :
           if ($target instanceof \DOMElement && ($this->_verbose || $type !== self::TYPE_STRING)) {
             $target->setAttributeNS(self::XMLNS, 'json:type', $type);
           }
-          $string = $this->getValueAsString($type, $value);
+          $string = $this->getValueAsString($type, $json);
           if (\is_string($string)) {
             $target->appendChild($target->ownerDocument->createTextNode($string));
           }
@@ -230,7 +231,7 @@ namespace FluentDOM\Loader\Json {
      * @param mixed $value
      * @return NULL|string
      */
-    public function getValueAsString(string $type, $value) {
+    public function getValueAsString(string $type, $value): ?string {
       switch ($type) {
       case self::TYPE_NULL :
         return NULL;
@@ -249,7 +250,7 @@ namespace FluentDOM\Loader\Json {
      * @param array $value
      * @param int $recursions
      */
-    private function transferArrayTo(\DOMNode $target, array $value, int $recursions) {
+    private function transferArrayTo(\DOMNode $target, array $value, int $recursions): void {
       $parentName = '';
       if ($target instanceof Element) {
         $target->setAttributeNS(self::XMLNS, 'json:type', 'array');
@@ -279,7 +280,7 @@ namespace FluentDOM\Loader\Json {
      * @param mixed $value
      * @param int $recursions
      */
-    private function transferObjectTo(\DOMNode $target, $value, int $recursions) {
+    private function transferObjectTo(\DOMNode $target, $value, int $recursions): void {
       $properties = \is_array($value) ? $value : \get_object_vars($value);
       if (($this->_verbose || empty($properties)) && $target instanceof \DOMElement) {
         $target->setAttributeNS(self::XMLNS, 'json:type', 'object');

@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2020 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -13,6 +13,8 @@ namespace FluentDOM\Loader {
 
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\DocumentFragment;
+  use FluentDOM\Exceptions\InvalidSource\TypeFile as InvalidFileSource;
+  use FluentDOM\Exceptions\InvalidSource\TypeString as InvalidStringSource;
   use FluentDOM\Loadable;
 
   /**
@@ -22,8 +24,8 @@ namespace FluentDOM\Loader {
 
     use Supports\Libxml;
 
-    const LIBXML_OPTIONS = 'libxml';
-    const CONTENT_TYPES = ['xml', 'application/xml', 'text/xml'];
+    public const LIBXML_OPTIONS = 'libxml';
+    public const CONTENT_TYPES = ['xml', 'application/xml', 'text/xml'];
 
     /**
      * @see Loadable::load
@@ -31,25 +33,26 @@ namespace FluentDOM\Loader {
      * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return Document|Result|NULL
-     * @throws \FluentDOM\Exceptions\InvalidSource\TypeString
-     * @throws \FluentDOM\Exceptions\InvalidSource\TypeFile
+     * @throws InvalidStringSource
+     * @throws InvalidFileSource
+     * @throws \Throwable
      */
-    public function load($source, string $contentType, $options = []) {
+    public function load($source, string $contentType, $options = []): ?Result {
       if ($this->supports($contentType)) {
-        return $this->loadXmlDocument($source, $options);
+        return new Result($this->loadXmlDocument($source, $options), $contentType);
       }
       return NULL;
     }
 
     /**
      * @see LoadableFragment::loadFragment
-     * @param string $source
+     * @param mixed $source
      * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return DocumentFragment|NULL
-     * @throws \InvalidArgumentException
+     * @throws \Throwable
      */
-    public function loadFragment($source, string $contentType, $options = []) {
+    public function loadFragment($source, string $contentType, $options = []): ?DocumentFragment {
       if ($this->supports($contentType)) {
         return (new Libxml\Errors())->capture(
           static function() use ($source) {

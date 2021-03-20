@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -22,29 +22,29 @@ namespace FluentDOM\Loader\Json {
   class BadgerFish implements Loadable {
 
     use Supports\Json;
-    const CONTENT_TYPES = ['badgerfish', 'application/badgerfish', 'application/badgerfish+json'];
+    public const CONTENT_TYPES = ['badgerfish', 'application/badgerfish', 'application/badgerfish+json'];
 
     /**
-     * @param \DOMNode|Element $node
+     * @param \DOMNode|Element $target
      * @param mixed $json
      * @throws \LogicException
      */
-    protected function transferTo(\DOMNode $node, $json) {
+    protected function transferTo(\DOMNode $target, $json): void {
       /** @var Document $document */
-      $document = $node->ownerDocument ?: $node;
+      $document = $target->ownerDocument ?: $target;
       if ($json instanceof \stdClass) {
         foreach ($json as $name => $data) {
           if ($name === '@xmlns') {
-            $this->transferNamespacesTo($node, $data);
+            $this->transferNamespacesTo($target, $data);
           } elseif ($name === '$') {
             // text content
-            $node->appendChild(
+            $target->appendChild(
               $document->createTextNode($this->getValueAsString($data))
             );
           } elseif (0 === strpos($name, '@')) {
-            $this->transferAttributeTo($node, $name, $data);
+            $this->transferAttributeTo($target, $name, $data);
           } else {
-            $this->transferChildTo($node, $name, $data);
+            $this->transferChildTo($target, $name, $data);
           }
         }
       }
@@ -65,7 +65,7 @@ namespace FluentDOM\Loader\Json {
      * @param \stdClass $data
      * @throws \LogicException
      */
-    protected function transferNamespacesTo(Element $node, $data) {
+    protected function transferNamespacesTo(Element $node, \stdClass $data): void {
       foreach ($data as $key => $namespaceURI) {
         $prefix = $key === '$' ? NULL : $key;
         if ((string)$node->lookupNamespaceUri($prefix) !== $namespaceURI) {
@@ -83,7 +83,7 @@ namespace FluentDOM\Loader\Json {
      * @param string|number|bool|NULL $data
      * @throws \LogicException
      */
-    protected function transferAttributeTo(Element $node, string $name, $data) {
+    protected function transferAttributeTo(Element $node, string $name, $data): void {
       /** @var Document $document */
       $document = $node->ownerDocument ?: $node;
       $name = (string)\substr($name, 1);

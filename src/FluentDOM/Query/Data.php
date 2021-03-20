@@ -115,7 +115,7 @@ namespace FluentDOM\Query {
      *
      * @param string $name
      */
-    public function __unset($name) {
+    public function __unset(string $name): void {
       $this->_node->removeAttribute($this->encodeName($name));
     }
 
@@ -173,7 +173,7 @@ namespace FluentDOM\Query {
       case ($value === 'false') :
         return FALSE;
       case ($this->isJsonString($value)) :
-        if ($json = \json_decode($value)) {
+        if ($json = \json_decode($value, FALSE)) {
           return $json;
         }
         return NULL;

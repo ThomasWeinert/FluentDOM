@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -15,6 +15,7 @@ namespace FluentDOM\Loader {
   use FluentDOM\DOM\DocumentFragment;
   use FluentDOM\DOM\Element;
   use FluentDOM\Loadable;
+  use FluentDOM\Loader\Json\JsonDOM;
   use FluentDOM\Utility\Constraints;
   use FluentDOM\Utility\QualifiedName;
 
@@ -24,21 +25,21 @@ namespace FluentDOM\Loader {
   class JSONx implements Loadable {
 
     use Supports\Libxml;
-    const CONTENT_TYPES = ['jsonx', 'application/xml+jsonx'];
+    public const CONTENT_TYPES = ['jsonx', 'application/xml+jsonx'];
 
-    const XMLNS_JSONX = 'http://www.ibm.com/xmlns/prod/2009/jsonx';
-    const XMLNS_JSONDOM = 'urn:carica-json-dom.2013';
-    const DEFAULT_QNAME = '_';
+    private const XMLNS_JSONX = 'http://www.ibm.com/xmlns/prod/2009/jsonx';
+    private const XMLNS_JSONDOM = JsonDOM::XMLNS;
+    private const DEFAULT_QNAME = '_';
 
     /**
      * @see Loadable::load
-     * @param string $source
+     * @param mixed $source
      * @param string $contentType
      * @param array|\Traversable|Options $options
-     * @return Document|Result|NULL
-     * @throws \LogicException
+     * @return Result|NULL
+     * @throws \Throwable
      */
-    public function load($source, string $contentType, $options = []) {
+    public function load($source, string $contentType, $options = []): ?Result {
       if (NULL !== $source && $this->supports($contentType)) {
         $document = $this->loadXmlDocument($source, $options);
         $target = new Document();
@@ -46,7 +47,7 @@ namespace FluentDOM\Loader {
         if (isset($document->documentElement)) {
           $this->transferNode($document->documentElement, $target);
         }
-        return $target;
+        return new Result($target, $contentType);
       }
       return NULL;
     }
@@ -54,13 +55,13 @@ namespace FluentDOM\Loader {
     /**
      * @see Loadable::loadFragment
      *
-     * @param string $source
+     * @param mixed $source
      * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return DocumentFragment|NULL
-     * @throws \LogicException
+     * @throws \Throwable
      */
-    public function loadFragment($source, string $contentType, $options = []) {
+    public function loadFragment($source, string $contentType, $options = []): ?DocumentFragment {
       if (NULL !== $source && $this->supports($contentType)) {
         $document = new Document();
         $document->preserveWhiteSpace = FALSE;
@@ -81,9 +82,9 @@ namespace FluentDOM\Loader {
     /**
      * @param \DOMNode|Element $node
      * @param \DOMNode|Document|Element $target
-     * @throws \LogicException
+     * @throws \Throwable
      */
-    private function transferNode(\DOMNode $node, \DOMNode $target) {
+    private function transferNode(\DOMNode $node, \DOMNode $target): void {
       Constraints::assertNodeClass(
         $node, Element::class
       );

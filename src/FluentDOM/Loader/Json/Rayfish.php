@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -22,23 +22,23 @@ namespace FluentDOM\Loader\Json {
   class Rayfish implements Loadable {
 
     use Supports\Json;
-    const CONTENT_TYPES = ['rayfish', 'application/rayfish', 'application/rayfish+json'];
+    public const CONTENT_TYPES = ['rayfish', 'application/rayfish', 'application/rayfish+json'];
 
     /**
-     * @param \DOMNode|Element $node
+     * @param \DOMNode|Element $target
      * @param mixed $json
      */
-    protected function transferTo(\DOMNode $node, $json) {
+    protected function transferTo(\DOMNode $target, $json): void {
       if (\is_object($json)) {
         /** @var Document $document */
-        $document = $node->ownerDocument ?: $node;
+        $document = $target->ownerDocument ?: $target;
         $nodeName = $json->{'#name'};
-        list($attributes, $namespaces) = $this->getAttributes($json);
+        [$attributes, $namespaces] = $this->getAttributes($json);
         $child = $document->createElementNS(
-          $this->getNamespaceForNode($nodeName, $namespaces, $node),
+          $this->getNamespaceForNode($nodeName, $namespaces, $target),
           $nodeName
         );
-        $node->appendChild($child);
+        $target->appendChild($child);
         $this->transferText($document, $child, $json);
         $this->transferChildren($child, $json, $namespaces, $attributes);
       }
@@ -49,7 +49,7 @@ namespace FluentDOM\Loader\Json {
      * @param Element $target
      * @param \stdClass $json
      */
-    private function transferText(Document $document, Element $target, $json) {
+    private function transferText(Document $document, Element $target, \stdClass $json): void {
       if (isset($json->{'#text'})) {
         $target->appendChild($document->createTextNode($json->{'#text'}));
       }
@@ -63,7 +63,7 @@ namespace FluentDOM\Loader\Json {
      */
     private function transferChildren(
       Element $target, \stdClass $json, \stdClass $namespaces, \stdClass $attributes
-    ) {
+    ): void {
       if (isset($json->{'#children'})) {
         $this->transferAttributes($target, $namespaces, $attributes);
         foreach ($json->{'#children'} as $value) {
@@ -82,7 +82,7 @@ namespace FluentDOM\Loader\Json {
      * @param \stdClass $namespaces
      * @param \stdClass $attributes
      */
-    private function transferAttributes(Element $node, \stdClass $namespaces, \stdClass $attributes) {
+    private function transferAttributes(Element $node, \stdClass $namespaces, \stdClass $attributes): void {
       foreach ($namespaces as $name => $value) {
         $node->setAttribute($name, $value);
       }

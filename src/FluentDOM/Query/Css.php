@@ -25,12 +25,6 @@ namespace FluentDOM\Query {
   class Css implements \ArrayAccess, \Countable, \IteratorAggregate {
 
     /**
-     * Pattern to decode the style property string
-     */
-    const STYLE_PATTERN = /** @lang TEXT */
-      '((?:^|;)\s*(?P<name>[-\w]+)\s*:\s*(?P<value>[^;]+))';
-
-    /**
      * owner object
      * @var Query
      */
@@ -70,12 +64,12 @@ namespace FluentDOM\Query {
      * the first matched node.
      *
      * @see \ArrayAccess::offsetExists()
-     * @param string $name
+     * @param string $offset
      * @return bool
      */
-    public function offsetExists($name): bool {
+    public function offsetExists($offset): bool {
       if ($properties = $this->getStyleProperties()) {
-        return isset($properties[$name]);
+        return isset($properties[$offset]);
       }
       return FALSE;
     }
@@ -84,12 +78,12 @@ namespace FluentDOM\Query {
      * Allow to use array syntax to read a css property value from first matched node.
      *
      * @see ArrayAccess::offsetGet()
-     * @param string $name
-     * @return bool|mixed $value
+     * @param string $offset
+     * @return mixed
      */
-    public function offsetGet($name) {
+    public function offsetGet($offset) {
       if ($properties = $this->getStyleProperties()) {
-        return $properties[$name];
+        return $properties[$offset];
       }
       return FALSE;
     }
@@ -98,11 +92,11 @@ namespace FluentDOM\Query {
      * Allow to use array syntax to change a css property value on all matched nodes.
      *
      * @see ArrayAccess::offsetSet()
-     * @param string $name
+     * @param string $offset
      * @param string $value
      */
-    public function offsetSet($name, $value) {
-      $this->_query->css($name, $value);
+    public function offsetSet($offset, $value): void {
+      $this->_query->css($offset, $value);
     }
 
     /**
@@ -110,14 +104,14 @@ namespace FluentDOM\Query {
      * all matched nodes.
      *
      * @see ArrayAccess::offsetUnset()
-     * @param string $name
+     * @param string $offset
      */
-    public function offsetUnset($name) {
+    public function offsetUnset($offset): void {
       foreach ($this->_query as $node) {
         if ($node instanceof \DOMElement &&
           $node->hasAttribute('style')) {
           $properties = new Css\Properties($node->getAttribute('style'));
-          unset($properties[$name]);
+          unset($properties[$offset]);
           if (\count($properties) > 0) {
             $node->setAttribute('style', (string)$properties);
           } else {

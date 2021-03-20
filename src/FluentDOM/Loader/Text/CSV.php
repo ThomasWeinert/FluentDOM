@@ -15,8 +15,10 @@ namespace FluentDOM\Loader\Text {
   use FluentDOM\DOM\DocumentFragment;
   use FluentDOM\DOM\Element;
   use FluentDOM\DOM\Implementation;
+  use FluentDOM\Exceptions\InvalidSource;
   use FluentDOM\Exceptions\UnattachedNode;
   use FluentDOM\Loadable;
+  use FluentDOM\Loader\Json\JsonDOM;
   use FluentDOM\Loader\Options;
   use FluentDOM\Loader\Result;
   use FluentDOM\Loader\Supports;
@@ -29,24 +31,25 @@ namespace FluentDOM\Loader\Text {
 
     use Supports;
 
-    const XMLNS = 'urn:carica-json-dom.2013';
-    const DEFAULT_QNAME = '_';
-    const CONTENT_TYPES = ['text/csv'];
+    public const CONTENT_TYPES = ['text/csv'];
+
+    private const XMLNS = JsonDOM::XMLNS;
+    private const DEFAULT_QNAME = '_';
 
     private $_delimiter = ',';
     private $_enclosure = '"';
     private $_escape = '\\';
 
     /**
-     * @see Loadable::load
      * @param mixed $source
      * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return Document|Result|NULL
      * @throws \InvalidArgumentException
-     * @throws \FluentDOM\Exceptions\InvalidSource
+     * @throws InvalidSource
+     * @see Loadable::load
      */
-    public function load($source, string $contentType, $options = []) {
+    public function load($source, string $contentType, $options = []): ?Result {
       $options = $this->getOptions($options);
       $hasHeaderLine = isset($options['HEADER']) ? (bool)$options['HEADER'] : !isset($options['FIELDS']);
       $this->configure($options);
@@ -55,22 +58,22 @@ namespace FluentDOM\Loader\Text {
         $document->appendChild($list = $document->createElementNS(self::XMLNS, 'json:json'));
         $list->setAttributeNS(self::XMLNS, 'json:type', 'array');
         $this->appendLines($list, $lines, $hasHeaderLine, $options['FIELDS'] ?? NULL);
-        return $document;
+        return new Result($document, $contentType);
       }
       return NULL;
     }
 
     /**
-     * @see Loadable::loadFragment
-     *
-     * @param string $source
+     * @param mixed $source
      * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return DocumentFragment|NULL
      * @throws \InvalidArgumentException
-     * @throws \FluentDOM\Exceptions\InvalidSource
+     * @throws InvalidSource
+     * @see Loadable::loadFragment
+     *
      */
-    public function loadFragment($source, string $contentType, $options = []) {
+    public function loadFragment($source, string $contentType, $options = []): ?DocumentFragment {
       $options = $this->getOptions($options);
       $options[Options::ALLOW_FILE] = FALSE;
       $hasHeaderLine = isset($options['FIELDS']) ? FALSE : (isset($options['HEADER']) && $options['HEADER']);
@@ -91,28 +94,30 @@ namespace FluentDOM\Loader\Text {
      * @param array|\Traversable $lines
      * @param bool $hasHeaderLine
      * @param array|NULL $columns
-     * @throws UnattachedNode
      */
     private function appendLines(\DOMNode $parent, $lines, bool $hasHeaderLine, array $columns = NULL): void {
-      $document = Implementation::getNodeDocument($parent);
-      $headers = NULL;
-      /** @var array $record */
-      foreach ($lines as $record) {
-        if ($headers === NULL) {
-          $headers = $this->getHeaders(
-            $record, $hasHeaderLine, $columns
-          );
-          if ($hasHeaderLine) {
-            continue;
+      try {
+        $document = Implementation::getNodeDocument($parent);
+        $headers = NULL;
+        /** @var array $record */
+        foreach ($lines as $record) {
+          if ($headers === NULL) {
+            $headers = $this->getHeaders(
+              $record, $hasHeaderLine, $columns
+            );
+            if ($hasHeaderLine) {
+              continue;
+            }
+          }
+          /** @var Element $node */
+          $node = $parent->appendChild($document->createElement(self::DEFAULT_QNAME));
+          foreach ($record as $index => $field) {
+            if (isset($headers[$index])) {
+              $this->appendField($node, (string)$headers[$index], (string)$field);
+            }
           }
         }
-        /** @var Element $node */
-        $node = $parent->appendChild($document->createElement(self::DEFAULT_QNAME));
-        foreach ($record as $index => $field) {
-          if (isset($headers[$index])) {
-            $this->appendField($node, (string)$headers[$index], (string)$field);
-          }
-        }
+      } catch (UnattachedNode $e) {
       }
     }
 
@@ -121,7 +126,7 @@ namespace FluentDOM\Loader\Text {
      * @param string $name
      * @param string $value
      */
-    private function appendField(Element $parent, string $name, string $value) {
+    private function appendField(Element $parent, string $name, string $value): void {
       $qname = QualifiedName::normalizeString($name, self::DEFAULT_QNAME);
       $child = $parent->appendElement($qname, $value);
       if ($qname !== $name) {
@@ -154,7 +159,7 @@ namespace FluentDOM\Loader\Text {
      * @param mixed $source
      * @param Options $options
      * @return NULL|\Traversable
-     * @throws \FluentDOM\Exceptions\InvalidSource
+     * @throws InvalidSource
      */
     private function getLines($source, Options $options) {
       $result = NULL;
@@ -182,7 +187,7 @@ namespace FluentDOM\Loader\Text {
     /**
      * @param array|\Traversable|Options $options
      */
-    private function configure($options) {
+    private function configure($options): void {
       $this->_delimiter = $options['DELIMITER'] ?? $this->_delimiter;
       $this->_enclosure = $options['ENCLOSURE'] ?? $this->_enclosure;
       $this->_escape = $options['ESCAPE'] ?? $this->_escape;
@@ -194,7 +199,7 @@ namespace FluentDOM\Loader\Text {
      * @throws \InvalidArgumentException
      */
     public function getOptions($options): Options {
-      $result = new Options(
+      return new Options(
         $options,
         [
           Options::CB_IDENTIFY_STRING_SOURCE => function($source) {
@@ -202,7 +207,6 @@ namespace FluentDOM\Loader\Text {
           }
         ]
       );
-      return $result;
     }
   }
 

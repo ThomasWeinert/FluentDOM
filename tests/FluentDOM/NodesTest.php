@@ -10,6 +10,7 @@
 
 namespace FluentDOM {
 
+  use FluentDOM\Loader\Result;
   use FluentDOM\Utility\Iterators\NodesIterator;
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Xpath;
@@ -120,7 +121,11 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::prepareSource
      */
     public function testLoadWithCustomLoader() {
-      $loader = $this->getMockBuilder(Loadable::class)->getMock();
+      $result = $this->createMock(Result::class);
+      $result
+        ->method('getDocument')
+        ->willReturn($document = new Document());
+      $loader = $this->createMock(Loadable::class);
       $loader
         ->expects($this->once())
         ->method('supports')
@@ -130,7 +135,7 @@ namespace FluentDOM {
         ->expects($this->once())
         ->method('load')
         ->with('DATA', 'text/xml')
-        ->will($this->returnValue($document = new \DOMDocument()));
+        ->willReturn($result);
       $fd = new Nodes();
       $fd->loaders($loader);
       $fd->load('DATA');
@@ -147,6 +152,10 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::getLoadingOptions
      */
     public function testLoadWithCustomLoaderAndOptions() {
+      $result = $this->createMock(Result::class);
+      $result
+        ->method('getDocument')
+        ->willReturn($document = new Document());
       $loader = $this->getMockBuilder(Loadable::class)->getMock();
       $loader
         ->expects($this->once())
@@ -157,7 +166,7 @@ namespace FluentDOM {
         ->expects($this->once())
         ->method('load')
         ->with('DATA', 'text/xml', ['foo' => 'bar'])
-        ->will($this->returnValue($document = new \DOMDocument()));
+        ->willReturn($result);
       $fd = new Nodes();
       $fd->loaders($loader);
       $fd->load('DATA', 'text/xml', ['foo' => 'bar']);

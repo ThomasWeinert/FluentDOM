@@ -1,5 +1,12 @@
 <?php
-
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\Loader\Supports {
 
@@ -26,9 +33,9 @@ namespace FluentDOM\Loader\Supports {
       return $this->getValueAsString($json);
     }
 
-    protected function transferTo(\DOMNode $node, $json) {
-      $document = $node->ownerDocument ?: $node;
-      $node->appendChild($document->createElement('success'));
+    protected function transferTo(\DOMNode $target, $json) {
+      $document = $target->ownerDocument ?: $target;
+      $target->appendChild($document->createElement('success'));
     }
 
     public function getNamespace($nodeName, $namespaces, $parent) {
@@ -115,7 +122,7 @@ namespace FluentDOM\Loader\Supports {
       $json = new \stdClass();
       $json->foo = 'bar';
       $loader = new Json_TestProxy();
-      $document = $loader->load($json, 'json');
+      $document = $loader->load($json, 'json')->getDocument();
       $this->assertXmlStringEqualsXmlString(
         '<success/>', $document->saveXml()
       );

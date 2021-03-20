@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -19,16 +19,16 @@ namespace FluentDOM\Loader {
    */
   class Options implements \IteratorAggregate, \ArrayAccess {
 
-    const IS_FILE = 'is_file';
-    const IS_STRING = 'is_string';
-    const ALLOW_FILE = 'allow_file';
+    public const IS_FILE = 'is_file';
+    public const IS_STRING = 'is_string';
+    public const ALLOW_FILE = 'allow_file';
 
-    const LIBXML_OPTIONS = 'libxml';
-    const ENCODING = 'encoding';
-    const FORCE_ENCODING = 'force-encoding';
-    const PRESERVE_WHITESPACE = 'preserve_whitespace';
+    public const LIBXML_OPTIONS = 'libxml';
+    public const ENCODING = 'encoding';
+    public const FORCE_ENCODING = 'force-encoding';
+    public const PRESERVE_WHITESPACE = 'preserve_whitespace';
 
-    const CB_IDENTIFY_STRING_SOURCE = 'identifyStringSource';
+    public const CB_IDENTIFY_STRING_SOURCE = 'identifyStringSource';
 
     private $_options = [
       self::PRESERVE_WHITESPACE => FALSE
@@ -43,7 +43,7 @@ namespace FluentDOM\Loader {
      * @throws \InvalidArgumentException
      */
     public function __construct($options = [], array $callbacks = []) {
-      if (\is_array($options) || $options instanceof \Traversable) {
+      if (is_iterable($options)) {
         foreach ($options as $name => $value) {
           $this->offsetSet($name, $value);
         }
@@ -60,7 +60,7 @@ namespace FluentDOM\Loader {
      * @param callable $callback
      * @throws \InvalidArgumentException
      */
-    public function setCallback(string $name, callable $callback) {
+    public function setCallback(string $name, callable $callback): void {
       if (!array_key_exists($name, $this->_callbacks)) {
         throw new \InvalidArgumentException(
           \sprintf('Unknown callback specifier "%s".', $name)
@@ -100,7 +100,7 @@ namespace FluentDOM\Loader {
 
     /**
      * @param mixed $offset
-     * @return mixed|NULL
+     * @return mixed
      */
     public function offsetGet($offset) {
       return $this->_options[$offset] ?? NULL;
@@ -110,7 +110,7 @@ namespace FluentDOM\Loader {
      * @param mixed $offset
      * @param mixed $value
      */
-    public function offsetSet($offset, $value) {
+    public function offsetSet($offset, $value): void {
       switch ($offset) {
       case self::IS_STRING :
         if ($value) {
@@ -136,7 +136,7 @@ namespace FluentDOM\Loader {
     /**
      * @param mixed $offset
      */
-    public function offsetUnset($offset) {
+    public function offsetUnset($offset): void {
       $this->_options[$offset] = NULL;
     }
 

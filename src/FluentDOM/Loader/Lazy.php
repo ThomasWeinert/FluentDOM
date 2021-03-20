@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace FluentDOM\Loader {
 
-  use FluentDOM\DOM\Document;
   use FluentDOM\DOM\DocumentFragment;
   use FluentDOM\Loadable;
 
@@ -35,7 +34,7 @@ namespace FluentDOM\Loader {
      * @param Loadable|callable $loader
      * @throws \UnexpectedValueException
      */
-    public function add(string $contentType, $loader) {
+    public function add(string $contentType, $loader): void {
       $contentType = $this->normalizeContentType($contentType);
       if ($loader instanceof Loadable || \is_callable($loader)) {
         $this->_list[$contentType] = $loader;
@@ -57,7 +56,7 @@ namespace FluentDOM\Loader {
      * @throws \LogicException
      * @throws \UnexpectedValueException
      */
-    public function addClasses($classes, string $namespace = '') {
+    public function addClasses(array $classes, string $namespace = ''): void {
       foreach ($classes as $loader => $types) {
         $class = \str_replace(['\\\\\\', '\\\\'], '\\', $namespace.'\\'.$loader);
         $callback = function() use ($class) {
@@ -118,9 +117,9 @@ namespace FluentDOM\Loader {
      * @param mixed $source
      * @param string $contentType
      * @param array|\Traversable|Options $options
-     * @return Document|Result|NULL
+     * @return Result|NULL
      */
-    public function load($source, string $contentType, $options = []) {
+    public function load($source, string $contentType, $options = []): ?Result {
       $contentType = $this->normalizeContentType($contentType);
       if ($loader = $this->get($contentType)) {
         return $loader->load($source, $contentType, $options);
@@ -135,7 +134,7 @@ namespace FluentDOM\Loader {
      * @return DocumentFragment|NULL
      * @throws \UnexpectedValueException
      */
-    public function loadFragment($source, string $contentType, $options = []) {
+    public function loadFragment($source, string $contentType, $options = []): ?DocumentFragment {
       $contentType = $this->normalizeContentType($contentType);
       if ($loader = $this->get($contentType)) {
         return $loader->loadFragment($source, $contentType, $options);

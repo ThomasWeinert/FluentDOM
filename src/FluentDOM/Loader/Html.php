@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -14,6 +14,8 @@ namespace FluentDOM\Loader {
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\DocumentFragment;
   use FluentDOM\DOM\ProcessingInstruction;
+  use FluentDOM\Exceptions\InvalidSource\TypeFile as InvalidFileSource;
+  use FluentDOM\Exceptions\InvalidSource\TypeString as InvalidStringSource;
   use FluentDOM\Loadable;
 
   /**
@@ -23,19 +25,20 @@ namespace FluentDOM\Loader {
 
     use Supports\Libxml;
 
-    const IS_FRAGMENT = 'is_fragment';
-    const CONTENT_TYPES = ['html', 'text/html', 'html-fragment', 'text/html-fragment'];
+    public const IS_FRAGMENT = 'is_fragment';
+    public const CONTENT_TYPES = ['html', 'text/html', 'html-fragment', 'text/html-fragment'];
 
     /**
-     * @see Loadable::load
-     * @param string $source
+     * @param mixed $source
      * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return Document|Result|NULL
-     * @throws \FluentDOM\Exceptions\InvalidSource\TypeString
-     * @throws \FluentDOM\Exceptions\InvalidSource\TypeFile
+     * @throws InvalidStringSource
+     * @throws InvalidFileSource
+     * @throws \Throwable
+     * @see Loadable::load
      */
-    public function load($source, string $contentType, $options = []) {
+    public function load($source, string $contentType, $options = []): ?Result {
       if ($this->supports($contentType)) {
         return (new Libxml\Errors())->capture(
           function() use ($source, $contentType, $options) {
@@ -43,7 +46,7 @@ namespace FluentDOM\Loader {
             $document = new Document();
             $settings = $this->getOptions($options);
             if ($this->isFragment($contentType, $settings)) {
-              $this->loadFragmentIntoDom($document, $source, $settings);
+              $this->loadFragmentIntoDOM($document, $source, $settings);
               $selection = $document->evaluate('/node()');
             } else {
               $settings->isAllowed($sourceType = $settings->getSourceType($source));
@@ -122,13 +125,14 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @see LoadableFragment::loadFragment
-     * @param string $source
+     * @param mixed $source
      * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return DocumentFragment|NULL
+     * @throws \Throwable
+     * @see LoadableFragment::loadFragment
      */
-    public function loadFragment($source, string $contentType, $options = []) {
+    public function loadFragment($source, string $contentType, $options = []): ?DocumentFragment {
       if ($this->supports($contentType)) {
         $options = $this->getOptions($options);
         return (new Libxml\Errors())->capture(
@@ -162,7 +166,7 @@ namespace FluentDOM\Loader {
       );
     }
 
-    private function loadFragmentIntoDom(\DOMDocument $document, string $source, $settings) {
+    private function loadFragmentIntoDOM(\DOMDocument $document, string $source, $settings): void {
       $htmlDom = new Document();
       $htmlDom->loadHTML(
         $this->ensureEncodingPI(

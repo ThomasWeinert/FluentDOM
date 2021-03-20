@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2020 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -13,6 +13,8 @@ declare(strict_types=1);
 namespace FluentDOM\Loader\Supports {
 
   use FluentDOM\DOM\Document;
+  use FluentDOM\Exceptions\InvalidSource\TypeFile as InValidFileSource;
+  use FluentDOM\Exceptions\InvalidSource\TypeString as InvalidStringSource;
   use FluentDOM\Exceptions\LoadingError\FileNotLoaded;
   use FluentDOM\Loader\Libxml\Errors;
   use FluentDOM\Loader\Options;
@@ -45,9 +47,9 @@ namespace FluentDOM\Loader\Supports {
      * @param string $source
      * @param array|\Traversable|Options $options
      * @return Document
-     * @throws \FluentDOM\Exceptions\InvalidSource\TypeString
-     * @throws \FluentDOM\Exceptions\InvalidSource\TypeFile
-     * @throws \FluentDOM\Exceptions\LoadingError\FileNotLoaded
+     * @throws InvalidStringSource
+     * @throws InValidFileSource
+     * @throws FileNotLoaded
      * @throws \Throwable
      */
     private function loadXmlDocument(string $source, $options): Document {

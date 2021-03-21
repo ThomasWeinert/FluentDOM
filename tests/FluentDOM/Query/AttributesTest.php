@@ -24,7 +24,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query\Attributes::__construct
      */
     public function testConstructor(): void {
-      $fd = $this->getMockBuilder(Query::class)->getMock();
+      $fd = $this->createMock(Query::class);
       $attr = new Attributes($fd);
       $this->assertSame(
         $fd, $attr->getOwner()
@@ -71,7 +71,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query\Attributes::offsetExists
      */
     public function testOffsetExistsWithoutSelectionExpectingFalse(): void {
-      $fd = $this->getMockBuilder(Query::class)->getMock();
+      $fd = $this->createMock(Query::class);
       $fd
         ->method('offsetExists')
         ->with(0)
@@ -84,7 +84,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query\Attributes::offsetGet
      */
     public function testOffsetGet(): void {
-      $fd = $this->getMockBuilder(Query::class)->getMock();
+      $fd = $this->createMock(Query::class);
       $fd
         ->expects($this->once())
         ->method('attr')
@@ -98,7 +98,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query\Attributes::offsetSet
      */
     public function testOffsetSet(): void {
-      $fd = $this->getMockBuilder(Query::class)->getMock();
+      $fd = $this->createMock(Query::class);
       $fd
         ->expects($this->once())
         ->method('attr')
@@ -111,7 +111,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query\Attributes::offsetUnset
      */
     public function testOffsetUnset(): void {
-      $fd = $this->getMockBuilder(Query::class)->getMock();
+      $fd = $this->createMock(Query::class);
       $fd
         ->expects($this->once())
         ->method('removeAttr')
@@ -139,7 +139,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query\Attributes::getFirstElement
      */
     public function testCountExpectingZero(): void {
-      $fd = $this->getMockBuilder(Query::class)->getMock();
+      $fd = $this->createMock(Query::class);
       $fd
         ->method('offsetExists')
         ->with(0)
@@ -174,7 +174,7 @@ namespace FluentDOM\Query {
      * @return MockObject|Query
      */
     public function getFluentDOMWithNodeFixture(\DOMNode $node) {
-      $fd = $this->getMockBuilder(Query::class)->getMock();
+      $fd = $this->createMock(Query::class);
       $fd
         ->method('offsetExists')
         ->with(0)

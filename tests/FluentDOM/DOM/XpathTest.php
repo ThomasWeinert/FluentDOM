@@ -21,7 +21,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Xpath
      */
     public function testRegisterNamespaceRegistersOnDocument(): void {
-      $namespaces = $this->getMockBuilder(Namespaces::class)->getMock();
+      $namespaces = $this->createMock(Namespaces::class);
       $namespaces
         ->expects($this->once())
         ->method('offsetExists')
@@ -44,7 +44,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Xpath
      */
     public function testRegisterNamespaceRegistersOverwritesExisting(): void {
-      $namespaces = $this->getMockBuilder(Namespaces::class)->getMock();
+      $namespaces = $this->createMock(Namespaces::class);
       $namespaces
         ->expects($this->once())
         ->method('offsetExists')

@@ -550,7 +550,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Element::append
      */
     public function testAppend(): void {
-      $object = $this->getMockBuilder(Appendable::class)->getMock();
+      $object = $this->createMock(Appendable::class);
       $object
         ->expects($this->once())
         ->method('appendTo')

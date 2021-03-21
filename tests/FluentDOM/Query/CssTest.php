@@ -30,7 +30,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query\Css::__construct
      */
     public function testConstructorWithOwner(): void {
-      $fd = $this->getMockBuilder(Query::class)->getMock();
+      $fd = $this->createMock(Query::class);
       $css = new Css($fd);
       $this->assertSame($fd, $css->getOwner());
     }

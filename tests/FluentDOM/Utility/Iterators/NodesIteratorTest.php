@@ -21,7 +21,7 @@ namespace FluentDOM\Utility\Iterators {
     public function testIteratorCurrent(): void {
       $document = new Document();
 
-      $fd = $this->getMockBuilder(Query::class)->getMock();
+      $fd = $this->createMock(Query::class);
       $fd->expects($this->once())
         ->method('item')
         ->with($this->equalTo(0))
@@ -31,13 +31,13 @@ namespace FluentDOM\Utility\Iterators {
     }
 
     public function testIteratorKey(): void {
-      $fd = $this->getMockBuilder(Query::class)->getMock();
+      $fd = $this->createMock(Query::class);
       $fdi = new NodesIterator($fd);
       $this->assertEquals(0, $fdi->key());
     }
 
     public function testIteratorNext(): void {
-      $fd = $this->getMockBuilder(Query::class)->getMock();
+      $fd = $this->createMock(Query::class);
       $fdi = new NodesIterator($fd);
       $this->assertEquals(0, $fdi->key());
       $fdi->next();
@@ -45,7 +45,7 @@ namespace FluentDOM\Utility\Iterators {
     }
 
     public function testIteratorRewind(): void {
-      $fd = $this->getMockBuilder(Query::class)->getMock();
+      $fd = $this->createMock(Query::class);
       $fdi = new NodesIterator($fd);
       $fdi->next();
       $this->assertEquals(1, $fdi->key());
@@ -54,7 +54,7 @@ namespace FluentDOM\Utility\Iterators {
     }
 
     public function testIteratorSeek(): void {
-      $fd = $this->getMockBuilder(Query::class)->getMock();
+      $fd = $this->createMock(Query::class);
       $fd->expects($this->once())
         ->method('count')
         ->willReturn(2);
@@ -64,7 +64,7 @@ namespace FluentDOM\Utility\Iterators {
     }
 
     public function testIteratorSeekToInvalidPosition(): void {
-      $fd = $this->getMockBuilder(Query::class)->getMock();
+      $fd = $this->createMock(Query::class);
       $fd->expects($this->exactly(2))
         ->method('count')
         ->willReturn(1);
@@ -77,7 +77,7 @@ namespace FluentDOM\Utility\Iterators {
     }
 
     public function testIteratorValid(): void {
-      $fd = $this->getMockBuilder(Query::class)->getMock();
+      $fd = $this->createMock(Query::class);
       $fd->expects($this->once())
         ->method('item')
         ->willReturn(new \stdClass);
@@ -86,8 +86,8 @@ namespace FluentDOM\Utility\Iterators {
     }
 
     public function testGetChildren(): void {
-      $fdSource = $this->getMockBuilder(Query::class)->getMock();
-      $fdSpawn = $this->getMockBuilder(Query::class)->getMock();
+      $fdSource = $this->createMock(Query::class);
+      $fdSpawn = $this->createMock(Query::class);
       $document = new \DOMDocument();
       $node = $document->creatEelement('parent');
       $node->appendChild($document->createElement('child'));
@@ -112,7 +112,7 @@ namespace FluentDOM\Utility\Iterators {
     }
 
     public function testHasChildren(): void {
-      $fd = $this->getMockBuilder(Query::class)->getMock();
+      $fd = $this->createMock(Query::class);
       $node = $this
         ->getMockBuilder(\DOMElement::class)
         ->setConstructorArgs(['dummy'])

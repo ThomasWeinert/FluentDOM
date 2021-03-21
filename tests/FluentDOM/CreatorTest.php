@@ -204,7 +204,7 @@ namespace FluentDOM {
      */
     public function testEachWithIteratorAggregate(): void {
       $_ = new Creator();
-      $mock = $this->getMockBuilder(\IteratorAggregate::class)->getMock();
+      $mock = $this->createMock(\IteratorAggregate::class);
       $mock
         ->expects($this->once())
         ->method('getIterator')
@@ -276,7 +276,7 @@ namespace FluentDOM {
 
 
     public function testCreateWithAttributeAppendable(): void {
-      $appendable = $this->getMockBuilder(Appendable::class)->getMock();
+      $appendable = $this->createMock(Appendable::class);
       $appendable
         ->expects($this->once())
         ->method('appendTo')

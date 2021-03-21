@@ -156,7 +156,7 @@ namespace FluentDOM {
       $result
         ->method('getDocument')
         ->willReturn($document = new Document());
-      $loader = $this->getMockBuilder(Loadable::class)->getMock();
+      $loader = $this->createMock(Loadable::class);
       $loader
         ->expects($this->once())
         ->method('supports')
@@ -200,7 +200,7 @@ namespace FluentDOM {
         ->expects($this->once())
         ->method('getContentType')
         ->willReturn('text/xml');
-      $loader = $this->getMockBuilder(Loadable::class)->getMock();
+      $loader = $this->createMock(Loadable::class);
       $loader
         ->expects($this->once())
         ->method('supports')
@@ -247,7 +247,7 @@ namespace FluentDOM {
         ->expects($this->once())
         ->method('getContentType')
         ->willReturn('text/xml');
-      $loader = $this->getMockBuilder(Loadable::class)->getMock();
+      $loader = $this->createMock(Loadable::class);
       $loader
         ->expects($this->once())
         ->method('supports')
@@ -301,7 +301,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::loaders
      */
     public function testLoadersGetAfterSet(): void {
-      $loader = $this->getMockBuilder(Loadable::class)->getMock();
+      $loader = $this->createMock(Loadable::class);
       $fd = new Nodes();
       $fd->loaders($loader);
       $this->assertSame($loader, $fd->loaders());
@@ -322,7 +322,7 @@ namespace FluentDOM {
      */
     public function testLoadersGetCreateFromArray(): void {
       $fd = new Nodes();
-      $fd->loaders([$loader = $this->getMockBuilder(Loadable::class)->getMock()]);
+      $fd->loaders([$loader = $this->createMock(Loadable::class)]);
       $this->assertInstanceOf(Loadable::class, $fd->loaders());
       $this->assertSame([$loader], iterator_to_array($fd->loaders()));
     }
@@ -951,7 +951,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::__toString
      */
     public function testMagicToStringWithExceptionInSerializerFactory(): void {
-      $factory = $this->getMockBuilder(Serializer\Factory\Group::class)->getMock();
+      $factory = $this->createMock(Serializer\Factory\Group::class);
       $factory
         ->expects($this->once())
         ->method('createSerializer')
@@ -969,7 +969,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::__toString
      */
     public function testMagicToStringWithSerializerFactoryReturningNull(): void {
-      $factory = $this->getMockBuilder(Serializer\Factory\Group::class)->getMock();
+      $factory = $this->createMock(Serializer\Factory\Group::class);
       $factory
         ->expects($this->once())
         ->method('createSerializer')
@@ -987,7 +987,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::__toString
      */
     public function testStringWithSerializerFactoryExpectingException(): void {
-      $factory = $this->getMockBuilder(Serializer\Factory\Group::class)->getMock();
+      $factory = $this->createMock(Serializer\Factory\Group::class);
       $factory
         ->expects($this->once())
         ->method('createSerializer')
@@ -1205,7 +1205,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::serializerFactories
      */
     public function testGetSerializerFactoriesAfterSet(): void {
-      $factory = $this->getMockBuilder(Serializer\Factory\Group::class)->getMock();
+      $factory = $this->createMock(Serializer\Factory\Group::class);
       $fd = new Nodes();
       $this->assertSame(
         $factory, $fd->serializerFactories($factory)

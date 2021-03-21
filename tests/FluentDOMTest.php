@@ -108,7 +108,7 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
   public function testRegisterLoader(): void {
     $document = new \FluentDOM\DOM\Document();
     $document->loadXML('<success/>');
-    $mockLoader = $this->getMockBuilder(\FluentDOM\Loadable::class)->getMock();
+    $mockLoader = $this->createMock(\FluentDOM\Loadable::class);
     $mockLoader
       ->method('supports')
       ->willReturn(TRUE);
@@ -131,7 +131,7 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
   public function testRegisterLoaderWithContentTypes(): void {
     $document = new \FluentDOM\DOM\Document();
     $document->loadXML('<success/>');
-    $mockLoader = $this->getMockBuilder(\FluentDOM\Loadable::class)->getMock();
+    $mockLoader = $this->createMock(\FluentDOM\Loadable::class);
     $mockLoader
       ->method('supports')
       ->willReturn(TRUE);
@@ -154,7 +154,7 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
   public function testRegisterLoaderWithCallable(): void {
     $document = new \FluentDOM\DOM\Document();
     $document->loadXML('<success/>');
-    $mockLoader = $this->getMockBuilder(\FluentDOM\Loadable::class)->getMock();
+    $mockLoader = $this->createMock(\FluentDOM\Loadable::class);
     $mockLoader
       ->method('supports')
       ->willReturn(TRUE);
@@ -175,7 +175,7 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
    * @covers FluentDOM
    */
   public function testGetXPathTransformerAfterRegister(): void {
-    $transformer = $this->getMockBuilder(FluentDOM\Xpath\Transformer::class)->getMock();
+    $transformer = $this->createMock(FluentDOM\Xpath\Transformer::class);
     FluentDOM::registerXpathTransformer($transformer, TRUE);
     $this->assertSame(
       $transformer,
@@ -189,7 +189,7 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
    * @covers FluentDOM
    */
   public function testGetXPathTransformerAfterRegisterWithCallback(): void {
-    $transformer = $this->getMockBuilder(\FluentDOM\Xpath\Transformer::class)->getMock();
+    $transformer = $this->createMock(\FluentDOM\Xpath\Transformer::class);
     FluentDOM::registerXpathTransformer(
       function() use ($transformer) {
         return $transformer;

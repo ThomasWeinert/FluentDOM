@@ -23,7 +23,7 @@ namespace FluentDOM\Nodes {
      * @covers \FluentDOM\Nodes\Builder
      */
     public function testConstructor(): void {
-      $nodes = $this->getMockBuilder(Nodes::class)->getMock();
+      $nodes = $this->createMock(Nodes::class);
       $builder = new Builder($nodes);
       $this->assertSame(
         $nodes,

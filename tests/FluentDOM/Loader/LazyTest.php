@@ -164,7 +164,7 @@ namespace FluentDOM\Loader {
      */
     public function testLoadFragment(): void {
       $document = new Document();
-      $loaderMock = $this->getMockBuilder(Loadable::class)->getMock();
+      $loaderMock = $this->createMock(Loadable::class);
       $loaderMock
         ->expects($this->once())
         ->method('loadFragment')
@@ -189,7 +189,7 @@ namespace FluentDOM\Loader {
     }
 
     private function getLoaderFixture() {
-      $loaderMock = $this->getMockBuilder(Loadable::class)->getMock();
+      $loaderMock = $this->createMock(Loadable::class);
       $loader = new Lazy(
         [
           'callable' => function() use ($loaderMock) {

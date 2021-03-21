@@ -22,7 +22,7 @@ namespace FluentDOM\Node {
      * @cover FluentDOM\Node\QuerySelector\Implementation
      */
     public function testQuerySelector(): void {
-      $transformer = $this->getMockBuilder(Transformer::class)->getMock();
+      $transformer = $this->createMock(Transformer::class);
       $transformer
         ->expects($this->once())
         ->method('toXpath')
@@ -42,7 +42,7 @@ namespace FluentDOM\Node {
      * @cover FluentDOM\Node\QuerySelector\Implementation
      */
     public function testQuerySelectorAll(): void {
-      $transformer = $this->getMockBuilder(Transformer::class)->getMock();
+      $transformer = $this->createMock(Transformer::class);
       $transformer
         ->expects($this->once())
         ->method('toXpath')

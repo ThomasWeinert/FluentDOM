@@ -11,15 +11,12 @@
 namespace FluentDOM {
 
   use FluentDOM\DOM\Xpath;
-  use PHPUnit\Framework\Error\Notice;
-  use PHPUnit\Framework\Error\Warning;
-  use PHPUnit\Framework\Error\Deprecated;
 
   require_once __DIR__.'/../../vendor/autoload.php';
 
   abstract class TestCase extends \PHPUnit\Framework\TestCase {
 
-    const XML = '
+    protected const XML = '
       <items version="1.0">
         <group id="1st">
           <item index="0">text1</item>
@@ -34,7 +31,7 @@ namespace FluentDOM {
       </items>
     ';
 
-    const HTML = '
+    protected const HTML = '
       <html>
         <body>
           <p>Paragraph One</p>
@@ -56,11 +53,11 @@ namespace FluentDOM {
      * The the file to be compared is identified by the given function name.
      *
      * @param string $functionName
-     * @param string $actual
+     * @param Query $actual
      *
      * @uses getFileName()
      */
-    protected function assertFluentDOMQueryEqualsXMLFile($functionName, Query $actual) {
+    protected function assertFluentDOMQueryEqualsXMLFile(string $functionName, Query $actual): void {
       $fileName = $this->getFileName($functionName, 'tgt');
       $this->assertXmlStringEqualsXmlFile($fileName, (string)$actual->formatOutput());
     }
@@ -70,7 +67,7 @@ namespace FluentDOM {
      * @return Query
      * @throws \UnexpectedValueException
      */
-    protected function getQueryFixtureFromFunctionName($functionName): Query {
+    protected function getQueryFixtureFromFunctionName(string $functionName): Query {
       $fileName = $this->getFileName($functionName, 'src');
       if (!file_exists($fileName)) {
         throw new \UnexpectedValueException('File Not Found: ' . $fileName);
@@ -90,12 +87,10 @@ namespace FluentDOM {
      */
     protected function getQueryFixtureFromString($string = NULL, $xpath = NULL): Query {
       $fd = new Query();
-      /** @noinspection IsEmptyFunctionUsageInspection */
       if (!empty($string)) {
         $document = new \DOMDocument();
         $document->loadXML($string);
         $fd->load($document);
-        /** @noinspection IsEmptyFunctionUsageInspection */
         if (!empty($xpath)) {
           $query = new Xpath($document);
           $nodes = $query->evaluate($xpath);
@@ -111,7 +106,7 @@ namespace FluentDOM {
      * @param string $type
      * @return string
      */
-    protected function getFileName($functionName, $type): string {
+    protected function getFileName(string $functionName, string $type): string {
       /** @noinspection SubStrUsedAsArrayAccessInspection */
       return sprintf(
         '%s/TestData/%s%s.%s.xml',

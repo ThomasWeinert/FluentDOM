@@ -638,7 +638,7 @@ namespace FluentDOM {
      */
     public function testGetAfterSetOnPrepareSelector(): void {
       $fd = new Nodes();
-      $fd->onPrepareSelector = $callback = function() {};
+      $fd->onPrepareSelector = $callback = static function() {};
       $this->assertSame($callback, $fd->onPrepareSelector);
       $spawn = $fd->spawn();
       $this->assertSame($callback, $spawn->onPrepareSelector);

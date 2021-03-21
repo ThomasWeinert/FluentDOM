@@ -18,8 +18,9 @@ namespace FluentDOM {
      * @group Properties
      * @covers \FluentDOM\Query::__isset
      * @dataProvider providePropertyNames
+     * @param string $propertyName
      */
-    public function testIssetPropertyContentType($propertyName): void {
+    public function testIssetPropertyContentType(string $propertyName): void {
       $fd = new Query();
       $this->assertTrue(isset($fd->$propertyName));
     }
@@ -28,17 +29,18 @@ namespace FluentDOM {
      * @group Properties
      * @covers \FluentDOM\Query::__unset
      * @dataProvider providePropertyNames
+     * @param string $propertyName
      */
-    public function testUnsetPropertyContentType($propertyName): void {
+    public function testUnsetPropertyContentType(string $propertyName): void {
       $fd = new Query();
-      $this->expectException(
-        \BadMethodCallException::class,
+      $this->expectException(\BadMethodCallException::class);
+      $this->expectExceptionMessage(
         'Can not unset property FluentDOM\Query::$'.$propertyName
       );
       unset($fd->$propertyName);
     }
 
-    public static function providePropertyNames() {
+    public static function providePropertyNames(): array {
       return [
         ['attr'],
         ['css'],

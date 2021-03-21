@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -23,7 +23,9 @@ namespace FluentDOM\XMLReader {
    */
   class SiblingIterator extends Iterator {
 
-    protected function move(XMLReader $reader, $name, $filter): bool {
+    protected function move(
+      XMLReader $reader, string $name = NULL, callable $filter = NULL
+    ): bool {
       return ($this->key() < 0)
         ? $reader->read($name, NULL, $filter)
         : $reader->next($name, NULL, $filter);

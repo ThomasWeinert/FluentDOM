@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -72,7 +72,7 @@ namespace FluentDOM\Utility {
      *
      * @param string $protocol
      */
-    private static function register(string $protocol) {
+    private static function register(string $protocol): void {
       if (!\in_array($protocol, \stream_get_wrappers(), TRUE)) {
         \stream_wrapper_register($protocol, __CLASS__);
       }
@@ -101,7 +101,7 @@ namespace FluentDOM\Utility {
       /** @noinspection PhpUnusedParameterInspection */
       string $path, string $mode, int $options, &$opened_path
     ): bool {
-      list($protocol, $id) = \explode('://', $path);
+      [$protocol, $id] = \explode('://', $path);
       $context = \stream_context_get_options($this->context);
       if (
         isset($context[$protocol]['stream']) &&

@@ -22,8 +22,12 @@ namespace FluentDOM\XMLReader {
      * @covers \FluentDOM\XMLReader\Iterator
      */
     public function testIteration(): void {
+      $reader = new XMLReader();
+      /** @noinspection StaticInvocationViaThisInspection */
+      $reader->open(
+        __DIR__.'/../TestData/xmlreader-1.xml'
+      );
       $result = [];
-      $reader = XMLReader::open(__DIR__.'/../TestData/xmlreader-1.xml');
       /**
        * @var XMLReader $reader $key
        * @var Element $child
@@ -40,7 +44,11 @@ namespace FluentDOM\XMLReader {
      * @covers \FluentDOM\XMLReader\Iterator
      */
     public function testIterationFailsOnRewind(): void {
-      $reader = XMLReader::open(__DIR__.'/../TestData/xmlreader-1.xml');
+      $reader = new XMLReader();
+      /** @noinspection StaticInvocationViaThisInspection */
+      $reader->open(
+        __DIR__.'/../TestData/xmlreader-1.xml'
+      );
       /**
        * @var XMLReader $reader $key
        */

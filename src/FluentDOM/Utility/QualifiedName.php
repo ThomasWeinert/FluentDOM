@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -40,7 +40,7 @@ namespace FluentDOM\Utility {
      * @param string $name
      * @throws \UnexpectedValueException
      */
-    private function setQName(string $name) {
+    private function setQName(string $name): void {
       if (empty($name)) {
         throw new \UnexpectedValueException('Invalid QName: QName is empty.');
       }
@@ -50,7 +50,7 @@ namespace FluentDOM\Utility {
         return;
       }
       if (FALSE !== ($position = \strpos($name, ':'))) {
-        list($prefix, $localName) = \explode(':', $name, 2);
+        [$prefix, $localName] = \explode(':', $name, 2);
         $this->isNCName($prefix, 0, $name);
         $this->isNCName($name, $position + 1);
         $this->_prefix = $prefix;
@@ -70,7 +70,7 @@ namespace FluentDOM\Utility {
      *
      * @param string $name full QName
      * @param int $offset Offset of NCName part in QName
-     * @param string $fullName full name used in error message
+     * @param string|NULL $fullName full name used in error message
      * @throws \UnexpectedValueException
      * @return bool
      */
@@ -116,7 +116,7 @@ namespace FluentDOM\Utility {
      *
      * @return string
      */
-    public function __toString() {
+    public function __toString(): string {
       return $this->name;
     }
 
@@ -126,7 +126,7 @@ namespace FluentDOM\Utility {
      * @param string $property
      * @return bool
      */
-    public function __isset(string $property) {
+    public function __isset(string $property): bool {
       switch ($property) {
       case 'name' :
       case 'localName' :
@@ -143,7 +143,7 @@ namespace FluentDOM\Utility {
      * @return string
      * @throws \LogicException
      */
-    public function __get(string $property) {
+    public function __get(string $property): string {
       switch ($property) {
       case 'name' :
         return empty($this->_prefix) ? $this->_localName : $this->_prefix.':'.$this->_localName;

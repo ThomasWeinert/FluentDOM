@@ -22,7 +22,9 @@ namespace FluentDOM\XMLReader {
      * @covers \FluentDOM\XMLReader\SiblingIterator
      */
     public function testIteration(): void {
-      $reader = XMLReader::open(
+      $reader = new XMLReader();
+      /** @noinspection StaticInvocationViaThisInspection */
+      $reader->open(
         __DIR__.'/../TestData/xmlreader-1.xml'
       );
       $result = [];

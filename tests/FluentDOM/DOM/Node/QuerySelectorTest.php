@@ -27,7 +27,7 @@ namespace FluentDOM\Node {
         ->expects($this->once())
         ->method('toXpath')
         ->with('p', TRUE, FALSE)
-        ->will($this->returnValue('//p'));
+        ->willReturn('//p');
 
       \FluentDOM::registerXpathTransformer($transformer, TRUE);
       $document = new Document();
@@ -47,7 +47,7 @@ namespace FluentDOM\Node {
         ->expects($this->once())
         ->method('toXpath')
         ->with('p', TRUE, FALSE)
-        ->will($this->returnValue('//p'));
+        ->willReturn('//p');
 
       \FluentDOM::registerXpathTransformer($transformer, TRUE);
       $document = new Document();

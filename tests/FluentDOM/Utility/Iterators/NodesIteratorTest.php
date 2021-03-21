@@ -25,7 +25,7 @@ namespace FluentDOM\Utility\Iterators {
       $fd->expects($this->once())
         ->method('item')
         ->with($this->equalTo(0))
-        ->will($this->returnValue($document->createElement('test')));
+        ->willReturn($document->createElement('test'));
       $fdi = new NodesIterator($fd);
       $this->assertInstanceOf(\DOMNode::class, $fdi->current());
     }
@@ -57,7 +57,7 @@ namespace FluentDOM\Utility\Iterators {
       $fd = $this->getMockBuilder(Query::class)->getMock();
       $fd->expects($this->once())
         ->method('count')
-        ->will($this->returnValue(2));
+        ->willReturn(2);
       $fdi = new NodesIterator($fd);
       $fdi->seek(1);
       $this->assertEquals(1, $fdi->key());
@@ -67,7 +67,7 @@ namespace FluentDOM\Utility\Iterators {
       $fd = $this->getMockBuilder(Query::class)->getMock();
       $fd->expects($this->exactly(2))
         ->method('count')
-        ->will($this->returnValue(1));
+        ->willReturn(1);
       $fdi = new NodesIterator($fd);
       $this->expectException(
         \InvalidArgumentException::class,
@@ -80,7 +80,7 @@ namespace FluentDOM\Utility\Iterators {
       $fd = $this->getMockBuilder(Query::class)->getMock();
       $fd->expects($this->once())
         ->method('item')
-        ->will($this->returnValue(new \stdClass));
+        ->willReturn(new \stdClass);
       $fdi = new NodesIterator($fd);
       $this->assertTrue($fdi->valid());
     }
@@ -94,12 +94,12 @@ namespace FluentDOM\Utility\Iterators {
       $fdSource
         ->expects($this->once())
         ->method('spawn')
-        ->will($this->returnValue($fdSpawn));
+        ->willReturn($fdSpawn);
       $fdSource
         ->expects($this->once())
         ->method('item')
         ->with($this->equalTo(0))
-        ->will($this->returnValue($node));
+        ->willReturn($node);
       $fdSpawn
         ->expects($this->once())
         ->method('push')
@@ -121,11 +121,11 @@ namespace FluentDOM\Utility\Iterators {
         ->expects($this->once())
         ->method('item')
         ->with($this->equalTo(0))
-        ->will($this->returnValue($node));
+        ->willReturn($node);
       $node
         ->expects($this->once())
         ->method('hasChildNodes')
-        ->will($this->returnValue(TRUE));
+        ->willReturn(TRUE);
       $fdi = new NodesIterator($fd);
       $this->assertTrue($fdi->hasChildren());
     }

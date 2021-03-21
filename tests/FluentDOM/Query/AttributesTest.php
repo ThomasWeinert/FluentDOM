@@ -75,7 +75,7 @@ namespace FluentDOM\Query {
       $fd
         ->method('offsetExists')
         ->with(0)
-        ->will($this->returnValue(FALSE));
+        ->willReturn(FALSE);
       $attr = new Attributes($fd);
       $this->assertFalse(isset($attr['foo']));
     }
@@ -89,7 +89,7 @@ namespace FluentDOM\Query {
         ->expects($this->once())
         ->method('attr')
         ->with('name')
-        ->will($this->returnValue('success'));
+        ->willReturn('success');
       $attr = new Attributes($fd);
       $this->assertEquals('success', $attr['name']);
     }
@@ -143,7 +143,7 @@ namespace FluentDOM\Query {
       $fd
         ->method('offsetExists')
         ->with(0)
-        ->will($this->returnValue(FALSE));
+        ->willReturn(FALSE);
       $attr = new Attributes($fd);
       $this->assertEquals(
         0, count($attr)
@@ -178,11 +178,11 @@ namespace FluentDOM\Query {
       $fd
         ->method('offsetExists')
         ->with(0)
-        ->will($this->returnValue(TRUE));
+        ->willReturn(TRUE);
       $fd
         ->method('offsetGet')
         ->with(0)
-        ->will($this->returnValue($node));
+        ->willReturn($node);
       return $fd;
     }
 

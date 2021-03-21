@@ -130,7 +130,7 @@ namespace FluentDOM {
         ->expects($this->once())
         ->method('supports')
         ->with('text/xml')
-        ->will($this->returnValue(TRUE));
+        ->willReturn(TRUE);
       $loader
         ->expects($this->once())
         ->method('load')
@@ -161,7 +161,7 @@ namespace FluentDOM {
         ->expects($this->once())
         ->method('supports')
         ->with('text/xml')
-        ->will($this->returnValue(TRUE));
+        ->willReturn(TRUE);
       $loader
         ->expects($this->once())
         ->method('load')
@@ -205,7 +205,7 @@ namespace FluentDOM {
         ->expects($this->once())
         ->method('supports')
         ->with('text/xml')
-        ->will($this->returnValue(TRUE));
+        ->willReturn(TRUE);
       $loader
         ->expects($this->once())
         ->method('load')
@@ -252,7 +252,7 @@ namespace FluentDOM {
         ->expects($this->once())
         ->method('supports')
         ->with('text/xml')
-        ->will($this->returnValue(TRUE));
+        ->willReturn(TRUE);
       $loader
         ->expects($this->once())
         ->method('load')

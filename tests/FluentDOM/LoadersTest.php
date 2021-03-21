@@ -63,7 +63,7 @@ namespace FluentDOM {
         ->expects($this->once())
         ->method('supports')
         ->with('application/json')
-        ->will($this->returnValue(TRUE));
+        ->willReturn(TRUE);
       $loaders = new Loaders([$loader]);
       $this->assertTrue($loaders->supports('application/json'));
     }
@@ -77,7 +77,7 @@ namespace FluentDOM {
         ->expects($this->once())
         ->method('supports')
         ->with('application/json')
-        ->will($this->returnValue(FALSE));
+        ->willReturn(FALSE);
       $loaders = new Loaders([$loader]);
       $this->assertFalse($loaders->supports('application/json'));
     }
@@ -92,13 +92,13 @@ namespace FluentDOM {
         ->expects($this->once())
         ->method('supports')
         ->with('text/xml')
-        ->will($this->returnValue(FALSE));
+        ->willReturn(FALSE);
       $loaderTwo = $this->createMock(Loadable::class);
       $loaderTwo
         ->expects($this->once())
         ->method('supports')
         ->with('text/xml')
-        ->will($this->returnValue(TRUE));
+        ->willReturn(TRUE);
       $loaderTwo
         ->expects($this->once())
         ->method('load')

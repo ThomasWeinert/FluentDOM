@@ -111,7 +111,7 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
     $mockLoader = $this->getMockBuilder(\FluentDOM\Loadable::class)->getMock();
     $mockLoader
       ->method('supports')
-      ->will($this->returnValue(TRUE));
+      ->willReturn(TRUE);
     $mockLoader
       ->method('load')
       ->with('test.xml', 'mock/loader')
@@ -134,7 +134,7 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
     $mockLoader = $this->getMockBuilder(\FluentDOM\Loadable::class)->getMock();
     $mockLoader
       ->method('supports')
-      ->will($this->returnValue(TRUE));
+      ->willReturn(TRUE);
     $mockLoader
       ->method('load')
       ->with('test.xml', 'two')
@@ -157,7 +157,7 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
     $mockLoader = $this->getMockBuilder(\FluentDOM\Loadable::class)->getMock();
     $mockLoader
       ->method('supports')
-      ->will($this->returnValue(TRUE));
+      ->willReturn(TRUE);
     $mockLoader
       ->method('load')
       ->with('test.xml', 'some/type')

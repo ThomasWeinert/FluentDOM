@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace FluentDOM {
 
-  use FluentDOM\DOM\Document;
   use FluentDOM\DOM\DocumentFragment;
   use FluentDOM\Loader\Options;
   use FluentDOM\Loader\Result;

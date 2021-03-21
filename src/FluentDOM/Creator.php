@@ -133,9 +133,7 @@ namespace FluentDOM {
      */
     public function element(string $name, ...$parameters): DOM\Element {
       $node = $this->_document->createElement($name);
-      foreach ($parameters as $parameter) {
-        $node->append($parameter);
-      }
+      $node->append(...$parameters);
       return $node;
     }
 

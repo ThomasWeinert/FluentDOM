@@ -1,14 +1,15 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
 declare(strict_types=1);
 
+use FluentDOM\DOM\Document;
 use FluentDOM\Loadable;
 
 abstract class FluentDOM {
@@ -39,14 +40,14 @@ abstract class FluentDOM {
    * @param mixed $source
    * @param string $contentType
    * @param array $options
-   * @return \FluentDOM\DOM\Document
+   * @return Document
    */
-  public static function load($source, string $contentType = 'text/xml', array $options = []): \FluentDOM\DOM\Document {
+  public static function load($source, string $contentType = 'text/xml', array $options = []): Document {
     if (NULL === self::$_loader) {
       self::$_loader = self::getDefaultLoaders();
     }
     $result = self::$_loader->load($source, $contentType, $options);
-    return $result instanceof \DOMDocument ? $result : $result->getDocument();
+    return $result->getDocument();
   }
 
   /**
@@ -202,13 +203,13 @@ abstract class FluentDOM {
    */
   public static function getSerializerFactories(): FluentDOM\Serializer\Factory\Group {
     if (NULL === self::$_serializerFactories) {
-      $xml = function($contentType, \DOMNode $node) {
+      $xml = static function($contentType, \DOMNode $node) {
         return new FluentDOM\Serializer\Xml($node);
       };
-      $html = function($contentType, \DOMNode $node) {
+      $html = static function($contentType, \DOMNode $node) {
         return new FluentDOM\Serializer\Html($node);
       };
-      $json = function($contentType, \DOMNode $node) {
+      $json = static function($contentType, \DOMNode $node) {
         return new FluentDOM\Serializer\Json($node);
       };
       self::$_serializerFactories = new FluentDOM\Serializer\Factory\Group(

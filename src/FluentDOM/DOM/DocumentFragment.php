@@ -127,7 +127,7 @@ namespace FluentDOM\DOM {
      * Append an xml to the fragment, it can use namespace prefixes defined on the fragment object.
      *
      * @param string $data
-     * @param NULL|array|\Traversable|\DOMElement $namespaces
+     * @param NULL|iterable|\DOMElement $namespaces
      * @return bool
      * @throws \InvalidArgumentException
      */

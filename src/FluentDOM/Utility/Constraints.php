@@ -1,17 +1,15 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
 declare(strict_types=1);
 
 namespace FluentDOM\Utility {
-
-  use FluentDOM\DOM\Element;
 
   /**
    * Abstract utility class that provides several constraints/validations
@@ -148,7 +146,7 @@ namespace FluentDOM\Utility {
      * @param int $option
      * @return bool
      */
-    public static function hasOption($options, $option): bool {
+    public static function hasOption(int $options, int $option): bool {
       return ($options & $option) === $option;
     }
   }

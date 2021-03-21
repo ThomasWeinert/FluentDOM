@@ -140,18 +140,18 @@ namespace FluentDOM\DOM {
      * If $content is an array, the $content argument  will be merged with the $attributes
      * argument.
      *
-     * @param string $name
+     * @param string $qualifiedName
      * @param string|array $content
      * @param array|NULL $attributes
-     * @throws \LogicException
      * @return Element
+     *@throws \LogicException
      */
-    public function createElement($name, $content = NULL, array $attributes = NULL): Element {
-      [$prefix, $localName] = QualifiedName::split($name);
+    public function createElement($qualifiedName, $content = NULL, array $attributes = NULL): Element {
+      [$prefix, $localName] = QualifiedName::split($qualifiedName);
       $namespaceURI = '';
       if ($prefix !== FALSE) {
         if (empty($prefix)) {
-          $name = $localName;
+          $qualifiedName = $localName;
         } else {
           if ($this->namespaces()->isReservedPrefix($prefix)) {
             throw new \LogicException(
@@ -164,11 +164,11 @@ namespace FluentDOM\DOM {
         $namespaceURI = (string)$this->namespaces()->resolveNamespace('#default');
       }
       if ($namespaceURI !== '') {
-        $node = $this->createElementNS($namespaceURI, $name);
+        $node = $this->createElementNS($namespaceURI, $qualifiedName);
       } elseif (isset($this->_namespaces['#default'])) {
-        $node = $this->createElementNS('', $name);
+        $node = $this->createElementNS('', $qualifiedName);
       } else {
-        $node = parent::createElement($name);
+        $node = parent::createElement($qualifiedName);
       }
       $this->appendAttributes($node, $content, $attributes);
       $this->appendContent($node, $content);

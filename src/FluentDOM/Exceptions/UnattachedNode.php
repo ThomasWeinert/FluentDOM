@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace FluentDOM\Exceptions {
 
   use FluentDOM\Exception;
-  use Throwable;
 
   class UnattachedNode extends \Exception implements Exception {
 

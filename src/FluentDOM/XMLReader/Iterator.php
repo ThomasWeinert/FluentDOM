@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -63,14 +63,14 @@ namespace FluentDOM\XMLReader {
      *
      * @throws \LogicException
      */
-    public function rewind() {
+    public function rewind(): void {
       if ($this->_key >= 0) {
         throw new \LogicException(\sprintf('%s is not a seekable iterator', __CLASS__));
       }
       $this->next();
     }
 
-    public function next() {
+    public function next(): void {
       if ($this->move($this->_reader, $this->_name, $this->_filter)) {
         $this->_current = (NULL === $this->_current)
           ? $this->_reader->expand()
@@ -87,7 +87,9 @@ namespace FluentDOM\XMLReader {
      * @param callable|NULL $filter
      * @return bool
      */
-    protected function move(XMLReader $reader, $name, $filter): bool {
+    protected function move(
+      XMLReader $reader, string $name = NULL, callable $filter = NULL
+    ): bool {
       while ($found = $reader->read($name, NULL, $filter)) {
         if ($found && $reader->nodeType !== XMLReader::END_ELEMENT) {
           return TRUE;
@@ -106,7 +108,7 @@ namespace FluentDOM\XMLReader {
     /**
      * @return \DOMNode|NULL
      */
-    public function current() {
+    public function current(): ?\DOMNode {
       return $this->_current;
     }
 

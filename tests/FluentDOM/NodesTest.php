@@ -313,7 +313,7 @@ namespace FluentDOM {
      */
     public function testLoadersGetImplicitCreate(): void {
       $fd = new Nodes();
-      $this->assertInstanceOf(Loadable::class, $fd->loaders());
+      $this->assertInstanceOf(Loaders::class, $fd->loaders());
     }
 
     /**

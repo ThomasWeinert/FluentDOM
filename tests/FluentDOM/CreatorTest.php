@@ -244,6 +244,9 @@ namespace FluentDOM {
 
     public function testEachReturnsIterator(): void {
       $_ = new Creator();
+      /**
+       * @var \Traversable $iterator
+       */
       $iterator = $_->each(['one', 'two']);
       $this->assertInstanceOf(
         Creator\Nodes::class, $iterator
@@ -293,6 +296,7 @@ namespace FluentDOM {
 
     public function testCreateFetchingUnknownPropertyExpectingNull(): void {
       $_ = new Creator();
+      /** @noinspection PhpUndefinedFieldInspection */
       $this->assertNull(
         $_('foo')->unknown
       );
@@ -335,12 +339,14 @@ namespace FluentDOM {
     public function testCreatorGetUnknownPropertyExpectingNull(): void {
       $_ = new Creator();
       $this->assertFalse(isset($_->unkown));
+      /** @noinspection PhpUndefinedFieldInspection */
       $this->assertNull($_->unkown);
     }
 
 
     public function testCreatorGetUnknownPropertyAfterSet(): void {
       $_ = new Creator();
+      /** @noinspection PhpUndefinedFieldInspection */
       $_->unkown = TRUE;
       $this->assertTrue($_->unkown);
     }
@@ -353,8 +359,14 @@ namespace FluentDOM {
         'root',
         $_('foo:child')
       )->document;
-      $this->assertEquals('urn:foo', $document->documentElement->getAttribute('xmlns:foo'));
-      $this->assertEquals('', $document->documentElement->firstChild->getAttribute('xmlns:foo'));
+      $this->assertEquals(
+        'urn:foo',
+        $document->documentElement->getAttribute('xmlns:foo')
+      );
+      $this->assertEquals(
+        '',
+        $document->documentElement->firstElementChild->getAttribute('xmlns:foo')
+      );
     }
 
 
@@ -366,8 +378,14 @@ namespace FluentDOM {
         'root',
         $_('foo:child')
       )->document;
-      $this->assertEquals('urn:foo', $document->documentElement->getAttribute('xmlns:foo'));
-      $this->assertEquals('urn:foo', $document->documentElement->firstChild->getAttribute('xmlns:foo'));
+      $this->assertEquals(
+        'urn:foo',
+        $document->documentElement->getAttribute('xmlns:foo')
+      );
+      $this->assertEquals(
+        'urn:foo',
+        $document->documentElement->firstElementChild->getAttribute('xmlns:foo')
+      );
     }
 
 

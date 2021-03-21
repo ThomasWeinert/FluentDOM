@@ -73,7 +73,6 @@ namespace FluentDOM\Query {
     public function testOffsetExistsWithoutSelectionExpectingFalse(): void {
       $fd = $this->getMockBuilder(Query::class)->getMock();
       $fd
-        ->expects($this->any())
         ->method('offsetExists')
         ->with(0)
         ->will($this->returnValue(FALSE));
@@ -142,7 +141,6 @@ namespace FluentDOM\Query {
     public function testCountExpectingZero(): void {
       $fd = $this->getMockBuilder(Query::class)->getMock();
       $fd
-        ->expects($this->any())
         ->method('offsetExists')
         ->with(0)
         ->will($this->returnValue(FALSE));
@@ -178,12 +176,10 @@ namespace FluentDOM\Query {
     public function getFluentDOMWithNodeFixture(\DOMNode $node) {
       $fd = $this->getMockBuilder(Query::class)->getMock();
       $fd
-        ->expects($this->any())
         ->method('offsetExists')
         ->with(0)
         ->will($this->returnValue(TRUE));
       $fd
-        ->expects($this->any())
         ->method('offsetGet')
         ->with(0)
         ->will($this->returnValue($node));

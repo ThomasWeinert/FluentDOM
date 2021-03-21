@@ -57,7 +57,6 @@ namespace FluentDOM\DOM {
         ->willReturn("urn:bar");
       $document = $this->getMockBuilder(Document::class)->getMock();
       $document
-        ->expects($this->any())
         ->method('namespaces')
         ->willReturn($namespaces);
       $document

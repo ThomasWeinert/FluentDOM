@@ -1,4 +1,12 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\DOM\Node {
 
@@ -12,7 +20,7 @@ namespace FluentDOM\DOM\Node {
     /**
      * @covers \FluentDOM\DOM\Node\MutationMacro
      */
-    public function testExpandFromElementNode() {
+    public function testExpandFromElementNode(): void {
       $document = new Document();
       $node = $document->createElement('foo');
       $fragment = MutationMacro::expand($document, $node);
@@ -23,7 +31,7 @@ namespace FluentDOM\DOM\Node {
     /**
      * @covers \FluentDOM\DOM\Node\MutationMacro
      */
-    public function testExpandFromString() {
+    public function testExpandFromString(): void {
       $document = new Document();
       $fragment = MutationMacro::expand($document, 'STRING');
       $this->assertInstanceOf(\DOMDocumentFragment::class, $fragment);
@@ -33,7 +41,7 @@ namespace FluentDOM\DOM\Node {
     /**
      * @covers \FluentDOM\DOM\Node\MutationMacro
      */
-    public function testExpandFromArrayOfStrings() {
+    public function testExpandFromArrayOfStrings(): void {
       $document = new Document();
       $fragment = MutationMacro::expand($document, ['STRING_ONE', 'STRING_TWO']);
       $this->assertInstanceOf(\DOMDocumentFragment::class, $fragment);
@@ -43,7 +51,7 @@ namespace FluentDOM\DOM\Node {
     /**
      * @covers \FluentDOM\DOM\Node\MutationMacro
      */
-    public function testExpandFromInvalidArgumentExpectingException() {
+    public function testExpandFromInvalidArgumentExpectingException(): void {
       $document = new Document();
       $this->expectException(\InvalidArgumentException::class);
       MutationMacro::expand($document, [new \stdClass()]);
@@ -52,7 +60,7 @@ namespace FluentDOM\DOM\Node {
     /**
      * @covers \FluentDOM\DOM\Node\MutationMacro
      */
-    public function testExpandFromDocument() {
+    public function testExpandFromDocument(): void {
       $document = new Document();
       $document->loadXml('<one/>');
       $addDom = new Document();
@@ -66,7 +74,7 @@ namespace FluentDOM\DOM\Node {
     /**
      * @covers \FluentDOM\DOM\Node\MutationMacro
      */
-    public function testExpandFromNodeInOtherDocument() {
+    public function testExpandFromNodeInOtherDocument(): void {
       $document = new Document();
       $document->loadXml('<one/>');
       $addDom = new Document();

@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Query {
 
   use FluentDOM\Query;
@@ -15,7 +24,7 @@ namespace FluentDOM\Query {
      * @group ManipulationReplace
      * @covers \FluentDOM\Query
      */
-    public function testOuterHtmlRead() {
+    public function testOuterHtmlRead(): void {
       $expect = '<p>Paragraph One</p>';
       $html = $this
         ->getQueryFixtureFromString(self::HTML)
@@ -29,7 +38,7 @@ namespace FluentDOM\Query {
      * @group ManipulationReplace
      * @covers \FluentDOM\Query
      */
-    public function testOuterHtmlReadWithTextNodes() {
+    public function testOuterHtmlReadWithTextNodes(): void {
       $expect = 'Paragraph One';
       $html = $this
         ->getQueryFixtureFromString(self::HTML)
@@ -43,7 +52,7 @@ namespace FluentDOM\Query {
      * @group ManipulationReplace
      * @covers \FluentDOM\Query
      */
-    public function testOuterHtmlReadEmpty() {
+    public function testOuterHtmlReadEmpty(): void {
       $html = $this
         ->getQueryFixtureFromString('<html/>')
         ->find('/html/*')
@@ -56,7 +65,7 @@ namespace FluentDOM\Query {
      * @group ManipulationReplace
      * @covers \FluentDOM\Query
      */
-    public function testOuterHtmlWrite() {
+    public function testOuterHtmlWrite(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->find('//p[position() = last()]')
@@ -70,7 +79,7 @@ namespace FluentDOM\Query {
      * @group ManipulationReplace
      * @covers \FluentDOM\Query
      */
-    public function testOuterHtmlWriteEmpty() {
+    public function testOuterHtmlWriteEmpty(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->find('//p')
@@ -84,7 +93,7 @@ namespace FluentDOM\Query {
      * @group ManipulationReplace
      * @covers \FluentDOM\Query
      */
-    public function testOuterHtmlWriteWithCallback() {
+    public function testOuterHtmlWriteWithCallback(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->find('//p')
@@ -106,7 +115,7 @@ namespace FluentDOM\Query {
      * @group ManipulationReplace
      * @covers \FluentDOM\Query
      */
-    public function testOuterHtmlWriteWithInvalidDataExpectingException() {
+    public function testOuterHtmlWriteWithInvalidDataExpectingException(): void {
       $fd = new Query();
       $this->expectException(\UnexpectedValueException::class);
       $fd->outerHtml(new \stdClass());

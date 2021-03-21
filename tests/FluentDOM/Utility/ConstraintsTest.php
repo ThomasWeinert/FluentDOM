@@ -24,7 +24,7 @@ namespace FluentDOM\Utility {
      * @covers \FluentDOM\Utility\Constraints::filterNode
      * @param mixed $node
      */
-    public function testFilterNodeExpectingNode($node) {
+    public function testFilterNodeExpectingNode($node): void {
       $this->assertInstanceOf(\DOMNode::class, Constraints::filterNode($node));
     }
 
@@ -65,7 +65,7 @@ namespace FluentDOM\Utility {
      * @covers \FluentDOM\Utility\Constraints::assertNode
      * @param $node
      */
-    public function testAssertNodeExpectingNode($node) {
+    public function testAssertNodeExpectingNode($node): void {
       $this->assertTrue(Constraints::assertNode($node));
     }
 
@@ -74,7 +74,7 @@ namespace FluentDOM\Utility {
      * @group Constraints
      * @covers \FluentDOM\Utility\Constraints::assertNode
      */
-    public function testAssertNodeExpectingException() {
+    public function testAssertNodeExpectingException(): void {
       $this->expectException(
         \InvalidArgumentException::class,
         'DOMNode expected, got: boolean.'
@@ -87,7 +87,7 @@ namespace FluentDOM\Utility {
      * @group Constraints
      * @covers \FluentDOM\Utility\Constraints::assertNode
      */
-    public function testAssertNodeExpectingExceptionWithModifiedMessage() {
+    public function testAssertNodeExpectingExceptionWithModifiedMessage(): void {
       $this->expectException(
         \InvalidArgumentException::class,
         'Not a node but a stdClass.'
@@ -100,7 +100,7 @@ namespace FluentDOM\Utility {
      * @group Constraints
      * @covers \FluentDOM\Utility\Constraints::assertNodeClass
      */
-    public function testAssertNodeClassWithMatchingClass() {
+    public function testAssertNodeClassWithMatchingClass(): void {
       $document = new \DOMDocument();
       $this->assertTrue(
         Constraints::assertNodeClass($document, [\DOMElement::class, \DOMDocument::class])
@@ -112,7 +112,7 @@ namespace FluentDOM\Utility {
      * @group Constraints
      * @covers \FluentDOM\Utility\Constraints::assertNodeClass
      */
-    public function testAssertNodeClassExpectingException() {
+    public function testAssertNodeClassExpectingException(): void {
       $document = new \DOMDocument();
       $this->expectException(\LogicException::class);
       $this->expectExceptionMessage('Unexpected node type: DOMDocument');
@@ -124,7 +124,7 @@ namespace FluentDOM\Utility {
      * @group Constraints
      * @covers \FluentDOM\Utility\Constraints::assertNodeClass
      */
-    public function testAssertNodeClassExpectingExceptionWithProvidedMessage() {
+    public function testAssertNodeClassExpectingExceptionWithProvidedMessage(): void {
       $document = new \DOMDocument();
       $this->expectException(\LogicException::class);
       $this->expectExceptionMessage('Expect DOMElement not DOMDocument');
@@ -136,7 +136,7 @@ namespace FluentDOM\Utility {
      * @group Constraints
      * @covers \FluentDOM\Utility\Constraints::assertNodeClass
      */
-    public function testAssertNodeClassWithMultipleClassesExpectingException() {
+    public function testAssertNodeClassWithMultipleClassesExpectingException(): void {
       $document = new \DOMDocument();
       $this->expectException(\LogicException::class);
       Constraints::assertNodeClass($document, [\DOMElement::class, \DOMAttr::class]);
@@ -150,7 +150,7 @@ namespace FluentDOM\Utility {
      * @covers \FluentDOM\Utility\Constraints::filterNodeList
      * @param $list
      */
-    public function testFilterNodeListExpectingList($list) {
+    public function testFilterNodeListExpectingList($list): void {
       $this->assertThat(
         Constraints::filterNodeList($list),
         $this->logicalOr(
@@ -173,7 +173,7 @@ namespace FluentDOM\Utility {
      * @group Constraints
      * @covers \FluentDOM\Utility\Constraints::filterNodeList
      */
-    public function testFilterNodeListExpectingNull() {
+    public function testFilterNodeListExpectingNull(): void {
       $this->assertNull(Constraints::filterNodeList('string'));
     }
 
@@ -185,7 +185,7 @@ namespace FluentDOM\Utility {
      * @covers \FluentDOM\Utility\Constraints::filterCallableArray
      * @param $callable
      */
-    public function testFilterCallable($callable) {
+    public function testFilterCallable($callable): void {
       $this->assertIsCallable(Constraints::filterCallable($callable));
     }
 
@@ -201,7 +201,7 @@ namespace FluentDOM\Utility {
      * @group Constraints
      * @covers \FluentDOM\Utility\Constraints::filterCallable
      */
-    public function testFilterCallableWithGlobalFunctionExpectingCallable() {
+    public function testFilterCallableWithGlobalFunctionExpectingCallable(): void {
       $this->assertIsCallable(
         Constraints::filterCallable('strpos', TRUE)
       );
@@ -212,7 +212,7 @@ namespace FluentDOM\Utility {
      * @group Constraints
      * @covers \FluentDOM\Utility\Constraints::filterCallable
      */
-    public function testFilterCallableWithGlobalFunctionExpectingNull() {
+    public function testFilterCallableWithGlobalFunctionExpectingNull(): void {
       $this->assertNull(Constraints::filterCallable('strpos', FALSE));
     }
 
@@ -224,7 +224,7 @@ namespace FluentDOM\Utility {
      * @covers \FluentDOM\Utility\Constraints::filterCallableArray
      * @param $callback
      */
-    public function testFilterCallableExpectingNull($callback) {
+    public function testFilterCallableExpectingNull($callback): void {
       $this->assertNull(Constraints::filterCallable($callback));
     }
 
@@ -241,7 +241,7 @@ namespace FluentDOM\Utility {
      * @group Constraints
      * @covers \FluentDOM\Utility\Constraints::filterCallable
      */
-    public function testFilterCallableExpectingException() {
+    public function testFilterCallableExpectingException(): void {
       $this->expectException(\InvalidArgumentException::class);
       Constraints::filterCallable(NULL, FALSE, FALSE);
     }
@@ -251,7 +251,7 @@ namespace FluentDOM\Utility {
      * @group Constraints
      * @covers \FluentDOM\Utility\Constraints::hasOption
      */
-    public function testHasOptionExpectingTrue() {
+    public function testHasOptionExpectingTrue(): void {
       $this->assertTrue(
         Constraints::hasOption(3, 2)
       );
@@ -262,7 +262,7 @@ namespace FluentDOM\Utility {
      * @group Constraints
      * @covers \FluentDOM\Utility\Constraints::hasOption
      */
-    public function testHasOptionExpectingFalse() {
+    public function testHasOptionExpectingFalse(): void {
       $this->assertFalse(
         Constraints::hasOption(3, 4)
       );

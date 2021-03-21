@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Query {
 
   use FluentDOM\Query;
@@ -15,7 +24,7 @@ namespace FluentDOM\Query {
      * @group TraversingFind
      * @covers \FluentDOM\Query::children
      */
-    public function testChildren() {
+    public function testChildren(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__)
         ->find('//div[@id = "container"]/p')
         ->children();
@@ -27,7 +36,7 @@ namespace FluentDOM\Query {
      * @group TraversingFind
      * @covers \FluentDOM\Query::children
      */
-    public function testChildrenExpression() {
+    public function testChildrenExpression(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__)
         ->find('//div[@id = "container"]/p')
         ->children('name() = "em"');

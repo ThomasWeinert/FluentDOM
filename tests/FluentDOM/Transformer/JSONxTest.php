@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Serializer {
 
   use FluentDOM\DOM\Document;
@@ -27,7 +36,7 @@ namespace FluentDOM\Serializer {
     /**
      * @covers \FluentDOM\Transformer\JSONx
      */
-    public function testCastInvalidDocumentToStringExpectingEmptyString() {
+    public function testCastInvalidDocumentToStringExpectingEmptyString(): void {
       $document = new Document();
       $transformer = new JSONx($document);
       $this->assertEquals(

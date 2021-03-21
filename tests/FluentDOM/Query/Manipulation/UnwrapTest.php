@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -23,7 +23,7 @@ namespace FluentDOM\Query {
      * @group ManipulationAround
      * @covers \FluentDOM\Query
      */
-    public function testUnwrap() {
+    public function testUnwrap(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->find('//p')
@@ -36,7 +36,7 @@ namespace FluentDOM\Query {
      * @group ManipulationAround
      * @covers \FluentDOM\Query
      */
-    public function testUnwrapWithoutSelector() {
+    public function testUnwrapWithoutSelector(): void {
       $fd = $this->getQueryFixtureFromString('<section><div><p>One</p></div><div><p>Two</p></div></section>');
       $fd
         ->find('//p')
@@ -52,7 +52,7 @@ namespace FluentDOM\Query {
      * @group ManipulationAround
      * @covers \FluentDOM\Query
      */
-    public function testUnwrapWithSelector() {
+    public function testUnwrapWithSelector(): void {
       $fd = $this->getQueryFixtureFromString(
         '<section><div class="one"><p>One</p></div><div class="two"><p>Two</p></div></section>'
       );

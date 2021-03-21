@@ -20,7 +20,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers ::createDocument
      */
-    public function testCreateDocumentWithoutArgumentReturnsFluentDOMDocument() {
+    public function testCreateDocumentWithoutArgumentReturnsFluentDOMDocument(): void {
       $implementation = new Implementation();
       $this->assertInstanceOf(Document::class, $implementation->createDocument());
     }
@@ -28,7 +28,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers ::createDocument
      */
-    public function testCreateDocumentWithElement() {
+    public function testCreateDocumentWithElement(): void {
       $implementation = new Implementation();
       $document = $implementation->createDocument(NULL, 'html');
       $this->assertXmlStringEqualsXmlString(
@@ -40,7 +40,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers ::createDocument
      */
-    public function testCreateDocumentWithXhtmlDocType() {
+    public function testCreateDocumentWithXhtmlDocType(): void {
       $implementation = new Implementation();
       $document = $implementation->createDocument(
         NULL,
@@ -62,7 +62,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers ::createDocument
      */
-    public function testCreateDocumentWithHtmlDocType() {
+    public function testCreateDocumentWithHtmlDocType(): void {
       $implementation = new Implementation();
       $document = $implementation->createDocument(
         NULL,
@@ -80,7 +80,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers ::createDocument
      */
-    public function testCreateDocumentWithElementInNamespace() {
+    public function testCreateDocumentWithElementInNamespace(): void {
       $implementation = new Implementation();
       $document = $implementation->createDocument('https://www.w3.org/1999/xhtml/', 'html');
       $this->assertXmlStringEqualsXmlString(
@@ -94,7 +94,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers ::createDocument
      */
-    public function testCreateDocumentWithElementInNamespacewithPrefix() {
+    public function testCreateDocumentWithElementInNamespacewithPrefix(): void {
       $implementation = new Implementation();
       $document = $implementation->createDocument('https://www.w3.org/1999/xhtml/', 'xhtml:html');
       $this->assertXmlStringEqualsXmlString(
@@ -108,7 +108,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers ::createDocument
      */
-    public function testCreateAtomUsingAutomaticNamespaceRegistration() {
+    public function testCreateAtomUsingAutomaticNamespaceRegistration(): void {
       $implementation = new Implementation();
       $document = $implementation->createDocument('http://www.w3.org/2005/Atom', 'atom:feed');
       $feed = $document->documentElement;

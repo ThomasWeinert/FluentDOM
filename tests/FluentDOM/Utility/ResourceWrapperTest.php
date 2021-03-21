@@ -19,7 +19,7 @@ namespace FluentDOM\Utility {
     /**
      * @covers \FluentDOM\Utility\ResourceWrapper
      */
-    public function testOpenStreamFromURI() {
+    public function testOpenStreamFromURI(): void {
       $inner = fopen('data://text/plain;base64,'.base64_encode('success'), 'rb');
       $outer = fopen(ResourceWrapper::createURI($inner), 'rb');
       $this->assertEquals('success', fread($outer, 100));
@@ -28,7 +28,7 @@ namespace FluentDOM\Utility {
     /**
      * @covers \FluentDOM\Utility\ResourceWrapper
      */
-    public function testOpenStreamFromContext() {
+    public function testOpenStreamFromContext(): void {
       $inner = fopen('data://text/plain;base64,'.base64_encode('success'), 'rb');
       list($uri, $context) = ResourceWrapper::createContext($inner);
       $outer = fopen($uri, 'rb', FALSE, $context);
@@ -38,7 +38,7 @@ namespace FluentDOM\Utility {
     /**
      * @covers \FluentDOM\Utility\ResourceWrapper
      */
-    public function testUrlStat() {
+    public function testUrlStat(): void {
       $inner = fopen('data://text/plain;base64,'.base64_encode('success'), 'rb');
       $this->assertIsArray(stat(ResourceWrapper::createURI($inner)));
     }
@@ -46,7 +46,7 @@ namespace FluentDOM\Utility {
     /**
      * @covers \FluentDOM\Utility\ResourceWrapper
      */
-    public function testStreamRead() {
+    public function testStreamRead(): void {
       $inner = fopen('data://text/plain;base64,'.base64_encode('success_and_more'), 'rb');
       $outer = fopen(ResourceWrapper::createURI($inner), 'rb');
       $this->assertEquals('success', fread($outer, 7));
@@ -55,7 +55,7 @@ namespace FluentDOM\Utility {
     /**
      * @covers \FluentDOM\Utility\ResourceWrapper
      */
-    public function testStreamWriteAndSeek() {
+    public function testStreamWriteAndSeek(): void {
       $inner = fopen('php://memory', 'wb+');
       $outer = fopen(ResourceWrapper::createURI($inner), 'wb+');
       fwrite($outer, 'success');
@@ -66,7 +66,7 @@ namespace FluentDOM\Utility {
     /**
      * @covers \FluentDOM\Utility\ResourceWrapper
      */
-    public function testStreamEof() {
+    public function testStreamEof(): void {
       $inner = fopen('data://text/plain;base64,'.base64_encode('success'), 'rb');
       $outer = fopen(ResourceWrapper::createURI($inner), 'rb');
       $this->assertFalse(feof($outer));
@@ -79,7 +79,7 @@ namespace FluentDOM\Utility {
     /**
      * @covers \FluentDOM\Utility\ResourceWrapper
      */
-    public function testOpenWithInvalidContext() {
+    public function testOpenWithInvalidContext(): void {
       $inner = fopen('data://text/plain;base64,'.base64_encode('success'), 'rb');
       list($uri, $context) = ResourceWrapper::createContext($inner);
       $this->expectWarning();

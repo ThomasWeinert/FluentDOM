@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM {
 
   use FluentDOM\Query;
@@ -14,7 +23,7 @@ namespace FluentDOM {
      * @group Nodes
      * @covers \FluentDOM\Nodes::index
      */
-    public function testIndex() {
+    public function testIndex(): void {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//item[@index >= 1]');
       $this->assertEquals(
         1,
@@ -26,7 +35,7 @@ namespace FluentDOM {
      * @group Nodes
      * @covers \FluentDOM\Nodes::index
      */
-    public function testIndexWithExpression() {
+    public function testIndexWithExpression(): void {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//item');
       $this->assertEquals(
         1,
@@ -38,7 +47,7 @@ namespace FluentDOM {
      * @group Nodes
      * @covers \FluentDOM\Nodes::index
      */
-    public function testIndexWithNonMatchingExpression() {
+    public function testIndexWithNonMatchingExpression(): void {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//item');
       $this->assertEquals(
         -1,
@@ -50,7 +59,7 @@ namespace FluentDOM {
      * @group Nodes
      * @covers \FluentDOM\Nodes::index
      */
-    public function testIndexWithNode() {
+    public function testIndexWithNode(): void {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//item');
       $node = $fd->get(1);
       $this->assertEquals(
@@ -63,7 +72,7 @@ namespace FluentDOM {
      * @group Nodes
      * @covers \FluentDOM\Nodes::index
      */
-    public function testIndexOnEmptyList() {
+    public function testIndexOnEmptyList(): void {
       $fd = new Query();
       $this->assertEquals(-1, $fd->index());
     }

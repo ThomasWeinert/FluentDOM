@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Utility\Iterators {
 
   use FluentDOM\DOM\Document;
@@ -11,7 +20,7 @@ namespace FluentDOM\Utility\Iterators {
     /**
      * @covers \FluentDOM\Utility\Iterators\ElementIterator
      */
-    public function testIterator() {
+    public function testIterator(): void {
       $document = new Document();
       $document->loadXML('<items>ONE<two><three/></two></items>');
       $this->assertSame(
@@ -26,7 +35,7 @@ namespace FluentDOM\Utility\Iterators {
     /**
      * @covers \FluentDOM\Utility\Iterators\ElementIterator
      */
-    public function testSeek() {
+    public function testSeek(): void {
       $document = new Document();
       $document->loadXML('<items>ONE<two><three/></two></items>');
       $iterator = $document->documentElement->getIterator();
@@ -39,7 +48,7 @@ namespace FluentDOM\Utility\Iterators {
     /**
      * @covers \FluentDOM\Utility\Iterators\ElementIterator
      */
-    public function testSeekWithInvalidPositionExpectingException() {
+    public function testSeekWithInvalidPositionExpectingException(): void {
       $document = new Document();
       $document->loadXML('<items>ONE<two><three/></two></items>');
       $iterator = $document->documentElement->getIterator();
@@ -53,7 +62,7 @@ namespace FluentDOM\Utility\Iterators {
     /**
      * @covers \FluentDOM\Utility\Iterators\ElementIterator
      */
-    public function testRecursiveIterator() {
+    public function testRecursiveIterator(): void {
       $document = new Document();
       $document->loadXML('<items>ONE<two><three/></two></items>');
       $iterator = new \RecursiveIteratorIterator(
@@ -72,7 +81,7 @@ namespace FluentDOM\Utility\Iterators {
     /**
      * @covers \FluentDOM\Utility\Iterators\ElementIterator
      */
-    public function testGetChildrenOnTextNodeExpectingException() {
+    public function testGetChildrenOnTextNodeExpectingException(): void {
       $document = new Document();
       $document->loadXML('<items>ONE<two><three/></two></items>');
       $iterator = $document->documentElement->getIterator();

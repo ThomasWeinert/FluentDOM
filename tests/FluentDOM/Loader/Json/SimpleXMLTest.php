@@ -34,7 +34,7 @@ namespace FluentDOM\Loader\Json {
     /**
      * @covers \FluentDOM\Loader\Json\SimpleXML
      */
-    public function testLoadWithInvalidSourceExpectingNull() {
+    public function testLoadWithInvalidSourceExpectingNull(): void {
       $loader = new SimpleXML();
       $this->assertNull(
         $loader->load(

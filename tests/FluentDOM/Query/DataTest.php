@@ -21,7 +21,7 @@ namespace FluentDOM\Query {
     /**
      * @covers \FluentDOM\Query\Data::__construct
      */
-    public function testConstructor() {
+    public function testConstructor(): void {
       $document = new \DOMDocument();
       $document->appendChild($document->createElement('sample'));
       $data = new Data($document->documentElement);
@@ -34,7 +34,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query\Data::toArray
      * @covers \FluentDOM\Query\Data::isDataProperty
      */
-    public function testToArrayWithSeveralAttributes() {
+    public function testToArrayWithSeveralAttributes(): void {
       $document = new \DOMDocument();
       $document->loadXML(
         '<div data-role="page" data-hidden="true" data-options=\'{"name":"John"}\'></div>'
@@ -56,7 +56,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query\Data::toArray
      * @covers \FluentDOM\Query\Data::decodeName
      */
-    public function testToArrayWithComplexAttribute() {
+    public function testToArrayWithComplexAttribute(): void {
       $document = new \DOMDocument();
       $document->loadXML(
         '<div data-options-name="John"></div>'
@@ -71,7 +71,7 @@ namespace FluentDOM\Query {
     /**
      * @covers \FluentDOM\Query\Data::getIterator
      */
-    public function testGetIterator() {
+    public function testGetIterator(): void {
       $document = new \DOMDocument();
       $document->loadXML(
         '<div data-role="page" data-hidden="true"></div>'
@@ -89,7 +89,7 @@ namespace FluentDOM\Query {
     /**
      * @covers \FluentDOM\Query\Data::count
      */
-    public function testCountExpectingZero() {
+    public function testCountExpectingZero(): void {
       $document = new \DOMDocument();
       $document->loadXML(
         '<div></div>'
@@ -103,7 +103,7 @@ namespace FluentDOM\Query {
     /**
      * @covers \FluentDOM\Query\Data::count
      */
-    public function testCountExpectingTwo() {
+    public function testCountExpectingTwo(): void {
       $document = new \DOMDocument();
       $document->loadXML(
         '<div data-role="page" data-hidden="true"></div>'
@@ -117,7 +117,7 @@ namespace FluentDOM\Query {
     /**
      * @covers \FluentDOM\Query\Data::__isset
      */
-    public function testMagicMethodIssetExpectingTrue() {
+    public function testMagicMethodIssetExpectingTrue(): void {
       $document = new \DOMDocument();
       $document->loadXML('<node data-truth="true"/>');
       $data = new Data($document->documentElement);
@@ -127,7 +127,7 @@ namespace FluentDOM\Query {
     /**
      * @covers \FluentDOM\Query\Data::__isset
      */
-    public function testMagicMethodIssetExpectingFalse() {
+    public function testMagicMethodIssetExpectingFalse(): void {
       $document = new \DOMDocument();
       $document->loadXML('<node data-truth="true"/>');
       $data = new Data($document->documentElement);
@@ -172,7 +172,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query\Data::encodeName
      * @dataProvider provideDataValues
      */
-    public function testMagicMethodUnset() {
+    public function testMagicMethodUnset(): void {
       $document = new \DOMDocument();
       $document->loadXML('<node data-truth="true"/>');
       $data = new Data($document->documentElement);
@@ -236,7 +236,7 @@ namespace FluentDOM\Query {
      * @group AttributesData
      * @covers \FluentDOM\Query::data
      */
-    public function testDataRead() {
+    public function testDataRead(): void {
       $fd = $this->getQueryFixtureFromString('<sample data-foo="bar"/>')->find('//sample');
       $this->assertEquals('bar', $fd->data('foo'));
     }
@@ -245,7 +245,7 @@ namespace FluentDOM\Query {
      * @group AttributesData
      * @covers \FluentDOM\Query::data
      */
-    public function testDataReadWithoutElement() {
+    public function testDataReadWithoutElement(): void {
       $fd = $this->getQueryFixtureFromString('<sample/>');
       $this->assertEquals('', $fd->data('dummy'));
     }
@@ -255,7 +255,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::data
      * @covers \FluentDOM\Query::getSetterValues
      */
-    public function testDataWrite() {
+    public function testDataWrite(): void {
       $fd = $this->getQueryFixtureFromString('<sample/>')->find('//sample');
       $fd->data('foo', 'bar');
       $this->assertEquals(
@@ -269,7 +269,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::data
      * @covers \FluentDOM\Query::getSetterValues
      */
-    public function testDataWriteWithNullValue() {
+    public function testDataWriteWithNullValue(): void {
       $fd = $this->getQueryFixtureFromString('<sample/>')->find('//sample');
       $this->assertSame(
         $fd,
@@ -282,7 +282,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::data
      * @covers \FluentDOM\Query::getSetterValues
      */
-    public function testDataWriteUsingArray() {
+    public function testDataWriteUsingArray(): void {
       $fd = $this->getQueryFixtureFromString('<sample/>')->find('//sample');
       $fd->data(['foo' => 'bar']);
       $this->assertEquals(
@@ -296,7 +296,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::removeData
      * @covers \FluentDOM\Query::getNamesList
      */
-    public function testRemoveData() {
+    public function testRemoveData(): void {
       $fd = $this->getQueryFixtureFromString(
         '<sample data-foo="bar" data-bar="foo"/>'
       )->find('//sample');
@@ -312,7 +312,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::removeData
      * @covers \FluentDOM\Query::getNamesList
      */
-    public function testRemoveDataWithList() {
+    public function testRemoveDataWithList(): void {
       $fd = $this->getQueryFixtureFromString(
         '<sample data-foo="bar" data-bar="foo"/>'
       )->find('//sample');
@@ -328,7 +328,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::removeData
      * @covers \FluentDOM\Query::getNamesList
      */
-    public function testRemoveDataWithoutNamesRemovingAll() {
+    public function testRemoveDataWithoutNamesRemovingAll(): void {
       $fd = $this->getQueryFixtureFromString(
         '<sample data-foo="bar" data-bar="foo"/>'
       )->find('//sample');
@@ -344,7 +344,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::removeData
      * @covers \FluentDOM\Query::getNamesList
      */
-    public function testRemoveDataWithInvalidName() {
+    public function testRemoveDataWithInvalidName(): void {
       $fd = $this->getQueryFixtureFromString(
         '<sample data-foo="bar" data-bar="foo"/>'
       )->find('//sample');
@@ -356,7 +356,7 @@ namespace FluentDOM\Query {
      * @group AttributesData
      * @covers \FluentDOM\Query::hasData
      */
-    public function testHasDataExpectingTrue() {
+    public function testHasDataExpectingTrue(): void {
       $fd = $this->getQueryFixtureFromString('<sample data-foo="bar"/>')->find('//sample');
       $this->assertTrue($fd->hasData());
     }
@@ -365,7 +365,7 @@ namespace FluentDOM\Query {
      * @group AttributesData
      * @covers \FluentDOM\Query::hasData
      */
-    public function testHasDataExpectingFalse() {
+    public function testHasDataExpectingFalse(): void {
       $fd = $this->getQueryFixtureFromString('<sample/>')->find('//sample');
       $this->assertFalse($fd->hasData());
     }
@@ -374,7 +374,7 @@ namespace FluentDOM\Query {
      * @group AttributesData
      * @covers \FluentDOM\Query::hasData
      */
-    public function testHasDataOnEmptyFluentDomExpectingFalse() {
+    public function testHasDataOnEmptyFluentDomExpectingFalse(): void {
       $fd = $this->getQueryFixtureFromString('<sample/>');
       $this->assertFalse($fd->hasData());
     }
@@ -383,7 +383,7 @@ namespace FluentDOM\Query {
      * @group AttributesData
      * @covers \FluentDOM\Query::hasData
      */
-    public function testHasDataOnElementExpectingTrue() {
+    public function testHasDataOnElementExpectingTrue(): void {
       $fd = $this->getQueryFixtureFromString('<sample data-foo="bar"/>');
       $this->assertTrue($fd->hasData($fd->document->documentElement));
     }
@@ -392,7 +392,7 @@ namespace FluentDOM\Query {
      * @group AttributesData
      * @covers \FluentDOM\Query::hasData
      */
-    public function testHasDataOnElementExpectingFalse() {
+    public function testHasDataOnElementExpectingFalse(): void {
       $fd = $this->getQueryFixtureFromString('<sample/>');
       $this->assertFalse($fd->hasData($fd->document->documentElement));
     }
@@ -406,7 +406,7 @@ namespace FluentDOM\Query {
      * @group AttributesData
      * @covers \FluentDOM\Query::__get
      */
-    public function testDataPropertyRead() {
+    public function testDataPropertyRead(): void {
       $fd = $this->getQueryFixtureFromString('<sample data-foo="bar"/>')->find('//sample');
       $this->assertEquals(['foo' => 'bar'], iterator_to_array($fd->data));
     }
@@ -415,7 +415,7 @@ namespace FluentDOM\Query {
      * @group AttributesData
      * @covers \FluentDOM\Query::__get
      */
-    public function testDataPropertyReadOnEmptyListExpectingException() {
+    public function testDataPropertyReadOnEmptyListExpectingException(): void {
       $fd = new Query();
       $this->expectException(\UnexpectedValueException::class);
       $fd->data;
@@ -425,7 +425,7 @@ namespace FluentDOM\Query {
      * @group AttributesData
      * @covers \FluentDOM\Query::__set
      */
-    public function testDataPropertyWrite() {
+    public function testDataPropertyWrite(): void {
       $fd = $this->getQueryFixtureFromString('<sample/>')->find('//sample');
       $fd->data = ['foo' => 'bar'];
       $this->assertXmlStringEqualsXmlString(

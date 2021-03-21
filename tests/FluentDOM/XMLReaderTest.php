@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM {
 
   use FluentDOM\DOM\Document;
@@ -12,7 +21,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\XMLReader
      */
-    public function testTraverseSiblingsWithRegisteredNamespace() {
+    public function testTraverseSiblingsWithRegisteredNamespace(): void {
       $reader = new XMLReader();
       $reader->open(__DIR__.'/TestData/xmlreader-1.xml');
       $reader->registerNamespace('foo', 'urn:foo');
@@ -32,7 +41,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\XMLReader
      */
-    public function testTraverseSiblingsWithNamespace() {
+    public function testTraverseSiblingsWithNamespace(): void {
       $reader = new XMLReader();
       $reader->open(__DIR__.'/TestData/xmlreader-1.xml');
 
@@ -51,7 +60,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\XMLReader
      */
-    public function testTraverseSiblingsWithFilter() {
+    public function testTraverseSiblingsWithFilter(): void {
       $reader = new XMLReader();
       $reader->open(__DIR__.'/TestData/xmlreader-1.xml');
 
@@ -73,7 +82,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\XMLReader
      */
-    public function testTraverseSiblingsWithoutNamespace() {
+    public function testTraverseSiblingsWithoutNamespace(): void {
       $reader = new XMLReader();
       $reader->open(__DIR__.'/TestData/xmlreader-1.xml');
 
@@ -92,7 +101,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\XMLReader
      */
-    public function testTraverseAllSiblings() {
+    public function testTraverseAllSiblings(): void {
       $reader = new XMLReader();
       $reader->open(__DIR__.'/TestData/xmlreader-1.xml');
 
@@ -113,7 +122,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\XMLReader
      */
-    public function testTraverseDescendantsWithRegisteredNamespace() {
+    public function testTraverseDescendantsWithRegisteredNamespace(): void {
       $reader = new XMLReader();
       $reader->open(__DIR__.'/TestData/xmlreader-1.xml');
       $reader->registerNamespace('foo', 'urn:foo');
@@ -131,7 +140,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\XMLReader
      */
-    public function testTraverseDescendantsWithNamespace() {
+    public function testTraverseDescendantsWithNamespace(): void {
       $reader = new XMLReader();
       $reader->open(__DIR__.'/TestData/xmlreader-1.xml');
 
@@ -148,7 +157,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\XMLReader
      */
-    public function testTraverseDescendantsWithFilterFunctionAndTagName() {
+    public function testTraverseDescendantsWithFilterFunctionAndTagName(): void {
       $reader = new XMLReader();
       $reader->open(__DIR__.'/TestData/xmlreader-1.xml');
 
@@ -166,7 +175,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\XMLReader
      */
-    public function testTraverseDescendantsWithFilterFunction() {
+    public function testTraverseDescendantsWithFilterFunction(): void {
       $reader = new XMLReader();
       $reader->open(__DIR__.'/TestData/xmlreader-1.xml');
 
@@ -189,7 +198,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\XMLReader
      */
-    public function testTraverseDescendantsWithoutNamespace() {
+    public function testTraverseDescendantsWithoutNamespace(): void {
       $reader = new XMLReader();
       $reader->open(__DIR__.'/TestData/xmlreader-1.xml');
 
@@ -206,7 +215,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\XMLReader
      */
-    public function testGetAttributeWithNamespace() {
+    public function testGetAttributeWithNamespace(): void {
       $reader = new XMLReader();
       $reader->open(__DIR__.'/TestData/xmlreader-1.xml');
       $reader->registerNamespace('b', 'urn:bar');
@@ -220,7 +229,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\XMLReader
      */
-    public function testExpandToFluentDOMDocumentIncludingNamespaces() {
+    public function testExpandToFluentDOMDocumentIncludingNamespaces(): void {
       $reader = new XMLReader();
       $reader->open(__DIR__.'/TestData/xmlreader-1.xml');
       $reader->registerNamespace('foo', 'urn:foo');
@@ -238,7 +247,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\XMLReader
      */
-    public function testExpandToProvidedDocument() {
+    public function testExpandToProvidedDocument(): void {
       $reader = new XMLReader();
       $reader->open(__DIR__.'/TestData/xmlreader-1.xml');
       $reader->read();
@@ -251,7 +260,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\XMLReader
      */
-    public function testAttachStream() {
+    public function testAttachStream(): void {
       $fh = fopen(__DIR__.'/TestData/xmlreader-1.xml', 'rb');
       $reader = new XMLReader();
       $reader->attachStream($fh);
@@ -263,7 +272,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\XMLReader
      */
-    public function testAttachStreamExpectingException() {
+    public function testAttachStreamExpectingException(): void {
       $reader = new XMLReader();
       $this->expectException(InvalidArgument::class);
       $reader->attachStream('dummy');

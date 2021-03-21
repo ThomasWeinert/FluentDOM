@@ -21,17 +21,17 @@ namespace FluentDOM\Loader\XDM {
    */
   class JsonAsXDMTest extends TestCase {
 
-    public function testSupportsExpectingTrue() {
+    public function testSupportsExpectingTrue(): void {
       $loader = new JsonAsXDM();
       $this->assertTrue($loader->supports('xdm-json'));
     }
 
-    public function testSupportsExpectingFalse() {
+    public function testSupportsExpectingFalse(): void {
       $loader = new JsonAsXDM();
       $this->assertFalse($loader->supports('text/xml'));
     }
 
-    public function testLoadWithValidJson() {
+    public function testLoadWithValidJson(): void {
       $loader = new JsonAsXDM();
       $document = $loader->load(
         '{"foo":"bar"}',
@@ -46,7 +46,7 @@ namespace FluentDOM\Loader\XDM {
       );
     }
 
-    public function testLoadWithValidFileAllowFile() {
+    public function testLoadWithValidFileAllowFile(): void {
       $loader = new JsonAsXDM();
       $document = $loader->load(
         __DIR__.'/TestData/loader.json',
@@ -64,7 +64,7 @@ namespace FluentDOM\Loader\XDM {
       );
     }
 
-    public function testLoadWithValidFileExpectingException() {
+    public function testLoadWithValidFileExpectingException(): void {
       $loader = new JsonAsXDM();
       $this->expectException(InvalidSource\TypeFile::class);
       $loader->load(
@@ -73,7 +73,7 @@ namespace FluentDOM\Loader\XDM {
       );
     }
 
-    public function testLoadWithValidStructure() {
+    public function testLoadWithValidStructure(): void {
       $loader = new JsonAsXDM();
       $json = new \stdClass();
       $json->foo = 'bar';
@@ -89,7 +89,7 @@ namespace FluentDOM\Loader\XDM {
       );
     }
 
-    public function testLoadWithAllTypes() {
+    public function testLoadWithAllTypes(): void {
       $loader = new JsonAsXDM();
       $json = json_decode(
         '{
@@ -135,7 +135,7 @@ namespace FluentDOM\Loader\XDM {
       );
     }
 
-    public function testLoadWithAssociativeArray() {
+    public function testLoadWithAssociativeArray(): void {
       $loader = new JsonAsXDM();
       $json = ['foo' => 'bar'];
       $document = $loader->load(
@@ -150,7 +150,7 @@ namespace FluentDOM\Loader\XDM {
       );
     }
 
-    public function testLoadWithInvalidSourceExpectingNull() {
+    public function testLoadWithInvalidSourceExpectingNull(): void {
       $loader = new JsonAsXDM();
       $this->assertNull(
         $loader->load(
@@ -160,7 +160,7 @@ namespace FluentDOM\Loader\XDM {
       );
     }
 
-    public function testLoadWithInvalidJsonStringExpectingException() {
+    public function testLoadWithInvalidJsonStringExpectingException(): void {
       $loader = new JsonAsXDM();
       $this->expectException(\UnexpectedValueException::class);
       $loader->load(
@@ -169,7 +169,7 @@ namespace FluentDOM\Loader\XDM {
       );
     }
 
-    public function testLoadStoppingAtMaxDepth() {
+    public function testLoadStoppingAtMaxDepth(): void {
       $loader = new JsonAsXDM(0, 2);
       $this->assertXmlStringEqualsXmlString(
         '<?xml version="1.0" encoding="UTF-8"?>
@@ -183,7 +183,7 @@ namespace FluentDOM\Loader\XDM {
       );
     }
 
-    public function testLoadWithEmptyArray() {
+    public function testLoadWithEmptyArray(): void {
       $loader = new JsonAsXDM(0, 1);
       $this->assertXmlStringEqualsXmlString(
         '<?xml version="1.0" encoding="UTF-8"?>
@@ -195,7 +195,7 @@ namespace FluentDOM\Loader\XDM {
       );
     }
 
-    public function testLoadFragmentWithString() {
+    public function testLoadFragmentWithString(): void {
       $loader = new JsonAsXDM();
       $json = [
         'numbers' => [21, 42]
@@ -215,7 +215,7 @@ namespace FluentDOM\Loader\XDM {
       );
     }
 
-    public function testLoadFragmentWithUnsupportedTypeExpectingNull() {
+    public function testLoadFragmentWithUnsupportedTypeExpectingNull(): void {
       $loader = new JsonAsXDM();
       $this->assertNull($loader->loadFragment('', 'unknown'));
     }

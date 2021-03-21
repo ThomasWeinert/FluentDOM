@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Loader {
 
   use FluentDOM\TestCase;
@@ -11,7 +20,7 @@ namespace FluentDOM\Loader {
      * @covers \FluentDOM\Loader\Standard
      * @dataProvider provideSupportedTypes
      */
-    public function testSupportsExpectingTrue($mimetype) {
+    public function testSupportsExpectingTrue($mimetype): void {
       $loader = new Standard();
       $this->assertTrue($loader->supports($mimetype));
     }

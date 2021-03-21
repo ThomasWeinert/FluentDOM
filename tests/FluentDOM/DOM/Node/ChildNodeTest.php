@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -20,7 +20,7 @@ namespace FluentDOM\DOM\Node {
     /**
      * @covers \FluentDOM\DOM\Node\ChildNode\Implementation
      */
-    public function testRemoveWithElementNode() {
+    public function testRemoveWithElementNode(): void {
       $document = new Document();
       $document->loadXML('<foo><bar/></foo>');
       $document('/foo/bar')->item(0)->remove();
@@ -33,7 +33,7 @@ namespace FluentDOM\DOM\Node {
     /**
      * @covers \FluentDOM\DOM\Node\ChildNode\Implementation
      */
-    public function testBeforeInsertStringAsTextNodeBeforeElementNode() {
+    public function testBeforeInsertStringAsTextNodeBeforeElementNode(): void {
       $document = new Document();
       $document->loadXML('<foo><bar/></foo>');
       $document('/foo/bar')->item(0)->before('INSERTED');
@@ -46,7 +46,7 @@ namespace FluentDOM\DOM\Node {
     /**
      * @covers \FluentDOM\DOM\Node\ChildNode\Implementation
      */
-    public function testAfterAppendsStringAsTextNode() {
+    public function testAfterAppendsStringAsTextNode(): void {
       $document = new Document();
       $document->loadXML('<foo><bar/></foo>');
       $document('/foo/bar')->item(0)->after('APPENDED');
@@ -59,7 +59,7 @@ namespace FluentDOM\DOM\Node {
     /**
      * @covers \FluentDOM\DOM\Node\ChildNode\Implementation
      */
-    public function testAfterAppendsStringAsTextNodeBeforeElementNode() {
+    public function testAfterAppendsStringAsTextNodeBeforeElementNode(): void {
       $document = new Document();
       $document->loadXML('<foo><bar/><bar/></foo>');
       $document('/foo/bar')->item(0)->after('APPENDED');
@@ -72,7 +72,7 @@ namespace FluentDOM\DOM\Node {
     /**
      * @covers \FluentDOM\DOM\Node\ChildNode\Implementation
      */
-    public function testAfterAppendsCommentAfterDocumentElement() {
+    public function testAfterAppendsCommentAfterDocumentElement(): void {
       $document = new Document();
       $document->loadXML('<foo/>');
       $document('/foo')->item(0)->after($document->createComment('ABC'));
@@ -85,7 +85,7 @@ namespace FluentDOM\DOM\Node {
     /**
      * @covers \FluentDOM\DOM\Node\ChildNode\Implementation
      */
-    public function testReplaceWithElementNode() {
+    public function testReplaceWithElementNode(): void {
       $document = new Document();
       $document->loadXML('<foo><bar/></foo>');
       $newNode = $document->createElement('replaced');
@@ -99,7 +99,7 @@ namespace FluentDOM\DOM\Node {
     /**
      * @covers \FluentDOM\DOM\Node\ChildNode\Implementation
      */
-    public function testReplaceWithDocumentElement() {
+    public function testReplaceWithDocumentElement(): void {
       $document = new Document();
       $document->loadXML('<foo><bar/></foo>');
       $newNode = $document->createElement('replaced');
@@ -113,7 +113,7 @@ namespace FluentDOM\DOM\Node {
      * @covers \FluentDOM\DOM\Node\ChildNode\Implementation
      * @deprecated
      */
-    public function testReplaceElementNode() {
+    public function testReplaceElementNode(): void {
       $document = new Document();
       $document->loadXML('<foo><bar/></foo>');
       $newNode = $document->createElement('replaced');

@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Query {
 
   use FluentDOM\Query;
@@ -14,7 +23,7 @@ namespace FluentDOM\Query {
      * @group ManipulationReplace
      * @covers \FluentDOM\Query
      */
-    public function testReplaceAll() {
+    public function testReplaceAll(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->add('<b id="sample">Paragraph. </b>')
@@ -27,7 +36,7 @@ namespace FluentDOM\Query {
      * @group ManipulationReplace
      * @covers \FluentDOM\Query
      */
-    public function testReplaceAllWithNode() {
+    public function testReplaceAllWithNode(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->add('<b id="sample">Paragraph. </b>')
@@ -42,7 +51,7 @@ namespace FluentDOM\Query {
      * @group ManipulationReplace
      * @covers \FluentDOM\Query
      */
-    public function testReplaceAllWithInvalidArgument() {
+    public function testReplaceAllWithInvalidArgument(): void {
       $this->expectException(\InvalidArgumentException::class);
       $this->getQueryFixtureFromString(self::XML)
         ->add('<b id="sample">Paragraph. </b>')

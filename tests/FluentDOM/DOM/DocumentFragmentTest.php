@@ -1,4 +1,12 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\DOM {
 
@@ -11,7 +19,7 @@ namespace FluentDOM\DOM {
      /**
      * @covers \FluentDOM\DOM\DocumentFragment
      */
-    public function testMagicMethodToString() {
+    public function testMagicMethodToString(): void {
       $document = new Document();
       $fragment = $document->createDocumentFragment();
       $fragment->appendXml('<test>success</test>');
@@ -24,7 +32,7 @@ namespace FluentDOM\DOM {
      /**
      * @covers \FluentDOM\DOM\DocumentFragment
      */
-    public function testFirstElementChild() {
+    public function testFirstElementChild(): void {
       $document = new Document();
       $fragment = $document->createDocumentFragment();
       $fragment->appendXml(
@@ -39,7 +47,7 @@ namespace FluentDOM\DOM {
      /**
      * @covers \FluentDOM\DOM\DocumentFragment
      */
-    public function testLastElementChild() {
+    public function testLastElementChild(): void {
       $document = new Document();
       $fragment = $document->createDocumentFragment();
       $fragment->appendXml(
@@ -54,7 +62,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\DocumentFragment
      */
-    public function testGetIterator() {
+    public function testGetIterator(): void {
       $document = new Document();
       $fragment = $document->createDocumentFragment();
       $fragment->appendXml(
@@ -67,7 +75,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\DocumentFragment
      */
-    public function testCount() {
+    public function testCount(): void {
       $document = new Document();
       $fragment = $document->createDocumentFragment();
       $fragment->appendXml(
@@ -81,7 +89,7 @@ namespace FluentDOM\DOM {
      /**
      * @covers \FluentDOM\DOM\DocumentFragment
      */
-    public function testSaveFragment() {
+    public function testSaveFragment(): void {
       $document = new Document();
       $fragment = $document->createDocumentFragment();
       $fragment->appendXml('<test>success</test>success');
@@ -94,7 +102,7 @@ namespace FluentDOM\DOM {
      /**
      * @covers \FluentDOM\DOM\DocumentFragment
      */
-    public function testSaveFragmentAddsNamespaces() {
+    public function testSaveFragmentAddsNamespaces(): void {
       $document = new Document();
       $fragment = $document->createDocumentFragment();
       $fragment->appendXml('<test>success</test>success', ['#default' => 'urn:default']);
@@ -107,7 +115,7 @@ namespace FluentDOM\DOM {
      /**
      * @covers \FluentDOM\DOM\DocumentFragment
      */
-    public function testWithoutNamespaces() {
+    public function testWithoutNamespaces(): void {
       $document = new Document();
       $fragment = $document->createDocumentFragment();
       $this->assertTrue(
@@ -123,7 +131,7 @@ namespace FluentDOM\DOM {
      /**
      * @covers \FluentDOM\DOM\DocumentFragment
      */
-    public function testWithNamespacesFromDocument() {
+    public function testWithNamespacesFromDocument(): void {
       $document = new Document();
       $document->registerNamespace('bar', 'urn:bar');
       $fragment = $document->createDocumentFragment();
@@ -138,7 +146,7 @@ namespace FluentDOM\DOM {
      /**
      * @covers \FluentDOM\DOM\DocumentFragment
      */
-    public function testWithDefaultNamespace() {
+    public function testWithDefaultNamespace(): void {
       $document = new Document();
       $fragment = $document->createDocumentFragment();
       $fragment->registerNamespace('', 'urn:bar');
@@ -153,7 +161,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\DocumentFragment
      */
-    public function testWithNamespacesFromElementNode() {
+    public function testWithNamespacesFromElementNode(): void {
       $document = new Document();
       $document->appendChild($document->createElementNS('urn:bar', 'bar:root'));
       $fragment = $document->createDocumentFragment();
@@ -169,7 +177,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\DocumentFragment
      */
-    public function testWithDefaultNamespaceFromElementNode() {
+    public function testWithDefaultNamespaceFromElementNode(): void {
       $document = new Document();
       $document->appendChild($document->createElementNS('urn:bar', 'root'));
       $fragment = $document->createDocumentFragment();
@@ -185,7 +193,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\DocumentFragment
      */
-    public function testWithNamespacesList() {
+    public function testWithNamespacesList(): void {
       $document = new Document();
       $fragment = $document->createDocumentFragment();
       $fragment->appendXml('<foo:test>success</foo:test>', ['foo' => 'urn:bar']);
@@ -199,7 +207,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\DocumentFragment
      */
-    public function testWithInvalidNamespacesListExpectingException() {
+    public function testWithInvalidNamespacesListExpectingException(): void {
       $document = new Document();
       $fragment = $document->createDocumentFragment();
       $this->expectException(
@@ -212,7 +220,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\DocumentFragment
      */
-    public function testWithInvalidNamespacesExpectingException() {
+    public function testWithInvalidNamespacesExpectingException(): void {
       $document = new Document();
       $fragment = $document->createDocumentFragment();
       $this->expectException(
@@ -224,7 +232,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\DocumentFragment
      */
-    public function testWithInvalidFragmentReturningFalse() {
+    public function testWithInvalidFragmentReturningFalse(): void {
       $document = new Document();
       $fragment = $document->createDocumentFragment();
       $this->assertFalse(
@@ -232,7 +240,7 @@ namespace FluentDOM\DOM {
       );
     }
 
-    public function testAppendElement() {
+    public function testAppendElement(): void {
       $document = new Document();
       $fragment = $document->createDocumentFragment();
       $fragment->appendElement('name', 'content', ['attribute' => 'value']);

@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -38,7 +38,7 @@ namespace FluentDOM\Serializer\Json {
     /**
      * @covers \FluentDOM\Serializer\Json\BadgerFish
      */
-    public function testIntegrationWithEmptyDocument() {
+    public function testIntegrationWithEmptyDocument(): void {
       $serializer = new BadgerFish(new \DOMDocument());
       $this->assertEquals(
         '{}', (string)$serializer

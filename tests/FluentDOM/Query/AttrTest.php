@@ -24,7 +24,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::attr
      * @covers \FluentDOM\Query::getFirstElement
      */
-    public function testAttrRead() {
+    public function testAttrRead(): void {
       $fd = $this->getQueryFixtureFromString(self::XML)
         ->find('//group/item')
         ->attr('index');
@@ -36,7 +36,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::attr
      * @covers \FluentDOM\Query::getFirstElement
      */
-    public function testAttrReadFromRoot() {
+    public function testAttrReadFromRoot(): void {
       $fd = $this->getQueryFixtureFromString(self::XML);
       $this->assertEquals('1.0', $fd->find('/*')->attr('version'));
       $this->assertEquals('1.0', $fd->find('/items')->attr('version'));
@@ -48,7 +48,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::attr
      * @covers \FluentDOM\Query::getFirstElement
      */
-    public function testAttrReadInvalid() {
+    public function testAttrReadInvalid(): void {
       $this->expectException(\UnexpectedValueException::class);
       $this->getQueryFixtureFromString(self::XML)
         ->find('//item')
@@ -59,7 +59,7 @@ namespace FluentDOM\Query {
      * @group Attributes
      * @covers \FluentDOM\Query::attr
      */
-    public function testAttrReadNoMatch() {
+    public function testAttrReadNoMatch(): void {
       $fd = $this->getQueryFixtureFromString(self::XML)->attr('index');
       $this->assertNull($fd);
     }
@@ -69,7 +69,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::attr
      * @covers \FluentDOM\Query::getFirstElement
      */
-    public function testAttrReadNoAttribute() {
+    public function testAttrReadNoAttribute(): void {
       $fd = $this
         ->getQueryFixtureFromString(self::XML)
         ->find('//group')
@@ -82,7 +82,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::attr
      * @covers \FluentDOM\Query::getFirstElement
      */
-    public function testAttrReadOnDomtext() {
+    public function testAttrReadOnDomtext(): void {
       $fd = $this->getQueryFixtureFromString(self::XML)
         ->find('//item/text()')
         ->attr('index');
@@ -94,7 +94,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::attr
      * @covers \FluentDOM\Query::getSetterValues
      */
-    public function testAttrWrite() {
+    public function testAttrWrite(): void {
       $fd = $this->getQueryFixtureFromString(self::XML)
         ->find('//group/item')
         ->attr('index', '15')
@@ -107,7 +107,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::attr
      * @covers \FluentDOM\Query::getSetterValues
      */
-    public function testAttrWriteWithNullValue() {
+    public function testAttrWriteWithNullValue(): void {
       $fd = $this->getQueryFixtureFromString(self::XML)
         ->find('//group/item')
         ->attr('index', NULL)
@@ -122,7 +122,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::attr
      * @covers \FluentDOM\Query::getSetterValues
      */
-    public function testAttrWriteWithInvalidNames($attrName) {
+    public function testAttrWriteWithInvalidNames($attrName): void {
       $this->expectException(\UnexpectedValueException::class);
       $this->getQueryFixtureFromString(self::XML)
         ->find('//item')
@@ -146,7 +146,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::attr
      * @covers \FluentDOM\Query::getSetterValues
      */
-    public function testAttrWriteWithValidNames($attrName) {
+    public function testAttrWriteWithValidNames($attrName): void {
       $fd = $this->getQueryFixtureFromString(self::XML)
         ->find('//item')
         ->attr($attrName, 'foo');

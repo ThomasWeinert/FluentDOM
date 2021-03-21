@@ -24,7 +24,7 @@ namespace FluentDOM\Serializer\Factory {
     /**
      * @covers \FluentDOM\Serializer\Factory\Group
      */
-    public function testConstructor() {
+    public function testConstructor(): void {
       $group = new Group([]);
       $this->assertCount(0, $group);
     }
@@ -32,7 +32,7 @@ namespace FluentDOM\Serializer\Factory {
     /**
      * @covers \FluentDOM\Serializer\Factory\Group
      */
-    public function testConstructorWithOneFactory() {
+    public function testConstructorWithOneFactory(): void {
       $factory = $this->getMockBuilder(Factory::class)->getMock();
       $group = new Group(['type' => $factory]);
       $this->assertCount(1, $group);
@@ -42,7 +42,7 @@ namespace FluentDOM\Serializer\Factory {
     /**
      * @covers \FluentDOM\Serializer\Factory\Group
      */
-    public function testFactoryGetAfterSet() {
+    public function testFactoryGetAfterSet(): void {
       $factory = $this->getMockBuilder(Factory::class)->getMock();
       $group = new Group();
       $group['type'] = $factory;
@@ -53,7 +53,7 @@ namespace FluentDOM\Serializer\Factory {
     /**
      * @covers \FluentDOM\Serializer\Factory\Group
      */
-    public function testFactorSetWithInvalidFactoryExpectingException() {
+    public function testFactorSetWithInvalidFactoryExpectingException(): void {
       $group = new Group();
       $this->expectException(InvalidArgument::class);
       $group['type'] = 'INVALID';
@@ -62,7 +62,7 @@ namespace FluentDOM\Serializer\Factory {
     /**
      * @covers \FluentDOM\Serializer\Factory\Group
      */
-    public function testFactoryGetAfterRemove() {
+    public function testFactoryGetAfterRemove(): void {
       $factory = $this->getMockBuilder(Factory::class)->getMock();
       $group = new Group(['type' => $factory]);
       unset($group['type']);
@@ -72,7 +72,7 @@ namespace FluentDOM\Serializer\Factory {
     /**
      * @covers \FluentDOM\Serializer\Factory\Group
      */
-    public function testGetIterator() {
+    public function testGetIterator(): void {
       $factory = $this->getMockBuilder(Factory::class)->getMock();
       $group = new Group(['type' => $factory]);
       $this->assertSame(['type' => $factory], iterator_to_array($group));
@@ -130,7 +130,7 @@ namespace FluentDOM\Serializer\Factory {
     /**
      * @covers \FluentDOM\Serializer\Factory\Group
      */
-    public function testCreateSerializerExpectingException() {
+    public function testCreateSerializerExpectingException(): void {
       $document = new Document();
       $document->appendElement('dummy');
       $serializer = $this

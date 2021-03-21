@@ -20,7 +20,7 @@ namespace FluentDOM\Loader\Text {
     /**
      * @covers \FluentDOM\Loader\Text\CSV
      */
-    public function testSupportsExpectingTrue() {
+    public function testSupportsExpectingTrue(): void {
       $loader = new CSV();
       $this->assertTrue($loader->supports('text/csv'));
     }
@@ -28,7 +28,7 @@ namespace FluentDOM\Loader\Text {
     /**
      * @covers \FluentDOM\Loader\Text\CSV
      */
-    public function testSupportsExpectingFalse() {
+    public function testSupportsExpectingFalse(): void {
       $loader = new CSV();
       $this->assertFalse($loader->supports('text/html'));
     }
@@ -36,7 +36,7 @@ namespace FluentDOM\Loader\Text {
     /**
      * @covers \FluentDOM\Loader\Text\CSV
      */
-    public function testLoad() {
+    public function testLoad(): void {
       $loader = new CSV();
       $this->assertXmlStringEqualsXmlString(
         '<json:json xmlns:json="urn:carica-json-dom.2013" json:type="array">
@@ -55,7 +55,7 @@ namespace FluentDOM\Loader\Text {
     /**
      * @covers \FluentDOM\Loader\Text\CSV
      */
-    public function testLoadFromFile() {
+    public function testLoadFromFile(): void {
       $loader = new CSV();
       $this->assertXmlStringEqualsXmlString(
         '<json:json xmlns:json="urn:carica-json-dom.2013" json:type="array">
@@ -74,7 +74,7 @@ namespace FluentDOM\Loader\Text {
     /**
      * @covers \FluentDOM\Loader\Text\CSV
      */
-    public function testLoadFromArray() {
+    public function testLoadFromArray(): void {
       $loader = new CSV();
       $this->assertXmlStringEqualsXmlString(
         '<json:json xmlns:json="urn:carica-json-dom.2013" json:type="array">
@@ -93,7 +93,7 @@ namespace FluentDOM\Loader\Text {
     /**
      * @covers \FluentDOM\Loader\Text\CSV
      */
-    public function testLoadFromTraversable() {
+    public function testLoadFromTraversable(): void {
       $loader = new CSV();
       $this->assertXmlStringEqualsXmlString(
         '<json:json xmlns:json="urn:carica-json-dom.2013" json:type="array">
@@ -112,7 +112,7 @@ namespace FluentDOM\Loader\Text {
     /**
      * @covers \FluentDOM\Loader\Text\CSV
      */
-    public function testLoadWithDefinedFields() {
+    public function testLoadWithDefinedFields(): void {
       $loader = new CSV();
       $this->assertXmlStringEqualsXmlString(
         '<json:json xmlns:json="urn:carica-json-dom.2013" json:type="array">
@@ -142,7 +142,7 @@ namespace FluentDOM\Loader\Text {
     /**
      * @covers \FluentDOM\Loader\Text\CSV
      */
-    public function testLoadNormalizesNames() {
+    public function testLoadNormalizesNames(): void {
       $loader = new CSV();
       $this->assertXmlStringEqualsXmlString(
         '<json:json xmlns:json="urn:carica-json-dom.2013" json:type="array">
@@ -161,7 +161,7 @@ namespace FluentDOM\Loader\Text {
     /**
      * @covers \FluentDOM\Loader\Text\CSV
      */
-    public function testLoadWithoutColumnNames() {
+    public function testLoadWithoutColumnNames(): void {
       $loader = new CSV();
       $this->assertXmlStringEqualsXmlString(
         '<json:json xmlns:json="urn:carica-json-dom.2013" json:type="array">
@@ -185,7 +185,7 @@ namespace FluentDOM\Loader\Text {
     /**
      * @covers \FluentDOM\Loader\Text\CSV
      */
-    public function testLoadWithInvalidSourceExpectingNull() {
+    public function testLoadWithInvalidSourceExpectingNull(): void {
       $loader = new CSV();
       $this->assertNull(
         $loader->load(FALSE, 'text/csv')
@@ -195,7 +195,7 @@ namespace FluentDOM\Loader\Text {
     /**
      * @covers \FluentDOM\Loader\Text\CSV
      */
-    public function testLoadFragment() {
+    public function testLoadFragment(): void {
       $loader = new CSV();
       $this->assertXmlStringEqualsXmlString(
         '<fragment>
@@ -219,7 +219,7 @@ namespace FluentDOM\Loader\Text {
     /**
      * @covers \FluentDOM\Loader\Text\CSV
      */
-    public function testLoadFragmentWithColumnNames() {
+    public function testLoadFragmentWithColumnNames(): void {
       $loader = new CSV();
       $this->assertXmlStringEqualsXmlString(
         '<fragment>
@@ -243,7 +243,7 @@ namespace FluentDOM\Loader\Text {
     /**
      * @covers \FluentDOM\Loader\Text\CSV
      */
-    public function testLoadFragmentWithInvalidContentTypeExpectingNull() {
+    public function testLoadFragmentWithInvalidContentTypeExpectingNull(): void {
       $loader = new CSV();
       $this->assertNull(
         $loader->loadFragment("1,2,3\n4,5,6", 'INVALID', ['FIELDS' => ['a', 'b', 'c']])

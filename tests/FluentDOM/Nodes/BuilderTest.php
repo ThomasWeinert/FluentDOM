@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Nodes {
 
   use FluentDOM\DOM\Document;
@@ -13,7 +22,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testConstructor() {
+    public function testConstructor(): void {
       $nodes = $this->getMockBuilder(Nodes::class)->getMock();
       $builder = new Builder($nodes);
       $this->assertSame(
@@ -25,7 +34,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testGetTargetNodesFromElementNode() {
+    public function testGetTargetNodesFromElementNode(): void {
       $nodes = new Nodes(self::XML);
       $builder = new Builder($nodes);
       $this->assertSame(
@@ -37,7 +46,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testGetTargetNodesFromTextNode() {
+    public function testGetTargetNodesFromTextNode(): void {
       $nodes = new Nodes();
       $node = $nodes->document->createTextNode('success');
       $builder = new Builder($nodes);
@@ -50,7 +59,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testGetTargetNodesFromNodes() {
+    public function testGetTargetNodesFromNodes(): void {
       $nodes = (new Nodes(self::XML))->find('/*');
       $builder = new Builder($nodes);
       $this->assertSame(
@@ -62,7 +71,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testGetTargetNodesFromCallbackReturningNodesAsArray() {
+    public function testGetTargetNodesFromCallbackReturningNodesAsArray(): void {
       $nodes = (new Nodes(self::XML))->find('/*');
       $builder = new Builder($nodes);
       $this->assertSame(
@@ -78,7 +87,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testGetTargetNodesUsingSelector() {
+    public function testGetTargetNodesUsingSelector(): void {
       $nodes = new Nodes(self::XML);
       $builder = new Builder($nodes);
       $this->assertSame(
@@ -90,7 +99,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testGetTargetNodesUsingSelectorAndContext() {
+    public function testGetTargetNodesUsingSelectorAndContext(): void {
       $nodes = new Nodes(self::XML);
       $builder = new Builder($nodes);
       $this->assertSame(
@@ -102,7 +111,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testGetTargetNodesUsingSelectorReturningScalarExpectingException() {
+    public function testGetTargetNodesUsingSelectorReturningScalarExpectingException(): void {
       $nodes = new Nodes(self::XML);
       $builder = new Builder($nodes);
       $this->expectException(
@@ -115,7 +124,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testGetTargetNodesUsingInvalidSelectorExpectingException() {
+    public function testGetTargetNodesUsingInvalidSelectorExpectingException(): void {
       $nodes = new Nodes(self::XML);
       $builder = new Builder($nodes);
       $this->expectException(
@@ -128,7 +137,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testGetContentNodesWithElementNode() {
+    public function testGetContentNodesWithElementNode(): void {
       $nodes = new Nodes(self::XML);
       $builder = new Builder($nodes);
       $this->assertSame(
@@ -140,7 +149,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testGetContentNodesWithTextNode() {
+    public function testGetContentNodesWithTextNode(): void {
       $nodes = new Nodes(self::XML);
       $node = $nodes->document->createTextNode("success");
       $builder = new Builder($nodes);
@@ -153,7 +162,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testGetContentNodesWithTextNodeIgnoringTextNodes() {
+    public function testGetContentNodesWithTextNodeIgnoringTextNodes(): void {
       $nodes = new Nodes(self::XML);
       $node = $nodes->document->createTextNode("success");
       $builder = new Builder($nodes);
@@ -169,7 +178,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testGetContentNodesWithLimit() {
+    public function testGetContentNodesWithLimit(): void {
       $nodes = new Nodes(self::XML);
       $builder = new Builder($nodes);
       $array = $nodes->find('//item')->toArray();
@@ -182,7 +191,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testGetContentNodesFromNodeListWithLimit() {
+    public function testGetContentNodesFromNodeListWithLimit(): void {
       $nodes = new Nodes(self::XML);
       $builder = new Builder($nodes);
       $array = $nodes->find('//item')->toArray();
@@ -197,7 +206,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testGetContentNodesWithXml() {
+    public function testGetContentNodesWithXml(): void {
       $nodes = new Nodes();
       $builder = new Builder($nodes);
       $array = $builder->getContentNodes('<test/>');
@@ -213,7 +222,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testGetContentNodesWithHtml() {
+    public function testGetContentNodesWithHtml(): void {
       $nodes = new Nodes();
       $nodes->contentType = 'text/html';
       $builder = new Builder($nodes);
@@ -230,7 +239,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testGetContentNodesImportingNodes() {
+    public function testGetContentNodesImportingNodes(): void {
       $document = new Document();
       $document->loadXml(self::XML);
       $nodes = new Nodes();
@@ -246,7 +255,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testGetContentNodesFromEmptyArrayExpectingException() {
+    public function testGetContentNodesFromEmptyArrayExpectingException(): void {
       $document = new Document();
       $nodes = new Nodes();
       $builder = new Builder($nodes);
@@ -259,7 +268,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testGetContentNodesFromEmptyStringExpectingException() {
+    public function testGetContentNodesFromEmptyStringExpectingException(): void {
       $document = new Document();
       $nodes = new Nodes();
       $builder = new Builder($nodes);
@@ -272,7 +281,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testGetContentElement() {
+    public function testGetContentElement(): void {
       $nodes = new Nodes();
       $builder = new Builder($nodes);
       $node = $builder->getContentElement('<test/>');
@@ -286,7 +295,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testGetXmlFragment() {
+    public function testGetXmlFragment(): void {
       $nodes = new Nodes();
       $builder = new Builder($nodes);
       $this->assertXmlNodesArrayEqualsXmlStrings(
@@ -298,7 +307,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testGetXmlFragmentFromEmptyString() {
+    public function testGetXmlFragmentFromEmptyString(): void {
       $nodes = new Nodes();
       $builder = new Builder($nodes);
       $this->assertEquals(
@@ -309,7 +318,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testGetXmlFragmentWithInvalidFragment() {
+    public function testGetXmlFragmentWithInvalidFragment(): void {
       $nodes = new Nodes();
       $builder = new Builder($nodes);
       $this->expectException(
@@ -321,7 +330,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testGetXmlFragmentWithInvalidContentType() {
+    public function testGetXmlFragmentWithInvalidContentType(): void {
       $nodes = new Nodes();
       $builder = new Builder($nodes);
       $this->expectException(
@@ -333,7 +342,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testGetXmlFragmentWithInvalidFragmentBlockingErrors() {
+    public function testGetXmlFragmentWithInvalidFragmentBlockingErrors(): void {
       $nodes = new Nodes();
       $builder = new Builder($nodes);
       $this->assertEquals(
@@ -345,7 +354,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testGetHtmlFragment() {
+    public function testGetHtmlFragment(): void {
       $nodes = new Nodes();
       $builder = new Builder($nodes);
       $this->assertXmlNodesArrayEqualsXmlStrings(
@@ -357,7 +366,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testGetHtmlFragmentFromEmptyString() {
+    public function testGetHtmlFragmentFromEmptyString(): void {
       $nodes = new Nodes();
       $builder = new Builder($nodes);
       $this->assertEquals(
@@ -368,7 +377,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testGetHtmlFragmentWithInvalidFragment() {
+    public function testGetHtmlFragmentWithInvalidFragment(): void {
       $nodes = new Nodes();
       $builder = new Builder($nodes);
       $this->expectException(
@@ -380,7 +389,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testGetInnerXml() {
+    public function testGetInnerXml(): void {
       $nodes = new Nodes(self::XML);
       $builder = new Builder($nodes);
       $this->assertEquals(
@@ -392,7 +401,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testGetWrapperNodesSimple() {
+    public function testGetWrapperNodesSimple(): void {
       $nodes = new Nodes();
       $builder = new Builder($nodes);
       $template = $builder->getContentElement('<simple/>');
@@ -407,7 +416,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Builder
      */
-    public function testGetWrapperNodesComplex() {
+    public function testGetWrapperNodesComplex(): void {
       $nodes = new Nodes();
       $builder = new Builder($nodes);
       $template = $builder->getContentElement(

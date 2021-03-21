@@ -20,7 +20,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::__toString
      */
-    public function testMagicMethodToString() {
+    public function testMagicMethodToString(): void {
       $document = new Document();
       $document->appendElement('test', 'success');
       $this->assertEquals(
@@ -32,7 +32,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::__get
      */
-    public function testGetPropertyFirstElementChild() {
+    public function testGetPropertyFirstElementChild(): void {
       $document = new Document();
       $document->loadXml('<foo>TEXT<bar attr="value"/></foo>');
       $this->assertEquals(
@@ -44,7 +44,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::__isset
      */
-    public function testIssetPropertyFirstElementChildExpectingTrue() {
+    public function testIssetPropertyFirstElementChildExpectingTrue(): void {
       $document = new Document();
       $document->loadXml('<foo>TEXT<bar attr="value"/></foo>');
       $this->assertTrue(isset($document->documentElement->firstElementChild));
@@ -53,7 +53,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::__isset
      */
-    public function testIssetPropertyFirstElementChildExpectingFalse() {
+    public function testIssetPropertyFirstElementChildExpectingFalse(): void {
       $document = new Document();
       $document->loadXml('<foo>TEXT</foo>');
       $this->assertFalse(isset($document->documentElement->firstElementChild));
@@ -62,7 +62,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::__get
      */
-    public function testGetPropertyLastElementChild() {
+    public function testGetPropertyLastElementChild(): void {
       $document = new Document();
       $document->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
       $this->assertEquals(
@@ -74,7 +74,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::__isset
      */
-    public function testIssetPropertyLastElementChildExpectingTrue() {
+    public function testIssetPropertyLastElementChildExpectingTrue(): void {
       $document = new Document();
       $document->loadXml('<foo>TEXT<bar attr="value"/></foo>');
       $this->assertTrue(isset($document->documentElement->lastElementChild));
@@ -83,7 +83,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::__isset
      */
-    public function testIssetPropertyLastElementChildExpectingFalse() {
+    public function testIssetPropertyLastElementChildExpectingFalse(): void {
       $document = new Document();
       $document->loadXml('<foo>TEXT</foo>');
       $this->assertFalse(isset($document->documentElement->lastElementChild));
@@ -92,7 +92,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::__get
      */
-    public function testGetPropertyNextElementSibling() {
+    public function testGetPropertyNextElementSibling(): void {
       $document = new Document();
       $document->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
       $this->assertEquals(
@@ -104,7 +104,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::__isset
      */
-    public function testIssetPropertyNextElementSiblingExpectingTrue() {
+    public function testIssetPropertyNextElementSiblingExpectingTrue(): void {
       $document = new Document();
       $document->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
       $this->assertTrue(isset($document->documentElement->firstChild->nextElementSibling));
@@ -113,7 +113,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::__isset
      */
-    public function testIssetPropertyNextElementSiblingExpectingFalse() {
+    public function testIssetPropertyNextElementSiblingExpectingFalse(): void {
       $document = new Document();
       $document->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
       $this->assertFalse(isset($document->documentElement->lastChild->nextElementSibling));
@@ -122,7 +122,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::__get
      */
-    public function testGetPropertyPreviousElementSibling() {
+    public function testGetPropertyPreviousElementSibling(): void {
       $document = new Document();
       $document->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
       $this->assertEquals(
@@ -134,7 +134,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::__isset
      */
-    public function testIssetPropertyPreviousElementSiblingExpectingTrue() {
+    public function testIssetPropertyPreviousElementSiblingExpectingTrue(): void {
       $document = new Document();
       $document->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
       $this->assertTrue(isset($document->documentElement->lastChild->previousElementSibling));
@@ -143,7 +143,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::__isset
      */
-    public function testIssetPropertyPreviousElementSiblingExpectingFalse() {
+    public function testIssetPropertyPreviousElementSiblingExpectingFalse(): void {
       $document = new Document();
       $document->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
       $this->assertFalse(isset($document->documentElement->firstChild->previousElementSibling));
@@ -152,7 +152,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::__isset
      */
-    public function testIssetPropertyChildElementCountExpectingTrue() {
+    public function testIssetPropertyChildElementCountExpectingTrue(): void {
       $document = new Document();
       $document->loadXml('<foo/>');
       $this->assertTrue(isset($document->documentElement->childElementCount));
@@ -161,7 +161,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::__get
      */
-    public function testGetInvalidProperty() {
+    public function testGetInvalidProperty(): void {
       $document = new Document();
       $document->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
       $this->expectPropertyIsUndefined();
@@ -171,7 +171,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::__isset
      */
-    public function testIssetInvalidProperty() {
+    public function testIssetInvalidProperty(): void {
       $document = new Document();
       $document->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
       $this->assertFalse(isset($document->documentElement->INVALID_PROPERTY));
@@ -181,7 +181,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Element::__get
      * @covers \FluentDOM\DOM\Element::__set
      */
-    public function testGetUnknownPropertyAfterSet() {
+    public function testGetUnknownPropertyAfterSet(): void {
       $document = new Document();
       $node = $document->appendChild($document->createElement('foo'));
       $node->SOME_PROPERTY = 'success';
@@ -194,7 +194,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Element::__unset
      * @covers \FluentDOM\DOM\Element::blockReadOnlyProperties
      */
-    public function testUnsetUnknownPropertyAfterSet() {
+    public function testUnsetUnknownPropertyAfterSet(): void {
       $document = new Document();
       $node = $document->appendChild($document->createElement('foo'));
       $node->SOME_PROPERTY = 'success';
@@ -254,7 +254,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::getAttribute
      */
-    public function testGetAttribute() {
+    public function testGetAttribute(): void {
       $document = new Document();
       $document->loadXml('<foo attr="value"/>');
       $this->assertEquals(
@@ -266,7 +266,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::getAttribute
      */
-    public function testGetAttributeWithNamespace() {
+    public function testGetAttributeWithNamespace(): void {
       $document = new Document();
       $document->loadXml('<foo xmlns:foo="urn:foo" foo:attr="value"/>');
       $document->registerNamespace('f', 'urn:foo');
@@ -279,7 +279,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::getAttributeNode
      */
-    public function testGetAttributeNode() {
+    public function testGetAttributeNode(): void {
       $document = new Document();
       $document->loadXml('<foo attr="value"/>');
       $this->assertEquals(
@@ -291,7 +291,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::getAttributeNode
      */
-    public function testGetAttributeNodeWithNamespace() {
+    public function testGetAttributeNodeWithNamespace(): void {
       $document = new Document();
       $document->loadXml('<foo xmlns:foo="urn:foo" foo:attr="value"/>');
       $document->registerNamespace('f', 'urn:foo');
@@ -304,7 +304,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::setAttribute
      */
-    public function testSetAttribute() {
+    public function testSetAttribute(): void {
       $document = new Document();
       $document->appendChild($document->createElement('root'));
       $document->documentElement->setAttribute('attribute', 'value');
@@ -317,7 +317,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::setAttribute
      */
-    public function testSetAttributeWithNamespace() {
+    public function testSetAttributeWithNamespace(): void {
       $document = new Document();
       $document->registerNamespace('foo', 'urn:foo');
       $document->appendChild($document->createElement('root'));
@@ -331,7 +331,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::setIdAttribute
      */
-    public function testSetIdAttribute() {
+    public function testSetIdAttribute(): void {
       $document = new Document();
       $document->loadXML('<root attribute="value"/>');
       $document->documentElement->setIdAttribute('attribute', TRUE);
@@ -344,7 +344,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::setIdAttribute
      */
-    public function testSetIdAttributeWithNamespace() {
+    public function testSetIdAttributeWithNamespace(): void {
       $document = new Document();
       $document->loadXML('<root xmlns:foo="urn:foo" foo:attribute="value"/>');
       $document->registerNamespace('foo', 'urn:foo');
@@ -358,7 +358,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::setAttribute
      */
-    public function testSetAttributeXmlAttribute() {
+    public function testSetAttributeXmlAttribute(): void {
       $document = new Document();
       $document->registerNamespace('foo', 'urn:foo');
       $document->appendChild($document->createElement('root'));
@@ -372,7 +372,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::setAttribute
      */
-    public function testSetAttributeXmlnsAttribute() {
+    public function testSetAttributeXmlnsAttribute(): void {
       $document = new Document();
       $document->appendChild($document->createElement('root'));
       $document->documentElement->setAttribute('xmlns:foo', 'urn:foo');
@@ -385,7 +385,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::removeAttribute
      */
-    public function testRemoveAttribute() {
+    public function testRemoveAttribute(): void {
       $document = new Document();
       $document->loadXML('<root attribute="value"/>');
       $document->documentElement->removeAttribute('attribute');
@@ -398,7 +398,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::removeAttribute
      */
-    public function testRemoveAttributeWithNamespace() {
+    public function testRemoveAttributeWithNamespace(): void {
       $document = new Document();
       $document->loadXML('<root xmlns:foo="urn:foo" foo:attribute="value"/>');
       $document->registerNamespace('foo', 'urn:foo');
@@ -412,7 +412,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::removeAttributeNS
      */
-    public function testRemoveAttributeNS() {
+    public function testRemoveAttributeNS(): void {
       $document = new Document();
       $document->loadXML('<root xmlns:foo="urn:foo" foo:attribute="value"/>');
       $document->documentElement->removeAttributeNS('urn:foo', 'attribute');
@@ -426,7 +426,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Element::hasAttribute
      * @covers \FluentDOM\DOM\Element::resolveTagName
      */
-    public function testHasAttributeExpectingTrue() {
+    public function testHasAttributeExpectingTrue(): void {
       $document = new Document();
       $document->loadXml('<root attribute="value"/>');
       $this->assertTrue(
@@ -438,7 +438,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Element::hasAttribute
      * @covers \FluentDOM\DOM\Element::resolveTagName
      */
-    public function testHasAttributeExpectingFalse() {
+    public function testHasAttributeExpectingFalse(): void {
       $document = new Document();
       $document->loadXml('<root/>');
       $this->assertFalse(
@@ -450,7 +450,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Element::hasAttribute
      * @covers \FluentDOM\DOM\Element::resolveTagName
      */
-    public function testHasAttributeWithNamespaceExpectingTrue() {
+    public function testHasAttributeWithNamespaceExpectingTrue(): void {
       $document = new Document();
       $document->loadXml('<root xmlns:foo="urn:foo" foo:attribute="value"/>');
       $document->registerNamespace('foo', 'urn:foo');
@@ -463,7 +463,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Element::hasAttribute
      * @covers \FluentDOM\DOM\Element::resolveTagName
      */
-    public function testHasAttributeWithNamespaceExpectingFalse() {
+    public function testHasAttributeWithNamespaceExpectingFalse(): void {
       $document = new Document();
       $document->loadXml('<root xmlns:foo="urn:foo" foo:attribute="value"/>');
       $document->registerNamespace('foo', 'urn:BAR');
@@ -477,7 +477,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Element::isCurrentNamespace
      * @covers \FluentDOM\DOM\Element::getDocument
      */
-    public function testApplyNamespaces() {
+    public function testApplyNamespaces(): void {
       $document = new Document();
       $document->registerNamespace('#default', 'urn:default');
       $document->registerNamespace('foo', 'urn:foo');
@@ -493,7 +493,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Element::isCurrentNamespace
      * @covers \FluentDOM\DOM\Element::getDocument
      */
-    public function testApplyNamespacesWithTwoNamespaces() {
+    public function testApplyNamespacesWithTwoNamespaces(): void {
       $document = new Document();
       $document->registerNamespace('foo', 'urn:foo');
       $document->registerNamespace('bar', 'urn:bar');
@@ -509,7 +509,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Element::isCurrentNamespace
      * @covers \FluentDOM\DOM\Element::getDocument
      */
-    public function testApplyNamespacesWithOneOfTwoNamespaces() {
+    public function testApplyNamespacesWithOneOfTwoNamespaces(): void {
       $document = new Document();
       $document->registerNamespace('foo', 'urn:foo');
       $document->registerNamespace('bar', 'urn:bar');
@@ -525,7 +525,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Element::isCurrentNamespace
      * @covers \FluentDOM\DOM\Element::getDocument
      */
-    public function testApplyNamespacesWithTwoOfThreeNamespaces() {
+    public function testApplyNamespacesWithTwoOfThreeNamespaces(): void {
       $document = new Document();
       $document->registerNamespace('foo', 'urn:foo');
       $document->registerNamespace('bar', 'urn:bar');
@@ -540,7 +540,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element
      */
-    public function testAppendChildReturnsAppendedNode() {
+    public function testAppendChildReturnsAppendedNode(): void {
       $document = new Document();
       $appended = $document->appendChild($created = $document->createElement('foo'));
       $this->assertSame($appended, $created);
@@ -549,7 +549,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::append
      */
-    public function testAppend() {
+    public function testAppend(): void {
       $object = $this->getMockBuilder(Appendable::class)->getMock();
       $object
         ->expects($this->once())
@@ -574,7 +574,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::append
      */
-    public function testAppendWithText() {
+    public function testAppendWithText(): void {
       $document = new Document();
       $document->appendElement('root');
       $document->documentElement->append('success');
@@ -587,7 +587,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::append
      */
-    public function testAppendWithArraySetsAttributes() {
+    public function testAppendWithArraySetsAttributes(): void {
       $document = new Document();
       $document->appendElement('root');
       $document->documentElement->append(['result' => 'success']);
@@ -600,7 +600,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::append
      */
-    public function testAppendWithNode() {
+    public function testAppendWithNode(): void {
       $document = new Document();
       $document->appendElement('root');
       $document->documentElement->append(
@@ -615,7 +615,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::append
      */
-    public function testAppendWithNodeAppendsClone() {
+    public function testAppendWithNodeAppendsClone(): void {
       $document = new Document();
       $document->appendElement('root');
       $document->documentElement->append(
@@ -630,7 +630,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::append
      */
-    public function testAppendWithAttributeNode() {
+    public function testAppendWithAttributeNode(): void {
       $document = new Document();
       $document->appendElement('root');
       $document->documentElement->append(
@@ -645,7 +645,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::append
      */
-    public function testAppendWithDocument() {
+    public function testAppendWithDocument(): void {
       $import = new \DOMDocument();
       $import->loadXml('<success/>');
       $document = new Document();
@@ -662,7 +662,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::append
      */
-    public function testAppendWithEmptyDocument() {
+    public function testAppendWithEmptyDocument(): void {
       $import = new \DOMDocument();
       $document = new Document();
       $document->appendElement('root');
@@ -678,7 +678,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::append
      */
-    public function testAppendWithNodeFromOtherDocument() {
+    public function testAppendWithNodeFromOtherDocument(): void {
       $import = new \DOMDocument();
       $import->loadXml('<success/>');
       $document = new Document();
@@ -695,7 +695,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::append
      */
-    public function testAppendWithNodeListFromOtherDocument() {
+    public function testAppendWithNodeListFromOtherDocument(): void {
       $import = new Document();
       $import->loadXml('<success/>');
       $document = new Document();
@@ -712,7 +712,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::append
      */
-    public function testAppendWithArrayContainingNodes() {
+    public function testAppendWithArrayContainingNodes(): void {
       $document = new Document();
       $document
         ->appendElement('root')
@@ -732,7 +732,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::append
      */
-    public function testAppendWithAttributeNodeFromOtherDocument() {
+    public function testAppendWithAttributeNodeFromOtherDocument(): void {
       $import = new \DOMDocument();
       $import->loadXml('<root result="success"/>');
       $document = new Document();
@@ -749,7 +749,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::append
      */
-    public function testAppendWithClosure() {
+    public function testAppendWithClosure(): void {
       $document = new Document();
       $document
         ->appendElement('root')
@@ -767,7 +767,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::append
      */
-    public function testAppendWithUnattachedNodeExpectingException() {
+    public function testAppendWithUnattachedNodeExpectingException(): void {
       $node = new Element('foo', '', '');
       $this->expectException(\LogicException::class);
       $node->append('');
@@ -776,7 +776,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::appendElement
      */
-    public function testAppendElement() {
+    public function testAppendElement(): void {
       $document = new Document();
       $document->appendChild($document->createElement('root'));
       $document->documentElement->appendElement('test', 'text', ['attribute' => 'value']);
@@ -789,7 +789,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::appendXml
      */
-    public function testAppendXml() {
+    public function testAppendXml(): void {
       $document = new Document();
       $document->appendChild($document->createElement('root'));
       $document->documentElement->appendXml(
@@ -804,7 +804,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::appendXml
      */
-    public function testAppendXmlWithNamespace() {
+    public function testAppendXmlWithNamespace(): void {
       $document = new Document();
       $document->appendChild($document->createElement('root'));
       $document->documentElement->appendXml(
@@ -819,7 +819,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::saveXml
      */
-    public function testSaveXml() {
+    public function testSaveXml(): void {
       $document = new Document();
       $node = $document->appendChild($document->createElement('div'));
       $this->assertXmlStringEqualsXmlString('<div/>', $node->saveXml());
@@ -828,7 +828,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::saveXmlFragment
      */
-    public function testSaveXmlFragment() {
+    public function testSaveXmlFragment(): void {
       $document = new Document();
       $node = $document->appendChild($document->createElement('div'));
       $node->appendChild($document->createTextNode("text"));
@@ -839,7 +839,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::saveHtml
      */
-    public function testSaveHtml() {
+    public function testSaveHtml(): void {
       $document = new Document();
       $node = $document->appendChild($document->createElement('div'));
       $this->assertEquals('<div></div>', $node->saveHtml());
@@ -849,7 +849,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Element
      * @covers \FluentDOM\DOM\Node\Xpath
      */
-    public function testEvaluate() {
+    public function testEvaluate(): void {
       $document = new Document();
       $document->loadXml('<foo>success</foo>');
       $this->assertEquals(
@@ -862,7 +862,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Element
      * @covers \FluentDOM\DOM\Node\Xpath
      */
-    public function testEvaluateWithUnattachedNodeExpectingException() {
+    public function testEvaluateWithUnattachedNodeExpectingException(): void {
       $node = new Element('foo');
       $this->expectException(\LogicException::class);
       $node->evaluate('string(.)');
@@ -872,7 +872,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Element
      * @covers \FluentDOM\DOM\Node\Xpath
      */
-    public function testMagicMethodInvoke() {
+    public function testMagicMethodInvoke(): void {
       $document = new Document();
       $document->loadXml('<foo>success</foo>');
       $node = $document->documentElement;
@@ -885,7 +885,7 @@ namespace FluentDOM\DOM {
     /**
      * @cover FluentDOM\DOM\Document:getElementsByTagName
      */
-    public function testGetElementsByTagNameWithNamespace() {
+    public function testGetElementsByTagNameWithNamespace(): void {
       $document = new Document();
       $document->loadXML('<foo:bar xmlns:foo="urn:foo"><foo:foo></foo:foo></foo:bar>');
       $document->registerNamespace('f', 'urn:foo');
@@ -898,7 +898,7 @@ namespace FluentDOM\DOM {
     /**
      * @cover FluentDOM\DOM\Document:getElementsByTagName
      */
-    public function testGetElementsByTagName() {
+    public function testGetElementsByTagName(): void {
       $document = new Document();
       $document->loadXML('<foo><bar></bar></foo>');
       $this->assertEquals(
@@ -911,7 +911,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Element
      * @dataProvider provideExistingOffsets
      */
-    public function testArrayAccessOffsetExistsExpectingTrue($offset) {
+    public function testArrayAccessOffsetExistsExpectingTrue($offset): void {
       $document = new Document();
       $document->loadXML(self::XML);
       $this->assertTrue(isset($document->documentElement[$offset]));
@@ -929,7 +929,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Element
      * @dataProvider provideMissingOffsets
      */
-    public function testArrayAccessOffsetExistsExpectingFalse($offset) {
+    public function testArrayAccessOffsetExistsExpectingFalse($offset): void {
       $document = new Document();
       $document->loadXML(self::XML);
       $this->assertFalse(isset($document->documentElement[$offset]));
@@ -945,7 +945,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element
      */
-    public function testArrayAccessOffsetExistsExpectingException() {
+    public function testArrayAccessOffsetExistsExpectingException(): void {
       $document = new Document();
       $document->loadXML(self::XML);
       $this->expectException(
@@ -958,7 +958,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element
      */
-    public function testArrayAccessOffsetGetWithItem() {
+    public function testArrayAccessOffsetGetWithItem(): void {
       $document = new Document();
       $document->loadXML('<foo><bar/><foobar/></foo>');
       $this->assertEquals(
@@ -970,7 +970,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element
      */
-    public function testArrayAccessOffsetGetWithAttribute() {
+    public function testArrayAccessOffsetGetWithAttribute(): void {
       $document = new Document();
       $document->loadXML('<foo attribute="success"/>');
       $this->assertEquals(
@@ -982,7 +982,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element
      */
-    public function testArrayAccessOffsetGetWithChaining() {
+    public function testArrayAccessOffsetGetWithChaining(): void {
       $document = new Document();
       $document->loadXML('<foo><bar attribute="success"/></foo>');
       $this->assertEquals(
@@ -994,7 +994,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element
      */
-    public function testArrayAccessOffsetSetAppendChild() {
+    public function testArrayAccessOffsetSetAppendChild(): void {
       $document = new Document();
       $document->appendChild($document->createElement('root'));
       $document->documentElement[] = $document->createElement('success');
@@ -1007,7 +1007,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element
      */
-    public function testArrayAccessOffsetSetReplaceChild() {
+    public function testArrayAccessOffsetSetReplaceChild(): void {
       $document = new Document();
       $document
         ->appendChild($document->createElement('root'))
@@ -1022,7 +1022,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element
      */
-    public function testArrayAccessOffsetSetWithInvalidChildExpectingException() {
+    public function testArrayAccessOffsetSetWithInvalidChildExpectingException(): void {
       $document = new Document();
       $document->appendChild($document->createElement('root'));
       $this->expectException(
@@ -1035,7 +1035,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element
      */
-    public function testArrayAccessOffsetSetWriteAttribute() {
+    public function testArrayAccessOffsetSetWriteAttribute(): void {
       $document = new Document();
       $document
         ->appendChild($document->createElement('root'));
@@ -1049,7 +1049,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element
      */
-    public function testArrayAccessOffsetUnsetRemoveChild() {
+    public function testArrayAccessOffsetUnsetRemoveChild(): void {
       $document = new Document();
       $document->loadXML('<root><fail/></root>');
       unset($document->documentElement[0]);
@@ -1062,7 +1062,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element
      */
-    public function testArrayAccessOffsetUnsetRemoveAttribute() {
+    public function testArrayAccessOffsetUnsetRemoveAttribute(): void {
       $document = new Document();
       $document->loadXML('<root result="fail"/>');
       unset($document->documentElement['result']);
@@ -1075,7 +1075,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::getIterator
      */
-    public function testGetIterator() {
+    public function testGetIterator(): void {
       $document = new Document();
       $document->loadXML('<foo><bar/><bar/></foo>');
       $this->assertEquals(
@@ -1092,7 +1092,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::count
      */
-    public function testCountable() {
+    public function testCountable(): void {
       $document = new Document();
       $document->loadXML('<foo><bar/></foo>');
       $this->assertCount(

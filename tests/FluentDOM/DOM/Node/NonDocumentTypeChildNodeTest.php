@@ -21,7 +21,7 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
      */
-    public function testIssetNextElementSiblingExpectingTrue() {
+    public function testIssetNextElementSiblingExpectingTrue(): void {
       $document = new Document();
       $document->loadXML('<foo><!-- START -->TEXT<bar index="1"/></foo>');
       $this->assertTrue(isset($document->documentElement->firstChild->nextElementSibling));
@@ -31,7 +31,7 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
      */
-    public function testIssetNextElementSiblingExpectingFalse() {
+    public function testIssetNextElementSiblingExpectingFalse(): void {
       $document = new Document();
       $document->loadXML('<foo><!-- START -->TEXT</foo>');
       $this->assertFalse(isset($document->documentElement->firstChild->nextElementSibling));
@@ -41,7 +41,7 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
      */
-    public function testGetNextElementSibling() {
+    public function testGetNextElementSibling(): void {
       $document = new Document();
       $document->loadXML('<foo><bar index="0"/>TEXT<bar index="1"/></foo>');
       $node = $document->documentElement->firstChild->nextElementSibling;
@@ -55,7 +55,7 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
      */
-    public function testGetNextElementSiblingFromCommentNode() {
+    public function testGetNextElementSiblingFromCommentNode(): void {
       $document = new Document();
       $document->loadXML('<foo><!-- START -->TEXT<bar index="1"/></foo>');
       $node = $document->documentElement->firstChild->nextElementSibling;
@@ -69,7 +69,7 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
      */
-    public function testGetNextElementSiblingExpectingNull() {
+    public function testGetNextElementSiblingExpectingNull(): void {
       $document = new Document();
       $document->loadXML('<foo><bar index="0"/>TEXT</foo>');
       $this->assertNull(
@@ -81,7 +81,7 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
      */
-    public function testIssetPreviousElementSiblingExpectingTrue() {
+    public function testIssetPreviousElementSiblingExpectingTrue(): void {
       $document = new Document();
       $document->loadXML('<foo><bar index="0"/>TEXT<!-- START --></foo>');
       $this->assertTrue(isset($document->documentElement->lastChild->previousElementSibling));
@@ -90,7 +90,7 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
      */
-    public function testIssetPreviousElementSiblingExpectingFalse() {
+    public function testIssetPreviousElementSiblingExpectingFalse(): void {
       $document = new Document();
       $document->loadXML('<foo>TEXT<!-- START --></foo>');
       $this->assertFalse(isset($document->documentElement->lastChild->previousElementSibling));
@@ -100,7 +100,7 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
      */
-    public function testGetPreviousElementSibling() {
+    public function testGetPreviousElementSibling(): void {
       $document = new Document();
       $document->loadXML('<foo><bar index="0"/>TEXT<bar index="1"/></foo>');
       $node = $document->documentElement->lastChild->previousElementSibling;
@@ -114,7 +114,7 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
      */
-    public function testPreviousElementSiblingFromCommentNode() {
+    public function testPreviousElementSiblingFromCommentNode(): void {
       $document = new Document();
       $document->loadXML('<foo><bar index="0"/>TEXT<!-- START --></foo>');
       $node = $document->documentElement->lastChild->previousElementSibling;
@@ -128,7 +128,7 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
      */
-    public function testPreviousElementSiblingExpectingNull() {
+    public function testPreviousElementSiblingExpectingNull(): void {
       $document = new Document();
       $document->loadXML('<foo>TEXT<bar index="1"/></foo>');
       $this->assertNull(
@@ -140,7 +140,7 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
      */
-    public function testGetParentPropertyFromCommentNode() {
+    public function testGetParentPropertyFromCommentNode(): void {
       $document = new Document();
       $document->loadXML('<foo><!--comment--></foo>');
       $this->assertEquals(
@@ -153,7 +153,7 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
      */
-    public function testSetNextElementChildExpectingException() {
+    public function testSetNextElementChildExpectingException(): void {
       $document = new Document();
       $document->loadXML('<foo><!--comment--></foo>');
       $this->expectErrorMessage("Cannot write property");
@@ -164,7 +164,7 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
      */
-    public function testSetPreviousElementChildExpectingException() {
+    public function testSetPreviousElementChildExpectingException(): void {
       $document = new Document();
       $document->loadXML('<foo><!--comment--></foo>');
       $this->expectErrorMessage("Cannot write property");
@@ -175,7 +175,7 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
      */
-    public function testSetUnknownProperty() {
+    public function testSetUnknownProperty(): void {
       $document = new Document();
       $document->loadXML('<foo><!--comment--></foo>');
       $node = $document->documentElement->firstChild;
@@ -187,7 +187,7 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
      */
-    public function testUnsetUnknownProperty() {
+    public function testUnsetUnknownProperty(): void {
       $document = new Document();
       $document->loadXML('<foo><!--comment--></foo>');
       $node = $document->documentElement->firstChild;
@@ -200,7 +200,7 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
      */
-    public function testIssetUnknownPropertyExpectingTrue() {
+    public function testIssetUnknownPropertyExpectingTrue(): void {
       $document = new Document();
       $document->loadXML('<foo><!--comment--></foo>');
       $node = $document->documentElement->firstChild;
@@ -212,7 +212,7 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
      */
-    public function testIssetUnknownPropertyExpectingFalse() {
+    public function testIssetUnknownPropertyExpectingFalse(): void {
       $document = new Document();
       $document->loadXML('<foo><!--comment--></foo>');
       $node = $document->documentElement->firstChild;
@@ -223,7 +223,7 @@ namespace FluentDOM\Node {
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Implementation
      * @covers \FluentDOM\DOM\Node\NonDocumentTypeChildNode\Properties
      */
-    public function testGetUnknownPropertyExpectingError() {
+    public function testGetUnknownPropertyExpectingError(): void {
       $document = new Document();
       $document->loadXML('<foo><!--comment--></foo>');
       $node = $document->documentElement->firstChild;

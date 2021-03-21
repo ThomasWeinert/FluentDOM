@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Query {
 
   use FluentDOM\Query;
@@ -15,7 +24,7 @@ namespace FluentDOM\Query {
      * @group TraversingFilter
      * @covers \FluentDOM\Query::slice
      */
-    public function testSliceByRangeStartLtEnd() {
+    public function testSliceByRangeStartLtEnd(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->find('//p')
@@ -30,7 +39,7 @@ namespace FluentDOM\Query {
      * @group TraversingFilter
      * @covers \FluentDOM\Query::slice
      */
-    public function testSliceByRangeStartGtEnd() {
+    public function testSliceByRangeStartGtEnd(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->find('//p')
@@ -44,7 +53,7 @@ namespace FluentDOM\Query {
      * @group TraversingFilter
      * @covers \FluentDOM\Query::slice
      */
-    public function testSliceByNegRange() {
+    public function testSliceByNegRange(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->find('//p')
@@ -59,7 +68,7 @@ namespace FluentDOM\Query {
      * @group TraversingFilter
      * @covers \FluentDOM\Query::slice
      */
-    public function testSliceToEnd() {
+    public function testSliceToEnd(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->find('//p')

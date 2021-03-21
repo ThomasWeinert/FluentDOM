@@ -1,4 +1,12 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\Nodes {
 
@@ -12,7 +20,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Compare
      */
-    public function testCompareDocumentElementWithChildNode() {
+    public function testCompareDocumentElementWithChildNode(): void {
       $document = new Document();
       $document->loadXML('<main><child/></main>');
       $compare = new Compare($document->xpath());
@@ -28,7 +36,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Compare
      */
-    public function testCompareChildNodeWithDocumentElement() {
+    public function testCompareChildNodeWithDocumentElement(): void {
       $document = new Document();
       $document->loadXML('<main><child/></main>');
       $compare = new Compare($document->xpath());
@@ -44,7 +52,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Compare
      */
-    public function testCompareDocumentElementWithItself() {
+    public function testCompareDocumentElementWithItself(): void {
       $document = new Document();
       $document->loadXML('<main><child/></main>');
       $compare = new Compare($document->xpath());
@@ -60,7 +68,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Compare
      */
-    public function testCompareParentNodeWithChildNode() {
+    public function testCompareParentNodeWithChildNode(): void {
       $document = new Document();
       $document->loadXML('<main><parent><child/></parent></main>');
       $compare = new Compare($document->xpath());
@@ -76,7 +84,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Compare
      */
-    public function testCompareChildNodeWithParentNode() {
+    public function testCompareChildNodeWithParentNode(): void {
       $document = new Document();
       $document->loadXML('<main><parent><child/></parent></main>');
       $compare = new Compare($document->xpath());
@@ -92,7 +100,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Compare
      */
-    public function testCompareNodeWithPreviousSibling() {
+    public function testCompareNodeWithPreviousSibling(): void {
       $document = new Document();
       $document->loadXML('<main><previous/><next/></main>');
       $compare = new Compare($document->xpath());
@@ -108,7 +116,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Compare
      */
-    public function testCompareNodeWithNextNode() {
+    public function testCompareNodeWithNextNode(): void {
       $document = new Document();
       $document->loadXML('<main><previous/><next/></main>');
       $compare = new Compare($document->xpath());
@@ -124,7 +132,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Compare
      */
-    public function testCompareNodesByPositionUsingXpath() {
+    public function testCompareNodesByPositionUsingXpath(): void {
       $document = new Document();
       $document->loadXML('<main><previous/><current/><next/></main>');
       $compare = new Compare($document->xpath());

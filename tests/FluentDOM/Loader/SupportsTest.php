@@ -1,5 +1,12 @@
 <?php
-
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\Loader {
 
@@ -24,7 +31,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Supports
      */
-    public function testSupportsExpectingTrue() {
+    public function testSupportsExpectingTrue(): void {
       $loader = new Supports_TestProxy();
       $this->assertTrue($loader->supports('type/example'));
     }
@@ -32,7 +39,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Supports
      */
-    public function testSupportsExpectingFalse() {
+    public function testSupportsExpectingFalse(): void {
       $loader = new Supports_TestProxy();
       $this->assertFalse($loader->supports('type/another'));
     }
@@ -40,7 +47,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Supports
      */
-    public function testSupportsDefaultExpectingFalse() {
+    public function testSupportsDefaultExpectingFalse(): void {
       $loader = new Supports_TestProxyDefault();
       $this->assertFalse($loader->supports('type/another'));
     }

@@ -1,4 +1,12 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\Query {
 
@@ -11,7 +19,7 @@ namespace FluentDOM\Query {
 
   class Issue71Test extends TestCase {
 
-    public function testNoLinefeedAfterTextNode() {
+    public function testNoLinefeedAfterTextNode(): void {
       $fd = FluentDOM('<div></div>', 'html-fragment');
       $fd->html(FluentDOM('hihi', 'html-fragment'));
 
@@ -21,7 +29,7 @@ namespace FluentDOM\Query {
       );
     }
 
-    public function testLoaderAddsNoLineFeedToHtmlFragmentWithText() {
+    public function testLoaderAddsNoLineFeedToHtmlFragmentWithText(): void {
       $loader = new Html();
       /** @var Result $result */
       $result = $loader->load('hihi', 'html-fragment');
@@ -31,7 +39,7 @@ namespace FluentDOM\Query {
       );
     }
 
-    public function testSaveHtmlDoesNotAddSpaceToTextOnlyDocument() {
+    public function testSaveHtmlDoesNotAddSpaceToTextOnlyDocument(): void {
       $document = new Document();
       $document->appendChild($document->createTextNode('hihi'));
       $this->assertEquals(
@@ -40,7 +48,7 @@ namespace FluentDOM\Query {
       );
     }
 
-    public function testSaveHtmlDoesNotAddSpaceToDocumentWithMultipleElementNodes() {
+    public function testSaveHtmlDoesNotAddSpaceToDocumentWithMultipleElementNodes(): void {
       $document = new Document();
       $document->appendChild($document->createElement('b'));
       $document->appendChild($document->createElement('i'));

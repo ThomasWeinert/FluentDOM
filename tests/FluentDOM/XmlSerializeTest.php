@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM {
 
   use FluentDOM\DOM\Element;
@@ -22,7 +31,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\XmlSerialize
      */
-    public function testGetXmlWithOneElement() {
+    public function testGetXmlWithOneElement(): void {
       $object = $this->getMockForAbstractClass('FluentDOM\\XmlSerialize_TestProxy');
       $object
         ->expects($this->once())
@@ -40,7 +49,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\XmlSerialize
      */
-    public function testGetXmlWithoutInterfaceExpectingException() {
+    public function testGetXmlWithoutInterfaceExpectingException(): void {
       $object = $this->getMockBuilder(XmlSerialize_TestProxyInvalid::class)->getMockForAbstractClass();
       $this->expectException(\LogicException::class);
       $object->getXml();

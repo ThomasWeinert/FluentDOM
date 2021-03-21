@@ -22,7 +22,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Lazy
      */
-    public function testSupportsCallableExpectingTrue() {
+    public function testSupportsCallableExpectingTrue(): void {
       $loader = $this->getLoaderFixture();
       $this->assertTrue($loader->supports('callable'));
     }
@@ -30,7 +30,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Lazy
      */
-    public function testSupportsLoaderInstanceExpectingTrue() {
+    public function testSupportsLoaderInstanceExpectingTrue(): void {
       $loader = $this->getLoaderFixture();
       $this->assertTrue($loader->supports('loader'));
     }
@@ -38,7 +38,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Lazy
      */
-    public function testSupportsWithInvalidTypeExpectingFalse() {
+    public function testSupportsWithInvalidTypeExpectingFalse(): void {
       $loader = $this->getLoaderFixture();
       $this->assertFalse($loader->supports('non-existing'));
     }
@@ -46,7 +46,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Lazy
      */
-    public function testGetWithCallable() {
+    public function testGetWithCallable(): void {
       $loader = $this->getLoaderFixture();
       $this->assertInstanceOf(Loadable::class, $loader->get('callable'));
     }
@@ -54,7 +54,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Lazy
      */
-    public function testGetWithCallableThatDoesNotReturnALoadableExpectingException() {
+    public function testGetWithCallableThatDoesNotReturnALoadableExpectingException(): void {
       $this->expectException(\UnexpectedValueException::class);
       $loader = new Lazy(
         [
@@ -67,7 +67,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Lazy
      */
-    public function testAddClassesWithSingleType() {
+    public function testAddClassesWithSingleType(): void {
       $loader = new Lazy();
       $loader->addClasses(
         [
@@ -81,7 +81,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Lazy
      */
-    public function testAddClassesWithSingleTypeExpectingException() {
+    public function testAddClassesWithSingleTypeExpectingException(): void {
       $loader = new Lazy();
       $loader->addClasses(
         [
@@ -99,7 +99,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Lazy
      */
-    public function testAddClassesWithSeveralTypes() {
+    public function testAddClassesWithSeveralTypes(): void {
       $loader = new Lazy();
       $loader->addClasses(
         [
@@ -113,7 +113,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Lazy
      */
-    public function testGetWithLoader() {
+    public function testGetWithLoader(): void {
       $loader = $this->getLoaderFixture();
       $this->assertInstanceOf(Loadable::class, $loader->get('loader'));
     }
@@ -121,7 +121,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Lazy
      */
-    public function testAddWithInvalidLoaderExpectingException() {
+    public function testAddWithInvalidLoaderExpectingException(): void {
       $this->expectException(\UnexpectedValueException::class);
       new Lazy(
         [
@@ -133,7 +133,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Lazy
      */
-    public function testLoad() {
+    public function testLoad(): void {
       $result = $this->createMock(Result::class);
       $loaderMock = $this->createMock(Loadable::class);
       $loaderMock
@@ -154,7 +154,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Lazy
      */
-    public function testLoadWithUnsupportedTypeExpectingNull() {
+    public function testLoadWithUnsupportedTypeExpectingNull(): void {
       $loader = $this->getLoaderFixture();
       $this->assertNull($loader->load('', 'non-existing'));
     }
@@ -162,7 +162,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Lazy
      */
-    public function testLoadFragment() {
+    public function testLoadFragment(): void {
       $document = new Document();
       $loaderMock = $this->getMockBuilder(Loadable::class)->getMock();
       $loaderMock
@@ -183,7 +183,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Lazy
      */
-    public function testLoadFragmentWithUnsupportedTypeExpectingNul() {
+    public function testLoadFragmentWithUnsupportedTypeExpectingNul(): void {
       $loader = new Lazy();
       $this->assertNull($loader->loadFragment('', 'non-existing'));
     }

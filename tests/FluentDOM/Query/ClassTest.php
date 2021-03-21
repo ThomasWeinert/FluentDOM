@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Query {
 
   use FluentDOM\Query;
@@ -12,7 +21,7 @@ namespace FluentDOM\Query {
      * @group AttributesClasses
      * @covers \FluentDOM\Query::hasClass
      */
-    public function testHasClassExpectingTrue() {
+    public function testHasClassExpectingTrue(): void {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//html/div');
       $this->assertTrue($fd->hasClass('test1'));
     }
@@ -22,7 +31,7 @@ namespace FluentDOM\Query {
      * @group AttributesClasses
      * @covers \FluentDOM\Query::hasClass
      */
-    public function testHasClassExpectingFalse() {
+    public function testHasClassExpectingFalse(): void {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//html/div');
       $this->assertFalse($fd->hasClass('INVALID_CLASSNAME'));
     }
@@ -34,7 +43,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::changeClassString
      * @covers \FluentDOM\Query::addClass
      */
-    public function testAddClass() {
+    public function testAddClass(): void {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//html/div');
       $fd->addClass('added');
       $this->assertTrue($fd->hasClass('added'));
@@ -47,7 +56,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::changeClassString
      * @covers \FluentDOM\Query::removeClass
      */
-    public function testRemoveClass() {
+    public function testRemoveClass(): void {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//html/div');
       $fd->removeClass('test2');
       $this->assertEquals('test1', $fd[0]->getAttribute('class'));
@@ -61,7 +70,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::changeClassString
      * @covers \FluentDOM\Query::removeClass
      */
-    public function testRemoveClassWithEmptyString() {
+    public function testRemoveClassWithEmptyString(): void {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//html/div');
       $fd->removeClass();
       $this->assertFalse($fd[0]->hasAttribute('class'));
@@ -96,7 +105,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::toggleClass
      * @covers \FluentDOM\Query::changeClassString
      */
-    public function testToogleClassWithCallback() {
+    public function testToogleClassWithCallback(): void {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//html/div');
       $fd->toggleClass(
         function($node, $index, $class) {

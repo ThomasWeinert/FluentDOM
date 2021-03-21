@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Nodes {
 
   use FluentDOM\TestCase;
@@ -10,7 +19,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Modifier
      */
-    public function testConstructor() {
+    public function testConstructor(): void {
       $document = new \DOMDocument();
       $document->appendChild($document->createElement('test'));
       $modifier = new Modifier($document->documentElement);
@@ -23,7 +32,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Modifier
      */
-    public function testAppendChildren() {
+    public function testAppendChildren(): void {
       $document = new \DOMDocument();
       $document->appendChild($document->createElement('test'));
       $modifier = new Modifier($document->documentElement);
@@ -39,7 +48,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Modifier
      */
-    public function testReplaceChildren() {
+    public function testReplaceChildren(): void {
       $document = new \DOMDocument();
       $document->appendChild($document->createElement('test'));
       $document->documentElement->appendChild($document->createElement('fail'));
@@ -56,7 +65,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Modifier
      */
-    public function testInsertChildrenBefore() {
+    public function testInsertChildrenBefore(): void {
       $document = new \DOMDocument();
       $document->appendChild($document->createElement('test'));
       $document->documentElement->appendChild($document->createElement('three'));
@@ -73,7 +82,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Modifier
      */
-    public function testInsertChildrenBeforeIntoEmptyElement() {
+    public function testInsertChildrenBeforeIntoEmptyElement(): void {
       $document = new \DOMDocument();
       $document->appendChild($document->createElement('test'));
       $modifier = new Modifier($document->documentElement);
@@ -89,7 +98,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Modifier
      */
-    public function testInsertNodesAfter() {
+    public function testInsertNodesAfter(): void {
       $document = new \DOMDocument();
       $document->appendChild($document->createElement('test'));
       $document->documentElement->appendChild($document->createElement('one'));
@@ -107,7 +116,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Modifier
      */
-    public function testInsertNodesAfterLastChild() {
+    public function testInsertNodesAfterLastChild(): void {
       $document = new \DOMDocument();
       $document->appendChild($document->createElement('test'));
       $document->documentElement->appendChild($document->createElement('one'));
@@ -125,7 +134,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Modifier
      */
-    public function testInsertNodesBefore() {
+    public function testInsertNodesBefore(): void {
       $document = new \DOMDocument();
       $document->appendChild($document->createElement('test'));
       $document->documentElement->appendChild($document->createElement('one'));
@@ -143,7 +152,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Modifier
      */
-    public function testInsertNodesBeforeFirstChild() {
+    public function testInsertNodesBeforeFirstChild(): void {
       $document = new \DOMDocument();
       $document->appendChild($document->createElement('test'));
       $document->documentElement->appendChild($document->createElement('one'));
@@ -161,7 +170,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Modifier
      */
-    public function testReplaceNode() {
+    public function testReplaceNode(): void {
       $document = new \DOMDocument();
       $document->appendChild($document->createElement('test'));
       $document->documentElement->appendChild($document->createElement('one'));

@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Query {
 
   use FluentDOM\Query;
@@ -15,7 +24,7 @@ namespace FluentDOM\Query {
      * @group TraversingFind
      * @covers \FluentDOM\Query::closest
      */
-    public function testClosest() {
+    public function testClosest(): void {
       $attribute = $this->getQueryFixtureFromString(self::XML)
         ->find('//item')
         ->closest('name() = "group"')
@@ -28,7 +37,7 @@ namespace FluentDOM\Query {
      * @group TraversingFind
      * @covers \FluentDOM\Query::closest
      */
-    public function testClosestWithContext() {
+    public function testClosestWithContext(): void {
       $fd = $this->getQueryFixtureFromString(self::XML);
       $context =  $fd
         ->find('//item');
@@ -44,7 +53,7 @@ namespace FluentDOM\Query {
      * @group TraversingFind
      * @covers \FluentDOM\Query::closest
      */
-    public function testClosestWithContextExpectingNull() {
+    public function testClosestWithContextExpectingNull(): void {
       $fd = $this->getQueryFixtureFromString(self::XML);
       $context =  $fd
         ->find('//div');
@@ -60,7 +69,7 @@ namespace FluentDOM\Query {
      * @group TraversingFind
      * @covers \FluentDOM\Query::closest
      */
-    public function testClosestIsCurrentNode() {
+    public function testClosestIsCurrentNode(): void {
       $attribute = $this->getQueryFixtureFromString(self::XML)
         ->find('//item')
         ->closest('self::item[@index = "1"]')

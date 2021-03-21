@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Utility\Iterators {
 
   use FluentDOM\TestCase;
@@ -10,7 +19,7 @@ namespace FluentDOM\Utility\Iterators {
     /**
      * @covers \FluentDOM\Utility\Iterators\MapIterator
      */
-    public function testIterator() {
+    public function testIterator(): void {
       $iterator = new MapIterator(
         new \ArrayIterator(['one', 'two']),
         function ($value, $index) {

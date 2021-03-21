@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -20,7 +20,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Document
      */
-    public function testClone() {
+    public function testClone(): void {
       $document = new Document();
       $document->registerNamespace('foo', 'urn:foo');
       $clone = clone $document;
@@ -34,7 +34,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Document::__construct
      */
-    public function testDocumentRegistersNodeClass() {
+    public function testDocumentRegistersNodeClass(): void {
       $document = new Document();
       $node = $document->appendElement('test');
       $this->assertInstanceOf(
@@ -46,7 +46,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Document::__construct
      */
-    public function testDocumentRegistersNodeClassLoadingXml() {
+    public function testDocumentRegistersNodeClassLoadingXml(): void {
       $document = new Document();
       $document->appendElement('test');
       $this->assertInstanceOf(
@@ -59,7 +59,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Document::xpath
      */
-    public function testXpathImplicitCreate() {
+    public function testXpathImplicitCreate(): void {
       $document = new Document();
       $xpath = $document->xpath();
       $this->assertInstanceOf(__NAMESPACE__.'\\Xpath', $xpath);
@@ -69,7 +69,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Document::xpath
      */
-    public function testXpathImplicitCreateAfterDocumentLoad() {
+    public function testXpathImplicitCreateAfterDocumentLoad(): void {
       if (defined('HHVM_VERSION')) {
         $this->markTestSkipped(
           'HHVM does not need to recreate the Xpath instance.'
@@ -86,7 +86,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Document::registerNamespace
      * @covers \FluentDOM\DOM\Document::xpath
      */
-    public function testNamespaceIsRegisteredOnExistingXpath() {
+    public function testNamespaceIsRegisteredOnExistingXpath(): void {
       $document = new Document();
       $document->loadXML('<test xmlns:foo="urn:foo" foo:result="success"/>');
       $xpath = $document->xpath();
@@ -100,7 +100,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Document::registerNamespace
      * @covers \FluentDOM\DOM\Document::xpath
      */
-    public function testNamespaceIsRegisteredOnNewXpath() {
+    public function testNamespaceIsRegisteredOnNewXpath(): void {
       $document = new Document();
       $document->loadXML('<test xmlns:foo="urn:foo" foo:result="success"/>');
       $document->registerNamespace('bar', 'urn:foo');
@@ -112,7 +112,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Document::namespaces
      */
-    public function testNamespacesGet() {
+    public function testNamespacesGet(): void {
       $document = new Document();
       $document->registerNamespace('#default', 'urn:default');
       $document->registerNamespace('foo', 'urn:foo');
@@ -128,7 +128,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Document::namespaces
      */
-    public function testNamespacesSet() {
+    public function testNamespacesSet(): void {
       $document = new Document();
       $document->registerNamespace('foo', 'urn:foo');
       $document->namespaces(
@@ -151,7 +151,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Document::appendContent
      * @covers \FluentDOM\DOM\Document::appendAttributes
      */
-    public function testCreateElementWithoutNamespace() {
+    public function testCreateElementWithoutNamespace(): void {
       $document = new Document();
       $document->registerNamespace('#default', 'urn:default');
       $document->appendChild($document->createElement(':example'));
@@ -166,7 +166,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Document::appendContent
      * @covers \FluentDOM\DOM\Document::appendAttributes
      */
-    public function testCreateElementWithContent() {
+    public function testCreateElementWithContent(): void {
       $document = new Document();
       $document->appendChild($document->createElement('example', 'Content & More'));
       $this->assertXmlStringEqualsXmlString(
@@ -180,7 +180,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Document::appendContent
      * @covers \FluentDOM\DOM\Document::appendAttributes
      */
-    public function testCreateElementWithZeroContent() {
+    public function testCreateElementWithZeroContent(): void {
       $document = new Document();
       $document->appendChild($document->createElement('example', '0'));
       $this->assertXmlStringEqualsXmlString(
@@ -194,7 +194,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Document::appendContent
      * @covers \FluentDOM\DOM\Document::appendAttributes
      */
-    public function testCreateElementWithContentAndAttribute() {
+    public function testCreateElementWithContentAndAttribute(): void {
       $document = new Document();
       $document->appendChild(
         $document->createElement('example', 'Content & More', ['attr' => 'value'])
@@ -210,7 +210,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Document::appendContent
      * @covers \FluentDOM\DOM\Document::appendAttributes
      */
-    public function testCreateElementWithAttributeAsSecondArgument() {
+    public function testCreateElementWithAttributeAsSecondArgument(): void {
       $document = new Document();
       $document->appendChild(
         $document->createElement('example', ['attr' => 'value'])
@@ -226,7 +226,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Document::appendContent
      * @covers \FluentDOM\DOM\Document::appendAttributes
      */
-    public function testCreateElementWithAttributeAsSecondAndThirdArgument() {
+    public function testCreateElementWithAttributeAsSecondAndThirdArgument(): void {
       $document = new Document();
       $document->appendChild(
         $document->createElement('example', ['attr1' => 'one'], ['attr2' => 'two'])
@@ -242,7 +242,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Document::appendContent
      * @covers \FluentDOM\DOM\Document::appendAttributes
      */
-    public function testCreateElementWithNamespace() {
+    public function testCreateElementWithNamespace(): void {
       $document = new Document();
       $document->registerNamespace('test', 'urn:success');
       $document->appendChild($document->createElement('test:example'));
@@ -257,7 +257,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Document::appendContent
      * @covers \FluentDOM\DOM\Document::appendAttributes
      */
-    public function testCreateElementWithXmlNamespacePrefixExpectingException() {
+    public function testCreateElementWithXmlNamespacePrefixExpectingException(): void {
       $document = new Document();
       $this->expectException(
         \LogicException::class,
@@ -270,7 +270,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Document::createElementNs
      * @covers \FluentDOM\DOM\Document::appendContent
      */
-    public function testCreateElementNsWithContent() {
+    public function testCreateElementNsWithContent(): void {
       $document = new Document();
       $document->appendChild(
         $document->createElementNs('urn:default', 'example', 'Content & More')
@@ -284,7 +284,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Document::createAttribute
      */
-    public function testCreateAttribute() {
+    public function testCreateAttribute(): void {
       $document = new Document();
       /** @var Element $node */
       $node = $document->appendChild($document->createElement('example'));
@@ -298,7 +298,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Document::createAttribute
      */
-    public function testCreateAttributeWithNamespace() {
+    public function testCreateAttributeWithNamespace(): void {
       $document = new Document();
       $document->registerNamespace('test', 'urn:success');
       /** @var Element $node */
@@ -315,7 +315,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Document::createElement
      * @covers \FluentDOM\DOM\Document::appendElement
      */
-    public function testAppendElement() {
+    public function testAppendElement(): void {
       $document = new Document();
       $document->appendElement('test', 'text', ['attribute' => 'value']);
       $this->assertXmlStringEqualsXmlString(
@@ -329,7 +329,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Document::createElement
      * @covers \FluentDOM\DOM\Document::appendElement
      */
-    public function testAppendElementWithNamespace() {
+    public function testAppendElementWithNamespace(): void {
       $document = new Document();
       $document->registerNamespace('foo', 'urn:foo');
       $document->appendElement('foo:test', 'text', ['foo:attribute' => 'value']);
@@ -342,7 +342,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Document::evaluate
      */
-    public function testEvaluate() {
+    public function testEvaluate(): void {
       $document = new Document();
       $document->loadXml('<foo>success</foo>');
       $this->assertEquals(
@@ -354,7 +354,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Document::evaluate
      */
-    public function testEvaluateWithContext() {
+    public function testEvaluateWithContext(): void {
       $document = new Document();
       $document->loadXml('<foo>success</foo>');
       $this->assertEquals(
@@ -366,7 +366,7 @@ namespace FluentDOM\DOM {
     /**
      * @cover FluentDOM\DOM\Document:toXml
      */
-    public function testToXmlWithoutContext() {
+    public function testToXmlWithoutContext(): void {
       $document = new Document();
       $document->loadXML('<foo><bar/></foo>');
       $this->assertXmlStringEqualsXmlString(
@@ -378,7 +378,7 @@ namespace FluentDOM\DOM {
     /**
      * @cover FluentDOM\DOM\Document:toXml
      */
-    public function testToXmlWithNodeContext() {
+    public function testToXmlWithNodeContext(): void {
       $document = new Document();
       $document->loadXML('<foo><bar/></foo>');
       $this->assertEquals(
@@ -390,7 +390,7 @@ namespace FluentDOM\DOM {
     /**
      * @cover FluentDOM\DOM\Document:toXml
      */
-    public function testToXmlWithNodeListContext() {
+    public function testToXmlWithNodeListContext(): void {
       $document = new Document();
       $document->loadXML('<foo>TEXT<bar/></foo>');
       $this->assertEquals(
@@ -402,7 +402,7 @@ namespace FluentDOM\DOM {
     /**
      * @cover FluentDOM\DOM\Document:toHtml
      */
-    public function testToHtmlWithoutContext() {
+    public function testToHtmlWithoutContext(): void {
       $document = new Document();
       $document->loadXML('<div>TEXT</div>');
       $this->assertEquals(
@@ -414,7 +414,7 @@ namespace FluentDOM\DOM {
     /**
      * @cover FluentDOM\DOM\Document:toHtml
      */
-    public function testToHtmlWithNodeContext() {
+    public function testToHtmlWithNodeContext(): void {
       $document = new Document();
       $document->loadXML("<div>TEXT<br/>\n</div>");
       $this->assertEquals(
@@ -426,7 +426,7 @@ namespace FluentDOM\DOM {
     /**
      * @cover FluentDOM\DOM\Document:toHtml
      */
-    public function testToHtmlWithNodeListContext() {
+    public function testToHtmlWithNodeListContext(): void {
       $document = new Document();
       $document->loadXML('<div>TEXT<br/></div>');
       $this->assertEquals(
@@ -438,7 +438,7 @@ namespace FluentDOM\DOM {
     /**
      * @cover FluentDOM\DOM\Document:saveHTML
      */
-    public function testSaveHtmlWithNodeListContext() {
+    public function testSaveHtmlWithNodeListContext(): void {
       $document = new Document();
       $document->loadXML('<div>TEXT<br/></div>');
       $this->assertEquals(
@@ -450,7 +450,7 @@ namespace FluentDOM\DOM {
     /**
      * @cover FluentDOM\DOM\Document:saveHTML
      */
-    public function testSaveHtmlWithDocumentFragmentContext() {
+    public function testSaveHtmlWithDocumentFragmentContext(): void {
       $document = new Document();
       $fragment = $document->createDocumentFragment();
       $fragment->appendChild($document->createElement('em', 'test'));
@@ -465,7 +465,7 @@ namespace FluentDOM\DOM {
     /**
      * @cover FluentDOM\DOM\Document:getElementsByTagName
      */
-    public function testGetElementsByTagNameWithNamespace() {
+    public function testGetElementsByTagNameWithNamespace(): void {
       $document = new Document();
       $document->loadXML('<foo:bar xmlns:foo="urn:foo"/>');
       $document->registerNamespace('f', 'urn:foo');
@@ -478,7 +478,7 @@ namespace FluentDOM\DOM {
     /**
      * @cover FluentDOM\DOM\Document:getElementsByTagName
      */
-    public function testGetElementsByTagName() {
+    public function testGetElementsByTagName(): void {
       $document = new Document();
       $document->loadXML('<foo/>');
       $this->assertEquals(
@@ -490,7 +490,7 @@ namespace FluentDOM\DOM {
     /**
      * @cover FluentDOM\DOM\Document::__toString
      */
-    public function testStringCast() {
+    public function testStringCast(): void {
       $document = new Document();
       $document->loadXML('<foo/>');
       $this->assertEquals(
@@ -502,7 +502,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Document::createDocumentType
      */
-    public function testCreateDocumentType() {
+    public function testCreateDocumentType(): void {
       $document = new Document();
       $document->formatOutput = TRUE;
       $document->appendChild($document->createDocumentType('html'));
@@ -517,7 +517,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Document::createDocumentType
      */
-    public function testCreateDocumentTypeXhtmlStrict() {
+    public function testCreateDocumentTypeXhtmlStrict(): void {
       $document = new Document();
       $document->formatOutput = TRUE;
       $document->appendChild(

@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\XMLReader {
 
   use FluentDOM\TestCase;
@@ -11,7 +20,7 @@ namespace FluentDOM\XMLReader {
     /**
      * @covers \FluentDOM\XMLReader\Iterator
      */
-    public function testIteration() {
+    public function testIteration(): void {
       $reader = new XMLReader();
       $reader->open(__DIR__.'/../TestData/xmlreader-1.xml');
       $result = [];
@@ -27,7 +36,7 @@ namespace FluentDOM\XMLReader {
     /**
      * @covers \FluentDOM\XMLReader\Iterator
      */
-    public function testIterationFailsOnRewind() {
+    public function testIterationFailsOnRewind(): void {
       $reader = new XMLReader();
       $reader->open(__DIR__.'/../TestData/xmlreader-1.xml');
       $iterator = new Iterator($reader, 'child');

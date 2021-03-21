@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -16,7 +16,7 @@ namespace FluentDOM {
 
   class Issue80Test extends TestCase {
 
-    public function testRemoveAttributeNSShouldNotRemoveUsedNamespace() {
+    public function testRemoveAttributeNSShouldNotRemoveUsedNamespace(): void {
       $document = new Document();
       $document->appendChild($document->createElement('foo'));
       $document->documentElement->setAttributeNS('urn:bar', 'bar:bar', '42');
@@ -28,7 +28,7 @@ namespace FluentDOM {
       );
     }
 
-    public function testRemoveAttributeNSShouldRemoveNamespaceDefinition() {
+    public function testRemoveAttributeNSShouldRemoveNamespaceDefinition(): void {
       $document = new Document();
       $document->appendChild($document->createElement('foo'));
       $document->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:bar', 'urn:example');
@@ -39,7 +39,7 @@ namespace FluentDOM {
       );
     }
 
-    public function testRemoveAttributeNSShouldKeepUsedNamespaceDefinition() {
+    public function testRemoveAttributeNSShouldKeepUsedNamespaceDefinition(): void {
       $document = new Document();
       $document->appendChild($document->createElement('foo'));
       $document->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:bar', 'urn:example');

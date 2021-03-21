@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Exceptions\LoadingError {
 
   use FluentDOM\TestCase;
@@ -10,7 +19,7 @@ namespace FluentDOM\Exceptions\LoadingError {
     /**
      * @covers FluentDOM\Exceptions\LoadingError\Libxml
      */
-    public function testWithErrorFromString() {
+    public function testWithErrorFromString(): void {
       $error = new \LibXMLError();
       $error->level = LIBXML_ERR_FATAL;
       $error->file = '';
@@ -28,7 +37,7 @@ namespace FluentDOM\Exceptions\LoadingError {
     /**
      * @covers FluentDOM\Exceptions\LoadingError\Libxml
      */
-    public function testWithErrorFromFile() {
+    public function testWithErrorFromFile(): void {
       $error = new \LibXMLError();
       $error->level = LIBXML_ERR_FATAL;
       $error->file = 'demo.xml';

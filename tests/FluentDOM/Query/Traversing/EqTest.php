@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Query {
 
   use FluentDOM\Query;
@@ -15,7 +24,7 @@ namespace FluentDOM\Query {
      * @group TraversingFilter
      * @covers \FluentDOM\Query::eq
      */
-    public function testEq() {
+    public function testEq(): void {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//*');
       $eqFd = $fd->eq(0);
       $this->assertSame(
@@ -30,7 +39,7 @@ namespace FluentDOM\Query {
      * @group TraversingFilter
      * @covers \FluentDOM\Query::eq
      */
-    public function testEqWithNegativeOffset() {
+    public function testEqWithNegativeOffset(): void {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('/items/*');
       $eqFd = $fd->eq(-2);
       $this->assertSame(

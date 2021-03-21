@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -22,7 +22,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Fetcher
      */
-    public function testFetchDocumentNode() {
+    public function testFetchDocumentNode(): void {
       $fd = new Nodes(self::XML);
       $fetcher = new Fetcher($fd);
       $this->assertEquals(
@@ -39,7 +39,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Fetcher
      */
-    public function testFetchWithFilter() {
+    public function testFetchWithFilter(): void {
       $fd = (new Nodes(self::XML))->find('/items/group');
       $fetcher = new Fetcher($fd);
       $this->assertXmlNodesArrayEqualsXmlStrings(
@@ -56,7 +56,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Fetcher
      */
-    public function testFetchWithContext() {
+    public function testFetchWithContext(): void {
       $fd = (new Nodes(self::XML))->find('/items/group/item');
       $fetcher = new Fetcher($fd);
       $this->assertXmlNodesArrayEqualsXmlStrings(
@@ -70,7 +70,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Fetcher
      */
-    public function testFetchReverse() {
+    public function testFetchReverse(): void {
       $fd = (new Nodes(self::XML))->find('/items/group');
       $fetcher = new Fetcher($fd);
       $this->assertXmlNodesArrayEqualsXmlStrings(
@@ -91,7 +91,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Fetcher
      */
-    public function testFetchUnique() {
+    public function testFetchUnique(): void {
       $fd = (new Nodes(self::XML))->find('/items/group/item');
       $fetcher = new Fetcher($fd);
       $this->assertXmlNodesArrayEqualsXmlStrings(
@@ -107,7 +107,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Fetcher
      */
-    public function testFetchUntil() {
+    public function testFetchUntil(): void {
       $fd = (new Nodes(self::XML))->find('/items/group');
       $fetcher = new Fetcher($fd);
       $this->assertXmlNodesArrayEqualsXmlStrings(
@@ -123,7 +123,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Fetcher
      */
-    public function testFetchUntilIncludingStop() {
+    public function testFetchUntilIncludingStop(): void {
       $fd = (new Nodes(self::XML))->find('/items/group');
       $fetcher = new Fetcher($fd);
       $this->assertXmlNodesArrayEqualsXmlStrings(
@@ -143,7 +143,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Fetcher
      */
-    public function testFetchUntilWithFilter() {
+    public function testFetchUntilWithFilter(): void {
       $fd = (new Nodes(self::XML))->find('/items/group');
       $fetcher = new Fetcher($fd);
       $this->assertXmlNodesArrayEqualsXmlStrings(
@@ -160,7 +160,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Fetcher
      */
-    public function testFetchWithInvalidExpressionExpectingException() {
+    public function testFetchWithInvalidExpressionExpectingException(): void {
       $fd = (new Nodes(self::XML))->find('/items/group');
       $fetcher = new Fetcher($fd);
       $this->expectException(
@@ -173,7 +173,7 @@ namespace FluentDOM\Nodes {
     /**
      * @covers \FluentDOM\Nodes\Fetcher
      */
-    public function testFetchWithScalarExpressionExpectingException() {
+    public function testFetchWithScalarExpressionExpectingException(): void {
       $fd = (new Nodes(self::XML))->find('/items/group');
       $fetcher = new Fetcher($fd);
       $this->expectException(

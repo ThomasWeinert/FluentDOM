@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Query {
 
   use FluentDOM\Query;
@@ -15,7 +24,7 @@ namespace FluentDOM\Query {
      * @group ManipulationReplace
      * @covers \FluentDOM\Query
      */
-    public function testOuterXmlRead() {
+    public function testOuterXmlRead(): void {
       $expect = '<group id="1st">'.
         '<item index="0">text1</item>'.
         '<item index="1">text2</item>'.
@@ -33,7 +42,7 @@ namespace FluentDOM\Query {
      * @group ManipulationReplace
      * @covers \FluentDOM\Query
      */
-    public function testOuterXmlReadWithTextNodes() {
+    public function testOuterXmlReadWithTextNodes(): void {
       $expect = 'text1';
       $xml = $this
         ->getQueryFixtureFromString(self::XML)
@@ -47,7 +56,7 @@ namespace FluentDOM\Query {
      * @group ManipulationReplace
      * @covers \FluentDOM\Query
      */
-    public function testOuterXmlReadEmpty() {
+    public function testOuterXmlReadEmpty(): void {
       $xml = $this
         ->getQueryFixtureFromString('<items/>')
         ->find('/items/*')
@@ -60,7 +69,7 @@ namespace FluentDOM\Query {
      * @group ManipulationReplace
      * @covers \FluentDOM\Query
      */
-    public function testOuterXmlWrite() {
+    public function testOuterXmlWrite(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->find('//p[position() = last()]')
@@ -74,7 +83,7 @@ namespace FluentDOM\Query {
      * @group ManipulationReplace
      * @covers \FluentDOM\Query
      */
-    public function testOuterXmlWriteEmpty() {
+    public function testOuterXmlWriteEmpty(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->find('//p')
@@ -88,7 +97,7 @@ namespace FluentDOM\Query {
      * @group ManipulationReplace
      * @covers \FluentDOM\Query
      */
-    public function testOuterXmlWriteWithCallback() {
+    public function testOuterXmlWriteWithCallback(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->find('//p')
@@ -110,7 +119,7 @@ namespace FluentDOM\Query {
      * @group ManipulationReplace
      * @covers \FluentDOM\Query
      */
-    public function testOuterXmlWriteWithInvalidDataExpectingException() {
+    public function testOuterXmlWriteWithInvalidDataExpectingException(): void {
       $fd = new Query();
       $this->expectException(\UnexpectedValueException::class);
       @$fd->outerXml(new \stdClass());

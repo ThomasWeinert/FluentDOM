@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Query {
 
   use FluentDOM\Query;
@@ -15,7 +24,7 @@ namespace FluentDOM\Query {
      * @group ManipulationInside
      * @covers \FluentDOM\Query
      */
-    public function testTextReadReturnsTextContentOfAllNodes() {
+    public function testTextReadReturnsTextContentOfAllNodes(): void {
       $expect = 'text1text2text3';
       $text = $this->getQueryFixtureFromString(self::XML)->formatOutput()->find('//group/item')->text();
       $this->assertEquals($expect, $text);
@@ -26,7 +35,7 @@ namespace FluentDOM\Query {
      * @group ManipulationInside
      * @covers \FluentDOM\Query
      */
-    public function testTextWrite() {
+    public function testTextWrite(): void {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//item');
       $textFd = $fd->text('changed');
       $this->assertEquals('changed', $fd[0]->textContent);
@@ -39,7 +48,7 @@ namespace FluentDOM\Query {
      * @group ManipulationInside
      * @covers \FluentDOM\Query
      */
-    public function testTextWriteWithCallback() {
+    public function testTextWriteWithCallback(): void {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//item');
       $textFd = $fd->text(
         function ($node, $index, $text) {

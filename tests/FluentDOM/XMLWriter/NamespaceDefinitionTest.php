@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\XMLWriter {
 
   use FluentDOM\TestCase;
@@ -10,7 +19,7 @@ namespace FluentDOM\XMLWriter {
     /**
      * @covers \FluentDOM\XMLWriter\NamespaceDefinition
      */
-    public function testDecreaseExpectingException() {
+    public function testDecreaseExpectingException(): void {
       $definition = new NamespaceDefinition();
       $this->expectException(\LogicException::class);
       $definition->decreaseDepth();

@@ -20,7 +20,7 @@ namespace FluentDOM\Loader\PHP {
     /**
      * @covers \FluentDOM\Loader\PHP\PDO
      */
-    public function testSupportsExpectingTrue() {
+    public function testSupportsExpectingTrue(): void {
       $loader = new PDO();
       $this->assertTrue($loader->supports('php/pdo'));
     }
@@ -28,7 +28,7 @@ namespace FluentDOM\Loader\PHP {
     /**
      * @covers \FluentDOM\Loader\PHP\PDO
      */
-    public function testSupportsExpectingFalse() {
+    public function testSupportsExpectingFalse(): void {
       $loader = new PDO();
       $this->assertFalse($loader->supports('text/html'));
     }
@@ -36,7 +36,7 @@ namespace FluentDOM\Loader\PHP {
     /**
      * @covers \FluentDOM\Loader\PHP\PDO
      */
-    public function testLoad() {
+    public function testLoad(): void {
       if (!(extension_loaded('pdo') && extension_loaded('pdo_sqlite'))) {
         $this->markTestSkipped('PDO/Sqlite is needed for this test');
       }
@@ -64,7 +64,7 @@ namespace FluentDOM\Loader\PHP {
     /**
      * @covers \FluentDOM\Loader\PHP\PDO
      */
-    public function testLoadWithInvalidSourceExpectingNull() {
+    public function testLoadWithInvalidSourceExpectingNull(): void {
       $loader = new PDO();
       $this->assertNull(
         $loader->load(new \stdClass(), 'php/pdo')
@@ -74,7 +74,7 @@ namespace FluentDOM\Loader\PHP {
     /**
      * @covers \FluentDOM\Loader\PHP\PDO
      */
-    public function testLoadFragmentExpectingException() {
+    public function testLoadFragmentExpectingException(): void {
       $loader = new PDO();
       $this->expectException(InvalidFragmentLoader::class);
       $loader->loadFragment(NULL, 'php/pdo');

@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Query {
 
   use FluentDOM\Query;
@@ -15,7 +24,7 @@ namespace FluentDOM\Query {
      * @group TraversingChaining
      * @covers \FluentDOM\Query::addBack
      */
-    public function testAddBack() {
+    public function testAddBack(): void {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('/items')->find('.//item');
       $this->assertEquals(3, $fd->length);
       $addBackFd = $fd->addBack();

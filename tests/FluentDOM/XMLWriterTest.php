@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM {
 
   require_once __DIR__ . '/TestCase.php';
@@ -10,7 +19,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\XMLWriter\NamespaceDefinition
      * @covers \FluentDOM\XMLWriter\NamespaceStack
      */
-    public function testWriteSomeHtmlWithoutNamespaces() {
+    public function testWriteSomeHtmlWithoutNamespaces(): void {
       $_ = new XMLWriter();
       $_->openMemory();
       $_->setIndent(2);
@@ -39,7 +48,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\XMLWriter\NamespaceDefinition
      * @covers \FluentDOM\XMLWriter\NamespaceStack
      */
-    public function testWriteAtom() {
+    public function testWriteAtom(): void {
       $_ = new XMLWriter();
       $_->registerNamespace('atom', 'http://www.w3.org/2005/Atom');
       $_->openMemory();
@@ -69,7 +78,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\XMLWriter\NamespaceDefinition
      * @covers \FluentDOM\XMLWriter\NamespaceStack
      */
-    public function testWriteXmlWithAttributesInNamespace() {
+    public function testWriteXmlWithAttributesInNamespace(): void {
       $_ = new XMLWriter();
       $_->registerNamespace('', 'http://example.org/xmlns/2002/document');
       $_->registerNamespace('xlink', 'http://www.w3.org/1999/xlink');
@@ -111,7 +120,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\XMLWriter\NamespaceDefinition
      * @covers \FluentDOM\XMLWriter\NamespaceStack
      */
-    public function testWriteElementAddingNamespace() {
+    public function testWriteElementAddingNamespace(): void {
       $_ = new XMLWriter();
       $_->registerNamespace('example', 'http://example.org/xmlns/2002/document');
       $_->openMemory();
@@ -131,7 +140,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\XMLWriter\NamespaceDefinition
      * @covers \FluentDOM\XMLWriter\NamespaceStack
      */
-    public function testStartAttributeWithoutNamespace() {
+    public function testStartAttributeWithoutNamespace(): void {
       $_ = new XMLWriter();
       $_->registerNamespace('example', 'http://example.org/xmlns/2002/document');
       $_->openMemory();
@@ -155,7 +164,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\XMLWriter\NamespaceDefinition
      * @covers \FluentDOM\XMLWriter\NamespaceStack
      */
-    public function testStartAttributeAddingNamespace() {
+    public function testStartAttributeAddingNamespace(): void {
       $_ = new XMLWriter();
       $_->registerNamespace('example', 'http://example.org/xmlns/2002/document');
       $_->openMemory();
@@ -179,7 +188,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\XMLWriter\NamespaceDefinition
      * @covers \FluentDOM\XMLWriter\NamespaceStack
      */
-    public function testStartAttributeForAddedNamespace() {
+    public function testStartAttributeForAddedNamespace(): void {
       $_ = new XMLWriter();
       $_->registerNamespace('example', 'http://example.org/xmlns/2002/document');
       $_->openMemory();
@@ -203,7 +212,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\XMLWriter\NamespaceDefinition
      * @covers \FluentDOM\XMLWriter\NamespaceStack
      */
-    public function testWritettributeNSAddingNamespace() {
+    public function testWritettributeNSAddingNamespace(): void {
       $_ = new XMLWriter();
       $_->registerNamespace('example', 'http://example.org/xmlns/2002/document');
       $_->openMemory();
@@ -223,7 +232,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\XMLWriter
      */
-    public function testCollapseWithElement() {
+    public function testCollapseWithElement(): void {
       $xml = '<document attribute="value">
                 <!-- a comment -->
                 <text>some text</text>
@@ -249,7 +258,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\XMLWriter
      */
-    public function testCollapseLimitsDepth() {
+    public function testCollapseLimitsDepth(): void {
       $xml = '<one><two><tree><four></four></tree></two></one>';
 
       $document = new \DOMDocument();
@@ -271,7 +280,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\XMLWriter
      */
-    public function testCollapseWithDocumentFragment() {
+    public function testCollapseWithDocumentFragment(): void {
       $xml = '<document attribute="value">
                 <!-- a comment -->
                 <text>some text</text>

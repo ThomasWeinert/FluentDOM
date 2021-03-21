@@ -1,11 +1,20 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM {
 
   require_once __DIR__.'/../TestCase.php';
 
   class Issue73Test extends TestCase {
 
-    public function testCreatorDoesNotForgetNamespaces() {
+    public function testCreatorDoesNotForgetNamespaces(): void {
       $_ = new Creator();
       $_->registerNamespace('atom', 'urn:atom');
       $result = $_(

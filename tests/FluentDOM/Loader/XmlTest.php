@@ -21,7 +21,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Xml
      */
-    public function testSupportsExpectingTrue() {
+    public function testSupportsExpectingTrue(): void {
       $loader = new Xml();
       $this->assertTrue($loader->supports('text/xml'));
     }
@@ -29,7 +29,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Xml
      */
-    public function testSupportsExpectingFalse() {
+    public function testSupportsExpectingFalse(): void {
       $loader = new Xml();
       $this->assertFalse($loader->supports('text/html'));
     }
@@ -38,7 +38,7 @@ namespace FluentDOM\Loader {
      * @covers \FluentDOM\Loader\Xml
      * @covers \FluentDOM\Loader\Supports
      */
-    public function testLoadWithValidXml() {
+    public function testLoadWithValidXml(): void {
       $loader = new Xml();
       $document = $loader->load(
         '<xml><![CDATA[Test]]></xml>',
@@ -54,7 +54,7 @@ namespace FluentDOM\Loader {
      * @covers \FluentDOM\Loader\Xml
      * @covers \FluentDOM\Loader\Supports
      */
-    public function testLoadReplacingCdataInXml() {
+    public function testLoadReplacingCdataInXml(): void {
       $loader = new Xml();
       $document = $loader->load(
         '<xml><![CDATA[Test]]></xml>',
@@ -73,7 +73,7 @@ namespace FluentDOM\Loader {
      * @covers \FluentDOM\Loader\Xml
      * @covers \FluentDOM\Loader\Supports
      */
-    public function testLoadWithValidXmlFileAllowFile() {
+    public function testLoadWithValidXmlFileAllowFile(): void {
       $loader = new Xml();
       $this->assertInstanceOf(
         Result::class,
@@ -91,7 +91,7 @@ namespace FluentDOM\Loader {
      * @covers \FluentDOM\Loader\Xml
      * @covers \FluentDOM\Loader\Supports
      */
-    public function testLoadWithValidXmlFileForceFile() {
+    public function testLoadWithValidXmlFileForceFile(): void {
       $loader = new Xml();
       $this->assertInstanceOf(
         Result::class,
@@ -108,7 +108,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Html
      */
-    public function testLoadWithFileExpectingException() {
+    public function testLoadWithFileExpectingException(): void {
       $loader = new Xml();
       $this->expectException(InvalidSource\TypeFile::class);
       $loader->load(
@@ -120,7 +120,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Xml
      */
-    public function testLoadWithUnsupportedType() {
+    public function testLoadWithUnsupportedType(): void {
       $loader = new Xml();
       $this->assertNull(
         $loader->load(
@@ -134,7 +134,7 @@ namespace FluentDOM\Loader {
      * @covers \FluentDOM\Loader\Xml
      * @covers \FluentDOM\Loader\Supports
      */
-    public function testLoadWithNonExistingFileExpectingException() {
+    public function testLoadWithNonExistingFileExpectingException(): void {
       $loader = new Xml();
       $this->expectException(LoadingError\FileNotLoaded::class);
       $loader->load(
@@ -150,7 +150,7 @@ namespace FluentDOM\Loader {
      * @covers \FluentDOM\Loader\Xml
      * @covers \FluentDOM\Loader\Supports
      */
-    public function testLoadFragmentWithValidXml() {
+    public function testLoadFragmentWithValidXml(): void {
       $loader = new Xml();
       $fragment = $loader->loadFragment(
         'TEXT<xml><![CDATA[Test]]></xml>',
@@ -165,7 +165,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Xml
      */
-    public function testLoadFragmentWithUnsupportedType() {
+    public function testLoadFragmentWithUnsupportedType(): void {
       $loader = new Xml();
       $this->assertNull(
         $loader->loadFragment(
@@ -175,13 +175,13 @@ namespace FluentDOM\Loader {
       );
     }
 
-    public function testLoadWithInvalidXmlExpectingException() {
+    public function testLoadWithInvalidXmlExpectingException(): void {
       $loader = new Xml();
       $this->expectException(LoadingError\Libxml::class);
       $loader->load('<foo><bar/>', 'text/xml');
     }
 
-    public function testLoadWithPreserveWhitespaceTrue() {
+    public function testLoadWithPreserveWhitespaceTrue(): void {
       $loader = new Xml();
       $document = $loader
         ->load('<foo> <bar/> </foo>', 'xml', [Options::PRESERVE_WHITESPACE => TRUE])
@@ -189,7 +189,7 @@ namespace FluentDOM\Loader {
       $this->assertCount(3, $document->documentElement->childNodes);
     }
 
-    public function testLoadWithPreserveWhitespaceFalse() {
+    public function testLoadWithPreserveWhitespaceFalse(): void {
       $loader = new Xml();
       $document = $loader
         ->load('<foo> <bar/> </foo>', 'xml', [Options::PRESERVE_WHITESPACE => FALSE])

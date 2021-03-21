@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Query {
 
   use FluentDOM\Query;
@@ -15,7 +24,7 @@ namespace FluentDOM\Query {
      * @group TraversingFilter
      * @covers \FluentDOM\Query::not
      */
-    public function testNot() {
+    public function testNot(): void {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//*');
       $this->assertTrue($fd->length > 1);
       $notDoc = $fd->not('name() != "items"');
@@ -28,7 +37,7 @@ namespace FluentDOM\Query {
      * @group TraversingFilter
      * @covers \FluentDOM\Query::not
      */
-    public function testNotWithFunction() {
+    public function testNotWithFunction(): void {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//*');
       $this->assertTrue($fd->length > 1);
       $notDoc = $fd->not(

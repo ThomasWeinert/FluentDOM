@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -19,7 +19,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Text
      */
-    public function testMagicMethodToString() {
+    public function testMagicMethodToString(): void {
       $document = new Document();
       $document->appendElement('test')->appendChild($document->createTextNode('success'));
       $this->assertEquals(
@@ -36,7 +36,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Node\WholeText
      * @covers \FluentDOM\DOM\Text
      */
-    public function testReplaceWholeText() {
+    public function testReplaceWholeText(): void {
       $document = new Document();
       $document->loadXML(
         '<p>Thru-hiking is great!  <strong>No insipid election coverage!</strong>'.
@@ -62,7 +62,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Node\WholeText
      * @covers \FluentDOM\DOM\Text
      */
-    public function testReplaceWholeTextWithEmptyString() {
+    public function testReplaceWholeTextWithEmptyString(): void {
       $document = new Document();
       $document->loadXML(
         '<!DOCTYPE p ['."\n".
@@ -83,7 +83,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Node\WholeText
      * @covers \FluentDOM\DOM\Text
      */
-    public function testReplaceWholeTextWithEntityReferenceExpectingException() {
+    public function testReplaceWholeTextWithEntityReferenceExpectingException(): void {
       $document = new Document();
       $document->loadXML(
         '<!DOCTYPE p ['."\n".
@@ -101,7 +101,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Node\WholeText
      * @covers \FluentDOM\DOM\Text
      */
-    public function testReplaceWholeTextWithEntityReferenceRecursion() {
+    public function testReplaceWholeTextWithEntityReferenceRecursion(): void {
       $document = new Document();
       $document->loadXML(
         '<!DOCTYPE p ['."\n".
@@ -123,7 +123,7 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Node\WholeText
      * @covers \FluentDOM\DOM\Text
      */
-    public function testReplaceWholeTextRemovesEntity() {
+    public function testReplaceWholeTextRemovesEntity(): void {
       $document = new Document();
       $document->loadXML(
         '<!DOCTYPE p ['."\n".

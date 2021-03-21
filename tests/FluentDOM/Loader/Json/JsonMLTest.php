@@ -34,7 +34,7 @@ namespace FluentDOM\Loader\Json {
     /**
      * @covers \FluentDOM\Loader\Json\JsonML
      */
-    public function testLoadWithInvalidSourceExpectingNull() {
+    public function testLoadWithInvalidSourceExpectingNull(): void {
       $loader = new JsonML();
       $this->assertNull(
         $loader->load(

@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Query {
 
   use FluentDOM\Query;
@@ -15,7 +24,7 @@ namespace FluentDOM\Query {
      * @group ManipulationAround
      * @covers \FluentDOM\Query
      */
-    public function testWrapInner() {
+    public function testWrapInner(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->find('//p')
@@ -28,7 +37,7 @@ namespace FluentDOM\Query {
      * @group ManipulationAround
      * @covers \FluentDOM\Query
      */
-    public function testWrapInnerWithCallback() {
+    public function testWrapInnerWithCallback(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->find('//p')

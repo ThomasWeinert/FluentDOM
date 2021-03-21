@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Query {
 
   use FluentDOM\Query;
@@ -15,7 +24,7 @@ namespace FluentDOM\Query {
      * @group TraversingFilter
      * @covers \FluentDOM\Query::has
      */
-    public function testHas() {
+    public function testHas(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->find('//li')
@@ -29,7 +38,7 @@ namespace FluentDOM\Query {
      * @group TraversingFilter
      * @covers \FluentDOM\Query::has
      */
-    public function testHasWithNode() {
+    public function testHasWithNode(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $node = $fd->find('//ul')->item(1);
       $fd

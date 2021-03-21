@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Transformer {
 
   require_once __DIR__ . '/../TestCase.php';
@@ -12,7 +21,7 @@ namespace FluentDOM\Transformer {
     /**
      * @covers \FluentDOM\Transformer\Namespaces
      */
-    public function testConstructorWithDocument() {
+    public function testConstructorWithDocument(): void {
       $document = new Document();
       $document->loadXML(self::XML);
 
@@ -26,7 +35,7 @@ namespace FluentDOM\Transformer {
     /**
      * @covers \FluentDOM\Transformer\Namespaces
      */
-    public function testConstructorWithNode() {
+    public function testConstructorWithNode(): void {
       $document = new Document();
       $document->loadXML(self::XML);
 
@@ -40,7 +49,7 @@ namespace FluentDOM\Transformer {
     /**
      * @covers \FluentDOM\Transformer\Namespaces
      */
-    public function testIsTraversable() {
+    public function testIsTraversable(): void {
       $document = new Document();
       $document->loadXML(self::XML);
 
@@ -56,7 +65,7 @@ namespace FluentDOM\Transformer {
     /**
      * @covers \FluentDOM\Transformer\Namespaces
      */
-    public function testIsAppendable() {
+    public function testIsAppendable(): void {
       $source = new Document();
       $source->loadXML(self::XML);
 

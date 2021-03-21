@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -24,7 +24,7 @@ namespace FluentDOM\Query {
      * @group ManipulationInside
      * @covers \FluentDOM\Query
      */
-    public function testHtmlRead() {
+    public function testHtmlRead(): void {
       $query = $this
         ->getQueryFixtureFromString(
           '<html><body><p>Paragraph One</p>'."\n".'<p>Paragraph Two</p></body></html>'
@@ -41,7 +41,7 @@ namespace FluentDOM\Query {
      * @group ManipulationInside
      * @covers \FluentDOM\Query
      */
-    public function testHtmlReadEmpty() {
+    public function testHtmlReadEmpty(): void {
       $query = $this
         ->getQueryFixtureFromString('<html/>')
         ->find('/html/*');
@@ -53,7 +53,7 @@ namespace FluentDOM\Query {
      * @group ManipulationInside
      * @covers \FluentDOM\Query
      */
-    public function testHtmlWrite() {
+    public function testHtmlWrite(): void {
       $query = $this
         ->getQueryFixtureFromString(
           '<html><body><p>Paragraph One</p><p>Paragraph Two</p></body></html>'
@@ -72,7 +72,7 @@ namespace FluentDOM\Query {
      * @group ManipulationInside
      * @covers \FluentDOM\Query
      */
-    public function testHtmlWriteUsingCallback() {
+    public function testHtmlWriteUsingCallback(): void {
       $query = $this
         ->getQueryFixtureFromString(
           '<html><body><p>Paragraph One</p><p>Paragraph Two</p></body></html>'

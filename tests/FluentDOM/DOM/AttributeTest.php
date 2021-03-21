@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -19,7 +19,7 @@ namespace FluentDOM\DOM {
    */
   class AttributeTest extends TestCase {
 
-    public function testMagicMethodToString() {
+    public function testMagicMethodToString(): void {
       $document = new Document();
       $document->appendElement('test', ['attr' => 'success']);
       $attribute = $document->documentElement->attributes->getNamedItem('attr');
@@ -29,7 +29,7 @@ namespace FluentDOM\DOM {
       );
     }
 
-    public function testClarkNotation() {
+    public function testClarkNotation(): void {
       $document = new Document();
       $document->registerNamespace('a', 'urn:a');
       $document->appendElement('foo', ['a:bar' => '42']);
@@ -39,7 +39,7 @@ namespace FluentDOM\DOM {
       );
     }
 
-    public function testClarkNotationForEmptyNamespace() {
+    public function testClarkNotationForEmptyNamespace(): void {
       $document = new Document();
       $document->appendElement('foo', ['bar' => '42']);
       $this->assertEquals(

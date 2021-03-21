@@ -39,7 +39,7 @@ namespace FluentDOM\Loader\Json {
     /**
      * @covers \FluentDOM\Loader\Json\BadgerFish
      */
-    public function testLoadWithInvalidSourceExpectingNull() {
+    public function testLoadWithInvalidSourceExpectingNull(): void {
       $loader = new BadgerFish();
       $this->assertNull(
         $loader->load(
@@ -52,7 +52,7 @@ namespace FluentDOM\Loader\Json {
     /**
      * @covers \FluentDOM\Loader\Json\BadgerFish
      */
-    public function testLoadFragment() {
+    public function testLoadFragment(): void {
       $loader = new BadgerFish();
       $this->assertXmlStringEqualsXmlString(
         '<alice>bob</alice>',

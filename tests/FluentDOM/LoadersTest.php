@@ -19,7 +19,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\Loaders
      */
-    public function testConstructorWithTwoLoaders() {
+    public function testConstructorWithTwoLoaders(): void {
       $loaders = new Loaders(
         $list = [
           $this->getMockBuilder(Loadable::class)->getMock(),
@@ -32,7 +32,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\Loaders
      */
-    public function testAdd() {
+    public function testAdd(): void {
       $loaders = new Loaders();
       $loaders->add(
         $loader = $this->getMockBuilder(Loadable::class)->getMock()
@@ -43,7 +43,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\Loaders
      */
-    public function testRemove() {
+    public function testRemove(): void {
       $loaders = new Loaders(
         [
           $loaderOne = $this->getMockBuilder(Loadable::class)->getMock(),
@@ -57,7 +57,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\Loaders
      */
-    public function testSupportsExpectingTrue() {
+    public function testSupportsExpectingTrue(): void {
       $loader = $this->getMockBuilder(Loadable::class)->getMock();
       $loader
         ->expects($this->once())
@@ -71,7 +71,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\Loaders
      */
-    public function testSupportsExpectingFalse() {
+    public function testSupportsExpectingFalse(): void {
       $loader = $this->getMockBuilder(Loadable::class)->getMock();
       $loader
         ->expects($this->once())
@@ -85,7 +85,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\Loaders
      */
-    public function testLoadUsesSecondLoader() {
+    public function testLoadUsesSecondLoader(): void {
       $result = $this->createMock(Result::class);
       $loaderOne = $this->createMock(Loadable::class);
       $loaderOne

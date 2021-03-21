@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Query {
 
   use FluentDOM\Exceptions;
@@ -14,7 +23,7 @@ namespace FluentDOM\Query {
      * @group ManipulationAround
      * @covers \FluentDOM\Query
      */
-    public function testWrap() {
+    public function testWrap(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->find('//p')
@@ -27,7 +36,7 @@ namespace FluentDOM\Query {
      * @group ManipulationAround
      * @covers \FluentDOM\Query
      */
-    public function testWrapWithDomelement() {
+    public function testWrapWithDomelement(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $document = $fd->document;
       $div = $document->createElement('div');
@@ -41,7 +50,7 @@ namespace FluentDOM\Query {
      * @group ManipulationAround
      * @covers \FluentDOM\Query
      */
-    public function testWrapWithNodeList() {
+    public function testWrapWithNodeList(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $divs = $fd->xpath->evaluate('//div[@class = "wrapper"]');
       $fd->find('//p')->wrap($divs);
@@ -53,7 +62,7 @@ namespace FluentDOM\Query {
      * @group ManipulationAround
      * @covers \FluentDOM\Query
      */
-    public function testWrapWithInvalidArgument() {
+    public function testWrapWithInvalidArgument(): void {
       $this->expectException(Exceptions\LoadingError::class);
       $this->getQueryFixtureFromString(self::XML)
           ->find('//item')
@@ -65,7 +74,7 @@ namespace FluentDOM\Query {
      * @group ManipulationAround
      * @covers \FluentDOM\Query
      */
-    public function testWrapWithArray() {
+    public function testWrapWithArray(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $document = $fd->document;
       $divs[0] = $document->createElement('div');
@@ -80,7 +89,7 @@ namespace FluentDOM\Query {
      * @group ManipulationAround
      * @covers \FluentDOM\Query
      */
-    public function testWrapWithCallback() {
+    public function testWrapWithCallback(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd->find('//p')->wrap(
         function($node, $index) {

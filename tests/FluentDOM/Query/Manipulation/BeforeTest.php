@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Query {
 
   use FluentDOM\Query;
@@ -15,7 +24,7 @@ namespace FluentDOM\Query {
      * @group ManipulationOutside
      * @covers \FluentDOM\Query
      */
-    public function testBefore() {
+    public function testBefore(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->formatOutput()
@@ -30,7 +39,7 @@ namespace FluentDOM\Query {
      * @group ManipulationOutside
      * @covers \FluentDOM\Query
      */
-    public function testBeforeWithFunction() {
+    public function testBeforeWithFunction(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->formatOutput()

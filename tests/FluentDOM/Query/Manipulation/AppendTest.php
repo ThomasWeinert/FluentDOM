@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Query {
 
   use FluentDOM\Query;
@@ -16,7 +25,7 @@ namespace FluentDOM\Query {
      * @group ManipulationInside
      * @covers \FluentDOM\Query
      */
-    public function testAppend() {
+    public function testAppend(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->find('//p')
@@ -30,7 +39,7 @@ namespace FluentDOM\Query {
      * @group ManipulationInside
      * @covers \FluentDOM\Query
      */
-    public function testAppendXmlString() {
+    public function testAppendXmlString(): void {
       $fd = new Query();
       $fd->append('<strong>Hello</strong>');
       $this->assertEquals('strong', $fd->find('/strong')->item(0)->nodeName);
@@ -41,7 +50,7 @@ namespace FluentDOM\Query {
      * @group ManipulationInside
      * @covers \FluentDOM\Query
      */
-    public function testAppendDomElement() {
+    public function testAppendDomElement(): void {
       $fd = new Query();
       $fd->append($fd->document->createElement('strong'));
       $this->assertEquals('strong', $fd->find('/strong')->item(0)->nodeName);
@@ -52,7 +61,7 @@ namespace FluentDOM\Query {
      * @group ManipulationInside
      * @covers \FluentDOM\Query
      */
-    public function testAppendDomnodelist() {
+    public function testAppendDomnodelist(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $items = $fd->find('//item');
       $this->assertInstanceOf(Query::class, $fd);
@@ -68,7 +77,7 @@ namespace FluentDOM\Query {
      * @group ManipulationInside
      * @covers \FluentDOM\Query
      */
-    public function testAppendWithCallback() {
+    public function testAppendWithCallback(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->find('//p')
@@ -85,7 +94,7 @@ namespace FluentDOM\Query {
      * @group ManipulationInside
      * @covers \FluentDOM\Query
      */
-    public function testAppendOnEmptyDocumentWithCallback() {
+    public function testAppendOnEmptyDocumentWithCallback(): void {
       $fd = new Query();
       $doc = $fd->append(
         function () {
@@ -103,7 +112,7 @@ namespace FluentDOM\Query {
      * @group ManipulationInside
      * @covers \FluentDOM\Query
      */
-    public function testAppendNodeWithCallback() {
+    public function testAppendNodeWithCallback(): void {
       $fd = (new Query('<sample/>'))
         ->find('/*')
         ->append(
@@ -122,7 +131,7 @@ namespace FluentDOM\Query {
      * @group ManipulationInside
      * @covers \FluentDOM\Query
      */
-    public function testAppendFragmentWithMultipleNodesToDocument() {
+    public function testAppendFragmentWithMultipleNodesToDocument(): void {
       $fd = new Query();
       $fd->append('<first/><second/>');
       $this->assertXmlStringEqualsXmlString(
@@ -136,7 +145,7 @@ namespace FluentDOM\Query {
      * @group ManipulationInside
      * @covers \FluentDOM\Query
      */
-    public function testAppendWithMultipleNodesFromOtherDomToDocument() {
+    public function testAppendWithMultipleNodesFromOtherDomToDocument(): void {
       $document = new \DOMDocument();
       $fd = new Query();
       $fd->append(
@@ -156,7 +165,7 @@ namespace FluentDOM\Query {
      * @group ManipulationInside
      * @covers \FluentDOM\Query
      */
-    public function testAppendWithElementFromOtherDocument() {
+    public function testAppendWithElementFromOtherDocument(): void {
       $document = new \DOMDocument();
       $fd = new Query();
       $fd->append($document->createElement('first'));
@@ -171,7 +180,7 @@ namespace FluentDOM\Query {
      * @group ManipulationInside
      * @covers \FluentDOM\Query
      */
-    public function testAppendWithTextNodeFromOtherDocument() {
+    public function testAppendWithTextNodeFromOtherDocument(): void {
       $document = new \DOMDocument();
       $fd = new Query();
       $fd
@@ -188,7 +197,7 @@ namespace FluentDOM\Query {
      * @group ManipulationInside
      * @covers \FluentDOM\Query
      */
-    public function testAppendWithInvalidArgumentExpectingException() {
+    public function testAppendWithInvalidArgumentExpectingException(): void {
       $fd = new Query();
       $this->expectException(Exceptions\LoadingError::class);
       $fd->append(new \stdClass());
@@ -199,7 +208,7 @@ namespace FluentDOM\Query {
      * @group ManipulationInside
      * @covers \FluentDOM\Query
      */
-    public function testAppendWithEmptyArgumentExpectingException() {
+    public function testAppendWithEmptyArgumentExpectingException(): void {
       $fd = new Query();
       $this->expectException(Exceptions\LoadingError::class);
       $fd->append([]);

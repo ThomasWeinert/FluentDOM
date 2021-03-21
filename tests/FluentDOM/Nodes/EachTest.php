@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM {
 
   use FluentDOM\TestCase;
@@ -13,7 +22,7 @@ namespace FluentDOM {
      * @group Nodes
      * @covers \FluentDOM\Query::each
      */
-    public function testEach() {
+    public function testEach(): void {
       $data = [];
       $collect = function($node) use (&$data) {
         $data[] = (string)$node;
@@ -33,7 +42,7 @@ namespace FluentDOM {
      * @group Nodes
      * @covers \FluentDOM\Query::each
      */
-    public function testEachIgnoringTextNodes() {
+    public function testEachIgnoringTextNodes(): void {
       $data = [];
       $collect = function($node) use (&$data) {
         $data[] = (string)$node;
@@ -50,7 +59,7 @@ namespace FluentDOM {
      * @group Nodes
      * @covers \FluentDOM\Query::each
      */
-    public function testEachWithFilterFunction() {
+    public function testEachWithFilterFunction(): void {
       $data = [];
       $collect = function($node) use (&$data) {
         $data[] = (string)$node;

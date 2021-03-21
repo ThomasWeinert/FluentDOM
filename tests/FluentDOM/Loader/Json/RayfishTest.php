@@ -34,7 +34,7 @@ namespace FluentDOM\Loader\Json {
     /**
      * @covers \FluentDOM\Loader\Json\Rayfish
      */
-    public function testLoadWithInvalidSourceExpectingNull() {
+    public function testLoadWithInvalidSourceExpectingNull(): void {
       $loader = new Rayfish();
       $this->assertNull(
         $loader->load(

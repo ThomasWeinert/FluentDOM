@@ -1,4 +1,12 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\Query {
 
@@ -8,7 +16,7 @@ namespace FluentDOM\Query {
 
   class Issue65Test extends TestCase {
 
-    public function testWithFind() {
+    public function testWithFind(): void {
       $fd = \FluentDOM::Query(
         '<p>Paragraph 1</p> <p>Paragraph 2</p><p>Paragraph 3</p><div><b>5</b><p>4</p></div>',
         'html-fragment'
@@ -21,7 +29,7 @@ namespace FluentDOM\Query {
       );
     }
 
-    public function testWithFilter() {
+    public function testWithFilter(): void {
       $fd = \FluentDOM::Query(
         '<p>Paragraph 1</p> <p>Paragraph 2</p><p>Paragraph 3</p><div><b>5</b><p>4</p></div>',
         'html-fragment'

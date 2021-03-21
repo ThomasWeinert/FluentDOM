@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Loader {
 
   use FluentDOM\DOM\Document;
@@ -13,7 +22,7 @@ namespace FluentDOM\Loader {
      * @covers \FluentDOM\Loader\PHP
      * @dataProvider provideSupportedTypes
      */
-    public function testSupportsExpectingTrue($mimetype) {
+    public function testSupportsExpectingTrue($mimetype): void {
       $loader = new PHP();
       $this->assertTrue($loader->supports($mimetype));
     }
@@ -22,7 +31,7 @@ namespace FluentDOM\Loader {
      * @covers \FluentDOM\Loader\PHP
      * @dataProvider provideSupportedTypes
      */
-    public function testGetReturnLoadable($mimetype) {
+    public function testGetReturnLoadable($mimetype): void {
       $loader = new PHP();
       $this->assertInstanceOf(Loadable::class, $loader->get($mimetype));
     }

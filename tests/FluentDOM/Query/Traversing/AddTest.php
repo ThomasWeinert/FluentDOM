@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Query {
 
   use FluentDOM\Query;
@@ -15,7 +24,7 @@ namespace FluentDOM\Query {
      * @group TraversingFind
      * @covers \FluentDOM\Query::add
      */
-    public function testAddElements() {
+    public function testAddElements(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->add(
@@ -31,7 +40,7 @@ namespace FluentDOM\Query {
      * @group TraversingFind
      * @covers \FluentDOM\Query::add
      */
-    public function testAddFromExpression() {
+    public function testAddFromExpression(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->add('//div')
@@ -45,7 +54,7 @@ namespace FluentDOM\Query {
      * @group TraversingFind
      * @covers \FluentDOM\Query::add
      */
-    public function testAddInContext() {
+    public function testAddInContext(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->find('//p')
@@ -60,7 +69,7 @@ namespace FluentDOM\Query {
      * @group TraversingFind
      * @covers \FluentDOM\Query::add
      */
-    public function testAddWithContext() {
+    public function testAddWithContext(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
         ->find('//p')

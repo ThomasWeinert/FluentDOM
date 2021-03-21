@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Utility {
 
   require_once __DIR__ . '/../TestCase.php';
@@ -10,7 +19,7 @@ namespace FluentDOM\Utility {
     /**
      * @covers \FluentDOM\Utility\Namespaces
      */
-    public function testConstructorWithNamespaces() {
+    public function testConstructorWithNamespaces(): void {
       $namespaces = new Namespaces(['foo' => 'urn:foo']);
       $this->assertEquals(
         ['foo' => 'urn:foo'],
@@ -21,7 +30,7 @@ namespace FluentDOM\Utility {
     /**
      * @covers \FluentDOM\Utility\Namespaces
      */
-    public function testGetNamespaceAfterRegister() {
+    public function testGetNamespaceAfterRegister(): void {
       $namespaces = new Namespaces();
       $namespaces['test'] = 'urn:success';
       $this->assertEquals(
@@ -33,7 +42,7 @@ namespace FluentDOM\Utility {
     /**
      * @covers \FluentDOM\Utility\Namespaces
      */
-    public function testGetDefaultNamespaceAfterRegister() {
+    public function testGetDefaultNamespaceAfterRegister(): void {
       $namespaces = new Namespaces();
       $namespaces['#default'] = 'urn:success';
       $this->assertEquals(
@@ -45,7 +54,7 @@ namespace FluentDOM\Utility {
     /**
      * @covers \FluentDOM\Utility\Namespaces
      */
-    public function testGetDefaultNamespaceWithoutRegister() {
+    public function testGetDefaultNamespaceWithoutRegister(): void {
       $namespaces = new Namespaces();
       $this->assertEquals(
         '',
@@ -56,7 +65,7 @@ namespace FluentDOM\Utility {
     /**
      * @covers \FluentDOM\Utility\Namespaces
      */
-    public function testRegisterReservedNamespaceExpectingException() {
+    public function testRegisterReservedNamespaceExpectingException(): void {
       $namespaces = new Namespaces();
       $this->expectException(
         \LogicException::class,
@@ -68,7 +77,7 @@ namespace FluentDOM\Utility {
     /**
      * @covers \FluentDOM\Utility\Namespaces
      */
-    public function testGetReservedNamespace() {
+    public function testGetReservedNamespace(): void {
       $namespaces = new Namespaces();
       $this->assertEquals(
         'http://www.w3.org/XML/1998/namespace',
@@ -79,7 +88,7 @@ namespace FluentDOM\Utility {
     /**
      * @covers \FluentDOM\Utility\Namespaces
      */
-    public function testGetNamespaceWithoutRegisterExpectingException() {
+    public function testGetNamespaceWithoutRegisterExpectingException(): void {
       $namespaces = new Namespaces();
       $this->expectException(
         \LogicException::class,
@@ -91,7 +100,7 @@ namespace FluentDOM\Utility {
     /**
      * @covers \FluentDOM\Utility\Namespaces
      */
-    public function testUnsetNamespacePrefix() {
+    public function testUnsetNamespacePrefix(): void {
       $namespaces = new Namespaces(['foo' => 'urn:foo']);
       unset($namespaces['foo']);
       $this->assertFalse(isset($namespaces['foo']));
@@ -100,7 +109,7 @@ namespace FluentDOM\Utility {
     /**
      * @covers \FluentDOM\Utility\Namespaces
      */
-    public function testCount() {
+    public function testCount(): void {
       $namespaces = new Namespaces(
         [
           'foo' => 'urn:foo',
@@ -113,7 +122,7 @@ namespace FluentDOM\Utility {
     /**
      * @covers \FluentDOM\Utility\Namespaces
      */
-    public function testIsReservedPrefixExpectingTrue() {
+    public function testIsReservedPrefixExpectingTrue(): void {
       $namespaces = new Namespaces();
       $this->assertTrue($namespaces->isReservedPrefix('xml'));
     }
@@ -121,7 +130,7 @@ namespace FluentDOM\Utility {
     /**
      * @covers \FluentDOM\Utility\Namespaces
      */
-    public function testIsReservedPrefixExpectingFalse() {
+    public function testIsReservedPrefixExpectingFalse(): void {
       $namespaces = new Namespaces();
       $this->assertFalse($namespaces->isReservedPrefix('prefix'));
     }
@@ -130,7 +139,7 @@ namespace FluentDOM\Utility {
      * @covers \FluentDOM\Utility\Namespaces::store()
      * @covers \FluentDOM\Utility\Namespaces::restore()
      */
-    public function testStoreStatusAndRestore() {
+    public function testStoreStatusAndRestore(): void {
       $namespaces = new Namespaces();
       $namespaces['foo'] = 'urn:foo';
       $namespaces->store();

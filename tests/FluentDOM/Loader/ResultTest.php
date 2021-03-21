@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Loader {
 
   use FluentDOM\DOM\Document;
@@ -12,7 +21,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Result
      */
-    public function testConstructor() {
+    public function testConstructor(): void {
       $document = new Document();
       $result = new Loader\Result($document, 'text/xml');
       $this->assertSame($document, $result->getDocument());
@@ -23,7 +32,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Result
      */
-    public function testConstructorWithSelection() {
+    public function testConstructorWithSelection(): void {
       $document = new Document();
       $document->appendElement('dummy');
       $result = new Loader\Result($document, 'text/xml', $document->documentElement);

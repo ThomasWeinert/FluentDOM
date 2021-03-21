@@ -19,7 +19,7 @@ namespace FluentDOM\Query\Css {
     /**
      * @covers \FluentDOM\Query\Css\Properties::__construct
      */
-    public function testConstructor() {
+    public function testConstructor(): void {
       $css = new Properties('width: auto;');
       $this->assertEquals(
         ['width' => 'auto'], iterator_to_array($css)
@@ -29,7 +29,7 @@ namespace FluentDOM\Query\Css {
     /**
      * @covers \FluentDOM\Query\Css\Properties::__toString
      */
-    public function testMagicMethodToString() {
+    public function testMagicMethodToString(): void {
       $css = new Properties('width: auto;');
       $this->assertEquals(
         'width: auto;', (string)$css
@@ -39,7 +39,7 @@ namespace FluentDOM\Query\Css {
     /**
      * @covers \FluentDOM\Query\Css\Properties::offsetGet
      */
-    public function testOffsetGet() {
+    public function testOffsetGet(): void {
       $css = new Properties('width: auto;');
       $this->assertEquals(
         'auto', $css['width']
@@ -49,7 +49,7 @@ namespace FluentDOM\Query\Css {
     /**
      * @covers \FluentDOM\Query\Css\Properties::offsetExists
      */
-    public function testOffsetExistsExpectingTrue() {
+    public function testOffsetExistsExpectingTrue(): void {
       $css = new Properties('width: auto;');
       $this->assertTrue(isset($css['width']));
     }
@@ -57,7 +57,7 @@ namespace FluentDOM\Query\Css {
     /**
      * @covers \FluentDOM\Query\Css\Properties::offsetExists
      */
-    public function testOffsetExistsExpectingFalse() {
+    public function testOffsetExistsExpectingFalse(): void {
       $css = new Properties('width: auto;');
       $this->assertFalse(isset($css['height']));
     }
@@ -66,7 +66,7 @@ namespace FluentDOM\Query\Css {
      * @covers \FluentDOM\Query\Css\Properties::offsetSet
      * @covers \FluentDOM\Query\Css\Properties::_isCssProperty
      */
-    public function testOffsetSet() {
+    public function testOffsetSet(): void {
       $css = new Properties();
       $css['width'] = 'auto';
       $this->assertEquals(
@@ -78,7 +78,7 @@ namespace FluentDOM\Query\Css {
      * @covers \FluentDOM\Query\Css\Properties::offsetSet
      * @covers \FluentDOM\Query\Css\Properties::_isCssProperty
      */
-    public function testOffsetSetWithInvalidName() {
+    public function testOffsetSetWithInvalidName(): void {
       $css = new Properties();
       $this->expectException(\InvalidArgumentException::class);
       $css['---'] = 'test';
@@ -87,7 +87,7 @@ namespace FluentDOM\Query\Css {
     /**
      * @covers \FluentDOM\Query\Css\Properties::offsetSet
      */
-    public function testOffsetSetWithEmptyValue() {
+    public function testOffsetSetWithEmptyValue(): void {
       $css = new Properties('width: auto; height: auto;');
       $css['width'] = '';
       $this->assertEquals('height: auto;', (string)$css);
@@ -96,7 +96,7 @@ namespace FluentDOM\Query\Css {
     /**
      * @covers \FluentDOM\Query\Css\Properties::offsetUnset
      */
-    public function testOffsetUnset() {
+    public function testOffsetUnset(): void {
       $css = new Properties('width: auto; height: auto;');
       unset($css['width']);
       $this->assertEquals('height: auto;', (string)$css);
@@ -105,7 +105,7 @@ namespace FluentDOM\Query\Css {
     /**
      * @covers \FluentDOM\Query\Css\Properties::offsetUnset
      */
-    public function testOffsetUnsetWithArray() {
+    public function testOffsetUnsetWithArray(): void {
       $css = new Properties('width: auto; height: auto;');
       $names = ['width', 'height'];
       /** @noinspection PhpIllegalArrayKeyTypeInspection */
@@ -142,7 +142,7 @@ namespace FluentDOM\Query\Css {
     /**
      * @covers \FluentDOM\Query\Css\Properties::getIterator
      */
-    public function testGetIterator() {
+    public function testGetIterator(): void {
       $css = new Properties('width: auto; height: auto;');
       $this->assertEquals(
         ['width' => 'auto', 'height' => 'auto'],
@@ -153,7 +153,7 @@ namespace FluentDOM\Query\Css {
     /**
      * @covers \FluentDOM\Query\Css\Properties::count
      */
-    public function testCountExpectingZero() {
+    public function testCountExpectingZero(): void {
       $css = new Properties('');
       $this->assertEquals(
         0, count($css)
@@ -163,7 +163,7 @@ namespace FluentDOM\Query\Css {
     /**
      * @covers \FluentDOM\Query\Css\Properties::count
      */
-    public function testCountExpectingTwo() {
+    public function testCountExpectingTwo(): void {
       $css = new Properties('width: auto; height: auto;');
       $this->assertEquals(
         2, count($css)
@@ -173,7 +173,7 @@ namespace FluentDOM\Query\Css {
     /**
      * @covers \FluentDOM\Query\Css\Properties::compileValue
      */
-    public function testCompileValueWithIntegerExpectingString() {
+    public function testCompileValueWithIntegerExpectingString(): void {
       $document = new \DOMDocument();
       $document->appendChild($document->createElement('sample'));
       $css = new Properties('');
@@ -191,7 +191,7 @@ namespace FluentDOM\Query\Css {
     /**
      * @covers \FluentDOM\Query\Css\Properties::compileValue
      */
-    public function testCompileValueWithCallback() {
+    public function testCompileValueWithCallback(): void {
       $document = new \DOMDocument();
       $document->appendChild($document->createElement('sample'));
       $css = new Properties('');

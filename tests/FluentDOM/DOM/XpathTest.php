@@ -20,7 +20,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Xpath
      */
-    public function testRegisterNamespaceRegistersOnDocument() {
+    public function testRegisterNamespaceRegistersOnDocument(): void {
       $namespaces = $this->getMockBuilder(Namespaces::class)->getMock();
       $namespaces
         ->expects($this->once())
@@ -43,7 +43,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Xpath
      */
-    public function testRegisterNamespaceRegistersOverwritesExisting() {
+    public function testRegisterNamespaceRegistersOverwritesExisting(): void {
       $namespaces = $this->getMockBuilder(Namespaces::class)->getMock();
       $namespaces
         ->expects($this->once())
@@ -71,7 +71,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Xpath
      */
-    public function testEvaluateDoesNotRegisterNodeNamespaces() {
+    public function testEvaluateDoesNotRegisterNodeNamespaces(): void {
       $document = new \DOMDocument();
       $document->loadXml(
         '<foo:root xmlns:foo="urn:foo">
@@ -91,7 +91,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Xpath
      */
-    public function testEvaluateRegisterNodeNamespaces() {
+    public function testEvaluateRegisterNodeNamespaces(): void {
       $document = new \DOMDocument();
       $document->loadXml(
         '<foo:root xmlns:foo="urn:foo">
@@ -111,7 +111,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Xpath
      */
-    public function testEvaluateDisableRegisterNodeNamespacesWithArgument() {
+    public function testEvaluateDisableRegisterNodeNamespacesWithArgument(): void {
       $document = new \DOMDocument();
       $document->loadXml(
         '<foo:root xmlns:foo="urn:foo">
@@ -131,7 +131,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Xpath
      */
-    public function testMagicMethodInvoke() {
+    public function testMagicMethodInvoke(): void {
       $document = new \DOMDocument();
       $document->loadXml(self::XML);
       $xpath = new Xpath($document);
@@ -141,7 +141,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Xpath
      */
-    public function testMagicMethodInvokeWithContext() {
+    public function testMagicMethodInvokeWithContext(): void {
       $document = new \DOMDocument();
       $document->loadXml(self::XML);
       $xpath = new Xpath($document);
@@ -151,7 +151,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Xpath
      */
-    public function testQueryDoesNotRegisterNodeNamespaces() {
+    public function testQueryDoesNotRegisterNodeNamespaces(): void {
       $document = new \DOMDocument();
       $document->loadXml(
         '<foo:root xmlns:foo="urn:foo">
@@ -171,7 +171,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Xpath
      */
-    public function testQueryRegisterNodeNamespaces() {
+    public function testQueryRegisterNodeNamespaces(): void {
       $document = new \DOMDocument();
       $document->loadXml(
         '<foo:root xmlns:foo="urn:foo">
@@ -191,7 +191,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Xpath
      */
-    public function testQueryGeneratesDeprecatedError() {
+    public function testQueryGeneratesDeprecatedError(): void {
       $current = error_reporting();
       if (($current & E_USER_DEPRECATED) != E_USER_DEPRECATED) {
         error_reporting($current | E_USER_DEPRECATED);
@@ -206,7 +206,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Xpath
      */
-    public function testFirstOfMatchingNode() {
+    public function testFirstOfMatchingNode(): void {
       $document = new \DOMDocument();
       $document->loadXml('<foo/>');
       $xpath = new Xpath($document);
@@ -219,7 +219,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Xpath
      */
-    public function testFirstOfMatchingNothingExpectingNull() {
+    public function testFirstOfMatchingNothingExpectingNull(): void {
       $document = new \DOMDocument();
       $document->loadXml('<foo/>');
       $xpath = new Xpath($document);
@@ -231,7 +231,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Xpath
      */
-    public function testFirstOfMatchingScalarExpectingNull() {
+    public function testFirstOfMatchingScalarExpectingNull(): void {
       $document = new \DOMDocument();
       $document->loadXml('<foo>bar</foo>');
       $xpath = new Xpath($document);
@@ -258,7 +258,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Xpath
      */
-    public function testPropertyRegisterNodeNamespacesIsset() {
+    public function testPropertyRegisterNodeNamespacesIsset(): void {
       $document = new \DOMDocument();
       $xpath = new Xpath($document);
       $this->assertTrue(isset($xpath->registerNodeNamespaces));
@@ -267,7 +267,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Xpath
      */
-    public function testPropertyRegisterNodeNamespacesGetAfterSet() {
+    public function testPropertyRegisterNodeNamespacesGetAfterSet(): void {
       $document = new \DOMDocument();
       $xpath = new Xpath($document);
       $this->assertFalse($xpath->registerNodeNamespaces);
@@ -278,7 +278,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Xpath
      */
-    public function testPropertyRegisterNodeNamespacesGetAfterUnset() {
+    public function testPropertyRegisterNodeNamespacesGetAfterUnset(): void {
       $document = new \DOMDocument();
       $xpath = new Xpath($document);
       $xpath->registerNodeNamespaces = TRUE;
@@ -289,7 +289,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Xpath
      */
-    public function testDynamicProperty() {
+    public function testDynamicProperty(): void {
       $document = new \DOMDocument();
       $xpath = new Xpath($document);
       $this->assertFalse(isset($xpath->foo));
@@ -303,7 +303,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Xpath
      */
-    public function testPropertyGetWithUnknownPropertyExpectingPHPError() {
+    public function testPropertyGetWithUnknownPropertyExpectingPHPError(): void {
       $errors = error_reporting(E_ALL);
       $document = new \DOMDocument();
       $xpath = new Xpath($document);

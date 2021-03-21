@@ -37,7 +37,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\JSONx
      */
-    public function testLoadWithInvalidSourceExpectingNull() {
+    public function testLoadWithInvalidSourceExpectingNull(): void {
       $loader = new JSONx();
       $this->assertNull(
         $loader->load(
@@ -50,7 +50,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\JSONx
      */
-    public function testLoadFromFileConvertToJson() {
+    public function testLoadFromFileConvertToJson(): void {
       $loader = new JSONx();
       $document = $loader->load(
         __DIR__.'/TestData/jsonx.xml',
@@ -83,7 +83,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\JSONx
      */
-    public function testLoadFragment() {
+    public function testLoadFragment(): void {
       $loader = new JSONx();
       $fragment = $loader->loadFragment(
         '<json:object xmlns:json="http://www.ibm.com/xmlns/prod/2009/jsonx" name="Example">
@@ -102,7 +102,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\JSONx
      */
-    public function testLoadFragmentWithInvalidSourceExpectingNull() {
+    public function testLoadFragmentWithInvalidSourceExpectingNull(): void {
       $loader = new JSONx();
       $this->assertNull(
         $loader->loadFragment(

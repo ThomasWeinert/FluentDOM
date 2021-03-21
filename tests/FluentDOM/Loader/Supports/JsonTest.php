@@ -49,7 +49,7 @@ namespace FluentDOM\Loader\Supports {
     /**
      * @covers \FluentDOM\Loader\Supports\Json
      */
-    public function testGetSourceWithArrayAsString() {
+    public function testGetSourceWithArrayAsString(): void {
       $loader = new Json_TestProxy();
       $this->assertEquals(['foo'], $loader->getSource(json_encode(['foo'])));
     }
@@ -57,7 +57,7 @@ namespace FluentDOM\Loader\Supports {
     /**
      * @covers \FluentDOM\Loader\Supports\Json
      */
-    public function testGetSourceWithObjectAsString() {
+    public function testGetSourceWithObjectAsString(): void {
       $json = new \stdClass();
       $json->foo = 'bar';
       $loader = new Json_TestProxy();
@@ -67,7 +67,7 @@ namespace FluentDOM\Loader\Supports {
     /**
      * @covers \FluentDOM\Loader\Supports\Json
      */
-    public function testGetSourceWithObject() {
+    public function testGetSourceWithObject(): void {
       $json = new \stdClass();
       $json->foo = 'bar';
       $loader = new Json_TestProxy();
@@ -77,7 +77,7 @@ namespace FluentDOM\Loader\Supports {
     /**
      * @covers \FluentDOM\Loader\Supports\Json
      */
-    public function testGetSourceWithFileAllowFile() {
+    public function testGetSourceWithFileAllowFile(): void {
       $json = new \stdClass();
       $json->foo = 'bar';
       $loader = new Json_TestProxy();
@@ -90,7 +90,7 @@ namespace FluentDOM\Loader\Supports {
     /**
      * @covers \FluentDOM\Loader\Json\JsonDOM
      */
-    public function testGetSourceWithFileExpectingException() {
+    public function testGetSourceWithFileExpectingException(): void {
       $loader = new Json_TestProxy();
       $this->expectException(InvalidSource\TypeFile::class);
       $loader->getSource(__DIR__.'/TestData/loader.json');
@@ -99,7 +99,7 @@ namespace FluentDOM\Loader\Supports {
     /**
      * @covers \FluentDOM\Loader\Supports\Json
      */
-    public function testGetSourceWithUnsupportedTypeExpectingFalse() {
+    public function testGetSourceWithUnsupportedTypeExpectingFalse(): void {
       $json = new \stdClass();
       $json->foo = 'bar';
       $loader = new Json_TestProxy();
@@ -109,7 +109,7 @@ namespace FluentDOM\Loader\Supports {
     /**
      * @covers \FluentDOM\Loader\Supports\Json
      */
-    public function testGetSourceWithInvalidJsonExpectingException() {
+    public function testGetSourceWithInvalidJsonExpectingException(): void {
       $loader = new Json_TestProxy();
       $this->expectException(LoadingError\Json::class);
       $loader->getSource('{invalid');
@@ -118,7 +118,7 @@ namespace FluentDOM\Loader\Supports {
     /**
      * @covers \FluentDOM\Loader\Supports\Json
      */
-    public function testLoad() {
+    public function testLoad(): void {
       $json = new \stdClass();
       $json->foo = 'bar';
       $loader = new Json_TestProxy();
@@ -131,7 +131,7 @@ namespace FluentDOM\Loader\Supports {
     /**
      * @covers \FluentDOM\Loader\Supports\Json
      */
-    public function testLoadExpectingNull() {
+    public function testLoadExpectingNull(): void {
       $json = new \stdClass();
       $json->foo = 'bar';
       $loader = new Json_TestProxy();
@@ -143,7 +143,7 @@ namespace FluentDOM\Loader\Supports {
     /**
      * @covers \FluentDOM\Loader\Supports\Json
      */
-    public function testLoadFragment() {
+    public function testLoadFragment(): void {
       $json = new \stdClass();
       $json->foo = 'bar';
       $loader = new Json_TestProxy();
@@ -156,7 +156,7 @@ namespace FluentDOM\Loader\Supports {
     /**
      * @covers \FluentDOM\Loader\Supports\Json
      */
-    public function testLoadFragmentExpectingNull() {
+    public function testLoadFragmentExpectingNull(): void {
       $json = new \stdClass();
       $json->foo = 'bar';
       $loader = new Json_TestProxy();
@@ -168,7 +168,7 @@ namespace FluentDOM\Loader\Supports {
     /**
      * @covers \FluentDOM\Loader\Supports\Json
      */
-    public function testGetNamespaceForNodeFromNode() {
+    public function testGetNamespaceForNodeFromNode(): void {
       $document = new \DOMDocument();
       $document->loadXml('<foo:foo xmlns:foo="urn:foo"/>');
       $loader = new Json_TestProxy();
@@ -183,7 +183,7 @@ namespace FluentDOM\Loader\Supports {
     /**
      * @covers \FluentDOM\Loader\Supports\Json
      */
-    public function testGetNamespaceForNodeFromJsonProperties() {
+    public function testGetNamespaceForNodeFromJsonProperties(): void {
       $document = new \DOMDocument();
       $document->loadXml('<foo:foo xmlns:foo="urn:foo"/>');
       $properties = new \stdClass();

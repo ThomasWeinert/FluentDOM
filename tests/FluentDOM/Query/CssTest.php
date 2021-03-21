@@ -29,7 +29,7 @@ namespace FluentDOM\Query {
     /**
      * @covers \FluentDOM\Query\Css::__construct
      */
-    public function testConstructorWithOwner() {
+    public function testConstructorWithOwner(): void {
       $fd = $this->getMockBuilder(Query::class)->getMock();
       $css = new Css($fd);
       $this->assertSame($fd, $css->getOwner());
@@ -39,7 +39,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query\Css::offsetExists
      * @covers \FluentDOM\Query\Css::getStyleProperties
      */
-    public function testOffsetExistsExpectingTrue() {
+    public function testOffsetExistsExpectingTrue(): void {
       $fd = new Query();
       $fd->document->loadXml('<sample style="width: 21px;"/>');
       $fd = $fd->find('/*');
@@ -51,7 +51,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query\Css::offsetExists
      * @covers \FluentDOM\Query\Css::getStyleProperties
      */
-    public function testOffsetExistsExpectingFalse() {
+    public function testOffsetExistsExpectingFalse(): void {
       $fd = new Query();
       $fd->document->loadXml('<sample style="width: 21px;"/>');
       $fd = $fd->find('/*');
@@ -63,7 +63,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query\Css::offsetExists
      * @covers \FluentDOM\Query\Css::getStyleProperties
      */
-    public function testOffsetExistsWithoutElementExpectingFalse() {
+    public function testOffsetExistsWithoutElementExpectingFalse(): void {
       $fd = new Query();
       $css = new Css($fd);
       $this->assertFalse(isset($css['height']));
@@ -73,7 +73,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query\Css::offsetGet
      * @covers \FluentDOM\Query\Css::getStyleProperties
      */
-    public function testOffsetGet() {
+    public function testOffsetGet(): void {
       $fd = new Query();
       $fd->document->loadXml('<sample style="width: 21px;"/>');
       $fd = $fd->find('/*');
@@ -85,7 +85,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query\Css::offsetGet
      * @covers \FluentDOM\Query\Css::getStyleProperties
      */
-    public function testOffsetGetWithoutElementExpectingFalse() {
+    public function testOffsetGetWithoutElementExpectingFalse(): void {
       $fd = new Query();
       $css = new Css($fd);
       $this->assertFalse($css['height']);
@@ -94,7 +94,7 @@ namespace FluentDOM\Query {
     /**
      * @covers \FluentDOM\Query\Css::offsetSet
      */
-    public function testOffsetSetUpdatesAttributes() {
+    public function testOffsetSetUpdatesAttributes(): void {
       $fd = new Query();
       $fd->document->loadXml('<sample style="width: 21px;"/>');
       $fd = $fd->find('/*');
@@ -108,7 +108,7 @@ namespace FluentDOM\Query {
     /**
      * @covers \FluentDOM\Query\Css::offsetSet
      */
-    public function testOffsetSetRemovesAttributes() {
+    public function testOffsetSetRemovesAttributes(): void {
       $fd = new Query();
       $fd->document->loadXml('<sample style="width: 21px;"/>');
       $fd = $fd->find('/*');
@@ -122,7 +122,7 @@ namespace FluentDOM\Query {
     /**
      * @covers \FluentDOM\Query\Css::offsetUnset
      */
-    public function testOffsetUnset() {
+    public function testOffsetUnset(): void {
       $fd = new Query();
       $fd->document->loadXml('<sample style="width: 21px; height: 21px;"/>');
       $fd = $fd->find('/*');
@@ -136,7 +136,7 @@ namespace FluentDOM\Query {
     /**
      * @covers \FluentDOM\Query\Css::offsetUnset
      */
-    public function testOffsetUnsetRemovesAttributes() {
+    public function testOffsetUnsetRemovesAttributes(): void {
       $fd = new Query();
       $fd->document->loadXml('<sample style="width: 21px;"/>');
       $fd = $fd->find('/*');
@@ -150,7 +150,7 @@ namespace FluentDOM\Query {
     /**
      * @covers \FluentDOM\Query\Css::getIterator
      */
-    public function testGetIteratorForFirstElement() {
+    public function testGetIteratorForFirstElement(): void {
       $fd = new Query();
       $fd->document->loadXML('<sample style="width: 21px;"/>');
       $fd = $fd->find('/*');
@@ -164,7 +164,7 @@ namespace FluentDOM\Query {
     /**
      * @covers \FluentDOM\Query\Css::getIterator
      */
-    public function testGetIteratorExpectingEmptyIterator() {
+    public function testGetIteratorExpectingEmptyIterator(): void {
       $fd = new Query();
       $css = new Css($fd);
       $this->assertEquals(
@@ -176,7 +176,7 @@ namespace FluentDOM\Query {
     /**
      * @covers \FluentDOM\Query\Css::count
      */
-    public function testCountExpectingTwo() {
+    public function testCountExpectingTwo(): void {
       $fd = new Query();
       $fd->document->loadXml('<sample style="width: 21px; height: 21px;"/>');
       $fd = $fd->find('/*');
@@ -189,7 +189,7 @@ namespace FluentDOM\Query {
     /**
      * @covers \FluentDOM\Query\Css::count
      */
-    public function testCountExpectingZero() {
+    public function testCountExpectingZero(): void {
       $fd = new Query();
       $fd = $fd->find('/*');
       $css = new Css($fd);
@@ -202,7 +202,7 @@ namespace FluentDOM\Query {
      * @group ManipulationCSS
      * @covers \FluentDOM\Query::__get
      */
-    public function testPropertyCssGet() {
+    public function testPropertyCssGet(): void {
       $fd = $this->getQueryFixtureFromString('<sample style="test: success"/>', '/*');
       $css = $fd->css;
       $this->assertInstanceOf(Css::class, $css);
@@ -215,7 +215,7 @@ namespace FluentDOM\Query {
      * @group ManipulationCSS
      * @covers \FluentDOM\Query::__set
      */
-    public function testPropertyCssSetWithArray() {
+    public function testPropertyCssSetWithArray(): void {
       $fd = $this->getQueryFixtureFromString('<sample/>', '/*');
       $fd->css = ['foo' => '1', 'bar' => '2'];
       $this->assertEquals(
@@ -228,7 +228,7 @@ namespace FluentDOM\Query {
      * @group ManipulationCSS
      * @covers \FluentDOM\Query::__set
      */
-    public function testPropertyCssSetWithCssObject() {
+    public function testPropertyCssSetWithCssObject(): void {
       $fd = $this->getQueryFixtureFromString('<sample/>', '/*');
       $fd->css = new Css\Properties('foo: 1; bar: 2;');
       $this->assertEquals(
@@ -241,7 +241,7 @@ namespace FluentDOM\Query {
      * @group ManipulationCSS
      * @covers \FluentDOM\Query::css
      */
-    public function testCssRead() {
+    public function testCssRead(): void {
       $fd = $this->getQueryFixtureFromString(self::HTML, '//div');
       $this->assertEquals('left', $fd->css('text-align'));
     }
@@ -250,7 +250,7 @@ namespace FluentDOM\Query {
      * @group ManipulationCSS
      * @covers \FluentDOM\Query::css
      */
-    public function testCssReadWithInvalidProperty() {
+    public function testCssReadWithInvalidProperty(): void {
       $fd = $this->getQueryFixtureFromString(self::HTML, '//div');
       $this->assertEquals(NULL, $fd->css('---'));
     }
@@ -259,7 +259,7 @@ namespace FluentDOM\Query {
      * @group ManipulationCSS
      * @covers \FluentDOM\Query::css
      */
-    public function testCssReadOnEmpty() {
+    public function testCssReadOnEmpty(): void {
       $fd = $this->getQueryFixtureFromString(self::HTML);
       $this->assertEquals(NULL, $fd->css('text-align'));
     }
@@ -268,7 +268,7 @@ namespace FluentDOM\Query {
      * @group ManipulationCSS
      * @covers \FluentDOM\Query::css
      */
-    public function testCssReadOnTextNodes() {
+    public function testCssReadOnTextNodes(): void {
       $fd = $this->getQueryFixtureFromString(self::HTML, '//div')->contents()->addBack();
       $this->assertCount(6, $fd);
       $this->assertEquals('left', $fd->css('text-align'));
@@ -278,7 +278,7 @@ namespace FluentDOM\Query {
      * @group ManipulationCSS
      * @covers \FluentDOM\Query::css
      */
-    public function testCssWriteWithString() {
+    public function testCssWriteWithString(): void {
       $fd = $this->getQueryFixtureFromString(self::HTML, '//div');
       $fd->css('text-align', 'center');
       $this->assertEquals('text-align: center;', $fd->eq(0)->attr('style'));
@@ -289,7 +289,7 @@ namespace FluentDOM\Query {
      * @group ManipulationCSS
      * @covers \FluentDOM\Query::css
      */
-    public function testCssWriteWithNullValue() {
+    public function testCssWriteWithNullValue(): void {
       $fd = $this->getQueryFixtureFromString(self::HTML, '//div');
       $this->assertSame(
         $fd,
@@ -302,7 +302,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::css
      * @covers \FluentDOM\Query::getSetterValues
      */
-    public function testCssWriteWithArray() {
+    public function testCssWriteWithArray(): void {
       $fd = $this->getQueryFixtureFromString(self::HTML, '//div');
       $fd->css(
         [
@@ -319,7 +319,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::css
      * @covers \FluentDOM\Query::getSetterValues
      */
-    public function testCssWriteWithCallback() {
+    public function testCssWriteWithCallback(): void {
       $fd = $this->getQueryFixtureFromString(self::HTML, '//div');
       $fd->css(
         'text-align',
@@ -343,7 +343,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::css
      * @covers \FluentDOM\Query::getSetterValues
      */
-    public function testCssWriteWithInvalidPropertySyntax() {
+    public function testCssWriteWithInvalidPropertySyntax(): void {
       $this->expectException(\InvalidArgumentException::class);
       $this->getQueryFixtureFromString(self::HTML, '//div')->css('---', '');
     }
@@ -353,7 +353,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::css
      * @covers \FluentDOM\Query::getSetterValues
      */
-    public function testCssWriteWithInvalidPropertyType() {
+    public function testCssWriteWithInvalidPropertyType(): void {
       $this->expectException(\InvalidArgumentException::class);
       $this->getQueryFixtureFromString(self::HTML, '//div')->css(23, '');
     }
@@ -363,7 +363,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::css
      * @covers \FluentDOM\Query::getSetterValues
      */
-    public function testCssWriteWithInvalidPropertyInArray() {
+    public function testCssWriteWithInvalidPropertyInArray(): void {
       $this->expectException(\InvalidArgumentException::class);
       $this->getQueryFixtureFromString(self::HTML, '//div')->css(['---' => '']);
     }
@@ -372,7 +372,7 @@ namespace FluentDOM\Query {
      * @group ManipulationCSS
      * @covers \FluentDOM\Query::css
      */
-    public function testCssRemoveProperty() {
+    public function testCssRemoveProperty(): void {
       $fd = $this->getQueryFixtureFromString(self::HTML, '//div');
       $fd->css('text-align', '');
       $this->assertFalse($fd[0]->hasAttribute('style'));
@@ -382,7 +382,7 @@ namespace FluentDOM\Query {
      * @group ManipulationCSS
      * @covers \FluentDOM\Query::css
      */
-    public function testCssRemoveProperties() {
+    public function testCssRemoveProperties(): void {
       $fd = $this->getQueryFixtureFromString(self::HTML, '//div');
       $fd->css(
         [
@@ -397,7 +397,7 @@ namespace FluentDOM\Query {
      * @group ManipulationCSS
      * @covers \FluentDOM\Query::css
      */
-    public function testCssSortPropertiesName() {
+    public function testCssSortPropertiesName(): void {
       $fd = $this->getQueryFixtureFromString(self::HTML, '//div');
       $fd->css(
         [
@@ -413,7 +413,7 @@ namespace FluentDOM\Query {
      * @group ManipulationCSS
      * @covers \FluentDOM\Query::css
      */
-    public function testCssSortPropertiesLevels() {
+    public function testCssSortPropertiesLevels(): void {
       $fd = $this->getQueryFixtureFromString(self::HTML, '//div');
       $fd->css(
         [
@@ -430,7 +430,7 @@ namespace FluentDOM\Query {
      * @group ManipulationCSS
      * @covers \FluentDOM\Query::css
      */
-    public function testCssSortPropertiesPrefix() {
+    public function testCssSortPropertiesPrefix(): void {
       $fd = $this->getQueryFixtureFromString(self::HTML, '//div');
       $fd->css(
         [

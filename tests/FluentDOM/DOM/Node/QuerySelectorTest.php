@@ -1,4 +1,12 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\Node {
 
@@ -13,7 +21,7 @@ namespace FluentDOM\Node {
     /**
      * @cover FluentDOM\Node\QuerySelector\Implementation
      */
-    public function testQuerySelector() {
+    public function testQuerySelector(): void {
       $transformer = $this->getMockBuilder(Transformer::class)->getMock();
       $transformer
         ->expects($this->once())
@@ -33,7 +41,7 @@ namespace FluentDOM\Node {
     /**
      * @cover FluentDOM\Node\QuerySelector\Implementation
      */
-    public function testQuerySelectorAll() {
+    public function testQuerySelectorAll(): void {
       $transformer = $this->getMockBuilder(Transformer::class)->getMock();
       $transformer
         ->expects($this->once())

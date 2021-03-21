@@ -1,5 +1,12 @@
 <?php
-
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\Loader\Supports {
 
@@ -29,7 +36,7 @@ namespace FluentDOM\Loader\Supports {
     /**
      * @covers \FluentDOM\Loader\Supports\Libxml
      */
-    public function testGetOptions() {
+    public function testGetOptions(): void {
       $support = new Libxml_TestProxy();
       $options = $support->getOptions([]);
       $this->assertInstanceOf(Options::class, $options);
@@ -38,7 +45,7 @@ namespace FluentDOM\Loader\Supports {
     /**
      * @covers \FluentDOM\Loader\Supports\Libxml
      */
-    public function testLoadXmlString() {
+    public function testLoadXmlString(): void {
       $support = new Libxml_TestProxy();
       $document = $support->load('<foo/>', 'xml');
       $this->assertEquals('foo', $document->documentElement->localName);
@@ -47,7 +54,7 @@ namespace FluentDOM\Loader\Supports {
     /**
      * @covers \FluentDOM\Loader\Supports\Libxml
      */
-    public function testLoadXmlFile() {
+    public function testLoadXmlFile(): void {
       $support = new Libxml_TestProxy();
       $document = $support->load(__DIR__.'/TestData/loader.xml', 'xml', [Options::IS_FILE => TRUE]);
       $this->assertEquals('foo', $document->documentElement->localName);

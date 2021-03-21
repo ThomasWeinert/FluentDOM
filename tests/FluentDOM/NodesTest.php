@@ -30,7 +30,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\Nodes::__construct
      */
-    public function testConstructorWithXml() {
+    public function testConstructorWithXml(): void {
       $document = new \DOMDocument();
       $document->appendChild($document->createElement('xml'));
       $fd = new Nodes($document);
@@ -43,7 +43,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\Nodes::__construct
      */
-    public function testConstructorWithHtml() {
+    public function testConstructorWithHtml(): void {
       $document = new \DOMDocument();
       $document->appendChild($document->createElement('html'));
       $fd = new Nodes($document, 'html');
@@ -56,7 +56,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\Nodes::__construct
      */
-    public function testConstructorWithHtmlFragment() {
+    public function testConstructorWithHtmlFragment(): void {
       $fd = new Nodes('<label>Test</label><input>', 'html-fragment');
       $this->assertEquals(
         '<label>Test</label><input>',
@@ -67,7 +67,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\Nodes::__construct
      */
-    public function testConstructorWithoutSourceButWithContentType() {
+    public function testConstructorWithoutSourceButWithContentType(): void {
       $fd = new Nodes(NULL, 'text/html');
       $this->assertEquals(
         'text/html',
@@ -80,7 +80,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::load
      * @covers \FluentDOM\Nodes::prepareSource
      */
-    public function testLoadWithNodes() {
+    public function testLoadWithNodes(): void {
       $fdOne = new Nodes();
       $fdTwo = new Nodes();
       $fdTwo->load($fdOne);
@@ -92,7 +92,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::load
      * @covers \FluentDOM\Nodes::prepareSource
      */
-    public function testLoadWithDocument() {
+    public function testLoadWithDocument(): void {
       $fd = new Nodes();
       $fd->load($document = new \DOMDocument());
       $this->assertSame(
@@ -106,7 +106,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::load
      * @covers \FluentDOM\Nodes::prepareSource
      */
-    public function testLoadWithDomNode() {
+    public function testLoadWithDomNode(): void {
       $document = new \DOMDocument();
       $document->appendChild($document->createElement('test'));
       $fd = new Nodes();
@@ -120,7 +120,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::load
      * @covers \FluentDOM\Nodes::prepareSource
      */
-    public function testLoadWithCustomLoader() {
+    public function testLoadWithCustomLoader(): void {
       $result = $this->createMock(Result::class);
       $result
         ->method('getDocument')
@@ -151,7 +151,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::prepareSource
      * @covers \FluentDOM\Nodes::getLoadingOptions
      */
-    public function testLoadWithCustomLoaderAndOptions() {
+    public function testLoadWithCustomLoaderAndOptions(): void {
       $result = $this->createMock(Result::class);
       $result
         ->method('getDocument')
@@ -181,7 +181,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::load
      * @covers \FluentDOM\Nodes::prepareSource
      */
-    public function testLoadWithCustomLoaderReturningLoaderResult() {
+    public function testLoadWithCustomLoaderReturningLoaderResult(): void {
       $document = new Document();
       $document->appendElement('dummy');
       $result = $this
@@ -228,7 +228,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::load
      * @covers \FluentDOM\Nodes::prepareSource
      */
-    public function testLoadWithCustomLoaderReturningLoaderResultWithSelection() {
+    public function testLoadWithCustomLoaderReturningLoaderResultWithSelection(): void {
       $document = new Document();
       $document->appendElement('dummy');
       $result = $this
@@ -277,7 +277,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::prepareSource
      * @covers \FluentDOM\Nodes::setContentType
      */
-    public function testLoadWithUnknownContentType() {
+    public function testLoadWithUnknownContentType(): void {
       $document = new Document();
       $fd = new Nodes();
       $fd->load($document, 'unknown');
@@ -290,7 +290,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::prepareSource
      * @covers \FluentDOM\Nodes::setContentType
      */
-    public function testLoadWithInvalidSourceExpectingException() {
+    public function testLoadWithInvalidSourceExpectingException(): void {
       $fd = new Nodes();
       $this->expectException(Exceptions\InvalidSource\Variable::class);
       $fd->load(NULL, 'text');
@@ -300,7 +300,7 @@ namespace FluentDOM {
      * @group Load
      * @covers \FluentDOM\Nodes::loaders
      */
-    public function testLoadersGetAfterSet() {
+    public function testLoadersGetAfterSet(): void {
       $loader = $this->getMockBuilder(Loadable::class)->getMock();
       $fd = new Nodes();
       $fd->loaders($loader);
@@ -311,7 +311,7 @@ namespace FluentDOM {
      * @group Load
      * @covers \FluentDOM\Nodes::loaders
      */
-    public function testLoadersGetImplicitCreate() {
+    public function testLoadersGetImplicitCreate(): void {
       $fd = new Nodes();
       $this->assertInstanceOf(Loadable::class, $fd->loaders());
     }
@@ -320,7 +320,7 @@ namespace FluentDOM {
      * @group Load
      * @covers \FluentDOM\Nodes::loaders
      */
-    public function testLoadersGetCreateFromArray() {
+    public function testLoadersGetCreateFromArray(): void {
       $fd = new Nodes();
       $fd->loaders([$loader = $this->getMockBuilder(Loadable::class)->getMock()]);
       $this->assertInstanceOf(Loadable::class, $fd->loaders());
@@ -331,7 +331,7 @@ namespace FluentDOM {
      * @group Load
      * @covers \FluentDOM\Nodes::loaders
      */
-    public function testLoadersGetWithInvalidLoaderExpectingException() {
+    public function testLoadersGetWithInvalidLoaderExpectingException(): void {
       $fd = new Nodes();
       $this->expectException(\InvalidArgumentException::class);
       $fd->loaders('FOO');
@@ -341,7 +341,7 @@ namespace FluentDOM {
      * @group Load
      * @covers \FluentDOM\Nodes::push
      */
-    public function testPushWithNode() {
+    public function testPushWithNode(): void {
       $fd = new Nodes();
       $fd->document->appendElement('test');
       $fd->push($fd->document->documentElement);
@@ -352,7 +352,7 @@ namespace FluentDOM {
      * @group Load
      * @covers \FluentDOM\Nodes::push
      */
-    public function testPushWithTraversable() {
+    public function testPushWithTraversable(): void {
       $fd = new Nodes();
       $fd->document->appendElement('test');
       $fd->push([$fd->document->documentElement]);
@@ -363,7 +363,7 @@ namespace FluentDOM {
      * @group Load
      * @covers \FluentDOM\Nodes::push
      */
-    public function testPushWithInvalidArgumentExpectingException() {
+    public function testPushWithInvalidArgumentExpectingException(): void {
       $fd = new Nodes();
       $this->expectException(\InvalidArgumentException::class);
       $fd->push(FALSE);
@@ -373,7 +373,7 @@ namespace FluentDOM {
      * @group Load
      * @covers \FluentDOM\Nodes::push
      */
-    public function testPushNodeFromDifferentDocumentExpectingException() {
+    public function testPushNodeFromDifferentDocumentExpectingException(): void {
       $document = new Document();
       $document->appendElement('test');
       $fd = new Nodes();
@@ -385,7 +385,7 @@ namespace FluentDOM {
      * @group Load
      * @covers \FluentDOM\Nodes::push
      */
-    public function testPushListWithNodesFromDifferentDocumentExpectingException() {
+    public function testPushListWithNodesFromDifferentDocumentExpectingException(): void {
       $document = new Document();
       $document->appendElement('test');
       $fd = new Nodes();
@@ -397,7 +397,7 @@ namespace FluentDOM {
      * @group CoreFunctions
      * @covers \FluentDOM\Nodes::formatOutput
      */
-    public function testFormatOutput() {
+    public function testFormatOutput(): void {
       $fd = new Nodes();
       $fd->document->loadXML('<html><body><br/></body></html>');
       $fd->formatOutput();
@@ -416,7 +416,7 @@ namespace FluentDOM {
      * @group CoreFunctions
      * @covers \FluentDOM\Nodes::formatOutput
      */
-    public function testFormatOutputWithEmptyDocument() {
+    public function testFormatOutputWithEmptyDocument(): void {
       $fd = new Nodes();
       $fd->formatOutput();
       $this->assertEquals('text/xml', $fd->contentType);
@@ -426,7 +426,7 @@ namespace FluentDOM {
      * @group CoreFunctions
      * @covers \FluentDOM\Nodes::formatOutput
      */
-    public function testFormatOutputWithContentTypeHtml() {
+    public function testFormatOutputWithContentTypeHtml(): void {
       $fd = new Nodes();
       $fd->document->loadXML('<html><body><br/></body></html>');
       $fd->formatOutput('text/html');
@@ -439,7 +439,7 @@ namespace FluentDOM {
      * @group CoreFunctions
      * @covers \FluentDOM\Nodes::item
      */
-    public function testItem() {
+    public function testItem(): void {
       $fd = new Nodes();
       $fd = $fd->find('/*');
       $this->assertEquals($fd->document->documentElement, $fd->item(0));
@@ -695,7 +695,7 @@ namespace FluentDOM {
      * @group ArrayAccess
      * @covers \FluentDOM\Nodes::offsetGet
      */
-    public function testOffsetGet() {
+    public function testOffsetGet(): void {
       $fd = new Nodes(self::XML);
       $fd = $fd->find('//item');
       $this->assertEquals('text2', $fd[1]->nodeValue);
@@ -1204,7 +1204,7 @@ namespace FluentDOM {
     /**
      * @covers \FluentDOM\Nodes::serializerFactories
      */
-    public function testGetSerializerFactoriesAfterSet() {
+    public function testGetSerializerFactoriesAfterSet(): void {
       $factory = $this->getMockBuilder(Serializer\Factory\Group::class)->getMock();
       $fd = new Nodes();
       $this->assertSame(

@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -21,7 +21,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Options
      */
-    public function testConstructor() {
+    public function testConstructor(): void {
       $options = new Options();
       $this->assertInstanceOf(Options::class, $options);
     }
@@ -29,7 +29,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Options
      */
-    public function testConstructorWithOptionsInArray() {
+    public function testConstructorWithOptionsInArray(): void {
       $options = new Options([Options::IS_FILE => TRUE]);
       $this->assertTrue($options[Options::IS_FILE]);
     }
@@ -37,7 +37,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Options
      */
-    public function testConstructorWithOptionsInIterator() {
+    public function testConstructorWithOptionsInIterator(): void {
       $options = new Options(new \ArrayIterator([Options::IS_FILE => TRUE]));
       $this->assertTrue($options[Options::IS_FILE]);
     }
@@ -45,7 +45,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Options
      */
-    public function testConstructorWithOptionsExpectingException() {
+    public function testConstructorWithOptionsExpectingException(): void {
       $this->expectException(InvalidArgument::class);
       new Options('No STRING ALLOWED');
     }
@@ -53,7 +53,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Options
      */
-    public function testConstructorWithCallback() {
+    public function testConstructorWithCallback(): void {
       $options = new Options(
         [],
         [
@@ -66,7 +66,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Options
      */
-    public function testConstructorWithCallbackExpectingException() {
+    public function testConstructorWithCallbackExpectingException(): void {
       $this->expectException(\InvalidArgumentException::class);
       new Options([], ['UnknownCallback' => function() {} ]);
     }
@@ -74,7 +74,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Options
      */
-    public function testSetIsStringDisablesFileOptions() {
+    public function testSetIsStringDisablesFileOptions(): void {
       $options = new Options(
         [ Options::ALLOW_FILE => TRUE, Options::IS_FILE => TRUE ]
       );
@@ -87,7 +87,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Options
      */
-    public function testSetIsFileDisablesStringOptionActivatesAllowFile() {
+    public function testSetIsFileDisablesStringOptionActivatesAllowFile(): void {
       $options = new Options(
         [ Options::ALLOW_FILE => FALSE, Options::IS_STRING => TRUE ]
       );
@@ -100,7 +100,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Options
      */
-    public function testSetDisallowFileDisablesFileOption() {
+    public function testSetDisallowFileDisablesFileOption(): void {
       $options = new Options(
         [ Options::ALLOW_FILE => TRUE, Options::IS_FILE => TRUE ]
       );
@@ -112,7 +112,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Options
      */
-    public function testGetIterator() {
+    public function testGetIterator(): void {
       $options = new Options(
         [ Options::ALLOW_FILE => TRUE, Options::IS_FILE => TRUE ]
       );
@@ -131,7 +131,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Options
      */
-    public function testForExistingOption() {
+    public function testForExistingOption(): void {
       $options = new Options(
         [ Options::ALLOW_FILE => TRUE ]
       );
@@ -141,7 +141,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Options
      */
-    public function testForNonExistingOption() {
+    public function testForNonExistingOption(): void {
       $options = new Options(
         [ Options::ALLOW_FILE => TRUE ]
       );
@@ -151,7 +151,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Options
      */
-    public function testUnsetOption() {
+    public function testUnsetOption(): void {
       $options = new Options(
         [ Options::ALLOW_FILE => TRUE ]
       );
@@ -162,7 +162,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Options
      */
-    public function testGetSourceTypeWithoutIdentifyStringCallbackExpectingIsStringIsTrue() {
+    public function testGetSourceTypeWithoutIdentifyStringCallbackExpectingIsStringIsTrue(): void {
       $options = new Options();
       $this->assertEquals(Options::IS_STRING, $options->getSourceType(''));
     }
@@ -170,7 +170,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Options
      */
-    public function testGetSourceTypeExpectingIsStringIsTrue() {
+    public function testGetSourceTypeExpectingIsStringIsTrue(): void {
       $options = new Options(
         [],
         [
@@ -183,7 +183,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Options
      */
-    public function testGetSourceTypeExpectingIsFileIsTrue() {
+    public function testGetSourceTypeExpectingIsFileIsTrue(): void {
       $options = new Options(
         [],
         [
@@ -196,7 +196,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Options
      */
-    public function testGetSourceTypeForcingIsFile() {
+    public function testGetSourceTypeForcingIsFile(): void {
       $options = new Options(
         [Options::IS_FILE => TRUE],
         [
@@ -209,7 +209,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Options
      */
-    public function testGetSourceTypeForcingIsString() {
+    public function testGetSourceTypeForcingIsString(): void {
       $options = new Options(
         [Options::IS_STRING => TRUE],
         [
@@ -222,7 +222,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Options
      */
-    public function testIsAllowedFileExpectingTrue() {
+    public function testIsAllowedFileExpectingTrue(): void {
       $options = new Options(
         [Options::IS_FILE => TRUE]
       );
@@ -232,7 +232,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Options
      */
-    public function testIsAllowedFileExpectingException() {
+    public function testIsAllowedFileExpectingException(): void {
       $options = new Options(
         [Options::IS_FILE => FALSE]
       );
@@ -243,7 +243,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Options
      */
-    public function testIsAllowedStringExpectingException() {
+    public function testIsAllowedStringExpectingException(): void {
       $options = new Options(
         [Options::IS_FILE => TRUE]
       );
@@ -254,7 +254,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Options
      */
-    public function testIsAllowedFileExpectingFalse() {
+    public function testIsAllowedFileExpectingFalse(): void {
       $options = new Options(
         [Options::IS_FILE => FALSE]
       );
@@ -264,7 +264,7 @@ namespace FluentDOM\Loader {
     /**
      * @covers \FluentDOM\Loader\Options
      */
-    public function testIsAllowedStringExpectingFalse() {
+    public function testIsAllowedStringExpectingFalse(): void {
       $options = new Options(
         [Options::IS_FILE => TRUE]
       );

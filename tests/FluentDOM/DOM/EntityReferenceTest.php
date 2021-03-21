@@ -1,4 +1,12 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
 
 namespace FluentDOM\DOM {
 
@@ -11,7 +19,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\EntityReference
      */
-    public function testStringCast() {
+    public function testStringCast(): void {
       $document = new Document();
       $document->loadXml(
         '<!DOCTYPE p ['."\n".

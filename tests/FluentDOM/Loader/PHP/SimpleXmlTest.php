@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 namespace FluentDOM\Loader\PHP {
 
   use FluentDOM\Exceptions\InvalidArgument;
@@ -12,7 +21,7 @@ namespace FluentDOM\Loader\PHP {
     /**
      * @covers \FluentDOM\Loader\PHP\SimpleXml
      */
-    public function testSupportsExpectingTrue() {
+    public function testSupportsExpectingTrue(): void {
       $loader = new SimpleXml();
       $this->assertTrue($loader->supports('php/simplexml'));
     }
@@ -20,7 +29,7 @@ namespace FluentDOM\Loader\PHP {
     /**
      * @covers \FluentDOM\Loader\PHP\SimpleXml
      */
-    public function testSupportsExpectingFalse() {
+    public function testSupportsExpectingFalse(): void {
       $loader = new SimpleXml();
       $this->assertFalse($loader->supports('text/html'));
     }
@@ -28,7 +37,7 @@ namespace FluentDOM\Loader\PHP {
     /**
      * @covers \FluentDOM\Loader\PHP\SimpleXml
      */
-    public function testLoadWithValidXml() {
+    public function testLoadWithValidXml(): void {
       $loader = new SimpleXml();
       $this->assertInstanceOf(
         Result::class,
@@ -42,7 +51,7 @@ namespace FluentDOM\Loader\PHP {
     /**
      * @covers \FluentDOM\Loader\PHP\SimpleXml
      */
-    public function testLoadSelectingChildNode() {
+    public function testLoadSelectingChildNode(): void {
       $loader = new SimpleXml();
       $this->assertInstanceOf(
         Result::class,
@@ -59,14 +68,14 @@ namespace FluentDOM\Loader\PHP {
     /**
      * @covers \FluentDOM\Loader\PHP\SimpleXml
      */
-    public function testLoadWithInvalidSourceExpectingNull() {
+    public function testLoadWithInvalidSourceExpectingNull(): void {
       $loader = new SimpleXml();
       $this->assertNull(
         $loader->load('', 'php/simplexml')
       );
     }
 
-    public function testLoadFragmentWithString() {
+    public function testLoadFragmentWithString(): void {
       $loader = new SimpleXml();
       $fragment = $loader->loadFragment('<test/>', 'php/simplexml');
       $this->assertXmlStringEqualsXmlString(
@@ -75,7 +84,7 @@ namespace FluentDOM\Loader\PHP {
       );
     }
 
-    public function testLoadFragmentWithSimpleXMLElement() {
+    public function testLoadFragmentWithSimpleXMLElement(): void {
       $loader = new SimpleXml();
       $fragment = $loader->loadFragment(new \SimpleXMLElement('<test/>'), 'php/simplexml');
       $this->assertXmlStringEqualsXmlString(
@@ -87,7 +96,7 @@ namespace FluentDOM\Loader\PHP {
     /**
      * @covers \FluentDOM\Loader\PHP\SimpleXml
      */
-    public function testLoadFragmentWithTypeExpectingNull() {
+    public function testLoadFragmentWithTypeExpectingNull(): void {
       $loader = new SimpleXml();
       $this->assertNull(
         $loader->loadFragment('', 'unsupported')
@@ -97,7 +106,7 @@ namespace FluentDOM\Loader\PHP {
     /**
      * @covers \FluentDOM\Loader\PHP\SimpleXml
      */
-    public function testLoadFragmentWithInvalidSourceExpectingException() {
+    public function testLoadFragmentWithInvalidSourceExpectingException(): void {
       $loader = new SimpleXml();
       $this->expectException(
         InvalidArgument::class,

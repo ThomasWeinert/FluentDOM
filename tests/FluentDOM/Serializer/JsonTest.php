@@ -38,7 +38,7 @@ namespace FluentDOM\Serializer {
     /**
      * @covers \FluentDOM\Serializer\Json
      */
-    public function testToStringWithLimitedDepthExpectingEmptyString() {
+    public function testToStringWithLimitedDepthExpectingEmptyString(): void {
       $serializer = new Json_TestProxy(new \DOMDocument(), 0, 1);
       $serializer->jsonData = self::getArrayAsStdClass(
         [
@@ -76,7 +76,7 @@ namespace FluentDOM\Serializer {
     /**
      * @covers \FluentDOM\Serializer\Json
      */
-    public function testJsonSerializableWithLimitedDepthExpectingFalse() {
+    public function testJsonSerializableWithLimitedDepthExpectingFalse(): void {
       $serializer = new Json_TestProxy(new \DOMDocument());
       $serializer->jsonData = self::getArrayAsStdClass(
         [
@@ -96,7 +96,7 @@ namespace FluentDOM\Serializer {
     /**
      * @covers \FluentDOM\Serializer\Json
      */
-    public function testJsonSerializeCallingGetNode() {
+    public function testJsonSerializeCallingGetNode(): void {
       $document = new Document();
       $document->appendElement('success');
       $serializer = new Json_TestProxy($document);
@@ -108,7 +108,7 @@ namespace FluentDOM\Serializer {
     /**
      * @covers \FluentDOM\Serializer\Json
      */
-    public function testJsonSerializeCallingGetEmpty() {
+    public function testJsonSerializeCallingGetEmpty(): void {
       $serializer = new Json_TestProxy(new \DOMDocument());
       $this->assertEquals(
         '{}', json_encode($serializer)
@@ -118,7 +118,7 @@ namespace FluentDOM\Serializer {
     /**
      * @covers \FluentDOM\Serializer\Json
      */
-    public function testGetNamespaces() {
+    public function testGetNamespaces(): void {
       $document = new Document();
       $document->loadXml(
         '<xml xmlns="urn:1" xmlns:foo="urn:bar">'.
@@ -162,7 +162,7 @@ namespace FluentDOM\Serializer {
     /**
      * @covers \FluentDOM\Serializer\Json
      */
-    public function testIntegrationWithEmptyDocument() {
+    public function testIntegrationWithEmptyDocument(): void {
       $serializer = new Json(new \DOMDocument());
       $this->assertEquals(
         '{}', (string)$serializer

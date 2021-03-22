@@ -78,7 +78,7 @@ abstract class FluentDOM {
     if ($node instanceof FluentDOM\Query) {
       $node = $node->document;
     }
-    if ($serializer = self::getSerializerFactories()->createSerializer($contentType, $node)) {
+    if ($serializer = self::getSerializerFactories()->createSerializer($node, $contentType)) {
       return (string)$serializer;
     }
     throw new FluentDOM\Exceptions\NoSerializer($contentType);
@@ -126,7 +126,7 @@ abstract class FluentDOM {
     $builder = self::getXPathTransformer();
     $query = self::Query($source, $contentType, $options);
     $isHtml = ($query->contentType === 'text/html');
-    $query->onPrepareSelector = function($selector, $contextMode) use ($builder, $isHtml) {
+    $query->onPrepareSelector = static function($selector, $contextMode) use ($builder, $isHtml) {
       return $builder->toXpath($selector, $contextMode, $isHtml);
     };
     return $query;
@@ -212,13 +212,13 @@ abstract class FluentDOM {
    */
   public static function getSerializerFactories(): FluentDOM\Serializer\Factory\Group {
     if (NULL === self::$_serializerFactories) {
-      $xml = static function($contentType, DOMNode $node) {
+      $xml = static function(DOMNode $node) {
         return new FluentDOM\Serializer\Xml($node);
       };
-      $html = static function($contentType, DOMNode $node) {
+      $html = static function(DOMNode $node) {
         return new FluentDOM\Serializer\Html($node);
       };
-      $json = static function($contentType, DOMNode $node) {
+      $json = static function(DOMNode $node) {
         return new FluentDOM\Serializer\Json($node);
       };
       self::$_serializerFactories = new FluentDOM\Serializer\Factory\Group(
@@ -256,7 +256,7 @@ abstract class FluentDOM {
       }
       unset(self::$_xpathTransformers[$index]);
     }
-    throw new \LogicException($errorMessage);
+    throw new LogicException($errorMessage);
   }
 
   /**

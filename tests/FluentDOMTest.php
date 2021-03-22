@@ -248,9 +248,9 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
   public function testGetSerializerFactories(): void {
     $document = new \FluentDOM\DOM\Document();
     $serializers = FluentDOM::getSerializerFactories();
-    $this->assertInstanceOf(FluentDOM\Serializer\Xml::class, $serializers->createSerializer('xml', $document));
-    $this->assertInstanceOf(FluentDOM\Serializer\Html::class, $serializers->createSerializer('html', $document));
-    $this->assertInstanceOf(FluentDOM\Serializer\Json::class, $serializers->createSerializer('json', $document));
+    $this->assertInstanceOf(FluentDOM\Serializer\Xml::class, $serializers->createSerializer($document, 'xml'));
+    $this->assertInstanceOf(FluentDOM\Serializer\Html::class, $serializers->createSerializer($document, 'html'));
+    $this->assertInstanceOf(FluentDOM\Serializer\Json::class, $serializers->createSerializer($document, 'json'));
   }
 
   /**

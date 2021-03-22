@@ -84,10 +84,7 @@ namespace FluentDOM\Serializer\Factory {
     public function testCreateSerializer(): void {
       $document = new Document();
       $document->appendElement('dummy');
-      $serializer = $this
-        ->getMockBuilder(\stdClass::class)
-        ->addMethods(['__toString'])
-        ->getMock();
+      $serializer = $this->createMock(StringCastable::class);
       $serializer
         ->method('__toString')
         ->willReturn('success');
@@ -101,7 +98,7 @@ namespace FluentDOM\Serializer\Factory {
       $group = new Group(['some/type' => $factory]);
       $this->assertSame(
         'success',
-        (string)$group->createSerializer('some/type', $document->documentElement)
+        (string)$group->createSerializer($document->documentElement, 'some/type')
       );
     }
 
@@ -123,7 +120,7 @@ namespace FluentDOM\Serializer\Factory {
       $group = new Group(['some/type' => $factory]);
       $this->assertSame(
         $serializer,
-        $group->createSerializer('some/type', $document->documentElement)
+        $group->createSerializer($document->documentElement, 'some/type')
       );
     }
 
@@ -133,19 +130,15 @@ namespace FluentDOM\Serializer\Factory {
     public function testCreateSerializerExpectingException(): void {
       $document = new Document();
       $document->appendElement('dummy');
-      $serializer = $this
-        ->getMockBuilder(\stdClass::class)
-        ->getMock();
-      $factory = $this
-        ->getMockBuilder(Factory::class)
-        ->getMock();
-      $factory
-        ->expects($this->once())
-        ->method('createSerializer')
-        ->willReturn($serializer);
-      $group = new Group(['some/type' => $factory]);
+      $group = new Group(
+        [
+          'some/type' => function() {
+            return $this->createMock(\stdClass::class);
+          }
+        ]
+      );
       $this->expectException(InvalidSerializer::class);
-      $group->createSerializer('some/type', $document->documentElement);
+      $group->createSerializer($document->documentElement, 'some/type');
     }
 
   }

@@ -27,14 +27,14 @@ namespace FluentDOM\Serializer\Factory {
       }
     }
 
-    public function createSerializer(string $contentType, \DOMNode $node): ?StringCastable {
+    public function createSerializer(\DOMNode $node, string $contentType): ?StringCastable {
       $serializer = NULL;
       if ($this->offsetExists($contentType)) {
         $factory = $this->offsetGet($contentType);
         if ($factory instanceof SerializerFactory) {
-          $serializer = $factory->createSerializer($contentType, $node);
+          $serializer = $factory->createSerializer($node, $contentType);
         } elseif (\is_callable($factory)) {
-          $serializer = $factory($contentType, $node);
+          $serializer = $factory($node, $contentType);
         }
         if ($serializer instanceof StringCastable) {
           return $serializer;

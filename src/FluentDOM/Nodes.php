@@ -648,7 +648,7 @@ namespace FluentDOM {
      * @throws NoSerializer
      */
     public function toString(): string {
-      if ($serializer = $this->serializerFactories()->createSerializer($this->contentType, $this->document)) {
+      if ($serializer = $this->serializerFactories()->createSerializer($this->document, $this->contentType)) {
         return (string)$serializer;
       }
       throw new Exceptions\NoSerializer($this->contentType);

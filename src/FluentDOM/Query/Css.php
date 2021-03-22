@@ -79,13 +79,13 @@ namespace FluentDOM\Query {
      *
      * @see ArrayAccess::offsetGet()
      * @param mixed $offset
-     * @return mixed
+     * @return string|NULL
      */
-    public function offsetGet($offset) {
+    public function offsetGet($offset): ?string {
       if ($properties = $this->getStyleProperties()) {
         return $properties[$offset];
       }
-      return FALSE;
+      return NULL;
     }
 
     /**

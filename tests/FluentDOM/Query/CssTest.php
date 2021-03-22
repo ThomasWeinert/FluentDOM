@@ -85,10 +85,10 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query\Css::offsetGet
      * @covers \FluentDOM\Query\Css::getStyleProperties
      */
-    public function testOffsetGetWithoutElementExpectingFalse(): void {
+    public function testOffsetGetWithoutElementExpectingNull(): void {
       $fd = new Query();
       $css = new Css($fd);
-      $this->assertFalse($css['height']);
+      $this->assertNull($css['height']);
     }
 
     /**

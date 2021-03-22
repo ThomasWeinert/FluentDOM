@@ -12,6 +12,7 @@ namespace FluentDOM\Creator {
 
   use FluentDOM\Appendable;
   use FluentDOM\DOM\Element;
+  use FluentDOM\Exceptions\UnattachedNode;
 
   /**
    * Internal class for the FluentDOM\Creator, please do not use directly
@@ -101,8 +102,9 @@ namespace FluentDOM\Creator {
      * @return Element
      */
     public function appendTo(Element $parentNode): Element {
-      foreach ($this as $item) {
-        $parentNode->append($item);
+      try {
+        $parentNode->append(...$this);
+      } catch (UnattachedNode $e) {
       }
       return $parentNode;
     }

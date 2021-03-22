@@ -56,7 +56,7 @@ namespace FluentDOM\Loader\PHP {
      * @param string $contentType
      * @param array|\Traversable|Options $options
      * @return DocumentFragment|NULL
-     * @throws InvalidArgument
+     * @throws \Throwable
      */
     public function loadFragment($source, string $contentType, $options = []): ?DocumentFragment {
       if (!$this->supports($contentType)) {

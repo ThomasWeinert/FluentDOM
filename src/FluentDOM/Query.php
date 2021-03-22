@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace FluentDOM {
 
+  use FluentDOM\Exceptions\InvalidFragmentLoader;
+  use FluentDOM\Exceptions\LoadingError\EmptyResult;
   use FluentDOM\Nodes\Fetcher;
   use FluentDOM\Utility\Constraints;
   use FluentDOM\Utility\QualifiedName;
@@ -154,7 +156,7 @@ namespace FluentDOM {
      * @param array $elements
      * @param string|array|\DOMNode|\Traversable|callable $content
      * @return array
-     * @throws \FluentDOM\Exceptions\LoadingError\EmptyResult
+     * @throws EmptyResult
      * @throws \InvalidArgumentException
      */
     private function wrapNodes(array $elements, $content): array {
@@ -222,7 +224,7 @@ namespace FluentDOM {
      * @param string|array|\DOMNode|\DOMNodeList|\Traversable|callable $content
      * @param callable $handler
      * @return array
-     * @throws \FluentDOM\Exceptions\LoadingError\EmptyResult
+     * @throws EmptyResult
      * @throws \InvalidArgumentException
      */
     private function apply($targetNodes, $content, callable $handler): array {
@@ -299,7 +301,7 @@ namespace FluentDOM {
      * @param string|\Traversable|array $selector selector
      * @param array|\Traversable $context
      * @return self
-     * @throws \FluentDOM\Exceptions\LoadingError\EmptyResult
+     * @throws EmptyResult
      * @throws \OutOfBoundsException
      * @throws \InvalidArgumentException
      */
@@ -810,7 +812,7 @@ namespace FluentDOM {
      * @param string|array|\DOMNode|\Traversable|callable $content DOMNode or DOMNodeList or xml fragment string
      * @return self
      * @throws \InvalidArgumentException
-     * @throws \FluentDOM\Exceptions\LoadingError\EmptyResult
+     * @throws EmptyResult
      * @throws \LogicException
      */
     public function append($content): self {
@@ -879,7 +881,6 @@ namespace FluentDOM {
     public function clone(): self {
       $result = $this->spawn();
       foreach ($this->_nodes as $node) {
-        /** @var \DOMNode $node */
         $result->push($node->cloneNode(TRUE));
       }
       return $result;
@@ -1004,7 +1005,7 @@ namespace FluentDOM {
      * @param string|array|\DOMNode|\Traversable|callable $content
      * @return self
      * @throws \InvalidArgumentException
-     * @throws \FluentDOM\Exceptions\LoadingError\EmptyResult
+     * @throws EmptyResult
      */
     public function replaceWith($content): self {
       $this->apply(
@@ -1106,7 +1107,7 @@ namespace FluentDOM {
      * @example wrapAll.php Usage Example: FluentDOM::wrapAll()
      * @param string|array|\DOMNode|\Traversable $content
      * @return self
-     * @throws \FluentDOM\Exceptions\LoadingError\EmptyResult
+     * @throws EmptyResult
      * @throws \OutOfBoundsException
      * @throws \InvalidArgumentException
      */
@@ -1206,7 +1207,7 @@ namespace FluentDOM {
      * @param string|callable|NULL $xml XML fragment
      * @return string|$this
      * @throws \InvalidArgumentException
-     * @throws \FluentDOM\Exceptions\InvalidFragmentLoader
+     * @throws InvalidFragmentLoader
      * @throws \UnexpectedValueException
      * @throws \LogicException
      */
@@ -1234,7 +1235,7 @@ namespace FluentDOM {
      * @throws \LogicException
      * @throws \UnexpectedValueException
      * @throws \InvalidArgumentException
-     * @throws \FluentDOM\Exceptions\InvalidFragmentLoader
+     * @throws InvalidFragmentLoader
      */
     public function outerXml($xml = NULL) {
       return $this->outerContent(
@@ -1257,7 +1258,7 @@ namespace FluentDOM {
      * @throws \LogicException
      * @throws \UnexpectedValueException
      * @throws \InvalidArgumentException
-     * @throws \FluentDOM\Exceptions\InvalidFragmentLoader
+     * @throws InvalidFragmentLoader
      */
     public function outerHtml($html = NULL) {
       return $this->outerContent(
@@ -1280,7 +1281,7 @@ namespace FluentDOM {
      * @throws \LogicException
      * @throws \UnexpectedValueException
      * @throws \InvalidArgumentException
-     * @throws \FluentDOM\Exceptions\InvalidFragmentLoader
+     * @throws InvalidFragmentLoader
      */
     public function html($html = NULL) {
       return $this->content(
@@ -1562,14 +1563,14 @@ namespace FluentDOM {
      * @param string $current
      * @param string $toggle
      * @param bool|NULL $switch
-     * @return FALSE|string
+     * @return NULL|string
      */
-    private function changeClassString(string $current, string $toggle, bool $switch = NULL) {
-      /** @var array $currentClasses */
+    private function changeClassString(
+      string $current, string $toggle, bool $switch = NULL
+    ): ?string {
       $currentClasses = \array_flip(
         \preg_split('(\s+)', \trim($current), 0, PREG_SPLIT_NO_EMPTY) ?: []
       );
-      /** @var array $toggleClasses */
       $toggleClasses = \array_unique(
         \preg_split('(\s+)', \trim($toggle), 0, PREG_SPLIT_NO_EMPTY) ?: []
       );
@@ -1588,7 +1589,7 @@ namespace FluentDOM {
       }
       return $modified
         ? \implode(' ', \array_keys($currentClasses))
-        : FALSE;
+        : NULL;
     }
 
     /*************************************

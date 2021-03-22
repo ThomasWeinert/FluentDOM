@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -14,6 +14,7 @@ namespace FluentDOM {
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Node;
   use FluentDOM\Exceptions\InvalidArgument;
+  use FluentDOM\Exceptions\InvalidArgument as InvalidArgumentType;
   use FluentDOM\Utility\Namespaces;
   use FluentDOM\Utility\QualifiedName;
   use FluentDOM\Utility\ResourceWrapper;
@@ -58,7 +59,7 @@ namespace FluentDOM {
      */
     public function next($name = NULL, string $namespaceURI = NULL, callable $filter = NULL): bool {
       if (NULL !== $name) {
-        list($localName, $namespaceURI, $ignoreNamespace) = $this->prepareCondition($name, $namespaceURI);
+        [$localName, $namespaceURI, $ignoreNamespace] = $this->prepareCondition($name, $namespaceURI);
       } else {
         $ignoreNamespace = NULL === $namespaceURI || '' === $namespaceURI;
         $localName = $name;
@@ -91,7 +92,7 @@ namespace FluentDOM {
      */
     public function read(string $name = NULL, string $namespaceURI = NULL, callable $filter = NULL): bool {
       if (NULL !== $name) {
-        list($localName, $namespaceURI, $ignoreNamespace) = $this->prepareCondition($name, $namespaceURI);
+        [$localName, $namespaceURI, $ignoreNamespace] = $this->prepareCondition($name, $namespaceURI);
         while (parent::read()) {
           if (
             $this->nodeType === XML_ELEMENT_NODE &&
@@ -124,7 +125,7 @@ namespace FluentDOM {
      * @return NULL|string
      */
     public function getAttribute($name) {
-      list($prefix, $localName) = QualifiedName::split($name);
+      [$prefix, $localName] = QualifiedName::split($name);
       if (empty($prefix)) {
         return parent::getAttribute($name);
       }
@@ -156,7 +157,7 @@ namespace FluentDOM {
         $namespaceURI = (string)$namespaceURI;
         $ignoreNamespace = FALSE;
       } else {
-        list($prefix, $localName) = QualifiedName::split($name);
+        [$prefix, $localName] = QualifiedName::split($name);
         $namespaceURI = $prefix ? $this->_namespaces->resolveNamespace($prefix) : '';
         $ignoreNamespace = ($prefix === FALSE && $namespaceURI === '');
       }
@@ -168,13 +169,13 @@ namespace FluentDOM {
      * @param string|NULL $encoding
      * @param int $options
      * @return bool
-     * @throws \FluentDOM\Exceptions\InvalidArgument
+     * @throws InvalidArgumentType
      */
     public function attachStream($stream, string $encoding = NULL, int $options = 0): bool {
       if (!\is_resource($stream)) {
         throw new InvalidArgument('stream', 'resource');
       }
-      list($uri, $context) = ResourceWrapper::createContext($stream);
+      [$uri, $context] = ResourceWrapper::createContext($stream);
       \libxml_set_streams_context($context);
       return $this->open($uri, $encoding, $options);
     }

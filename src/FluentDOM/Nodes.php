@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -13,6 +13,8 @@ namespace FluentDOM {
 
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Xpath;
+  use FluentDOM\Exceptions\InvalidSource\Variable as InvalidVariableSource;
+  use FluentDOM\Exceptions\NoSerializer;
   use FluentDOM\Xpath\Transformer;
   use FluentDOM\Loader\Options;
   use FluentDOM\Serializer;
@@ -101,7 +103,7 @@ namespace FluentDOM {
     /**
      * @param mixed $source
      * @param NULL|string $contentType
-     * @throws \FluentDOM\Exceptions\InvalidSource\Variable
+     * @throws InvalidVariableSource
      * @throws \InvalidArgumentException
      * @throws \OutOfBoundsException
      * @throws \LogicException
@@ -121,10 +123,10 @@ namespace FluentDOM {
      * @param mixed $source
      * @param string $contentType optional, default value 'text/xml'
      * @param array|\Traversable|Options $options
-     * @throws \InvalidArgumentException
      * @return $this
+     * @throws \InvalidArgumentException
      * @throws \LogicException
-     * @throws \FluentDOM\Exceptions\InvalidSource\Variable
+     * @throws InvalidVariableSource
      * @throws \OutOfBoundsException
      */
     public function load($source, string $contentType = NULL, $options = []): self {
@@ -643,7 +645,7 @@ namespace FluentDOM {
      * Return the output of the internal dom document
      *
      * @return string
-     * @throws \FluentDOM\Exceptions\NoSerializer
+     * @throws NoSerializer
      */
     public function toString(): string {
       if ($serializer = $this->serializerFactories()->createSerializer($this->contentType, $this->document)) {
@@ -753,13 +755,14 @@ namespace FluentDOM {
      */
     public function each(callable $function, $elementsFilter = NULL): self {
       if (TRUE === $elementsFilter) {
-        $filter = function($node) {
+        $filter = static function($node) {
           return $node instanceof \DOMElement;
         };
       } else {
         $filter = Constraints::filterCallable($elementsFilter);
       }
       foreach ($this->_nodes as $index => $node) {
+        /** @noinspection PhpMethodParametersCountMismatchInspection */
         if (NULL === $filter || $filter($node, $index)) {
           $function($node, $index);
         }

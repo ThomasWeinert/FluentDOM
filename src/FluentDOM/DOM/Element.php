@@ -151,7 +151,7 @@ namespace FluentDOM\DOM {
      * @return string|NULL
      * @throws \LogicException
      */
-    public function getAttribute($qualifiedName) {
+    public function getAttribute($qualifiedName): ?string {
       [$namespaceURI, $localName] = $this->resolveTagName($qualifiedName);
       if ($namespaceURI !== '') {
         return parent::getAttributeNS($namespaceURI, $localName);

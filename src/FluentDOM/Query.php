@@ -141,7 +141,7 @@ namespace FluentDOM {
      *
      * @return NULL|\DOMElement
      */
-    private function getFirstElement() {
+    private function getFirstElement(): ?\DOMElement {
       foreach ($this->_nodes as $node) {
         if ($node instanceof \DOMElement) {
           return $node;
@@ -1072,7 +1072,7 @@ namespace FluentDOM {
      * @param string|NULL $selector
      * @return $this
      */
-    public function unwrap(string $selector = NULL) {
+    public function unwrap(string $selector = NULL): Query {
       $parents = $this->parent();
       if (NULL !== $selector) {
         $parents = $parents->filter($selector);

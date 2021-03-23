@@ -682,7 +682,7 @@ namespace FluentDOM {
      * @throws \OutOfBoundsException
      * @throws \InvalidArgumentException
      */
-    public function spawn($elements = NULL) {
+    public function spawn($elements = NULL): Nodes {
       $result = clone $this;
       $result->_parent = $this;
       $result->_document = $this->getDocument();

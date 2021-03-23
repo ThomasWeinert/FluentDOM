@@ -68,7 +68,9 @@ namespace FluentDOM\Utility {
      * @param string $message
      * @return boolean
      */
-    public static function assertNodeClass(\DOMNode $node, $classes, $message = 'Unexpected node type: %s') {
+    public static function assertNodeClass(
+      \DOMNode $node, $classes, $message = 'Unexpected node type: %s'
+    ): bool {
       if (!is_array($classes)) {
         $classes = [$classes];
       }

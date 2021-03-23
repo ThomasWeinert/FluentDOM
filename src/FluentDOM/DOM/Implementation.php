@@ -26,8 +26,9 @@ namespace FluentDOM\DOM {
      * @param DOMDocumentType|null $doctype
      * @return Document
      */
-    public function createDocument($namespaceURI = NULL, $qualifiedName = NULL, DOMDocumentType
-    $doctype = NULL) {
+    public function createDocument(
+      $namespaceURI = NULL, $qualifiedName = NULL, DOMDocumentType $doctype = NULL
+    ) {
       $document = new Document();
       if ($doctype) {
         $document->appendChild($doctype);

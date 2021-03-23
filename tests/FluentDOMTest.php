@@ -39,7 +39,6 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
    */
   public function testCreator(): void {
     $write = FluentDOM::create();
-    $this->assertInstanceOf(\FluentDOM\Creator::class, $write);
     $this->assertXmlStringEqualsXmlString(
       "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<test/>\n",
       (string)$write('test')
@@ -52,7 +51,6 @@ class FluentDOMTest extends \FluentDOM\TestCase  {
    */
   public function testCreatorWithArguments(): void {
     $write = FluentDOM::create('2.0', 'ASCII');
-    $this->assertInstanceOf(\FluentDOM\Creator::class, $write);
     $this->assertEquals(
       "<?xml version=\"2.0\" encoding=\"ASCII\"?>\n<test/>\n",
       (string)$write('test')

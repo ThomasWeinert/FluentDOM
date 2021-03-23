@@ -99,14 +99,12 @@ namespace FluentDOM\Creator {
 
     /**
      * @param Element $parentNode
-     * @return Element
      */
-    public function appendTo(Element $parentNode): Element {
+    public function appendTo(Element $parentNode): void {
       try {
         $parentNode->append(...$this);
       } catch (UnattachedNode $e) {
       }
-      return $parentNode;
     }
   }
 }

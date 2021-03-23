@@ -124,13 +124,11 @@ namespace FluentDOM\Creator {
 
     /**
      * @param Element $parentNode
-     * @return Element
      */
-    public function appendTo(Element $parentNode): Element {
+    public function appendTo(Element $parentNode): void {
       $parentNode->appendChild(
         $parentNode->ownerDocument->importNode($this->_node, TRUE)
       );
-      return $parentNode;
     }
 
     /**

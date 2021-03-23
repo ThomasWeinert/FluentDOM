@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -19,7 +19,7 @@ namespace FluentDOM {
    */
   trait XmlSerialize {
 
-    abstract public function appendTo(Element $parentNode);
+    abstract public function appendTo(Element $parentNode): void;
 
     /**
      * Return the object as an XML fragment.

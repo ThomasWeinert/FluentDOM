@@ -32,13 +32,13 @@ namespace FluentDOM {
    */
   class Nodes implements \ArrayAccess, \Countable, \IteratorAggregate {
 
-    const CONTEXT_DOCUMENT = Transformer::CONTEXT_DOCUMENT;
-    const CONTEXT_SELF = Transformer::CONTEXT_SELF;
-    const CONTEXT_CHILDREN = Transformer::CONTEXT_CHILDREN;
+    public const CONTEXT_DOCUMENT = Transformer::CONTEXT_DOCUMENT;
+    public const CONTEXT_SELF = Transformer::CONTEXT_SELF;
+    public const CONTEXT_CHILDREN = Transformer::CONTEXT_CHILDREN;
 
-    const FIND_MODE_MATCH = 8;
-    const FIND_MODE_FILTER = 16;
-    const FIND_FORCE_SORT = 32;
+    public const FIND_MODE_MATCH = 8;
+    public const FIND_MODE_FILTER = 16;
+    public const FIND_FORCE_SORT = 32;
 
     /**
      * @var Xpath
@@ -193,7 +193,7 @@ namespace FluentDOM {
       if (NULL !== $loaders) {
         if ($loaders instanceOf Loadable) {
           $this->_loaders = $loaders;
-        } elseif (\is_array($loaders) || $loaders instanceOf \Traversable) {
+        } elseif (is_iterable($loaders)) {
           $this->_loaders = new Loaders($loaders);
         } else {
           throw new Exceptions\InvalidArgument(
@@ -418,7 +418,7 @@ namespace FluentDOM {
         return $selector;
       }
       if ($selector instanceof \DOMNode) {
-        return function(\DOMNode $node) use ($selector) {
+        return static function(\DOMNode $node) use ($selector) {
           return $node->isSameNode($selector);
         };
       }
@@ -427,8 +427,8 @@ namespace FluentDOM {
           return $this->matches($selector, $node);
         };
       }
-      if ($selector instanceof \Traversable || \is_array($selector)) {
-        return function(\DOMNode $node) use ($selector) {
+      if (is_iterable($selector)) {
+        return static function(\DOMNode $node) use ($selector) {
           foreach ($selector as $compareWith) {
             if (
               $compareWith instanceof \DOMNode &&

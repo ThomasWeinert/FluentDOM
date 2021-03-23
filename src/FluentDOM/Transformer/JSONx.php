@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -14,6 +14,7 @@ namespace FluentDOM\Transformer {
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Element;
   use FluentDOM\DOM\Xpath;
+  use FluentDOM\Loader\Json\JsonDOM;
   use FluentDOM\Utility\StringCastable;
 
   /**
@@ -23,8 +24,8 @@ namespace FluentDOM\Transformer {
    */
   class JSONx implements StringCastable {
 
-    const XMLNS_JSONX = 'http://www.ibm.com/xmlns/prod/2009/jsonx';
-    const XMLNS_JSONDOM = 'urn:carica-json-dom.2013';
+    private const XMLNS_JSONX = 'http://www.ibm.com/xmlns/prod/2009/jsonx';
+    private const XMLNS_JSONDOM = JsonDOM::XMLNS;
 
     /**
      * @var \DOMDocument

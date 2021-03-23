@@ -90,7 +90,7 @@ namespace FluentDOM\Utility {
      * @return \Traversable|array
      */
     public static function filterNodeList($elements) {
-      if ($elements instanceof \Traversable || \is_array($elements)) {
+      if (is_iterable($elements)) {
         return empty($elements) ? new \EmptyIterator() : $elements;
       }
       return NULL;

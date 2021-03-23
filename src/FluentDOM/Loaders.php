@@ -29,10 +29,10 @@ namespace FluentDOM {
     /**
      * Store the a list of loaders if provided.
      *
-     * @param array|\Traversable|NULL $list
+     * @param iterable|NULL $list
      */
-    public function __construct($list = NULL) {
-      if (\is_array($list) || $list instanceOf \Traversable) {
+    public function __construct(iterable $list = NULL) {
+      if (is_iterable($list)) {
         /** @var array|\Traversable $list */
         foreach ($list as $loader) {
           $this->add($loader);

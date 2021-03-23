@@ -130,6 +130,7 @@ namespace FluentDOM {
      * @param mixed ...$parameters
      * @return DOM\Element
      * @throws \LogicException
+     * @throws Exceptions\UnattachedNode
      */
     public function element(string $name, ...$parameters): DOM\Element {
       $node = $this->_document->createElement($name);

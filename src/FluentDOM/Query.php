@@ -530,7 +530,7 @@ namespace FluentDOM {
         if ($mapped === NULL) {
           continue;
         }
-        if ($mapped instanceof \Traversable || \is_array($mapped)) {
+        if (is_iterable($mapped)) {
           foreach ($mapped as $element) {
             if ($element !== NULL) {
               $result[] = $element;
@@ -1382,7 +1382,7 @@ namespace FluentDOM {
       if (\is_string($name)) {
         return [(string)$name => $value];
       }
-      if (\is_array($name) || $name instanceOf \Traversable) {
+      if (is_iterable($name)) {
         return $name;
       }
       throw new \InvalidArgumentException('Invalid css property name argument type.');

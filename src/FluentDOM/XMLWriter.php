@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -183,16 +183,16 @@ namespace FluentDOM {
     /**
      * Write a DOM node
      *
-     * @param \DOMNode|\DOMNode[]|\Traversable $nodes
+     * @param \DOMNode|\DOMNode[]|iterable $nodes
      * @param int $maximumDepth
      */
-    public function collapse($nodes, int $maximumDepth = 1000) {
+    public function collapse($nodes, int $maximumDepth = 1000): void {
       if ($maximumDepth <= 0) {
         return;
       }
       if ($nodes instanceof \DOMNode) {
         $this->collapseNode($nodes, $maximumDepth);
-      } elseif ($nodes instanceof \Traversable || \is_array($nodes)) {
+      } elseif (is_iterable($nodes)) {
         foreach ($nodes as $childNode) {
           $this->collapse($childNode, $maximumDepth);
         }
@@ -203,7 +203,7 @@ namespace FluentDOM {
      * @param \DOMNode $node
      * @param int $maximumDepth
      */
-    private function collapseNode(\DOMNode $node, int $maximumDepth) {
+    private function collapseNode(\DOMNode $node, int $maximumDepth): void {
       if ($node instanceof \DOMElement) {
         $this->startElementNS($node->prefix, $node->localName, $node->namespaceURI);
         $this->collapse($node->attributes, $maximumDepth - 1);

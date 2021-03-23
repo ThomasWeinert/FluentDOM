@@ -103,7 +103,8 @@ namespace FluentDOM\Serializer {
         $result = new \stdClass();
         /** @var \DOMElement $child */
         foreach ($this->getChildElements($node) as $child) {
-          $result->{$this->getKey($child)} = $this->getNode($child);
+          $key = $this->getKey($child);
+          $result->{$key} = $this->getNode($child);
         }
         break;
       case 'array' :

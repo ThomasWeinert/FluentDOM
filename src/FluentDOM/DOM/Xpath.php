@@ -102,7 +102,9 @@ namespace FluentDOM\DOM {
      * @param NULL|bool $registerNodeNS
      * @return \DOMNodeList|NULL
      */
-    public function query($expression, \DOMNode $contextNode = NULL, $registerNodeNS = NULL) {
+    public function query(
+      $expression, \DOMNode $contextNode = NULL, $registerNodeNS = NULL
+    ): ?\DOMNodeList {
       trigger_error(
         'Please use XPath::evaluate() not XPath::query().', E_USER_DEPRECATED
       );

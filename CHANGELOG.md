@@ -6,6 +6,8 @@
     \FluentDOM\Loader\Result instance (or NULL)
 - [!BC] Define Return Type For \FluentDOM\Loadable::load()
 - [!BC] Define Return Type For \FluentDOM\Loadable::loadFragment()
+- [!BC] Define Appendable::appendTo() Return Value 
+  as "void"
 - [!BC] Change Method Signatures Of DOM L3 Methods To PHP
 - [FEATURE] #90 Throw Exception If File Can Not Be Loaded
 - [REFACTOR] Define Argument And Return Types

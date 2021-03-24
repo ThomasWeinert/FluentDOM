@@ -44,7 +44,7 @@ namespace FluentDOM {
      * @param string $namespaceURI
      * @throws \LogicException
      */
-    public function registerNamespace(string $prefix, string $namespaceURI) {
+    public function registerNamespace(string $prefix, string $namespaceURI): void {
       $this->_namespaces[$prefix] = $namespaceURI;
     }
 
@@ -92,7 +92,7 @@ namespace FluentDOM {
      */
     public function read(string $name = NULL, string $namespaceURI = NULL, callable $filter = NULL): bool {
       if (NULL !== $name) {
-        [$localName, $namespaceURI, $ignoreNamespace] = $this->prepareCondition($name, $namespaceURI);
+        [$localName, $namespaceURI, $ignoreNamespace] = $this->prepareCondition($name ?? '', $namespaceURI);
         while (parent::read()) {
           if (
             $this->nodeType === XML_ELEMENT_NODE &&
@@ -148,10 +148,10 @@ namespace FluentDOM {
 
     /**
      * @param string $name
-     * @param string|null $namespaceURI
+     * @param string|NULL $namespaceURI
      * @return array
      */
-    private function prepareCondition($name, $namespaceURI): array {
+    private function prepareCondition(string $name, string $namespaceURI = NULL): array {
       if (NULL !== $namespaceURI) {
         $localName = $name;
         $namespaceURI = (string)$namespaceURI;
@@ -177,7 +177,7 @@ namespace FluentDOM {
       }
       [$uri, $context] = ResourceWrapper::createContext($stream);
       \libxml_set_streams_context($context);
-      return $this->open($uri, $encoding, $options);
+      return NULL !== $this->open($uri, $encoding, $options);
     }
   }
 }

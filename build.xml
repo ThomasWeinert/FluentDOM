@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!--
+  ~ FluentDOM
+  ~
+  ~ @link https://thomas.weinert.info/FluentDOM/
+  ~ @copyright Copyright 2009-2021 FluentDOM Contributors
+  ~ @license http://www.opensource.org/licenses/mit-license.php The MIT License
+  ~
+  -->
+
 <project name="FluentDOM" default="build">
 
   <property name="builddir" value="${project.basedir}/build" />
@@ -18,7 +27,9 @@
   </target>
 
   <target name="phpunit" depends="prepare">
-    <exec executable="phpunit" passthru="true">
+    <exec executable="phpdbg" passthru="true">
+      <arg value="-qrr"/>
+      <arg file="tools/phpunit.phar"/>
       <arg value="--coverage-xml"/>
       <arg file="${builddir}/coverage/xml"/>
       <arg value="--coverage-html"/>
@@ -29,11 +40,14 @@
   </target>
 
   <target name="phpdox" depends="prepare">
-    <exec command="phpdox" passthru="true"/>
+    <exec executable="php" passthru="true">
+      <arg file="tools/phpdox.phar"/>
+    </exec>
   </target>
 
   <target name="phpmd" depends="prepare">
-    <exec executable="phpmd" passthru="true">
+    <exec executable="php" passthru="true">
+      <arg file="tools/phpmd.phar"/>
       <arg path="./src"/>
       <arg value="xml"/>
       <arg value="codesize,design,unusedcode"/>
@@ -43,7 +57,8 @@
   </target>
 
   <target name="phploc" depends="prepare">
-    <exec executable="phploc" passthru="true">
+    <exec executable="php" passthru="true">
+      <arg file="tools/phploc.phar"/>
       <arg value="--log-xml"/>
       <arg file="${builddir}/logs/phploc.xml"/>
       <arg path="./src"/>

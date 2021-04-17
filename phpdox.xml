@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<phpdox xmlns="http://phpdox.net/config" silent="false">
+<!--
+  ~ FluentDOM
+  ~
+  ~ @link https://thomas.weinert.info/FluentDOM/
+  ~ @copyright Copyright 2009-2021 FluentDOM Contributors
+  ~ @license http://www.opensource.org/licenses/mit-license.php The MIT License
+  ~
+  -->
+
+<phpdox xmlns="http://xml.phpdox.net/config" silent="false">
   <bootstrap />
   <project name="FluentDOM" source="src" workdir="${basedir}/build/phpdox/xml">
     <collector publiconly="false" backend="parser">
@@ -17,11 +26,6 @@
           <executable file="git"/>
           <history enabled="true" limit="15" cache="./build/logs/gitlog.xml" />
         </source>
-        <!--
-        <source type="checkstyle">
-          <file name="logs/checkstyle.xml" />
-        </source>
-        -->
         <source type="pmd">
           <file name="logs/phpmd.xml" />
         </source>
@@ -32,7 +36,6 @@
       <!--  default engine "html" -->
       <build engine="html" enabled="true" output="html">
         <template path="${phpDox.home}/templates/html" />
-        <resource path="${basedir}/build/static" />
         <file extension="xhtml" />
       </build>
     </generator>

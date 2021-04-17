@@ -176,7 +176,7 @@ namespace FluentDOM {
         $loaded = $this->loaders()->load($source, $contentType, $options);
         $this->_loadingContext = [
           'contentType' => $contentType,
-          'options' => $options
+          'options' => $options,
         ];
       }
       return $loaded;
@@ -186,12 +186,12 @@ namespace FluentDOM {
      * Set the loaders list.
      *
      * @param Loadable|array|\Traversable $loaders
-     * @throws \InvalidArgumentException
      * @return Loadable
+     * @throws \InvalidArgumentException
      */
     public function loaders($loaders = NULL): Loadable {
       if (NULL !== $loaders) {
-        if ($loaders instanceOf Loadable) {
+        if ($loaders instanceof Loadable) {
           $this->_loaders = $loaders;
         } elseif (is_iterable($loaders)) {
           $this->_loaders = new Loaders($loaders);
@@ -274,7 +274,7 @@ namespace FluentDOM {
     public function registerNamespace(string $prefix, string $namespaceURI) {
       $this->_namespaces[$prefix] = $namespaceURI;
       $document = $this->getDocument();
-      if ($document instanceOf Document) {
+      if ($document instanceof Document) {
         $document->registerNamespace($prefix, $namespaceURI);
       } elseif (NULL !== $this->_xpath) {
         $this->_xpath->registerNamespace($prefix, $namespaceURI);
@@ -363,7 +363,7 @@ namespace FluentDOM {
         'html-fragment' => 'text/html',
         'text/html-fragment' => 'text/html',
         'html' => 'text/html',
-        'text/html' => 'text/html'
+        'text/html' => 'text/html',
       ];
       $normalizedValue = strtolower($value);
       $newContentType = $value;
@@ -389,6 +389,7 @@ namespace FluentDOM {
       }
       return $this->_document;
     }
+
     /**
      * Use callback to convert selector if it is set.
      *
@@ -408,9 +409,9 @@ namespace FluentDOM {
      * Returns a callback that can be used to validate if an node
      * matches the selector.
      *
-     * @throws \InvalidArgumentException
      * @param NULL|callable|string|array|\DOMNode|\Traversable $selector
      * @return callable|NULL
+     * @throws \InvalidArgumentException
      */
     public function getSelectorCallback($selector) {
       if (NULL === $selector || Constraints::filterCallable($selector)) {
@@ -418,22 +419,22 @@ namespace FluentDOM {
         return $selector;
       }
       if ($selector instanceof \DOMNode) {
-        return static function(\DOMNode $node) use ($selector) {
+        return static function (\DOMNode $node) use ($selector) {
           return $node->isSameNode($selector);
         };
       }
       if (\is_string($selector) && $selector !== '') {
-        return function(\DOMNode $node) use ($selector) {
+        return function (\DOMNode $node) use ($selector) {
           return $this->matches($selector, $node);
         };
       }
       if (is_iterable($selector)) {
-        return static function(\DOMNode $node) use ($selector) {
+        return static function (\DOMNode $node) use ($selector) {
           foreach ($selector as $compareWith) {
             if (
               $compareWith instanceof \DOMNode &&
               $node->isSameNode($compareWith)
-            ){
+            ) {
               return TRUE;
             }
           }
@@ -498,9 +499,9 @@ namespace FluentDOM {
     /**
      * Check if index exists in internal array
      *
-     * @example interfaces/ArrayAccess.php Usage Example: ArrayAccess Interface
      * @param int $offset
      * @return bool
+     * @example interfaces/ArrayAccess.php Usage Example: ArrayAccess Interface
      */
     public function offsetExists($offset): bool {
       return isset($this->_nodes[$offset]);
@@ -509,9 +510,9 @@ namespace FluentDOM {
     /**
      * Get element from internal array
      *
-     * @example interfaces/ArrayAccess.php Usage Example: ArrayAccess Interface
      * @param int $offset
      * @return \DOMElement|\DOMNode|NULL
+     * @example interfaces/ArrayAccess.php Usage Example: ArrayAccess Interface
      */
     public function offsetGet($offset) {
       return $this->_nodes[$offset] ?? NULL;
@@ -520,10 +521,10 @@ namespace FluentDOM {
     /**
      * If somebody tries to modify the internal array throw an exception.
      *
-     * @example interfaces/ArrayAccess.php Usage Example: ArrayAccess Interface
      * @param int $offset
      * @param mixed $value
      * @throws \BadMethodCallException
+     * @example interfaces/ArrayAccess.php Usage Example: ArrayAccess Interface
      */
     public function offsetSet($offset, $value) {
       throw new \BadMethodCallException('List is read only');
@@ -532,9 +533,9 @@ namespace FluentDOM {
     /**
      * If somebody tries to remove an element from the internal array throw an exception.
      *
-     * @example interfaces/ArrayAccess.php Usage Example: ArrayAccess Interface
      * @param int $offset
      * @throws \BadMethodCallException
+     * @example interfaces/ArrayAccess.php Usage Example: ArrayAccess Interface
      */
     public function offsetUnset($offset) {
       throw new \BadMethodCallException('List is read only');
@@ -562,9 +563,9 @@ namespace FluentDOM {
      * Virtual properties, read property
      *
      * @param string $name
-     * @throws \UnexpectedValueException
-     * @throws \LogicException
      * @return mixed
+     * @throws \LogicException
+     * @throws \UnexpectedValueException
      */
     public function __get(string $name) {
       switch ($name) {
@@ -712,9 +713,9 @@ namespace FluentDOM {
      *
      * @param \DOMNode|\Traversable|array|NULL $elements
      * @param bool $ignoreTextNodes ignore text nodes
-     * @throws \OutOfBoundsException
-     * @throws \InvalidArgumentException
      * @return $this
+     * @throws \InvalidArgumentException
+     * @throws \OutOfBoundsException
      */
     public function push($elements, bool $ignoreTextNodes = FALSE): self {
       if (Constraints::filterNode($elements, $ignoreTextNodes)) {
@@ -755,7 +756,7 @@ namespace FluentDOM {
      */
     public function each(callable $function, $elementsFilter = NULL): self {
       if (TRUE === $elementsFilter) {
-        $filter = static function($node) {
+        $filter = static function ($node) {
           return $node instanceof \DOMElement;
         };
       } else {
@@ -783,22 +784,22 @@ namespace FluentDOM {
      * this is the like the jQuery specification - but a lot slower and needs more memory.
      * Additionally in this mode, it will find only element nodes.     *
      *
-     * @example find.php Usage Example: FluentDOM::find()
      * @param mixed $selector selector
      * @param int $options FIND_* options CONTEXT_DOCUMENT, FIND_MODE_FILTER, FIND_FORCE_SORT
      * @return self
      * @throws \LogicException
      * @throws \OutOfBoundsException
      * @throws \InvalidArgumentException
+     * @example ../examples/Query/find.php Usage Example: FluentDOM::find()
      */
     public function find($selector, int $options = 0): self {
-      list(
+      [
         $selectorIsScalar,
         $selectorIsFilter,
         $expression,
         $contextMode,
-        $fetchOptions
-      ) = $this->prepareFindContext($selector, $options);
+        $fetchOptions,
+      ] = $this->prepareFindContext($selector, $options);
       if ($selectorIsFilter) {
         return $this->fetch(
           $expression,
@@ -857,7 +858,7 @@ namespace FluentDOM {
       } elseif (preg_match('(^(//?)(.*))', $filter, $matches)) {
         $filter = 'self::'.$matches[2];
       }
-      return function($node) use ($filter) {
+      return function ($node) use ($filter) {
         return $this->xpath->evaluate($filter, $node)->length > 0;
       };
     }
@@ -897,8 +898,8 @@ namespace FluentDOM {
      * Note that this only works on arrays of DOM nodes, not strings or numbers.
      *
      * @param \DOMNode[] $array array of DOM nodes
-     * @throws \InvalidArgumentException
      * @return array
+     * @throws \InvalidArgumentException
      */
     public function unique(array $array): array {
       $count = \count($array);

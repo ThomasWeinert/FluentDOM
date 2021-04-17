@@ -72,10 +72,8 @@ namespace FluentDOM\Utility {
      * @param int $offset Offset of NCName part in QName
      * @param string|NULL $fullName full name used in error message
      * @throws \UnexpectedValueException
-     * @return bool
      */
-    private function isNCName(string $name, int $offset = 0, string $fullName = NULL): bool {
-      /** @noinspection SpellCheckingInspection */
+    private function isNCName(string $name, int $offset = 0, string $fullName = NULL): void {
       $nameStartChar =
         'A-Z_a-z'.
         '\\x{C0}-\\x{D6}\\x{D8}-\\x{F6}\\x{F8}-\\x{2FF}\\x{370}-\\x{37D}'.
@@ -84,7 +82,7 @@ namespace FluentDOM\Utility {
         '\\x{FDF0}-\\x{FFFD}\\x{10000}-\\x{EFFFF}';
       $nameChar =
         $nameStartChar.
-        '\\.\\d\\x{B7}\\x{300}-\\x{36F}\\x{203F}-\\x{2040}';
+        '.\\d\\x{B7}\\x{300}-\\x{36F}\\x{203F}-\\x{2040}';
       if ($offset > 0) {
         $namePart = \substr($name, $offset);
       } else {
@@ -109,7 +107,6 @@ namespace FluentDOM\Utility {
           'Invalid QName "'.$name.'": Invalid character at index '.$offset.'.'
         );
       }
-      return TRUE;
     }
 
     /**

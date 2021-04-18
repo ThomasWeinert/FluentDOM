@@ -352,7 +352,7 @@ namespace FluentDOM {
      * Get a set of elements containing the closest parent element that matches the specified
      * selector, the starting element included.
      *
-     * @param string $selector selector
+     * @param string|callable $selector selector
      * @param array|\Traversable $context
      * @return self
      * @throws \OutOfBoundsException
@@ -1435,7 +1435,7 @@ namespace FluentDOM {
      * @param string $name
      * @return bool
      */
-    public function hasAttr($name): bool {
+    public function hasAttr(string $name): bool {
       foreach ($this->_nodes as $node) {
         if ($node instanceof \DOMElement && $node->hasAttribute($name)) {
           return TRUE;

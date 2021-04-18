@@ -23,9 +23,13 @@ namespace FluentDOM\Query {
       );
       $fd->find('/p')->first()->replaceWith('hi');
 
-      $this->assertEquals(
-        "hi <p>Paragraph 2</p><p>Paragraph 3</p><div><b>5</b><p>4</p></div>",
-        (string)$fd
+      $html = (string)$fd;
+      $this->assertThat(
+        $html,
+        $this->logicalOr(
+          "hi <p>Paragraph 2</p><p>Paragraph 3</p><div><b>5</b><p>4</p></div>",
+          "hi <p>Paragraph 2</p><p>Paragraph 3</p><div>\n<b>5</b><p>4</p>\n</div>"
+        )
       );
     }
 
@@ -36,9 +40,13 @@ namespace FluentDOM\Query {
       );
       $fd->filter('self::p')->first()->replaceWith('hi');
 
-      $this->assertEquals(
-        "hi <p>Paragraph 2</p><p>Paragraph 3</p><div><b>5</b><p>4</p></div>",
-        (string)$fd
+      $html = (string)$fd;
+      $this->assertThat(
+        $html,
+        $this->logicalOr(
+          "hi <p>Paragraph 2</p><p>Paragraph 3</p><div><b>5</b><p>4</p></div>",
+          "hi <p>Paragraph 2</p><p>Paragraph 3</p><div>\n<b>5</b><p>4</p>\n</div>"
+        )
       );
     }
 

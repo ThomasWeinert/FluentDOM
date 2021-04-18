@@ -8,14 +8,14 @@
  *
  */
 
-namespace FluentDOM\Query {
+namespace FluentDOM\Query\Manipulation {
 
   use FluentDOM\Query;
   use FluentDOM\TestCase;
 
   require_once __DIR__.'/../../TestCase.php';
 
-  class ManipulationCloneTest extends TestCase {
+  class CloneTest extends TestCase {
 
     protected $_directory = __DIR__;
 
@@ -31,7 +31,7 @@ namespace FluentDOM\Query {
       $this->assertTrue($fd[0] !== $clonedNodes[0]);
       $this->assertEquals($fd[0]->nodeName, $clonedNodes[0]->nodeName);
       $this->assertEquals($fd[1]->getAttribute('index'), $clonedNodes[1]->getAttribute('index'));
-      $this->assertEquals(count($fd), count($clonedNodes));
+      $this->assertSameSize($fd, $clonedNodes);
     }
   }
 }

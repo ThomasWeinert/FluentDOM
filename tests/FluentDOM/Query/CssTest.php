@@ -17,8 +17,8 @@ namespace FluentDOM\Query {
 
   class CssTest extends TestCase {
 
-    const HTML = '
-      <html>
+    protected const HTML = '
+      <html lang="en">
         <body>
           <div style="text-align: left;">First</div>
           <div style="text-align: right;">Second</div>
@@ -181,9 +181,7 @@ namespace FluentDOM\Query {
       $fd->document->loadXml('<sample style="width: 21px; height: 21px;"/>');
       $fd = $fd->find('/*');
       $css = new Css($fd);
-      $this->assertEquals(
-        2, count($css)
-      );
+      $this->assertCount(2, $css);
     }
 
     /**
@@ -193,9 +191,7 @@ namespace FluentDOM\Query {
       $fd = new Query();
       $fd = $fd->find('/*');
       $css = new Css($fd);
-      $this->assertEquals(
-        0, count($css)
-      );
+      $this->assertCount(0, $css);
     }
 
     /**

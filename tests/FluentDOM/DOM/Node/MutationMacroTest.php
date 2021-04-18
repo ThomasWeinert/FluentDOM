@@ -11,6 +11,7 @@
 namespace FluentDOM\DOM\Node {
 
   use FluentDOM\DOM\Document;
+  use FluentDOM\Exceptions\UnattachedNode;
   use FluentDOM\TestCase;
 
   require_once __DIR__.'/../../TestCase.php';
@@ -40,6 +41,7 @@ namespace FluentDOM\DOM\Node {
 
     /**
      * @covers \FluentDOM\DOM\Node\MutationMacro
+     * @throws UnattachedNode
      */
     public function testExpandFromArrayOfStrings(): void {
       $document = new Document();
@@ -50,10 +52,12 @@ namespace FluentDOM\DOM\Node {
 
     /**
      * @covers \FluentDOM\DOM\Node\MutationMacro
+     * @throws UnattachedNode
      */
     public function testExpandFromInvalidArgumentExpectingException(): void {
       $document = new Document();
       $this->expectException(\InvalidArgumentException::class);
+      /** @noinspection PhpParamsInspection */
       MutationMacro::expand($document, [new \stdClass()]);
     }
 

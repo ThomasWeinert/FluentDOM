@@ -52,10 +52,8 @@ namespace FluentDOM\Utility\Iterators {
       $document = new Document();
       $document->loadXML('<items>ONE<two><three/></two></items>');
       $iterator = $document->documentElement->getIterator();
-      $this->expectException(
-        \InvalidArgumentException::class,
-        'Unknown position 99, only 2 items'
-      );
+      $this->expectException(\InvalidArgumentException::class);
+      $this->expectErrorMessage('Unknown position 99, only 2 items');
       $iterator->seek(99);
     }
 
@@ -85,8 +83,8 @@ namespace FluentDOM\Utility\Iterators {
       $document = new Document();
       $document->loadXML('<items>ONE<two><three/></two></items>');
       $iterator = $document->documentElement->getIterator();
-      $this->expectException(
-        \UnexpectedValueException::class,
+      $this->expectException(\UnexpectedValueException::class);
+      $this->expectErrorMessage(
         'Called FluentDOM\Utility\Iterators\ElementIterator::getChildren with invalid current element.'
       );
       $iterator->getChildren();

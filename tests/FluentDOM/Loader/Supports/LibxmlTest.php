@@ -10,8 +10,7 @@
 
 namespace FluentDOM\Loader\Supports {
 
-  use FluentDOM\Exceptions\InvalidSource;
-  use FluentDOM\Exceptions\LoadingError;
+  use FluentDOM\DOM\Document;
   use FluentDOM\Loader\Options;
   use FluentDOM\TestCase;
 
@@ -21,11 +20,11 @@ namespace FluentDOM\Loader\Supports {
 
     use Libxml;
 
-    public function getSupported() {
+    public function getSupported(): array {
       return ['xml'];
     }
 
-    public function load($source, $contentType, $options = []) {
+    public function load($source, $contentType, $options = []): Document {
       return $this->loadXmlDocument($source, $options);
     }
 

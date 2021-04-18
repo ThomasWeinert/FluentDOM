@@ -26,10 +26,9 @@ namespace FluentDOM\DOM {
         ->appendChild(
           $document->createProcessingInstruction('php', 'echo "Hello World!";')
         );
-      $this->assertEquals(
-        'echo "Hello World!";',
-        (string)$document->documentElement->childNodes->item(0)
-      );
+      /** @var ProcessingInstruction $node */
+      $node = $document->documentElement->childNodes->item(0);
+      $this->assertEquals('echo "Hello World!";', (string)$node);
       $this->assertEquals(
         '<test><?php echo "Hello World!";?></test>',
         $document->saveXML($document->documentElement)

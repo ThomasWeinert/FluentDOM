@@ -22,10 +22,9 @@ namespace FluentDOM\DOM {
     public function testMagicMethodToString(): void {
       $document = new Document();
       $document->appendElement('test')->appendChild($document->createComment('success'));
-      $this->assertEquals(
-        'success',
-        (string)$document->documentElement->childNodes->item(0)
-      );
+      /** @var Comment $node */
+      $node = $document->documentElement->childNodes->item(0);
+      $this->assertEquals('success', (string)$node);
       $this->assertEquals(
         '<test><!--success--></test>',
         $document->saveXML($document->documentElement)

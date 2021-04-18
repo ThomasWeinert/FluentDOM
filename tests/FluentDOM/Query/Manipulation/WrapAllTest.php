@@ -8,14 +8,13 @@
  *
  */
 
-namespace FluentDOM\Query {
+namespace FluentDOM\Query\Manipulation {
 
-  use FluentDOM\Query;
   use FluentDOM\TestCase;
 
   require_once __DIR__.'/../../TestCase.php';
 
-  class ManipulationWrapAllTest extends TestCase {
+  class WrapAllTest extends TestCase {
 
     protected $_directory = __DIR__;
 

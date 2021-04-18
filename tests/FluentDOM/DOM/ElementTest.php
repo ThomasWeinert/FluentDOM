@@ -196,6 +196,7 @@ namespace FluentDOM\DOM {
      */
     public function testUnsetUnknownPropertyAfterSet(): void {
       $document = new Document();
+      /** @var Element $node */
       $node = $document->appendChild($document->createElement('foo'));
       $node->SOME_PROPERTY = 'success';
       unset($node->SOME_PROPERTY);
@@ -208,7 +209,7 @@ namespace FluentDOM\DOM {
      * @dataProvider dataProviderDynamicElementProperties
      * @param string $propertyName
      */
-    public function testSetDynamicPropertyExpectingException(string $propertyName) {
+    public function testSetDynamicPropertyExpectingException(string $propertyName): void {
       $document = new Document();
       $document->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
       $this->expectErrorMessage('Cannot write property');
@@ -221,14 +222,14 @@ namespace FluentDOM\DOM {
      * @dataProvider dataProviderDynamicElementProperties
      * @param string $propertyName
      */
-    public function testUnsetDynamicPropertyExpectingException(string $propertyName) {
+    public function testUnsetDynamicPropertyExpectingException(string $propertyName): void {
       $document = new Document();
       $document->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
       $this->expectException(\BadMethodCallException::class);
       unset($document->documentElement->$propertyName);
     }
 
-    public static function dataProviderDynamicElementProperties() {
+    public static function dataProviderDynamicElementProperties(): array {
       return [
         ['firstElementChild'],
         ['lastElementChild'],
@@ -240,10 +241,10 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Element::__unset
      * @covers \FluentDOM\DOM\Element::blockReadOnlyProperties
-     * @dataProvider dataProviderDynamicElementProperties
-     * @param string $propertyName
+     * @noinspection PhpExpressionResultUnusedInspection
+     * @noinspection PhpUndefinedFieldInspection
      */
-    public function testUnsetUnknownProperty(string $propertyName) {
+    public function testUnsetUnknownProperty(): void {
       $document = new Document();
       $document->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
       unset($document->documentElement->SOME_PROPERTY);
@@ -917,7 +918,7 @@ namespace FluentDOM\DOM {
       $this->assertTrue(isset($document->documentElement[$offset]));
     }
 
-    public static function provideExistingOffsets() {
+    public static function provideExistingOffsets(): array {
       return [
         [0],
         [1],
@@ -935,7 +936,7 @@ namespace FluentDOM\DOM {
       $this->assertFalse(isset($document->documentElement[$offset]));
     }
 
-    public static function provideMissingOffsets() {
+    public static function provideMissingOffsets(): array {
       return [
         [99],
         ['NON_EXISTING']
@@ -948,10 +949,8 @@ namespace FluentDOM\DOM {
     public function testArrayAccessOffsetExistsExpectingException(): void {
       $document = new Document();
       $document->loadXML(self::XML);
-      $this->expectException(
-        \InvalidArgumentException::class,
-        'Invalid offset. Use integer for child nodes and strings for attributes.'
-      );
+      $this->expectException(\InvalidArgumentException::class);
+      $this->expectErrorMessage('Invalid offset. Use integer for child nodes and strings for attributes.');
       $document->documentElement[NULL];
     }
 
@@ -1025,10 +1024,8 @@ namespace FluentDOM\DOM {
     public function testArrayAccessOffsetSetWithInvalidChildExpectingException(): void {
       $document = new Document();
       $document->appendChild($document->createElement('root'));
-      $this->expectException(
-        \InvalidArgumentException::class,
-        '$value is not a valid \DOMNode'
-      );
+      $this->expectException(\InvalidArgumentException::class);
+      $this->expectErrorMessage('$value is not a valid \DOMNode');
       $document->documentElement[0] = NULL;
     }
 
@@ -1110,7 +1107,7 @@ namespace FluentDOM\DOM {
      *   [1, "<foo>text<bar/>text</foo>"]
      *   [1, "<foo>text<bar><child/></bar>text</foo>"]
      */
-    public function testChildElementCount($expected, $xml) {
+    public function testChildElementCount(int $expected, string $xml): void {
       $document = new Document();
       $document->loadXML($xml);
       $this->assertSame($expected, $document->documentElement->childElementCount);

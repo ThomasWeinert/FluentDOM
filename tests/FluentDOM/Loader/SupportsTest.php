@@ -17,7 +17,7 @@ namespace FluentDOM\Loader {
   class Supports_TestProxy {
     use Supports;
 
-    public function getSupported() {
+    public function getSupported(): array {
       return ['type/example'];
     }
   }

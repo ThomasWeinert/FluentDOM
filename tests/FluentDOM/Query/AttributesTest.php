@@ -129,9 +129,7 @@ namespace FluentDOM\Query {
         $this->getSimpleDocumentNodeFixture()
       );
       $attr = new Attributes($fd);
-      $this->assertEquals(
-        2, count($attr)
-      );
+      $this->assertCount(2, $attr);
     }
 
     /**
@@ -145,9 +143,7 @@ namespace FluentDOM\Query {
         ->with(0)
         ->willReturn(FALSE);
       $attr = new Attributes($fd);
-      $this->assertEquals(
-        0, count($attr)
-      );
+      $this->assertCount(0, $attr);
     }
 
     /**

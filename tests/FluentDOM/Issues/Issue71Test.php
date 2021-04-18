@@ -15,16 +15,16 @@ namespace FluentDOM\Query {
   use FluentDOM\Loader\Result;
   use FluentDOM\TestCase;
 
-  require_once __DIR__ . '/../TestCase.php';
+  require_once __DIR__.'/../TestCase.php';
 
   class Issue71Test extends TestCase {
 
     public function testNoLinefeedAfterTextNode(): void {
       $fd = FluentDOM('<div></div>', 'html-fragment');
-      $fd->html(FluentDOM('hihi', 'html-fragment'));
+      $fd->html(FluentDOM('ho ho ho', 'html-fragment'));
 
       $this->assertEquals(
-        "<div>hihi</div>\n",
+        "<div>ho ho ho</div>\n",
         (string)$fd
       );
     }
@@ -32,19 +32,19 @@ namespace FluentDOM\Query {
     public function testLoaderAddsNoLineFeedToHtmlFragmentWithText(): void {
       $loader = new Html();
       /** @var Result $result */
-      $result = $loader->load('hihi', 'html-fragment');
+      $result = $loader->load('ho ho ho', 'html-fragment');
       $this->assertEquals(
-        "hihi",
+        "ho ho ho",
         (string)$result->getSelection()[0]
       );
     }
 
     public function testSaveHtmlDoesNotAddSpaceToTextOnlyDocument(): void {
       $document = new Document();
-      $document->appendChild($document->createTextNode('hihi'));
+      $document->appendChild($document->createTextNode('ho ho ho'));
       $this->assertEquals(
-        "hihi",
-        (string)$document->saveHtml()
+        "ho ho ho",
+        $document->saveHTML()
       );
     }
 
@@ -54,7 +54,7 @@ namespace FluentDOM\Query {
       $document->appendChild($document->createElement('i'));
       $this->assertEquals(
         "<b></b><i></i>",
-        (string)$document->saveHtml()
+        $document->saveHTML()
       );
     }
   }

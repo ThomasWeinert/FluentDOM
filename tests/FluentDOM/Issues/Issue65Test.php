@@ -12,7 +12,7 @@ namespace FluentDOM\Query {
 
   use FluentDOM\TestCase;
 
-  require_once __DIR__ . '/../TestCase.php';
+  require_once __DIR__.'/../TestCase.php';
 
   class Issue65Test extends TestCase {
 
@@ -24,7 +24,7 @@ namespace FluentDOM\Query {
       $fd->find('/p')->first()->replaceWith('hi');
 
       $this->assertEquals(
-        "hi <p>Paragraph 2</p><p>Paragraph 3</p><div>\n<b>5</b><p>4</p>\n</div>\n",
+        "hi <p>Paragraph 2</p><p>Paragraph 3</p><div><b>5</b><p>4</p></div>",
         (string)$fd
       );
     }
@@ -37,7 +37,7 @@ namespace FluentDOM\Query {
       $fd->filter('self::p')->first()->replaceWith('hi');
 
       $this->assertEquals(
-        "hi <p>Paragraph 2</p><p>Paragraph 3</p><div>\n<b>5</b><p>4</p>\n</div>\n",
+        "hi <p>Paragraph 2</p><p>Paragraph 3</p><div><b>5</b><p>4</p></div>",
         (string)$fd
       );
     }

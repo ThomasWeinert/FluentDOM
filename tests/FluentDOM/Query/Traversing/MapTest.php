@@ -8,14 +8,14 @@
  *
  */
 
-namespace FluentDOM\Query {
+namespace FluentDOM\Query\Traversing {
 
   use FluentDOM\Query;
   use FluentDOM\TestCase;
 
   require_once __DIR__.'/../../TestCase.php';
 
-  class TraversingMapTest extends TestCase {
+  class MapTest extends TestCase {
 
     protected $_directory = __DIR__;
 
@@ -34,7 +34,7 @@ namespace FluentDOM\Query {
             $fd
               ->find('//input')
               ->map(
-                function($node, $index) {
+                function(\DOMNode $node) {
                   $fd = new Query();
                   return $fd->load($node)->attr("value");
                 }
@@ -73,7 +73,6 @@ namespace FluentDOM\Query {
               )
           )
         );
-      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
   }

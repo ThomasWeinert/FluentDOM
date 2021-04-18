@@ -49,11 +49,7 @@ namespace FluentDOM\XMLReader {
       $reader->open(
         __DIR__.'/../TestData/xmlreader-1.xml'
       );
-      /**
-       * @var XMLReader $reader $key
-       */
       $iterator = new Iterator($reader, 'child');
-      /** @noinspection PhpExpressionResultUnusedInspection */
       iterator_to_array($iterator);
       $this->expectException(\LogicException::class);
       $this->expectExceptionMessage(

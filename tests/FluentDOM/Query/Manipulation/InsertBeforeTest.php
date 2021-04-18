@@ -8,14 +8,14 @@
  *
  */
 
-namespace FluentDOM\Query {
+namespace FluentDOM\Query\Manipulation {
 
   use FluentDOM\Query;
   use FluentDOM\TestCase;
 
   require_once __DIR__.'/../../TestCase.php';
 
-  class ManipulationInsertBeforeTest extends TestCase {
+  class InsertBeforeTest extends TestCase {
 
     protected $_directory = __DIR__;
 
@@ -29,7 +29,6 @@ namespace FluentDOM\Query {
       $fd
         ->find('//p')
         ->insertBefore('//div[@id = "foo"]');
-      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
   }

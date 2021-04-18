@@ -942,7 +942,7 @@ namespace FluentDOM {
     /**
      * Prepend content to the inside of every matched element.
      *
-     * @param string|array|\DOMNode|\Traversable $content
+     * @param string|\DOMNode|iterable|callable $content
      * @return self
      * @example ../examples/Query/prepend.php Usage Example: FluentDOM\Query::prepend()
      */
@@ -1183,7 +1183,7 @@ namespace FluentDOM {
      * Wrap the inner child contents of each matched element
      * (including text nodes) with an XML structure.
      *
-     * @param string|array|\DOMNode|\Traversable $content
+     * @param string|\DOMNode|iterable|callable $content
      * @return self
      * @example ../examples/Query/wrapInner.php Usage Example: FluentDOM\Query::wrapInner()
      */
@@ -1600,7 +1600,7 @@ namespace FluentDOM {
      * get or set CSS values in style attributes
      *
      * @param string|array $property
-     * @param array ...$arguments
+     * @param mixed ...$arguments
      * @return string|NULL|$this
      * @throws \InvalidArgumentException
      */
@@ -1638,7 +1638,7 @@ namespace FluentDOM {
      * Read a data attribute from the first node or set data attributes on all selected nodes.
      *
      * @param string|array $name data attribute identifier or array of data attributes to set
-     * @param mixed[] ...$arguments
+     * @param mixed ...$arguments
      * @return mixed
      * @throws \InvalidArgumentException
      * @example ../examples/Query/data.php Usage Example: FluentDOM\Query::data()

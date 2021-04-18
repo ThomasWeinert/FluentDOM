@@ -8,14 +8,13 @@
  *
  */
 
-namespace FluentDOM\Query {
+namespace FluentDOM\Query\Manipulation {
 
-  use FluentDOM\Query;
   use FluentDOM\TestCase;
 
   require_once __DIR__.'/../../TestCase.php';
 
-  class ManipulationBeforeTest extends TestCase {
+  class BeforeTest extends TestCase {
 
     protected $_directory = __DIR__;
 
@@ -46,7 +45,7 @@ namespace FluentDOM\Query {
         ->find('//p')
         ->before(
           function($node, $index) {
-            return '<p index="'.$index.'">Hi</p>';
+            return '<p data-index="'.$index.'">Hi</p>';
           }
         );
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);

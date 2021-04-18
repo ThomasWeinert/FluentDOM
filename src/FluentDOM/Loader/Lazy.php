@@ -51,7 +51,7 @@ namespace FluentDOM\Loader {
     /**
      * Add loader classes for different types
      *
-     * @param array[] $classes ['class' => ['type/one', 'type/two'], ...]
+     * @param array[]|string[] $classes ['class' => ['type/one', 'type/two'], ...]
      * @param string $namespace
      * @throws \LogicException
      * @throws \UnexpectedValueException

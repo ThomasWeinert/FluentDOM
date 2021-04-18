@@ -10,20 +10,21 @@
 
 namespace FluentDOM\Loader\Json {
 
+  use FluentDOM\Exceptions\InvalidSource;
   use FluentDOM\TestCase;
 
   require_once __DIR__ . '/../../TestCase.php';
 
   class JsonMLTest extends TestCase {
 
-
     /**
      * @covers \FluentDOM\Loader\Json\JsonML
      * @dataProvider provideExamples
      * @param string $json
      * @param string $xml
+     * @throws InvalidSource
      */
-    public function testIntegeration($json, $xml) {
+    public function testIntegration(string $json, string $xml): void {
       $loader = new JsonML();
       $document = $loader->load($json, 'jsonml')->getDocument();
       $this->assertXmlStringEqualsXmlString(
@@ -44,7 +45,7 @@ namespace FluentDOM\Loader\Json {
       );
     }
 
-    public  static function provideExamples() {
+    public  static function provideExamples(): array {
       return [
         'Simple element' => [
           '["alice", "bob"]',

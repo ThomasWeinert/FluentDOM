@@ -12,7 +12,6 @@ namespace FluentDOM\DOM {
 
   require_once __DIR__ . '/../TestCase.php';
 
-  use FluentDOM\Query;
   use FluentDOM\TestCase;
 
   class DocumentTest extends TestCase {
@@ -62,7 +61,6 @@ namespace FluentDOM\DOM {
     public function testXpathImplicitCreate(): void {
       $document = new Document();
       $xpath = $document->xpath();
-      $this->assertInstanceOf(__NAMESPACE__.'\\Xpath', $xpath);
       $this->assertSame($xpath, $document->xpath());
     }
 
@@ -70,15 +68,9 @@ namespace FluentDOM\DOM {
      * @covers \FluentDOM\DOM\Document::xpath
      */
     public function testXpathImplicitCreateAfterDocumentLoad(): void {
-      if (defined('HHVM_VERSION')) {
-        $this->markTestSkipped(
-          'HHVM does not need to recreate the Xpath instance.'
-        );
-      }
       $document = new Document();
       $xpath = $document->xpath();
       $document->loadXML('<test/>');
-      $this->assertInstanceOf(__NAMESPACE__.'\\Xpath', $xpath);
       $this->assertNotSame($xpath, $document->xpath());
     }
 
@@ -259,10 +251,8 @@ namespace FluentDOM\DOM {
      */
     public function testCreateElementWithXmlNamespacePrefixExpectingException(): void {
       $document = new Document();
-      $this->expectException(
-        \LogicException::class,
-        'Can not use reserved namespace prefix "xml" in element name'
-      );
+      $this->expectException(\LogicException::class);
+      $this->expectErrorMessage('Can not use reserved namespace prefix "xml" in element name');
       $document->appendChild($document->createElement('xml:example'));
     }
 

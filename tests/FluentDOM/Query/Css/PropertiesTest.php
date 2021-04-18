@@ -108,7 +108,6 @@ namespace FluentDOM\Query\Css {
     public function testOffsetUnsetWithArray(): void {
       $css = new Properties('width: auto; height: auto;');
       $names = ['width', 'height'];
-      /** @noinspection PhpIllegalArrayKeyTypeInspection */
       unset($css[$names]);
       $this->assertEquals('', (string)$css);
     }
@@ -117,7 +116,7 @@ namespace FluentDOM\Query\Css {
      * @covers \FluentDOM\Query\Css\Properties::setStyleString
      * @dataProvider provideStyleStrings
      */
-    public function testSetStyleString($expected, $styleString) {
+    public function testSetStyleString(array $expected, string $styleString): void {
       $css = new Properties();
       $css->setStyleString($styleString);
       $this->assertEquals(
@@ -129,7 +128,7 @@ namespace FluentDOM\Query\Css {
      * @covers \FluentDOM\Query\Css\Properties::getStyleString
      * @dataProvider providePropertyArrays
      */
-    public function testGetStyleString($expected, $propertyArray) {
+    public function testGetStyleString(string $expected, array $propertyArray): void {
       $css = new Properties();
       foreach ($propertyArray as $name => $value) {
         $css[$name] = $value;
@@ -155,9 +154,7 @@ namespace FluentDOM\Query\Css {
      */
     public function testCountExpectingZero(): void {
       $css = new Properties('');
-      $this->assertEquals(
-        0, count($css)
-      );
+      $this->assertCount(0, $css);
     }
 
     /**
@@ -165,9 +162,7 @@ namespace FluentDOM\Query\Css {
      */
     public function testCountExpectingTwo(): void {
       $css = new Properties('width: auto; height: auto;');
-      $this->assertEquals(
-        2, count($css)
-      );
+      $this->assertCount(2, $css);
     }
 
     /**
@@ -216,7 +211,7 @@ namespace FluentDOM\Query\Css {
      * data provider
      ********************/
 
-    public static function provideStyleStrings() {
+    public static function provideStyleStrings(): array {
       return [
         'single property' => [
           ['width' => 'auto'],
@@ -225,7 +220,7 @@ namespace FluentDOM\Query\Css {
       ];
     }
 
-    public static function providePropertyArrays() {
+    public static function providePropertyArrays(): array {
       return [
         'single property' => [
           'width: auto;',

@@ -8,14 +8,13 @@
  *
  */
 
-namespace FluentDOM {
+namespace FluentDOM\Nodes {
 
-  use FluentDOM\Query;
   use FluentDOM\TestCase;
 
   require_once __DIR__.'/../TestCase.php';
 
-  class NodesToArrayTest extends TestCase {
+  class ToArrayTest extends TestCase {
 
     protected $_directory = __DIR__;
 

@@ -25,7 +25,7 @@ namespace FluentDOM\Loader {
       $this->assertTrue($loader->supports($mimetype));
     }
 
-    public static function provideSupportedTypes() {
+    public static function provideSupportedTypes(): array {
       return [
         ['xml'],
         ['text/xml'],

@@ -1,13 +1,16 @@
 <?php
-/**
- * Allow an object to be appendable to a FluentDOM\Element
+/*
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Transformer\Namespaces {
 
+  use FluentDOM\Exceptions\UnattachedNode;
   use FluentDOM\TestCase;
 
   require_once __DIR__ . '/../../TestCase.php';
@@ -15,14 +18,17 @@ namespace FluentDOM\Transformer\Namespaces {
   class ReplaceTest extends TestCase {
 
     /**
-     * @covers       \FluentDOM\Transformer\Namespaces\Replace
+     * @covers \FluentDOM\Transformer\Namespaces\Replace
      * @dataProvider provideOptimizeExamples
      * @param string $expected
      * @param string $xml
      * @param array $namespaces
      * @param array $prefixes
+     * @throws UnattachedNode
      */
-    public function testReplace($expected, $xml, $namespaces, $prefixes = []) {
+    public function testReplace(
+      string $expected, string $xml, array $namespaces, array $prefixes = []
+    ): void {
       $document = new \DOMDocument();
       $document->loadXML($xml);
       $replace = new Replace($document, $namespaces, $prefixes);
@@ -31,7 +37,7 @@ namespace FluentDOM\Transformer\Namespaces {
       );
     }
 
-    public static function provideOptimizeExamples() {
+    public static function provideOptimizeExamples(): array {
       return [
         'Remove namespace' => [
           '<root />',

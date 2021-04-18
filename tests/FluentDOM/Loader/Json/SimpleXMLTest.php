@@ -10,6 +10,7 @@
 
 namespace FluentDOM\Loader\Json {
 
+  use FluentDOM\Exceptions\InvalidSource;
   use FluentDOM\TestCase;
 
   require_once __DIR__ . '/../../TestCase.php';
@@ -21,9 +22,10 @@ namespace FluentDOM\Loader\Json {
      * @dataProvider provideExamples
      * @param string $xmlInput
      * @param string $expectedXml
+     * @throws InvalidSource
      */
-    public function testIntegeration($xmlInput, $expectedXml) {
-      $json = json_decode(json_encode(new \SimpleXMLElement($xmlInput)));
+    public function testIntegration(string $xmlInput, string $expectedXml): void {
+      $json = json_decode(json_encode(new \SimpleXMLElement($xmlInput)), false);
       $loader = new SimpleXML();
       $document = $loader->load($json, 'text/simplexml')->getDocument();
       $this->assertXmlStringEqualsXmlString(
@@ -44,7 +46,7 @@ namespace FluentDOM\Loader\Json {
       );
     }
 
-    public  static function provideExamples() {
+    public  static function provideExamples(): array {
       return [
         'Simple element' => [
           '<alice><bob>text</bob></alice>',

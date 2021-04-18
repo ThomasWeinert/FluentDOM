@@ -80,7 +80,7 @@ namespace FluentDOM\Loader\PHP {
       $loader->loadFragment(NULL, 'php/pdo');
     }
 
-    private function getExampleDatabase() {
+    private function getExampleDatabase(): \PDO {
       $pdo = new \PDO('sqlite::memory:');
       $pdo->query(
         "CREATE TABLE persons(

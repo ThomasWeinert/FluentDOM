@@ -10,6 +10,7 @@
 
 namespace FluentDOM\Loader {
 
+  use FluentDOM\Exceptions\InvalidSource;
   use FluentDOM\TestCase;
 
   require_once __DIR__ . '/../TestCase.php';
@@ -25,8 +26,9 @@ namespace FluentDOM\Loader {
      * @dataProvider provideExamples
      * @param string $JsonDOM
      * @param string $JSONx
+     * @throws InvalidSource|\Throwable
      */
-    public function testIntegeration($JsonDOM, $JSONx) {
+    public function testIntegration(string $JsonDOM, string $JSONx): void {
       $loader = new JSONx();
       $document = $loader->load($JSONx, 'jsonx')->getDocument();
       $this->assertXmlStringEqualsXmlString(
@@ -101,6 +103,7 @@ namespace FluentDOM\Loader {
 
     /**
      * @covers \FluentDOM\Loader\JSONx
+     * @throws \Throwable
      */
     public function testLoadFragmentWithInvalidSourceExpectingNull(): void {
       $loader = new JSONx();
@@ -112,7 +115,7 @@ namespace FluentDOM\Loader {
       );
     }
 
-    public  static function provideExamples() {
+    public  static function provideExamples(): array {
       return [
         'object as root' => [
           '<json:json xmlns:json="urn:carica-json-dom.2013">

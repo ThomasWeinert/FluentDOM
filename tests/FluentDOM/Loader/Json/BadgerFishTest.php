@@ -10,6 +10,7 @@
 
 namespace FluentDOM\Loader\Json {
 
+  use FluentDOM\Exceptions\InvalidSource;
   use FluentDOM\TestCase;
 
   require_once __DIR__ . '/../../TestCase.php';
@@ -26,9 +27,9 @@ namespace FluentDOM\Loader\Json {
      * @param string $json
      * @param string $xml
      * @throws \Exception
-     * @throws \FluentDOM\Exceptions\InvalidSource
+     * @throws InvalidSource
      */
-    public function testIntegration($json, $xml) {
+    public function testIntegration(string $json, string $xml): void {
       $loader = new BadgerFish();
       $document = $loader->load($json, 'badgerfish')->getDocument();
       $this->assertXmlStringEqualsXmlString(
@@ -63,7 +64,7 @@ namespace FluentDOM\Loader\Json {
       );
     }
 
-    public  static function provideExamples() {
+    public  static function provideExamples(): array {
       return [
         'Text content of elements goes in the $ property of an object.' => [
           '{"alice":{"$":"bob"}}',

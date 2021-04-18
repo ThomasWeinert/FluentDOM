@@ -35,7 +35,7 @@ namespace FluentDOM\Loader {
       $this->assertInstanceOf(Loadable::class, $loader->get($mimetype));
     }
 
-    public static function provideSupportedTypes() {
+    public static function provideSupportedTypes(): array {
       return [
         ['text/csv']
       ];

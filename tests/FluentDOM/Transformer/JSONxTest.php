@@ -24,7 +24,7 @@ namespace FluentDOM\Serializer {
      * @param string $JsonDOM
      * @param string $JSONx
      */
-    public function testIntegeration($JsonDOM, $JSONx) {
+    public function testIntegration(string $JsonDOM, string $JSONx): void {
       $document = new Document();
       $document->loadXml($JsonDOM);
       $transformer = new JSONx($document);
@@ -44,7 +44,7 @@ namespace FluentDOM\Serializer {
       );
     }
 
-    public  static function provideExamples() {
+    public  static function provideExamples(): array {
       return [
         'object as root' => [
           '<json:json xmlns:json="urn:carica-json-dom.2013">

@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ FluentDOM
+  ~
+  ~ @link https://thomas.weinert.info/FluentDOM/
+  ~ @copyright Copyright 2009-2021 FluentDOM Contributors
+  ~ @license http://www.opensource.org/licenses/mit-license.php The MIT License
+  ~
+  -->
+
 <html>
 <head></head>
 <body>
-  <p index="0">Hi</p>
+  <p data-index="0">Hi</p>
   <p> is what I said...</p>
-  <p index="1">Hi</p>
+  <p data-index="1">Hi</p>
   <p> is what he said...</p>
-  <p index="2">Hi</p>
+  <p data-index="2">Hi</p>
   <p> is what she said...</p>
 </body>
 </html>

@@ -183,7 +183,7 @@ namespace FluentDOM\Node {
      *   [1, "<foo>text<bar/>text</foo>"]
      *   [1, "<foo>text<bar><child/></bar>text</foo>"]
      */
-    public function testChildElementCount($expected, $xml) {
+    public function testChildElementCount(int $expected, string $xml): void {
       $document = new Document();
       $document->loadXML($xml);
       $this->assertTrue(isset($document->documentElement->childElementCount));

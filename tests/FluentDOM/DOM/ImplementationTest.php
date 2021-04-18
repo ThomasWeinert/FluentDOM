@@ -94,7 +94,7 @@ namespace FluentDOM\DOM {
     /**
      * @covers ::createDocument
      */
-    public function testCreateDocumentWithElementInNamespacewithPrefix(): void {
+    public function testCreateDocumentWithElementInNamespaceWithPrefix(): void {
       $implementation = new Implementation();
       $document = $implementation->createDocument('https://www.w3.org/1999/xhtml/', 'xhtml:html');
       $this->assertXmlStringEqualsXmlString(

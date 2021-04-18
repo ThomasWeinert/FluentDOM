@@ -10,7 +10,6 @@
 
 namespace FluentDOM\Loader {
 
-  use FluentDOM\DOM\Document;
   use FluentDOM\Loadable;
   use FluentDOM\TestCase;
 
@@ -36,7 +35,7 @@ namespace FluentDOM\Loader {
       $this->assertInstanceOf(Loadable::class, $loader->get($mimetype));
     }
 
-    public static function provideSupportedTypes() {
+    public static function provideSupportedTypes(): array {
       return [
         ['json'],
         ['jsonml'],

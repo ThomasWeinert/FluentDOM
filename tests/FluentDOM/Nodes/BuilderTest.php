@@ -12,6 +12,7 @@ namespace FluentDOM\Nodes {
 
   use FluentDOM\DOM\Document;
   use FluentDOM\Exceptions;
+  use FluentDOM\Exceptions\LoadingError;
   use FluentDOM\TestCase;
   use FluentDOM\Nodes;
 
@@ -114,10 +115,8 @@ namespace FluentDOM\Nodes {
     public function testGetTargetNodesUsingSelectorReturningScalarExpectingException(): void {
       $nodes = new Nodes(self::XML);
       $builder = new Builder($nodes);
-      $this->expectException(
-        \InvalidArgumentException::class,
-        'Given selector did not return an node list'
-      );
+      $this->expectException(\InvalidArgumentException::class);
+      $this->expectErrorMessage('Given selector did not return an node list');
       $builder->getTargetNodes('count(//item)');
     }
 
@@ -127,10 +126,8 @@ namespace FluentDOM\Nodes {
     public function testGetTargetNodesUsingInvalidSelectorExpectingException(): void {
       $nodes = new Nodes(self::XML);
       $builder = new Builder($nodes);
-      $this->expectException(
-        \InvalidArgumentException::class,
-        'Invalid selector'
-      );
+      $this->expectException(\InvalidArgumentException::class);
+      $this->expectErrorMessage('Invalid selector');
       $builder->getTargetNodes(NULL);
     }
 
@@ -167,7 +164,7 @@ namespace FluentDOM\Nodes {
       $node = $nodes->document->createTextNode("success");
       $builder = new Builder($nodes);
       $this->expectException(
-        \FluentDOM\Exceptions\LoadingError::class
+        LoadingError::class
       );
       $this->assertSame(
         [$node],
@@ -260,7 +257,7 @@ namespace FluentDOM\Nodes {
       $nodes = new Nodes();
       $builder = new Builder($nodes);
       $this->expectException(
-        \FluentDOM\Exceptions\LoadingError::class
+        LoadingError::class
       );
       $builder->getContentNodes($document->xpath()->evaluate('//item'));
     }
@@ -269,11 +266,10 @@ namespace FluentDOM\Nodes {
      * @covers \FluentDOM\Nodes\Builder
      */
     public function testGetContentNodesFromEmptyStringExpectingException(): void {
-      $document = new Document();
       $nodes = new Nodes();
       $builder = new Builder($nodes);
       $this->expectException(
-        \FluentDOM\Exceptions\LoadingError::class
+        LoadingError::class
       );
       $builder->getContentNodes('');
     }
@@ -300,7 +296,7 @@ namespace FluentDOM\Nodes {
       $builder = new Builder($nodes);
       $this->assertXmlNodesArrayEqualsXmlStrings(
         ['<one/>', '<two/>', 'three'],
-        $builder->getFragment('<one/><two/>three', 'text/xml')
+        $builder->getFragment('<one/><two/>three')
       );
     }
 
@@ -311,7 +307,7 @@ namespace FluentDOM\Nodes {
       $nodes = new Nodes();
       $builder = new Builder($nodes);
       $this->assertEquals(
-        [], $builder->getFragment('', 'text/xml')
+        [], $builder->getFragment('')
       );
     }
 
@@ -324,7 +320,7 @@ namespace FluentDOM\Nodes {
       $this->expectException(
         Exceptions\LoadingError\EmptySource::class
       );
-      $builder->getFragment(NULL, 'text/xml');
+      $builder->getFragment(NULL);
     }
 
     /**
@@ -347,7 +343,7 @@ namespace FluentDOM\Nodes {
       $builder = new Builder($nodes);
       $this->assertEquals(
         [],
-        @$builder->getFragment('', 'text/xml')
+        @$builder->getFragment('')
       );
     }
 
@@ -432,9 +428,9 @@ namespace FluentDOM\Nodes {
 
     /**
      * @param array $expected
-     * @param array|\Traversable $nodes
+     * @param iterable $nodes
      */
-    public function assertXmlNodesArrayEqualsXmlStrings($expected, $nodes) {
+    public function assertXmlNodesArrayEqualsXmlStrings(array $expected, iterable $nodes): void {
       $actual = [];
       foreach ($nodes as $node) {
         $actual[] = $node->ownerDocument->saveXml($node);

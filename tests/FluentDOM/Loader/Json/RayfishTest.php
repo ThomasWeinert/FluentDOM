@@ -10,6 +10,7 @@
 
 namespace FluentDOM\Loader\Json {
 
+  use FluentDOM\Exceptions\InvalidSource;
   use FluentDOM\TestCase;
 
   require_once __DIR__ . '/../../TestCase.php';
@@ -22,8 +23,9 @@ namespace FluentDOM\Loader\Json {
      * @dataProvider provideExamples
      * @param string $json
      * @param string $xml
+     * @throws InvalidSource
      */
-    public function testIntegeration($json, $xml) {
+    public function testIntegration(string $json, string $xml): void {
       $loader = new Rayfish();
       $document = $loader->load($json, 'Rayfish')->getDocument();
       $this->assertXmlStringEqualsXmlString(
@@ -33,6 +35,7 @@ namespace FluentDOM\Loader\Json {
 
     /**
      * @covers \FluentDOM\Loader\Json\Rayfish
+     * @throws InvalidSource
      */
     public function testLoadWithInvalidSourceExpectingNull(): void {
       $loader = new Rayfish();
@@ -44,7 +47,7 @@ namespace FluentDOM\Loader\Json {
       );
     }
 
-    public  static function provideExamples() {
+    public  static function provideExamples(): array {
       return [
         'Simple element' => [
           '{ "#name": "alice", "#text": null, "#children": [ ] }',

@@ -68,7 +68,7 @@ namespace FluentDOM\Loader {
      */
     public function testConstructorWithCallbackExpectingException(): void {
       $this->expectException(\InvalidArgumentException::class);
-      new Options([], ['UnknownCallback' => function() {} ]);
+      new Options([], ['UnknownCallback' => static function() {} ]);
     }
 
     /**

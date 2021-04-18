@@ -11,6 +11,7 @@
 namespace FluentDOM\Serializer {
 
   use FluentDOM\DOM\Document;
+  use FluentDOM\DOM\Element;
   use FluentDOM\TestCase;
 
   require_once __DIR__ . '/../TestCase.php';
@@ -21,13 +22,13 @@ namespace FluentDOM\Serializer {
      * @covers \FluentDOM\Serializer\Json
      * @dataProvider provideJsonExamples
      * @param string $expected
-     * @param string $data
+     * @param mixed $data
      * @param int $options
      * @param int $depth
      */
     public function testToString(
-      $expected, $data, $options = 0, $depth = 256
-    ) {
+      string $expected, $data, int $options = 0, int $depth = 256
+    ): void {
       $serializer = new Json_TestProxy(new \DOMDocument(), $options, $depth);
       $serializer->jsonData = $data;
       $this->assertEquals(
@@ -58,16 +59,16 @@ namespace FluentDOM\Serializer {
      * @covers \FluentDOM\Serializer\Json
      * @dataProvider provideJsonExamples
      * @param string $expected
-     * @param string $data
+     * @param mixed $data
      * @param int $options
      * @param int $depth
      */
     public function testJsonSerializable(
-      $expected, $data, $options = 0, $depth = 256
-    ) {
+      string $expected, $data, int $options = 0, int $depth = 256
+    ): void {
       $serializer = new Json_TestProxy(new \DOMDocument());
       $serializer->jsonData = $data;
-      $json = version_compare(PHP_VERSION, '5.5.0', '>=')
+      $json = PHP_VERSION_ID >= 50500
         ? json_encode($serializer, $options, $depth)
         : json_encode($serializer, $options);
       $this->assertEquals($expected, $json);
@@ -126,17 +127,19 @@ namespace FluentDOM\Serializer {
         '</xml>'
       );
       $serializer = new Json_TestProxy($document);
+      /** @var Element $childNode */
+      $childNode = $document->documentElement->firstChild;
       $this->assertEquals(
         [
           'xmlns:bar' => 'urn:bar',
           'xmlns:foo' => 'urn:foo',
           'xmlns' => 'urn:2'
         ],
-        $serializer->getNamespaces($document->documentElement->firstChild)
+        $serializer->getNamespaces($childNode)
       );
     }
 
-    public static function getArrayAsStdClass($properties) {
+    public static function getArrayAsStdClass($properties): \stdClass {
       $data = new \stdClass();
       foreach ($properties as $name => $value) {
         $data->{$name} = $value;
@@ -149,7 +152,7 @@ namespace FluentDOM\Serializer {
      * @param string $expected
      * @param string $xml
      */
-    public function testIntegration($expected, $xml) {
+    public function testIntegration(string $expected, string $xml): void {
       $document = new \DOMDocument();
       $document->loadXML($xml);
       $serializer = new Json($document);
@@ -169,7 +172,7 @@ namespace FluentDOM\Serializer {
       );
     }
 
-    public static function provideJsonExamples() {
+    public static function provideJsonExamples(): array {
       return [
         [
           '{"alice":"bob"}',
@@ -183,7 +186,7 @@ namespace FluentDOM\Serializer {
       ];
     }
 
-    public  static function provideExamples() {
+    public  static function provideExamples(): array {
       return [
         'object' => [
           '{"foo":"bar"}',
@@ -240,7 +243,7 @@ namespace FluentDOM\Serializer {
       return $this->jsonData ?: parent::jsonSerialize();
     }
 
-    public function getNode(\DOMElement $node) {
+    public function getNode(\DOMElement $node): array {
       return [ $node->nodeName ];
     }
 

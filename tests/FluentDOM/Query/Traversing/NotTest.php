@@ -8,14 +8,13 @@
  *
  */
 
-namespace FluentDOM\Query {
+namespace FluentDOM\Query\Traversing {
 
-  use FluentDOM\Query;
   use FluentDOM\TestCase;
 
   require_once __DIR__.'/../../TestCase.php';
 
-  class TraversingNotTest extends TestCase {
+  class NotTest extends TestCase {
 
     protected $_directory = __DIR__;
 
@@ -41,8 +40,8 @@ namespace FluentDOM\Query {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//*');
       $this->assertTrue($fd->length > 1);
       $notDoc = $fd->not(
-        function ($node, $index) {
-          return $node->nodeName != "items";
+        function (\DOMNode $node) {
+          return $node->nodeName !== "items";
         }
       );
       $this->assertEquals(1, $notDoc->length);

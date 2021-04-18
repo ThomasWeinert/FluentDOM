@@ -95,7 +95,7 @@ namespace FluentDOM\DOM {
       $fragment->appendXml('<test>success</test>success');
       $this->assertEquals(
         '<test>success</test>success',
-        (string)$fragment->saveXmlFragment()
+        $fragment->saveXmlFragment()
       );
     }
 
@@ -108,7 +108,7 @@ namespace FluentDOM\DOM {
       $fragment->appendXml('<test>success</test>success', ['#default' => 'urn:default']);
       $this->assertEquals(
         '<test xmlns="urn:default">success</test>success',
-        (string)$fragment->saveXmlFragment()
+        $fragment->saveXmlFragment()
       );
     }
 
@@ -210,8 +210,8 @@ namespace FluentDOM\DOM {
     public function testWithInvalidNamespacesListExpectingException(): void {
       $document = new Document();
       $fragment = $document->createDocumentFragment();
-      $this->expectException(
-        \InvalidArgumentException::class,
+      $this->expectException(\InvalidArgumentException::class);
+      $this->expectErrorMessage(
         '$namespaces needs to be a list of namespaces or an element node to fetch the namespaces from.'
       );
       $fragment->appendXml('<foo:test>success</foo:test>',  'INVALID_VALUE');

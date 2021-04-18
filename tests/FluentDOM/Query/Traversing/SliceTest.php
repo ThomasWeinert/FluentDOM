@@ -8,14 +8,14 @@
  *
  */
 
-namespace FluentDOM\Query {
+namespace FluentDOM\Query\Traversing {
 
   use FluentDOM\Query;
   use FluentDOM\TestCase;
 
   require_once __DIR__.'/../../TestCase.php';
 
-  class TraversingSliceTest extends TestCase {
+  class SliceTest extends TestCase {
 
     protected $_directory = __DIR__;
 
@@ -30,7 +30,6 @@ namespace FluentDOM\Query {
         ->find('//p')
         ->slice(0, 3)
         ->replaceAll('//div');
-      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
 
@@ -45,7 +44,6 @@ namespace FluentDOM\Query {
         ->find('//p')
         ->slice(5, 2)
         ->replaceAll('//div');
-      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
 
@@ -59,7 +57,6 @@ namespace FluentDOM\Query {
         ->find('//p')
         ->slice(1, -2)
         ->replaceAll('//div');
-      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
 
@@ -74,7 +71,6 @@ namespace FluentDOM\Query {
         ->find('//p')
         ->slice(3)
         ->replaceAll('//div');
-      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
   }

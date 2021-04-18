@@ -108,10 +108,8 @@ namespace FluentDOM\Loader\PHP {
      */
     public function testLoadFragmentWithInvalidSourceExpectingException(): void {
       $loader = new SimpleXml();
-      $this->expectException(
-        InvalidArgument::class,
-        'Invalid $source argument. Expected: SimpleXMLElement, string'
-      );
+      $this->expectException(InvalidArgument::class);
+      $this->expectErrorMessage('Invalid $source argument. Expected: SimpleXMLElement, string');
       $loader->loadFragment(42, 'php/simplexml');
     }
   }

@@ -8,14 +8,13 @@
  *
  */
 
-namespace FluentDOM\Query {
+namespace FluentDOM\Query\Traversing {
 
-  use FluentDOM\Query;
   use FluentDOM\TestCase;
 
   require_once __DIR__.'/../../TestCase.php';
 
-  class TraversingSiblingsTest extends TestCase {
+  class SiblingsTest extends TestCase {
 
     protected $_directory = __DIR__;
 
@@ -27,10 +26,9 @@ namespace FluentDOM\Query {
     public function testSiblings(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $fd
-        ->find('//li[@class = "hilite"]')
+        ->find('//li[@class = "highlight"]')
         ->siblings()
         ->addClass('before');
-      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
   }

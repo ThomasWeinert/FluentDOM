@@ -95,9 +95,7 @@ namespace FluentDOM\Query {
         '<div></div>'
       );
       $data = new Data($document->documentElement);
-      $this->assertEquals(
-        0, count($data)
-      );
+      $this->assertCount(0, $data);
     }
 
     /**
@@ -109,9 +107,7 @@ namespace FluentDOM\Query {
         '<div data-role="page" data-hidden="true"></div>'
       );
       $data = new Data($document->documentElement);
-      $this->assertEquals(
-        2, count($data)
-      );
+      $this->assertCount(2, $data);
     }
 
     /**
@@ -182,7 +178,7 @@ namespace FluentDOM\Query {
       );
     }
 
-    public static function provideDataAttributes() {
+    public static function provideDataAttributes(): array {
       return [
         'string' => ['World', 'Hello', '<node data-hello="World"/>'],
         'boolean true' => [TRUE, 'truth', '<node data-truth="true"/>'],
@@ -198,13 +194,13 @@ namespace FluentDOM\Query {
           '<node data-object="{&quot;foo&quot;:&quot;bar&quot;}"/>'
         ],
         'invalid object' => [NULL, 'object', '<node data-object=\'{{"foo":"bar"}\'/>'],
-        'invalid attrbute' => [NULL, 'unknown', '<node/>'],
+        'invalid attribute' => [NULL, 'unknown', '<node/>'],
         'complex name' => [1, 'complexName', '<node data-complex-name="1"/>'],
         'abbreviation' => [1, 'someABBRName', '<node data-some-abbr-name="1"/>']
       ];
     }
 
-    public static function provideDataValues() {
+    public static function provideDataValues(): array {
       return [
         'string' => ['<node data-hello="World"/>', 'hello', 'World'],
         'boolean true' => ['<node data-truth="true"/>', 'truth', TRUE],
@@ -220,7 +216,7 @@ namespace FluentDOM\Query {
       ];
     }
 
-    public static function createObjectFromArray($array) {
+    public static function createObjectFromArray($array): \stdClass {
       $result = new \stdClass();
       foreach ($array as $key => $value) {
         $result->$key = $value;
@@ -418,6 +414,7 @@ namespace FluentDOM\Query {
     public function testDataPropertyReadOnEmptyListExpectingException(): void {
       $fd = new Query();
       $this->expectException(\UnexpectedValueException::class);
+      /** @noinspection PhpExpressionResultUnusedInspection */
       $fd->data;
     }
 

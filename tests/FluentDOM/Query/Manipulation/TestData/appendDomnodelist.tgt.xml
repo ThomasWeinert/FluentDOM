@@ -1,17 +1,26 @@
 <?xml version="1.0"?>
+<!--
+  ~ FluentDOM
+  ~
+  ~ @link https://thomas.weinert.info/FluentDOM/
+  ~ @copyright Copyright 2009-2021 FluentDOM Contributors
+  ~ @license http://www.opensource.org/licenses/mit-license.php The MIT License
+  ~
+  -->
+
 <html>
 <head/>
 <body>
   <p>I would like to say: </p>
   <items>
     <group>
-      <item index="0">text1</item>
-      <item index="1">text2</item>
-      <item index="2">text3</item>
+      <item data-index="0">text1</item>
+      <item data-index="1">text2</item>
+      <item data-index="2">text3</item>
     </group>
     <html>
-      <div class="test1 test2">class testing<item index="0">text1</item><item index="1">text2</item><item index="2">text3</item></div>
-      <div class="test2">class testing<item index="0">text1</item><item index="1">text2</item><item index="2">text3</item></div>
+      <div class="test1 test2">class testing<item data-index="0">text1</item><item data-index="1">text2</item><item data-index="2">text3</item></div>
+      <div class="test2">class testing<item data-index="0">text1</item><item data-index="1">text2</item><item data-index="2">text3</item></div>
     </html>
   </items>
 </body>

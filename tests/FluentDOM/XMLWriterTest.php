@@ -212,7 +212,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\XMLWriter\NamespaceDefinition
      * @covers \FluentDOM\XMLWriter\NamespaceStack
      */
-    public function testWritettributeNSAddingNamespace(): void {
+    public function testWriteAttributeNSAddingNamespace(): void {
       $_ = new XMLWriter();
       $_->registerNamespace('example', 'http://example.org/xmlns/2002/document');
       $_->openMemory();

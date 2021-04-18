@@ -25,7 +25,7 @@ namespace FluentDOM\Serializer\Json {
      * @param string $expected
      * @param string $xml
      */
-    public function testIntegration($expected, $xml) {
+    public function testIntegration(string $expected, string $xml): void {
       $document = new \DOMDocument();
       $document->loadXML($xml);
       $serializer = new BadgerFish($document);
@@ -45,7 +45,7 @@ namespace FluentDOM\Serializer\Json {
       );
     }
 
-    public  static function provideExamples() {
+    public  static function provideExamples(): array {
       return [
         'Text content of elements goes in the $ property of an object.' => [
           '{"alice":{"$":"bob"}}',

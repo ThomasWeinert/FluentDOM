@@ -8,14 +8,14 @@
  *
  */
 
-namespace FluentDOM\Query {
+namespace FluentDOM\Query\Manipulation {
 
   use FluentDOM\Query;
   use FluentDOM\TestCase;
 
   require_once __DIR__.'/../../TestCase.php';
 
-  class ManipulationXmlTest extends TestCase {
+  class XmlTest extends TestCase {
 
     protected $_directory = __DIR__;
 
@@ -65,7 +65,6 @@ namespace FluentDOM\Query {
       $fd
         ->find('//p[position() = last()]')
         ->xml('<b>New</b>World');
-      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
 
@@ -79,7 +78,6 @@ namespace FluentDOM\Query {
       $fd
         ->find('//p')
         ->xml('');
-      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
 
@@ -93,15 +91,13 @@ namespace FluentDOM\Query {
       $fd
         ->find('//p')
         ->xml(
-          function($node, $index, $xml) {
-            if ($index == 1) {
+          function(\DOMNode $node, int $index, string $xml): string {
+            if ($index === 1) {
               return '';
-            } else {
-              return strtoupper($xml);
             }
+            return strtoupper($xml);
           }
         );
-      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
 

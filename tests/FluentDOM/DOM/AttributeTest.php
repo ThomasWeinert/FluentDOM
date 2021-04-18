@@ -22,6 +22,7 @@ namespace FluentDOM\DOM {
     public function testMagicMethodToString(): void {
       $document = new Document();
       $document->appendElement('test', ['attr' => 'success']);
+      /** @var Attribute $attribute */
       $attribute = $document->documentElement->attributes->getNamedItem('attr');
       $this->assertEquals(
         'success',

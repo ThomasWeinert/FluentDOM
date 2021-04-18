@@ -69,10 +69,8 @@ namespace FluentDOM\Utility\Iterators {
         ->method('count')
         ->willReturn(1);
       $fdi = new NodesIterator($fd);
-      $this->expectException(
-        \InvalidArgumentException::class,
-        'Unknown position 1, only 1 items'
-      );
+      $this->expectException(\InvalidArgumentException::class);
+      $this->expectErrorMessage('Unknown position 1, only 1 items');
       $fdi->seek(1);
     }
 
@@ -105,10 +103,7 @@ namespace FluentDOM\Utility\Iterators {
         ->method('push')
         ->with($this->isInstanceOf(\DOMNodeList::class));
       $fdi = new NodesIterator($fdSource);
-      $this->assertInstanceOf(
-        NodesIterator::class,
-        $fdi->getChildren()
-      );
+      $fdi->getChildren();
     }
 
     public function testHasChildren(): void {

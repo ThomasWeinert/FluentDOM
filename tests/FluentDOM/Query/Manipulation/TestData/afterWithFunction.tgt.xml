@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ FluentDOM
+  ~
+  ~ @link https://thomas.weinert.info/FluentDOM/
+  ~ @copyright Copyright 2009-2021 FluentDOM Contributors
+  ~ @license http://www.opensource.org/licenses/mit-license.php The MIT License
+  ~
+  -->
+
 <html>
 <head></head>
 <body>
   <p>She would like to say: </p>
-  <p index="0">Hi</p>
+  <p data-index="0">Hi</p>
   <p>He would like to say: </p>
-  <p index="1">Hi</p>
+  <p data-index="1">Hi</p>
 </body>
 </html>

@@ -123,8 +123,8 @@ namespace FluentDOM {
     public function testCreateWithSeveralTextNodes(): void {
       $_ = new Creator();
       $this->assertXmlStringEqualsXmlString(
-        '<xml>onetwo</xml>',
-        $_->element('xml', 'one', 'two')->saveXml()
+        '<xml>one two</xml>',
+        $_->element('xml', 'one', ' ',  'two')->saveXml()
       );
     }
 

@@ -123,6 +123,8 @@ namespace FluentDOM\Utility {
     public function testPropertyGetWithInvalidPropertyExpectingException(): void {
       $qualifiedName = new QualifiedName('ns:tag');
       $this->expectException(\LogicException::class);
+      /** @noinspection PhpUndefinedFieldInspection */
+      /** @noinspection PhpExpressionResultUnusedInspection */
       $qualifiedName->invalidPropertyName;
     }
 

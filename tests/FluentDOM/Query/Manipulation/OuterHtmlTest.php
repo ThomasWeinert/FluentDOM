@@ -8,14 +8,14 @@
  *
  */
 
-namespace FluentDOM\Query {
+namespace FluentDOM\Query\Manipulation {
 
   use FluentDOM\Query;
   use FluentDOM\TestCase;
 
   require_once __DIR__.'/../../TestCase.php';
 
-  class ManipulationOuterHtmlTest extends TestCase {
+  class OuterHtmlTest extends TestCase {
 
     protected $_directory = __DIR__;
 
@@ -70,7 +70,6 @@ namespace FluentDOM\Query {
       $fd
         ->find('//p[position() = last()]')
         ->outerHtml('<b>New</b>World');
-      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
 
@@ -84,7 +83,6 @@ namespace FluentDOM\Query {
       $fd
         ->find('//p')
         ->outerHtml('');
-      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
 
@@ -106,7 +104,6 @@ namespace FluentDOM\Query {
             }
           }
         );
-      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
 

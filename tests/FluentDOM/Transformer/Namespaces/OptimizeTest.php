@@ -1,9 +1,11 @@
 <?php
-/**
- * Allow an object to be appendable to a FluentDOM\Element
+/*
+ * FluentDOM
  *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2021 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
+ *
  */
 
 namespace FluentDOM\Transformer\Namespaces {
@@ -27,7 +29,7 @@ namespace FluentDOM\Transformer\Namespaces {
       );
     }
 
-    public static function provideOptimizeExamples() {
+    public static function provideOptimizeExamples(): array {
       return [
         'Keep need namespace' => [
           '<foo:root xmlns:foo="urn:foo"/>',

@@ -26,7 +26,7 @@ namespace FluentDOM\DOM\Node {
 
     /**
      * @param \DOMNode $context
-     * @param \DOMNode|string|\DOMNodeList ...$nodes
+     * @param \DOMNode|string|string[]|\DOMNodeList ...$nodes
      * @return \DOMDocumentFragment|NULL
      * @throws UnattachedNode
      */

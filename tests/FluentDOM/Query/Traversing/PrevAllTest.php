@@ -8,14 +8,13 @@
  *
  */
 
-namespace FluentDOM\Query {
+namespace FluentDOM\Query\Traversing {
 
-  use FluentDOM\Query;
   use FluentDOM\TestCase;
 
   require_once __DIR__.'/../../TestCase.php';
 
-  class TraversingPrevAllTest extends TestCase {
+  class PrevAllTest extends TestCase {
 
     protected $_directory = __DIR__;
 

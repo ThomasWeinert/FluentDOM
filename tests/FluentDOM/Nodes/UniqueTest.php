@@ -8,14 +8,14 @@
  *
  */
 
-namespace FluentDOM {
+namespace FluentDOM\Nodes {
 
-  use FluentDOM\Query;
+  use FluentDOM\Nodes;
   use FluentDOM\TestCase;
 
   require_once __DIR__.'/../TestCase.php';
 
-  class NodesUniqueTest extends TestCase {
+  class UniqueTest extends TestCase {
 
     /**
      * @group Nodes

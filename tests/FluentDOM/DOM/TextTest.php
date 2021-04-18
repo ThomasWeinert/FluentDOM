@@ -22,10 +22,9 @@ namespace FluentDOM\DOM {
     public function testMagicMethodToString(): void {
       $document = new Document();
       $document->appendElement('test')->appendChild($document->createTextNode('success'));
-      $this->assertEquals(
-        'success',
-        (string)$document->documentElement->childNodes->item(0)
-      );
+      /** @var Text $node */
+      $node = $document->documentElement->childNodes->item(0);
+      $this->assertEquals('success', (string)$node);
       $this->assertEquals(
         '<test>success</test>',
         $document->saveXML($document->documentElement)
@@ -131,7 +130,7 @@ namespace FluentDOM\DOM {
         ']>'."\n".
         '<p>Hello &t;<br/>, nice to see you &t;.</p>'
       );
-      /** @var \FluentDOM\Text $text */
+      /** @var Text $text */
       $text = $document->documentElement->firstChild;
       $text->replaceWholeText('Hi universe');
       $this->assertEquals(

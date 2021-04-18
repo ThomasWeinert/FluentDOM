@@ -192,7 +192,7 @@ namespace FluentDOM\DOM {
      */
     public function testQueryGeneratesDeprecatedError(): void {
       $current = error_reporting();
-      if (($current & E_USER_DEPRECATED) != E_USER_DEPRECATED) {
+      if (($current & E_USER_DEPRECATED) !== E_USER_DEPRECATED) {
         error_reporting($current | E_USER_DEPRECATED);
       }
       $document = new \DOMDocument();
@@ -245,12 +245,10 @@ namespace FluentDOM\DOM {
      * @param string $expected
      * @param string $value
      */
-    public function testQuote($expected, $value) {
-      $document = new \DOMDocument();
-      $xpath = new Xpath($document);
+    public function testQuote(string $expected, string $value): void {
       $this->assertEquals(
         $expected,
-        $xpath->quote($value)
+        Xpath::quote($value)
       );
     }
 
@@ -311,6 +309,8 @@ namespace FluentDOM\DOM {
       } else {
         $this->expectWarning();
       }
+      /** @noinspection PhpUndefinedFieldInspection */
+      /** @noinspection PhpExpressionResultUnusedInspection */
       $xpath->someUnknownProperty;
       error_reporting($errors);
     }
@@ -322,7 +322,7 @@ namespace FluentDOM\DOM {
     /**
      * @return array
      */
-    public static function provideValuesForQuote() {
+    public static function provideValuesForQuote(): array {
       return [
         'simple string' => ["'foo'", 'foo'],
         'single quote' => ['"\'"', "'"],

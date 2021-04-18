@@ -8,14 +8,13 @@
  *
  */
 
-namespace FluentDOM\Query {
+namespace FluentDOM\Query\Manipulation {
 
-  use FluentDOM\Query;
   use FluentDOM\TestCase;
 
   require_once __DIR__.'/../../TestCase.php';
 
-  class ManipulationAfterTest extends TestCase {
+  class AfterTest extends TestCase {
 
     protected $_directory = __DIR__;
 
@@ -40,12 +39,11 @@ namespace FluentDOM\Query {
      */
     public function testAfterWithFunction(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
-      /** @noinspection PhpUnusedParameterInspection */
       $fd->formatOutput()
          ->find('//p')
          ->after(
-          function($node, $index, $content) {
-            return '<p index="'.$index.'">Hi</p>';
+          function(\DOMNode $node, int $index) {
+            return '<p data-index="'.$index.'">Hi</p>';
           }
         );
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);

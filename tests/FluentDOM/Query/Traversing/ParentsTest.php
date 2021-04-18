@@ -8,14 +8,14 @@
  *
  */
 
-namespace FluentDOM\Query {
+namespace FluentDOM\Query\Traversing {
 
   use FluentDOM\Query;
   use FluentDOM\TestCase;
 
   require_once __DIR__.'/../../TestCase.php';
 
-  class TraversingParentsTest extends TestCase {
+  class ParentsTest extends TestCase {
 
     protected $_directory = __DIR__;
     /**
@@ -25,7 +25,6 @@ namespace FluentDOM\Query {
      */
     public function testParents(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
-      $this->assertInstanceOf(Query::class, $fd);
       $parents = $fd
         ->find('//b')
         ->parents()
@@ -41,11 +40,10 @@ namespace FluentDOM\Query {
       $this->assertContains('body', $parents);
       $this->assertContains('html', $parents);
       $parents = implode(', ', $parents);
-      $doc = $fd
+      $document = $fd
         ->find('//b')
         ->append('<strong>'.htmlspecialchars($parents).'</strong>');
-      $this->assertInstanceOf(Query::class, $doc);
-      $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $doc);
+      $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $document);
     }
   }
 }

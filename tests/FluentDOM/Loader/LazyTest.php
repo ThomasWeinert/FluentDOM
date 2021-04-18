@@ -89,10 +89,8 @@ namespace FluentDOM\Loader {
         ],
         __NAMESPACE__
       );
-      $this->expectException(
-        \LogicException::class,
-        'Loader class "FluentDOM\Loader\NonExistingClassName" not found.'
-      );
+      $this->expectException(\LogicException::class);
+      $this->expectErrorMessage('Loader class "FluentDOM\Loader\NonExistingClassName" not found.');
       $this->assertInstanceOf(Xml::class, $loader->get('test/unittest'));
     }
 
@@ -188,9 +186,9 @@ namespace FluentDOM\Loader {
       $this->assertNull($loader->loadFragment('', 'non-existing'));
     }
 
-    private function getLoaderFixture() {
+    private function getLoaderFixture(): Lazy {
       $loaderMock = $this->createMock(Loadable::class);
-      $loader = new Lazy(
+      return new Lazy(
         [
           'callable' => function() use ($loaderMock) {
             return $loaderMock;
@@ -198,7 +196,6 @@ namespace FluentDOM\Loader {
           'loader' => $loaderMock
         ]
       );
-      return $loader;
     }
 
   }

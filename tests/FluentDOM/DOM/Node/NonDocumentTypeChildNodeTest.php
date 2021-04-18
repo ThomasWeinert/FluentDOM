@@ -10,6 +10,7 @@
 
 namespace FluentDOM\Node {
 
+  use FluentDOM\DOM\Comment;
   use FluentDOM\DOM\Document;
   use FluentDOM\TestCase;
 
@@ -203,6 +204,7 @@ namespace FluentDOM\Node {
     public function testIssetUnknownPropertyExpectingTrue(): void {
       $document = new Document();
       $document->loadXML('<foo><!--comment--></foo>');
+      /** @var Comment $node */
       $node = $document->documentElement->firstChild;
       $node->SOME_PROPERTY = 'foo';
       $this->assertTrue(isset($node->SOME_PROPERTY));
@@ -216,6 +218,7 @@ namespace FluentDOM\Node {
       $document = new Document();
       $document->loadXML('<foo><!--comment--></foo>');
       $node = $document->documentElement->firstChild;
+      /** @noinspection MissingIssetImplementationInspection */
       $this->assertFalse(isset($node->SOME_PROPERTY));
     }
 
@@ -228,6 +231,8 @@ namespace FluentDOM\Node {
       $document->loadXML('<foo><!--comment--></foo>');
       $node = $document->documentElement->firstChild;
       $this->expectPropertyIsUndefined();
+      /** @noinspection PhpExpressionResultUnusedInspection */
+      /** @noinspection PhpUndefinedFieldInspection */
       $node->SOME_PROPERTY;
     }
   }

@@ -67,10 +67,8 @@ namespace FluentDOM\Utility {
      */
     public function testRegisterReservedNamespaceExpectingException(): void {
       $namespaces = new Namespaces();
-      $this->expectException(
-        \LogicException::class,
-        'Can not register reserved namespace prefix "xml".'
-      );
+      $this->expectException(\LogicException::class);
+      $this->expectErrorMessage('Can not register reserved namespace prefix "xml".');
       $namespaces['xml'] = 'urn:fail';
     }
 
@@ -90,10 +88,8 @@ namespace FluentDOM\Utility {
      */
     public function testGetNamespaceWithoutRegisterExpectingException(): void {
       $namespaces = new Namespaces();
-      $this->expectException(
-        \LogicException::class,
-        'Unknown namespace prefix "test".'
-      );
+      $this->expectException(\LogicException::class);
+      $this->expectErrorMessage('Unknown namespace prefix "test".');
       $namespaces->resolveNamespace('test');
     }
 

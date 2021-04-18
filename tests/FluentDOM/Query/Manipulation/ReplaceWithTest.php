@@ -8,14 +8,13 @@
  *
  */
 
-namespace FluentDOM\Query {
+namespace FluentDOM\Query\Manipulation {
 
-  use FluentDOM\Query;
   use FluentDOM\TestCase;
 
   require_once __DIR__.'/../../TestCase.php';
 
-  class ManipulationReplaceWithTest extends TestCase {
+  class ReplaceWithTest extends TestCase {
 
     protected $_directory = __DIR__;
 
@@ -43,7 +42,7 @@ namespace FluentDOM\Query {
         ->find('//p')
         ->replaceWith(
           function ($node, $index) {
-            return '<div index="'.$index.'">'.$node->textContent.'</div>';
+            return '<div data-index="'.$index.'">'.$node->textContent.'</div>';
           }
         );
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);

@@ -8,14 +8,14 @@
  *
  */
 
-namespace FluentDOM\Query {
+namespace FluentDOM\Query\Manipulation {
 
   use FluentDOM\Query;
   use FluentDOM\TestCase;
 
   require_once __DIR__.'/../../TestCase.php';
 
-  class ManipulationPrependTest extends TestCase {
+  class PrependTest extends TestCase {
 
     protected $_directory = __DIR__;
 
@@ -42,7 +42,7 @@ namespace FluentDOM\Query {
       $fd
         ->find('//p')
         ->prepend(
-          function($node, $index) {
+          function(\DOMNode $node, int $index): string {
             return 'Hello #'.($index + 1);
           }
         );

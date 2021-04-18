@@ -22,10 +22,9 @@ namespace FluentDOM\DOM {
     public function testMagicMethodToString(): void {
       $document = new Document();
       $document->appendElement('test')->appendChild($document->createCDATASection('success'));
-      $this->assertEquals(
-        'success',
-        (string)$document->documentElement->childNodes->item(0)
-      );
+      /** @var CdataSection $node */
+      $node = $document->documentElement->childNodes->item(0);
+      $this->assertEquals('success', (string)$node);
       $this->assertEquals(
         '<test><![CDATA[success]]></test>',
         $document->saveXML($document->documentElement)

@@ -275,6 +275,7 @@ namespace FluentDOM {
     public function testAttachStreamExpectingException(): void {
       $reader = new XMLReader();
       $this->expectException(InvalidArgument::class);
+      /** @noinspection PhpParamsInspection */
       $reader->attachStream('dummy');
     }
   }

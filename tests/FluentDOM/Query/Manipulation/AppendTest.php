@@ -8,7 +8,7 @@
  *
  */
 
-namespace FluentDOM\Query {
+namespace FluentDOM\Query\Manipulation {
 
   use FluentDOM\Query;
   use FluentDOM\Exceptions;
@@ -16,7 +16,7 @@ namespace FluentDOM\Query {
 
   require_once __DIR__.'/../../TestCase.php';
 
-  class ManipulationAppendTest extends TestCase {
+  class AppendTest extends TestCase {
 
     protected $_directory = __DIR__;
 
@@ -30,7 +30,6 @@ namespace FluentDOM\Query {
       $fd
         ->find('//p')
         ->append('<strong>Hello</strong>');
-      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
 
@@ -61,14 +60,12 @@ namespace FluentDOM\Query {
      * @group ManipulationInside
      * @covers \FluentDOM\Query
      */
-    public function testAppendDomnodelist(): void {
+    public function testAppendDOMNodeList(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $items = $fd->find('//item');
-      $this->assertInstanceOf(Query::class, $fd);
-      $doc = $fd
+      $fd
         ->find('//html/div')
         ->append($items);
-      $this->assertInstanceOf(Query::class, $doc);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
 
@@ -200,6 +197,7 @@ namespace FluentDOM\Query {
     public function testAppendWithInvalidArgumentExpectingException(): void {
       $fd = new Query();
       $this->expectException(Exceptions\LoadingError::class);
+      /** @noinspection PhpParamsInspection */
       $fd->append(new \stdClass());
     }
 

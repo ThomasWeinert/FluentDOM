@@ -8,14 +8,14 @@
  *
  */
 
-namespace FluentDOM\Query {
+namespace FluentDOM\Query\Traversing {
 
   use FluentDOM\Query;
   use FluentDOM\TestCase;
 
   require_once __DIR__.'/../../TestCase.php';
 
-  class TraversingNextTest extends TestCase {
+  class NextTest extends TestCase {
 
     protected $_directory = __DIR__;
 
@@ -29,7 +29,6 @@ namespace FluentDOM\Query {
       $fd ->find('//button[@disabled]')
         ->next()
         ->text('This button is disabled.');
-      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
   }

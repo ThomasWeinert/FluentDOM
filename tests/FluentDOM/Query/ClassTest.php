@@ -10,7 +10,6 @@
 
 namespace FluentDOM\Query {
 
-  use FluentDOM\Query;
   use FluentDOM\TestCase;
 
   require_once __DIR__.'/../TestCase.php';
@@ -84,7 +83,9 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::toggleClass
      * @covers \FluentDOM\Query::changeClassString
      */
-    public function testToggleClass($toggle, $expectedOne, $expectedTwo) {
+    public function testToggleClass(
+      string $toggle, string $expectedOne, string $expectedTwo
+    ): void {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//html/div');
       $fd->toggleClass($toggle);
       $this->assertEquals($expectedOne, $fd[0]->getAttribute('class'));
@@ -92,7 +93,7 @@ namespace FluentDOM\Query {
       $this->assertEquals($toggle, $fd[2]->getAttribute('class'));
     }
 
-    public function dataProviderToggleClass() {
+    public function dataProviderToggleClass(): array {
       return [
         ['test1', 'test2', 'test2 test1'],
         ['test2 test4', 'test1 test4', 'test4']
@@ -105,7 +106,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::toggleClass
      * @covers \FluentDOM\Query::changeClassString
      */
-    public function testToogleClassWithCallback(): void {
+    public function testToggleClassWithCallback(): void {
       $fd = $this->getQueryFixtureFromString(self::XML)->find('//html/div');
       $fd->toggleClass(
         function($node, $index, $class) {

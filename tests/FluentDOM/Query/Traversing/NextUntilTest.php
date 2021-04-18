@@ -8,14 +8,14 @@
  *
  */
 
-namespace FluentDOM\Query {
+namespace FluentDOM\Query\Traversing {
 
   use FluentDOM\Query;
   use FluentDOM\TestCase;
 
   require_once __DIR__.'/../../TestCase.php';
 
-  class TraversingNextUntilTest extends TestCase {
+  class NextUntilTest extends TestCase {
 
     protected $_directory = __DIR__;
 
@@ -30,7 +30,6 @@ namespace FluentDOM\Query {
         ->find('//*[@id = "term-2"]')
         ->nextUntil('name() = "dt"')
         ->addClass('next');
-      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
   }

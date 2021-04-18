@@ -82,7 +82,7 @@ namespace FluentDOM\Query {
      * @covers \FluentDOM\Query::attr
      * @covers \FluentDOM\Query::getFirstElement
      */
-    public function testAttrReadOnDomtext(): void {
+    public function testAttrReadOnDOMText(): void {
       $fd = $this->getQueryFixtureFromString(self::XML)
         ->find('//item/text()')
         ->attr('index');
@@ -129,7 +129,7 @@ namespace FluentDOM\Query {
         ->attr($attrName, '');
     }
 
-    public static function dataProviderInvalidAttributeNames() {
+    public static function dataProviderInvalidAttributeNames(): array {
       return [
         ['1foo'],
         ['1bar:foo'],
@@ -154,7 +154,7 @@ namespace FluentDOM\Query {
       $this->assertEquals('foo', $fd->item(0)->getAttribute($attrName));
     }
 
-    public static function dataProviderValidAttributeNames() {
+    public static function dataProviderValidAttributeNames(): array {
       return [
         ['foo'],
         ['bar:foo']

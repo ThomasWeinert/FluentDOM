@@ -8,14 +8,14 @@
  *
  */
 
-namespace FluentDOM\Query {
+namespace FluentDOM\Query\Manipulation {
 
   use FluentDOM\Exceptions;
   use FluentDOM\TestCase;
 
   require_once __DIR__.'/../../TestCase.php';
 
-  class ManipulationWrapTest extends TestCase {
+  class WrapTest extends TestCase {
 
     protected $_directory = __DIR__;
     /**
@@ -36,7 +36,7 @@ namespace FluentDOM\Query {
      * @group ManipulationAround
      * @covers \FluentDOM\Query
      */
-    public function testWrapWithDomelement(): void {
+    public function testWrapWithDOMElement(): void {
       $fd = $this->getQueryFixtureFromFunctionName(__FUNCTION__);
       $document = $fd->document;
       $div = $document->createElement('div');

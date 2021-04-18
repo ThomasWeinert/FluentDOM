@@ -46,8 +46,7 @@ namespace FluentDOM\Nodes {
         ['<item index="1">text2</item>'],
         $fetcher->fetch(
           'item',
-          $fd->getSelectorCallback('@index = 1'),
-          NULL
+          $fd->getSelectorCallback('@index = 1')
         )
       );
     }
@@ -163,10 +162,8 @@ namespace FluentDOM\Nodes {
     public function testFetchWithInvalidExpressionExpectingException(): void {
       $fd = (new Nodes(self::XML))->find('/items/group');
       $fetcher = new Fetcher($fd);
-      $this->expectException(
-        \InvalidArgumentException::class,
-        'Invalid selector/expression.'
-      );
+      $this->expectException(\InvalidArgumentException::class);
+      $this->expectErrorMessage('Invalid selector/expression.');
       $fetcher->fetch('');
     }
 
@@ -176,10 +173,8 @@ namespace FluentDOM\Nodes {
     public function testFetchWithScalarExpressionExpectingException(): void {
       $fd = (new Nodes(self::XML))->find('/items/group');
       $fetcher = new Fetcher($fd);
-      $this->expectException(
-        \InvalidArgumentException::class,
-        'Given selector/expression did not return a node list.'
-      );
+      $this->expectException(\InvalidArgumentException::class);
+      $this->expectErrorMessage('Given selector/expression did not return a node list.');
       $fetcher->fetch('count(*)');
     }
 

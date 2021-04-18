@@ -21,24 +21,27 @@ namespace FluentDOM\Loader\Supports {
 
     use Json;
 
-    public function getSupported() {
+    public function getSupported(): array {
       return ['json'];
     }
 
+    /**
+     * @throws InvalidSource
+     */
     public function getSource($source, $type = 'json', $options = []) {
       return $this->getJson($source, $type, $options);
     }
 
-    public function getValue($json) {
+    public function getValue($json): string {
       return $this->getValueAsString($json);
     }
 
-    protected function transferTo(\DOMNode $target, $json) {
+    protected function transferTo(\DOMNode $target, $json): void {
       $document = $target->ownerDocument ?: $target;
       $target->appendChild($document->createElement('success'));
     }
 
-    public function getNamespace($nodeName, $namespaces, $parent) {
+    public function getNamespace($nodeName, $namespaces, $parent): ?string {
       return $this->getNamespaceForNode($nodeName, $namespaces, $parent);
     }
 
@@ -201,7 +204,7 @@ namespace FluentDOM\Loader\Supports {
      * @covers \FluentDOM\Loader\Supports\Json
      * @dataProvider provideJsonValues
      */
-    public function testGetValueAsJson($expected, $value) {
+    public function testGetValueAsJson(string $expected, $value): void {
       $loader = new Json_TestProxy();
       $this->assertSame(
         $expected,
@@ -209,7 +212,7 @@ namespace FluentDOM\Loader\Supports {
       );
     }
 
-    public static function provideJsonValues() {
+    public static function provideJsonValues(): array {
       return [
         ['true', TRUE],
         ['false', FALSE],

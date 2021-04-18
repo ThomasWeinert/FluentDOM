@@ -8,14 +8,14 @@
  *
  */
 
-namespace FluentDOM\Query {
+namespace FluentDOM\Query\Traversing {
 
   use FluentDOM\Query;
   use FluentDOM\TestCase;
 
   require_once __DIR__.'/../../TestCase.php';
 
-  class TraversingAddTest extends TestCase {
+  class AddTest extends TestCase {
 
     protected $_directory = __DIR__;
 
@@ -31,7 +31,6 @@ namespace FluentDOM\Query {
           $fd->find('//div')
         )
         ->toggleClass('inB');
-      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
 
@@ -45,7 +44,6 @@ namespace FluentDOM\Query {
       $fd
         ->add('//div')
         ->toggleClass('inB');
-      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
 
@@ -60,7 +58,6 @@ namespace FluentDOM\Query {
         ->find('//p')
         ->add('.//b')
         ->toggleClass('inB');
-      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
 
@@ -75,7 +72,6 @@ namespace FluentDOM\Query {
         ->find('//p')
         ->add('.//b', $fd->document->documentElement)
         ->toggleClass('inB');
-      $this->assertInstanceOf(Query::class, $fd);
       $this->assertFluentDOMQueryEqualsXMLFile(__FUNCTION__, $fd);
     }
   }

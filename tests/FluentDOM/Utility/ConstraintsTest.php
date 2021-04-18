@@ -12,7 +12,6 @@ namespace FluentDOM\Utility {
 
   require_once __DIR__ . '/../TestCase.php';
 
-  use FluentDOM\DOM\Element;
   use FluentDOM\TestCase;
 
   class ConstraintsTest extends TestCase {
@@ -28,7 +27,7 @@ namespace FluentDOM\Utility {
       $this->assertInstanceOf(\DOMNode::class, Constraints::filterNode($node));
     }
 
-    public static function provideValidNodes() {
+    public static function provideValidNodes(): array {
       $document = new \DOMDocument();
       return [
         [$document->createElement('element')],
@@ -45,11 +44,11 @@ namespace FluentDOM\Utility {
      * @param mixed $node
      * @param bool $ignoreTextNodes
      */
-    public function testFilterNodeExpectingNull($node, $ignoreTextNodes = FALSE) {
+    public function testFilterNodeExpectingNull($node, bool $ignoreTextNodes = FALSE): void {
       $this->assertNull(Constraints::filterNode($node, $ignoreTextNodes));
     }
 
-    public static function provideInvalidNodes() {
+    public static function provideInvalidNodes(): array {
       $document = new \DOMDocument();
       return [
         ['string'],
@@ -75,10 +74,8 @@ namespace FluentDOM\Utility {
      * @covers \FluentDOM\Utility\Constraints::assertNode
      */
     public function testAssertNodeExpectingException(): void {
-      $this->expectException(
-        \InvalidArgumentException::class,
-        'DOMNode expected, got: boolean.'
-      );
+      $this->expectException(\InvalidArgumentException::class);
+      $this->expectErrorMessage('DOMNode expected, got: boolean.');
       Constraints::assertNode(FALSE);
     }
 
@@ -88,10 +85,8 @@ namespace FluentDOM\Utility {
      * @covers \FluentDOM\Utility\Constraints::assertNode
      */
     public function testAssertNodeExpectingExceptionWithModifiedMessage(): void {
-      $this->expectException(
-        \InvalidArgumentException::class,
-        'Not a node but a stdClass.'
-      );
+      $this->expectException(\InvalidArgumentException::class);
+      $this->expectErrorMessage('Not a node but a stdClass.');
       Constraints::assertNode(new \stdClass, 'Not a node but a %s.');
     }
 
@@ -148,7 +143,7 @@ namespace FluentDOM\Utility {
      * @group Constraints
      * @dataProvider provideNodeLists
      * @covers \FluentDOM\Utility\Constraints::filterNodeList
-     * @param $list
+     * @param mixed $list
      */
     public function testFilterNodeListExpectingList($list): void {
       $this->assertThat(
@@ -160,7 +155,7 @@ namespace FluentDOM\Utility {
       );
     }
 
-    public static function provideNodeLists() {
+    public static function provideNodeLists(): array {
       $document = new \DOMDocument();
       return [
         [[$document->createElement('element')]],
@@ -185,11 +180,11 @@ namespace FluentDOM\Utility {
      * @covers \FluentDOM\Utility\Constraints::filterCallableArray
      * @param $callable
      */
-    public function testFilterCallable($callable): void {
+    public function testFilterCallable(callable $callable): void {
       $this->assertIsCallable(Constraints::filterCallable($callable));
     }
 
-    public function provideCallables() {
+    public function provideCallables(): array {
       return [
         [static function() {}],
         [[$this, 'provideCallables']]
@@ -213,7 +208,7 @@ namespace FluentDOM\Utility {
      * @covers \FluentDOM\Utility\Constraints::filterCallable
      */
     public function testFilterCallableWithGlobalFunctionExpectingNull(): void {
-      $this->assertNull(Constraints::filterCallable('strpos', FALSE));
+      $this->assertNull(Constraints::filterCallable('strpos'));
     }
 
     /**
@@ -228,7 +223,7 @@ namespace FluentDOM\Utility {
       $this->assertNull(Constraints::filterCallable($callback));
     }
 
-    public function provideInvalidCallables() {
+    public function provideInvalidCallables(): array {
       return [
         [NULL],
         [[]],

@@ -11,9 +11,9 @@
 namespace FluentDOM {
 
   use FluentDOM\Loader\Result;
-  use FluentDOM\Utility\Iterators\NodesIterator;
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Xpath;
+  use PHPUnit\Framework\MockObject\MockObject;
 
   require_once __DIR__.'/TestCase.php';
 
@@ -125,20 +125,7 @@ namespace FluentDOM {
       $result
         ->method('getDocument')
         ->willReturn($document = new Document());
-      $loader = $this->createMock(Loadable::class);
-      $loader
-        ->expects($this->once())
-        ->method('supports')
-        ->with('text/xml')
-        ->willReturn(TRUE);
-      $loader
-        ->expects($this->once())
-        ->method('load')
-        ->with('DATA', 'text/xml')
-        ->willReturn($result);
-      $fd = new Nodes();
-      $fd->loaders($loader);
-      $fd->load('DATA');
+      $fd = $this->createLoaderMock($result);
       $this->assertSame(
         $document,
         $fd->document
@@ -184,36 +171,8 @@ namespace FluentDOM {
     public function testLoadWithCustomLoaderReturningLoaderResult(): void {
       $document = new Document();
       $document->appendElement('dummy');
-      $result = $this
-        ->getMockBuilder(Loader\Result::class)
-        ->disableOriginalConstructor()
-        ->getMock();
-      $result
-        ->expects($this->once())
-        ->method('getDocument')
-        ->willReturn($document);
-      $result
-        ->expects($this->once())
-        ->method('getSelection')
-        ->willReturn(FALSE);
-      $result
-        ->expects($this->once())
-        ->method('getContentType')
-        ->willReturn('text/xml');
-      $loader = $this->createMock(Loadable::class);
-      $loader
-        ->expects($this->once())
-        ->method('supports')
-        ->with('text/xml')
-        ->willReturn(TRUE);
-      $loader
-        ->expects($this->once())
-        ->method('load')
-        ->with('DATA', 'text/xml')
-        ->willReturn($result);
-      $fd = new Nodes();
-      $fd->loaders($loader);
-      $fd->load('DATA');
+      $result = $this->createLoaderResultMock($document);
+      $fd = $this->createLoaderMock($result);
       $this->assertSame(
         $document,
         $fd->document
@@ -231,36 +190,8 @@ namespace FluentDOM {
     public function testLoadWithCustomLoaderReturningLoaderResultWithSelection(): void {
       $document = new Document();
       $document->appendElement('dummy');
-      $result = $this
-        ->getMockBuilder(Loader\Result::class)
-        ->disableOriginalConstructor()
-        ->getMock();
-      $result
-        ->expects($this->once())
-        ->method('getDocument')
-        ->willReturn($document);
-      $result
-        ->expects($this->once())
-        ->method('getSelection')
-        ->willReturn($document->documentElement);
-      $result
-        ->expects($this->once())
-        ->method('getContentType')
-        ->willReturn('text/xml');
-      $loader = $this->createMock(Loadable::class);
-      $loader
-        ->expects($this->once())
-        ->method('supports')
-        ->with('text/xml')
-        ->willReturn(TRUE);
-      $loader
-        ->expects($this->once())
-        ->method('load')
-        ->with('DATA', 'text/xml')
-        ->willReturn($result);
-      $fd = new Nodes();
-      $fd->loaders($loader);
-      $fd->load('DATA');
+      $result = $this->createLoaderResultMock($document, $document->documentElement);
+      $fd = $this->createLoaderMock($result);
       $this->assertSame(
         $document,
         $fd->document
@@ -323,8 +254,9 @@ namespace FluentDOM {
     public function testLoadersGetCreateFromArray(): void {
       $fd = new Nodes();
       $fd->loaders([$loader = $this->createMock(Loadable::class)]);
-      $this->assertInstanceOf(Loadable::class, $fd->loaders());
-      $this->assertSame([$loader], iterator_to_array($fd->loaders()));
+      /** @var Loaders $loaders */
+      $loaders = $fd->loaders();
+      $this->assertSame([$loader], iterator_to_array($loaders));
     }
 
     /**
@@ -366,6 +298,7 @@ namespace FluentDOM {
     public function testPushWithInvalidArgumentExpectingException(): void {
       $fd = new Nodes();
       $this->expectException(\InvalidArgumentException::class);
+      /** @noinspection PhpParamsInspection */
       $fd->push(FALSE);
     }
 
@@ -501,7 +434,7 @@ namespace FluentDOM {
      * @group CoreFunctions
      * @covers \FluentDOM\Nodes::unique
      */
-    public function testUniquewithASingleNode(): void {
+    public function testUniqueWithASingleNode(): void {
       $fd = new Nodes();
       $fd->document->appendElement('test');
       $nodes = $fd->unique(
@@ -528,6 +461,7 @@ namespace FluentDOM {
     public function testUniqueWithInvalidElementInList(): void {
       $fd = new Nodes();
       $this->expectException(\InvalidArgumentException::class);
+      /** @noinspection PhpParamsInspection */
       $fd->unique(['Invalid']);
     }
 
@@ -662,7 +596,6 @@ namespace FluentDOM {
     public function testIterator(): void {
       $fd = new Nodes(self::XML);
       $fd = $fd->find('//item');
-      $this->assertInstanceOf(NodesIterator::class, $fd->getIterator());
       $this->assertCount(3, $fd);
     }
 
@@ -848,6 +781,7 @@ namespace FluentDOM {
      */
     public function testIssetPropertyDocumentExpectingTrue(): void {
       $fd = new Nodes();
+      /** @noinspection PhpExpressionResultUnusedInspection */
       $fd->document;
       $this->assertTrue(isset($fd->document));
     }
@@ -1107,7 +1041,7 @@ namespace FluentDOM {
     public function testGetSelectorCallbackWithNullExpectingNull(): void {
       $fd = new Nodes(self::XML);
       $this->assertNull(
-        $callback = $fd->getSelectorCallback(NULL)
+        $fd->getSelectorCallback(NULL)
       );
     }
 
@@ -1194,10 +1128,8 @@ namespace FluentDOM {
      */
     public function testGetSelectorCallbackWithInvalidSelectorExpectingException(): void {
       $fd = new Nodes(self::XML);
-      $this->expectException(
-        \InvalidArgumentException::class,
-        'Invalid selector argument.'
-      );
+      $this->expectException(\InvalidArgumentException::class);
+      $this->expectErrorMessage('Invalid selector argument.');
       $fd->getSelectorCallback('');
     }
 
@@ -1220,6 +1152,53 @@ namespace FluentDOM {
       $this->assertSame(
         \FluentDOM::getSerializerFactories(), $fd->serializerFactories()
       );
+    }
+
+    /**
+     * @param Document $document
+     * @param \DOMNode|NULL $selection
+     * @return Result|MockObject
+     */
+    public function createLoaderResultMock(Document $document, \DOMNode $selection = NULL) {
+      $result = $this
+        ->getMockBuilder(Loader\Result::class)
+        ->disableOriginalConstructor()
+        ->getMock();
+      $result
+        ->expects($this->once())
+        ->method('getDocument')
+        ->willReturn($document);
+      $result
+        ->expects($this->once())
+        ->method('getSelection')
+        ->willReturn($selection ?: FALSE);
+      $result
+        ->expects($this->once())
+        ->method('getContentType')
+        ->willReturn('text/xml');
+      return $result;
+    }
+
+    /**
+     * @param $result
+     * @return Nodes
+     */
+    public function createLoaderMock($result): Nodes {
+      $loader = $this->createMock(Loadable::class);
+      $loader
+        ->expects($this->once())
+        ->method('supports')
+        ->with('text/xml')
+        ->willReturn(TRUE);
+      $loader
+        ->expects($this->once())
+        ->method('load')
+        ->with('DATA', 'text/xml')
+        ->willReturn($result);
+      $fd = new Nodes();
+      $fd->loaders($loader);
+      $fd->load('DATA');
+      return $fd;
     }
   }
 }

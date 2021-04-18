@@ -1,11 +1,20 @@
 <?xml version="1.0"?>
+<!--
+  ~ FluentDOM
+  ~
+  ~ @link https://thomas.weinert.info/FluentDOM/
+  ~ @copyright Copyright 2009-2021 FluentDOM Contributors
+  ~ @license http://www.opensource.org/licenses/mit-license.php The MIT License
+  ~
+  -->
+
 <html>
 <head/>
 <body>
   <ul>
     <li class="before">One</li>
     <li class="before">Two</li>
-    <li class="hilite">Three</li>
+    <li class="highlight">Three</li>
     <li class="before">Four</li>
   </ul>
   <ul>
@@ -15,9 +24,9 @@
   </ul>
   <ul>
     <li class="before">Eight</li>
-    <li class="hilite before">Nine</li>
+    <li class="highlight before">Nine</li>
     <li class="before">Ten</li>
-    <li class="hilite before">Eleven</li>
+    <li class="highlight before">Eleven</li>
   </ul>
   <p>Unique siblings: <b/></p>
 </body>

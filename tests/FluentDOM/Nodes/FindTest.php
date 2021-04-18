@@ -8,13 +8,14 @@
  *
  */
 
-namespace FluentDOM {
+namespace FluentDOM\Nodes {
 
+  use FluentDOM\Nodes;
   use FluentDOM\TestCase;
 
   require_once __DIR__ . '/../TestCase.php';
 
-  class NodesFindTest extends TestCase {
+  class FindTest extends TestCase {
 
     protected $_directory = __DIR__;
 
@@ -45,7 +46,7 @@ namespace FluentDOM {
     public function testFinForcingSort(): void {
       $fd = (new Nodes(self::XML))->find('/*');
       $this->assertEquals(1, $fd->length);
-      $findFd = $fd->find('group/item', \FluentDOM\Nodes::FIND_FORCE_SORT);
+      $findFd = $fd->find('group/item', Nodes::FIND_FORCE_SORT);
       $this->assertEquals(3, $findFd->length);
       $this->assertTrue($findFd !== $fd);
     }
@@ -82,7 +83,7 @@ namespace FluentDOM {
       $fd = (new Nodes(self::XML))->find('/*');
       $this->assertEquals(1, $fd->length);
       $findFd = $fd->find(
-        function ($context) use ($fd) {
+        function () {
           return FALSE;
         }
       );
@@ -116,7 +117,7 @@ namespace FluentDOM {
     public function testFindUsingFilterModeWithSelectorCallback(): void {
       $fd = new Nodes(self::XML);
       $fd->onPrepareSelector = function() {return 'self::item'; };
-      $fd = $fd->find('', \FluentDOM\Nodes::FIND_MODE_FILTER);
+      $fd = $fd->find('', Nodes::FIND_MODE_FILTER);
       $this->assertEquals(3, $fd->length);
     }
 
@@ -131,7 +132,7 @@ namespace FluentDOM {
     public function testFindUsingFilterModeWithSelectorCallbackIgnoreRootDescendantFix(): void {
       $fd = new Nodes(self::XML);
       $fd->onPrepareSelector = function() { return '//self::item'; };
-      $fd = $fd->find('', \FluentDOM\Nodes::FIND_MODE_FILTER);
+      $fd = $fd->find('', Nodes::FIND_MODE_FILTER);
       $this->assertEquals(3, $fd->length);
     }
 
@@ -146,7 +147,7 @@ namespace FluentDOM {
     public function testFindUsingFilterModeWithSelectorCallbackAddSelfAxeFix(): void {
       $fd = new Nodes(self::XML);
       $fd->onPrepareSelector = function() { return '//item'; };
-      $fd = $fd->find('', \FluentDOM\Nodes::FIND_MODE_FILTER);
+      $fd = $fd->find('', Nodes::FIND_MODE_FILTER);
       $this->assertEquals(3, $fd->length);
     }
 
@@ -204,10 +205,8 @@ namespace FluentDOM {
      */
     public function testFindWithExpressionThatReturnsScalarExpectingException(): void {
       $fd = new Nodes(self::XML);
-      $this->expectException(
-        \InvalidArgumentException::class,
-        'Given selector/expression did not return a node list.'
-      );
+      $this->expectException(\InvalidArgumentException::class);
+      $this->expectErrorMessage('Given selector/expression did not return a node list.');
       $fd->find('count(*)');
     }
 
@@ -221,10 +220,8 @@ namespace FluentDOM {
      */
     public function testFindWithInvalidSelectorExpectingException(): void {
       $fd = new Nodes(self::XML);
-      $this->expectException(
-        \InvalidArgumentException::class,
-        'Invalid selector/expression.'
-      );
+      $this->expectException(\InvalidArgumentException::class);
+      $this->expectErrorMessage('Invalid selector/expression.');
       $fd->find('');
     }
   }

@@ -3,15 +3,18 @@
 
 - [!BC] Minimum PHP Version 7.2.0
 - [!BC] \FluentDOM\Loadable::load() now always returns 
-    \FluentDOM\Loader\Result instance (or NULL)
+  \FluentDOM\Loader\Result instance (or NULL)
 - [!BC] Define Return Type For \FluentDOM\Loadable::load()
 - [!BC] Define Return Type For \FluentDOM\Loadable::loadFragment()
 - [!BC] Define Appendable::appendTo() Return Value 
   as "void"
-- [!BC] Change Method Signatures Of DOM L3 Methods To PHP
+- [!BC] Change Method Signatures Of DOM L3 Methods To Match PHP
+- [!BC] Declare FluentDOM::setLoader() Argument As A Nullable 
+  Of Loadable
 - [FEATURE] #90 Throw Exception If File Can Not Be Loaded
 - [REFACTOR] Define Argument And Return Types
 - [REFACTOR] Reference Loaders By Class Constants
+- [REFACTOR] Cleanup Unit Tests
 
 7.4.0
 -----

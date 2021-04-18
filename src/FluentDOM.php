@@ -136,21 +136,15 @@ abstract class FluentDOM {
    * Set a loader used in FluentDOM::load(), FALSE will reset the loader.
    * If no loader is provided an FluentDOM\Loader\Standard() will be created.
    *
-   * @param FluentDOM\Loadable|FALSE $loader
+   * @param FluentDOM\Loadable|NULL $loader
    * @throws InvalidArgument
    */
-  public static function setLoader($loader): void {
+  public static function setLoader(Loadable $loader = NULL): void {
     if (!$loader) {
       self::$_loader = NULL;
       return;
     }
-    if ($loader instanceof FluentDOM\Loadable) {
-      self::$_loader = $loader;
-      return;
-    }
-    throw new FluentDOM\Exceptions\InvalidArgument(
-      'loader', [Loadable::class]
-    );
+    self::$_loader = $loader;
   }
 
   /**

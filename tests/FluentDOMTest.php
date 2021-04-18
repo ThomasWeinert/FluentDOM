@@ -92,7 +92,7 @@ class FluentDOMTest extends TestCase  {
    * @covers FluentDOM
    */
   public function testSetLoaderWithInvalidObject(): void {
-    $this->expectException(\FluentDOM\Exception::class);
+    $this->expectException(TypeError::class);
     /** @noinspection PhpParamsInspection */
     FluentDOM::setLoader(new stdClass());
   }

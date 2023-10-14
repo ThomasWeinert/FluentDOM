@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -20,27 +20,20 @@ namespace FluentDOM\Utility\Iterators {
 
     /**
      * internal position pointer variable
-     * @var int
      */
-    protected $_position  = 0;
+    protected int $_position  = 0;
 
     /**
      * owner (object) of the iterator
-     * @var \Countable
      */
-    private $_owner;
+    private \Countable $_owner;
 
-    /**
-     * @param \Countable $owner
-     */
     public function __construct(\Countable $owner) {
       $this->_owner = $owner;
     }
 
     /**
      * Return the owner object
-     *
-     * @return \Countable
      */
     protected function getOwner(): \Countable {
       return $this->_owner;
@@ -48,8 +41,6 @@ namespace FluentDOM\Utility\Iterators {
 
     /**
      * Get current iterator pointer
-     *
-     * @return int
      */
     public function key(): int {
       return $this->_position;
@@ -57,34 +48,31 @@ namespace FluentDOM\Utility\Iterators {
 
     /**
      * Move iterator pointer to next element
-     *
-     * @return void
      */
-    public function next() {
+    public function next(): void {
       ++$this->_position;
     }
 
     /**
      * Reset iterator pointer
      */
-    public function rewind() {
+    public function rewind(): void {
       $this->_position = 0;
     }
 
     /**
      * Move iterator pointer to specified element
      *
-     * @param int $position
      * @throws \InvalidArgumentException
      */
-    public function seek($position) {
-      if ($this->getOwner()->count() > $position) {
-        $this->_position = $position;
+    public function seek(int $offset): void {
+      if ($this->getOwner()->count() > $offset) {
+        $this->_position = $offset;
       } else {
         throw new \InvalidArgumentException(
           \sprintf(
             'Unknown position %d, only %d items',
-            $position,
+            $offset,
             $this->getOwner()->count()
           )
         );

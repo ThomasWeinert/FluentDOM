@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -18,7 +18,7 @@ namespace FluentDOM\Loader\XDM {
    */
   class XDMLoaders extends LazyLoaders {
 
-    private static $_loaders = [
+    private static array $_loaders = [
       JsonAsXDM::class => JsonAsXDM::CONTENT_TYPES
     ];
 

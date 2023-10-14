@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -21,15 +21,19 @@ namespace FluentDOM\Loader\Libxml {
     public const ERROR_WARNING = 1;
     public const ERROR_ERROR = 2;
     public const ERROR_FATAL = 4;
+    /** @noinspection PhpUnused */
     public const ERROR_ALL = self::ERROR_WARNING | self::ERROR_ERROR | self::ERROR_FATAL;
 
-    private $_errorMapping = [
+    private array $_errorMapping = [
       LIBXML_ERR_NONE => self::ERROR_NONE,
       LIBXML_ERR_WARNING => self::ERROR_WARNING,
       LIBXML_ERR_ERROR => self::ERROR_ERROR,
       LIBXML_ERR_FATAL => self::ERROR_FATAL
     ];
 
+    /**
+     * @throws \Throwable
+     */
     public function capture(callable $callback, int $errorLevel = self::ERROR_FATAL) {
       $exception = NULL;
       $result = NULL;

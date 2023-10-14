@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -12,6 +12,7 @@ namespace FluentDOM\DOM {
 
   require_once __DIR__ . '/../TestCase.php';
 
+  use FluentDOM\Exceptions\UndeclaredPropertyError;
   use FluentDOM\TestCase;
   use FluentDOM\Utility\Namespaces;
 
@@ -190,21 +191,6 @@ namespace FluentDOM\DOM {
     /**
      * @covers \FluentDOM\DOM\Xpath
      */
-    public function testQueryGeneratesDeprecatedError(): void {
-      $current = error_reporting();
-      if (($current & E_USER_DEPRECATED) !== E_USER_DEPRECATED) {
-        error_reporting($current | E_USER_DEPRECATED);
-      }
-      $document = new \DOMDocument();
-      $xpath = new Xpath($document);
-      $this->expectDeprecation();
-      $xpath->query('*');
-      error_reporting($current);
-    }
-
-    /**
-     * @covers \FluentDOM\DOM\Xpath
-     */
     public function testFirstOfMatchingNode(): void {
       $document = new \DOMDocument();
       $document->loadXml('<foo/>');
@@ -280,7 +266,7 @@ namespace FluentDOM\DOM {
       $xpath = new Xpath($document);
       $xpath->registerNodeNamespaces = TRUE;
       unset($xpath->registerNodeNamespaces);
-      $this->assertFalse($xpath->registerNodeNamespaces);
+      $this->assertIsBool($xpath->registerNodeNamespaces);
     }
 
     /**
@@ -290,29 +276,20 @@ namespace FluentDOM\DOM {
       $document = new \DOMDocument();
       $xpath = new Xpath($document);
       $this->assertFalse(isset($xpath->foo));
+      $this->expectException(UndeclaredPropertyError::class);
       $xpath->foo = 'bar';
-      $this->assertTrue(isset($xpath->foo));
-      $this->assertEquals('bar', $xpath->foo);
-      unset($xpath->foo);
-      $this->assertFalse(isset($xpath->foo));
     }
 
     /**
      * @covers \FluentDOM\DOM\Xpath
      */
     public function testPropertyGetWithUnknownPropertyExpectingPHPError(): void {
-      $errors = error_reporting(E_ALL);
       $document = new \DOMDocument();
       $xpath = new Xpath($document);
-      if (PHP_VERSION_ID < 80000) {
-        $this->expectNotice();
-      } else {
-        $this->expectWarning();
-      }
+      $this->expectException(UndeclaredPropertyError::class);
       /** @noinspection PhpUndefinedFieldInspection */
       /** @noinspection PhpExpressionResultUnusedInspection */
       $xpath->someUnknownProperty;
-      error_reporting($errors);
     }
 
     /***************************

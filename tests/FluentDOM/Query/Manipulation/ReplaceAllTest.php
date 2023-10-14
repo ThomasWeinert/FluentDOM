@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -51,7 +51,7 @@ namespace FluentDOM\Query\Manipulation {
      * @covers \FluentDOM\Query
      */
     public function testReplaceAllWithInvalidArgument(): void {
-      $this->expectException(\InvalidArgumentException::class);
+      $this->expectException(\TypeError::class);
       $this->getQueryFixtureFromString(self::XML)
         ->add('<b id="sample">Paragraph. </b>')
         ->replaceAll(

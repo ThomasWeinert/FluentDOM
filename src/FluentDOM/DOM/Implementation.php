@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -20,24 +20,20 @@ namespace FluentDOM\DOM {
    */
   class Implementation extends \DOMImplementation {
 
-    /**
-     * @param string|null $namespaceURI
-     * @param string|null $qualifiedName
-     * @param DOMDocumentType|null $doctype
-     * @return Document
-     */
     public function createDocument(
-      $namespaceURI = NULL, $qualifiedName = NULL, DOMDocumentType $doctype = NULL
-    ) {
+      string $namespace = NULL,
+      string $qualifiedName = NULL,
+      DOMDocumentType $doctype = NULL
+    ): Document {
       $document = new Document();
       if ($doctype) {
         $document->appendChild($doctype);
       }
       if ($qualifiedName) {
-        $document->appendChild($document->createElementNS($namespaceURI, $qualifiedName));
+        $document->appendChild($document->createElementNS($namespace, $qualifiedName));
         $prefix = (string)strstr($qualifiedName, ':', TRUE);
-        if ($prefix !== '' || !empty($namespaceURI)) {
-          $document->registerNamespace($prefix, $namespaceURI);
+        if ($prefix !== '' || !empty($namespace)) {
+          $document->registerNamespace($prefix, $namespace);
         }
       }
       return $document;

@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -13,9 +13,9 @@ namespace FluentDOM\Loader\Supports {
 
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\DocumentFragment;
-  use FluentDOM\DOM\Element;
   use FluentDOM\Exceptions\InvalidSource;
   use FluentDOM\Exceptions\LoadingError;
+  use FluentDOM\Exceptions\UnattachedNode;
   use FluentDOM\Loader\Options;
   use FluentDOM\Loader\Result;
   use FluentDOM\Loader\Supports;
@@ -26,14 +26,11 @@ namespace FluentDOM\Loader\Supports {
 
     /**
      * Load the json string into an DOMDocument
-     *
-     * @param mixed $source
-     * @param string $contentType
-     * @param array|\Traversable|Options $options
-     * @return Result|NULL
      * @throws InvalidSource
+     * @throws \DOMException
+     * @throws UnattachedNode
      */
-    public function load($source, string $contentType, $options = []): ?Result {
+    public function load(mixed $source, string $contentType, iterable  $options = []): ?Result {
       if (FALSE !== ($json = $this->getJson($source, $contentType, $options))) {
         $document = new Document('1.0', 'UTF-8');
         $this->transferTo($document, $json);
@@ -43,15 +40,14 @@ namespace FluentDOM\Loader\Supports {
     }
 
     /**
-     * @see Loadable::loadFragment
-     *
-     * @param mixed $source
-     * @param string $contentType
-     * @param array|\Traversable|Options $options
-     * @return DocumentFragment|NULL
+     * @throws UnattachedNode
+     * @throws \DOMException
      * @throws InvalidSource
+     * @see Loadable::loadFragment
      */
-    public function loadFragment($source, string $contentType, $options = []): ?DocumentFragment {
+    public function loadFragment(
+      mixed $source, string $contentType, iterable $options = []
+    ): ?DocumentFragment {
       if (FALSE !== ($json = $this->getJson($source, $contentType, $options))) {
         $document = new Document('1.0', 'UTF-8');
         $fragment = $document->createDocumentFragment();
@@ -62,14 +58,10 @@ namespace FluentDOM\Loader\Supports {
     }
 
     /**
-     * @param mixed $source
-     * @param string $contentType
-     * @param array|\Traversable|Options $options
-     * @return mixed
      * @throws \Exception
      * @throws InvalidSource
      */
-    private function getJson($source, string $contentType, $options)  {
+    private function getJson(mixed $source, string $contentType, iterable $options)  {
       if ($this->supports($contentType)) {
         if (\is_string($source)) {
           $json = FALSE;
@@ -98,11 +90,9 @@ namespace FluentDOM\Loader\Supports {
     }
 
     /**
-     * @param array|\Traversable|Options $options
-     * @return Options
      * @throws \InvalidArgumentException
      */
-    public function getOptions($options): Options {
+    public function getOptions(iterable $options): Options {
       return new Options(
         $options,
         [
@@ -113,17 +103,13 @@ namespace FluentDOM\Loader\Supports {
       );
     }
 
-    /**
-     * @param \DOMNode|Element $target
-     * @param mixed $json
-     */
-    abstract protected function transferTo(\DOMNode $target, $json);
+    abstract protected function transferTo(\DOMNode $target, mixed $json): void;
 
     /**
      * @param mixed $value
      * @return string
      */
-    private function getValueAsString($value): string {
+    private function getValueAsString(mixed $value): string {
       if (\is_bool($value)) {
         return $value ? 'true' : 'false';
       }

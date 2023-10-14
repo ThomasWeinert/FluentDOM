@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -25,10 +25,8 @@ namespace FluentDOM\Query\Css {
 
     /**
      * property storage
-     *
-     * @var array
      */
-    private $_properties = [];
+    private array $_properties = [];
 
     public function __construct(string $styleString = '') {
       $this->setStyleString($styleString);
@@ -40,8 +38,6 @@ namespace FluentDOM\Query\Css {
 
     /**
      * Decode style attribute to the css properties array.
-     *
-     * @param string $styleString
      */
     public function setStyleString(string $styleString): void {
       $this->_properties = [];
@@ -62,27 +58,24 @@ namespace FluentDOM\Query\Css {
 
     /**
      * Encode css properties array for the style string.
-     *
-     * @return string
      */
     public function getStyleString(): string {
       $result = '';
-      if (\is_array($this->_properties) && \count($this->_properties) > 0) {
-        \uksort($this->_properties, new PropertyCompare());
+      if (count($this->_properties) > 0) {
+        uksort($this->_properties, new PropertyCompare());
         foreach ($this->_properties as $name => $value) {
-          if (\trim($value) !== '') {
+          if (trim($value) !== '') {
             $result .= ' '.$name.': '.$value.';';
           }
         }
       }
-      return (string)\substr($result, 1);
+      return substr($result, 1);
     }
 
     /**
      * Get an iterator for the properties
      *
      * @see IteratorAggregate::getIterator()
-     * @return \Iterator
      */
     public function getIterator(): \Iterator {
       return new \ArrayIterator($this->_properties);
@@ -92,21 +85,18 @@ namespace FluentDOM\Query\Css {
      * Get the property count of the first selected node
      *
      * @see Countable::count()
-     * @return int
      */
     public function count(): int {
-      return \count($this->_properties);
+      return count($this->_properties);
     }
 
     /**
      * Allow to use isset() and array syntax to check if a css property is set on
      * the first matched node.
      *
-     * @param mixed $offset
-     * @return bool
      * @see ArrayAccess::offsetExists()
      */
-    public function offsetExists($offset): bool {
+    public function offsetExists(mixed $offset): bool {
       return isset($this->_properties[$offset]);
     }
 
@@ -114,10 +104,8 @@ namespace FluentDOM\Query\Css {
      * Allow to use array syntax to read a css property value from first matched node.
      *
      * @see ArrayAccess::offsetGet()
-     * @param mixed $offset
-     * @return string $value
      */
-    public function offsetGet($offset): string {
+    public function offsetGet(mixed $offset): string {
       return $this->_properties[$offset];
     }
 
@@ -125,11 +113,9 @@ namespace FluentDOM\Query\Css {
      * Set a property
      *
      * @see ArrayAccess::offsetSet()
-     * @param mixed $offset
-     * @param mixed $value
      * @throws \InvalidArgumentException
      */
-    public function offsetSet($offset, $value): void {
+    public function offsetSet(mixed $offset, mixed $value): void {
       if ($this->_isCSSProperty($offset)) {
         if (\trim($value) !== '') {
           $this->_properties[$offset] = (string)$value;
@@ -147,7 +133,7 @@ namespace FluentDOM\Query\Css {
      * @see ArrayAccess::offsetUnset()
      * @param string|string[] $offset
      */
-    public function offsetUnset($offset): void {
+    public function offsetUnset(mixed $offset): void {
       if (!\is_array($offset)) {
         $offset = [$offset];
       }
@@ -160,15 +146,9 @@ namespace FluentDOM\Query\Css {
 
     /**
      * Compile value argument into a string (it can be an callback)
-     *
-     * @param string|callable $value
-     * @param \DOMElement $node
-     * @param int $index
-     * @param string|NULL $currentValue
-     * @return string
      */
     public function compileValue(
-      $value, \DOMElement $node, int $index, string $currentValue = NULL
+      mixed $value, \DOMElement $node, int $index, string $currentValue = NULL
     ): string {
       if (!\is_string($value) && \is_callable($value, TRUE)) {
         return (string)$value($node, $index, $currentValue);
@@ -183,7 +163,7 @@ namespace FluentDOM\Query\Css {
      * @return bool
      */
     private function _isCSSProperty(string $propertyName): bool {
-      $pattern = '(^-?(?:[a-z]+-)*(?:[a-z]+)$)D';
+      $pattern = '(^-?(?:[a-z]+-)*[a-z]+$)D';
       if (preg_match($pattern, $propertyName)) {
         return TRUE;
       }

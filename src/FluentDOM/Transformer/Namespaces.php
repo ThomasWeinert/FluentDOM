@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -25,21 +25,14 @@ namespace FluentDOM\Transformer {
    */
   abstract class Namespaces implements \IteratorAggregate, Appendable, StringCastable {
 
-    /**
-     * @var Document
-     */
-    private $_document;
+    private Document $_document;
 
     /**
      * Add a node to the target node
-     *
-     * @param \DOMNode $target
-     * @param \DOMNode $source
      */
-    abstract protected function addNode(\DOMNode $target, \DOMNode $source);
+    abstract protected function addNode(\DOMNode $target, \DOMNode $source): void;
 
     /**
-     * @param \DOMNode $node
      * @throws UnattachedNode
      */
     public function __construct(\DOMNode $node) {
@@ -60,8 +53,6 @@ namespace FluentDOM\Transformer {
 
     /**
      * Create a document with optimized namespaces and return it as xml string
-     *
-     * @return string
      */
     public function __toString(): string {
       return $this->getDocument()->saveXML();
@@ -69,8 +60,6 @@ namespace FluentDOM\Transformer {
 
     /**
      * Create and return a document with optimized namespaces.
-     *
-     * @return Document
      */
     public function getDocument(): Document {
       $document = new Document($this->_document->xmlVersion, $this->_document->xmlEncoding);
@@ -80,9 +69,6 @@ namespace FluentDOM\Transformer {
       return $document;
     }
 
-    /**
-     * @return \Iterator
-     */
     public function getIterator(): \Iterator {
       $document = $this->getDocument();
       return new \CallbackFilterIterator(
@@ -95,8 +81,6 @@ namespace FluentDOM\Transformer {
 
     /**
      * Append transformed nodes to another DOM
-     *
-     * @param Element $parentNode
      */
     public function appendTo(Element $parentNode): void {
       foreach ($this->_document->childNodes as $node) {

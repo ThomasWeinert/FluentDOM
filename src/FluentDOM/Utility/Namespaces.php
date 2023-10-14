@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -18,97 +18,80 @@ namespace FluentDOM\Utility {
   class Namespaces implements NamespaceResolver, \ArrayAccess, \IteratorAggregate, \Countable {
 
     /**
-     * @var array
+     * @var string[]
      */
-    private $_namespaces = [];
+    private array $_namespaces = [];
 
-    /**
-     * @var array
-     */
-    private $_reserved = [
+    private array $_reserved = [
       'xml' => 'http://www.w3.org/XML/1998/namespace',
       'xmlns' => 'http://www.w3.org/2000/xmlns/'
     ];
 
-    private $_stash = [];
+    private array $_stash = [];
 
-    /**
-     * Namespaces constructor.
-     * @param NULL|array|\Traversable $namespaces
-     */
-    public function __construct($namespaces = NULL) {
+    public function __construct(iterable $namespaces = NULL) {
       if (NULL !== $namespaces) {
         $this->assign($namespaces);
       }
     }
 
-    /**
-     * @param string $prefix
-     * @return string|NULL
-     */
     public function resolveNamespace(string $prefix): ?string {
       return $this[empty($prefix) ? '#default' : $prefix];
     }
 
-    /**
-     * @param string $prefix
-     * @return bool
-     */
     public function isReservedPrefix(string $prefix): bool {
       return \array_key_exists($prefix, $this->_reserved);
     }
 
     /**
-     * @param string $prefix
-     * @return bool
+     * @param string $offset
      */
-    public function offsetExists($prefix): bool {
-      return \array_key_exists($prefix, $this->_reserved) || \array_key_exists($prefix, $this->_namespaces);
+    public function offsetExists(mixed $offset): bool {
+      return \array_key_exists($offset, $this->_reserved) || \array_key_exists($offset, $this->_namespaces);
     }
 
     /**
-     * @param string $prefix
-     * @param string $namespaceURI
+     * @param string $offset
+     * @param string $value
      * @throws \LogicException
      */
-    public function offsetSet($prefix, $namespaceURI): void {
-      $prefix = $this->validatePrefix($prefix);
-      if (isset($this->_reserved[$prefix])) {
+    public function offsetSet(mixed $offset, mixed $value): void {
+      $offset = $this->validatePrefix($offset);
+      if (isset($this->_reserved[$offset])) {
         throw new \LogicException(
-          \sprintf('Can not register reserved namespace prefix "%s".', $prefix)
+          \sprintf('Can not register reserved namespace prefix "%s".', $offset)
         );
       }
-      $this->_namespaces[$prefix] = $namespaceURI;
+      $this->_namespaces[$offset] = $value;
     }
 
     /**
-     * @param string $prefix
-     * @return string|NULL
+     * @param string $offset
      * @throws \LogicException
      */
-    public function offsetGet($prefix): ?string {
-      $prefix = $this->validatePrefix($prefix);
-      if (\array_key_exists($prefix, $this->_reserved)) {
-        return $this->_reserved[$prefix];
+    public function offsetGet(mixed $offset): ?string {
+      $offset = $this->validatePrefix($offset);
+      if (\array_key_exists($offset, $this->_reserved)) {
+        return $this->_reserved[$offset];
       }
-      if (\array_key_exists($prefix, $this->_namespaces)) {
-        return $this->_namespaces[$prefix];
+      if (\array_key_exists($offset, $this->_namespaces)) {
+        return $this->_namespaces[$offset];
       }
-      if ($prefix === '#default') {
+      if ($offset === '#default') {
         return '';
       }
       throw new \LogicException(
-        \sprintf('Unknown namespace prefix "%s".', $prefix)
+        \sprintf('Unknown namespace prefix "%s".', $offset)
       );
     }
 
     /**
-     * @param string $prefix
+     * @param string $offset
      */
-    public function offsetUnset($prefix): void {
-      $prefix = $this->validatePrefix($prefix);
-      if (\array_key_exists($prefix, $this->_namespaces)) {
-        unset($this->_namespaces[$prefix]);
+    public function offsetUnset(mixed $offset): void {
+      $offset = $this->validatePrefix($offset);
+      if (\array_key_exists($offset, $this->_namespaces)) {
+        unset($this->_namespaces[$offset]);
       }
     }
 
@@ -133,28 +116,20 @@ namespace FluentDOM\Utility {
       $this->_namespaces = \array_pop($this->_stash);
     }
 
-    /**
-     * @return int
-     */
     public function count(): int {
       return \count($this->_namespaces);
     }
 
     /**
-     * @param array|\Traversable $namespaces
      * @throws \LogicException
      */
-    public function assign($namespaces): void {
+    public function assign(iterable $namespaces): void {
       $this->_namespaces = [];
       foreach ($namespaces as $prefix => $namespaceURI) {
         $this->offsetSet($prefix, $namespaceURI);
       }
     }
 
-    /**
-     * @param string $prefix
-     * @return string
-     */
     private function validatePrefix(string $prefix): string {
       return empty($prefix) ? '#default' : $prefix;
     }

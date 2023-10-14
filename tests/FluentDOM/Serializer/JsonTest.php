@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -239,7 +239,7 @@ namespace FluentDOM\Serializer {
   class Json_TestProxy extends Json {
     public $jsonData = NULL;
 
-    public function jsonSerialize() {
+    public function jsonSerialize(): mixed {
       return $this->jsonData ?: parent::jsonSerialize();
     }
 

@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -15,25 +15,13 @@ namespace FluentDOM\Loader {
 
   class Result {
 
-    /**
-     * @var Document
-     */
-    private $_document;
-    /**
-     * @var string
-     */
-    private $_contentType;
-    /**
-     * @var \DOMNode|\Traversable|array|NULL
-     */
-    private $_selection;
+    private Document $_document;
+    private string $_contentType;
+    private NULL|\DOMNode|iterable $_selection;
 
-    /**
-     * @param Document $document
-     * @param string $contentType
-     * @param \DOMNode|\Traversable|array|NULL $selection
-     */
-    public function __construct(Document $document, string $contentType, $selection = NULL) {
+    public function __construct(
+      Document $document, string $contentType, \DOMNode|iterable $selection = NULL
+    ) {
       $this->_document = $document;
       $this->_contentType = $contentType;
       $this->_selection = $selection;
@@ -46,17 +34,12 @@ namespace FluentDOM\Loader {
       return $this->_document;
     }
 
-    /**
-     * @return string
-     */
     public function getContentType(): string {
       return $this->_contentType;
     }
 
-    /**
-     * @return array|\DOMNode|NULL|\Traversable
-     */
-    public function getSelection() {
+    /** @noinspection PhpUnused */
+    public function getSelection(): NULL|\DOMNode|iterable {
       return $this->_selection;
     }
   }

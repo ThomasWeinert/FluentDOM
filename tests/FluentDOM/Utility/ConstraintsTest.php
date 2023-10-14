@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -75,7 +75,7 @@ namespace FluentDOM\Utility {
      */
     public function testAssertNodeExpectingException(): void {
       $this->expectException(\InvalidArgumentException::class);
-      $this->expectErrorMessage('DOMNode expected, got: boolean.');
+      $this->expectExceptionMessage('DOMNode expected, got: boolean.');
       Constraints::assertNode(FALSE);
     }
 
@@ -86,7 +86,7 @@ namespace FluentDOM\Utility {
      */
     public function testAssertNodeExpectingExceptionWithModifiedMessage(): void {
       $this->expectException(\InvalidArgumentException::class);
-      $this->expectErrorMessage('Not a node but a stdClass.');
+      $this->expectExceptionMessage('Not a node but a stdClass.');
       Constraints::assertNode(new \stdClass, 'Not a node but a %s.');
     }
 

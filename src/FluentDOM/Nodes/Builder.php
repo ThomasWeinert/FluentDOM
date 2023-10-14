@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -22,34 +22,21 @@ namespace FluentDOM\Nodes {
     */
   class Builder {
 
-    /**
-     * @var Nodes
-     */
-    private $_nodes;
+    private Nodes $_nodes;
 
-    /**
-     * @param Nodes $nodes
-     */
     public function __construct(Nodes $nodes) {
       $this->_nodes = $nodes;
     }
 
-    /**
-     * @return Nodes
-     */
     public function getOwner(): Nodes {
       return $this->_nodes;
     }
 
     /**
-     * @param mixed $content
-     * @param bool $includeTextNodes
-     * @param int $limit
-     * @return array
      * @throws \InvalidArgumentException
      */
     private function getNodeList(
-      $content,
+      mixed $content,
       bool $includeTextNodes = TRUE,
       int $limit = -1
     ): array {
@@ -71,13 +58,10 @@ namespace FluentDOM\Nodes {
     /**
      * Match selector against context and return matched elements.
      *
-     * @param mixed $selector
-     * @param \DOMNode|NULL $context optional, default value NULL
      * @throws \InvalidArgumentException
-     * @return array
      * @throws \LogicException
      */
-    public function getTargetNodes($selector, \DOMNode $context = NULL): array {
+    public function getTargetNodes(mixed $selector, \DOMNode $context = NULL): array {
       if ($nodes = $this->getNodeList($selector)) {
         return $nodes;
       }
@@ -99,17 +83,15 @@ namespace FluentDOM\Nodes {
     /**
      * Convert a given content into and array of nodes
      *
-     * @param mixed $content
-     * @param bool $includeTextNodes
-     * @param int $limit
-     * @return array
      * @throws \LogicException
      * @throws \UnexpectedValueException
      * @throws \InvalidArgumentException
      * @throws EmptyResult
      * @throws InvalidFragmentLoader
      */
-    public function getContentNodes($content, bool $includeTextNodes = TRUE, int $limit = -1): array {
+    public function getContentNodes(
+      mixed $content, bool $includeTextNodes = TRUE, int $limit = -1
+    ): array {
       $result = [];
       if ($nodes = $this->getNodeList($content, $includeTextNodes, $limit)) {
         $result = $nodes;
@@ -132,11 +114,9 @@ namespace FluentDOM\Nodes {
     /**
      * Convert $content to a DOMElement. If $content contains several elements use the first.
      *
-     * @param mixed $content
-     * @return \DOMElement
      * @throws EmptyResult
      */
-    public function getContentElement($content): \DOMElement {
+    public function getContentElement(mixed $content): \DOMElement {
       $contentNodes = $this->getContentNodes($content, FALSE, 1);
       return $contentNodes[0];
     }
@@ -144,17 +124,12 @@ namespace FluentDOM\Nodes {
     /**
      * Convert a given content string into and array of nodes
      *
-     * @param mixed $xml
-     * @param string $contentType
-     * @param bool $includeTextNodes
-     * @param int $limit
      * @throws Exceptions\InvalidFragmentLoader
-     * @return array
      * @throws \InvalidArgumentException
      * @throws \UnexpectedValueException
      */
     public function getFragment(
-      $xml, $contentType = 'text/xml', bool $includeTextNodes = TRUE, int $limit = -1
+      mixed $xml, string $contentType = 'text/xml', bool $includeTextNodes = TRUE, int $limit = -1
     ): array {
       $xml = $this->getContentAsString($xml);
       $loader = $this->getOwner()->loaders();
@@ -183,11 +158,9 @@ namespace FluentDOM\Nodes {
     }
 
     /**
-     * @param mixed $content
-     * @return string|bool
      * @throws \UnexpectedValueException
      */
-    private function getContentAsString($content) {
+    private function getContentAsString(mixed $content): string|bool {
       if (
         \is_scalar($content) ||
         (is_object($content) && \method_exists($content, '__toString'))
@@ -243,15 +216,10 @@ namespace FluentDOM\Nodes {
       return [$target, $wrapper];
     }
 
-    /**
-     * @param array|\Traversable $nodes
-     * @param int $limit
-     * @return array
-     */
-    private function getLimitedArray($nodes, int $limit = -1): array {
+    private function getLimitedArray(iterable $nodes, int $limit = -1): array {
       if ($limit > 0) {
-        if (\is_array($nodes)) {
-          return \array_slice($nodes, 0, $limit);
+        if (is_array($nodes)) {
+          return array_slice($nodes, 0, $limit);
         }
         return \iterator_to_array(
           new \LimitIterator(

@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -18,10 +18,6 @@ namespace FluentDOM\Query\Css {
 
     /**
      * Compare to css property names by name, browser-prefix and level.
-     *
-     * @param string $propertyNameOne
-     * @param string $propertyNameTwo
-     * @return int
      */
     public function __invoke(string $propertyNameOne, string $propertyNameTwo): int {
       return $this->compare($propertyNameOne, $propertyNameTwo);
@@ -29,10 +25,6 @@ namespace FluentDOM\Query\Css {
 
     /**
      * Compare to css property names by name, browser-prefix and level.
-     *
-     * @param string $propertyNameOne
-     * @param string $propertyNameTwo
-     * @return int
      */
     public function compare(string $propertyNameOne, string $propertyNameTwo): int {
       $propertyOne = $this->_decodeName($propertyNameOne);
@@ -62,23 +54,19 @@ namespace FluentDOM\Query\Css {
 
     /**
      * Decodes the css property name into an comparable array.
-     *
-     * @param string $propertyName
-     * @return array
      */
     private function _decodeName(string $propertyName): array {
-      if (0 === \strpos($propertyName,'-')) {
-        $pos = \strpos($propertyName, '-', 1);
-        $items = \explode('-', \substr($propertyName, $pos + 1));
+      if (str_starts_with($propertyName, '-')) {
+        $pos = strpos($propertyName, '-', 1);
+        $items = explode('-', \substr($propertyName, $pos + 1));
         if (is_array($items)) {
           /** @var string[] $items */
-          $items[] = \substr($propertyName, 1, $pos);
+          $items[] = substr($propertyName, 1, $pos);
           return $items;
         }
         return [];
       }
-      $items = \explode('-', $propertyName);
-      return $items;
+      return explode('-', $propertyName);
     }
   }
 }

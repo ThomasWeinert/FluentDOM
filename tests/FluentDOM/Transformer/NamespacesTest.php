@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -14,6 +14,7 @@ namespace FluentDOM\Transformer {
 
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Element;
+  use FluentDOM\Exceptions\UnattachedNode;
   use FluentDOM\TestCase;
 
   class NamespacesTest extends TestCase {
@@ -84,7 +85,10 @@ namespace FluentDOM\Transformer {
 
   class Namespaces_TestProxy extends Namespaces {
 
-    protected function addNode(\DOMNode $target, \DOMNode $source) {
+    /**
+     * @throws UnattachedNode
+     */
+    protected function addNode(\DOMNode $target, \DOMNode $source): void {
       /** @var Document|Element $target */
       $target->append($source);
     }

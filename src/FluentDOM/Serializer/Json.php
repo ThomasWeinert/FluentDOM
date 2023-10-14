@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -45,44 +45,24 @@ namespace FluentDOM\Serializer {
 
     private const XMLNS_JSONDOM = JsonDOM::XMLNS;
 
-    /**
-     * @var \DOMNode
-     */
-    protected $_node;
+    protected \DOMNode $_node;
 
-    /**
-     * @var int
-     */
-    private $_options;
+    private int $_options;
 
-    /**
-     * @var int
-     */
-    private $_depth;
+    private int $_depth;
 
-    /**
-     * @param \DOMNode $node
-     * @param int $options
-     * @param int $depth
-     */
     public function __construct(\DOMNode $node, int $options = 0, int $depth = 512) {
       $this->_node = $node;
       $this->_options = $options;
       $this->_depth = $depth;
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string {
       $json = (string)json_encode($this, $this->_options, $this->_depth);
       return $json ?: '';
     }
 
-    /**
-     * @return mixed
-     */
-    public function jsonSerialize() {
+    public function jsonSerialize(): mixed {
       $node = $this->_node;
       if ($node instanceof \DOMDocument) {
         $node = $node->documentElement;
@@ -93,11 +73,7 @@ namespace FluentDOM\Serializer {
       return $this->getEmpty();
     }
 
-    /**
-     * @param \DOMElement $node
-     * @return mixed
-     */
-    protected function getNode(\DOMElement $node) {
+    protected function getNode(\DOMElement $node): mixed {
       switch ($this->getType($node)) {
       case 'object' :
         $result = new \stdClass();
@@ -125,19 +101,11 @@ namespace FluentDOM\Serializer {
       return $result;
     }
 
-    /**
-     * @param \DOMElement $source
-     * @return \DOMNodeList
-     */
     private function getChildElements(\DOMElement $source): \DOMNodeList {
       $xpath = new Xpath($source->ownerDocument);
       return $xpath('*', $source);
     }
 
-    /**
-     * @param \DOMElement $node
-     * @return string
-     */
     private function getType(\DOMElement $node): string {
       if ($node->hasAttributeNS(self::XMLNS_JSONDOM, 'type')) {
         return $node->getAttributeNS(self::XMLNS_JSONDOM, 'type');
@@ -146,10 +114,6 @@ namespace FluentDOM\Serializer {
       return $xpath('count(*) > 0', $node) ? 'object' : 'string';
     }
 
-    /**
-     * @param \DOMElement $node
-     * @return string
-     */
     private function getKey(\DOMElement $node): string {
       if ($node->hasAttributeNS(self::XMLNS_JSONDOM, 'name')) {
         return $node->getAttributeNS(self::XMLNS_JSONDOM, 'name');
@@ -157,10 +121,7 @@ namespace FluentDOM\Serializer {
       return $node->localName;
     }
 
-    /**
-     * @return mixed
-     */
-    protected function getEmpty() {
+    protected function getEmpty(): mixed {
       return new \stdClass();
     }
 
@@ -169,9 +130,6 @@ namespace FluentDOM\Serializer {
      *
      * If compares the namespaces of the current node with the ones from
      * the parent node. Only definitions that are different are returned.
-     *
-     * @param \DOMElement $node
-     * @return array
      */
     protected function getNamespaces(\DOMElement $node): array {
       $result = $this->getAllNamespaces($node);
@@ -182,10 +140,6 @@ namespace FluentDOM\Serializer {
       return array_diff_assoc($result, $inherited);
     }
 
-    /**
-     * @param \DOMElement $node
-     * @return array
-     */
     private function getAllNamespaces(\DOMElement $node): array {
       $xpath = new Xpath($node->ownerDocument);
       $result = [];

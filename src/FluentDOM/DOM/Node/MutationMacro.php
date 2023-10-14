@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -62,19 +62,11 @@ namespace FluentDOM\DOM\Node {
       return $result->childNodes->length > 0 ? $result : NULL;
     }
 
-    /**
-     * @param mixed $value
-     * @return bool
-     */
-    private static function isStringCastable($value): bool {
+    private static function isStringCastable(mixed $value): bool {
       return \is_scalar($value) || (\is_object($value) && \method_exists($value, '__toString'));
     }
 
-    /**
-     * @param mixed $value
-     * @return bool
-     */
-    private static function isTraversableOfNodes($value): bool {
+    private static function isTraversableOfNodes(mixed $value): bool {
       return (
         !($value instanceof \DOMNode) && \is_iterable($value)
       );

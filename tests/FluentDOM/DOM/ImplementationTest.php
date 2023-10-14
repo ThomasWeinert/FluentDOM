@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -32,7 +32,7 @@ namespace FluentDOM\DOM {
       $implementation = new Implementation();
       $document = $implementation->createDocument(NULL, 'html');
       $this->assertXmlStringEqualsXmlString(
-        '<html/>', $document
+        '<html/>', (string)$document
       );
       $this->assertEmpty($document->namespaces()['#default']);
     }
@@ -84,7 +84,7 @@ namespace FluentDOM\DOM {
       $implementation = new Implementation();
       $document = $implementation->createDocument('https://www.w3.org/1999/xhtml/', 'html');
       $this->assertXmlStringEqualsXmlString(
-        '<html xmlns="https://www.w3.org/1999/xhtml/"/>', $document
+        '<html xmlns="https://www.w3.org/1999/xhtml/"/>', (string)$document
       );
       $this->assertEquals(
         'https://www.w3.org/1999/xhtml/', $document->namespaces()['#default']
@@ -98,7 +98,7 @@ namespace FluentDOM\DOM {
       $implementation = new Implementation();
       $document = $implementation->createDocument('https://www.w3.org/1999/xhtml/', 'xhtml:html');
       $this->assertXmlStringEqualsXmlString(
-        '<xhtml:html xmlns:xhtml="https://www.w3.org/1999/xhtml/"/>', $document
+        '<xhtml:html xmlns:xhtml="https://www.w3.org/1999/xhtml/"/>', (string)$document
       );
       $this->assertEquals(
         'https://www.w3.org/1999/xhtml/', $document->namespaces()['xhtml']
@@ -119,7 +119,7 @@ namespace FluentDOM\DOM {
           <atom:title>Example Feed</atom:title>
           <atom:link href="http://example.org/"/>
         </atom:feed>',
-        $document
+        (string)$document
       );
     }
   }

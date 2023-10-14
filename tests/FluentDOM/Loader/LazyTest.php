@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -90,7 +90,7 @@ namespace FluentDOM\Loader {
         __NAMESPACE__
       );
       $this->expectException(\LogicException::class);
-      $this->expectErrorMessage('Loader class "FluentDOM\Loader\NonExistingClassName" not found.');
+      $this->expectExceptionMessage('Loader class "FluentDOM\Loader\NonExistingClassName" not found.');
       $this->assertInstanceOf(Xml::class, $loader->get('test/unittest'));
     }
 
@@ -120,7 +120,7 @@ namespace FluentDOM\Loader {
      * @covers \FluentDOM\Loader\Lazy
      */
     public function testAddWithInvalidLoaderExpectingException(): void {
-      $this->expectException(\UnexpectedValueException::class);
+      $this->expectException(\TypeError::class);
       new Lazy(
         [
           'type' => new \stdClass()

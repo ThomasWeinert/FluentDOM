@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -26,11 +26,9 @@ namespace FluentDOM\Loader\Json {
     public const CONTENT_TYPES = ['jsonml', 'application/jsonml', 'application/jsonml+json'];
 
     /**
-     * @param \DOMNode|Element $target
-     * @param mixed $json
-     * @throws UnattachedNode
+     * @throws UnattachedNode|\DOMException
      */
-    public function transferTo(\DOMNode $target, $json): void {
+    public function transferTo(\DOMNode $target, mixed $json): void {
       if (\is_array($json) && \count($json) > 0) {
         $this->transferToElement($target, $json);
       } elseif (\is_scalar($json)) {
@@ -47,7 +45,7 @@ namespace FluentDOM\Loader\Json {
      */
     private function addNamespaceAttributes(Element $node, \stdClass $properties): void {
       foreach ($properties as $name => $value) {
-        if ($name === 'xmlns' || 0 === \strpos($name, 'xmlns:')) {
+        if ($name === 'xmlns' || str_starts_with($name, 'xmlns:')) {
           if ($node instanceof \DOMElement) {
             $prefix = $name === 'xmlns' ? NULL : \substr($name, 6);
             if ((string)$node->lookupNamespaceUri($prefix) !== $value) {
@@ -59,13 +57,12 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * @param Element $node
-     * @param \stdClass $properties
+     * @throws \DOMException
      */
     private function addAttributes(Element $node, \stdClass $properties): void {
       $document = $node->ownerDocument;
       foreach ($properties as $name => $value) {
-        if (!($name === 'xmlns' || 0 === \strpos($name, 'xmlns:'))) {
+        if (!($name === 'xmlns' || str_starts_with($name, 'xmlns:'))) {
           $namespaceURI = $this->getNamespaceForNode($name, $properties, $node);
           $attribute = '' === (string)$namespaceURI
             ? $document->createAttribute($name)
@@ -77,11 +74,9 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * @param \DOMNode $node
-     * @param mixed $json
-     * @throws UnattachedNode
+     * @throws UnattachedNode|\DOMException
      */
-    private function transferToElement(\DOMNode $node, $json): void {
+    private function transferToElement(\DOMNode $node, mixed $json): void {
       $document = Implementation::getNodeDocument($node);
       $nodeName = $json[0];
       $length = \count($json);

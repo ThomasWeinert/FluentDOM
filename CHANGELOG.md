@@ -1,16 +1,15 @@
 8.0.0
 -----
 
-- [!BC] Minimum PHP Version 7.2.0
+- [!BC] Minimum PHP Version 8.0.0
 - [!BC] \FluentDOM\Loadable::load() now always returns 
   \FluentDOM\Loader\Result instance (or NULL)
-- [!BC] Define Return Type For \FluentDOM\Loadable::load()
-- [!BC] Define Return Type For \FluentDOM\Loadable::loadFragment()
-- [!BC] Define Appendable::appendTo() Return Value 
-  as "void"
+- [!BC] Define Argument/Return Types
 - [!BC] Change Method Signatures Of DOM L3 Methods To Match PHP
 - [!BC] Declare FluentDOM::setLoader() Argument As A Nullable 
   Of Loadable
+- [!BC] Throw UndeclaredPropertyError for unknown properties
+- [!BC] Throw ReadOnlyPropertyError blocking write on read only properties
 - [FEATURE] #90 Throw Exception If File Can Not Be Loaded
 - [REFACTOR] Define Argument And Return Types
 - [REFACTOR] Reference Loaders By Class Constants
@@ -118,7 +117,7 @@
 - Added: JsonDOM loader supports a callback for mapping keys to tag names
    The callback can be set using an option or JsonDOM::onMapKey().
 - Changed: string arguments to methods like FluentDOM\Query::append() are now parsed as
-    HTML fragments if the content type of the FluentDOM\Query instance is a HTML type.
+    HTML fragments if the content type of the FluentDOM\Query instance is an HTML type.
 - Changed: NULL values can now be set using FluentDOM\Query::attr(), FluentDOM\Query::css()
     and FluentDOM\Query::data() methods.
 - Changed: FluentDOM\Nodes()/FluentDOM\Query() now keeps the content type used to load the
@@ -178,7 +177,7 @@
 -----
 
 - Changed: All DOMNode descendants (FluentDOM\Document, FluentDOM\Element,
-  FluentDOM\Text, ...) are now functors, allowing to evaluate an
+  FluentDOM\Text, ...) are now functors, allowing to evaluate a
   Xpath expression relative to them
 - Changed: FluentDOM\Xpath is now a functor.
 - Changed: FluentDOM\Element::append() is now longer restricted to
@@ -217,7 +216,7 @@
 -----
 
 Complete Rewrite!
-- PHP Namespaces, PSR-4 comatible, Composer support
+- PHP Namespaces, PSR-4 compatible, Composer support
 - Original FluentDOM functionality is now merged in FluentDOM\Query.
 - FluentDOM() function creates an FluentDOM\Query instance
 - FluentDOM\Query has a new loader concept
@@ -247,7 +246,7 @@ Complete Rewrite!
 
 For css() and attr() now property access is possible. HTML 5 data attributes are supported, too.
 
-In PHP 5.3 an third argument was introduced to DOMXPath::evaluate(). This allows to disable the
+In PHP 5.3 a third argument was introduced to DOMXPath::evaluate(). This allows to disable the
 automatic namespace registration. Because it is broken and completely wrong in the first place it
 is disabled if possible. This improves performance, too.
 
@@ -269,12 +268,12 @@ is disabled if possible. This improves performance, too.
 This version has been restructured because the class had grown to large. The new structure allows
 better testing and inheritance.
 
-It brings compatiblity to the jQuery 1.4 API changes. A callback argument is supported by many
+It brings compatibility to the jQuery 1.4 API changes. A callback argument is supported by many
 methods.
 
 - Implemented: FluentDOMLoader implementations now return a DOMNode or NULL,
                DOMDocument inherits from DOMNode
-- Implemented: make the $contentType argument of FluentDOMLoader an reference,
+- Implemented: make the $contentType argument of FluentDOMLoader a reference,
                so the loader can change it, set the changed version
 - Changed: Moved source files into subdirectory src
 - Changed: Splitting changelog.txt from readme.txt
@@ -290,8 +289,8 @@ methods.
 - Added: FluentDOM::index()
 - Added: FluentDOM::has()
 - Added: FluentDOM::nextUntil(), FluentDOM::prevUntil(), FluentDOM::parentsUntil()
-- Implemented: FluentDOM::children() now matches only elements (no text nodes any more)
-- Added: FluentDOM::contents() matches all childnodes including textnodes
+- Implemented: FluentDOM::children() now matches only elements (no text nodes anymore)
+- Added: FluentDOM::contents() matches all child nodes including textnodes
 - Added: FluentDOM::last()
 - Added: FluentDOM::first()
 - Fixed: FluentDOMHandler::insertChildrenBefore(), new nodes had wrong order
@@ -311,8 +310,8 @@ methods.
 - Implemented: $context for FluentDOMCore::_test() ist now optional
 - Added: FluentDOMCore::_isNodeList()
 - Implemented: FluentDOMIterator now works for FluentDOMCore
-- Implemented: FluentDOMCore::_spawn() is now publich and renamed to spawn()
-- Implemented: FluentDOMCore::_push() is now publich and renamed to push()
+- Implemented: FluentDOMCore::_spawn() is now public and renamed to spawn()
+- Implemented: FluentDOMCore::_push() is now public and renamed to push()
 - Implemented: splitting FluentDOMCore from FluentDOM
 - Implemented: support additional parameter $attr in FluentDOM::node()
 - Implemented: FluentDOM::append() supports function argument
@@ -352,7 +351,7 @@ methods.
 - Implemented: removed defined, but never used variables
 - Implemented: closest() needs to match the current node, too
 - Tested: closest() needs to match the current node, too
-- Implemented: improved the closest() example, explaning a possible problem
+- Implemented: improved the closest() example, explaining a possible problem
 - Implemented: jQuery 1.3 traversing method: closest
                added links to jQuery and schlitt.info - corrected misspelled words
 - Documented: added description from webpage
@@ -379,9 +378,9 @@ methods.
 - Tested: removeAttr() with array parameter
 - Tested: removeAttr() with asterisk (*) parameter
 - Fixed: DOMDocument are child classes from DOMNode
-         but are invalid sources for the FluentDOMLoaderDOMNode, check DOMNode for an valid
+         but are invalid sources for the FluentDOMLoaderDOMNode, check DOMNode for a valid
          ownerDocument property
-- Fixed: simple atom reader sample has to use the FluentDOM function an not the class directly
+- Fixed: simple atom reader sample has to use the FluentDOM function a not the class directly
 - changed FluentDOMTestCase should be an abstract class
 - patch by Sebastian Bergmann
 
@@ -389,13 +388,13 @@ methods.
 -----
 - added: FluentDOMIterator
 - added: FluentDOM now implements IteratorAggregate
-- removed: FluentDOM does not implement RecursiveIterator any more
-- removed: FluentDOM does not implement SeekableIterator any more
+- removed: FluentDOM does not implement RecursiveIterator anymore
+- removed: FluentDOM does not implement SeekableIterator anymore
 - removed: suffix "Siblings" from FluentDOM::next()
 - removed: suffix "Siblings" from FluentDOM::nextAll()
 - removed: suffix "Siblings" from FluentDOM::prev()
 - removed: suffix "Siblings" from FluentDOM::prevAll()
-- changed: FluentDOM::__construct() has no parameters any more
+- changed: FluentDOM::__construct() has no parameters anymore
 - changed: FluentDOM::append() now works on an empty document and returns new
            elements
 - added: FluentDOM::load() to load document content
@@ -408,7 +407,7 @@ methods.
 - added: FluentDOMLoaderDOMDocument - attach dom document
 - added: FluentDOMLoaderDOMNode - attach owner document and select node
 - added: FluentDOMLoaderSimpleXMLElement - import SimpleXML element
-- added: Example for custom loader (example/iniloader)
+- added: Example for custom loader (examples/Loader)
 - added: Example attributes with namespace
 - added: FluentDOM::contentType - content type property for input and output
 - fixed: attribute name check allowed invalid attribute names

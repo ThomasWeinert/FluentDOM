@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -22,7 +22,7 @@ namespace FluentDOM\Serializer\Json {
      * @param \DOMElement $node
      * @return mixed
      */
-    protected function getNodes(\DOMElement $node) {
+    protected function getNodes(\DOMElement $node): mixed {
       $xpath = new Xpath($node->ownerDocument);
       $hasText = $xpath->evaluate('count(text()[normalize-space(.) != ""]) > 0', $node);
       $hasElements = $xpath->evaluate('count(*) > 0', $node);
@@ -39,13 +39,9 @@ namespace FluentDOM\Serializer\Json {
       return parent::getNodes($node);
     }
 
-    /**
-     * @param \DOMElement $node
-     * @param \stdClass|array $attributes
-     * @param Xpath $xpath
-     * @return array
-     */
-    private function getNodesArray(\DOMElement $node, $attributes, Xpath $xpath): array {
+    private function getNodesArray(
+      \DOMElement $node, \stdClass|array $attributes, Xpath $xpath
+    ): array {
       $result = [];
       foreach ((array)$attributes as $name => $value) {
         $child = new \stdClass();

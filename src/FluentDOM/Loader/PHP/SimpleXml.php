@@ -3,9 +3,12 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
+ */
+/**
+ * @noinspection PhpComposerExtensionStubsInspection
  */
 declare(strict_types=1);
 
@@ -15,7 +18,6 @@ namespace FluentDOM\Loader\PHP {
   use FluentDOM\DOM\DocumentFragment;
   use FluentDOM\Exceptions\InvalidArgument;
   use FluentDOM\Loadable;
-  use FluentDOM\Loader\Options;
   use FluentDOM\Loader\Result;
   use FluentDOM\Loader\Supports;
   use FluentDOM\Loader\Xml;
@@ -31,16 +33,12 @@ namespace FluentDOM\Loader\PHP {
     /**
      * @var Xml|NULL
      */
-    private $_xmlLoader;
+    private ?Xml $_xmlLoader = NULL;
 
     /**
      * @see Loadable::load
-     * @param mixed $source
-     * @param string $contentType
-     * @param array|\Traversable|Options $options
-     * @return Document|Result|NULL
      */
-    public function load($source, string $contentType, $options = []): ?Result {
+    public function load(mixed $source, string $contentType, iterable $options = []): ?Result {
       if ($source instanceof \SimpleXMLElement) {
         $document = new Document();
         $document->appendChild($document->importNode(\dom_import_simplexml($source), TRUE));
@@ -52,13 +50,9 @@ namespace FluentDOM\Loader\PHP {
     /**
      * @see Loadable::loadFragment
      *
-     * @param mixed $source
-     * @param string $contentType
-     * @param array|\Traversable|Options $options
-     * @return DocumentFragment|NULL
      * @throws \Throwable
      */
-    public function loadFragment($source, string $contentType, $options = []): ?DocumentFragment {
+    public function loadFragment(mixed $source, string $contentType, iterable $options = []): ?DocumentFragment {
       if (!$this->supports($contentType)) {
         return NULL;
       }

@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -206,7 +206,7 @@ namespace FluentDOM\Nodes {
     public function testFindWithExpressionThatReturnsScalarExpectingException(): void {
       $fd = new Nodes(self::XML);
       $this->expectException(\InvalidArgumentException::class);
-      $this->expectErrorMessage('Given selector/expression did not return a node list.');
+      $this->expectExceptionMessage('Given selector/expression did not return a node list.');
       $fd->find('count(*)');
     }
 
@@ -221,7 +221,7 @@ namespace FluentDOM\Nodes {
     public function testFindWithInvalidSelectorExpectingException(): void {
       $fd = new Nodes(self::XML);
       $this->expectException(\InvalidArgumentException::class);
-      $this->expectErrorMessage('Invalid selector/expression.');
+      $this->expectExceptionMessage('Invalid selector/expression.');
       $fd->find('');
     }
   }

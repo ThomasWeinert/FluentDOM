@@ -3,13 +3,14 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
 
 namespace FluentDOM {
 
+  use FluentDOM\Exceptions\UndeclaredPropertyError;
   use FluentDOM\Loader\Result;
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Xpath;
@@ -25,10 +26,11 @@ namespace FluentDOM {
 
   class NodesTest extends TestCase {
 
-    public static $_fd;
+    public static ?Nodes $_fd = NULL;
 
     /**
      * @covers \FluentDOM\Nodes::__construct
+     * @throws \DOMException
      */
     public function testConstructorWithXml(): void {
       $document = new \DOMDocument();
@@ -42,11 +44,13 @@ namespace FluentDOM {
 
     /**
      * @covers \FluentDOM\Nodes::__construct
+     * @throws \DOMException
      */
     public function testConstructorWithHtml(): void {
       $document = new \DOMDocument();
       $document->appendChild($document->createElement('html'));
       $fd = new Nodes($document, 'html');
+      /** @noinspection HtmlRequiredLangAttribute */
       $this->assertEquals(
         '<html></html>'."\n",
         (string)$fd
@@ -105,6 +109,7 @@ namespace FluentDOM {
      * @group Load
      * @covers \FluentDOM\Nodes::load
      * @covers \FluentDOM\Nodes::prepareSource
+     * @throws \DOMException
      */
     public function testLoadWithDomNode(): void {
       $document = new \DOMDocument();
@@ -265,7 +270,8 @@ namespace FluentDOM {
      */
     public function testLoadersGetWithInvalidLoaderExpectingException(): void {
       $fd = new Nodes();
-      $this->expectException(\InvalidArgumentException::class);
+      $this->expectException(\TypeError::class);
+      /** @noinspection PhpParamsInspection */
       $fd->loaders('FOO');
     }
 
@@ -297,7 +303,7 @@ namespace FluentDOM {
      */
     public function testPushWithInvalidArgumentExpectingException(): void {
       $fd = new Nodes();
-      $this->expectException(\InvalidArgumentException::class);
+      $this->expectException(\TypeError::class);
       /** @noinspection PhpParamsInspection */
       $fd->push(FALSE);
     }
@@ -332,8 +338,10 @@ namespace FluentDOM {
      */
     public function testFormatOutput(): void {
       $fd = new Nodes();
+      /** @noinspection HtmlRequiredLangAttribute */
       $fd->document->loadXML('<html><body><br/></body></html>');
       $fd->formatOutput();
+      /** @noinspection HtmlRequiredLangAttribute */
       $expected =
         "<?xml version=\"1.0\"?>\n".
         "<html>\n".
@@ -361,8 +369,10 @@ namespace FluentDOM {
      */
     public function testFormatOutputWithContentTypeHtml(): void {
       $fd = new Nodes();
+      /** @noinspection HtmlRequiredLangAttribute */
       $fd->document->loadXML('<html><body><br/></body></html>');
       $fd->formatOutput('text/html');
+      /** @noinspection HtmlRequiredLangAttribute */
       $expected = "<html><body><br></body></html>\n";
       $this->assertEquals('text/html', $fd->contentType);
       $this->assertSame($expected, (string)$fd);
@@ -403,6 +413,7 @@ namespace FluentDOM {
     /**
      * @group CoreFunctions
      * @covers \FluentDOM\Nodes::spawn
+     * @throws \DOMException
      */
     public function testSpawnWithElements(): void {
       $document = new \DOMDocument;
@@ -446,6 +457,7 @@ namespace FluentDOM {
     /**
      * @group CoreFunctions
      * @covers \FluentDOM\Nodes::unique
+     * @throws \DOMException
      */
     public function testUniqueWithUnattachedNodes(): void {
       $fd = new Nodes();
@@ -688,11 +700,10 @@ namespace FluentDOM {
      */
     public function testDynamicProperty(): void {
       $fd = new Nodes();
-      $this->assertEquals(FALSE, isset($fd->dynamicProperty));
-      $this->assertEquals(NULL, $fd->dynamicProperty);
+      $this->assertFalse(isset($fd->dynamicProperty));
+      $this->expectException(UndeclaredPropertyError::class);
+      /** @noinspection PhpUndefinedFieldInspection */
       $fd->dynamicProperty = 'test';
-      $this->assertEquals(TRUE, isset($fd->dynamicProperty));
-      $this->assertEquals('test', $fd->dynamicProperty);
       unset($fd->dynamicProperty);
     }
 
@@ -781,7 +792,6 @@ namespace FluentDOM {
      */
     public function testIssetPropertyDocumentExpectingTrue(): void {
       $fd = new Nodes();
-      /** @noinspection PhpExpressionResultUnusedInspection */
       $fd->document;
       $this->assertTrue(isset($fd->document));
     }
@@ -1041,7 +1051,7 @@ namespace FluentDOM {
     public function testGetSelectorCallbackWithNullExpectingNull(): void {
       $fd = new Nodes(self::XML);
       $this->assertNull(
-        $fd->getSelectorCallback(NULL)
+        $fd->getSelectorCallback()
       );
     }
 
@@ -1129,7 +1139,7 @@ namespace FluentDOM {
     public function testGetSelectorCallbackWithInvalidSelectorExpectingException(): void {
       $fd = new Nodes(self::XML);
       $this->expectException(\InvalidArgumentException::class);
-      $this->expectErrorMessage('Invalid selector argument.');
+      $this->expectExceptionMessage('Invalid selector argument.');
       $fd->getSelectorCallback('');
     }
 
@@ -1159,7 +1169,7 @@ namespace FluentDOM {
      * @param \DOMNode|NULL $selection
      * @return Result|MockObject
      */
-    public function createLoaderResultMock(Document $document, \DOMNode $selection = NULL) {
+    public function createLoaderResultMock(Document $document, \DOMNode $selection = NULL): Result|MockObject {
       $result = $this
         ->getMockBuilder(Loader\Result::class)
         ->disableOriginalConstructor()
@@ -1171,7 +1181,7 @@ namespace FluentDOM {
       $result
         ->expects($this->once())
         ->method('getSelection')
-        ->willReturn($selection ?: FALSE);
+        ->willReturn($selection ?: NULL);
       $result
         ->expects($this->once())
         ->method('getContentType')

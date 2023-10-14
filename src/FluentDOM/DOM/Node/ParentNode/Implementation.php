@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -25,55 +25,9 @@ namespace FluentDOM\DOM\Node\ParentNode {
    */
   trait Implementation {
 
-    /**
-     * @param \DOMNode $newChild
-     * @param \DOMNode|NULL $refChild
-     * @return \DOMNode
-     */
     abstract public function insertBefore(\DOMNode $newChild, \DOMNode $refChild = NULL);
 
-    /**
-     * @param \DOMNode $newChild
-     * @return \DOMNode
-     */
     abstract public function appendChild(\DOMNode $newChild);
-
-    /**
-     * Returns the first element child node
-     * @return Element|NULL
-     */
-    public function getFirstElementChild(): ?Element {
-      if ($this instanceof Document) {
-        return $this->documentElement;
-      }
-      $node = $this->firstChild;
-      while ($node instanceof \DOMNode) {
-        if ($node instanceof Element) {
-          return $node;
-        }
-        $node = $node->nextSibling;
-      }
-      return NULL;
-    }
-
-    /**
-     * Returns the last element child node
-     * @return Element|NULL
-     */
-    public function getLastElementChild(): ?Element {
-      if ($this instanceof Document) {
-        return $this->documentElement;
-      }
-      /** @var \DOMNode $this */
-      $node = $this->lastChild;
-      while ($node instanceof \DOMNode) {
-        if ($node instanceof Element) {
-          return $node;
-        }
-        $node = $node->previousSibling;
-      }
-      return NULL;
-    }
 
     /**
      * Insert nodes before the first child node

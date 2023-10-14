@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -40,14 +40,6 @@ namespace FluentDOM\Loader {
     public function testConstructorWithOptionsInIterator(): void {
       $options = new Options(new \ArrayIterator([Options::IS_FILE => TRUE]));
       $this->assertTrue($options[Options::IS_FILE]);
-    }
-
-    /**
-     * @covers \FluentDOM\Loader\Options
-     */
-    public function testConstructorWithOptionsExpectingException(): void {
-      $this->expectException(InvalidArgument::class);
-      new Options('No STRING ALLOWED');
     }
 
     /**

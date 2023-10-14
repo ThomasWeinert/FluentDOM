@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace FluentDOM\Loader\Json {
 
   use FluentDOM\DOM\Document;
-  use FluentDOM\DOM\Element;
   use FluentDOM\Exceptions\InvalidSource;
   use FluentDOM\Loadable;
   use FluentDOM\Loader\Options;
@@ -33,13 +32,9 @@ namespace FluentDOM\Loader\Json {
     /**
      * Load the json string into an DOMDocument
      *
-     * @param mixed $source
-     * @param string $contentType
-     * @param array|\Traversable|Options $options
-     * @return Result|NULL
-     * @throws InvalidSource
+     * @throws InvalidSource|\DOMException
      */
-    public function load($source, string $contentType, $options = []): ?Result {
+    public function load($source, string $contentType, iterable $options = []): ?Result {
       if (FALSE !== ($json = $this->getJson($source, $contentType, $options))) {
         $document = new Document('1.0', 'UTF-8');
         $document->appendChild(
@@ -51,11 +46,7 @@ namespace FluentDOM\Loader\Json {
       return NULL;
     }
 
-    /**
-     * @param \DOMNode|Element $target
-     * @param mixed $json
-     */
-    protected function transferTo(\DOMNode $target, $json): void {
+    protected function transferTo(\DOMNode $target, mixed $json): void {
       /** @var Document $document */
       $document = $target->ownerDocument ?: $target;
       if ($json instanceof \stdClass) {
@@ -78,12 +69,9 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * @param \DOMNode $node
-     * @param string $name
-     * @param mixed $data
-     * @return array
+     * @throws \DOMException
      */
-    protected function transferChildTo(\DOMNode $node, string $name, $data): array {
+    protected function transferChildTo(\DOMNode $node, string $name, mixed $data): array {
       /** @var Document $document */
       $document = $node->ownerDocument ?: $node;
       if (!\is_array($data)) {

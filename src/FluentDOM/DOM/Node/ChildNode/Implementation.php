@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -90,12 +90,10 @@ namespace FluentDOM\DOM\Node\ChildNode {
     }
 
     /**
-     * @param \DOMNode|\DOMNodeList $nodes
-     * @return $this|\DOMNode
      * @throws UnattachedNode
      * @deprecated
      */
-    public function replace($nodes) {
+    public function replace(\DOMNode|\DOMNodeList $nodes): static {
       $this->replaceWith($nodes);
       return $this;
     }

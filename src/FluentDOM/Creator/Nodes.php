@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -16,46 +16,33 @@ namespace FluentDOM\Creator {
 
   /**
    * Internal class for the FluentDOM\Creator, please do not use directly
+   * @internal
    */
   class Nodes implements Appendable, \OuterIterator {
 
-    /**
-     * @var array|\Traversable
-     */
-    private $_iterable;
+    private iterable $_iterable;
 
-    /**
-     * @var callable|NULL
-     */
-    private $_map;
+    private ?\Closure $_map;
 
-    /**
-     * @var NULL|\Iterator
-     */
-    private $_iterator;
+    private ?\Iterator $_iterator = NULL;
 
-    /**
-     * @param iterable $iterable
-     * @param callable|NULL $map
-     */
     public function __construct(iterable $iterable, callable $map = NULL) {
       $this->_iterable = $iterable;
-      $this->_map = $map;
+      $this->_map = ($map === NULL || $map instanceof \Closure)
+        ? $map
+        : fn(...$arguments) => $map(...$arguments);
     }
 
-    /**
-     * @return \Iterator
-     */
     public function getInnerIterator(): \Iterator {
       if (NULL === $this->_iterator) {
         if ($this->_iterable instanceof \Iterator) {
           $this->_iterator = $this->_iterable;
-        } elseif (\is_array($this->_iterable)) {
+        } elseif (is_array($this->_iterable)) {
           $this->_iterator = new \ArrayIterator($this->_iterable);
+        } else if ($this->_iterable instanceof \Traversable) {
+          $this->_iterator = new \IteratorIterator($this->_iterable);
         } else {
-          $this->_iterator = (NULL !== $this->_iterable)
-            ? new \IteratorIterator($this->_iterable)
-            : new \EmptyIterator();
+          $this->_iterator = new \EmptyIterator();
         }
       }
       return $this->_iterator;
@@ -69,17 +56,11 @@ namespace FluentDOM\Creator {
       $this->getInnerIterator()->next();
     }
 
-    /**
-     * @return string|int|float
-     */
-    public function key() {
+    public function key(): string|int|float {
       return $this->getInnerIterator()->key();
     }
 
-    /**
-     * @return mixed
-     */
-    public function current() {
+    public function current(): mixed {
       if (NULL !== $this->_map) {
         $map = $this->_map;
         return $map(
@@ -90,20 +71,14 @@ namespace FluentDOM\Creator {
       return $this->getInnerIterator()->current();
     }
 
-    /**
-     * @return bool
-     */
     public function valid(): bool {
       return $this->getInnerIterator()->valid();
     }
 
-    /**
-     * @param Element $parentNode
-     */
     public function appendTo(Element $parentNode): void {
       try {
         $parentNode->append(...$this);
-      } catch (UnattachedNode $e) {
+      } catch (UnattachedNode) {
       }
     }
   }

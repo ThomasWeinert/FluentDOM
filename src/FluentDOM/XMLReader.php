@@ -3,10 +3,11 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
+/** @noinspection PhpComposerExtensionStubsInspection */
 declare(strict_types=1);
 
 namespace FluentDOM {
@@ -21,16 +22,10 @@ namespace FluentDOM {
 
   class XMLReader extends \XMLReader {
 
-    /**
-     * @var Namespaces
-     */
-    private $_namespaces;
+    private Namespaces $_namespaces;
 
-    /**
-     * Store last used document to avoid early GC
-     * @var Document
-     */
-    private $_document;
+    /** @noinspection PhpPropertyOnlyWrittenInspection */
+    private ?Document $_document = NULL;
 
     public function __construct() {
       $this->_namespaces = new Namespaces();
@@ -40,8 +35,6 @@ namespace FluentDOM {
      * register a namespace prefix for the xml reader, it will be used in
      * next() and other methods with a tag name argument
      *
-     * @param string $prefix
-     * @param string $namespaceURI
      * @throws \LogicException
      */
     public function registerNamespace(string $prefix, string $namespaceURI): void {
@@ -51,13 +44,10 @@ namespace FluentDOM {
     /**
      * Positions cursor on the next node skipping all subtrees. If $name contains
      * a namespace prefix it will be resolved using the registered namespaces.
-     *
-     * @param NULL|string $name The name of the next node to move to.
-     * @param NULL|string $namespaceURI
-     * @param callable|NULL $filter
-     * @return bool
      */
-    public function next($name = NULL, string $namespaceURI = NULL, callable $filter = NULL): bool {
+    public function next(
+      string $name = NULL, string $namespaceURI = NULL, callable $filter = NULL
+    ): bool {
       if (NULL !== $name) {
         [$localName, $namespaceURI, $ignoreNamespace] = $this->prepareCondition($name, $namespaceURI);
       } else {
@@ -92,7 +82,7 @@ namespace FluentDOM {
      */
     public function read(string $name = NULL, string $namespaceURI = NULL, callable $filter = NULL): bool {
       if (NULL !== $name) {
-        [$localName, $namespaceURI, $ignoreNamespace] = $this->prepareCondition($name ?? '', $namespaceURI);
+        [$localName, $namespaceURI, $ignoreNamespace] = $this->prepareCondition($name, $namespaceURI);
         while (parent::read()) {
           if (
             $this->nodeType === XML_ELEMENT_NODE &&
@@ -124,7 +114,7 @@ namespace FluentDOM {
      * @param string $name
      * @return NULL|string
      */
-    public function getAttribute($name) {
+    public function getAttribute(string $name): ?string {
       [$prefix, $localName] = QualifiedName::split($name);
       if (empty($prefix)) {
         return parent::getAttribute($name);
@@ -137,7 +127,7 @@ namespace FluentDOM {
      * @return Node|\DOMNode
      * @throws \LogicException
      */
-    public function expand($baseNode = NULL) {
+    public function expand($baseNode = NULL): \DOMNode|FALSE {
       if (NULL !== $baseNode) {
         return parent::expand($baseNode);
       }
@@ -154,7 +144,6 @@ namespace FluentDOM {
     private function prepareCondition(string $name, string $namespaceURI = NULL): array {
       if (NULL !== $namespaceURI) {
         $localName = $name;
-        $namespaceURI = (string)$namespaceURI;
         $ignoreNamespace = FALSE;
       } else {
         [$prefix, $localName] = QualifiedName::split($name);

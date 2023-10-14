@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -52,10 +52,6 @@ namespace FluentDOM\Serializer\Json {
       return $result;
     }
 
-    /**
-     * @param \DOMElement $node
-     * @return array
-     */
     private function getAttributes(\DOMElement $node): array {
       $result = [];
       foreach ($node->attributes as $name => $attribute) {
@@ -66,11 +62,8 @@ namespace FluentDOM\Serializer\Json {
 
     /**
      * Get value prepared for Json data structure
-     *
-     * @param mixed $value
-     * @return mixed
      */
-    private function getValue($value) {
+    private function getValue(mixed $value): mixed {
       if ($this->isBoolean($value)) {
         return (\strtolower($value) === 'true');
       }
@@ -83,27 +76,15 @@ namespace FluentDOM\Serializer\Json {
       return $value;
     }
 
-    /**
-     * @param mixed $value
-     * @return bool
-     */
-    private function isInteger($value): bool {
+    private function isInteger(mixed $value): bool {
       return (bool)\preg_match('(^[1-9]\d*$)D', $value);
     }
 
-    /**
-     * @param mixed $value
-     * @return bool
-     */
-    private function isNumber($value): bool {
+    private function isNumber(mixed $value): bool {
       return (bool)\preg_match('(^(?:\\d+\\.\\d+|[1-9]\d*)$)D', $value);
     }
 
-    /**
-     * @param mixed $value
-     * @return bool
-     */
-    private function isBoolean($value): bool {
+    private function isBoolean(mixed $value): bool {
       return (bool)\preg_match('(^(?:true|false)$)Di', $value);
     }
   }

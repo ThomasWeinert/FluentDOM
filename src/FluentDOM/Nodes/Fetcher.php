@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -30,25 +30,14 @@ namespace FluentDOM\Nodes {
     /** ignore the current context (use the document context) */
     public const FORCE_SORT = 16;
 
-    /**
-     * @var Nodes
-     */
-    private $_nodes;
+    private Nodes $_nodes;
 
-    /**
-     * @param Nodes $nodes
-     */
     public function __construct(Nodes $nodes) {
       $this->_nodes = $nodes;
     }
 
     /**
-     * @param string $expression
-     * @param callable|NULL $filter
-     * @param callable|NULL $stopAt
-     * @param int $options
      * @throws \InvalidArgumentException
-     * @return array
      */
     public function fetch(
       string $expression, callable $filter = NULL, callable $stopAt = NULL, int $options = 0
@@ -87,7 +76,7 @@ namespace FluentDOM\Nodes {
       }
       return
         Constraints::hasOption($options, self::IGNORE_CONTEXT) ||
-        (\strpos($expression, '/') === 0);
+        (str_starts_with($expression, '/'));
     }
 
     /**
@@ -113,12 +102,6 @@ namespace FluentDOM\Nodes {
      * $stopAt to reduce the returned nodes.
      *
      * @throws \InvalidArgumentException
-     * @param string $expression
-     * @param \DOMNode|NULL $context
-     * @param callable|NULL $filter
-     * @param callable|NULL $stopAt
-     * @param int $options
-     * @return array|bool|\DOMNodeList|float|string
      */
     private function fetchFor(
       string $expression,
@@ -126,7 +109,7 @@ namespace FluentDOM\Nodes {
       callable $filter = NULL,
       callable $stopAt = NULL,
       int $options = 0
-    ) {
+    ): array {
       $nodes = $this->fetchNodes($expression, $context, $options);
       if ($filter || $stopAt) {
         return $this->filterNodes($nodes, $filter, $stopAt, $options);
@@ -139,23 +122,22 @@ namespace FluentDOM\Nodes {
      * ist NULL the document context is used.
      *
      * @throws \InvalidArgumentException
-     * @param string $expression
-     * @param \DOMNode|NULL $context
-     * @param int $options
-     * @return array|bool|\DOMNodeList|float|string
      */
-    private function fetchNodes(string $expression, \DOMNode $context = NULL, int $options = 0) {
+    private function fetchNodes(
+      string $expression, \DOMNode $context = NULL, int $options = 0
+    ): array {
       $nodes = $this->_nodes->xpath($expression, $context);
       if (!$nodes instanceof \DOMNodeList) {
         throw new \InvalidArgumentException(
           'Given selector/expression did not return a node list.'
         );
       }
-      $nodes = \iterator_to_array($nodes);
+      $nodesArray = iterator_to_array($nodes);
       if (Constraints::hasOption($options, self::REVERSE)) {
-        return \array_reverse($nodes, FALSE);
+        /** @noinspection PhpRedundantOptionalArgumentInspection */
+        return array_reverse($nodesArray, FALSE);
       }
-      return $nodes;
+      return $nodesArray;
     }
 
     /**

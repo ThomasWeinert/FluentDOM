@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -33,11 +33,7 @@ namespace FluentDOM\DOM\Node {
    */
   trait WholeText {
 
-    /**
-     * @param string $content
-     * @return $this|Text|CdataSection|NULL
-     */
-    public function replaceWholeText($content) {
+    public function replaceWholeText($content): static|NULL|Text|CdataSection {
       $canReplaceEntity = static function(\DOMEntityReference $reference) use (&$canReplaceEntity) {
         foreach ($reference->firstChild->childNodes as $childNode) {
           $canReplace = FALSE;

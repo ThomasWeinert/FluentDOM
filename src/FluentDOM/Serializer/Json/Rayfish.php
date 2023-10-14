@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -23,9 +23,9 @@ namespace FluentDOM\Serializer\Json {
 
     /**
      * @param \DOMElement $node
-     * @return mixed
+     * @return \stdClass
      */
-    protected function getNode(\DOMElement $node) {
+    protected function getNode(\DOMElement $node): \stdClass {
       $result = new \stdClass();
       $result->{'#name'} = $node->nodeName;
       $result->{'#text'} = '';
@@ -37,7 +37,7 @@ namespace FluentDOM\Serializer\Json {
         if ($childNode instanceof \DOMElement) {
           $result->{'#children'}[] = $this->getNode($childNode);
         } elseif (
-          ($childNode instanceof \DOMText || $childNode instanceof \DOMCdataSection) &&
+          $childNode instanceof \DOMText &&
           !$childNode->isWhitespaceInElementContent()
         ) {
           $result->{'#text'} .= $childNode->textContent;
@@ -49,13 +49,9 @@ namespace FluentDOM\Serializer\Json {
       return $result;
     }
 
-    /**
-     * @param \DOMElement $node
-     * @return array
-     */
     private function getAttributes(\DOMElement $node): array {
       $result = [];
-      foreach ($node->attributes as $name => $attributeNode) {
+      foreach ($node->attributes as $attributeNode) {
         $attribute = new \stdClass();
         $attribute->{'#name'} = '@'.$attributeNode->name;
         $attribute->{'#text'} = $attributeNode->value;

@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -13,7 +13,7 @@ use FluentDOM\Creator;
 use FluentDOM\DOM\Document;
 use FluentDOM\Exceptions\InvalidArgument;
 use FluentDOM\Exceptions\InvalidSource\Variable as InvalidVariableSource;
-use FluentDOM\Exceptions\NoSerializer;
+use FluentDOM\Exceptions\NoSerializer as NoSerializerException;
 use FluentDOM\Loadable;
 use FluentDOM\Loader\Lazy as LazyLoader;
 use FluentDOM\Serializer\Factory as SerializerFactory;
@@ -21,35 +21,22 @@ use FluentDOM\Xpath\Transformer as XpathTransformer;
 
 abstract class FluentDOM {
 
-  /**
-   * @var FluentDOM\Loadable
-   */
-  private static $_loader;
+  private static ?Loadable $_loader = NULL;
 
-  /**
-   * @var array
-   */
-  private static $_xpathTransformers = [];
+  private static array $_xpathTransformers = [];
 
-  /**
-   * @var FluentDOM\Loadable
-   */
-  private static $_defaultLoaders = [];
+  private static array|Loadable $_defaultLoaders = [];
 
-  /**
-   * @var FluentDOM\Serializer\Factory\Group
-   */
-  private static $_serializerFactories;
+  private static ?SerializerFactory\Group $_serializerFactories = NULL;
 
   /**
    * Load a data source into a FluentDOM\DOM\Document
-   *
-   * @param mixed $source
-   * @param string $contentType
-   * @param array $options
-   * @return Document
    */
-  public static function load($source, string $contentType = 'text/xml', array $options = []): Document {
+  public static function load(
+    mixed $source,
+    string $contentType = 'text/xml',
+    array $options = []
+  ): Document {
     if (NULL === self::$_loader) {
       self::$_loader = self::getDefaultLoaders();
     }
@@ -59,45 +46,33 @@ abstract class FluentDOM {
 
   /**
    * Return a FluentDOM Creator instance, allow to create a DOM using nested function calls
-   *
-   * @param string $version
-   * @param string $encoding
-   * @return FluentDOM\Creator
    */
   public static function create(string $version = '1.0', string $encoding = 'UTF-8'): Creator {
     return new FluentDOM\Creator($version, $encoding);
   }
 
-  /**
-   * @param DOMNode|FluentDOM\Query $node
-   * @param string $contentType
-   * @return string
-   * @throws NoSerializer
-   */
-  public static function save($node, string $contentType = 'text/xml'): string {
+  public static function save(DOMNode|FluentDOM\Query $node, string $contentType = 'text/xml'): string {
     if ($node instanceof FluentDOM\Query) {
       $node = $node->document;
     }
     if ($serializer = self::getSerializerFactories()->createSerializer($node, $contentType)) {
       return (string)$serializer;
     }
-    throw new FluentDOM\Exceptions\NoSerializer($contentType);
+    throw new NoSerializerException($contentType);
   }
 
   /**
    * Create an FluentDOM::Query instance and load the source into it.
    *
-   * @param mixed $source
-   * @param string $contentType
-   * @param array $options
-   * @return FluentDOM\Query
    * @throws LogicException
    * @throws OutOfBoundsException
    * @throws InvalidArgumentException
    * @throws InvalidVariableSource
    */
   public static function Query(
-    $source = NULL, string $contentType = 'text/xml', array $options = []
+    mixed $source = NULL,
+    string $contentType = 'text/xml',
+    array $options = []
   ): FluentDOM\Query {
     $query = new FluentDOM\Query();
     if (NULL !== $source) {
@@ -110,10 +85,6 @@ abstract class FluentDOM {
    * Create an FluentDOM::Query instance with a modified selector callback.
    * This allows to use CSS selectors instead of Xpath expression.
    *
-   * @param mixed $source
-   * @param string $contentType
-   * @param array $options
-   * @return FluentDOM\Query
    * @throws LogicException
    * @throws InvalidArgumentException
    * @throws OutOfBoundsException
@@ -121,7 +92,9 @@ abstract class FluentDOM {
    * @codeCoverageIgnore
    */
   public static function QueryCss(
-    $source = NULL, string $contentType = 'text/xml', array $options = []
+    mixed $source = NULL,
+    string $contentType = 'text/xml',
+    array $options = []
   ): FluentDOM\Query {
     $builder = self::getXPathTransformer();
     $query = self::Query($source, $contentType, $options);
@@ -136,7 +109,6 @@ abstract class FluentDOM {
    * Set a loader used in FluentDOM::load(), FALSE will reset the loader.
    * If no loader is provided an FluentDOM\Loader\Standard() will be created.
    *
-   * @param FluentDOM\Loadable|NULL $loader
    * @throws InvalidArgument
    */
   public static function setLoader(Loadable $loader = NULL): void {
@@ -149,12 +121,11 @@ abstract class FluentDOM {
 
   /**
    * Register an additional default loader
-   *
-   * @param FluentDOM\Loadable|callable $loader
-   * @param string ...$contentTypes
-   * @return FluentDOM\Loaders
    */
-  public static function registerLoader($loader, string ...$contentTypes): FluentDOM\Loaders {
+  public static function registerLoader(
+    Loadable|callable $loader,
+    string ...$contentTypes
+  ): FluentDOM\Loaders {
     $loaders = self::getDefaultLoaders();
     if (count($contentTypes) > 0) {
       $lazyLoader = new LazyLoader();
@@ -174,7 +145,6 @@ abstract class FluentDOM {
   /**
    * Standard loader + any registered loader.
    *
-   * @return FluentDOM\Loaders
    * @codeCoverageIgnore
    */
   public static function getDefaultLoaders(): FluentDOM\Loaders {
@@ -187,12 +157,10 @@ abstract class FluentDOM {
   /**
    * Register a serializer factory for a specified content type(s). This can be
    * a callable returning the create serializer.
-   *
-   * @param SerializerFactory|callable $factory
-   * @param string ...$contentTypes
    */
   public static function registerSerializerFactory(
-    $factory, string ...$contentTypes
+    SerializerFactory|callable $factory,
+    string ...$contentTypes
   ): void {
     foreach ($contentTypes as $contentType) {
       self::getSerializerFactories()[$contentType] = $factory;
@@ -201,10 +169,8 @@ abstract class FluentDOM {
 
   /**
    * Return registered serializer factories
-   *
-   * @return FluentDOM\Serializer\Factory\Group
    */
-  public static function getSerializerFactories(): FluentDOM\Serializer\Factory\Group {
+  public static function getSerializerFactories(): SerializerFactory\Group {
     if (NULL === self::$_serializerFactories) {
       $xml = static function(DOMNode $node) {
         return new FluentDOM\Serializer\Xml($node);
@@ -232,8 +198,6 @@ abstract class FluentDOM {
   /**
    * Get a xpath expression builder to convert css selectors to xpath
    *
-   * @param string $errorMessage
-   * @return XpathTransformer
    * @throws LogicException
    */
   public static function getXPathTransformer(
@@ -253,11 +217,10 @@ abstract class FluentDOM {
     throw new LogicException($errorMessage);
   }
 
-  /**
-   * @param string|callable|FluentDOM\Xpath\Transformer $transformer
-   * @param bool $reset
-   */
-  public static function registerXpathTransformer($transformer, bool $reset = FALSE): void {
+  public static function registerXpathTransformer(
+    string|callable|XpathTransformer $transformer,
+    bool $reset = FALSE
+  ): void {
     if ($reset) {
       self::$_xpathTransformers = [];
     }
@@ -270,12 +233,12 @@ abstract class FluentDOM {
  * FluentDOM function, is an Alias for the \FluentDOM\FluentDOM::Query()
  * factory class function.
  *
- * @param mixed $source
- * @param string $contentType
- * @param array $options
- * @return FluentDOM\Query
  * @codeCoverageIgnore
  */
-function FluentDOM($source = NULL, string $contentType = 'text/xml', array $options = []): FluentDOM\Query {
+function FluentDOM(
+  mixed $source = NULL,
+  string $contentType = 'text/xml',
+  array $options = []
+): FluentDOM\Query {
   return FluentDOM::Query($source, $contentType, $options);
 }

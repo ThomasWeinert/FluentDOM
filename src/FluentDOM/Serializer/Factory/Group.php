@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -15,11 +15,10 @@ namespace FluentDOM\Serializer\Factory {
   use FluentDOM\Serializer\Factory as SerializerFactory;
   use FluentDOM\Serializer\StringCast;
   use FluentDOM\Utility\StringCastable;
-  use PHPUnit\phpDocumentor\Reflection\DocBlock\Serializer;
 
   class Group implements SerializerFactory, \ArrayAccess, \IteratorAggregate, \Countable {
 
-    private $_factories = [];
+    private array $_factories = [];
 
     public function __construct(array $factories = []) {
       foreach ($factories as $contentType => $factory) {
@@ -53,12 +52,12 @@ namespace FluentDOM\Serializer\Factory {
       return strtolower($contentType);
     }
 
-    public function offsetExists($offset): bool {
+    public function offsetExists(mixed $offset): bool {
       $contentType = $this->normalizeContentType($offset);
       return array_key_exists($contentType, $this->_factories);
     }
 
-    public function offsetSet($offset, $value): void {
+    public function offsetSet(mixed $offset, mixed $value): void {
       $contentType = $this->normalizeContentType($offset);
       if (!($value instanceOf SerializerFactory || \is_callable($value))) {
         throw new Exceptions\InvalidArgument(
@@ -68,16 +67,12 @@ namespace FluentDOM\Serializer\Factory {
       $this->_factories[$contentType] = $value;
     }
 
-    /**
-     * @param mixed $offset
-     * @return callable|Serializer
-     */
-    public function offsetGet($offset) {
+    public function offsetGet(mixed $offset): callable|SerializerFactory {
       $contentType = $this->normalizeContentType($offset);
       return $this->_factories[$contentType];
     }
 
-    public function offsetUnset($offset): void {
+    public function offsetUnset(mixed $offset): void {
       $contentType = $this->normalizeContentType($offset);
       if (array_key_exists($contentType, $this->_factories)) {
         unset($this->_factories[$contentType]);

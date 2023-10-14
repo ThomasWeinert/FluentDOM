@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -16,24 +16,16 @@ namespace FluentDOM\Utility {
    */
   class ResourceWrapper {
 
-    /**
-     * @var array
-     */
-    private static $_streams = [];
+    private static array $_streams = [];
 
-    /**
-     * @var NULL|resource
-     */
-    private $_stream;
-    /**
-     * @var string
-     */
-    private $_id = '';
+    private mixed $_stream = NULL;
+
+    private string $_id = '';
 
     /**
      * @var resource
      */
-    public $context;
+    public mixed $context = NULL;
 
     /**
      * Return an URI to open the stream, the actual stream will be stored in the
@@ -43,7 +35,7 @@ namespace FluentDOM\Utility {
      * @param string $protocol
      * @return string
      */
-    public static function createURI($stream, string $protocol = 'fluentdom-resource'): string {
+    public static function createURI(mixed $stream, string $protocol = 'fluentdom-resource'): string {
       self::register($protocol);
       do {
         $id = \uniqid('fd', TRUE);
@@ -60,7 +52,7 @@ namespace FluentDOM\Utility {
      * @param string $protocol
      * @return array
      */
-    public static function createContext($stream, string $protocol = 'fluentdom-resource'): array {
+    public static function createContext(mixed $stream, string $protocol = 'fluentdom-resource'): array {
       self::register($protocol);
       return [
         $protocol.'://context', \stream_context_create([$protocol => ['stream' => $stream]])
@@ -90,13 +82,6 @@ namespace FluentDOM\Utility {
       return [];
     }
 
-    /**
-     * @param string $path
-     * @param string $mode
-     * @param int $options
-     * @param string|NULL $opened_path
-     * @return bool
-     */
     public function stream_open(
       /** @noinspection PhpUnusedParameterInspection */
       string $path, string $mode, int $options, string &$opened_path = NULL
@@ -118,34 +103,18 @@ namespace FluentDOM\Utility {
       return FALSE;
     }
 
-    /**
-     * @param int $count
-     * @return bool|string
-     */
-    public function stream_read(int $count) {
+    public function stream_read(int $count): bool|string {
       return \fread($this->_stream, $count);
     }
 
-    /**
-     * @param string $data
-     * @return bool|int
-     */
-    public function stream_write(string $data) {
+    public function stream_write(string $data): bool|int {
       return \fwrite($this->_stream, $data);
     }
 
-    /**
-     * @return bool
-     */
     public function stream_eof(): bool {
       return \feof($this->_stream);
     }
 
-    /**
-     * @param int $offset
-     * @param int $whence
-     * @return int
-     */
     public function stream_seek(int $offset, int $whence): int {
       return \fseek($this->_stream, $offset, $whence);
     }

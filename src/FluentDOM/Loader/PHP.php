@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -18,7 +18,7 @@ namespace FluentDOM\Loader {
    */
   class PHP extends Lazy {
 
-    private static $_loaders = [
+    private static array $_loaders = [
       PHP\PDO::class => PHP\PDO::CONTENT_TYPES,
       PHP\SimpleXml::class => PHP\SimpleXml::CONTENT_TYPES
     ];

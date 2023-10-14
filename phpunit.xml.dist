@@ -3,22 +3,25 @@
   ~ FluentDOM
   ~
   ~ @link https://thomas.weinert.info/FluentDOM/
-  ~ @copyright Copyright 2009-2021 FluentDOM Contributors
+  ~ @copyright Copyright 2009-2023 FluentDOM Contributors
   ~ @license http://www.opensource.org/licenses/mit-license.php The MIT License
   ~
   -->
-
-<phpunit backupGlobals="false"
-         backupStaticAttributes="false"
-         extensionsDirectory="C:/Projects/FluentDOM/FluentDOM/tools/phpunit.d">
+<phpunit
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  backupGlobals="false"
+  backupStaticAttributes="false"
+  convertDeprecationsToExceptions="true"
+  extensionsDirectory="tools/phpunit.d"
+  xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage includeUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">src</directory>
+    </include>
+  </coverage>
   <testsuites>
     <testsuite name="FluentDOM">
       <directory suffix="Test.php">tests</directory>
     </testsuite>
   </testsuites>
-  <filter>
-    <whitelist addUncoveredFilesFromWhitelist="true">
-      <directory suffix=".php">src</directory>
-    </whitelist>
-  </filter>
 </phpunit>

@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -16,7 +16,7 @@ namespace FluentDOM\Loader {
    */
   class Text extends Lazy {
 
-    private static $_loaders = [
+    private static array $_loaders = [
       Text\CSV::class => Text\CSV::CONTENT_TYPES
     ];
 

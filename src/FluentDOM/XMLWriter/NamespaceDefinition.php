@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -11,20 +11,16 @@ declare(strict_types=1);
 
 namespace FluentDOM\XMLWriter {
 
+  use FluentDOM\Utility\NamespaceResolver;
   use FluentDOM\Utility\Namespaces;
 
-  class NamespaceDefinition {
+  class NamespaceDefinition implements \IteratorAggregate, NamespaceResolver {
 
-    /**
-     * @var int
-     */
-    private $_indent;
-    /**
-     * @var Namespaces
-     */
-    private $_namespaces;
 
-    public function __construct($inherit = NULL) {
+    private int $_indent;
+    private Namespaces $_namespaces;
+
+    public function __construct(iterable $inherit = NULL) {
       $this->_indent = 0;
       $this->_namespaces = new Namespaces($inherit);
     }
@@ -51,9 +47,13 @@ namespace FluentDOM\XMLWriter {
     public function resolveNamespace($prefix): ?string {
       try {
         return $this->_namespaces->resolveNamespace($prefix);
-      } catch (\LogicException $e) {
+      } catch (\LogicException) {
         return '';
       }
+    }
+
+    public function getIterator(): Namespaces {
+      return $this->_namespaces;
     }
   }
 }

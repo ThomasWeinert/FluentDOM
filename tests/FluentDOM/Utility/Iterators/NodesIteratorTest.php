@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -70,7 +70,7 @@ namespace FluentDOM\Utility\Iterators {
         ->willReturn(1);
       $fdi = new NodesIterator($fd);
       $this->expectException(\InvalidArgumentException::class);
-      $this->expectErrorMessage('Unknown position 1, only 1 items');
+      $this->expectExceptionMessage('Unknown position 1, only 1 items');
       $fdi->seek(1);
     }
 
@@ -78,7 +78,7 @@ namespace FluentDOM\Utility\Iterators {
       $fd = $this->createMock(Query::class);
       $fd->expects($this->once())
         ->method('item')
-        ->willReturn(new \stdClass);
+        ->willReturn($this->createMock(\DOMNode::class));
       $fdi = new NodesIterator($fd);
       $this->assertTrue($fdi->valid());
     }

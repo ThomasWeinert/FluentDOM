@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -82,8 +82,8 @@ namespace FluentDOM\Utility {
     public function testOpenWithInvalidContext(): void {
       $inner = fopen('data://text/plain;base64,'.base64_encode('success'), 'rb');
       [$uri] = ResourceWrapper::createContext($inner);
-      $this->expectWarning();
-      fopen($uri, 'rb', FALSE);
+      $this->expectException(\ErrorException::class);
+      $this->assertFalse(@fopen($uri, 'rb', FALSE));
     }
   }
 }

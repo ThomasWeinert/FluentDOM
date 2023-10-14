@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -11,29 +11,21 @@ declare(strict_types=1);
 
 namespace FluentDOM\Utility\Iterators {
 
+  use FluentDOM\Utility\Constraints;
+
   /**
    * An iterator that calls a map function for the current value before returning it.
    */
   class MapIterator extends \IteratorIterator {
 
-    /**
-     * @var callable
-     */
-    private $_callback;
+    private \Closure $_callback;
 
-    /**
-     * @param \Traversable $traversable
-     * @param callable $callback
-     */
     public function __construct(\Traversable $traversable, callable $callback) {
       parent::__construct($traversable);
-      $this->_callback = $callback;
+      $this->_callback = Constraints::filterCallable($callback);
     }
 
-    /**
-     * @return mixed
-     */
-    public function current() {
+    public function current(): mixed {
       $callback = $this->_callback;
       return $callback(parent::current(), parent::key());
     }

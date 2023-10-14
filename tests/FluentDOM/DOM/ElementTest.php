@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -13,13 +13,14 @@ namespace FluentDOM\DOM {
   require_once __DIR__ . '/../TestCase.php';
 
   use FluentDOM\Appendable;
+  use FluentDOM\Exceptions\UndeclaredPropertyError;
   use FluentDOM\TestCase;
 
+  /**
+   * @covers \FluentDOM\DOM\Element
+   */
   class ElementTest extends TestCase {
 
-    /**
-     * @covers \FluentDOM\DOM\Element::__toString
-     */
     public function testMagicMethodToString(): void {
       $document = new Document();
       $document->appendElement('test', 'success');
@@ -29,9 +30,6 @@ namespace FluentDOM\DOM {
       );
     }
 
-    /**
-     * @covers \FluentDOM\DOM\Element::__get
-     */
     public function testGetPropertyFirstElementChild(): void {
       $document = new Document();
       $document->loadXml('<foo>TEXT<bar attr="value"/></foo>');
@@ -41,27 +39,18 @@ namespace FluentDOM\DOM {
       );
     }
 
-    /**
-     * @covers \FluentDOM\DOM\Element::__isset
-     */
     public function testIssetPropertyFirstElementChildExpectingTrue(): void {
       $document = new Document();
       $document->loadXml('<foo>TEXT<bar attr="value"/></foo>');
       $this->assertTrue(isset($document->documentElement->firstElementChild));
     }
 
-    /**
-     * @covers \FluentDOM\DOM\Element::__isset
-     */
     public function testIssetPropertyFirstElementChildExpectingFalse(): void {
       $document = new Document();
       $document->loadXml('<foo>TEXT</foo>');
       $this->assertFalse(isset($document->documentElement->firstElementChild));
     }
 
-    /**
-     * @covers \FluentDOM\DOM\Element::__get
-     */
     public function testGetPropertyLastElementChild(): void {
       $document = new Document();
       $document->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
@@ -71,27 +60,18 @@ namespace FluentDOM\DOM {
       );
     }
 
-    /**
-     * @covers \FluentDOM\DOM\Element::__isset
-     */
     public function testIssetPropertyLastElementChildExpectingTrue(): void {
       $document = new Document();
       $document->loadXml('<foo>TEXT<bar attr="value"/></foo>');
       $this->assertTrue(isset($document->documentElement->lastElementChild));
     }
 
-    /**
-     * @covers \FluentDOM\DOM\Element::__isset
-     */
     public function testIssetPropertyLastElementChildExpectingFalse(): void {
       $document = new Document();
       $document->loadXml('<foo>TEXT</foo>');
       $this->assertFalse(isset($document->documentElement->lastElementChild));
     }
 
-    /**
-     * @covers \FluentDOM\DOM\Element::__get
-     */
     public function testGetPropertyNextElementSibling(): void {
       $document = new Document();
       $document->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
@@ -101,27 +81,18 @@ namespace FluentDOM\DOM {
       );
     }
 
-    /**
-     * @covers \FluentDOM\DOM\Element::__isset
-     */
     public function testIssetPropertyNextElementSiblingExpectingTrue(): void {
       $document = new Document();
       $document->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
       $this->assertTrue(isset($document->documentElement->firstChild->nextElementSibling));
     }
 
-    /**
-     * @covers \FluentDOM\DOM\Element::__isset
-     */
     public function testIssetPropertyNextElementSiblingExpectingFalse(): void {
       $document = new Document();
       $document->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
       $this->assertFalse(isset($document->documentElement->lastChild->nextElementSibling));
     }
 
-    /**
-     * @covers \FluentDOM\DOM\Element::__get
-     */
     public function testGetPropertyPreviousElementSibling(): void {
       $document = new Document();
       $document->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
@@ -131,27 +102,18 @@ namespace FluentDOM\DOM {
       );
     }
 
-    /**
-     * @covers \FluentDOM\DOM\Element::__isset
-     */
     public function testIssetPropertyPreviousElementSiblingExpectingTrue(): void {
       $document = new Document();
       $document->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
       $this->assertTrue(isset($document->documentElement->lastChild->previousElementSibling));
     }
 
-    /**
-     * @covers \FluentDOM\DOM\Element::__isset
-     */
     public function testIssetPropertyPreviousElementSiblingExpectingFalse(): void {
       $document = new Document();
       $document->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
       $this->assertFalse(isset($document->documentElement->firstChild->previousElementSibling));
     }
 
-    /**
-     * @covers \FluentDOM\DOM\Element::__isset
-     */
     public function testIssetPropertyChildElementCountExpectingTrue(): void {
       $document = new Document();
       $document->loadXml('<foo/>');
@@ -159,74 +121,13 @@ namespace FluentDOM\DOM {
     }
 
     /**
-     * @covers \FluentDOM\DOM\Element::__get
-     */
-    public function testGetInvalidProperty(): void {
-      $document = new Document();
-      $document->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
-      $this->expectPropertyIsUndefined();
-      $this->assertNull($document->documentElement->INVALID_PROPERTY);
-    }
-
-    /**
-     * @covers \FluentDOM\DOM\Element::__isset
-     */
-    public function testIssetInvalidProperty(): void {
-      $document = new Document();
-      $document->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
-      $this->assertFalse(isset($document->documentElement->INVALID_PROPERTY));
-    }
-
-    /**
-     * @covers \FluentDOM\DOM\Element::__get
-     * @covers \FluentDOM\DOM\Element::__set
-     */
-    public function testGetUnknownPropertyAfterSet(): void {
-      $document = new Document();
-      $node = $document->appendChild($document->createElement('foo'));
-      $node->SOME_PROPERTY = 'success';
-      $this->assertEquals(
-        'success', $node->SOME_PROPERTY
-      );
-    }
-
-    /**
-     * @covers \FluentDOM\DOM\Element::__unset
-     * @covers \FluentDOM\DOM\Element::blockReadOnlyProperties
-     */
-    public function testUnsetUnknownPropertyAfterSet(): void {
-      $document = new Document();
-      /** @var Element $node */
-      $node = $document->appendChild($document->createElement('foo'));
-      $node->SOME_PROPERTY = 'success';
-      unset($node->SOME_PROPERTY);
-      $this->assertFalse(isset($node->SOME_PROPERTY));
-    }
-
-    /**
-     * @covers \FluentDOM\DOM\Element::__set
-     * @covers \FluentDOM\DOM\Element::blockReadOnlyProperties
      * @dataProvider dataProviderDynamicElementProperties
-     * @param string $propertyName
      */
     public function testSetDynamicPropertyExpectingException(string $propertyName): void {
       $document = new Document();
       $document->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
-      $this->expectErrorMessage('Cannot write property');
+      $this->expectErrorMessageContains('Cannot write');
       $document->documentElement->$propertyName = $document->createElement('test');
-    }
-
-    /**
-     * @covers \FluentDOM\DOM\Element::__unset
-     * @covers \FluentDOM\DOM\Element::blockReadOnlyProperties
-     * @dataProvider dataProviderDynamicElementProperties
-     * @param string $propertyName
-     */
-    public function testUnsetDynamicPropertyExpectingException(string $propertyName): void {
-      $document = new Document();
-      $document->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
-      $this->expectException(\BadMethodCallException::class);
-      unset($document->documentElement->$propertyName);
     }
 
     public static function dataProviderDynamicElementProperties(): array {
@@ -236,20 +137,6 @@ namespace FluentDOM\DOM {
         ['nextElementSibling'],
         ['previousElementSibling']
       ];
-    }
-
-    /**
-     * @covers \FluentDOM\DOM\Element::__unset
-     * @covers \FluentDOM\DOM\Element::blockReadOnlyProperties
-     * @noinspection PhpExpressionResultUnusedInspection
-     * @noinspection PhpUndefinedFieldInspection
-     */
-    public function testUnsetUnknownProperty(): void {
-      $document = new Document();
-      $document->loadXml('<foo><foo/>TEXT<bar attr="value"/></foo>');
-      unset($document->documentElement->SOME_PROPERTY);
-      $this->expectPropertyIsUndefined();
-      $document->documentElement->SOME_PROPERTY;
     }
 
     /**
@@ -950,7 +837,7 @@ namespace FluentDOM\DOM {
       $document = new Document();
       $document->loadXML(self::XML);
       $this->expectException(\InvalidArgumentException::class);
-      $this->expectErrorMessage('Invalid offset. Use integer for child nodes and strings for attributes.');
+      $this->expectExceptionMessage('Invalid offset. Use integer for child nodes and strings for attributes.');
       $document->documentElement[NULL];
     }
 
@@ -1025,7 +912,7 @@ namespace FluentDOM\DOM {
       $document = new Document();
       $document->appendChild($document->createElement('root'));
       $this->expectException(\InvalidArgumentException::class);
-      $this->expectErrorMessage('$value is not a valid \DOMNode');
+      $this->expectExceptionMessage('$value is not a valid \DOMNode');
       $document->documentElement[0] = NULL;
     }
 

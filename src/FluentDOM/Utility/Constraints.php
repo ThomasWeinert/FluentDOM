@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -16,16 +16,13 @@ namespace FluentDOM\Utility {
    */
   abstract class Constraints {
 
-
     /**
      * Check if the DOMNode is DOMElement or DOMText with content.
      * It returns the node or NULL.
-     *
-     * @param mixed $node
-     * @param bool $ignoreTextNodes
-     * @return \DOMElement|\DOMText|\DOMCdataSection
      */
-    public static function filterNode($node, $ignoreTextNodes = FALSE) {
+    public static function filterNode(
+      mixed $node, bool $ignoreTextNodes = FALSE
+    ): \DOMElement|\DOMCharacterData|NULL {
       if (
         $node instanceof \DOMElement ||
         (
@@ -45,12 +42,11 @@ namespace FluentDOM\Utility {
     }
 
     /**
-     * @param mixed $node
-     * @param string $message
-     * @return bool
      * @throws \InvalidArgumentException
      */
-    public static function assertNode($node, $message = 'DOMNode expected, got: %s.'): bool {
+    public static function assertNode(
+      mixed $node, string $message = 'DOMNode expected, got: %s.'
+    ): bool {
       if (!($node instanceof \DOMNode)) {
         throw new \InvalidArgumentException(
           \sprintf(
@@ -63,13 +59,10 @@ namespace FluentDOM\Utility {
     }
 
     /**
-     * @param \DOMNode $node
      * @param string|string[] $classes
-     * @param string $message
-     * @return boolean
      */
     public static function assertNodeClass(
-      \DOMNode $node, $classes, $message = 'Unexpected node type: %s'
+      \DOMNode $node, string|array $classes, string $message = 'Unexpected node type: %s'
     ): bool {
       if (!is_array($classes)) {
         $classes = [$classes];
@@ -87,11 +80,8 @@ namespace FluentDOM\Utility {
     /**
      * Check if $elements is a traversable node list. It returns
      * the $elements or NULL
-     *
-     * @param mixed $elements
-     * @return \Traversable|array
      */
-    public static function filterNodeList($elements) {
+    public static function filterNodeList(mixed $elements): ?iterable {
       if (is_iterable($elements)) {
         return empty($elements) ? new \EmptyIterator() : $elements;
       }
@@ -100,25 +90,25 @@ namespace FluentDOM\Utility {
 
     /**
      * check if parameter is a valid callback function. It returns
-     * the callable or NULL.
+     * the a Closure or NULL.
      *
      * If $silent is disabled, an exception is thrown for invalid callbacks
      *
-     * @param mixed $callback
-     * @param bool $allowGlobalFunctions
-     * @param bool $silent (no InvalidArgumentException)
      * @throws \InvalidArgumentException
-     * @return callable|NULL
      */
-    public static function filterCallable($callback, $allowGlobalFunctions = FALSE, $silent = TRUE) {
+    public static function filterCallable(
+      mixed $callback,
+      bool $allowGlobalFunctions = FALSE,
+      bool $silent = TRUE
+    ): ?\Closure {
       if ($callback instanceof \Closure) {
         return $callback;
       }
-      if (
-        (\is_string($callback) && $allowGlobalFunctions) ||
-        self::filterCallableArray($callback)
-      ) {
-        return \is_callable($callback) ? $callback : NULL;
+      if (\is_string($callback) && $allowGlobalFunctions) {
+        return \Closure::fromCallable($callback);
+      }
+      if ($closure = self::filterCallableArray($callback)) {
+        return $closure;
       }
       if ($silent) {
         return NULL;
@@ -127,26 +117,20 @@ namespace FluentDOM\Utility {
     }
 
     /**
-     * Return TRUE if the $callback is an array that can be an
-     *
-     * @param mixed $callback
-     * @return bool
+     * Return the $callback wrapped into a Closure  if the $callback is an array that
+     * can be a callable.
      */
-    private static function filterCallableArray($callback): bool {
+    private static function filterCallableArray(mixed $callback): ?\Closure {
       return (
         \is_array($callback) &&
         \count($callback) === 2 &&
         (\is_object($callback[0]) || \is_string($callback[0])) &&
         \is_string($callback[1])
-      );
+      ) ? \Closure::fromCallable($callback) : NULL;
     }
 
     /**
      * Check options bitmask for an option
-     *
-     * @param int $options
-     * @param int $option
-     * @return bool
      */
     public static function hasOption(int $options, int $option): bool {
       return ($options & $option) === $option;

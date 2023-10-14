@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -29,15 +29,13 @@ namespace FluentDOM\Loader {
 
     /**
      * @see Loadable::load
-     * @param string $source
-     * @param string $contentType
-     * @param array|\Traversable|Options $options
-     * @return Document|Result|NULL
      * @throws InvalidStringSource
      * @throws InvalidFileSource
      * @throws \Throwable
      */
-    public function load($source, string $contentType, $options = []): ?Result {
+    public function load(
+      mixed $source, string $contentType, iterable $options = []
+    ): ?Result {
       if ($this->supports($contentType)) {
         return new Result($this->loadXmlDocument($source, $options), $contentType);
       }
@@ -46,13 +44,11 @@ namespace FluentDOM\Loader {
 
     /**
      * @see LoadableFragment::loadFragment
-     * @param mixed $source
-     * @param string $contentType
-     * @param array|\Traversable|Options $options
-     * @return DocumentFragment|NULL
      * @throws \Throwable
      */
-    public function loadFragment($source, string $contentType, $options = []): ?DocumentFragment {
+    public function loadFragment(
+      mixed $source, string $contentType, iterable $options = []
+    ): ?DocumentFragment {
       if ($this->supports($contentType)) {
         return (new Libxml\Errors())->capture(
           static function() use ($source) {

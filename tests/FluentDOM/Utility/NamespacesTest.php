@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -68,7 +68,7 @@ namespace FluentDOM\Utility {
     public function testRegisterReservedNamespaceExpectingException(): void {
       $namespaces = new Namespaces();
       $this->expectException(\LogicException::class);
-      $this->expectErrorMessage('Can not register reserved namespace prefix "xml".');
+      $this->expectExceptionMessage('Can not register reserved namespace prefix "xml".');
       $namespaces['xml'] = 'urn:fail';
     }
 
@@ -89,7 +89,7 @@ namespace FluentDOM\Utility {
     public function testGetNamespaceWithoutRegisterExpectingException(): void {
       $namespaces = new Namespaces();
       $this->expectException(\LogicException::class);
-      $this->expectErrorMessage('Unknown namespace prefix "test".');
+      $this->expectExceptionMessage('Unknown namespace prefix "test".');
       $namespaces->resolveNamespace('test');
     }
 

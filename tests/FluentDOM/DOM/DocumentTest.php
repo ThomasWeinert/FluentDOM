@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -252,7 +252,7 @@ namespace FluentDOM\DOM {
     public function testCreateElementWithXmlNamespacePrefixExpectingException(): void {
       $document = new Document();
       $this->expectException(\LogicException::class);
-      $this->expectErrorMessage('Can not use reserved namespace prefix "xml" in element name');
+      $this->expectExceptionMessage('Can not use reserved namespace prefix "xml" in element name');
       $document->appendChild($document->createElement('xml:example'));
     }
 

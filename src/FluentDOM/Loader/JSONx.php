@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -27,19 +27,18 @@ namespace FluentDOM\Loader {
     use Supports\Libxml;
     public const CONTENT_TYPES = ['jsonx', 'application/xml+jsonx'];
 
+    /** @noinspection HttpUrlsUsage */
     private const XMLNS_JSONX = 'http://www.ibm.com/xmlns/prod/2009/jsonx';
     private const XMLNS_JSONDOM = JsonDOM::XMLNS;
     private const DEFAULT_QNAME = '_';
 
     /**
      * @see Loadable::load
-     * @param mixed $source
-     * @param string $contentType
-     * @param array|\Traversable|Options $options
-     * @return Result|NULL
      * @throws \Throwable
      */
-    public function load($source, string $contentType, $options = []): ?Result {
+    public function load(
+      mixed $source, string $contentType, iterable $options = []
+    ): ?Result {
       if (NULL !== $source && $this->supports($contentType)) {
         $document = $this->loadXmlDocument($source, $options);
         $target = new Document();
@@ -80,17 +79,11 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @param \DOMNode|Element $node
-     * @param \DOMNode|Document|Element $target
      * @throws \Throwable
      */
-    private function transferNode(\DOMNode $node, \DOMNode $target): void {
-      Constraints::assertNodeClass(
-        $node, Element::class
-      );
-      Constraints::assertNodeClass(
-        $node, [Element::class, DocumentFragment::class, Document::class]
-      );
+    private function transferNode(
+      Element $node, Document|Element|DocumentFragment $target
+    ): void {
       if ($node->namespaceURI === self::XMLNS_JSONX) {
         if ($target instanceof Document) {
           $normalizedName = $name = 'json:json';

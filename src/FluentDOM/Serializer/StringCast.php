@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -14,10 +14,8 @@ namespace FluentDOM\Serializer {
   use FluentDOM\Utility\StringCastable;
 
   class StringCast implements StringCastable {
-    /**
-     * @var object
-     */
-    private $_serializer;
+
+    private object $_serializer;
 
     /**
      * @param object $serializer

@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -19,15 +19,11 @@ namespace FluentDOM\Query {
 
     /**
      * Attached element node
-     *
-     * @var \DOMElement
      */
-    private $_node;
+    private \DOMElement $_node;
 
     /**
      * Create object with attached element node.
-     *
-     * @param \DOMElement $node
      */
     public function __construct(\DOMElement $node) {
       $this->_node = $node;
@@ -88,21 +84,15 @@ namespace FluentDOM\Query {
 
     /**
      * Change a data attribute on the attached node.
-     *
-     * @param string $name
-     * @param mixed $value
      */
-    public function __set(string $name, $value) {
+    public function __set(string $name, mixed $value): void {
       $this->_node->setAttribute($this->encodeName($name), $this->encodeValue($value));
     }
 
     /**
      * Read a data attribute from the attached node.
-     *
-     * @param string $name
-     * @return mixed
      */
-    public function __get(string $name) {
+    public function __get(string $name): mixed {
       $name = $this->encodeName($name);
       if ($this->_node->hasAttribute($name)) {
         return $this->decodeValue($this->_node->getAttribute($name));
@@ -126,7 +116,7 @@ namespace FluentDOM\Query {
      * @return bool
      */
     private function isDataProperty(string $name): bool {
-      return (0 === \strpos($name, 'data-') && $name === \strtolower($name));
+      return (str_starts_with($name, 'data-') && $name === \strtolower($name));
     }
 
     /**
@@ -137,7 +127,7 @@ namespace FluentDOM\Query {
      */
     private function encodeName(string $name): string {
       if (\preg_match('(^[a-z][a-z\d]*([A-Z]+[a-z\d]*)+$)DS', $name)) {
-        $camelCasePattern = '((?:[a-z][a-z\d]+)|(?:[A-Z][a-z\d]+)|(?:[A-Z]+(?![a-z\d])))S';
+        $camelCasePattern = '([a-z][a-z\d]+|[A-Z][a-z\d]+|[A-Z]+(?![a-z\d]))S';
         if (\preg_match_all($camelCasePattern, $name, $matches)) {
           $name = \implode('-', $matches[0]);
         }
@@ -162,11 +152,8 @@ namespace FluentDOM\Query {
 
     /**
      * Decode the attribute value into a php variable/array/object
-     *
-     * @param string $value
-     * @return mixed
      */
-    private function decodeValue(string $value) {
+    private function decodeValue(string $value): mixed {
       switch (TRUE) {
       case ($value === 'true') :
         return TRUE;
@@ -194,11 +181,8 @@ namespace FluentDOM\Query {
     /**
      * Encode php variable into a string. Array or Objects will be serialized using json encoding.
      * Boolean use the strings yes/no.
-     *
-     * @param mixed $value
-     * @return string
      */
-    private function encodeValue($value): string {
+    private function encodeValue(mixed $value): string {
       if (\is_bool($value)) {
         return $value ? 'true' : 'false';
       }

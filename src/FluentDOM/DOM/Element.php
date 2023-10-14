@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -13,7 +13,9 @@ declare(strict_types=1);
 namespace FluentDOM\DOM {
 
   use FluentDOM\Appendable;
+  use FluentDOM\Exceptions\ReadOnlyPropertyError;
   use FluentDOM\Exceptions\UnattachedNode;
+  use FluentDOM\Exceptions\UndeclaredPropertyError;
   use FluentDOM\Utility\Iterators\ElementIterator;
   use FluentDOM\Utility\QualifiedName;
 
@@ -40,7 +42,6 @@ namespace FluentDOM\DOM {
 
     use
       Node\ChildNode\Implementation,
-      Node\NonDocumentTypeChildNode\Implementation,
       Node\QuerySelector\Implementation,
       Node\StringCast,
       Node\Xpath,
@@ -52,91 +53,13 @@ namespace FluentDOM\DOM {
     private const NAMESPACE_XMLNS = 'http://www.w3.org/2000/xmlns/';
 
     /**
-     * @param string $name
-     * @return bool
-     */
-    public function __isset(string $name): bool {
-      switch ($name) {
-      case 'nextElementSibling' :
-        return $this->getNextElementSibling() !== NULL;
-      case 'previousElementSibling' :
-        return $this->getPreviousElementSibling() !== NULL;
-      case 'firstElementChild' :
-        return $this->getFirstElementChild() !== NULL;
-      case 'lastElementChild' :
-        return $this->getLastElementChild() !== NULL;
-      case 'childElementCount' :
-        return TRUE;
-      }
-      return FALSE;
-    }
-
-    /**
-     * @param string $name
-     * @return mixed
-     */
-    public function __get(string $name) {
-      switch ($name) {
-      case 'nextElementSibling' :
-        return $this->getNextElementSibling();
-      case 'previousElementSibling' :
-        return $this->getPreviousElementSibling();
-      case 'firstElementChild' :
-        return $this->getFirstElementChild();
-      case 'lastElementChild' :
-        return $this->getLastElementChild();
-      case 'childElementCount' :
-        return (int)$this->evaluate('count(*)');
-      }
-      return $this->$name;
-    }
-
-    /**
-     * @param string $name
-     * @param mixed $value
-     * @throws \BadMethodCallException
-     */
-    public function __set(string $name, $value) {
-      $this->blockReadOnlyProperties($name);
-      $this->$name = $value;
-    }
-
-    /**
-     * @param string $name
-     * @throws \BadMethodCallException
-     */
-    public function __unset(string $name) {
-      $this->blockReadOnlyProperties($name);
-      unset($this->$name);
-    }
-
-    /**
-     * @param string $name
-     * @throws \BadMethodCallException
-     */
-    private function blockReadOnlyProperties(string $name): void {
-      switch ($name) {
-      case 'nextElementSibling' :
-      case 'previousElementSibling' :
-      case 'firstElementChild' :
-      case 'lastElementChild' :
-        throw new \BadMethodCallException(
-          \sprintf(
-            'Cannot write property %s::$%s.',
-            \get_class($this), $name
-          )
-        );
-      }
-    }
-
-    /**
      * Validate if an attribute exists
      *
      * @param string $qualifiedName
      * @return bool
      * @throws \LogicException
      */
-    public function hasAttribute($qualifiedName): bool {
+    public function hasAttribute(string $qualifiedName): bool {
       [$namespaceURI, $localName] = $this->resolveTagName($qualifiedName);
       if ($namespaceURI !== '') {
         return parent::hasAttributeNS($namespaceURI, $localName);
@@ -148,13 +71,13 @@ namespace FluentDOM\DOM {
      * Get an attribute value
      *
      * @param string $qualifiedName
-     * @return string|NULL
+     * @return string
      * @throws \LogicException
      */
-    public function getAttribute($qualifiedName): ?string {
+    public function getAttribute(string $qualifiedName): string {
       [$namespaceURI, $localName] = $this->resolveTagName($qualifiedName);
       if ($namespaceURI !== '') {
-        return parent::getAttributeNS($namespaceURI, $localName);
+        return $this->getAttributeNS($namespaceURI, $localName);
       }
       return parent::getAttribute($qualifiedName);
     }
@@ -162,11 +85,10 @@ namespace FluentDOM\DOM {
     /**
      * Get an attribute value
      *
-     * @param string $qualifiedName
-     * @return Attribute|\DOMAttr|NULL
      * @throws \LogicException
+     * @noinspection PhpIncompatibleReturnTypeInspection
      */
-    public function getAttributeNode($qualifiedName) {
+    public function getAttributeNode(string $qualifiedName): ?Attribute {
       [$namespaceURI, $localName] = $this->resolveTagName($qualifiedName);
       if ($namespaceURI !== '') {
         return parent::getAttributeNodeNS($namespaceURI, $localName);
@@ -177,12 +99,9 @@ namespace FluentDOM\DOM {
     /**
      * Set an attribute on an element
      *
-     * @param string $qualifiedName
-     * @param string $value
-     * @return void
      * @throws \LogicException
      */
-    public function setAttribute($qualifiedName, $value) {
+    public function setAttribute(string $qualifiedName, string $value): void {
       [$namespaceURI] = $this->resolveTagName($qualifiedName);
       if ($namespaceURI !== '') {
         parent::setAttributeNS($namespaceURI, $qualifiedName, $value);
@@ -197,40 +116,36 @@ namespace FluentDOM\DOM {
      * @return bool
      * @throws \LogicException
      */
-    public function removeAttribute($qualifiedName): bool {
+    public function removeAttribute(string $qualifiedName): bool {
       [$namespaceURI, $localName] = $this->resolveTagName($qualifiedName);
       if ($namespaceURI !== '') {
         return $this->removeAttributeNS($namespaceURI, $localName);
       }
-      return (bool)parent::removeAttribute($qualifiedName);
+      return parent::removeAttribute($qualifiedName);
     }
 
-    /**
-     * @param string $namespaceURI
-     * @param string $localName
-     * @return bool
-     */
-    public function removeAttributeNS($namespaceURI, $localName): bool {
-      if ($namespaceURI === self::NAMESPACE_XMLNS) {
-        if (parent::removeAttributeNS($namespaceURI, $localName)) {
+    #[\ReturnTypeWillChange]
+    public function removeAttributeNS(?string $namespace, string $localName): bool {
+      if ($namespace === self::NAMESPACE_XMLNS) {
+        if (parent::removeAttributeNS($namespace, $localName)) {
           // @codeCoverageIgnoreStart
           // will only be triggered if PHP is fixed
           return TRUE;
           // @codeCoverageIgnoreEnd
         }
-        $namespaceDefinitionValue = $this->getAttributeNS($namespaceURI, $localName);
+        $namespaceDefinitionValue = $this->getAttributeNS($namespace, $localName);
         if ($this->evaluate('count(@*[namespace-uri() = '.Xpath::quote($namespaceDefinitionValue).']) = 0')) {
           return (bool)parent::removeAttributeNS($namespaceDefinitionValue, $localName);
         }
         return FALSE;
       }
       if (
-        ($this->getAttribute('xmlns:'.$localName) === $namespaceURI) &&
-        ($attribute = $this->getAttributeNodeNS($namespaceURI, $localName))
+        ($this->getAttribute('xmlns:'.$localName) === $namespace) &&
+        ($attribute = $this->getAttributeNodeNS($namespace, $localName))
       ) {
         return (bool)parent::removeAttributeNode($attribute);
       }
-      return (bool)parent::removeAttributeNS($namespaceURI, $localName);
+      return (bool)parent::removeAttributeNS($namespace, $localName);
     }
 
     /**
@@ -240,10 +155,10 @@ namespace FluentDOM\DOM {
      * @param bool $isId
      * @throws \LogicException
      */
-    public function setIdAttribute($qualifiedName, $isId) {
+    public function setIdAttribute(string $qualifiedName, bool $isId): void {
       [$namespaceURI, $localName] = $this->resolveTagName($qualifiedName);
       if ($namespaceURI !== '') {
-        parent::setIdAttributeNS($namespaceURI, $localName, $isId);
+        $this->setIdAttributeNS($namespaceURI, $localName, $isId);
       } else {
         parent::setIdAttribute($qualifiedName, $isId);
       }
@@ -280,7 +195,7 @@ namespace FluentDOM\DOM {
           $document->namespaces()->store();
           $node->appendTo($this);
           $document->namespaces()->restore();
-        } elseif ($node instanceof \Closure && !$node instanceof \DOMNode) {
+        } elseif ((!$node instanceof \DOMNode) && $node instanceof \Closure) {
           $this->append($node());
         } elseif (\is_array($node)) {
           $nodes = [];
@@ -301,13 +216,11 @@ namespace FluentDOM\DOM {
     /**
      * Append an child element
      *
-     * @param string $qualifiedName
-     * @param string $content
-     * @param array|NULL $attributes
-     * @return Element
-     * @throws \LogicException
+     * @throws \LogicException|\DOMException
      */
-    public function appendElement(string $qualifiedName, $content = '', array $attributes = NULL): Element {
+    public function appendElement(
+      string $qualifiedName, string|array $content = '', array $attributes = NULL
+    ): Element {
       $this->appendChild(
         $node = $this->getDocument()->createElement($qualifiedName, $content, $attributes)
       );
@@ -364,7 +277,7 @@ namespace FluentDOM\DOM {
      * @return \DOMNodeList
      * @throws \LogicException
      */
-    public function getElementsByTagName($name): \DOMNodeList {
+    public function getElementsByTagName(string $name): \DOMNodeList {
       [$namespaceURI, $localName] = $this->resolveTagName($name);
       if ($namespaceURI !== '') {
         return parent::getElementsByTagNameNS($namespaceURI, $localName);
@@ -411,7 +324,7 @@ namespace FluentDOM\DOM {
      * @return \DOMNode|mixed|string
      * @throws \InvalidArgumentException
      */
-    public function offsetGet($offset) {
+    public function offsetGet(mixed $offset): mixed {
       if ($this->isNodeOffset($offset)) {
         return $this->childNodes->item((int)$offset);
       }
@@ -463,7 +376,7 @@ namespace FluentDOM\DOM {
      * @throws \InvalidArgumentException
      * @return bool
      */
-    private function isNodeOffset($offset): bool {
+    private function isNodeOffset(mixed $offset): bool {
       if (\is_int($offset) || \ctype_digit((string)$offset)) {
         return TRUE;
       }
@@ -477,11 +390,8 @@ namespace FluentDOM\DOM {
 
     /**
      * Attribute offsets are strings that can not only contains digits.
-     *
-     * @param mixed $offset
-     * @return bool
      */
-    private function isAttributeOffset($offset): bool {
+    private function isAttributeOffset(mixed $offset): bool {
       return (is_string($offset) && !ctype_digit((string)$offset));
     }
 
@@ -540,10 +450,9 @@ namespace FluentDOM\DOM {
     /**
      * Sets all namespaces registered on the document as xmlns attributes on the element.
      *
-     * @param NULL|string|array $prefixes
      * @throws \LogicException
      */
-    public function applyNamespaces($prefixes = NULL): void {
+    public function applyNamespaces(string|array $prefixes = NULL): void {
       if ($prefixes !== NULL && !\is_array($prefixes)) {
         $prefixes = [$prefixes];
       }

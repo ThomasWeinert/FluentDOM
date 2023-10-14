@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -25,11 +25,9 @@ namespace FluentDOM\Loader\Supports {
     use Supports;
 
     /**
-     * @param array|\Traversable|Options $options
-     * @return Options
      * @throws \InvalidArgumentException
      */
-    public function getOptions($options): Options {
+    public function getOptions(iterable $options): Options {
       $result = new Options(
         $options,
         [
@@ -44,15 +42,12 @@ namespace FluentDOM\Loader\Supports {
     }
 
     /**
-     * @param string $source
-     * @param array|\Traversable|Options $options
-     * @return Document
      * @throws InvalidStringSource
      * @throws InValidFileSource
      * @throws FileNotLoaded
      * @throws \Throwable
      */
-    private function loadXmlDocument(string $source, $options): Document {
+    private function loadXmlDocument(string $source, iterable $options): Document {
       return (new Errors())->capture(
         function () use ($source, $options): Document {
           $settings = $this->getOptions($options);

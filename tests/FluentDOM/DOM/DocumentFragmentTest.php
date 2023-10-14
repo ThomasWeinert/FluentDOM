@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -210,10 +210,7 @@ namespace FluentDOM\DOM {
     public function testWithInvalidNamespacesListExpectingException(): void {
       $document = new Document();
       $fragment = $document->createDocumentFragment();
-      $this->expectException(\InvalidArgumentException::class);
-      $this->expectErrorMessage(
-        '$namespaces needs to be a list of namespaces or an element node to fetch the namespaces from.'
-      );
+      $this->expectException(\TypeError::class);
       $fragment->appendXml('<foo:test>success</foo:test>',  'INVALID_VALUE');
     }
 
@@ -223,9 +220,7 @@ namespace FluentDOM\DOM {
     public function testWithInvalidNamespacesExpectingException(): void {
       $document = new Document();
       $fragment = $document->createDocumentFragment();
-      $this->expectException(
-        \InvalidArgumentException::class
-      );
+      $this->expectException(\TypeError::class);
       $fragment->appendXml('<foo:test>success</foo:test>', FALSE);
     }
 

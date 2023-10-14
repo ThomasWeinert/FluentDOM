@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -53,7 +53,7 @@ namespace FluentDOM\Utility\Iterators {
       $document->loadXML('<items>ONE<two><three/></two></items>');
       $iterator = $document->documentElement->getIterator();
       $this->expectException(\InvalidArgumentException::class);
-      $this->expectErrorMessage('Unknown position 99, only 2 items');
+      $this->expectExceptionMessage('Unknown position 99, only 2 items');
       $iterator->seek(99);
     }
 
@@ -84,7 +84,7 @@ namespace FluentDOM\Utility\Iterators {
       $document->loadXML('<items>ONE<two><three/></two></items>');
       $iterator = $document->documentElement->getIterator();
       $this->expectException(\UnexpectedValueException::class);
-      $this->expectErrorMessage(
+      $this->expectExceptionMessage(
         'Called FluentDOM\Utility\Iterators\ElementIterator::getChildren with invalid current element.'
       );
       $iterator->getChildren();

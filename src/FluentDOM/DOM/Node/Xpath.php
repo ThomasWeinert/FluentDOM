@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -26,12 +26,10 @@ namespace FluentDOM\DOM\Node {
     /**
      * Evaluate an xpath expression in the context of this
      * element.
-     *
-     * @param string $expression
-     * @param Node|\DOMNode|NULL $context
-     * @return string|float|\DOMNodeList|Node[]
      */
-    public function evaluate(string $expression, Node $context = NULL) {
+    public function evaluate(
+      string $expression, Node $context = NULL
+    ): string|float|bool|\DOMNodeList {
       $document = $this instanceof Document
         ? $this
         : $this->ownerDocument;
@@ -45,11 +43,8 @@ namespace FluentDOM\DOM\Node {
 
     /**
      * Allow to call evaluate() by using the node as object
-     *
-     * @param string $expression
-     * @return string|float|\DOMNodeList|Node[]
      */
-    public function __invoke(string $expression) {
+    public function __invoke(string $expression): string|float|bool|\DOMNodeList {
       return $this->evaluate(
         $expression, $this instanceof \DOMNode ? $this : NULL
       );

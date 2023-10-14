@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -24,17 +24,11 @@ namespace FluentDOM\Query {
    */
   class Css implements \ArrayAccess, \Countable, \IteratorAggregate {
 
-    /**
-     * owner object
-     * @var Query
-     */
-    private $_query;
+    private Query $_query;
 
 
     /**
      * Store the FluentDOM instance for later use and decode the style string into an array
-     *
-     * @param Query $query
      */
     public function __construct(Query $query) {
       $this->_query = $query;
@@ -46,8 +40,6 @@ namespace FluentDOM\Query {
 
     /**
      * Get the style properties from the first node in the Query object
-     *
-     * @return Css\Properties|NULL
      */
     private function getStyleProperties(): ?Css\Properties {
       if (isset($this->_query[0])) {
@@ -64,10 +56,8 @@ namespace FluentDOM\Query {
      * the first matched node.
      *
      * @see \ArrayAccess::offsetExists()
-     * @param mixed $offset
-     * @return bool
      */
-    public function offsetExists($offset): bool {
+    public function offsetExists(mixed $offset): bool {
       if ($properties = $this->getStyleProperties()) {
         return isset($properties[$offset]);
       }
@@ -78,10 +68,8 @@ namespace FluentDOM\Query {
      * Allow to use array syntax to read a css property value from first matched node.
      *
      * @see ArrayAccess::offsetGet()
-     * @param mixed $offset
-     * @return string|NULL
      */
-    public function offsetGet($offset): ?string {
+    public function offsetGet(mixed $offset): ?string {
       if ($properties = $this->getStyleProperties()) {
         return $properties[$offset];
       }
@@ -92,10 +80,8 @@ namespace FluentDOM\Query {
      * Allow to use array syntax to change a css property value on all matched nodes.
      *
      * @see ArrayAccess::offsetSet()
-     * @param mixed $offset
-     * @param mixed $value
      */
-    public function offsetSet($offset, $value): void {
+    public function offsetSet(mixed $offset, mixed $value): void {
       $this->_query->css($offset, $value);
     }
 
@@ -104,9 +90,8 @@ namespace FluentDOM\Query {
      * all matched nodes.
      *
      * @see ArrayAccess::offsetUnset()
-     * @param mixed $offset
      */
-    public function offsetUnset($offset): void {
+    public function offsetUnset(mixed $offset): void {
       foreach ($this->_query as $node) {
         if ($node instanceof \DOMElement &&
           $node->hasAttribute('style')) {
@@ -125,7 +110,6 @@ namespace FluentDOM\Query {
      * Get an iterator for the properties
      *
      * @see IteratorAggregate::getIterator()
-     * @return \Iterator
      */
     public function getIterator(): \Iterator {
       if ($properties = $this->getStyleProperties()) {
@@ -138,7 +122,6 @@ namespace FluentDOM\Query {
      * Get the property count of the first selected node
      *
      * @see Countable::count()
-     * @return int
      */
     public function count(): int {
       if ($properties = $this->getStyleProperties()) {

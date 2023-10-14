@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -20,11 +20,11 @@ namespace FluentDOM\Utility {
    */
   class QualifiedName {
 
-    public static $cacheLimit = 100;
-    private static $_cache = [];
+    public static int $cacheLimit = 100;
+    private static array $_cache = [];
 
-    private $_prefix = '';
-    private $_localName = '';
+    private string $_prefix = '';
+    private string $_localName = '';
 
     /**
      * @param string $name
@@ -37,7 +37,6 @@ namespace FluentDOM\Utility {
     /**
      * Validate string as qualified node name
      *
-     * @param string $name
      * @throws \UnexpectedValueException
      */
     private function setQName(string $name): void {
@@ -68,9 +67,6 @@ namespace FluentDOM\Utility {
     /**
      * Validate string as qualified node name part (namespace or local name)
      *
-     * @param string $name full QName
-     * @param int $offset Offset of NCName part in QName
-     * @param string|NULL $fullName full name used in error message
      * @throws \UnexpectedValueException
      */
     private function isNCName(string $name, int $offset = 0, string $fullName = NULL): void {
@@ -111,8 +107,6 @@ namespace FluentDOM\Utility {
 
     /**
      * Allow to convert the qualified name object to a string.
-     *
-     * @return string
      */
     public function __toString(): string {
       return $this->name;
@@ -120,25 +114,17 @@ namespace FluentDOM\Utility {
 
     /**
      * Define dynamic properties, return FALSE for all other
-     *
-     * @param string $property
-     * @return bool
      */
     public function __isset(string $property): bool {
-      switch ($property) {
-      case 'name' :
-      case 'localName' :
-      case 'prefix' :
-        return TRUE;
-      }
-      return FALSE;
+      return match ($property) {
+        'name', 'localName', 'prefix' => TRUE,
+        default => FALSE,
+      };
     }
 
     /**
      * Read dynamic property, throw exception for invalid properties.
      *
-     * @param string $property
-     * @return string
      * @throws \LogicException
      */
     public function __get(string $property): string {
@@ -158,11 +144,9 @@ namespace FluentDOM\Utility {
     /**
      * Block changes
      *
-     * @param string $property
-     * @param mixed $value
      * @throws \LogicException
      */
-    public function __set(string $property, $value) {
+    public function __set(string $property, mixed $value): void {
       throw new \LogicException(
         \sprintf('%s is immutable.', \get_class($this))
       );
@@ -171,10 +155,9 @@ namespace FluentDOM\Utility {
     /**
      * Block changes
      *
-     * @param string $property
      * @throws \LogicException
      */
-    public function __unset(string $property) {
+    public function __unset(string $property): void {
       throw new \LogicException(
         \sprintf('%s is immutable.', \get_class($this))
       );
@@ -182,9 +165,6 @@ namespace FluentDOM\Utility {
 
     /**
      * Split an qualified name into its two parts.
-     *
-     * @param string $name
-     * @return array
      */
     public static function split(string $name): array {
       if (FALSE !== ($position = \strpos($name, ':'))) {
@@ -202,14 +182,11 @@ namespace FluentDOM\Utility {
 
     /**
      * Validate a string to be an valid QName
-     *
-     * @param string $name
-     * @return bool
      */
     public static function validate(string $name): bool {
       try {
         new self($name);
-      } catch (\UnexpectedValueException $e) {
+      } catch (\UnexpectedValueException) {
         return FALSE;
       }
       return TRUE;
@@ -221,13 +198,8 @@ namespace FluentDOM\Utility {
      * tag name of an xml element without a prefix.
      *
      * If the result of that removal is an empty string, the default value is returned.
-     *
-     * @param string $string
-     * @param string $default
-     * @return string
      */
     public static function normalizeString(string $string, string $default = '_'): string {
-      /** @noinspection SpellCheckingInspection */
       $nameStartChar =
         'A-Z_a-z'.
         '\\x{C0}-\\x{D6}\\x{D8}-\\x{F6}\\x{F8}-\\x{2FF}\\x{370}-\\x{37D}'.

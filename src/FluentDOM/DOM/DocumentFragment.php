@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -32,40 +32,25 @@ namespace FluentDOM\DOM {
       Node\ParentNode {
 
     use
+      Node\ParentNode\Implementation,
       /** @noinspection TraitsPropertiesConflictsInspection */
-      Node\ParentNode\Properties,
       Node\QuerySelector\Implementation,
       /** @noinspection TraitsPropertiesConflictsInspection */
       Node\Xpath;
 
-    /**
-     * @var Namespaces
-     */
-    private $_namespaces;
+    private ?Namespaces $_namespaces = NULL;
 
     /**
      * Casting the fragment to string will return the text content of all nodes
-     *
-     * @return string
      */
     public function __toString(): string {
-      $result = '';
-      foreach ($this->childNodes as $child) {
-        $result .= $child;
-      }
-      return $result;
+      return implode('', iterator_to_array($this->childNodes));
     }
 
-    /**
-     * @return int
-     */
     public function count(): int {
       return $this->childNodes->length;
     }
 
-    /**
-     * @return \Iterator
-     */
     public function getIterator(): \Iterator {
       return new \ArrayIterator(iterator_to_array($this->childNodes));
     }
@@ -77,11 +62,9 @@ namespace FluentDOM\DOM {
      * to set the namespaces. If the list is empty, the namespaces from
      * the document object will be used.
      *
-     * @param NULL|array|\Traversable|\DOMElement $namespaces
-     * @return Namespaces
      * @throws \InvalidArgumentException
      */
-    public function namespaces($namespaces = NULL): Namespaces {
+    public function namespaces(iterable|\DOMElement $namespaces = NULL): Namespaces {
       if (NULL !== $namespaces || (!$this->_namespaces instanceof Namespaces)) {
         $this->_namespaces = new Namespaces();
       }
@@ -103,10 +86,6 @@ namespace FluentDOM\DOM {
               $this->registerNamespace($key, $namespaceURI);
             }
           }
-        } elseif (NULL !== $namespaces) {
-          throw new \InvalidArgumentException(
-            '$namespaces needs to be a list of namespaces or an element node to fetch the namespaces from.'
-          );
         }
       }
       return \count($this->_namespaces) > 0 ? $this->_namespaces : $this->ownerDocument->namespaces();
@@ -131,7 +110,7 @@ namespace FluentDOM\DOM {
      * @return bool
      * @throws \InvalidArgumentException
      */
-    public function appendXml($data, $namespaces = NULL): bool {
+    public function appendXml(string $data, iterable|\DOMElement $namespaces = NULL): bool {
       $namespaces = $this->namespaces($namespaces);
       if (\count($namespaces) === 0) {
         return parent::appendXML($data);
@@ -156,13 +135,11 @@ namespace FluentDOM\DOM {
     /**
      * Append an child element
      *
-     * @param string $name
-     * @param string $content
-     * @param array|NULL $attributes
-     * @return Element
-     * @throws \LogicException
+     * @throws \LogicException|\DOMException
      */
-    public function appendElement(string $name, $content = '', array $attributes = NULL): Element {
+    public function appendElement(
+      string $name, string|array $content = '', array $attributes = NULL
+    ): Element {
       $this->appendChild(
         $node = $this->ownerDocument->createElement($name, $content, $attributes)
       );
@@ -180,4 +157,3 @@ namespace FluentDOM\DOM {
     }
   }
 }
-

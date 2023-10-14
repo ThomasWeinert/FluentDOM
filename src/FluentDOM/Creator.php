@@ -3,13 +3,15 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
 declare(strict_types=1);
 
 namespace FluentDOM {
+
+  use FluentDOM\Exceptions\UndeclaredPropertyError;
 
   /**
    * @property bool $formatOutput
@@ -18,96 +20,55 @@ namespace FluentDOM {
    */
   class Creator {
 
-    /**
-     * @var DOM\Document
-     */
-    private $_document;
+    private DOM\Document $_document;
 
-    /**
-     * @var bool
-     */
-    private $_optimizeNamespaces = TRUE;
+    private bool $_optimizeNamespaces = TRUE;
 
-    /**
-     * @param string $version
-     * @param string $encoding
-     */
     public function __construct(string $version = '1.0', string $encoding = 'UTF-8') {
       $this->_document = new DOM\Document($version, $encoding);
     }
 
-    /**
-     * @param string $name
-     * @return bool
-     */
     public function __isset(string $name): bool {
-      switch ($name) {
-        case 'document' :
-          return true;
-        case 'formatOutput' :
-          return isset($this->_document->{$name});
-        case 'optimizeNamespaces' :
-          return TRUE;
-      }
-      return FALSE;
+      return match ($name) {
+        'document' => true,
+        'formatOutput' => isset($this->_document->{$name}),
+        'optimizeNamespaces' => TRUE,
+        default => FALSE,
+      };
     }
 
-    /**
-     * @param string $name
-     * @return mixed
-     */
-    public function __get(string $name) {
-      switch ($name) {
-        case 'document' :
-          return $this->_document;
-        case 'formatOutput' :
-          return $this->_document->{$name};
-        case 'optimizeNamespaces' :
-          return $this->_optimizeNamespaces;
-      }
-      return NULL;
+    public function __get(string $name): mixed {
+      return match ($name) {
+        'document' => $this->_document,
+        'formatOutput' => $this->_document->{$name},
+        'optimizeNamespaces' => $this->_optimizeNamespaces,
+        default => NULL,
+      };
     }
 
-    /**
-     * @param string $name
-     * @param mixed $value
-     */
-    public function __set(string $name, $value) {
-      switch ($name) {
-        case 'formatOutput' :
-          $this->_document->{$name} = $value;
-          return;
-        case 'optimizeNamespaces' :
-          $this->_optimizeNamespaces = (bool)$value;
-          return;
-      }
-      $this->{$name} = $value;
+    public function __set(string $name, mixed $value): void {
+      match  ($name) {
+        'formatOutput' => $this->_document->{$name} = $value,
+        'optimizeNamespaces' => $this->_optimizeNamespaces = (bool)$value,
+        default => throw new UndeclaredPropertyError($this, $name)
+      };
     }
 
     /**
      * If the creator is cloned, a clone of the dom document is needed, too.
-     *
      */
-    public function __clone() {
+    public function __clone(): void {
       $this->_document = clone $this->_document;
     }
 
-    /**
-     * @param string $prefix
-     * @param string $namespaceURI
-     * @throws \LogicException
-     */
     public function registerNamespace(string $prefix, string $namespaceURI): void {
       $this->_document->registerNamespace($prefix, $namespaceURI);
     }
 
     /**
-     * @param string $name
-     * @param mixed ...$parameters
-     * @return Creator\Node
-     * @throws \LogicException
+     * @throws \LogicException|Exceptions\UnattachedNode|\DOMException
      */
-    public function __invoke(string $name, ...$parameters): Creator\Node {
+    public function __invoke(string $name, mixed ...$parameters): Creator\Node {
       return new Creator\Node(
         $this,
         $this->_document,
@@ -126,48 +87,27 @@ namespace FluentDOM {
      * - FluentDOM\Appendable instances are appended
      * - Strings or objects castable to string are appended as text nodes
      *
-     * @param string $name
-     * @param mixed ...$parameters
-     * @return DOM\Element
      * @throws \LogicException
-     * @throws Exceptions\UnattachedNode
+     * @throws Exceptions\UnattachedNode|\DOMException
      */
-    public function element(string $name, ...$parameters): DOM\Element {
+    public function element(string $name, mixed ...$parameters): DOM\Element {
       $node = $this->_document->createElement($name);
       $node->append(...$parameters);
       return $node;
     }
 
-    /**
-     * @param string $content
-     * @return DOM\CdataSection
-     */
     public function cdata(string $content): DOM\CdataSection {
       return $this->_document->createCdataSection($content);
     }
 
-    /**
-     * @param string $content
-     * @return DOM\Comment
-     */
     public function comment(string $content): DOM\Comment {
       return $this->_document->createComment($content);
     }
 
-    /**
-     * @param string $target
-     * @param string $content
-     * @return DOM\ProcessingInstruction
-     */
     public function pi(string $target, string $content): DOM\ProcessingInstruction {
       return $this->_document->createProcessingInstruction($target, $content);
     }
 
-    /**
-     * @param iterable $traversable
-     * @param callable|NULL $map
-     * @return Appendable
-     */
     public function each(iterable $traversable, callable $map = NULL): Appendable {
       return new Creator\Nodes($traversable, $map);
     }

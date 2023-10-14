@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -12,6 +12,7 @@ namespace FluentDOM {
 
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Element;
+  use FluentDOM\Exceptions\UndeclaredPropertyError;
 
   require_once __DIR__ . '/TestCase.php';
 
@@ -346,9 +347,9 @@ namespace FluentDOM {
 
     public function testCreatorGetUnknownPropertyAfterSet(): void {
       $_ = new Creator();
+      $this->expectException(UndeclaredPropertyError::class);
       /** @noinspection PhpUndefinedFieldInspection */
       $_->unkown = TRUE;
-      $this->assertTrue($_->unkown);
     }
 
 
@@ -373,18 +374,14 @@ namespace FluentDOM {
     public function testCreatorOptimizeNamespacesCanBeDisabled(): void {
       $_ = new Creator();
       $_->registerNamespace('foo', 'urn:foo');
-      $_->optimizeNamespaces = FALSE;
+      $_->optimizeNamespaces = false;
       $document = $_(
         'root',
-        $_('foo:child')
+        $_('foo:child', 'text')
       )->document;
       $this->assertEquals(
-        'urn:foo',
-        $document->documentElement->getAttribute('xmlns:foo')
-      );
-      $this->assertEquals(
-        'urn:foo',
-        $document->documentElement->firstElementChild->getAttribute('xmlns:foo')
+        'text',
+        $document('string(//foo:child)')
       );
     }
 

@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -21,19 +21,15 @@ namespace FluentDOM\Serializer\Json {
 
     /**
      * @param \DOMElement $node
-     * @return mixed
+     * @return \stdClass
      */
-    protected function getNode(\DOMElement $node) {
+    protected function getNode(\DOMElement $node): \stdClass {
       $result = new \stdClass();
       $result->{$node->nodeName} = $this->getNodes($node);
       return $result;
     }
 
-    /**
-     * @param \DOMElement $node
-     * @return mixed
-     */
-    protected function getNodes(\DOMElement $node) {
+    protected function getNodes(\DOMElement $node): mixed  {
       $result = new \stdClass();
       $xpath = new Xpath($node->ownerDocument);
       $this->addNamespaces($result, $node, $xpath);
@@ -103,10 +99,6 @@ namespace FluentDOM\Serializer\Json {
       }
     }
 
-    /**
-     * @param \stdClass $target
-     * @param \DOMNode|\DOMText|\DOMCdataSection $node
-     */
     private function addText(\stdClass $target, \DOMNode $node): void {
       if (!($node instanceof \DOMText) || !$node->isWhitespaceInElementContent()) {
         if (!isset($target->{'$'})) {

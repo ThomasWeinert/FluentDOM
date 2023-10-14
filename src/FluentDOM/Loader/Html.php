@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -29,20 +29,16 @@ namespace FluentDOM\Loader {
     public const CONTENT_TYPES = ['html', 'text/html', 'html-fragment', 'text/html-fragment'];
 
     /**
-     * @param mixed $source
-     * @param string $contentType
-     * @param array|\Traversable|Options $options
-     * @return Document|Result|NULL
      * @throws InvalidStringSource
      * @throws InvalidFileSource
      * @throws \Throwable
      * @see Loadable::load
      */
-    public function load($source, string $contentType, $options = []): ?Result {
+    public function load(mixed $source, string $contentType, iterable $options = []): ?Result {
       if ($this->supports($contentType)) {
         return (new Libxml\Errors())->capture(
           function() use ($source, $contentType, $options) {
-            $selection = FALSE;
+            $selection = NULL;
             $document = new Document();
             $settings = $this->getOptions($options);
             if ($this->isFragment($contentType, $settings)) {
@@ -92,11 +88,7 @@ namespace FluentDOM\Loader {
       return $source;
     }
 
-    /**
-     * @param string $source
-     * @return string|bool
-     */
-    private function getCharsetFromMetaTag(string $source) {
+    private function getCharsetFromMetaTag(string $source): string|bool {
       $hasMetaTag = \preg_match(
         /** @lang TEXT */
         '(<meta\\s+[^>]*charset=["\']\s*(?<charset>[^\\s\'">]+)\s*["\'])i',
@@ -125,14 +117,12 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @param mixed $source
-     * @param string $contentType
-     * @param array|\Traversable|Options $options
-     * @return DocumentFragment|NULL
      * @throws \Throwable
      * @see LoadableFragment::loadFragment
      */
-    public function loadFragment($source, string $contentType, $options = []): ?DocumentFragment {
+    public function loadFragment(
+      mixed $source, string $contentType, iterable $options = []
+    ): ?DocumentFragment {
       if ($this->supports($contentType)) {
         $options = $this->getOptions($options);
         return (new Libxml\Errors())->capture(

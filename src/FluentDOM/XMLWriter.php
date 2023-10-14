@@ -3,10 +3,11 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
+/** @noinspection PhpComposerExtensionStubsInspection */
 declare(strict_types=1);
 
 namespace FluentDOM {
@@ -16,15 +17,9 @@ namespace FluentDOM {
 
   class XMLWriter extends \XMLWriter {
 
-    /**
-     * @var Namespaces
-     */
-    private $_namespaces;
+    private Namespaces $_namespaces;
 
-    /**
-     * @var XMLWriter\NamespaceStack
-     */
-    private $_xmlnsStack;
+    private XMLWriter\NamespaceStack $_xmlnsStack;
 
     public function __construct() {
       $this->_namespaces = new Namespaces();
@@ -35,18 +30,17 @@ namespace FluentDOM {
      * register a namespace prefix for the xml reader, it will be used in
      * next() and other methods with a tag name argument
      *
-     * @param string $prefix
-     * @param string $namespaceURI
      * @throws \LogicException
      */
-    public function registerNamespace(string $prefix, string $namespaceURI) {
+    public function registerNamespace(string $prefix, string $namespaceURI): void
+    {
       $this->_namespaces[$prefix] = $namespaceURI;
     }
 
     /**
      * Add the current namespace configuration as xmlns* attributes to the element node.
      */
-    public function applyNamespaces() {
+    public function applyNamespaces(): void {
       foreach ($this->_namespaces as $prefix => $namespaceURI) {
         $this->writeAttribute(
           empty($prefix) || $prefix === '#default' ? 'xmlns' : 'xmlns:'.$prefix, $namespaceURI
@@ -54,145 +48,99 @@ namespace FluentDOM {
       }
     }
 
-    /**
-     * @param string $name
-     * @return bool
-     */
-    public function startElement($name): bool {
+    public function startElement(string $name): bool {
       list($prefix, $localName) = QualifiedName::split($name);
       $namespaceURI = $this->_namespaces->resolveNamespace((string)$prefix);
       return $this->startElementNS((string)$prefix, $localName, $namespaceURI);
     }
 
-    /**
-     * @param string $name
-     * @param NULL|string $content
-     * @return bool
-     */
-    public function writeElement($name, $content = NULL): bool {
+    public function writeElement(string $name, string $content = NULL): bool {
       list($prefix, $localName) = QualifiedName::split($name);
       $namespaceURI = $this->_namespaces->resolveNamespace((string)$prefix);
       return $this->writeElementNS((string)$prefix, $localName, $namespaceURI, $content);
     }
 
-    /**
-     * @param string $prefix
-     * @param string $name
-     * @param string $namespaceURI
-     * @return bool
-     */
-    public function startElementNS($prefix, $name, $namespaceURI): bool {
+    public function startElementNS(?string $prefix, string $name, ?string $namespace): bool {
       $this->_xmlnsStack->push();
-      if ($this->_xmlnsStack->isDefined($prefix, $namespaceURI)) {
+      if ($this->_xmlnsStack->isDefined($prefix, $namespace)) {
         $result = parent::startElement(empty($prefix) ? $name : $prefix.':'.$name);
       } else {
-        $result = parent::startElementNs(empty($prefix) ? NULL : $prefix, $name, $namespaceURI);
-        $this->_xmlnsStack->add($prefix, $namespaceURI);
+        $result = parent::startElementNs(empty($prefix) ? NULL : $prefix, $name, $namespace);
+        $this->_xmlnsStack->add($prefix, $namespace);
       }
       return $result;
     }
 
-    /**
-     * @param string $prefix
-     * @param string $name
-     * @param string $uri
-     * @param NULL|string $content
-     * @return bool
-     */
-    public function writeElementNS($prefix, $name, $uri, $content = NULL): bool {
-      if ($this->_xmlnsStack->isDefined($prefix, $uri)) {
+    public function writeElementNS(
+      ?string $prefix, string $name, ?string $namespace, string $content = NULL
+    ): bool {
+      if ($this->_xmlnsStack->isDefined($prefix, $namespace)) {
         return parent::writeElement(empty($prefix) ? $name : $prefix.':'.$name, $content);
       }
-      return parent::writeElementNs(empty($prefix) ? NULL : $prefix, $name, $uri, $content);
+      return parent::writeElementNs(empty($prefix) ? NULL : $prefix, $name, $namespace, $content);
     }
 
-    /**
-     * @return bool
-     */
     public function endElement(): bool {
       $this->_xmlnsStack->pop();
       return parent::endElement();
     }
 
-    /**
-     * @param string $name
-     * @return bool
-     */
-    public function startAttribute($name): bool {
+    public function startAttribute(string $name): bool {
       list($prefix, $localName) = QualifiedName::split($name);
       return $this->startAttributeNS(
         (string)$prefix, $localName, $this->_namespaces->resolveNamespace((string)$prefix)
       );
     }
 
-    /**
-     * @param string $name
-     * @param string $value
-     * @return bool
-     */
-    public function writeAttribute($name, $value): bool {
+    public function writeAttribute(string $name, string $value): bool {
       list($prefix, $localName) = QualifiedName::split($name);
       return $this->writeAttributeNS(
         (string)$prefix, $localName, $this->_namespaces->resolveNamespace((string)$prefix), $value
       );
     }
 
-    /**
-     * @param string $prefix
-     * @param string $name
-     * @param string $uri
-     * @return bool
-     */
-    public function startAttributeNS($prefix, $name, $uri): bool {
+    public function startAttributeNS(?string $prefix, string $name, ?string $namespace): bool {
       if (empty($prefix)) {
         return parent::startAttribute($name);
       }
-      if ($this->_xmlnsStack->isDefined($prefix, $uri)) {
+      if ($this->_xmlnsStack->isDefined($prefix, $namespace)) {
         return parent::startAttribute($prefix.':'.$name);
       }
-      return parent::startAttributeNs($prefix, $name, $uri);
+      return parent::startAttributeNs($prefix, $name, $namespace);
     }
 
-    /**
-     * @param string $prefix
-     * @param string $localName
-     * @param string $uri
-     * @param string $content
-     * @return bool
-     */
-    public function writeAttributeNS($prefix, $localName, $uri, $content): bool {
-      if ((empty($prefix) && $localName === 'xmlns') || $prefix === 'xmlns') {
-        $namespacePrefix = empty($prefix) ? '' : $localName;
-        $namespaceURI = $content;
+    public function writeAttributeNS(
+      ?string $prefix, string $name, ?string $namespace, string $value
+    ): bool {
+      if ((empty($prefix) && $name === 'xmlns') || $prefix === 'xmlns') {
+        $namespacePrefix = empty($prefix) ? '' : $name;
+        $namespaceURI = $value;
         if (!$this->_xmlnsStack->isDefined($namespacePrefix, $namespaceURI)) {
-          $result = parent::writeAttribute(empty($prefix) ? 'xmlns' : 'xmlns:'.$localName, $namespaceURI);
+          $result = parent::writeAttribute(empty($prefix) ? 'xmlns' : 'xmlns:'.$name, $namespaceURI);
           $this->_xmlnsStack->add($namespacePrefix, $namespaceURI);
           return $result;
         }
         return FALSE;
       }
       if (empty($prefix)) {
-        return parent::writeAttribute($localName, $content);
+        return parent::writeAttribute($name, $value);
       }
-      if ($this->_xmlnsStack->isDefined($prefix, $uri)) {
-        return parent::writeAttribute($prefix.':'.$localName, $content);
+      if ($this->_xmlnsStack->isDefined($prefix, $namespace)) {
+        return parent::writeAttribute($prefix.':'.$name, $value);
       }
-      return parent::writeAttributeNs($prefix, $localName, $uri, $content);
+      return parent::writeAttributeNs($prefix, $name, $namespace, $value);
     }
 
     /**
      * Write a DOM node
-     *
-     * @param \DOMNode|\DOMNode[]|iterable $nodes
-     * @param int $maximumDepth
      */
-    public function collapse($nodes, int $maximumDepth = 1000): void {
+    public function collapse(\DOMNode|iterable $nodes, int $maximumDepth = 1000): void {
       if ($maximumDepth <= 0) {
         return;
       }
       if ($nodes instanceof \DOMNode) {
         $this->collapseNode($nodes, $maximumDepth);
-      } elseif (is_iterable($nodes)) {
+      } else {
         foreach ($nodes as $childNode) {
           $this->collapse($childNode, $maximumDepth);
         }

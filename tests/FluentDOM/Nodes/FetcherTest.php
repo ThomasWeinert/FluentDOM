@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -163,7 +163,7 @@ namespace FluentDOM\Nodes {
       $fd = (new Nodes(self::XML))->find('/items/group');
       $fetcher = new Fetcher($fd);
       $this->expectException(\InvalidArgumentException::class);
-      $this->expectErrorMessage('Invalid selector/expression.');
+      $this->expectExceptionMessage('Invalid selector/expression.');
       $fetcher->fetch('');
     }
 
@@ -174,7 +174,7 @@ namespace FluentDOM\Nodes {
       $fd = (new Nodes(self::XML))->find('/items/group');
       $fetcher = new Fetcher($fd);
       $this->expectException(\InvalidArgumentException::class);
-      $this->expectErrorMessage('Given selector/expression did not return a node list.');
+      $this->expectExceptionMessage('Given selector/expression did not return a node list.');
       $fetcher->fetch('count(*)');
     }
 

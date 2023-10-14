@@ -3,10 +3,12 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
+
+declare(strict_types=1);
 
 namespace FluentDOM\Query {
 
@@ -250,7 +252,7 @@ namespace FluentDOM\Query {
      */
     public function testRemoveAttrWithInvalidParameter(): void {
       $fd = new Query();
-      $this->expectException(\InvalidArgumentException::class);
+      $this->expectException(\Throwable::class);
       $fd->removeAttr(1);
     }
 

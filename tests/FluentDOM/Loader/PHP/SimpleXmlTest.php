@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -109,7 +109,7 @@ namespace FluentDOM\Loader\PHP {
     public function testLoadFragmentWithInvalidSourceExpectingException(): void {
       $loader = new SimpleXml();
       $this->expectException(InvalidArgument::class);
-      $this->expectErrorMessage('Invalid $source argument. Expected: SimpleXMLElement, string');
+      $this->expectExceptionMessage('Invalid $source argument. Expected: SimpleXMLElement, string');
       $loader->loadFragment(42, 'php/simplexml');
     }
   }

@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -36,20 +36,16 @@ namespace FluentDOM\Loader\Text {
     private const XMLNS = JsonDOM::XMLNS;
     private const DEFAULT_QNAME = '_';
 
-    private $_delimiter = ',';
-    private $_enclosure = '"';
-    private $_escape = '\\';
+    private string $_delimiter = ',';
+    private string $_enclosure = '"';
+    private string $_escape = '\\';
 
     /**
-     * @param mixed $source
-     * @param string $contentType
-     * @param array|\Traversable|Options $options
-     * @return Document|Result|NULL
      * @throws \InvalidArgumentException
-     * @throws InvalidSource
+     * @throws InvalidSource|\DOMException
      * @see Loadable::load
      */
-    public function load($source, string $contentType, $options = []): ?Result {
+    public function load(mixed $source, string $contentType, iterable $options = []): ?Result {
       $options = $this->getOptions($options);
       $hasHeaderLine = isset($options['HEADER']) ? (bool)$options['HEADER'] : !isset($options['FIELDS']);
       $this->configure($options);
@@ -70,13 +66,16 @@ namespace FluentDOM\Loader\Text {
      * @return DocumentFragment|NULL
      * @throws \InvalidArgumentException
      * @throws InvalidSource
+     * @throws \DOMException
      * @see Loadable::loadFragment
      *
      */
     public function loadFragment($source, string $contentType, $options = []): ?DocumentFragment {
       $options = $this->getOptions($options);
       $options[Options::ALLOW_FILE] = FALSE;
-      $hasHeaderLine = isset($options['FIELDS']) ? FALSE : (isset($options['HEADER']) && $options['HEADER']);
+      $hasHeaderLine = (
+        (!isset($options['FIELDS'])) && isset($options['HEADER']) && $options['HEADER']
+      );
       $this->configure($options);
       if ($this->supports($contentType) && ($lines = $this->getLines($source, $options))) {
         $document = new Document('1.0', 'UTF-8');
@@ -89,13 +88,11 @@ namespace FluentDOM\Loader\Text {
 
     /**
      * Append the provided lines to the parent.
-     *
-     * @param \DOMNode $parent
-     * @param array|\Traversable $lines
-     * @param bool $hasHeaderLine
-     * @param array|NULL $columns
+     * @throws \DOMException
      */
-    private function appendLines(\DOMNode $parent, $lines, bool $hasHeaderLine, array $columns = NULL): void {
+    private function appendLines(
+      \DOMNode $parent, iterable $lines, bool $hasHeaderLine, array $columns = NULL
+    ): void {
       try {
         $document = Implementation::getNodeDocument($parent);
         $headers = NULL;
@@ -117,14 +114,12 @@ namespace FluentDOM\Loader\Text {
             }
           }
         }
-      } catch (UnattachedNode $e) {
+      } catch (UnattachedNode) {
       }
     }
 
     /**
-     * @param Element $parent
-     * @param string $name
-     * @param string $value
+     * @throws \DOMException
      */
     private function appendField(Element $parent, string $name, string $value): void {
       $qname = QualifiedName::normalizeString($name, self::DEFAULT_QNAME);
@@ -134,13 +129,7 @@ namespace FluentDOM\Loader\Text {
       }
     }
 
-    /**
-     * @param array $record
-     * @param bool $hasHeaderLine
-     * @param array|NULL $columns
-     * @return array
-     */
-    private function getHeaders(array $record, bool $hasHeaderLine, $columns = NULL): array {
+    private function getHeaders(array $record, bool $hasHeaderLine, array $columns = NULL): array {
       if (\is_array($columns)) {
         $headers = [];
         foreach ($record as $index => $field) {
@@ -156,12 +145,9 @@ namespace FluentDOM\Loader\Text {
     }
 
     /**
-     * @param mixed $source
-     * @param Options $options
-     * @return NULL|\Traversable
      * @throws InvalidSource
      */
-    private function getLines($source, Options $options) {
+    private function getLines(mixed $source, Options $options): ?\Traversable {
       $result = NULL;
       if (\is_string($source)) {
         $options->isAllowed($sourceType = $options->getSourceType($source));
@@ -184,26 +170,21 @@ namespace FluentDOM\Loader\Text {
       return empty($result) ? NULL : $result;
     }
 
-    /**
-     * @param array|\Traversable|Options $options
-     */
-    private function configure($options): void {
+    private function configure(iterable $options): void {
       $this->_delimiter = $options['DELIMITER'] ?? $this->_delimiter;
       $this->_enclosure = $options['ENCLOSURE'] ?? $this->_enclosure;
       $this->_escape = $options['ESCAPE'] ?? $this->_escape;
     }
 
     /**
-     * @param array|\Traversable|Options $options
-     * @return Options
      * @throws \InvalidArgumentException
      */
-    public function getOptions($options): Options {
+    public function getOptions(iterable $options): Options {
       return new Options(
         $options,
         [
           Options::CB_IDENTIFY_STRING_SOURCE => function($source) {
-            return (\is_string($source) && (FALSE !== \strpos($source, "\n")));
+            return (is_string($source) && (str_contains($source, "\n")));
           }
         ]
       );

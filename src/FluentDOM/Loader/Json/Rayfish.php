@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -25,10 +25,9 @@ namespace FluentDOM\Loader\Json {
     public const CONTENT_TYPES = ['rayfish', 'application/rayfish', 'application/rayfish+json'];
 
     /**
-     * @param \DOMNode|Element $target
-     * @param mixed $json
+     * @throws \DOMException
      */
-    protected function transferTo(\DOMNode $target, $json): void {
+    protected function transferTo(\DOMNode $target, mixed $json): void {
       if (\is_object($json)) {
         /** @var Document $document */
         $document = $target->ownerDocument ?: $target;
@@ -56,10 +55,7 @@ namespace FluentDOM\Loader\Json {
     }
 
     /**
-     * @param Element $target
-     * @param \stdClass $json
-     * @param \stdClass $namespaces
-     * @param \stdClass $attributes
+     * @throws \DOMException
      */
     private function transferChildren(
       Element $target, \stdClass $json, \stdClass $namespaces, \stdClass $attributes
@@ -68,7 +64,7 @@ namespace FluentDOM\Loader\Json {
         $this->transferAttributes($target, $namespaces, $attributes);
         foreach ($json->{'#children'} as $value) {
           $name = $value->{'#name'} ?? '@';
-          if (0 !== \strpos($name, '@')) {
+          if (!str_starts_with($name, '@')) {
             $this->transferTo($target, $value);
           }
         }
@@ -102,9 +98,9 @@ namespace FluentDOM\Loader\Json {
         foreach ($json->{'#children'} as $child) {
           $name = $child->{'#name'} ?? '';
           $value = $child->{'#text'} ?? '';
-          if ($name === '@xmlns' || 0 === \strpos($name, '@xmlns:')) {
+          if ($name === '@xmlns' || str_starts_with($name, '@xmlns:')) {
             $namespaces->{\substr($name, 1)} = $value;
-          } elseif (0 === \strpos($name, '@')) {
+          } elseif (str_starts_with($name, '@')) {
             $attributes->{\substr($name, 1)} = $value;
           }
         }

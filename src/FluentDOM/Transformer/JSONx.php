@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -13,6 +13,7 @@ namespace FluentDOM\Transformer {
 
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Element;
+  use FluentDOM\DOM\Node\ParentNode;
   use FluentDOM\DOM\Xpath;
   use FluentDOM\Loader\Json\JsonDOM;
   use FluentDOM\Utility\StringCastable;
@@ -24,18 +25,14 @@ namespace FluentDOM\Transformer {
    */
   class JSONx implements StringCastable {
 
+    /** @noinspection HttpUrlsUsage */
     private const XMLNS_JSONX = 'http://www.ibm.com/xmlns/prod/2009/jsonx';
     private const XMLNS_JSONDOM = JsonDOM::XMLNS;
 
-    /**
-     * @var \DOMDocument
-     */
-    private $_document;
+    private \DOMDocument $_document;
 
     /**
      * Import a DOM document and use the JsonDOM rules to convert it into JSONx.
-     *
-     * @param \DOMDocument $document
      */
     public function __construct(\DOMDocument $document) {
       $this->_document = $document;
@@ -43,21 +40,17 @@ namespace FluentDOM\Transformer {
 
     /**
      * Create a JSONX document and return it as xml string
-     *
-     * @return string
      */
     public function __toString(): string {
       try {
         return $this->getDocument()->saveXML();
-      } catch (\Throwable $e) {
+      } catch (\Throwable) {
         return '';
       }
     }
 
     /**
      * Create and return a JSONx document.
-     *
-     * @return Document
      */
     public function getDocument(): Document {
       $document = new Document();
@@ -66,12 +59,9 @@ namespace FluentDOM\Transformer {
       return $document;
     }
 
-    /**
-     * @param Document|Element $parent
-     * @param \DOMElement $node
-     * @param bool $addNameAttribute
-     */
-    public function addNode($parent, \DOMElement $node, bool $addNameAttribute = FALSE) {
+    public function addNode(
+      ParentNode $parent, \DOMElement $node, bool $addNameAttribute = FALSE
+    ): void {
       switch ($this->getType($node)) {
       case 'object' :
         $result = $parent->appendElement('json:object');
@@ -103,12 +93,9 @@ namespace FluentDOM\Transformer {
       }
     }
 
-    /**
-     * @param Element $target
-     * @param \DOMElement $source
-     * @param bool $addNameAttribute
-     */
-    private function appendChildNodes(Element $target, \DOMElement $source, bool $addNameAttribute = FALSE) {
+    private function appendChildNodes(
+      Element $target, \DOMElement $source, bool $addNameAttribute = FALSE
+    ): void {
       $xpath = new Xpath($source->ownerDocument);
       /** @var \DOMElement $child */
       foreach ($xpath('*', $source) as $child) {
@@ -116,10 +103,6 @@ namespace FluentDOM\Transformer {
       }
     }
 
-    /**
-     * @param \DOMElement $node
-     * @return string
-     */
     private function getType(\DOMElement $node): string {
       if ($node->hasAttributeNS(self::XMLNS_JSONDOM, 'type')) {
         return $node->getAttributeNS(self::XMLNS_JSONDOM, 'type');

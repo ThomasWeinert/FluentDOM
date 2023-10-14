@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -22,16 +22,10 @@ namespace FluentDOM\Query {
    */
   class Attributes implements \ArrayAccess, \Countable, \IteratorAggregate {
 
-    /**
-     * owner object
-     * @var Query
-     */
-    private $_query;
+    private Query $_query;
 
     /**
      * Store the FluentDOM instance for later use
-     *
-     * @param Query $query
      */
     public function __construct(Query $query) {
       $this->_query = $query;
@@ -43,8 +37,6 @@ namespace FluentDOM\Query {
 
     /**
      * Convert the attributes of the first node into an array
-     *
-     * @return array
      */
     public function toArray(): array {
       $result = [];
@@ -60,10 +52,8 @@ namespace FluentDOM\Query {
      * Check if the first selected node has the specified attribute
      *
      * @see ArrayAccess::offsetExists()
-     * @param mixed $offset
-     * @return bool
      */
-    public function offsetExists($offset): bool {
+    public function offsetExists(mixed $offset): bool {
       if ($node = $this->getFirstElement()) {
         return $node->hasAttribute($offset);
       }
@@ -76,10 +66,8 @@ namespace FluentDOM\Query {
      * @see ArrayAccess::offsetGet()
      * @see FluentDOM::attr()
      * @example properties/attr-get.php Usage: Get attribute property
-     * @param mixed $offset
-     * @return string
      */
-    public function offsetGet($offset): string {
+    public function offsetGet(mixed $offset): string {
       return $this->_query->attr($offset);
     }
 
@@ -89,10 +77,8 @@ namespace FluentDOM\Query {
      * @see ArrayAccess::offsetSet()
      * @see FluentDOM::attr()
      * @example properties/attr-set.php Usage: Set attribute property
-     * @param mixed $offset
-     * @param mixed $value
      */
-    public function offsetSet($offset, $value): void {
+    public function offsetSet(mixed $offset, mixed $value): void {
       $this->_query->attr($offset, $value);
     }
 
@@ -122,7 +108,6 @@ namespace FluentDOM\Query {
      * Get the attribute count of the first selected node
      *
      * @see Countable::count()
-     * @return int
      */
     public function count(): int {
       if ($node = $this->getFirstElement()) {
@@ -131,9 +116,6 @@ namespace FluentDOM\Query {
       return 0;
     }
 
-    /**
-     * @return \DOMElement|NULL
-     */
     private function getFirstElement(): ?\DOMElement {
       if (isset($this->_query[0]) && $this->_query[0] instanceof \DOMElement) {
         return $this->_query[0];

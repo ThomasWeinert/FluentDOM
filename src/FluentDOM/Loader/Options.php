@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -30,19 +30,20 @@ namespace FluentDOM\Loader {
 
     public const CB_IDENTIFY_STRING_SOURCE = 'identifyStringSource';
 
-    private $_options = [
+    private array $_options = [
       self::PRESERVE_WHITESPACE => FALSE
     ];
-    protected $_callbacks = [
+    protected array $_callbacks = [
       self::CB_IDENTIFY_STRING_SOURCE => FALSE
     ];
 
     /**
-     * @param array|\Traversable|Options $options
-     * @param array $callbacks
      * @throws \InvalidArgumentException
      */
-    public function __construct($options = [], array $callbacks = []) {
+    public function __construct(
+      iterable $options = [],
+      array $callbacks = []
+    ) {
       if (is_iterable($options)) {
         foreach ($options as $name => $value) {
           $this->offsetSet($name, $value);
@@ -56,8 +57,6 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @param string $name
-     * @param callable $callback
      * @throws \InvalidArgumentException
      */
     public function setCallback(string $name, callable $callback): void {
@@ -69,13 +68,7 @@ namespace FluentDOM\Loader {
       $this->_callbacks[$name] = $callback;
     }
 
-    /**
-     * @param string $name
-     * @param mixed $default
-     * @param mixed ...$arguments
-     * @return mixed
-     */
-    private function executeCallback(string $name, $default, ...$arguments) {
+    private function executeCallback(string $name, mixed $default, mixed ...$arguments): mixed {
       $callback = $this->_callbacks[$name];
       if (\is_callable($callback)) {
         return $callback(...$arguments);
@@ -83,34 +76,19 @@ namespace FluentDOM\Loader {
       return $default;
     }
 
-    /**
-     * @return \Iterator
-     */
     public function getIterator(): \Iterator {
       return new \ArrayIterator($this->_options);
     }
 
-    /**
-     * @param mixed $offset
-     * @return bool
-     */
-    public function offsetExists($offset): bool {
+    public function offsetExists(mixed $offset): bool {
       return array_key_exists($offset, $this->_options);
     }
 
-    /**
-     * @param mixed $offset
-     * @return mixed
-     */
-    public function offsetGet($offset) {
+    public function offsetGet(mixed $offset): mixed {
       return $this->_options[$offset] ?? NULL;
     }
 
-    /**
-     * @param mixed $offset
-     * @param mixed $value
-     */
-    public function offsetSet($offset, $value): void {
+    public function offsetSet(mixed $offset, mixed $value): void {
       switch ($offset) {
       case self::IS_STRING :
         if ($value) {
@@ -133,18 +111,11 @@ namespace FluentDOM\Loader {
       $this->_options[$offset] = $value;
     }
 
-    /**
-     * @param mixed $offset
-     */
-    public function offsetUnset($offset): void {
+    public function offsetUnset(mixed $offset): void {
       $this->_options[$offset] = NULL;
     }
 
-    /**
-     * @param mixed $source
-     * @return string
-     */
-    public function getSourceType($source): string {
+    public function getSourceType(mixed $source): string {
       if ($this[self::IS_FILE]) {
         return self::IS_FILE;
       }
@@ -158,9 +129,6 @@ namespace FluentDOM\Loader {
     }
 
     /**
-     * @param string $sourceType
-     * @param bool $throwException
-     * @return bool
      * @throws InvalidSource
      */
     public function isAllowed(string $sourceType, bool $throwException = TRUE): bool {

@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -116,7 +116,7 @@ namespace FluentDOM\Nodes {
       $nodes = new Nodes(self::XML);
       $builder = new Builder($nodes);
       $this->expectException(\InvalidArgumentException::class);
-      $this->expectErrorMessage('Given selector did not return an node list');
+      $this->expectExceptionMessage('Given selector did not return an node list');
       $builder->getTargetNodes('count(//item)');
     }
 
@@ -127,7 +127,7 @@ namespace FluentDOM\Nodes {
       $nodes = new Nodes(self::XML);
       $builder = new Builder($nodes);
       $this->expectException(\InvalidArgumentException::class);
-      $this->expectErrorMessage('Invalid selector');
+      $this->expectExceptionMessage('Invalid selector');
       $builder->getTargetNodes(NULL);
     }
 

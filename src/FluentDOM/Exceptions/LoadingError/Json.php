@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -20,7 +20,7 @@ namespace FluentDOM\Exceptions\LoadingError {
      * JSON errors
      * @var array $_jsonErrors
      */
-    private static $_jsonErrors = [
+    private static array $_jsonErrors = [
       -1 => 'Unknown error has occurred',
       0 => 'No error has occurred',
       1 => 'The maximum stack depth has been exceeded',

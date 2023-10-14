@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -30,26 +30,18 @@ namespace FluentDOM\DOM {
   class Document extends \DOMDocument implements Node\ParentNode {
 
     use
-      Node\ParentNode\Properties,
+      Node\ParentNode\Implementation,
       Node\QuerySelector\Implementation,
       Node\Xpath;
 
-    /**
-     * @var Xpath
-     */
-    private $_xpath;
+    private ?Xpath $_xpath = NULL;
 
-    /**
-     * @var Namespaces
-     */
-    private $_namespaces;
+    private ?Namespaces $_namespaces;
 
     /**
      * Map dom node classes to extended descendants.
-     *
-     * @var array
      */
-    private static $_classes = [
+    private static array $_classes = [
       'DOMDocument' => self::class,
       'DOMAttr' => Attribute::class,
       'DOMCdataSection' => CdataSection::class,
@@ -61,11 +53,7 @@ namespace FluentDOM\DOM {
       'DOMEntityReference' => EntityReference::class
     ];
 
-    /**
-     * @param string $version
-     * @param string $encoding
-     */
-    public function __construct($version = '1.0', $encoding = 'UTF-8') {
+    public function __construct(string $version = '1.0', ?string $encoding = 'UTF-8') {
       parent::__construct($version, $encoding ?: 'UTF-8');
       foreach (self::$_classes as $superClass => $className) {
         $this->registerNodeClass($superClass, $className);
@@ -73,7 +61,7 @@ namespace FluentDOM\DOM {
       $this->_namespaces = new Namespaces();
     }
 
-    public function __clone() {
+    public function __clone(): void {
       $this->_namespaces = clone $this->_namespaces;
     }
 
@@ -117,11 +105,9 @@ namespace FluentDOM\DOM {
      *
      * If the argument is provided ALL namespaces will be replaced.
      *
-     * @param array|\Traversable $namespaces
-     * @return Namespaces
      * @throws \LogicException
      */
-    public function namespaces($namespaces = NULL): Namespaces {
+    public function namespaces(iterable $namespaces = NULL): Namespaces {
       if (NULL !== $namespaces) {
         $this->_namespaces->assign([]);
         foreach($namespaces as $prefix => $namespaceURI) {
@@ -140,18 +126,18 @@ namespace FluentDOM\DOM {
      * If $content is an array, the $content argument  will be merged with the $attributes
      * argument.
      *
-     * @param string $qualifiedName
-     * @param string|array $content
-     * @param array|NULL $attributes
-     * @return Element
-     *@throws \LogicException
+     * @throws \LogicException|\DOMException
      */
-    public function createElement($qualifiedName, $content = NULL, array $attributes = NULL): Element {
-      [$prefix, $localName] = QualifiedName::split($qualifiedName);
+    public function createElement(
+      string $name,
+      string|array $value = NULL,
+      array $attributes = NULL
+    ): Element {
+      [$prefix, $localName] = QualifiedName::split($name);
       $namespaceURI = '';
       if ($prefix !== FALSE) {
         if (empty($prefix)) {
-          $qualifiedName = $localName;
+          $name = $localName;
         } else {
           if ($this->namespaces()->isReservedPrefix($prefix)) {
             throw new \LogicException(
@@ -164,27 +150,25 @@ namespace FluentDOM\DOM {
         $namespaceURI = (string)$this->namespaces()->resolveNamespace('#default');
       }
       if ($namespaceURI !== '') {
-        $node = $this->createElementNS($namespaceURI, $qualifiedName);
+        $node = $this->createElementNS($namespaceURI, $name);
       } elseif (isset($this->_namespaces['#default'])) {
-        $node = $this->createElementNS('', $qualifiedName);
+        $node = $this->createElementNS('', $name);
       } else {
-        $node = parent::createElement($qualifiedName);
+        $node = parent::createElement($name);
       }
-      $this->appendAttributes($node, $content, $attributes);
-      $this->appendContent($node, $content);
+      $this->appendAttributes($node, $value, $attributes);
+      $this->appendContent($node, $value);
       return $node;
     }
 
-    /**
-     * @param string $namespaceURI
-     * @param string $qualifiedName
-     * @param string|NULL $content
-     * @return Element
-     */
-    public function createElementNS($namespaceURI, $qualifiedName, $content = NULL): Element {
+    public function createElementNS(
+      string|null $namespace,
+      string $qualifiedName,
+      string $value = NULL
+    ): Element {
       /** @var Element $node */
-      $node = parent::createElementNS($namespaceURI, $qualifiedName);
-      $this->appendContent($node, $content);
+      $node = parent::createElementNS($namespace, $qualifiedName);
+      $this->appendContent($node, $value);
       return $node;
     }
 
@@ -194,12 +178,9 @@ namespace FluentDOM\DOM {
      *
      * Allow to add a attribute value directly.
      *
-     * @param string $name
-     * @param string|NULL $value
-     * @return Attribute
-     * @throws \LogicException
+     * @throws \LogicException|\DOMException
      */
-    public function createAttribute($name, $value = NULL): Attribute {
+    public function createAttribute(string $name, string $value = NULL): Attribute {
       [$prefix] = QualifiedName::split($name);
       if (empty($prefix)) {
         $node = parent::createAttribute($name);
@@ -215,25 +196,24 @@ namespace FluentDOM\DOM {
     /**
      * Overload appendElement to add a text content and attributes directly.
      *
-     * @param string $name
-     * @param string $content
-     * @param array|NULL $attributes
-     * @return Element
-     * @throws \LogicException
+     * @throws \LogicException|\DOMException
      */
-    public function appendElement(string $name, $content = '', array $attributes = NULL): Element {
+    public function appendElement(
+      string $name,
+      string|array $value = '',
+      array $attributes = NULL
+    ): Element {
       $this->appendChild(
-        $node = $this->createElement($name, $content, $attributes)
+        $node = $this->createElement($name, $value, $attributes)
       );
       return $node;
     }
 
-    /**
-     * @param \DOMElement $node
-     * @param string|array|NULL $content
-     * @param array|NULL $attributes
-     */
-    private function appendAttributes(\DOMElement $node, $content = NULL, array $attributes = NULL): void {
+    private function appendAttributes(
+      \DOMElement $node,
+      string|array $content = NULL,
+      array $attributes = NULL
+    ): void {
       if (\is_array($content)) {
         /** @noinspection CallableParameterUseCaseInTypeContextInspection */
         $attributes = (NULL === $attributes) ? $content : \array_merge($content, $attributes);
@@ -245,11 +225,7 @@ namespace FluentDOM\DOM {
       }
     }
 
-    /**
-     * @param \DOMElement $node
-     * @param string|array|NULL $content
-     */
-    private function appendContent(\DOMElement $node, $content = NULL): void {
+    private function appendContent(\DOMElement $node, string|array $content = NULL): void {
       if (!((empty($content) && !\is_numeric($content)) || \is_array($content) )) {
         $node->appendChild($this->createTextNode((string)$content));
       }
@@ -259,27 +235,27 @@ namespace FluentDOM\DOM {
      * Allow to save XML fragments, providing a node list
      *
      * Overloading saveXML() with a removed type hint triggers an E_STRICT error,
-     * so we the function needs a new name. :-(
-     *
-     * @param \DOMNode|\DOMNodeList|NULL $context
-     * @param int $options
-     * @return string
+     * so the function needs a new name. :-(
      */
-    public function toXml($context = NULL, int $options = 0): string {
+    public function saveXML(\DOMNode|\DOMNodeList $context = NULL, int $options = NULL): string {
       if ($context instanceof \DOMNodeList) {
         $result = '';
         foreach ($context as $node) {
-          $result .= $this->saveXML($node, $options);
+          $result .= parent::saveXML($node, $options ?: 0);
         }
         return $result;
       }
-      return $this->saveXML($context, $options);
+      return parent::saveXML($context, $options ?: 0);
     }
 
     /**
+     * @deprecated
+     */
+    public function toXml(\DOMNode|\DOMNodeList $context = NULL, int $options = NULL): string {
+      return $this->saveXML($context, $options);
+    }
+      /**
      * Allow to cast the document to string, returning the whole XML.
-     *
-     * @return string
      */
     public function __toString(): string {
       return $this->saveXML();
@@ -291,20 +267,16 @@ namespace FluentDOM\DOM {
      * This is an alias for the extended saveHTML() method. Make it
      * consistent with toXml()
      *
-     * @param \DOMNode|\DOMNodeList|NULL $context
-     * @return string
+     * @deprecated
      */
-    public function toHtml($context = NULL): string {
+    public function toHtml(\DOMNode|\DOMNodeList $context = NULL): string {
       return $this->saveHTML($context);
     }
 
     /**
      * Allow to save HTML fragments, providing a node list
-     *
-     * @param \DOMNode|\DOMNodeList|NULL $context
-     * @return string
      */
-    public function saveHTML($context = NULL): string {
+    public function saveHTML(\DOMNode|\DOMNodeList $context = NULL): string {
       if ($context instanceof \DOMDocumentFragment) {
         $context = $context->childNodes;
       }
@@ -336,11 +308,9 @@ namespace FluentDOM\DOM {
     /**
      * Allow getElementsByTagName to use the defined namespaces.
      *
-     * @param string $qualifiedName
-     * @return \DOMNodeList
      * @throws \LogicException
      */
-    public function getElementsByTagName($qualifiedName): \DOMNodeList {
+    public function getElementsByTagName(string $qualifiedName): \DOMNodeList {
       list($prefix, $localName) = QualifiedName::split($qualifiedName);
       $namespaceURI = (string)$this->namespaces()->resolveNamespace((string)$prefix);
       if ($namespaceURI !== '') {
@@ -350,10 +320,7 @@ namespace FluentDOM\DOM {
     }
 
     /**
-     * @param string|null $qualifiedName
-     * @param string|null $publicId
-     * @param string|null $systemId
-     * @return \DOMDocumentType
+     * @throws \DOMException
      */
     public function createDocumentType(
       string $qualifiedName = NULL, string $publicId = NULL, string $systemId = NULL

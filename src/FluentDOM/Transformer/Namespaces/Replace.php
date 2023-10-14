@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -24,15 +24,9 @@ namespace FluentDOM\Transformer\Namespaces {
    */
   class Replace extends Namespaces {
 
-    /**
-     * @var array
-     */
-    private $_namespaces;
+    private array $_namespaces;
 
-    /**
-     * @var array
-     */
-    private $_prefixes;
+    private array $_prefixes;
 
     public function __construct(\DOMNode $node, array $namespaces, array $prefixes = []) {
       parent::__construct($node);
@@ -41,9 +35,7 @@ namespace FluentDOM\Transformer\Namespaces {
     }
 
     /**
-     * @param \DOMNode $target
-     * @param \DOMNode $source
-     * @throws UnattachedNode
+     * @throws UnattachedNode|\DOMException
      */
     protected function addNode(\DOMNode $target, \DOMNode $source): void {
       if ($source instanceof \DOMElement) {
@@ -55,9 +47,7 @@ namespace FluentDOM\Transformer\Namespaces {
     }
 
     /**
-     * @param \DOMNode $target
-     * @param \DOMElement $source
-     * @throws UnattachedNode
+     * @throws UnattachedNode|\DOMException
      */
     private function importElement(\DOMNode $target, \DOMElement $source): void {
       $document = Implementation::getNodeDocument($target);
@@ -79,15 +69,11 @@ namespace FluentDOM\Transformer\Namespaces {
       }
     }
 
-    /**
-     * @param \DOMElement $parent
-     * @param \DOMAttr $source
-     */
     private function importAttribute(\DOMElement $parent, \DOMAttr $source): void {
       $document = $parent->ownerDocument;
       $namespaceURI = $this->getMappedNamespace((string)$source->namespaceURI);
       $prefix = $this->getMappedPrefix($namespaceURI) ?? $source->prefix;
-      if (empty($namespaceURI) || '' === (string)$prefix) {
+      if (empty($namespaceURI) || NULL === $prefix || '' === $prefix) {
         $attribute = $document->createAttribute($source->localName);
       } else {
         $attribute = $document->createAttributeNS($namespaceURI, $prefix.':'.$source->localName);
@@ -96,10 +82,6 @@ namespace FluentDOM\Transformer\Namespaces {
       $parent->setAttributeNode($attribute);
     }
 
-    /**
-     * @param string $namespaceURI
-     * @return string
-     */
     private function getMappedNamespace(string $namespaceURI): string {
       if (isset($this->_namespaces[$namespaceURI])) {
         return (string)$this->_namespaces[$namespaceURI];
@@ -107,10 +89,6 @@ namespace FluentDOM\Transformer\Namespaces {
       return $namespaceURI;
     }
 
-    /**
-     * @param string $namespaceURI
-     * @return string|NULL
-     */
     private function getMappedPrefix(string $namespaceURI): ?string {
       if (isset($this->_prefixes[$namespaceURI])) {
         return (string)$this->_prefixes[$namespaceURI];

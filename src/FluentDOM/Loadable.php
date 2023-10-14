@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace FluentDOM {
 
   use FluentDOM\DOM\DocumentFragment;
-  use FluentDOM\Loader\Options;
   use FluentDOM\Loader\Result;
 
   /**
@@ -25,32 +24,19 @@ namespace FluentDOM {
 
     /**
      * Validate if the loader supports the given content type
-     *
-     * @param string $contentType
-     * @return bool
      */
     public function supports(string $contentType):bool;
 
     /**
      * Load the data source and return the new DOM document. Return NULL if
      * the data source could not be loaded.
-     *
-     * @param mixed $source
-     * @param string $contentType
-     * @param array|\Traversable|Options $options Optional options for the loader
-     * @return Result|NULL
      */
-    public function load($source, string $contentType, $options = []): ?Result;
+    public function load($source, string $contentType, iterable $options = []): ?Result;
 
     /**
      * Load the data source and return the new DOM document. Return NULL if
      * the data source could not be loaded.
-     *
-     * @param mixed $source
-     * @param string $contentType
-     * @param array|\Traversable|Options $options Optional options for the loader
-     * @return NULL|DocumentFragment
      */
-    public function loadFragment($source, string $contentType, $options = []): ?DocumentFragment;
+    public function loadFragment($source, string $contentType, iterable $options = []): ?DocumentFragment;
   }
 }

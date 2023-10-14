@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -115,6 +115,20 @@ namespace FluentDOM {
         substr($functionName, 5),
         $type
       );
+    }
+
+    public function expectErrorMessageContains(string $message): void {
+      set_error_handler(
+        /**
+         * @throws \ErrorException
+         */
+        static function ($code, $message) {
+          restore_error_handler();
+          throw new \ErrorException($message, $code);
+        },
+        E_ALL
+      );
+      $this->expectExceptionMessageMatches('('.preg_quote($message, '(').')');
     }
 
     public function expectPropertyIsUndefined(): void {

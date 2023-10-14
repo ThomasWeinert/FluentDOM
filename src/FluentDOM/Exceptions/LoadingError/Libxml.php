@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2019 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -15,7 +15,7 @@ namespace FluentDOM\Exceptions\LoadingError {
 
   class Libxml extends \UnexpectedValueException implements Exceptions\LoadingError {
 
-    private static $_levels = [
+    private static array $_levels = [
       LIBXML_ERR_WARNING => 'warning',
       LIBXML_ERR_ERROR => 'error',
       LIBXML_ERR_FATAL => 'fatal error'

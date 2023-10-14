@@ -1,16 +1,23 @@
-<?php
-/*
+<?php /*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
- */
+ */ /*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */ /** @noinspection PhpComposerExtensionStubsInspection */
 declare(strict_types=1);
 
 namespace FluentDOM\XMLReader {
 
+  use FluentDOM\Utility\Constraints;
   use FluentDOM\XMLReader;
 
   /**
@@ -20,42 +27,24 @@ namespace FluentDOM\XMLReader {
    */
   class Iterator implements \Iterator {
 
-    /**
-     * @var XMLReader
-     */
-    private $_reader;
-    /**
-     * @var string|NULL
-     */
-    private $_name;
-    /**
-     * @var callable
-     */
-    private $_filter;
+    private XMLReader $_reader;
 
-    /**
-     * @var int
-     */
-    private $_key = -1;
+    private ?string $_name;
+    private ?\Closure $_filter;
 
-    /**
-     * @var NULL|\DOMNode
-     */
-    private $_current;
+    private int $_key = -1;
+
+    private ?\DOMNode $_current = NULL;
 
     /**
      * Iterator constructor.
-     *
-     * @param XMLReader $reader
-     * @param NULL|string $name tag name filter
-     * @param callable|NULL $filter
      */
     public function __construct(
-      XMLReader $reader, $name = NULL, callable $filter = NULL
+      XMLReader $reader, string $name = NULL, callable $filter = NULL
     ) {
       $this->_reader = $reader;
       $this->_name = $name;
-      $this->_filter = $filter;
+      $this->_filter = Constraints::filterCallable($filter);
     }
 
     /**
@@ -90,8 +79,8 @@ namespace FluentDOM\XMLReader {
     protected function move(
       XMLReader $reader, string $name = NULL, callable $filter = NULL
     ): bool {
-      while ($found = $reader->read($name, NULL, $filter)) {
-        if ($found && $reader->nodeType !== XMLReader::END_ELEMENT) {
+      while ($reader->read($name, NULL, $filter)) {
+        if ($reader->nodeType !== \XMLReader::END_ELEMENT) {
           return TRUE;
         }
       }

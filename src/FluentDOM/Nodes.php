@@ -15,6 +15,7 @@ namespace FluentDOM {
   use FluentDOM\DOM\Xpath;
   use FluentDOM\Exceptions\InvalidSource\Variable as InvalidVariableSource;
   use FluentDOM\Exceptions\NoSerializer;
+  use FluentDOM\Exceptions\ReadOnlyPropertyError;
   use FluentDOM\Exceptions\UndeclaredPropertyError;
   use FluentDOM\Xpath\Transformer;
   use FluentDOM\Utility\Constraints;
@@ -512,22 +513,14 @@ namespace FluentDOM {
      * @throws \InvalidArgumentException
      */
     public function __set(string $name, mixed $value): void {
-      switch ($name) {
-      case 'contentType' :
-        $this->setContentType($value);
-        break;
-      case 'onPrepareSelector' :
-        if ($callback = Constraints::filterCallable($value, TRUE, FALSE)) {
-          $this->_onPrepareSelector = $callback;
-        }
-        break;
-      case 'document' :
-      case 'length' :
-      case 'xpath' :
-        throw new \BadMethodCallException('Can not set readonly value.');
-      default :
-        throw new UndeclaredPropertyError($this, $name);
-      }
+      match ($name) {
+        'contentType' => $this->setContentType($value),
+        'onPrepareSelector' => $this->_onPrepareSelector = Constraints::filterCallable($value, TRUE, FALSE),
+        'document',
+        'length',
+        'xpath' => throw new ReadOnlyPropertyError($this, $name),
+        default => throw new UndeclaredPropertyError($this, $name)
+      };
     }
 
     /**
@@ -537,26 +530,13 @@ namespace FluentDOM {
      * @throws \BadMethodCallException
      */
     public function __unset(string $name): void {
-      switch ($name) {
-      case 'contentType' :
-      case 'document' :
-      case 'length' :
-      case 'xpath' :
-        throw new \BadMethodCallException(
-          \sprintf(
-            'Can not unset property %s::$%s',
-            \get_class($this),
-            $name
-          )
-        );
-      }
-      throw new \BadMethodCallException(
-        \sprintf(
-          'Can not unset non existing property %s::$%s',
-          \get_class($this),
-          $name
-        )
-      );
+      match ($name) {
+        'contentType',
+        'document',
+        'length',
+        'xpath' => throw new ReadOnlyPropertyError($this, $name),
+        default => throw new UndeclaredPropertyError($this, $name)
+      };
     }
 
     /**
@@ -645,8 +625,6 @@ namespace FluentDOM {
           }
           $this->_nodes[] = $node;
         }
-      } elseif (NULL !== $elements) {
-        throw new \InvalidArgumentException('Invalid elements variable.');
       }
       return $this;
     }

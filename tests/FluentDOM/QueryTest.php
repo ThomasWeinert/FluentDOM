@@ -3,12 +3,14 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
 
 namespace FluentDOM {
+
+  use FluentDOM\Exceptions\ReadOnlyPropertyError;
 
   require_once __DIR__.'/TestCase.php';
 
@@ -31,12 +33,9 @@ namespace FluentDOM {
      * @dataProvider providePropertyNames
      * @param string $propertyName
      */
-    public function testUnsetPropertyContentType(string $propertyName): void {
+    public function testUnsetProperty(string $propertyName): void {
       $fd = new Query();
-      $this->expectException(\BadMethodCallException::class);
-      $this->expectExceptionMessage(
-        'Can not unset property FluentDOM\Query::$'.$propertyName
-      );
+      $this->expectException(ReadOnlyPropertyError::class);
       unset($fd->$propertyName);
     }
 

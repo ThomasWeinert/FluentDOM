@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace FluentDOM\Utility {
 
-  abstract class ValueType {
+  abstract class JsonValueType {
 
     public const TYPE_NULL = 'null';
     public const TYPE_STRING = 'string';

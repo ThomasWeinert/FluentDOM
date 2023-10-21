@@ -21,7 +21,7 @@ namespace FluentDOM\Loader\Json {
   use FluentDOM\Loader\Supports\Json as SupportsJson;
   use FluentDOM\Utility\Constraints;
   use FluentDOM\Utility\QualifiedName;
-  use FluentDOM\Utility\ValueType;
+  use FluentDOM\Utility\JsonValueType;
 
   /**
    * Load a DOM document from a json string or file
@@ -137,16 +137,16 @@ namespace FluentDOM\Loader\Json {
         return;
       }
       if ($target instanceof Element || $target instanceOf DocumentFragment) {
-        $type = ValueType::getTypeFromValue($json);
+        $type = JsonValueType::getTypeFromValue($json);
         switch ($type) {
-        case ValueType::TYPE_ARRAY :
+        case JsonValueType::TYPE_ARRAY :
           $this->transferArrayTo($target, $json, $recursions - 1);
           break;
-        case ValueType::TYPE_OBJECT :
+        case JsonValueType::TYPE_OBJECT :
           $this->transferObjectTo($target, $json, $recursions - 1);
           break;
         default :
-          if ($target instanceof \DOMElement && ($this->_verbose || $type !== ValueType::TYPE_STRING)) {
+          if ($target instanceof \DOMElement && ($this->_verbose || $type !== JsonValueType::TYPE_STRING)) {
             $target->setAttributeNS(self::XMLNS, 'json:type', $type);
           }
           $string = $this->getValueAsString($json, $type);
@@ -176,8 +176,8 @@ namespace FluentDOM\Loader\Json {
 
     private function getValueAsString(mixed $value, string $type): ?string {
       return match ($type) {
-        ValueType::TYPE_NULL => NULL,
-        ValueType::TYPE_BOOLEAN => $value ? 'true' : 'false',
+        JsonValueType::TYPE_NULL => NULL,
+        JsonValueType::TYPE_BOOLEAN => $value ? 'true' : 'false',
         default => (string)$value,
       };
     }

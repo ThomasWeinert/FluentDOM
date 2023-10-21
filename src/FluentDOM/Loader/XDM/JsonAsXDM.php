@@ -20,7 +20,7 @@ namespace FluentDOM\Loader\XDM {
   use FluentDOM\Loadable;
   use FluentDOM\Loader\Result;
   use FluentDOM\Loader\Supports\Json as SupportsJson;
-  use FluentDOM\Utility\ValueType;
+  use FluentDOM\Utility\JsonValueType;
 
   /**
    * Load a XDM (Xpath Data Model) document from a json string or file
@@ -115,7 +115,7 @@ namespace FluentDOM\Loader\XDM {
           $target instanceOf DocumentFragment
         )
       ) {
-        $type = ValueType::getTypeFromValue($json);
+        $type = JsonValueType::getTypeFromValue($json);
         $target->appendChild(
           $element = $document->createElementNS(
             self::XMLNS_FN, $this->getNameForType($type)
@@ -125,12 +125,12 @@ namespace FluentDOM\Loader\XDM {
           $element->setAttribute('key', $key);
         }
         switch ($type) {
-        case ValueType::TYPE_ARRAY :
+        case JsonValueType::TYPE_ARRAY :
           foreach ($json as $childValue) {
             $this->transferTo($element, $childValue, NULL, $recursions - 1);
           }
           break;
-        case ValueType::TYPE_OBJECT :
+        case JsonValueType::TYPE_OBJECT :
           $properties = \is_array($json) ? $json : \get_object_vars($json);
           foreach ($properties as $childKey => $childValue) {
             $this->transferTo($element, $childValue, $childKey, $recursions - 1);
@@ -147,15 +147,15 @@ namespace FluentDOM\Loader\XDM {
 
     private function getValueAsString(mixed $value, string $type): ?string {
       return match ($type) {
-        ValueType::TYPE_NULL => NULL,
-        ValueType::TYPE_BOOLEAN => $value ? 'true' : 'false',
+        JsonValueType::TYPE_NULL => NULL,
+        JsonValueType::TYPE_BOOLEAN => $value ? 'true' : 'false',
         default => (string)$value,
       };
     }
 
     private function getNameForType(string $type): string {
       return match ($type) {
-        ValueType::TYPE_OBJECT => 'map',
+        JsonValueType::TYPE_OBJECT => 'map',
         default => $type,
       };
     }

@@ -10,6 +10,7 @@
 
 namespace FluentDOM {
 
+  use FluentDOM\Exceptions\ReadOnlyPropertyError;
   use FluentDOM\Exceptions\UndeclaredPropertyError;
   use FluentDOM\Loader\Result;
   use FluentDOM\DOM\Document;
@@ -608,7 +609,7 @@ namespace FluentDOM {
     public function testIterator(): void {
       $fd = new Nodes(self::XML);
       $fd = $fd->find('//item');
-      $this->assertCount(3, $fd);
+      $this->assertCount(3, iterator_to_array($fd));
     }
 
     /**
@@ -713,7 +714,7 @@ namespace FluentDOM {
      */
     public function testDynamicPropertyUnsetOnNonExistingPropertyExpectingException(): void {
       $fd = new Nodes();
-      $this->expectException(\BadMethodCallException::class);
+      $this->expectException(UndeclaredPropertyError::class);
       unset($fd->dynamicProperty);
     }
 
@@ -722,7 +723,7 @@ namespace FluentDOM {
      */
     public function testSetPropertyXpath(): void {
       $fd = new Nodes(self::XML);
-      $this->expectException(\BadMethodCallException::class);
+      $this->expectException(ReadOnlyPropertyError::class);
       $fd->xpath = $fd->xpath();
     }
 
@@ -763,7 +764,7 @@ namespace FluentDOM {
      */
     public function testSetPropertyLength(): void {
       $fd = new Nodes();
-      $this->expectException(\BadMethodCallException::class);
+      $this->expectException(ReadOnlyPropertyError::class);
       $fd->length = 50;
     }
 
@@ -773,7 +774,7 @@ namespace FluentDOM {
      */
     public function testUnsetPropertyLength(): void {
       $fd = new Nodes;
-      $this->expectException(\BadMethodCallException::class);
+      $this->expectException(ReadOnlyPropertyError::class);
       unset($fd->length);
     }
 

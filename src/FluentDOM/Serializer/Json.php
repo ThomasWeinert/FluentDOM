@@ -74,29 +74,27 @@ namespace FluentDOM\Serializer {
     }
 
     protected function getNode(\DOMElement $node): mixed {
-      switch ($this->getType($node)) {
-      case 'object' :
+      $type = $this->getType($node);
+      if ($type === 'object') {
         $result = new \stdClass();
         /** @var \DOMElement $child */
         foreach ($this->getChildElements($node) as $child) {
           $key = $this->getKey($child);
           $result->{$key} = $this->getNode($child);
         }
-        break;
-      case 'array' :
+      } elseif ($type === 'array') {
         $result = [];
         foreach ($this->getChildElements($node) as $child) {
           $result[] = $this->getNode($child);
         }
-        break;
-      case 'number' :
-        return (float)$node->nodeValue;
-      case 'boolean' :
-        return $node->nodeValue === 'true';
-      case 'null' :
+      } elseif ($type === 'number') {
+        return (float)$node->textContent;
+      } elseif ($type === 'boolean') {
+        return $node->textContent === 'true';
+      } elseif ($type === 'null') {
         return NULL;
-      default :
-        return $node->nodeValue;
+      } else {
+        return $node->textContent;
       }
       return $result;
     }

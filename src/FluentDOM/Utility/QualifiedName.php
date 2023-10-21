@@ -128,17 +128,14 @@ namespace FluentDOM\Utility {
      * @throws \LogicException
      */
     public function __get(string $property): string {
-      switch ($property) {
-      case 'name' :
-        return empty($this->_prefix) ? $this->_localName : $this->_prefix.':'.$this->_localName;
-      case 'localName' :
-        return $this->_localName;
-      case 'prefix' :
-        return $this->_prefix;
-      }
-      throw new \LogicException(
-        \sprintf('Invalid property %s::$%s', \get_class($this), $property)
-      );
+      return match ($property) {
+        'name' => empty($this->_prefix) ? $this->_localName : $this->_prefix . ':' . $this->_localName,
+        'localName' => $this->_localName,
+        'prefix' => $this->_prefix,
+        default => throw new \LogicException(
+          \sprintf('Invalid property %s::$%s', \get_class($this), $property)
+        )
+      };
     }
 
     /**

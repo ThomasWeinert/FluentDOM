@@ -13,6 +13,7 @@ namespace FluentDOM {
 
   use FluentDOM\Exceptions\InvalidFragmentLoader;
   use FluentDOM\Exceptions\LoadingError\EmptyResult;
+  use FluentDOM\Exceptions\ReadOnlyPropertyError;
   use FluentDOM\Nodes\Fetcher;
   use FluentDOM\Utility\Constraints;
   use FluentDOM\Utility\QualifiedName;
@@ -55,20 +56,18 @@ namespace FluentDOM {
      * @throws \LogicException
      */
     public function __get(string $name): mixed {
-      switch ($name) {
-      case 'attr' :
-        return new Query\Attributes($this);
-      case 'css' :
-        return new Query\Css($this);
-      case 'data' :
-        if ($node = $this->getFirstElement()) {
-          return new Query\Data($node);
-        }
-        throw new \UnexpectedValueException(
-          'UnexpectedValueException: first selected node is no element.'
-        );
-      }
-      return parent::__get($name);
+      return match ($name) {
+        'attr' => new Query\Attributes($this),
+        'css' => new Query\Css($this),
+        'data' => (
+          ($node = $this->getFirstElement())
+            ? new Query\Data($node)
+            : throw new \UnexpectedValueException(
+           'UnexpectedValueException: first selected node is no element.'
+            )
+        ),
+        default => parent::__get($name),
+      };
     }
 
     /**
@@ -78,22 +77,16 @@ namespace FluentDOM {
      * @throws \BadMethodCallException
      */
     public function __set(string $name, mixed $value): void {
-      switch ($name) {
-      case 'attr' :
-        $this->attr(
+      match ($name) {
+        'attr' => $this->attr(
           $value instanceof Query\Attributes ? $value->toArray() : $value
-        );
-        return;
-      case 'css' :
-        $this->css($value);
-        return;
-      case 'data' :
-        $this->data(
+        ),
+        'css' => $this->css($value),
+        'data' => $this->data(
           $value instanceof Query\Data ? $value->toArray() : $value
-        );
-        return;
-      }
-      parent::__set($name, $value);
+        ),
+        default => parent::__set($name, $value)
+      };
     }
 
     /**
@@ -103,22 +96,13 @@ namespace FluentDOM {
      * @throws \BadMethodCallException
      */
     public function __unset(string $name): void {
-      switch ($name) {
-      case 'attr' :
-      case 'css' :
-      case 'data' :
-        throw new \BadMethodCallException(
-          \sprintf(
-            'Can not unset property %s::$%s',
-            \get_class($this),
-            $name
-          )
-        );
-      }
-      parent::__unset($name);
-      // @codeCoverageIgnoreStart
+      match ($name) {
+        'attr',
+        'css',
+        'data' => throw new ReadOnlyPropertyError($this, $name),
+        default => parent::__unset($name)
+      };
     }
-    // @codeCoverageIgnoreEnd
 
     /******************
      * Internal
@@ -1260,13 +1244,7 @@ namespace FluentDOM {
       string|iterable $name,
       string|float|int|callable $value = NULL
     ): iterable {
-      if (\is_string($name)) {
-        return [$name => $value];
-      }
-      if (is_iterable($name)) {
-        return $name;
-      }
-      throw new \InvalidArgumentException('Invalid css property name argument type.');
+      return is_string($name) ?  [$name => $value] : $name;
     }
 
     /**

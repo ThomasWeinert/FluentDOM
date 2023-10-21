@@ -62,27 +62,20 @@ namespace FluentDOM\Transformer {
     public function addNode(
       ParentNode $parent, \DOMElement $node, bool $addNameAttribute = FALSE
     ): void {
-      switch ($this->getType($node)) {
-      case 'object' :
+      $type = $this->getType($node);
+      if ($type === 'object') {
         $result = $parent->appendElement('json:object');
         $this->appendChildNodes($result, $node, TRUE);
-        break;
-      case 'array' :
+      } elseif ($type === 'array') {
         $result = $parent->appendElement('json:array');
         $this->appendChildNodes($result, $node);
-        break;
-      case 'number' :
-        $result = $parent->appendElement('json:number', $node->nodeValue);
-        break;
-      case 'boolean' :
-        $result = $parent->appendElement('json:boolean', $node->nodeValue);
-        break;
-      case 'null' :
-        $result = $parent->appendElement('json:null');
-        break;
-      default :
-        $result = $parent->appendElement('json:string', $node->nodeValue);
-        break;
+      } else {
+        $result = match ($type) {
+          'number' => $parent->appendElement('json:number', $node->nodeValue),
+          'boolean' => $parent->appendElement('json:boolean', $node->nodeValue),
+          'null' => $parent->appendElement('json:null'),
+          default => $parent->appendElement('json:string', $node->nodeValue)
+        };
       }
       if ($addNameAttribute) {
         $name = $node->localName;

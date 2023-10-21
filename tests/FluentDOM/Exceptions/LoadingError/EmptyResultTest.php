@@ -15,7 +15,7 @@ namespace FluentDOM\Exceptions\LoadingError {
   require_once __DIR__.'/../../TestCase.php';
 
   /**
-   * @covers \FluentDOM\Exceptions\EmptyResult
+   * @covers \FluentDOM\Exceptions\LoadingError\EmptyResult
    */
   class EmptyResultTest extends TestCase {
 

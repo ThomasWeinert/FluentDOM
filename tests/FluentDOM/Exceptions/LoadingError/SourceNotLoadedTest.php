@@ -15,7 +15,7 @@ namespace FluentDOM\Exceptions\LoadingError {
   require_once __DIR__.'/../../TestCase.php';
 
   /**
-   * @covers \FluentDOM\Exceptions\SourceNotLoaded
+   * @covers \FluentDOM\Exceptions\LoadingError\SourceNotLoaded
    */
   class SourceNotLoadedTest extends TestCase {
 

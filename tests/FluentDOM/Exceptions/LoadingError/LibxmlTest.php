@@ -15,13 +15,10 @@ namespace FluentDOM\Exceptions\LoadingError {
   require_once __DIR__.'/../../TestCase.php';
 
   /**
-   * @covers \FluentDOM\Exceptions\Libxml
+   * @covers \FluentDOM\Exceptions\LoadingError\Libxml
    */
   class LibxmlTest extends TestCase {
 
-    /**
-     * @covers FluentDOM\Exceptions\LoadingError\Libxml
-     */
     public function testWithErrorFromString(): void {
       $error = new \LibXMLError();
       $error->level = LIBXML_ERR_FATAL;
@@ -37,9 +34,6 @@ namespace FluentDOM\Exceptions\LoadingError {
       );
     }
 
-    /**
-     * @covers FluentDOM\Exceptions\LoadingError\Libxml
-     */
     public function testWithErrorFromFile(): void {
       $error = new \LibXMLError();
       $error->level = LIBXML_ERR_FATAL;

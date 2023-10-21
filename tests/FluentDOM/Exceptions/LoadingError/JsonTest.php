@@ -15,7 +15,7 @@ namespace FluentDOM\Exceptions\LoadingError {
   require_once __DIR__.'/../../TestCase.php';
 
   /**
-   * @covers \FluentDOM\Exceptions\Json
+   * @covers \FluentDOM\Exceptions\LoadingError\Json
    */
   class JsonTest extends TestCase {
 

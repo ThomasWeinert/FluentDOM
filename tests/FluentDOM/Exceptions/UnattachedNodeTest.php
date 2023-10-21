@@ -14,15 +14,16 @@ namespace FluentDOM\Exceptions {
 
   require_once __DIR__.'/../TestCase.php';
 
+
   /**
-   * @covers \FluentDOM\Exceptions\NoSerializer
+   * @covers \FluentDOM\Exceptions\UnattachedNode
    */
-  class NoSerializerTest extends TestCase  {
+  class UnattachedNodeTest extends TestCase  {
 
     public function testConstructor(): void {
-      $exception = new NoSerializer('some/type');
+      $exception = new UnattachedNode('some/type');
       $this->assertEquals(
-        'No serializer for content type some/type available.',
+        'Node has no owner document and isn\'t a document.',
         $exception->getMessage()
       );
     }

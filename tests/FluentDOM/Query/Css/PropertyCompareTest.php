@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -41,6 +41,14 @@ namespace FluentDOM\Query\Css {
         [1, '-padding-top', 'margin-top'],
         [1, '-padding-top', 'padding-bottom'],
       ];
+    }
+
+    public function testCompareWithInvalidPropertyName(): void {
+      $compare = new PropertyCompare();
+      $this->assertEquals(
+        false,
+        $compare('-', '-')
+      );
     }
   }
 }

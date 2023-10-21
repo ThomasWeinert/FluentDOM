@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -15,6 +15,9 @@ namespace FluentDOM\Query {
 
   require_once __DIR__.'/../TestCase.php';
 
+  /**
+   * @covers \FluentDOM\Query\Css
+   */
   class CssTest extends TestCase {
 
     protected const HTML = '
@@ -26,19 +29,13 @@ namespace FluentDOM\Query {
         </body>
       </html>
     ';
-    /**
-     * @covers \FluentDOM\Query\Css::__construct
-     */
+
     public function testConstructorWithOwner(): void {
       $fd = $this->createMock(Query::class);
       $css = new Css($fd);
       $this->assertSame($fd, $css->getOwner());
     }
 
-    /**
-     * @covers \FluentDOM\Query\Css::offsetExists
-     * @covers \FluentDOM\Query\Css::getStyleProperties
-     */
     public function testOffsetExistsExpectingTrue(): void {
       $fd = new Query();
       $fd->document->loadXml('<sample style="width: 21px;"/>');
@@ -47,10 +44,6 @@ namespace FluentDOM\Query {
       $this->assertTrue(isset($css['width']));
     }
 
-    /**
-     * @covers \FluentDOM\Query\Css::offsetExists
-     * @covers \FluentDOM\Query\Css::getStyleProperties
-     */
     public function testOffsetExistsExpectingFalse(): void {
       $fd = new Query();
       $fd->document->loadXml('<sample style="width: 21px;"/>');
@@ -59,20 +52,12 @@ namespace FluentDOM\Query {
       $this->assertFalse(isset($css['height']));
     }
 
-    /**
-     * @covers \FluentDOM\Query\Css::offsetExists
-     * @covers \FluentDOM\Query\Css::getStyleProperties
-     */
     public function testOffsetExistsWithoutElementExpectingFalse(): void {
       $fd = new Query();
       $css = new Css($fd);
       $this->assertFalse(isset($css['height']));
     }
 
-    /**
-     * @covers \FluentDOM\Query\Css::offsetGet
-     * @covers \FluentDOM\Query\Css::getStyleProperties
-     */
     public function testOffsetGet(): void {
       $fd = new Query();
       $fd->document->loadXml('<sample style="width: 21px;"/>');
@@ -81,19 +66,12 @@ namespace FluentDOM\Query {
       $this->assertEquals('21px', $css['width']);
     }
 
-    /**
-     * @covers \FluentDOM\Query\Css::offsetGet
-     * @covers \FluentDOM\Query\Css::getStyleProperties
-     */
     public function testOffsetGetWithoutElementExpectingNull(): void {
       $fd = new Query();
       $css = new Css($fd);
       $this->assertNull($css['height']);
     }
 
-    /**
-     * @covers \FluentDOM\Query\Css::offsetSet
-     */
     public function testOffsetSetUpdatesAttributes(): void {
       $fd = new Query();
       $fd->document->loadXml('<sample style="width: 21px;"/>');
@@ -105,9 +83,6 @@ namespace FluentDOM\Query {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Query\Css::offsetSet
-     */
     public function testOffsetSetRemovesAttributes(): void {
       $fd = new Query();
       $fd->document->loadXml('<sample style="width: 21px;"/>');
@@ -119,9 +94,6 @@ namespace FluentDOM\Query {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Query\Css::offsetUnset
-     */
     public function testOffsetUnset(): void {
       $fd = new Query();
       $fd->document->loadXml('<sample style="width: 21px; height: 21px;"/>');
@@ -133,9 +105,6 @@ namespace FluentDOM\Query {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Query\Css::offsetUnset
-     */
     public function testOffsetUnsetRemovesAttributes(): void {
       $fd = new Query();
       $fd->document->loadXml('<sample style="width: 21px;"/>');
@@ -147,9 +116,6 @@ namespace FluentDOM\Query {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Query\Css::getIterator
-     */
     public function testGetIteratorForFirstElement(): void {
       $fd = new Query();
       $fd->document->loadXML('<sample style="width: 21px;"/>');
@@ -161,9 +127,6 @@ namespace FluentDOM\Query {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Query\Css::getIterator
-     */
     public function testGetIteratorExpectingEmptyIterator(): void {
       $fd = new Query();
       $css = new Css($fd);
@@ -173,9 +136,6 @@ namespace FluentDOM\Query {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Query\Css::count
-     */
     public function testCountExpectingTwo(): void {
       $fd = new Query();
       $fd->document->loadXml('<sample style="width: 21px; height: 21px;"/>');
@@ -184,9 +144,6 @@ namespace FluentDOM\Query {
       $this->assertCount(2, $css);
     }
 
-    /**
-     * @covers \FluentDOM\Query\Css::count
-     */
     public function testCountExpectingZero(): void {
       $fd = new Query();
       $fd = $fd->find('/*');

@@ -106,11 +106,7 @@ namespace FluentDOM\Loader\XDM {
       if ($recursions < 1) {
         return;
       }
-      try {
-        $document = Implementation::getNodeDocument($target);
-      } catch (UnattachedNode) {
-        return;
-      }
+      $document = Implementation::getNodeDocument($target);
       if (
         $document instanceof Document &&
         (

@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -16,13 +16,13 @@ namespace FluentDOM\Query {
 
   require_once __DIR__.'/../TestCase.php';
 
+  /**
+   * @covers \FluentDOM\Query\Attributes
+   */
   class AttributesTest extends TestCase {
 
     protected $_directory = __DIR__;
 
-    /**
-     * @covers \FluentDOM\Query\Attributes::__construct
-     */
     public function testConstructor(): void {
       $fd = $this->createMock(Query::class);
       $attr = new Attributes($fd);
@@ -31,9 +31,6 @@ namespace FluentDOM\Query {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Query\Attributes::toArray
-     */
     public function testToArray(): void {
       $fd = $this->getFluentDOMWithNodeFixture(
         $this->getSimpleDocumentNodeFixture()
@@ -45,9 +42,6 @@ namespace FluentDOM\Query {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Query\Attributes::offsetExists
-     */
     public function testOffsetExistsExpectingTrue(): void {
       $fd = $this->getFluentDOMWithNodeFixture(
         $this->getSimpleDocumentNodeFixture()
@@ -56,9 +50,6 @@ namespace FluentDOM\Query {
       $this->assertTrue(isset($attr['foo']));
     }
 
-    /**
-     * @covers \FluentDOM\Query\Attributes::offsetExists
-     */
     public function testOffsetExistsExpectingFalse(): void {
       $fd = $this->getFluentDOMWithNodeFixture(
         $this->getSimpleDocumentNodeFixture()
@@ -67,9 +58,6 @@ namespace FluentDOM\Query {
       $this->assertFalse(isset($attr['non_existing']));
     }
 
-    /**
-     * @covers \FluentDOM\Query\Attributes::offsetExists
-     */
     public function testOffsetExistsWithoutSelectionExpectingFalse(): void {
       $fd = $this->createMock(Query::class);
       $fd
@@ -80,9 +68,6 @@ namespace FluentDOM\Query {
       $this->assertFalse(isset($attr['foo']));
     }
 
-    /**
-     * @covers \FluentDOM\Query\Attributes::offsetGet
-     */
     public function testOffsetGet(): void {
       $fd = $this->createMock(Query::class);
       $fd
@@ -94,9 +79,6 @@ namespace FluentDOM\Query {
       $this->assertEquals('success', $attr['name']);
     }
 
-    /**
-     * @covers \FluentDOM\Query\Attributes::offsetSet
-     */
     public function testOffsetSet(): void {
       $fd = $this->createMock(Query::class);
       $fd
@@ -107,9 +89,6 @@ namespace FluentDOM\Query {
       $attr['name'] = 'success';
     }
 
-    /**
-     * @covers \FluentDOM\Query\Attributes::offsetUnset
-     */
     public function testOffsetUnset(): void {
       $fd = $this->createMock(Query::class);
       $fd
@@ -120,10 +99,6 @@ namespace FluentDOM\Query {
       unset($attr['name']);
     }
 
-    /**
-     * @covers \FluentDOM\Query\Attributes::count
-     * @covers \FluentDOM\Query\Attributes::getFirstElement
-     */
     public function testCountExpectingTwo(): void {
       $fd = $this->getFluentDOMWithNodeFixture(
         $this->getSimpleDocumentNodeFixture()
@@ -132,10 +107,6 @@ namespace FluentDOM\Query {
       $this->assertCount(2, $attr);
     }
 
-    /**
-     * @covers \FluentDOM\Query\Attributes::count
-     * @covers \FluentDOM\Query\Attributes::getFirstElement
-     */
     public function testCountExpectingZero(): void {
       $fd = $this->createMock(Query::class);
       $fd
@@ -146,9 +117,6 @@ namespace FluentDOM\Query {
       $this->assertCount(0, $attr);
     }
 
-    /**
-     * @covers \FluentDOM\Query\Attributes::getIterator
-     */
     public function testGetIterator(): void {
       $fd = $this->getFluentDOMWithNodeFixture(
         $this->getSimpleDocumentNodeFixture()

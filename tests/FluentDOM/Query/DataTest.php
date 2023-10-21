@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -15,12 +15,13 @@ namespace FluentDOM\Query {
 
   require_once __DIR__.'/../TestCase.php';
 
+  /**
+   * @covers \FluentDOM\Query\Data
+   */
   class DataTest extends TestCase {
 
     protected $_directory = __DIR__;
-    /**
-     * @covers \FluentDOM\Query\Data::__construct
-     */
+
     public function testConstructor(): void {
       $document = new \DOMDocument();
       $document->appendChild($document->createElement('sample'));
@@ -30,10 +31,6 @@ namespace FluentDOM\Query {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Query\Data::toArray
-     * @covers \FluentDOM\Query\Data::isDataProperty
-     */
     public function testToArrayWithSeveralAttributes(): void {
       $document = new \DOMDocument();
       $document->loadXML(
@@ -52,10 +49,6 @@ namespace FluentDOM\Query {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Query\Data::toArray
-     * @covers \FluentDOM\Query\Data::decodeName
-     */
     public function testToArrayWithComplexAttribute(): void {
       $document = new \DOMDocument();
       $document->loadXML(
@@ -68,9 +61,6 @@ namespace FluentDOM\Query {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Query\Data::getIterator
-     */
     public function testGetIterator(): void {
       $document = new \DOMDocument();
       $document->loadXML(
@@ -86,9 +76,6 @@ namespace FluentDOM\Query {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Query\Data::count
-     */
     public function testCountExpectingZero(): void {
       $document = new \DOMDocument();
       $document->loadXML(
@@ -98,9 +85,6 @@ namespace FluentDOM\Query {
       $this->assertCount(0, $data);
     }
 
-    /**
-     * @covers \FluentDOM\Query\Data::count
-     */
     public function testCountExpectingTwo(): void {
       $document = new \DOMDocument();
       $document->loadXML(
@@ -110,9 +94,6 @@ namespace FluentDOM\Query {
       $this->assertCount(2, $data);
     }
 
-    /**
-     * @covers \FluentDOM\Query\Data::__isset
-     */
     public function testMagicMethodIssetExpectingTrue(): void {
       $document = new \DOMDocument();
       $document->loadXML('<node data-truth="true"/>');
@@ -120,9 +101,6 @@ namespace FluentDOM\Query {
       $this->assertTrue(isset($data->truth));
     }
 
-    /**
-     * @covers \FluentDOM\Query\Data::__isset
-     */
     public function testMagicMethodIssetExpectingFalse(): void {
       $document = new \DOMDocument();
       $document->loadXML('<node data-truth="true"/>');
@@ -131,10 +109,6 @@ namespace FluentDOM\Query {
     }
 
     /**
-     * @covers \FluentDOM\Query\Data::__get
-     * @covers \FluentDOM\Query\Data::encodeName
-     * @covers \FluentDOM\Query\Data::decodeValue
-     * @covers \FluentDOM\Query\Data::isJsonString
      * @dataProvider provideDataAttributes
      */
     public function testMagicMethodGet($expected, $name, $xml) {
@@ -148,9 +122,6 @@ namespace FluentDOM\Query {
     }
 
     /**
-     * @covers \FluentDOM\Query\Data::__set
-     * @covers \FluentDOM\Query\Data::encodeName
-     * @covers \FluentDOM\Query\Data::encodeValue
      * @dataProvider provideDataValues
      */
     public function testMagicMethodSet($expectedXml, $name, $value) {
@@ -164,8 +135,6 @@ namespace FluentDOM\Query {
     }
 
     /**
-     * @covers \FluentDOM\Query\Data::__unset
-     * @covers \FluentDOM\Query\Data::encodeName
      * @dataProvider provideDataValues
      */
     public function testMagicMethodUnset(): void {

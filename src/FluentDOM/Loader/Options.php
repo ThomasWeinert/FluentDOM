@@ -44,12 +44,8 @@ namespace FluentDOM\Loader {
       iterable $options = [],
       array $callbacks = []
     ) {
-      if (is_iterable($options)) {
-        foreach ($options as $name => $value) {
-          $this->offsetSet($name, $value);
-        }
-      } else {
-        throw new InvalidArgument('options', ['array', \Traversable::class]);
+      foreach ($options as $name => $value) {
+        $this->offsetSet($name, $value);
       }
       foreach ($callbacks as $name => $callback) {
         $this->setCallback($name, $callback);

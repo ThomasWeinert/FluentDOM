@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -19,19 +19,16 @@ namespace FluentDOM\Serializer\Factory {
 
   require_once __DIR__ . '/../../TestCase.php';
 
+  /**
+   * @covers \FluentDOM\Serializer\Factory\Group
+   */
   class GroupTest extends TestCase {
 
-    /**
-     * @covers \FluentDOM\Serializer\Factory\Group
-     */
     public function testConstructor(): void {
       $group = new Group([]);
       $this->assertCount(0, $group);
     }
 
-    /**
-     * @covers \FluentDOM\Serializer\Factory\Group
-     */
     public function testConstructorWithOneFactory(): void {
       $factory = $this->createMock(Factory::class);
       $group = new Group(['type' => $factory]);
@@ -39,9 +36,6 @@ namespace FluentDOM\Serializer\Factory {
       $this->assertSame($factory, $group['type']);
     }
 
-    /**
-     * @covers \FluentDOM\Serializer\Factory\Group
-     */
     public function testFactoryGetAfterSet(): void {
       $factory = $this->createMock(Factory::class);
       $group = new Group();
@@ -50,18 +44,12 @@ namespace FluentDOM\Serializer\Factory {
       $this->assertSame($factory, $group['type']);
     }
 
-    /**
-     * @covers \FluentDOM\Serializer\Factory\Group
-     */
     public function testFactorSetWithInvalidFactoryExpectingException(): void {
       $group = new Group();
       $this->expectException(InvalidArgument::class);
       $group['type'] = 'INVALID';
     }
 
-    /**
-     * @covers \FluentDOM\Serializer\Factory\Group
-     */
     public function testFactoryGetAfterRemove(): void {
       $factory = $this->createMock(Factory::class);
       $group = new Group(['type' => $factory]);
@@ -69,18 +57,12 @@ namespace FluentDOM\Serializer\Factory {
       $this->assertFalse(isset($group['type']));
     }
 
-    /**
-     * @covers \FluentDOM\Serializer\Factory\Group
-     */
     public function testGetIterator(): void {
       $factory = $this->createMock(Factory::class);
       $group = new Group(['type' => $factory]);
       $this->assertSame(['type' => $factory], iterator_to_array($group));
     }
 
-    /**
-     * @covers \FluentDOM\Serializer\Factory\Group
-     */
     public function testCreateSerializer(): void {
       $document = new Document();
       $document->appendElement('dummy');
@@ -102,9 +84,28 @@ namespace FluentDOM\Serializer\Factory {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Serializer\Factory\Group
-     */
+    public function testCreateSerializerOnEmptyGroup(): void {
+      $document = new Document();
+      $document->appendElement('dummy');
+      $group = new Group([]);
+      $this->assertNULL($group->createSerializer($document->documentElement, 'test/dummy'));
+    }
+
+    public function testCreateSerializerWithoutInterface(): void {
+      $document = new Document();
+      $document->appendElement('dummy');
+      $serializer = new class {
+        public function __toString(): string {
+          return 'success';
+        }
+      };
+      $group = new Group(['some/type' => fn() => $serializer]);
+      $this->assertSame(
+        'success',
+        (string)$group->createSerializer($document->documentElement, 'some/type')
+      );
+    }
+
     public function testCreateSerializerWithStringCastable(): void {
       $document = new Document();
       $document->appendElement('dummy');
@@ -124,9 +125,6 @@ namespace FluentDOM\Serializer\Factory {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Serializer\Factory\Group
-     */
     public function testCreateSerializerExpectingException(): void {
       $document = new Document();
       $document->appendElement('dummy');

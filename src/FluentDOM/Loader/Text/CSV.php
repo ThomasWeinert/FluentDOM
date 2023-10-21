@@ -42,7 +42,7 @@ namespace FluentDOM\Loader\Text {
 
     /**
      * @throws \InvalidArgumentException
-     * @throws InvalidSource|\DOMException
+     * @throws InvalidSource|\DOMException|UnattachedNode
      * @see Loadable::load
      */
     public function load(mixed $source, string $contentType, iterable $options = []): ?Result {
@@ -66,7 +66,7 @@ namespace FluentDOM\Loader\Text {
      * @return DocumentFragment|NULL
      * @throws \InvalidArgumentException
      * @throws InvalidSource
-     * @throws \DOMException
+     * @throws \DOMException|UnattachedNode
      * @see Loadable::loadFragment
      *
      */
@@ -88,33 +88,30 @@ namespace FluentDOM\Loader\Text {
 
     /**
      * Append the provided lines to the parent.
-     * @throws \DOMException
+     * @throws \DOMException|UnattachedNode
      */
     private function appendLines(
       \DOMNode $parent, iterable $lines, bool $hasHeaderLine, array $columns = NULL
     ): void {
-      try {
-        $document = Implementation::getNodeDocument($parent);
-        $headers = NULL;
-        /** @var array $record */
-        foreach ($lines as $record) {
-          if ($headers === NULL) {
-            $headers = $this->getHeaders(
-              $record, $hasHeaderLine, $columns
-            );
-            if ($hasHeaderLine) {
-              continue;
-            }
-          }
-          /** @var Element $node */
-          $node = $parent->appendChild($document->createElement(self::DEFAULT_QNAME));
-          foreach ($record as $index => $field) {
-            if (isset($headers[$index])) {
-              $this->appendField($node, (string)$headers[$index], (string)$field);
-            }
+      $document = Implementation::getNodeDocument($parent);
+      $headers = NULL;
+      /** @var array $record */
+      foreach ($lines as $record) {
+        if ($headers === NULL) {
+          $headers = $this->getHeaders(
+            $record, $hasHeaderLine, $columns
+          );
+          if ($hasHeaderLine) {
+            continue;
           }
         }
-      } catch (UnattachedNode) {
+        /** @var Element $node */
+        $node = $parent->appendChild($document->createElement(self::DEFAULT_QNAME));
+        foreach ($record as $index => $field) {
+          if (isset($headers[$index])) {
+            $this->appendField($node, (string)$headers[$index], (string)$field);
+          }
+        }
       }
     }
 

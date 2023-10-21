@@ -38,12 +38,6 @@ namespace FluentDOM\Loader {
         $this->_list[$contentType] = $loader;
         return;
       }
-      throw new \UnexpectedValueException(
-        \sprintf(
-          'Lazy loader for content type "%s" is not a callable or FluentDOM\Loadable',
-          $contentType
-        )
-      );
     }
 
     /**

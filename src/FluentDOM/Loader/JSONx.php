@@ -96,31 +96,32 @@ namespace FluentDOM\Loader {
         if ($name !== $normalizedName && $name !== '') {
           $newNode->setAttribute('json:name', $name);
         }
-        switch ($type) {
-        case 'object' :
-          if ($node('count(*) > 0')) {
-            foreach ($node('*') as $childNode) {
-              /** @var Element $childNode */
-              $this->transferNode($childNode, $newNode);
-            }
-            return;
-          }
-          break;
-        case 'array' :
-          foreach ($node('*') as $childNode) {
-            /** @var Element $childNode */
-            $this->transferNode($childNode, $newNode);
-          }
-          break;
-        case 'string' :
+        $implicit = false;
+        if ($type === 'object') {
+          $implicit = $this->transferChildElements($node, $newNode);
+        } elseif ($type === 'array') {
+          $this->transferChildElements($node, $newNode);
+        } elseif ($type === 'string') {
           $newNode->append((string)$node);
           return;
-        default :
+        } else {
           $newNode->append((string)$node);
-          break;
         }
-        $newNode->setAttribute('json:type', $type);
+        if (!$implicit) {
+          $newNode->setAttribute('json:type', $type);
+        }
       }
+    }
+
+    private function transferChildElements(Element $node, Element $target): bool {
+      if ($node('count(*) > 0')) {
+        foreach ($node('*') as $childNode) {
+          /** @var Element $childNode */
+          $this->transferNode($childNode, $target);
+        }
+        return true;
+      }
+      return false;
     }
   }
 }

@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -27,6 +27,21 @@ class FluentDOMTest extends TestCase  {
     $document = new DOMDocument();
     $document->appendChild($document->createElement('test'));
     $query = FluentDOM::Query($document->documentElement);
+    $this->assertCount(1, $query);
+    $this->assertXmlStringEqualsXmlString("<?xml version=\"1.0\"?>\n<test/>\n", (string)$query);
+  }
+
+  /**
+   * @group FactoryFunctions
+   * @covers FluentDOM
+   */
+  public function testQueryCssWithNode(): void {
+    FluentDOM::registerXpathTransformer(
+      fn() => $this->createMock(XpathTransformer::class)
+    );
+    $document = new DOMDocument();
+    $document->appendChild($document->createElement('test'));
+    $query = FluentDOM::QueryCss($document->documentElement);
     $this->assertCount(1, $query);
     $this->assertXmlStringEqualsXmlString("<?xml version=\"1.0\"?>\n<test/>\n", (string)$query);
   }

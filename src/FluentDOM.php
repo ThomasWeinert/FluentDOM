@@ -89,18 +89,17 @@ abstract class FluentDOM {
    * @throws InvalidArgumentException
    * @throws OutOfBoundsException
    * @throws InvalidVariableSource
-   * @codeCoverageIgnore
    */
   public static function QueryCss(
     mixed $source = NULL,
     string $contentType = 'text/xml',
     array $options = []
   ): FluentDOM\Query {
-    $builder = self::getXPathTransformer();
+    $transformer = self::getXPathTransformer();
     $query = self::Query($source, $contentType, $options);
     $isHtml = ($query->contentType === 'text/html');
-    $query->onPrepareSelector = static function($selector, $contextMode) use ($builder, $isHtml) {
-      return $builder->toXpath($selector, $contextMode, $isHtml);
+    $query->onPrepareSelector = static function($selector, $contextMode) use ($transformer, $isHtml) {
+      return $transformer->toXpath($selector, $contextMode, $isHtml);
     };
     return $query;
   }

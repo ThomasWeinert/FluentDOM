@@ -36,7 +36,6 @@ namespace FluentDOM\Loader {
       $contentType = $this->normalizeContentType($contentType);
       if ($loader instanceof Loadable || \is_callable($loader)) {
         $this->_list[$contentType] = $loader;
-        return;
       }
     }
 

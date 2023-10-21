@@ -143,6 +143,7 @@ namespace FluentDOM\DOM {
         ($this->getAttribute('xmlns:'.$localName) === $namespace) &&
         ($attribute = $this->getAttributeNodeNS($namespace, $localName))
       ) {
+        /** @noinspection PhpCastIsUnnecessaryInspection */
         return (bool)parent::removeAttributeNode($attribute);
       }
       return (bool)parent::removeAttributeNS($namespace, $localName);
@@ -390,6 +391,7 @@ namespace FluentDOM\DOM {
      * Attribute offsets are strings that can not only contains digits.
      */
     private function isAttributeOffset(mixed $offset): bool {
+      /** @noinspection PhpCastIsUnnecessaryInspection */
       return (is_string($offset) && !ctype_digit((string)$offset));
     }
 

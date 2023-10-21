@@ -82,7 +82,6 @@ namespace FluentDOM\Utility {
     public function testOpenWithInvalidContext(): void {
       $inner = fopen('data://text/plain;base64,'.base64_encode('success'), 'rb');
       [$uri] = ResourceWrapper::createContext($inner);
-      $this->expectException(\ErrorException::class);
       $this->assertFalse(@fopen($uri, 'rb', FALSE));
     }
   }

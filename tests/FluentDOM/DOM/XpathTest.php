@@ -276,7 +276,7 @@ namespace FluentDOM\DOM {
       $document = new \DOMDocument();
       $xpath = new Xpath($document);
       $this->assertFalse(isset($xpath->foo));
-      $this->expectException(UndeclaredPropertyError::class);
+      $this->expectException(\ErrorException::class);
       $xpath->foo = 'bar';
     }
 
@@ -286,7 +286,7 @@ namespace FluentDOM\DOM {
     public function testPropertyGetWithUnknownPropertyExpectingPHPError(): void {
       $document = new \DOMDocument();
       $xpath = new Xpath($document);
-      $this->expectException(UndeclaredPropertyError::class);
+      $this->expectException(\ErrorException::class);
       /** @noinspection PhpUndefinedFieldInspection */
       /** @noinspection PhpExpressionResultUnusedInspection */
       $xpath->someUnknownProperty;

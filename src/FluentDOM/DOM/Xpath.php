@@ -17,12 +17,8 @@ namespace FluentDOM\DOM {
   /**
    * FluentDOM\DOM\Xpath extends PHPs DOMXpath class. It disables the
    * automatic namespace registration by default and, throws notices for the query method.
-   *
-   * @property bool $registerNodeNamespaces
    */
   class Xpath extends \DOMXPath {
-
-    private bool $_registerNodeNamespaces = FALSE;
 
     private \DOMDocument $_documentReference;
 
@@ -139,40 +135,6 @@ namespace FluentDOM\DOM {
         return '"'.$string.'"';
       }
       return "'".$string."'";
-    }
-
-    /**
-     * @param string $name
-     * @return bool
-     */
-    public function __isset(string $name): bool {
-      if ($name === 'registerNodeNamespaces') {
-        return TRUE;
-      }
-      return FALSE;
-    }
-
-    public function __get(string $name): mixed {
-      if ($name === 'registerNodeNamespaces') {
-        return $this->_registerNodeNamespaces;
-      }
-      throw new UndeclaredPropertyError($this, $name);
-    }
-
-    public function __set(string $name, mixed $value): void {
-      if ($name === 'registerNodeNamespaces') {
-        $this->_registerNodeNamespaces = (bool)$value;
-        return;
-      }
-      throw new UndeclaredPropertyError($this, $name);
-    }
-
-    public function __unset(string $name): void {
-      if ($name === 'registerNodeNamespaces') {
-        $this->registerNodeNamespaces = FALSE;
-        return;
-      }
-      throw new UndeclaredPropertyError($this, $name);
     }
   }
 }

@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -97,6 +97,13 @@ namespace FluentDOM\Loader\Json {
           '"@xmlns":{"$":"http:\\/\\/some-namespace","charlie":"http:\\/\\/some-other-namespace"}}}',
           '<alice xmlns="http://some-namespace" xmlns:charlie="http://some-other-namespace">'.
           ' <bob>david</bob> <charlie:edgar>frank</charlie:edgar> </alice>'
+        ],
+        'Attributes with namespace' => [
+          '{"alice":{"@xmlns":{"$":"http:\\/\\/some-namespace","charlie":"http:\\/\\/some-other-namespace"},'.
+          '"charlie:bob": {"@charlie:doris": 42}}}',
+          '<alice xmlns="http://some-namespace" xmlns:charlie="http://some-other-namespace">'.
+          '<charlie:bob charlie:doris="42"/>'.
+          '</alice>'
         ]
       ];
     }

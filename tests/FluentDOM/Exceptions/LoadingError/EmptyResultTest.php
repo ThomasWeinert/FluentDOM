@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -14,6 +14,9 @@ namespace FluentDOM\Exceptions\LoadingError {
 
   require_once __DIR__.'/../../TestCase.php';
 
+  /**
+   * @covers \FluentDOM\Exceptions\EmptyResult
+   */
   class EmptyResultTest extends TestCase {
 
     public function testGetMessage(): void {

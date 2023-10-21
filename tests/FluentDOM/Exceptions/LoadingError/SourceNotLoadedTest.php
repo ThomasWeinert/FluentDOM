@@ -15,14 +15,14 @@ namespace FluentDOM\Exceptions\LoadingError {
   require_once __DIR__.'/../../TestCase.php';
 
   /**
-   * @covers \FluentDOM\Exceptions\EmptySource
+   * @covers \FluentDOM\Exceptions\SourceNotLoaded
    */
-  class EmptySourceTest extends TestCase {
+  class SourceNotLoadedTest extends TestCase {
 
     public function testGetMessage(): void {
-      $e = new EmptySource();
+      $e = new SourceNotLoaded();
       $this->assertEquals(
-        'Given source was empty.',
+        'Could not load source.',
         $e->getMessage()
       );
     }

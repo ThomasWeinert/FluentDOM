@@ -12,6 +12,7 @@ namespace FluentDOM {
 
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Element;
+  use FluentDOM\Exceptions\UnattachedNode;
   use FluentDOM\Exceptions\UndeclaredPropertyError;
 
   require_once __DIR__ . '/TestCase.php';
@@ -391,6 +392,22 @@ namespace FluentDOM {
       $result = $_('foo');
       $this->assertInstanceOf(\Traversable::class, $result);
       $this->assertSame([$result->node], iterator_to_array($result));
+    }
+
+    public function testAppendToUnattachedNode(): void {
+      $_ = new Creator();
+      $node = $_('foo');
+      $target = new Element('bar');
+      $this->expectException(UnattachedNode::class);
+      $node->appendTo($target);
+    }
+
+    public function testAppendListToUnattachedNode(): void {
+      $_ = new Creator();
+      $nodes = $_->each(['foo']);
+      $target = new Element('bar');
+      $this->expectException(UnattachedNode::class);
+      $nodes->appendTo($target);
     }
   }
 }

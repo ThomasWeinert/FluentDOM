@@ -13,6 +13,7 @@ namespace FluentDOM\Creator {
   use FluentDOM\Appendable;
   use FluentDOM\DOM\Element;
   use FluentDOM\Exceptions\UnattachedNode;
+  use FluentDOM\Utility\Constraints;
 
   /**
    * Internal class for the FluentDOM\Creator, please do not use directly
@@ -28,9 +29,7 @@ namespace FluentDOM\Creator {
 
     public function __construct(iterable $iterable, callable $map = NULL) {
       $this->_iterable = $iterable;
-      $this->_map = ($map === NULL || $map instanceof \Closure)
-        ? $map
-        : fn(...$arguments) => $map(...$arguments);
+      $this->_map = Constraints::filterCallable($map);
     }
 
     public function getInnerIterator(): \Iterator {
@@ -39,10 +38,9 @@ namespace FluentDOM\Creator {
           $this->_iterator = $this->_iterable;
         } elseif (is_array($this->_iterable)) {
           $this->_iterator = new \ArrayIterator($this->_iterable);
-        } else if ($this->_iterable instanceof \Traversable) {
-          $this->_iterator = new \IteratorIterator($this->_iterable);
         } else {
-          $this->_iterator = new \EmptyIterator();
+          /** @noinspection PhpParamsInspection */
+          $this->_iterator = new \IteratorIterator($this->_iterable);
         }
       }
       return $this->_iterator;
@@ -75,11 +73,11 @@ namespace FluentDOM\Creator {
       return $this->getInnerIterator()->valid();
     }
 
+    /**
+     * @throws UnattachedNode
+     */
     public function appendTo(Element $parentNode): void {
-      try {
-        $parentNode->append(...$this);
-      } catch (UnattachedNode) {
-      }
+      $parentNode->append(...$this);
     }
   }
 }

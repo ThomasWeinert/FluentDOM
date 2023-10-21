@@ -10,6 +10,9 @@
 
 namespace FluentDOM\DOM {
 
+  require_once __DIR__ . '/../TestCase.php';
+
+  use FluentDOM\Exceptions\UnattachedNode;
   use FluentDOM\TestCase;
 
   /**
@@ -121,6 +124,14 @@ namespace FluentDOM\DOM {
         </atom:feed>',
         (string)$document
       );
+    }
+
+    /**
+     * ::getNodeDocument
+     */
+    public function testGetNodeDocumentWithUnattachedNodeExpectingException(): void {
+      $this->expectException(UnattachedNode::class);
+      Implementation::getNodeDocument(new Element('trigger'));
     }
   }
 }

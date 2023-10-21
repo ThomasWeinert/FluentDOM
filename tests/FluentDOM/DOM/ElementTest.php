@@ -13,7 +13,7 @@ namespace FluentDOM\DOM {
   require_once __DIR__ . '/../TestCase.php';
 
   use FluentDOM\Appendable;
-  use FluentDOM\Exceptions\UndeclaredPropertyError;
+  use FluentDOM\Exceptions\UnattachedNode;
   use FluentDOM\TestCase;
 
   /**
@@ -657,7 +657,7 @@ namespace FluentDOM\DOM {
      */
     public function testAppendWithUnattachedNodeExpectingException(): void {
       $node = new Element('foo', '', '');
-      $this->expectException(\LogicException::class);
+      $this->expectException(UnattachedNode::class);
       $node->append('');
     }
 

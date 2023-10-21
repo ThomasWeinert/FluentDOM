@@ -181,9 +181,7 @@ namespace FluentDOM\DOM {
     public function append(...$nodes): void {
       $document = $this->ownerDocument;
       if (!$document instanceof Document) {
-        throw new \LogicException(
-          sprintf('Node is not attached to a %s.', Document::class)
-        );
+        throw new UnattachedNode();
       }
       foreach ($nodes as $node) {
         if ($node instanceof \DOMAttr) {

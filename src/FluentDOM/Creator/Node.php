@@ -74,11 +74,8 @@ namespace FluentDOM\Creator {
       $document = clone $this->_document;
       $document->appendChild($document->importNode($this->_node, TRUE));
       if ($this->_creator->optimizeNamespaces) {
-        try {
-          $document = (new Optimize($document))->getDocument();
-          $document->formatOutput = $this->_document->formatOutput;
-        } catch (UnattachedNode) {
-        }
+        $document = (new Optimize($document))->getDocument();
+        $document->formatOutput = $this->_document->formatOutput;
       }
       return $document;
     }
@@ -88,6 +85,9 @@ namespace FluentDOM\Creator {
     }
 
     public function appendTo(Element $parentNode): void {
+      if (!$parentNode->ownerDocument) {
+        throw new UnattachedNode();
+      }
       $parentNode->appendChild(
         $parentNode->ownerDocument->importNode($this->_node, TRUE)
       );

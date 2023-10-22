@@ -20,6 +20,7 @@ namespace FluentDOM\Creator {
   /**
    * Internal class for the FluentDOM\Creator, please do not use directly
    *
+   * @internal
    * @property-read Document $document
    * @property-read Element $node
    */

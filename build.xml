@@ -4,26 +4,31 @@
   ~ FluentDOM
   ~
   ~ @link https://thomas.weinert.info/FluentDOM/
-  ~ @copyright Copyright 2009-2021 FluentDOM Contributors
+  ~ @copyright Copyright 2009-2023 FluentDOM Contributors
   ~ @license http://www.opensource.org/licenses/mit-license.php The MIT License
   ~
   -->
 
 <project name="FluentDOM" default="build">
 
-  <property name="builddir" value="${project.basedir}/build" />
+  <property name="buildDirectory" value="${project.basedir}/build" />
+  <condition property="cmdSuffix" value=".bat" else="">
+    <and>
+      <os family="windows"/>
+    </and>
+  </condition>
 
   <target name="build" depends="documentation">
   </target>
 
-  <target name="documentation" depends="phploc,phpmd,phpunit,phpdox">
+  <target name="documentation" depends="phpunit,phpdoc">
   </target>
 
   <target name="prepare">
     <echo msg="Making directory ./build" />
-    <mkdir dir="${builddir}" />
-    <mkdir dir="${builddir}/logs" />
-    <mkdir dir="${builddir}/coverage" />
+    <mkdir dir="${buildDirectory}" />
+    <mkdir dir="${buildDirectory}/logs" />
+    <mkdir dir="${buildDirectory}/coverage" />
   </target>
 
   <target name="phpunit" depends="prepare">
@@ -31,37 +36,16 @@
       <arg value="-qrr"/>
       <arg file="tools/phpunit.phar"/>
       <arg value="--coverage-xml"/>
-      <arg file="${builddir}/coverage/xml"/>
+      <arg file="${buildDirectory}/coverage/xml"/>
       <arg value="--coverage-html"/>
-      <arg file="${builddir}/coverage/html"/>
+      <arg file="${buildDirectory}/coverage/html"/>
       <arg value="-c"/>
       <arg file="phpunit.xml.dist"/>
     </exec>
   </target>
 
-  <target name="phpdox" depends="prepare">
-    <exec executable="php" passthru="true">
-      <arg file="tools/phpdox.phar"/>
-    </exec>
+  <target name="phpdoc" depends="prepare">
+    <exec executable="tools/phpdocumentor${cmdSuffix}" passthru="true"/>
   </target>
 
-  <target name="phpmd" depends="prepare">
-    <exec executable="php" passthru="true">
-      <arg file="tools/phpmd.phar"/>
-      <arg path="./src"/>
-      <arg value="xml"/>
-      <arg value="codesize,design,unusedcode"/>
-      <arg value="--reportfile"/>
-      <arg file="${builddir}/logs/phpmd.xml"/>
-    </exec>
-  </target>
-
-  <target name="phploc" depends="prepare">
-    <exec executable="php" passthru="true">
-      <arg file="tools/phploc.phar"/>
-      <arg value="--log-xml"/>
-      <arg file="${builddir}/logs/phploc.xml"/>
-      <arg path="./src"/>
-    </exec>
-  </target>
 </project>

@@ -20,8 +20,6 @@ namespace FluentDOM\Transformer {
 
   /**
    * Allows to transform JSONx to JsonDOM
-   *
-   * @package FluentDOM\Transformer
    */
   class JSONx implements StringCastable {
 

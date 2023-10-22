@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ FluentDOM
+  ~
+  ~ @link https://thomas.weinert.info/FluentDOM/
+  ~ @copyright Copyright 2009-2023 FluentDOM Contributors
+  ~ @license http://www.opensource.org/licenses/mit-license.php The MIT License
+  ~
+  -->
+
+<phpdocumentor
+  configVersion="3"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="https://www.phpdoc.org"
+  xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/phpDocumentor/phpDocumentor/master/data/xsd/phpdoc.xsd">
+  <title>FluentDOM</title>
+  <paths>
+    <output>build/phpdoc</output>
+    <cache>build/phpdoc-cache</cache>
+  </paths>
+  <version number="8.0">
+    <folder>latest</folder>
+    <api>
+      <source dsn=".">
+        <path>src</path>
+      </source>
+      <visibility>public</visibility>
+      <default-package-name>FluentDOM</default-package-name>
+      <include-source>true</include-source>
+      <markers>
+        <marker>TODO</marker>
+      </markers>
+    </api>
+    
+  </version>
+
+</phpdocumentor>

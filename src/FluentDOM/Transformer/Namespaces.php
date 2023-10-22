@@ -20,8 +20,6 @@ namespace FluentDOM\Transformer {
 
   /**
    * Superclass for the namespace transformers (optimize and replace)
-   *
-   * @package FluentDOM\Transformer
    */
   abstract class Namespaces implements \IteratorAggregate, Appendable, StringCastable {
 

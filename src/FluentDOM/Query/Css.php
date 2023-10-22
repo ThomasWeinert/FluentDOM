@@ -19,8 +19,6 @@ namespace FluentDOM\Query {
    *
    * It acts like the FluentDOMStyle::css() method. If you read css properties it uses the first
    * selected node. Write actions are applied to all matches element nodes.
-   *
-   * @package FluentDOM
    */
   class Css implements \ArrayAccess, \Countable, \IteratorAggregate {
 

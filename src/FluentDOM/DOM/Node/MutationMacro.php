@@ -19,8 +19,6 @@ namespace FluentDOM\DOM\Node {
    * Class MutationMacro
    *
    * Converts a list of potential nodes into a single DOM node.
-   *
-   * @package FluentDOM\DOM\Node
    */
   abstract class MutationMacro {
 

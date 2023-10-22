@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -15,14 +15,14 @@ namespace FluentDOM\Serializer {
 
   require_once __DIR__ . '/../TestCase.php';
 
-  class HtmlTest extends TestCase  {
+  class XmlSerializerTest extends TestCase  {
 
     public function testToString(): void {
       $document = new Document();
-      $document->loadHTML(self::HTML);
-      $serializer = new Html($document);
+      $document->loadXML(self::XML);
+      $serializer = new XmlSerializer($document);
       $this->assertXmlStringEqualsXmlString(
-        self::HTML, (string)$serializer
+        self::XML, (string)$serializer
       );
     }
   }

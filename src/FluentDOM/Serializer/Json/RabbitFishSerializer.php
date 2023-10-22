@@ -14,9 +14,9 @@ namespace FluentDOM\Serializer\Json {
   use FluentDOM\DOM\Xpath;
 
   /**
-   * Serialize a DOM to RabbitFish Json: http://www.bramstein.com/projects/xsltjson/
+   * Serialize a DOM to RabbitFish JsonSerializer: http://www.bramstein.com/projects/xsltjson/
    */
-  class RabbitFish extends BadgerFish {
+  class RabbitFishSerializer extends BadgerFishSerializer {
 
     /**
      * @param \DOMElement $node

@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -14,10 +14,10 @@ namespace FluentDOM\Serializer\Json {
 
   require_once __DIR__ . '/../../TestCase.php';
 
-  class RayfishTest extends TestCase {
+  class RayfishSerializerTest extends TestCase {
 
     /**
-     * @covers \FluentDOM\Serializer\Json\Rayfish
+     * @covers \FluentDOM\Serializer\Json\RayfishSerializer
      * @dataProvider provideExamples
      * @param string $expected
      * @param string $xml
@@ -25,7 +25,7 @@ namespace FluentDOM\Serializer\Json {
     public function testIntegration(string $expected, string $xml): void {
       $document = new \DOMDocument();
       $document->loadXML($xml);
-      $serializer = new Rayfish($document);
+      $serializer = new RayfishSerializer($document);
       $this->assertJsonStringEqualsJsonString(
         $expected,
         json_encode($serializer)
@@ -33,10 +33,10 @@ namespace FluentDOM\Serializer\Json {
     }
 
     /**
-     * @covers \FluentDOM\Serializer\Json\Rayfish
+     * @covers \FluentDOM\Serializer\Json\RayfishSerializer
      */
     public function testIntegrationWithEmptyDocument(): void {
-      $serializer = new Rayfish(new \DOMDocument());
+      $serializer = new RayfishSerializer(new \DOMDocument());
       $this->assertEquals(
         '{}', (string)$serializer
       );

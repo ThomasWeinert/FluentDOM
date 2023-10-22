@@ -11,15 +11,15 @@ declare(strict_types=1);
 
 namespace FluentDOM\Serializer\Json {
 
-  use FluentDOM\Serializer\Json;
+  use FluentDOM\Serializer\JsonSerializer;
 
   /**
-   * Serialize a DOM to Rayfish Json: http://www.bramstein.com/projects/xsltjson/
+   * Serialize a DOM to Rayfish JsonSerializer: http://www.bramstein.com/projects/xsltjson/
    *
    * @license http://www.opensource.org/licenses/mit-license.php The MIT License
    * @copyright Copyright (c) 2009-2017 FluentDOM Contributors
    */
-  class Rayfish extends Json {
+  class RayfishSerializer extends JsonSerializer {
 
     /**
      * @param \DOMElement $node

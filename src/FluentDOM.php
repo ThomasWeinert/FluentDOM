@@ -16,7 +16,8 @@ use FluentDOM\Exceptions\InvalidSource\Variable as InvalidVariableSource;
 use FluentDOM\Exceptions\NoSerializer as NoSerializerException;
 use FluentDOM\Loadable;
 use FluentDOM\Loader\Lazy as LazyLoader;
-use FluentDOM\Serializer\Factory as SerializerFactory;
+use FluentDOM\Serializer\Factory\Group as SerializerFactoryGroup;
+use FluentDOM\Serializer\SerializerFactory as SerializerFactory;
 use FluentDOM\Xpath\Transformer as XpathTransformer;
 
 abstract class FluentDOM {
@@ -27,7 +28,7 @@ abstract class FluentDOM {
 
   private static array|Loadable $_defaultLoaders = [];
 
-  private static ?SerializerFactory\Group $_serializerFactories = NULL;
+  private static ?SerializerFactoryGroup $_serializerFactories = NULL;
 
   /**
    * Load a data source into a FluentDOM\DOM\Document
@@ -169,18 +170,18 @@ abstract class FluentDOM {
   /**
    * Return registered serializer factories
    */
-  public static function getSerializerFactories(): SerializerFactory\Group {
+  public static function getSerializerFactories(): SerializerFactoryGroup {
     if (NULL === self::$_serializerFactories) {
       $xml = static function(DOMNode $node) {
-        return new FluentDOM\Serializer\Xml($node);
+        return new FluentDOM\Serializer\XmlSerializer($node);
       };
       $html = static function(DOMNode $node) {
-        return new FluentDOM\Serializer\Html($node);
+        return new FluentDOM\Serializer\HtmlSerializer($node);
       };
       $json = static function(DOMNode $node) {
-        return new FluentDOM\Serializer\Json($node);
+        return new FluentDOM\Serializer\JsonSerializer($node);
       };
-      self::$_serializerFactories = new FluentDOM\Serializer\Factory\Group(
+      self::$_serializerFactories = new SerializerFactoryGroup(
         [
           'text/html' => $html,
           'html' => $html,

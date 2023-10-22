@@ -15,21 +15,14 @@ namespace FluentDOM\Serializer {
 
   require_once __DIR__ . '/../TestCase.php';
 
-  /**
-   * @covers \FluentDOM\Serializer\StringCast
-   */
-  class StringCastTest extends TestCase  {
+  class HtmlSerializerTest extends TestCase  {
 
     public function testToString(): void {
-      $serializer = new StringCast(
-        new class {
-          public function __toString(): string {
-            return 'success';
-          }
-        }
-      );
-      $this->assertEquals(
-        'success', (string)$serializer
+      $document = new Document();
+      $document->loadHTML(self::HTML);
+      $serializer = new HtmlSerializer($document);
+      $this->assertXmlStringEqualsXmlString(
+        self::HTML, (string)$serializer
       );
     }
   }

@@ -12,9 +12,8 @@ declare(strict_types=1);
 namespace FluentDOM\Serializer\Factory {
 
   use FluentDOM\Exceptions;
-  use FluentDOM\Serializer\Factory as SerializerFactory;
-  use FluentDOM\Serializer\StringCast;
-  use FluentDOM\Utility\StringCastable;
+  use FluentDOM\Serializer\Serializer;
+  use FluentDOM\Serializer\SerializerFactory as SerializerFactory;
 
   class Group implements SerializerFactory, \ArrayAccess, \IteratorAggregate, \Countable {
 
@@ -26,7 +25,7 @@ namespace FluentDOM\Serializer\Factory {
       }
     }
 
-    public function createSerializer(\DOMNode $node, string $contentType): ?StringCastable {
+    public function createSerializer(\DOMNode $node, string $contentType): ?Serializer {
       $serializer = NULL;
       if ($this->offsetExists($contentType)) {
         $factory = $this->offsetGet($contentType);
@@ -35,11 +34,14 @@ namespace FluentDOM\Serializer\Factory {
         } elseif (\is_callable($factory)) {
           $serializer = $factory($node, $contentType);
         }
-        if ($serializer instanceof StringCastable) {
+        if ($serializer instanceof Serializer) {
           return $serializer;
         }
         if ((NULL !== $serializer) && \method_exists($serializer, '__toString')) {
-          return new StringCast($serializer);
+          return (new class($serializer) implements Serializer {
+            public function __construct(private object $serializer) {}
+            public function __toString(): string { return (string)$this->serializer; }
+          });
         }
         if (NULL !== $serializer) {
           throw new Exceptions\InvalidSerializer($contentType, \get_class($serializer));

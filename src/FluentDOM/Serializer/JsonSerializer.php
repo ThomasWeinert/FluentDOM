@@ -13,10 +13,9 @@ namespace FluentDOM\Serializer {
 
   use FluentDOM\DOM\Xpath;
   use FluentDOM\Loader\Json\JsonDOM;
-  use FluentDOM\Utility\StringCastable;
 
   /**
-   * Serialize a DOM into a Json structure. This loader allows to save an imported Json back as JSON.
+   * Serialize a DOM into a Json structure. This loader allows to save an imported JsonSerializer back as JSON.
    *
    * Using this on a standard XML document will ignore a lot of data. Namespaces and Attributes
    * are ignored, if here are two elements with the same name only the last will be in the output.
@@ -41,7 +40,7 @@ namespace FluentDOM\Serializer {
    *   <a-complex-name json:type="object" json:name="a complex name"/>
    * </json:json>
    */
-  class Json implements \JsonSerializable, StringCastable {
+  class JsonSerializer implements \JsonSerializable, Serializer {
 
     private const XMLNS_JSONDOM = JsonDOM::XMLNS;
 

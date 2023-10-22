@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -14,13 +14,13 @@ namespace FluentDOM\Serializer\Json {
 
   require_once __DIR__ . '/../../TestCase.php';
 
-  class BadgerFishTest extends TestCase {
+  class BadgerFishSerializerTest extends TestCase {
 
     /**
-     * Test against the examples from the BadgerFish webpage
+     * Test against the examples from the BadgerFishSerializer webpage
      * http://badgerfish.ning.com/
      *
-     * @covers \FluentDOM\Serializer\Json\BadgerFish
+     * @covers \FluentDOM\Serializer\Json\BadgerFishSerializer
      * @dataProvider provideExamples
      * @param string $expected
      * @param string $xml
@@ -28,7 +28,7 @@ namespace FluentDOM\Serializer\Json {
     public function testIntegration(string $expected, string $xml): void {
       $document = new \DOMDocument();
       $document->loadXML($xml);
-      $serializer = new BadgerFish($document);
+      $serializer = new BadgerFishSerializer($document);
       $this->assertJsonStringEqualsJsonString(
         $expected,
         (string)$serializer
@@ -36,10 +36,10 @@ namespace FluentDOM\Serializer\Json {
     }
 
     /**
-     * @covers \FluentDOM\Serializer\Json\BadgerFish
+     * @covers \FluentDOM\Serializer\Json\BadgerFishSerializer
      */
     public function testIntegrationWithEmptyDocument(): void {
-      $serializer = new BadgerFish(new \DOMDocument());
+      $serializer = new BadgerFishSerializer(new \DOMDocument());
       $this->assertEquals(
         '{}', (string)$serializer
       );

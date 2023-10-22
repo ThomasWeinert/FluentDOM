@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -14,29 +14,26 @@ namespace FluentDOM\Serializer\Json {
 
   require_once __DIR__ . '/../../TestCase.php';
 
-  class JsonMLTest extends TestCase {
+  /**
+   * @covers \FluentDOM\Serializer\Json\JsonMLSerializer
+   */
+  class JsonMLSerializerTest extends TestCase {
 
     /**
-     * @covers \FluentDOM\Serializer\Json\JsonML
      * @dataProvider provideExamples
-     * @param string $expected
-     * @param string $xml
      */
     public function testIntegration(string $expected, string $xml): void {
       $document = new \DOMDocument();
       $document->loadXML($xml);
-      $serializer = new JsonML($document);
+      $serializer = new JsonMLSerializer($document);
       $this->assertJsonStringEqualsJsonString(
         $expected,
         json_encode($serializer)
       );
     }
 
-    /**
-     * @covers \FluentDOM\Serializer\Json\JsonML
-     */
     public function testIntegrationWithEmptyDocument(): void {
-      $serializer = new JsonML(new \DOMDocument());
+      $serializer = new JsonMLSerializer(new \DOMDocument());
       $this->assertEquals(
         '[]', (string)$serializer
       );

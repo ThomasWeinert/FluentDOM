@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 require __DIR__.'/../../../vendor/autoload.php';
 
 $xml = <<<'XML'
@@ -22,7 +31,7 @@ $document->loadXML($xml);
 echo "XML -> Rayfish\n\n";
 
 $json = json_encode(
-  new FluentDOM\Serializer\Json\Rayfish($document), JSON_PRETTY_PRINT
+  new FluentDOM\Serializer\Json\RayfishSerializer($document), JSON_PRETTY_PRINT
 );
 echo $json;
 

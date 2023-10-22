@@ -13,7 +13,8 @@ namespace FluentDOM\Serializer\Factory {
   use FluentDOM\DOM\Document;
   use FluentDOM\Exceptions\InvalidArgument;
   use FluentDOM\Exceptions\InvalidSerializer;
-  use FluentDOM\Serializer\Factory;
+  use FluentDOM\Serializer\Serializer;
+  use FluentDOM\Serializer\SerializerFactory;
   use FluentDOM\TestCase;
   use FluentDOM\Utility\StringCastable;
 
@@ -30,14 +31,14 @@ namespace FluentDOM\Serializer\Factory {
     }
 
     public function testConstructorWithOneFactory(): void {
-      $factory = $this->createMock(Factory::class);
+      $factory = $this->createMock(SerializerFactory::class);
       $group = new Group(['type' => $factory]);
       $this->assertCount(1, $group);
       $this->assertSame($factory, $group['type']);
     }
 
     public function testFactoryGetAfterSet(): void {
-      $factory = $this->createMock(Factory::class);
+      $factory = $this->createMock(SerializerFactory::class);
       $group = new Group();
       $group['type'] = $factory;
       $this->assertTrue(isset($group));
@@ -51,14 +52,14 @@ namespace FluentDOM\Serializer\Factory {
     }
 
     public function testFactoryGetAfterRemove(): void {
-      $factory = $this->createMock(Factory::class);
+      $factory = $this->createMock(SerializerFactory::class);
       $group = new Group(['type' => $factory]);
       unset($group['type']);
       $this->assertFalse(isset($group['type']));
     }
 
     public function testGetIterator(): void {
-      $factory = $this->createMock(Factory::class);
+      $factory = $this->createMock(SerializerFactory::class);
       $group = new Group(['type' => $factory]);
       $this->assertSame(['type' => $factory], iterator_to_array($group));
     }
@@ -66,12 +67,12 @@ namespace FluentDOM\Serializer\Factory {
     public function testCreateSerializer(): void {
       $document = new Document();
       $document->appendElement('dummy');
-      $serializer = $this->createMock(StringCastable::class);
+      $serializer = $this->createMock(Serializer::class);
       $serializer
         ->method('__toString')
         ->willReturn('success');
       $factory = $this
-        ->getMockBuilder(Factory::class)
+        ->getMockBuilder(SerializerFactory::class)
         ->getMock();
       $factory
         ->expects($this->once())
@@ -106,13 +107,13 @@ namespace FluentDOM\Serializer\Factory {
       );
     }
 
-    public function testCreateSerializerWithStringCastable(): void {
+    public function testCreateSerializerWithInterface(): void {
       $document = new Document();
       $document->appendElement('dummy');
       $serializer = $this
-        ->createMock(StringCastable::class);
+        ->createMock(Serializer::class);
       $factory = $this
-        ->getMockBuilder(Factory::class)
+        ->getMockBuilder(SerializerFactory::class)
         ->getMock();
       $factory
         ->expects($this->once())

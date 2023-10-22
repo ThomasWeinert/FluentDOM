@@ -11,10 +11,7 @@ declare(strict_types=1);
 
 namespace FluentDOM\Serializer {
 
-  use FluentDOM\Utility\StringCastable;
-
-  class Xml implements StringCastable {
-
+  class HtmlSerializer implements Serializer {
 
     protected \DOMNode $_node;
 
@@ -22,13 +19,10 @@ namespace FluentDOM\Serializer {
       $this->_node = $node;
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string {
       return $this->_node instanceof \DOMDocument
-        ? $this->_node->saveXML()
-        : $this->_node->ownerDocument->saveXML($this->_node);
+        ? $this->_node->saveHTML()
+        : $this->_node->ownerDocument->saveHTML($this->_node);
     }
   }
 }

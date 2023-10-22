@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -14,10 +14,10 @@ namespace FluentDOM\Serializer\Json {
 
   require_once __DIR__ . '/../../TestCase.php';
 
-  class RabbitFishTest extends TestCase {
+  class RabbitFishSerializerTest extends TestCase {
 
     /**
-     * @covers \FluentDOM\Serializer\Json\RabbitFish
+     * @covers \FluentDOM\Serializer\Json\RabbitFishSerializer
      * @dataProvider provideExamples
      * @param string $expected
      * @param string $xml
@@ -25,7 +25,7 @@ namespace FluentDOM\Serializer\Json {
     public function testIntegration(string $expected, string $xml): void {
       $document = new \DOMDocument();
       $document->loadXML($xml);
-      $serializer = new RabbitFish($document);
+      $serializer = new RabbitFishSerializer($document);
       $this->assertJsonStringEqualsJsonString(
         $expected,
         (string)$serializer
@@ -33,10 +33,10 @@ namespace FluentDOM\Serializer\Json {
     }
 
     /**
-     * @covers \FluentDOM\Serializer\Json\RabbitFish
+     * @covers \FluentDOM\Serializer\Json\RabbitFishSerializer
      */
     public function testIntegrationWithEmptyDocument(): void {
-      $serializer = new RabbitFish(new \DOMDocument());
+      $serializer = new RabbitFishSerializer(new \DOMDocument());
       $this->assertEquals(
         '{}', (string)$serializer
       );

@@ -16,15 +16,13 @@ namespace FluentDOM\Serializer {
 
   require_once __DIR__ . '/../TestCase.php';
 
-  class JsonTest extends TestCase {
+  /**
+   * @covers \FluentDOM\Serializer\JsonSerializer
+   */
+  class JsonSerializerTest extends TestCase {
 
     /**
-     * @covers \FluentDOM\Serializer\Json
      * @dataProvider provideJsonExamples
-     * @param string $expected
-     * @param mixed $data
-     * @param int $options
-     * @param int $depth
      */
     public function testToString(
       string $expected, $data, int $options = 0, int $depth = 256
@@ -36,9 +34,6 @@ namespace FluentDOM\Serializer {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Serializer\Json
-     */
     public function testToStringWithLimitedDepthExpectingEmptyString(): void {
       $serializer = new Json_TestProxy(new \DOMDocument(), 0, 1);
       $serializer->jsonData = self::getArrayAsStdClass(
@@ -56,12 +51,7 @@ namespace FluentDOM\Serializer {
 
 
     /**
-     * @covers \FluentDOM\Serializer\Json
      * @dataProvider provideJsonExamples
-     * @param string $expected
-     * @param mixed $data
-     * @param int $options
-     * @param int $depth
      */
     public function testJsonSerializable(
       string $expected, $data, int $options = 0, int $depth = 256
@@ -74,9 +64,6 @@ namespace FluentDOM\Serializer {
       $this->assertEquals($expected, $json);
     }
 
-    /**
-     * @covers \FluentDOM\Serializer\Json
-     */
     public function testJsonSerializableWithLimitedDepthExpectingFalse(): void {
       $serializer = new Json_TestProxy(new \DOMDocument());
       $serializer->jsonData = self::getArrayAsStdClass(
@@ -94,9 +81,6 @@ namespace FluentDOM\Serializer {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Serializer\Json
-     */
     public function testJsonSerializeCallingGetNode(): void {
       $document = new Document();
       $document->appendElement('success');
@@ -106,9 +90,6 @@ namespace FluentDOM\Serializer {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Serializer\Json
-     */
     public function testJsonSerializeCallingGetEmpty(): void {
       $serializer = new Json_TestProxy(new \DOMDocument());
       $this->assertEquals(
@@ -116,9 +97,6 @@ namespace FluentDOM\Serializer {
       );
     }
 
-    /**
-     * @covers \FluentDOM\Serializer\Json
-     */
     public function testGetNamespaces(): void {
       $document = new Document();
       $document->loadXml(
@@ -147,26 +125,20 @@ namespace FluentDOM\Serializer {
       return $data;
     }
     /**
-     * @covers \FluentDOM\Serializer\Json
      * @dataProvider provideExamples
-     * @param string $expected
-     * @param string $xml
      */
     public function testIntegration(string $expected, string $xml): void {
       $document = new \DOMDocument();
       $document->loadXML($xml);
-      $serializer = new Json($document);
+      $serializer = new JsonSerializer($document);
       $this->assertJsonStringEqualsJsonString(
         $expected,
         (string)$serializer
       );
     }
 
-    /**
-     * @covers \FluentDOM\Serializer\Json
-     */
     public function testIntegrationWithEmptyDocument(): void {
-      $serializer = new Json(new \DOMDocument());
+      $serializer = new JsonSerializer(new \DOMDocument());
       $this->assertEquals(
         '{}', (string)$serializer
       );
@@ -236,7 +208,7 @@ namespace FluentDOM\Serializer {
     }
   }
 
-  class Json_TestProxy extends Json {
+  class Json_TestProxy extends JsonSerializer {
     public $jsonData = NULL;
 
     public function jsonSerialize(): mixed {

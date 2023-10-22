@@ -11,12 +11,12 @@ declare(strict_types=1);
 
 namespace FluentDOM\Serializer\Json {
 
-  use FluentDOM\Serializer\Json;
+  use FluentDOM\Serializer\JsonSerializer;
 
   /**
    * Serialize a DOM to JsonML: http://www.jsonml.org/
    */
-  class JsonML extends Json {
+  class JsonMLSerializer extends JsonSerializer {
 
     /**
      * @return array

@@ -11,24 +11,22 @@ declare(strict_types=1);
 
 namespace FluentDOM\Serializer {
 
-  use FluentDOM\Utility\StringCastable;
+  class XmlSerializer implements Serializer {
 
-  class StringCast implements StringCastable {
 
-    private object $_serializer;
+    protected \DOMNode $_node;
 
-    /**
-     * @param object $serializer
-     */
-    public function __construct(object $serializer) {
-      $this->_serializer = $serializer;
+    public function __construct(\DOMNode $node) {
+      $this->_node = $node;
     }
 
     /**
      * @return string
      */
     public function __toString(): string {
-      return (string)$this->_serializer;
+      return $this->_node instanceof \DOMDocument
+        ? $this->_node->saveXML()
+        : $this->_node->ownerDocument->saveXML($this->_node);
     }
   }
 }

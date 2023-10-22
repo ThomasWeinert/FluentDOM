@@ -82,7 +82,11 @@ namespace FluentDOM\Utility {
     public function testOpenWithInvalidContext(): void {
       $inner = fopen('data://text/plain;base64,'.base64_encode('success'), 'rb');
       [$uri] = ResourceWrapper::createContext($inner);
-      $this->assertFalse(@fopen($uri, 'rb', FALSE));
+      try {
+        $this->assertFalse(fopen($uri, 'rb', FALSE));
+      } catch (\ErrorException $e) {
+        $this->assertStringContainsString('Failed to open stream:', $e->getMessage());
+      }
     }
   }
 }

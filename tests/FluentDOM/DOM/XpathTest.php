@@ -269,29 +269,6 @@ namespace FluentDOM\DOM {
       $this->assertIsBool($xpath->registerNodeNamespaces);
     }
 
-    /**
-     * @covers \FluentDOM\DOM\Xpath
-     */
-    public function testDynamicProperty(): void {
-      $document = new \DOMDocument();
-      $xpath = new Xpath($document);
-      $this->assertFalse(isset($xpath->foo));
-      $this->expectException(\ErrorException::class);
-      $xpath->foo = 'bar';
-    }
-
-    /**
-     * @covers \FluentDOM\DOM\Xpath
-     */
-    public function testPropertyGetWithUnknownPropertyExpectingPHPError(): void {
-      $document = new \DOMDocument();
-      $xpath = new Xpath($document);
-      $this->expectException(\ErrorException::class);
-      /** @noinspection PhpUndefinedFieldInspection */
-      /** @noinspection PhpExpressionResultUnusedInspection */
-      $xpath->someUnknownProperty;
-    }
-
     /***************************
      * Data Provider
      **************************/

@@ -14,7 +14,7 @@ namespace FluentDOM\Serializer\Json {
   use FluentDOM\Serializer\JsonSerializer;
 
   /**
-   * Serialize a DOM to JsonML: http://www.jsonml.org/
+   * Serialize a DOM to JsonMLLoader: http://www.jsonml.org/
    */
   class JsonMLSerializer extends JsonSerializer {
 
@@ -61,7 +61,7 @@ namespace FluentDOM\Serializer\Json {
     }
 
     /**
-     * Get value prepared for Json data structure
+     * Get value prepared for JsonLoader data structure
      */
     private function getValue(mixed $value): mixed {
       if ($this->isBoolean($value)) {

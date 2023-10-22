@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace FluentDOM\Loader\XDM {
 
-  use FluentDOM\Loader\Lazy as LazyLoaders;
+  use FluentDOM\Loader\LazyLoaders as LazyLoaders;
 
   /**
    * Index for json format loaders
@@ -19,7 +19,7 @@ namespace FluentDOM\Loader\XDM {
   class XDMLoaders extends LazyLoaders {
 
     private static array $_loaders = [
-      JsonAsXDM::class => JsonAsXDM::CONTENT_TYPES
+      JsonAsXDMLoader::class => JsonAsXDMLoader::CONTENT_TYPES
     ];
 
     public function __construct() {

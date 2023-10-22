@@ -13,7 +13,7 @@ namespace FluentDOM\Loader\Libxml {
 
   use FluentDOM\Exceptions\LoadingError;
   use FluentDOM\Exceptions\LoadingError\SourceNotLoaded;
-  use FluentDOM\Loader\Result as LoaderResult;
+  use FluentDOM\Loader\LoaderResult as LoaderResult;
 
   class Errors {
 

@@ -10,7 +10,7 @@
 
 namespace FluentDOM\Loader\XDM {
 
-  use FluentDOM\Loader\Standard;
+  use FluentDOM\Loader\StandardLoaders;
   use FluentDOM\TestCase;
 
   require_once __DIR__.'/../../TestCase.php';

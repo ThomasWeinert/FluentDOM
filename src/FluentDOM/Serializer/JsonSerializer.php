@@ -12,10 +12,10 @@ declare(strict_types=1);
 namespace FluentDOM\Serializer {
 
   use FluentDOM\DOM\Xpath;
-  use FluentDOM\Loader\Json\JsonDOM;
+  use FluentDOM\Loader\Json\JsonDOMLoader;
 
   /**
-   * Serialize a DOM into a Json structure. This loader allows to save an imported JsonSerializer back as JSON.
+   * Serialize a DOM into a JsonLoader structure. This loader allows to save an imported JsonSerializer back as JSON.
    *
    * Using this on a standard XML document will ignore a lot of data. Namespaces and Attributes
    * are ignored, if here are two elements with the same name only the last will be in the output.
@@ -23,7 +23,7 @@ namespace FluentDOM\Serializer {
    *
    * See the other serializers, to keep this data.
    *
-   * This serializer recognizes attributes from the JsonDOM namespaces. If you import an JSON to a DOM
+   * This serializer recognizes attributes from the JsonDOMLoader namespaces. If you import an JSON to a DOM
    * in FluentDOM, the additional information is stored in these attributes (types, names, ...)
    *
    * Here is a example of an XML:
@@ -42,7 +42,7 @@ namespace FluentDOM\Serializer {
    */
   class JsonSerializer implements \JsonSerializable, Serializer {
 
-    private const XMLNS_JSONDOM = JsonDOM::XMLNS;
+    private const XMLNS_JSONDOM = JsonDOMLoader::XMLNS;
 
     protected \DOMNode $_node;
 

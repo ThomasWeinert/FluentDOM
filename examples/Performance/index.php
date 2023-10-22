@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 /**
  * The example compares the FluentDOM\Query Api with the extended DOM classes
  */
@@ -14,7 +23,7 @@ function benchmark(callable $callback, $callCount) {
 }
 
 // FluentDOM\Query
-$fd = FluentDOM('test.html', 'text/html', [FluentDOM\Loader\Options::IS_FILE => TRUE]);
+$fd = FluentDOM('test.html', 'text/html', [FluentDOM\Loader\LoaderOptions::IS_FILE => TRUE]);
 echo benchmark(
   function() use ($fd) {
     $fd->find('//div[@class="test"]')->text();
@@ -23,7 +32,7 @@ echo benchmark(
 ), "\n";
 
 // extended DOM (FluentDOM >= 5.2), this is faster
-$fd = FluentDOM::load('test.html', 'text/html', [FluentDOM\Loader\Options::IS_FILE => TRUE]);
+$fd = FluentDOM::load('test.html', 'text/html', [FluentDOM\Loader\LoaderOptions::IS_FILE => TRUE]);
 echo benchmark(
   function() use ($fd) {
     $fd('string(//div[@class="test"])');

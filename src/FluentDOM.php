@@ -15,7 +15,7 @@ use FluentDOM\Exceptions\InvalidArgument;
 use FluentDOM\Exceptions\InvalidSource\Variable as InvalidVariableSource;
 use FluentDOM\Exceptions\NoSerializer as NoSerializerException;
 use FluentDOM\Loadable;
-use FluentDOM\Loader\Lazy as LazyLoader;
+use FluentDOM\Loader\LazyLoaders;
 use FluentDOM\Serializer\Factory\Group as SerializerFactoryGroup;
 use FluentDOM\Serializer\SerializerFactory as SerializerFactory;
 use FluentDOM\Xpath\Transformer as XpathTransformer;
@@ -107,7 +107,7 @@ abstract class FluentDOM {
 
   /**
    * Set a loader used in FluentDOM::load(), FALSE will reset the loader.
-   * If no loader is provided an FluentDOM\Loader\Standard() will be created.
+   * If no loader is provided an FluentDOM\Loader\StandardLoaders() will be created.
    *
    * @throws InvalidArgument
    */
@@ -128,7 +128,7 @@ abstract class FluentDOM {
   ): FluentDOM\Loaders {
     $loaders = self::getDefaultLoaders();
     if (count($contentTypes) > 0) {
-      $lazyLoader = new LazyLoader();
+      $lazyLoader = new LazyLoaders();
       foreach ($contentTypes as $contentType) {
         $lazyLoader->add($contentType, $loader);
       }
@@ -143,13 +143,13 @@ abstract class FluentDOM {
   }
 
   /**
-   * Standard loader + any registered loader.
+   * StandardLoaders loader + any registered loader.
    *
    * @codeCoverageIgnore
    */
   public static function getDefaultLoaders(): FluentDOM\Loaders {
     if (!(self::$_defaultLoaders instanceof FluentDOM\Loaders)) {
-      self::$_defaultLoaders = new FluentDOM\Loaders(new FluentDOM\Loader\Standard());
+      self::$_defaultLoaders = new FluentDOM\Loaders(new FluentDOM\Loader\StandardLoaders());
     }
     return self::$_defaultLoaders;
   }

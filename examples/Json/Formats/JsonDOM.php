@@ -1,9 +1,9 @@
 <?php
-/**
+/*
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2018 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -40,7 +40,7 @@ $fd = \FluentDOM(
   'text/json',
   [
     // optional, map key to tag name
-    \FluentDOM\Loader\Json\JsonDOM::ON_MAP_KEY => function($key, $isArrayElement) {
+    \FluentDOM\Loader\Json\JsonDOMLoader::ON_MAP_KEY => function($key, $isArrayElement) {
       $map = [
         'phoneNumbers' => 'phoneNumber'
       ];

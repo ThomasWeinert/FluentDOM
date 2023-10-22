@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -11,7 +11,7 @@
 namespace FluentDOM {
 
   use FluentDOM\Exceptions\LoadingError\FileNotLoaded;
-  use FluentDOM\Loader\Options as LoaderOptions;
+  use FluentDOM\Loader\LoaderOptions as LoaderOptions;
 
   require_once __DIR__.'/../TestCase.php';
 

@@ -12,7 +12,7 @@ namespace FluentDOM {
 
   use FluentDOM\Exceptions\ReadOnlyPropertyError;
   use FluentDOM\Exceptions\UndeclaredPropertyError;
-  use FluentDOM\Loader\Result;
+  use FluentDOM\Loader\LoaderResult;
   use FluentDOM\DOM\Document;
   use FluentDOM\DOM\Xpath;
   use PHPUnit\Framework\MockObject\MockObject;
@@ -127,7 +127,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::prepareSource
      */
     public function testLoadWithCustomLoader(): void {
-      $result = $this->createMock(Result::class);
+      $result = $this->createMock(LoaderResult::class);
       $result
         ->method('getDocument')
         ->willReturn($document = new Document());
@@ -145,7 +145,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Nodes::getLoadingOptions
      */
     public function testLoadWithCustomLoaderAndOptions(): void {
-      $result = $this->createMock(Result::class);
+      $result = $this->createMock(LoaderResult::class);
       $result
         ->method('getDocument')
         ->willReturn($document = new Document());
@@ -1168,11 +1168,11 @@ namespace FluentDOM {
     /**
      * @param Document $document
      * @param \DOMNode|NULL $selection
-     * @return Result|MockObject
+     * @return LoaderResult|MockObject
      */
-    public function createLoaderResultMock(Document $document, \DOMNode $selection = NULL): Result|MockObject {
+    public function createLoaderResultMock(Document $document, \DOMNode $selection = NULL): LoaderResult|MockObject {
       $result = $this
-        ->getMockBuilder(Loader\Result::class)
+        ->getMockBuilder(Loader\LoaderResult::class)
         ->disableOriginalConstructor()
         ->getMock();
       $result

@@ -3,14 +3,14 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
 
 namespace FluentDOM {
 
-  use FluentDOM\Loader\Result;
+  use FluentDOM\Loader\LoaderResult;
 
   require_once __DIR__.'/TestCase.php';
 
@@ -86,7 +86,7 @@ namespace FluentDOM {
      * @covers \FluentDOM\Loaders
      */
     public function testLoadUsesSecondLoader(): void {
-      $result = $this->createMock(Result::class);
+      $result = $this->createMock(LoaderResult::class);
       $loaderOne = $this->createMock(Loadable::class);
       $loaderOne
         ->expects($this->once())

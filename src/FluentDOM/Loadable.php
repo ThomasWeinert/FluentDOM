@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace FluentDOM {
 
   use FluentDOM\DOM\DocumentFragment;
-  use FluentDOM\Loader\Result;
+  use FluentDOM\Loader\LoaderResult;
 
   /**
    * FluentDOM\Loadable describes an interface for loader objects that can be used to load
@@ -31,7 +31,7 @@ namespace FluentDOM {
      * Load the data source and return the new DOM document. Return NULL if
      * the data source could not be loaded.
      */
-    public function load($source, string $contentType, iterable $options = []): ?Result;
+    public function load($source, string $contentType, iterable $options = []): ?LoaderResult;
 
     /**
      * Load the data source and return the new DOM document. Return NULL if

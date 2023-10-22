@@ -15,7 +15,7 @@ namespace FluentDOM {
   use FluentDOM\DOM\Element;
 
   /**
-   * Standard implementation for FluentDOM\XmlSerializable
+   * StandardLoaders implementation for FluentDOM\XmlSerializable
    */
   trait XmlSerialize {
 

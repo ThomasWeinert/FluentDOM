@@ -1,4 +1,13 @@
 <?php
+/*
+ * FluentDOM
+ *
+ * @link https://thomas.weinert.info/FluentDOM/
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ *
+ */
+
 require __DIR__.'/../../vendor/autoload.php';
 
 $file = 'data://text/xml;base64,'.base64_encode('<foo/>');
@@ -17,7 +26,7 @@ $document = FluentDOM::load($string);
 echo $document->saveXML();
 
 /* FluentDOM load xml from file */
-$document = FluentDOM::load($file, 'xml', [FluentDOM\Loader\Options::IS_FILE => TRUE]);
+$document = FluentDOM::load($file, 'xml', [FluentDOM\Loader\LoaderOptions::IS_FILE => TRUE]);
 echo $document->saveXML();
 
 /* FluentDOM load html from string */

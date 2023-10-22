@@ -3,7 +3,7 @@
  * FluentDOM
  *
  * @link https://thomas.weinert.info/FluentDOM/
- * @copyright Copyright 2009-2021 FluentDOM Contributors
+ * @copyright Copyright 2009-2023 FluentDOM Contributors
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  *
  */
@@ -11,8 +11,8 @@
 namespace FluentDOM\Query {
 
   use FluentDOM\DOM\Document;
-  use FluentDOM\Loader\Html;
-  use FluentDOM\Loader\Result;
+  use FluentDOM\Loader\HtmlLoader;
+  use FluentDOM\Loader\LoaderResult;
   use FluentDOM\TestCase;
 
   require_once __DIR__.'/../TestCase.php';
@@ -30,8 +30,8 @@ namespace FluentDOM\Query {
     }
 
     public function testLoaderAddsNoLineFeedToHtmlFragmentWithText(): void {
-      $loader = new Html();
-      /** @var Result $result */
+      $loader = new HtmlLoader();
+      /** @var LoaderResult $result */
       $result = $loader->load('ho ho ho', 'html-fragment');
       $this->assertEquals(
         "ho ho ho",

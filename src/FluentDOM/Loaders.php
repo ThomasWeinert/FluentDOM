@@ -12,8 +12,8 @@ declare(strict_types=1);
 namespace FluentDOM {
 
   use FluentDOM\DOM\DocumentFragment;
-  use FluentDOM\Loader\Options;
-  use FluentDOM\Loader\Result;
+  use FluentDOM\Loader\LoaderOptions;
+  use FluentDOM\Loader\LoaderResult;
 
   /**
    * FluentDOM\Loaders is a list of loaders that allow to import data sources into
@@ -83,7 +83,7 @@ namespace FluentDOM {
      */
     public function load(
       mixed $source, string $contentType, iterable $options = []
-    ): ?Result {
+    ): ?LoaderResult {
       $result = NULL;
       foreach ($this as $loader) {
         /**
@@ -93,7 +93,7 @@ namespace FluentDOM {
           break;
         }
       }
-      return ($result instanceof Result) ? $result : NULL;
+      return ($result instanceof LoaderResult) ? $result : NULL;
     }
 
     /**

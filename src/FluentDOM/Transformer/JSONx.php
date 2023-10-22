@@ -15,22 +15,22 @@ namespace FluentDOM\Transformer {
   use FluentDOM\DOM\Element;
   use FluentDOM\DOM\Node\ParentNode;
   use FluentDOM\DOM\Xpath;
-  use FluentDOM\Loader\Json\JsonDOM;
+  use FluentDOM\Loader\Json\JsonDOMLoader;
   use FluentDOM\Utility\StringCastable;
 
   /**
-   * Allows to transform JSONx to JsonDOM
+   * Allows to transform JSONxLoader to JsonDOMLoader
    */
   class JSONx implements StringCastable {
 
     /** @noinspection HttpUrlsUsage */
     private const XMLNS_JSONX = 'http://www.ibm.com/xmlns/prod/2009/jsonx';
-    private const XMLNS_JSONDOM = JsonDOM::XMLNS;
+    private const XMLNS_JSONDOM = JsonDOMLoader::XMLNS;
 
     private \DOMDocument $_document;
 
     /**
-     * Import a DOM document and use the JsonDOM rules to convert it into JSONx.
+     * Import a DOM document and use the JsonDOMLoader rules to convert it into JSONxLoader.
      */
     public function __construct(\DOMDocument $document) {
       $this->_document = $document;
@@ -48,7 +48,7 @@ namespace FluentDOM\Transformer {
     }
 
     /**
-     * Create and return a JSONx document.
+     * Create and return a JSONxLoader document.
      */
     public function getDocument(): Document {
       $document = new Document();

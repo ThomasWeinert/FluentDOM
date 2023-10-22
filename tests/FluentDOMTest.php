@@ -11,7 +11,7 @@
 use FluentDOM\DOM\Document;
 use FluentDOM\Exceptions\NoSerializer;
 use FluentDOM\Loadable;
-use FluentDOM\Loader\Result as LoaderResult;
+use FluentDOM\Loader\LoaderResult as LoaderResult;
 use FluentDOM\TestCase;
 use FluentDOM\Xpath\Transformer as XpathTransformer;
 

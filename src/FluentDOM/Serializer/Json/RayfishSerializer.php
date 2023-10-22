@@ -14,7 +14,7 @@ namespace FluentDOM\Serializer\Json {
   use FluentDOM\Serializer\JsonSerializer;
 
   /**
-   * Serialize a DOM to Rayfish JsonSerializer: http://www.bramstein.com/projects/xsltjson/
+   * Serialize a DOM to RayfishLoader JsonSerializer: http://www.bramstein.com/projects/xsltjson/
    *
    * @license http://www.opensource.org/licenses/mit-license.php The MIT License
    * @copyright Copyright (c) 2009-2017 FluentDOM Contributors

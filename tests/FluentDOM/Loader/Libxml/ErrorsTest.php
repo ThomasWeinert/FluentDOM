@@ -13,7 +13,7 @@ namespace FluentDOM\Loader\Libxml {
   use FluentDOM\DOM\Document;
   use FluentDOM\Exceptions\LoadingError\SourceNotLoaded;
   use FluentDOM\Loader\Libxml\Errors;
-  use FluentDOM\Loader\Options;
+  use FluentDOM\Loader\LoaderOptions;
   use FluentDOM\TestCase;
 
   require_once __DIR__ . '/../../TestCase.php';

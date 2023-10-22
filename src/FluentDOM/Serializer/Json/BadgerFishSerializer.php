@@ -15,7 +15,7 @@ namespace FluentDOM\Serializer\Json {
   use FluentDOM\Serializer\JsonSerializer;
 
   /**
-   * Serialize a DOM to BadgerFish JsonSerializer: http://badgerfish.ning.com/
+   * Serialize a DOM to BadgerFish Json: http://badgerfish.ning.com/
    */
   class BadgerFishSerializer extends JsonSerializer {
 

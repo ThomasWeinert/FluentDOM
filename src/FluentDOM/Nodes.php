@@ -101,10 +101,10 @@ namespace FluentDOM {
     ): self {
       $contentType = $contentType ?: 'text/xml';
       $loaded = $this->prepareSource($source, $contentType, $options);
-      $isResult = $loaded instanceof Loader\Result;
+      $isResult = $loaded instanceof Loader\LoaderResult;
       if ($isResult || $loaded instanceof \DOMDocument) {
         if ($isResult) {
-          /** @var Loader\Result $loaded */
+          /** @var Loader\LoaderResult $loaded */
           $this->_document = $loaded->getDocument();
           $this->setContentType($loaded->getContentType());
           if ($selection = $loaded->getSelection()) {
@@ -130,7 +130,7 @@ namespace FluentDOM {
       mixed $source,
       string $contentType,
       iterable $options
-    ): \DOMDocument|Loader\Result|bool|NULL {
+    ): \DOMDocument|Loader\LoaderResult|bool|NULL {
       $loaded = FALSE;
       $this->_useDocumentContext = TRUE;
       if ($source instanceof self) {
